@@ -5,6 +5,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import com.giraffe.presentation.designsystem.color.LocalCineVerseColors
 import com.giraffe.presentation.designsystem.color.darkThemeColor
 import com.giraffe.presentation.designsystem.color.lightThemeColor
+import com.giraffe.presentation.designsystem.icon.CineVerseIcons
+import com.giraffe.presentation.designsystem.icon.LocalCineVerseIcons
 import com.giraffe.presentation.designsystem.radius.CineVerseRadius
 import com.giraffe.presentation.designsystem.radius.LocalCineVerseRadius
 import com.giraffe.presentation.designsystem.text_style.LocalCineVerseTextStyle
@@ -16,11 +18,11 @@ fun CinVerseTheme(
     content: @Composable () -> Unit
 ) {
     val theme = if (isDarkTheme) darkThemeColor else lightThemeColor
-
     CompositionLocalProvider(
         LocalCineVerseColors provides theme,
         LocalCineVerseTextStyle provides defaultTextStyle,
-        LocalCineVerseRadius provides CineVerseRadius()
+        LocalCineVerseRadius provides CineVerseRadius(),
+        LocalCineVerseIcons provides CineVerseIcons(),
     ) {
         content()
     }

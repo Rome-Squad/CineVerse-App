@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import com.giraffe.presentation.designsystem.color.CineVerseColors
 import com.giraffe.presentation.designsystem.color.LocalCineVerseColors
+import com.giraffe.presentation.designsystem.icon.CineVerseIcons
+import com.giraffe.presentation.designsystem.icon.LocalCineVerseIcons
 import com.giraffe.presentation.designsystem.radius.CineVerseRadius
 import com.giraffe.presentation.designsystem.radius.LocalCineVerseRadius
 import com.giraffe.presentation.designsystem.text_style.CineVerseTextStyle
@@ -18,4 +20,7 @@ object Theme {
 
     val radius: CineVerseRadius
         @Composable @ReadOnlyComposable get() = LocalCineVerseRadius.current
+
+    val icons: CineVerseIcons
+        @Composable @ReadOnlyComposable get() = LocalCineVerseIcons.current
 }
