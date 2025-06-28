@@ -1,7 +1,9 @@
 package com.giraffe.presentation.designsystem.radius
 
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.giraffe.presentation.designsystem.color.lightThemeColor
 
 data class CineVerseRadius(
     val xxs: Dp = 2.dp,
@@ -16,3 +18,5 @@ data class CineVerseRadius(
     val x4l: Dp = 32.dp,
     val full: Dp = 1000.dp
 )
+
+internal val LocalCineVerseRadius = staticCompositionLocalOf { CineVerseRadius() }
