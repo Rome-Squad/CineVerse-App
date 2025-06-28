@@ -1,5 +1,6 @@
 package com.giraffe.presentation.designsystem.text_style
 
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 
 data class CineVerseTextStyle(
@@ -21,3 +22,5 @@ data class CineVerseTextStyle(
     val labelMdMedium: TextStyle,
     val labelMdSemiBold: TextStyle
 )
+
+internal val LocalCineVerseTextStyle = staticCompositionLocalOf { defaultTextStyle }
