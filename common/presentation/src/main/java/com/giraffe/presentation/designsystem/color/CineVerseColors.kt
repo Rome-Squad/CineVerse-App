@@ -1,5 +1,6 @@
 package com.giraffe.presentation.designsystem.color
 
+
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -46,7 +47,7 @@ data class Stroke(
 
 data class Additional(
     val primary: Primary,
-    val secondary:Secondary
+    val secondary: Secondary
 )
 
 data class Primary(
@@ -60,3 +61,5 @@ data class Secondary(
     val green: Color,
     val yellow: Color,
 )
+
+internal val LocalCineVerseColors = staticCompositionLocalOf { lightThemeColor }
