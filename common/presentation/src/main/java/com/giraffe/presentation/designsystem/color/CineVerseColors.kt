@@ -1,7 +1,5 @@
 package com.giraffe.presentation.designsystem.color
 
-package com.thechance.tomandjerry.design_system.color
-
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
