@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.presentation.R
-import com.giraffe.presentation.designsystem.text_style.defaultTextStyle
 import com.giraffe.presentation.designsystem.theme.Theme
 
 @Composable
@@ -40,13 +39,13 @@ fun CollectionItem(
         ) {
             Text(
                 text = text,
-                style = defaultTextStyle.body.medium.medium,
+                style = Theme.textStyle.body.medium.medium,
                 color = Theme.color.shade.primary,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
                 text = description,
-                style = defaultTextStyle.body.small.regular,
+                style = Theme.textStyle.body.small.regular,
                 color = Theme.color.shade.secondary
             )
         }
