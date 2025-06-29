@@ -87,14 +87,15 @@ fun MenuItem(
 @Preview
 @Composable
 fun MenuItemPreview() {
-    val cineVerseIcons = CineVerseIcons()
-    MenuItem(
-        icon = cineVerseIcons.dueTone.moon,
-        title = "Profile",
-        hasSwitch = true,
-        onSwitchChange = {},
-        hasButton = true,
-        onButtonClick = {}
-    )
+    cinverseTheme {
+        MenuItem(
+            icon = Theme.icons.dueTone.moon,
+            title = "Profile",
+            hasSwitch = true,
+            onSwitchChange = {},
+            hasButton = true,
+            onButtonClick = {}
+        )
+    }
 }
 
