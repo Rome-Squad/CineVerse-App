@@ -41,15 +41,14 @@ fun StaffInfoSection(
             Text(
                 text = title,
                 color = Theme.color.shade.primary,
-                style = Theme.textStyle.title.sm
+                style = Theme.textStyle.title.sm,
             )
 
             Text(
                 text = "Show More",
                 color = Theme.color.brand.primary,
-                modifier = Modifier
-                    .clickable { onShowMoreClick() }
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                modifier = Modifier.padding(start = 12.dp)
+                    .clickable { onShowMoreClick() },
                 style = Theme.textStyle.body.medium.medium
             )
         }
