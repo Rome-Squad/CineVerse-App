@@ -6,4 +6,5 @@
     <string name="right_arrow">Right Arrow</string>
     <string name="you_rated_it">You rated it</string>
     <string name="did_you_watch_it">Did You Watch it?</string>
+    <string name="user_name">\@%1$s</string>
 </resources>
