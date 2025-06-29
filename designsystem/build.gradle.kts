@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.home"
+    namespace = "com.giraffe.designsystem"
     compileSdk = 36
 
     defaultConfig {
@@ -45,11 +45,10 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
