@@ -15,12 +15,14 @@ val manropeFontFamily = FontFamily(
 )
 
 val defaultTextStyle = CineVerseTextStyle(
-    display = TextStyle(
-        fontFamily = manropeFontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 40.sp
+    display = Display(
+        xl = TextStyle(
+            fontFamily = manropeFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 40.sp,
+        )
     ),
-    title = TitleTextStyle(
+    title = Title(
         xl = TextStyle(
             fontFamily = manropeFontFamily,
             fontWeight = FontWeight.Medium,
@@ -42,26 +44,76 @@ val defaultTextStyle = CineVerseTextStyle(
             fontSize = 16.sp
         )
     ),
-    body = SizedTextStyle(
-        large = WeightedTextStyle(
-            regular = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Normal, fontSize = 16.sp),
-            medium = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Medium, fontSize = 16.sp),
-            semiBold = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+    body = Body(
+        lg = Weight(
+            regular = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp
+            ),
+            medium = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp
+            ),
+            semiBold = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
         ),
-        medium = WeightedTextStyle(
-            regular = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Normal, fontSize = 14.sp),
-            medium = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Medium, fontSize = 14.sp),
-            semiBold = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+        md = Weight(
+            regular = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp
+            ),
+            medium = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp
+            ),
+            semiBold = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp
+            )
         ),
-        small = WeightedTextStyle(
-            regular = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Normal, fontSize = 12.sp),
-            medium = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Medium, fontSize = 12.sp),
-            semiBold = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
+        sm = Weight(
+            regular = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp
+            ),
+            medium = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 12.sp
+            ),
+            semiBold = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp
+            )
         )
     ),
-    label = WeightedTextStyle(
-        regular = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Normal, fontSize = 12.sp),
-        medium = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.Medium, fontSize = 12.sp),
-        semiBold = TextStyle(fontFamily = manropeFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
+    label = Label(
+        md = Weight(
+            regular = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp
+            ),
+            medium = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 12.sp
+            ),
+            semiBold = TextStyle(
+                fontFamily = manropeFontFamily,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp
+            )
+        )
     )
 )
