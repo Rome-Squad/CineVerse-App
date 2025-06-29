@@ -52,5 +52,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
 
+    implementation(libs.coil.compose)
     implementation(libs.kotlinx.datetime)
 }
