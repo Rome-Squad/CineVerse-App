@@ -103,7 +103,9 @@ fun MenuItem(
         if (hasBottomDivider) {
             Divider(
                 color = Theme.color.shade.tertiary,
-                thickness = 1.dp
+                thickness = 1.dp,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
             )
         }
     }
