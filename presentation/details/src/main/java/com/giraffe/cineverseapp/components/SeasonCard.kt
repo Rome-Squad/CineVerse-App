@@ -67,10 +67,10 @@ fun SeasonCard(
                         .size(width = posterWidth, height = posterHeight)
                         .clip(
                             RoundedCornerShape(
-                                topStart = 32.dp,
-                                topEnd = 32.dp,
-                                bottomEnd = 4.dp,
-                                bottomStart = 4.dp
+                                topStart = Theme.radius.x4l,
+                                topEnd = Theme.radius.x4l,
+                                bottomEnd = Theme.radius.xs,
+                                bottomStart = Theme.radius.xs
                             )
                         ),
                     contentScale = ContentScale.Crop
