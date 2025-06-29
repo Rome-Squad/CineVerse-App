@@ -101,9 +101,9 @@ fun CastCard(
                     .size(64.dp)
                     .clip(
                         RoundedCornerShape(
-                            topStart = 12.dp,
-                            topEnd = 12.dp,
-                            bottomStart = 12.dp,
+                            topStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
                             bottomEnd = 0.dp
                         )
                     )
