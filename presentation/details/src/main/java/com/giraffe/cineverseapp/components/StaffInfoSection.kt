@@ -57,7 +57,7 @@ fun StaffInfoSection(
 
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(Theme.radius.lg),
             colors = CardDefaults.cardColors(containerColor = Theme.color.background.card)
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
