@@ -25,7 +25,7 @@ fun SettingsSection(
         )
         Column(
             modifier = Modifier
-                .background(Theme.color.shade.quaternary!!)
+                .background(Theme.color.shade.quaternary)
         ) {
             content()
         }

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.presentation.designsystem.icon.CineVerseIcons
+import com.giraffe.presentation.designsystem.theme.CineVerseTheme
 import com.giraffe.presentation.designsystem.theme.Theme
 
 @Composable
@@ -32,7 +33,7 @@ fun MenuItem(
 ) {
     Column(
         modifier = modifier
-            .background(Theme.color.shade.quaternary!!)
+            .background(Theme.color.shade.quaternary)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -50,10 +51,9 @@ fun MenuItem(
                 )
                 Text(
                     text = title,
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier,
                     color = if (isDanger) Theme.color.additional.primary.red else Theme.color.shade.primary,
-                    style = Theme.textStyle.body.medium.medium,
+                    style = Theme.textStyle.body.md.medium,
                 )
             }
             Row(
@@ -76,7 +76,7 @@ fun MenuItem(
         }
         if (hasBottomDivider) {
             Divider(
-                color = Theme.color.shade.tertiary!!,
+                color = Theme.color.shade.tertiary,
                 thickness = 1.dp
             )
         }
@@ -87,14 +87,15 @@ fun MenuItem(
 @Preview
 @Composable
 fun MenuItemPreview() {
-    cinverseTheme {
+    CineVerseTheme {
         MenuItem(
             icon = Theme.icons.dueTone.moon,
             title = "Profile",
             hasSwitch = true,
             onSwitchChange = {},
             hasButton = true,
-            onButtonClick = {}
+            onButtonClick = {},
+            isDanger = true,
         )
     }
 }
