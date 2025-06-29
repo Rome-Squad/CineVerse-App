@@ -15,6 +15,7 @@ data class Colored(
     val tiktok: Int,
     val ukFlag: Int,
     val x: Int,
+    val youtube: Int,
 )
 
 val coloredIcons = Colored(
@@ -29,5 +30,6 @@ val coloredIcons = Colored(
     starStruck = R.drawable.colored_star_struck,
     tiktok = R.drawable.colored_tiktok,
     ukFlag = R.drawable.colored_uk_flag,
-    x = R.drawable.colored_x
+    x = R.drawable.colored_x,
+    youtube = R.drawable.colored_youtube
 )

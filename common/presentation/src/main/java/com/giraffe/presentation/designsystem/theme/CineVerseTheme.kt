@@ -13,7 +13,7 @@ import com.giraffe.presentation.designsystem.text_style.LocalCineVerseTextStyle
 import com.giraffe.presentation.designsystem.text_style.defaultTextStyle
 
 @Composable
-fun CinVerseTheme(
+fun CineVerseTheme(
     isDarkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
