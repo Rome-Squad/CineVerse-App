@@ -1,6 +1,7 @@
 package com.giraffe.cineverseapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -8,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,7 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.giraffe.cineverseapp.components.RatingSelector
+import androidx.compose.ui.unit.dp
+import com.giraffe.cineverseapp.components.RatingSection
 import com.giraffe.cineverseapp.ui.theme.CineVerseAppTheme
 import com.giraffe.presentation.designsystem.theme.CinVerseTheme
 import com.giraffe.presentation.designsystem.theme.Theme
@@ -31,7 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             var rate by remember {
                 mutableIntStateOf(
-                    0
+                    3
                 )
             }
             CinVerseTheme {
@@ -49,6 +52,7 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
+/*
 
                         RatingSelector(
                             modifier = Modifier,
@@ -57,7 +61,43 @@ class MainActivity : ComponentActivity() {
                                 rate = it
                             }
                         )
+*/
+/*
+                        BSRatingContent(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            rate = rate,
+                            onRateClick = {
+                                rate = it
+                            }
+                        ) {
+                            Log.d("TAG", "onCreate: rate added $it")
+                        }*/
 
+                        RatingSection(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    all = 16.dp
+                                ),
+                            rate = rate,
+                        ) {
+                            Log.d("TAG", "onCreate: $rate")
+                        }
+
+
+                        RatingSection(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    all = 16.dp
+                                ),
+                            rate = null,
+                        ) {
+
+                            Log.d("TAG", "onCreate: null")
+                        }
                     }
 
                 }

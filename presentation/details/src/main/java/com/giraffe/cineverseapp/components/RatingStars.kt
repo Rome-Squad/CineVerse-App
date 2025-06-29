@@ -30,7 +30,7 @@ fun RatingStars(
     starSize: Dp = 24.dp,
     rate: Int = 0,
     onRateClickEnabled: Boolean = true,
-    onRateClick: (Int) -> Unit
+    onRateClick: (Int) -> Unit = {}
 ) {
 
     Row(
