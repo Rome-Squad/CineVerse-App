@@ -4,23 +4,29 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 
 data class CineVerseTextStyle(
-    val displayXl: TextStyle,
-    val titleXl: TextStyle,
-    val titleLg: TextStyle,
-    val titleMd: TextStyle,
-    val titleSm: TextStyle,
-    val bodyLgRegular: TextStyle,
-    val bodyLgMedium: TextStyle,
-    val bodyLgSemiBold: TextStyle,
-    val bodyMdRegular: TextStyle,
-    val bodyMdMedium: TextStyle,
-    val bodyMdSemiBold: TextStyle,
-    val bodySmRegular: TextStyle,
-    val bodySmMedium: TextStyle,
-    val bodySmSemiBold: TextStyle,
-    val labelMdRegular: TextStyle,
-    val labelMdMedium: TextStyle,
-    val labelMdSemiBold: TextStyle
+    val display: TextStyle,
+    val title: TitleTextStyle,
+    val body: SizedTextStyle,
+    val label: WeightedTextStyle
+)
+
+data class WeightedTextStyle(
+    val regular: TextStyle,
+    val medium: TextStyle,
+    val semiBold: TextStyle
+)
+
+data class TitleTextStyle(
+    val xl: TextStyle,
+    val lg: TextStyle,
+    val md: TextStyle,
+    val sm: TextStyle
+)
+
+data class SizedTextStyle(
+    val large: WeightedTextStyle,
+    val medium: WeightedTextStyle,
+    val small: WeightedTextStyle
 )
 
 internal val LocalCineVerseTextStyle = staticCompositionLocalOf { defaultTextStyle }
