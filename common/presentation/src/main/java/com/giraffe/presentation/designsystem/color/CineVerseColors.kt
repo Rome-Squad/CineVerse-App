@@ -8,10 +8,10 @@ import androidx.compose.ui.graphics.Color
 data class CineVerseColors(
     val background: Background,
     val shade: Shade,
-    val brand: Shade,
+    val brand: Brand,
     val button: Button,
     val stroke: Stroke,
-    val overlay: Shade,
+    val overlay: Overlay,
     val additional: Additional
 )
 
@@ -25,9 +25,20 @@ data class Background(
 data class Shade(
     val primary: Color,
     val secondary: Color,
-    val tertiary: Color?,
-    val quaternary: Color?,
-    val quinary: Color?
+    val tertiary: Color,
+    val quaternary: Color,
+    val quinary: Color
+)
+
+data class Brand(
+    val primary: Color,
+    val secondary: Color,
+    val tertiary: Color,
+)
+
+data class Overlay(
+    val primary: Color,
+    val secondary: Color,
 )
 
 data class Button(

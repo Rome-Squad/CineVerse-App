@@ -17,12 +17,10 @@ val lightThemeColor = CineVerseColors(
         bottomSheet = Color(0xFFFFFFFF),
         bottomSheetCard = Color(0xFFF6F6F6)
     ),
-    brand = Shade(
+    brand = Brand(
         primary = Color(0xFF536DFE),
         secondary = Color(0xFFBEC8FF),
         tertiary = Color(0xFFF1F3FF),
-        quaternary = null,
-        quinary = null
     ),
     button = Button(
         primary = Color(0xFF536DFE),
@@ -44,12 +42,9 @@ val lightThemeColor = CineVerseColors(
             )
         )
     ),
-    overlay = Shade(
+    overlay = Overlay(
         primary = Color(0xFFFFFFFF).copy(alpha = 0.60f),
         secondary = Color(0xFFFFFFFF).copy(alpha = 0.24f),
-        tertiary = null,
-        quaternary = null,
-        quinary = null
     ),
     additional = Additional(
         primary = Primary(
