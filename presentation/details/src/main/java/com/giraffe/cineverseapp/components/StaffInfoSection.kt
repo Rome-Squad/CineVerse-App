@@ -31,7 +31,6 @@ fun StaffInfoSection(
 ) {
     Column(
         modifier = modifier
-            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
