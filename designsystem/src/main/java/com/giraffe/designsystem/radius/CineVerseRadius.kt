@@ -3,7 +3,6 @@ package com.giraffe.designsystem.radius
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.giraffe.presentation.designsystem.color.lightThemeColor
 
 data class CineVerseRadius(
     val xxs: Dp = 2.dp,

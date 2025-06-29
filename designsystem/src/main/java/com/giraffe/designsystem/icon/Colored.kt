@@ -1,6 +1,6 @@
 package com.giraffe.designsystem.icon
 
-import com.giraffe.presentation.R
+import com.giraffe.designsystem.R
 
 data class Colored(
     val logo: Int,

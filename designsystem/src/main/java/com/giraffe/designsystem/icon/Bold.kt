@@ -1,7 +1,6 @@
 package com.giraffe.designsystem.icon
 
 import com.giraffe.designsystem.R
-import com.giraffe.presentation.R
 
 data class Bold(
     val logo: Int,
