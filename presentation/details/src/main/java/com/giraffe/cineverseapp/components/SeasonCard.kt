@@ -39,7 +39,10 @@ fun SeasonCard(
     episodes: Int,
     year: Int,
     posterWidth: Dp = 48.dp,
-    posterHeight: Dp = 64.dp
+    posterHeight: Dp = 64.dp,
+    ratingIcon: Painter = painterResource(id = Theme.icons.dueTone.star),
+    episodesIcon: Painter = painterResource(id = Theme.icons.dueTone.videoLibrary),
+    calendarIcon: Painter = painterResource(id = Theme.icons.dueTone.calendar),
 ) {
     Card(
         modifier = modifier
@@ -101,7 +104,7 @@ fun SeasonCard(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    painter = painterResource(id = Theme.icons.dueTone.star),
+                    painter = ratingIcon,
                     tint = Theme.color.additional.primary.yellow,
                     contentDescription = "Rating",
                     modifier = Modifier.size(16.dp)
@@ -116,7 +119,7 @@ fun SeasonCard(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Icon(
-                    painter = painterResource(id = Theme.icons.dueTone.videoLibrary),
+                    painter = episodesIcon,
                     contentDescription = "Episodes",
                     tint = Theme.color.shade.secondary,
                     modifier = Modifier.size(16.dp)
@@ -131,7 +134,7 @@ fun SeasonCard(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Icon(
-                    painter = painterResource(id = Theme.icons.dueTone.calendar),
+                    painter = calendarIcon,
                     contentDescription = "Year",
                     tint = Theme.color.shade.secondary,
                     modifier = Modifier.size(16.dp)
