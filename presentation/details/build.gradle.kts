@@ -36,7 +36,6 @@ android {
 dependencies {
     implementation(project(":common:presentation:"))
 
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -50,4 +49,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.coil.compose)
+    implementation(libs.readmore.material3)
+    implementation(libs.kotlinx.datetime)
 }

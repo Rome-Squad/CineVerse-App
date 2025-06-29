@@ -19,10 +19,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.giraffe.cineverseapp.components.RatingSelector
+import androidx.compose.ui.unit.dp
+import com.giraffe.cineverseapp.components.ReviewCard
 import com.giraffe.cineverseapp.ui.theme.CineVerseAppTheme
 import com.giraffe.presentation.designsystem.theme.CinVerseTheme
 import com.giraffe.presentation.designsystem.theme.Theme
+import com.giraffe.presentation.R
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,9 +33,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             var rate by remember {
                 mutableIntStateOf(
-                    0
+                    3
                 )
             }
+
             CinVerseTheme {
 
                 Scaffold(
@@ -45,10 +48,14 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Theme.color.background.screen)
-                            .padding(innerPadding),
+                            .padding(innerPadding)
+                            .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
+
+
+/*
 
                         RatingSelector(
                             modifier = Modifier,
@@ -57,9 +64,64 @@ class MainActivity : ComponentActivity() {
                                 rate = it
                             }
                         )
+*/
+                        /*
+                        BSRatingContent(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            rate = rate,
+                            onRateClick = {
+                                rate = it
+                            }
+                        ) {
+                            Log.d("TAG", "onCreate: rate added $it")
+                        }*/
+                        /*
+
+                        RatingSection(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    all = 16.dp
+                                ),
+                            rate = rate,
+                        ) {
+                            Log.d("TAG", "onCreate: $rate")
+                        }
+
+
+                        RatingSection(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    all = 16.dp
+                                ),
+                            rate = null,
+                        ) {
+
+                            Log.d("TAG", "onCreate: null")
+                        }
+                    }
+*/
+/*
+
+                        ReadMoreText(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            text = "This has no competition. It is the very finest comic-book character movie ever made. Knowing the Burton, Donner and Nolan filmic adaptations of Batman and Superman will be a matter of history, not just of memory.",
+                        )
+*/
+                        ReviewCard(
+                            rate = 4,
+                            reviewText = "A sickening, borderline fascist film that is simultaneously dull and harmful. The editing represents thatA sickening, borderline fascist film that is simultaneously dull and harmful. The editing represents that of an anti-pirate commercial and the politics are beyond repr The editing represents that of an anti-pirate commercial and the politics are beyond repr",
+                            reviewerImageSource = R.drawable.reviewer,
+                            reviewerName = "Bilal Azzam",
+                            reviewerUsername = "bilal_azzam",
+                        )
 
                     }
-
                 }
 
             }
