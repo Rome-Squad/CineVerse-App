@@ -40,7 +40,7 @@ fun CollectionItem(modifier: Modifier = Modifier, image: Int, collectionType: St
                 .background(Theme.color.brand.tertiary)
         )
         Box(
-            modifier
+            Modifier
                 .clip(RoundedCornerShape(Theme.radius.s))
                 .fillMaxWidth()
                 .height(80.dp),
