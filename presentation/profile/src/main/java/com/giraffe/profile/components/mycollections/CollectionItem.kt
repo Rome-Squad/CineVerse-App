@@ -39,20 +39,20 @@ fun CollectionItem(
         ) {
             Text(
                 text = text,
-                style = Theme.textStyle.body.medium.medium,
+                style = Theme.textStyle.body.md.medium,
                 color = Theme.color.shade.primary,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
                 text = description,
-                style = Theme.textStyle.body.small.regular,
+                style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.shade.secondary
             )
         }
         Icon(
             painter = painterResource(Theme.icons.outline.altArrowRight),
             contentDescription = "arrow right icon",
-            tint = Theme.color.shade.tertiary!!,
+            tint = Theme.color.shade.tertiary,
             modifier = Modifier.padding(start = 8.dp)
         )
 
