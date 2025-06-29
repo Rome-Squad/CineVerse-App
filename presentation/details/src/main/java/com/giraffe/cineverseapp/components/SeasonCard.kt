@@ -82,6 +82,7 @@ fun SeasonCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
+                        modifier=Modifier.padding(bottom = 4.dp),
                         text = title,
                         style = Theme.textStyle.body.medium.medium,
                         color = Theme.color.shade.primary
