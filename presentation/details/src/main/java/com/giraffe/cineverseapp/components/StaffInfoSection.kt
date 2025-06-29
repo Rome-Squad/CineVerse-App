@@ -26,7 +26,7 @@ import com.giraffe.presentation.designsystem.theme.Theme
 fun StaffInfoSection(
     title: String,
     onShowMoreClick: () -> Unit,
-    staffList: List<Pair<String, String>>,
+    staffList: List<StaffMember>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -47,7 +47,8 @@ fun StaffInfoSection(
             Text(
                 text = "Show More",
                 color = Theme.color.brand.primary,
-                modifier = Modifier.padding(start = 12.dp)
+                modifier = Modifier
+                    .padding(start = 12.dp)
                     .clickable { onShowMoreClick() },
                 style = Theme.textStyle.body.medium.medium
             )
@@ -61,8 +62,8 @@ fun StaffInfoSection(
             colors = CardDefaults.cardColors(containerColor = Theme.color.background.card)
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                staffList.forEachIndexed { index, (name, role) ->
-                    StaffItem(name = name, role = role)
+                staffList.forEachIndexed { index, staff ->
+                    StaffItem(name = staff.name, role = staff.role)
 
                     if (index != staffList.lastIndex) {
                         HorizontalDivider(
@@ -100,6 +101,10 @@ fun StaffItem(name: String, role: String) {
         )
     }
 }
+data class StaffMember(
+    val name: String,
+    val role: String
+)
 @Preview(
     name = "StaffInfoSection Preview - Dark",
     showBackground = false,
@@ -112,9 +117,9 @@ fun PreviewStaffInfoSectionDark() {
             title = "Staff Info",
             onShowMoreClick = {},
             staffList = listOf(
-                "John Doe" to "Director",
-                "Christopher Nolan" to "Director, Screenplay, Story",
-                "Mike Johnson" to "Writer"
+                StaffMember(name = "John Doe", role = "Director"),
+                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
+                StaffMember(name = "Mike Johnson", role = "Writer")
             )
         )
     }
@@ -132,9 +137,9 @@ fun PreviewStaffInfoSectionLight() {
             title = "Staff Info",
             onShowMoreClick = {},
             staffList = listOf(
-                "John Doe" to "Director",
-                "Christopher Nolan" to "Director, Screenplay, Story",
-                "Mike Johnson" to "Writer"
+                StaffMember(name = "John Doe", role = "Director"),
+                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
+                StaffMember(name = "Mike Johnson", role = "Writer")
             )
         )
     }
