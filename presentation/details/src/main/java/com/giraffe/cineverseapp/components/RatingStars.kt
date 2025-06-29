@@ -28,6 +28,7 @@ import com.giraffe.presentation.designsystem.theme.Theme
 fun RatingStars(
     modifier: Modifier = Modifier,
     starSize: Dp = 24.dp,
+    starSpace: Dp = 8.dp,
     rate: Int = 0,
     onRateClickEnabled: Boolean = true,
     onRateClick: (Int) -> Unit = {}
@@ -35,7 +36,7 @@ fun RatingStars(
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(starSpace),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
