@@ -45,7 +45,7 @@ fun AddToCollectionContent(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.bottomSheetCard),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
