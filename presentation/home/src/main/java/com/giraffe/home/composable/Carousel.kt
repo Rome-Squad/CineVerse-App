@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -49,6 +48,7 @@ fun Carousel(
     HorizontalPager(
         modifier = modifier,
         beyondViewportPageCount = movieCards.size,
+        pageSpacing = (-50).dp,
         contentPadding = PaddingValues(horizontal = 24.dp),
         state = pagerState,
     ) { pageIndex ->
@@ -57,18 +57,8 @@ fun Carousel(
             targetValue = if (isSelected) 1f else 0f,
             label = "ZIndexAnimation"
         ).value
-        val horizontalOffset = animateDpAsState(
-            targetValue = when {
-                pageIndex > pagerState.currentPage -> (-40).dp
-                pageIndex < pagerState.currentPage -> 40.dp
-                else -> 0.dp
-            },
-            label = "OffsetAnimation"
-        ).value
         MovieItem(
-            modifier = Modifier
-                .zIndex(zIndex)
-                .offset(x = horizontalOffset),
+            modifier = Modifier.zIndex(zIndex),
             movieCard = movieCards[pageIndex],
             isSelected = isSelected
         )
