@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ fun CollectionItem(modifier: Modifier = Modifier, image: Int, collectionType: St
     Box(modifier = modifier) {
         Box(
             modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
                 .height(92.dp)
                 .clip(RoundedCornerShape(Theme.radius.s))
@@ -34,6 +36,7 @@ fun CollectionItem(modifier: Modifier = Modifier, image: Int, collectionType: St
         )
         Box(
             modifier = Modifier
+                .padding(horizontal = 8.dp)
                 .fillMaxWidth()
                 .height(86.dp)
                 .clip(RoundedCornerShape(Theme.radius.s))
@@ -78,6 +81,7 @@ fun CollectionItem(modifier: Modifier = Modifier, image: Int, collectionType: St
 fun CollectionItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
         CollectionItem(
+            modifier = Modifier.width(280.dp),
             image = R.drawable.collection_image,
             collectionType = "Text"
         )

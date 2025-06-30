@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.material3.Text
@@ -34,14 +35,18 @@ fun CollectionListSection(
         LazyHorizontalGrid(
             modifier = modifier
                 .fillMaxWidth(),
-            contentPadding = PaddingValues(),
+            contentPadding = PaddingValues(horizontal = 16.dp),
             rows = GridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(
                 count = collectionItems.size,
             ) {
                 CollectionItem(
+                    modifier = Modifier
+                        .width(280.dp)
+                        .height(92.dp),
                     image = collectionItems[it].second,
                     collectionType = collectionItems[it].first
                 )
@@ -54,7 +59,7 @@ fun CollectionListSection(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CollectionListSectionPreview() {
-    CineVerseTheme(isDarkTheme = false) {
+    CineVerseTheme(isDarkTheme = true) {
         CollectionListSection(
             modifier = Modifier.height(200.dp),
             collectionItems =
