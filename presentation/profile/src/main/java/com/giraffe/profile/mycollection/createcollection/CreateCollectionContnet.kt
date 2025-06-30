@@ -1,4 +1,4 @@
-package com.giraffe.profile.components.mycollections.createCollection
+package com.giraffe.profile.mycollection.createcollection
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.giraffe.presentation.R
+import com.giraffe.designsystem.R
 
 @Composable
 fun CreateCollectionContent(
