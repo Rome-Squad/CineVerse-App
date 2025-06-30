@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
@@ -39,6 +40,7 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun AppTextField(
     startIcon: Painter,
+    placeholder: String,
     modifier: Modifier = Modifier,
     endIcon: @Composable (() -> Unit)? = null,
     title: String? = null,
@@ -116,6 +118,13 @@ fun AppTextField(
                     VisualTransformation.None
                 else
                     PasswordVisualTransformation(),
+                placeholder = {
+                    Text(
+                        placeholder,
+                        style = Theme.textStyle.body.md.regular,
+                        color = Theme.color.shade.tertiary
+                    )
+                },
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Theme.color.background.card,
                     focusedContainerColor = Theme.color.background.card,
@@ -170,9 +179,10 @@ fun AppTextField(
 
 @Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFF7F7F7)
 @Composable
-private fun Previewww() {
+private fun TextFieldPreview() {
     CineVerseTheme {
         AppTextField(
+            placeholder = "Enter your password",
             title = "Label",
             startIcon = painterResource(Theme.icons.outline.user),
             hasPassword = true
