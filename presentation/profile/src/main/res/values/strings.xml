@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="history">History</string>
+    <string name="my_collections">My Collections</string>
+    <string name="my_ratings">My Ratings</string>
+</resources>

@@ -1,23 +1,22 @@
 package com.giraffe.profile.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.TabRowDefaults.Divider
-import androidx.compose.material.Text
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.giraffe.presentation.designsystem.icon.CineVerseIcons
-import com.giraffe.presentation.designsystem.theme.CineVerseTheme
-import com.giraffe.presentation.designsystem.theme.Theme
+import com.giraffe.designsystem.icon.CineVerseIcons
+import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun MenuItem(
@@ -75,7 +74,7 @@ fun MenuItem(
             }
         }
         if (hasBottomDivider) {
-            Divider(
+            HorizontalDivider(
                 color = Theme.color.shade.tertiary,
                 thickness = 1.dp
             )
