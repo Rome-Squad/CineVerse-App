@@ -47,7 +47,7 @@ fun Rating(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRating() {
+private fun Preview() {
     CineVerseTheme(isDarkTheme = true) {
         Rating(
             value = 7.5f,

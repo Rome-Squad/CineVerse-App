@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="show_more">عرض المزيد</string>
+    <string name="card_icon">أيقونة بطاقة</string>
+    <string name="alt_arrow_right_icon">أيقونة السهم البديل لليمين</string>
+    <string name="loading_image">جاري تحميل الصورة</string>
+    <string name="image_poster_movie">ملصق الفيلم المصور</string>
+    <string name="unknown_genre">نوع غير معروف</string>
+    <string name="clock_icon">أيقونة الساعة</string>
+    <string name="unknown_time">وقت غير معروف</string>
+    <string name="calendar_icon">أيقونة التقويم</string>
+    <string name="unknown_date">تاريخ غير معروف</string>
 </resources>

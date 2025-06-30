@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="show_more">Show More</string>
+    <string name="card_icon">CTA Card icon</string>
+    <string name="alt_arrow_right_icon">alt arrow right icon</string>
+    <string name="loading_image">Loading image</string>
+    <string name="image_poster_movie">Image poster movie</string>
+    <string name="unknown_genre">Unknown Genre</string>
+    <string name="clock_icon">clock icon</string>
+    <string name="unknown_time">Unknown Time</string>
+    <string name="calendar_icon">calendar icon</string>
+    <string name="unknown_date">Unknown Date</string>
 </resources>
