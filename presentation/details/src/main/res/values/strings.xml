@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="galley_image">galley image</string>
+    <string name="gallery">gallery</string>
+    <string name="show_more">show more</string>
+    <string name="actor_image">actor image</string>
+    <string name="birthday_cake_icon">birthday cake icon</string>
+    <string name="actor_birthday">Born on</string>
+    <string name="location_icon">location icon</string>
+    <string name="place_of_birth">In</string>
+    <string name="youtube">YouTube</string>
+    <string name="youtube_icon">youtube_icon</string>
+    <string name="facebook">Facebook</string>
+    <string name="facebook_icon">facebook icon</string>
+    <string name="instgram">Instagram</string>
+    <string name="instagram_icon">instagram icon</string>
+</resources>
