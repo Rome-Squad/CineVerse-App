@@ -28,16 +28,15 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun Switch(
-    enabled: Boolean,
-    isDarkTheme: Boolean,
+    isOn: Boolean,
     modifier: Modifier = Modifier,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
-
+    val enabled = onCheckedChange != null
     val switchBackgroundColor by animateColorAsState(
-        targetValue = if (enabled && isDarkTheme) {
+        targetValue = if (enabled && isOn) {
             Theme.color.brand.primary
-        } else if (enabled && !isDarkTheme) {
+        } else if (enabled && !isOn) {
             Color.Transparent
         } else {
             Theme.color.shade.quaternary
@@ -47,7 +46,7 @@ fun Switch(
     val switchCircleColor by animateColorAsState(
         targetValue = if (!enabled) {
             Theme.color.shade.tertiary
-        } else if (isDarkTheme) {
+        } else if (isOn) {
             Color.White
         } else {
             Theme.color.shade.secondary
@@ -55,15 +54,15 @@ fun Switch(
     )
 
     val borderColor =
-        if (enabled && isDarkTheme)
+        if (enabled && isOn)
             Theme.color.brand.primary
-        else if (enabled && !isDarkTheme)
+        else if (!isOn && enabled)
             Theme.color.shade.secondary
         else
             Theme.color.shade.tertiary
 
     val alignment by animateDpAsState(
-        targetValue = if (isDarkTheme) 16.dp else 0.dp,
+        targetValue = if (isOn) 16.dp else 0.dp,
     )
 
     Box(
@@ -75,7 +74,7 @@ fun Switch(
             .border(1.dp, borderColor, RoundedCornerShape(Theme.radius.full))
             .clickable(
                 enabled = enabled, onClick = {
-                    onCheckedChange?.invoke(!isDarkTheme)
+                    onCheckedChange?.invoke(!isOn)
                 }
             )
             .padding(3.dp),
@@ -97,9 +96,8 @@ private fun SwitchPreview() {
     CineVerseTheme {
         Switch(
             modifier = Modifier.padding(16.dp),
-            isDarkTheme = isDarkTheme,
+            isOn = isDarkTheme,
             onCheckedChange = { isDarkTheme = !isDarkTheme },
-            enabled = true
         )
     }
 }
