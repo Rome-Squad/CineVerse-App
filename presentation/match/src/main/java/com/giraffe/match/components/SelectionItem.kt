@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -31,6 +32,8 @@ fun SelectionItem(
     type: SelectionType = SelectionType.CARD,
     icon: Painter = painterResource(Theme.icons.dueTone.headphone),
     description: String,
+    horizontalPadding: Dp,
+    verticalPadding: Dp,
     onClick: () -> Unit = {}
 ) {
     var backgroundColor = Theme.color.background.card
@@ -58,17 +61,13 @@ fun SelectionItem(
                 shape = RoundedCornerShape(Theme.radius.lg)
             )
             .clickable(onClick = onClick)
-            .size(
-                width = if (type == SelectionType.CARD) 328.dp else 69.dp,
-                height = if (type == SelectionType.CARD) 56.dp else 44.dp,
-            )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    horizontal = if (type == SelectionType.CHIP) 20.dp else 12.dp,
-                    vertical = if (type == SelectionType.CHIP) 12.5.dp else 12.dp,
+                    horizontal = horizontalPadding,
+                    vertical = verticalPadding,
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -92,7 +91,12 @@ fun SelectionItem(
 @Composable
 fun SelectionItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
-        SelectionItem(description = "Text")
+        SelectionItem(
+            modifier = Modifier.size(width = 528.dp, height = 56.dp),
+            description = "Text",
+            horizontalPadding = 12.dp,
+            verticalPadding = 12.dp
+        )
     }
 }
 
@@ -100,7 +104,13 @@ fun SelectionItemPreview() {
 @Composable
 fun SelectionItemPreviewIsSelected() {
     CineVerseTheme(isDarkTheme = true) {
-        SelectionItem(isSelected = true, description = "Text")
+        SelectionItem(
+            modifier = Modifier.size(width = 528.dp, height = 56.dp),
+            isSelected = true,
+            description = "Text",
+            horizontalPadding = 12.dp,
+            verticalPadding = 12.dp
+        )
     }
 }
 
@@ -108,7 +118,14 @@ fun SelectionItemPreviewIsSelected() {
 @Composable
 fun SelectionItemPreviewWithoutIconAndNotSelected() {
     CineVerseTheme(isDarkTheme = true) {
-        SelectionItem(type = SelectionType.CHIP, isSelected = false, description = "Text")
+        SelectionItem(
+            modifier = Modifier.size(width = 69.dp, height = 44.dp),
+            type = SelectionType.CHIP,
+            isSelected = false,
+            description = "Text",
+            horizontalPadding = 20.dp,
+            verticalPadding = 12.5.dp
+        )
     }
 }
 
@@ -116,6 +133,13 @@ fun SelectionItemPreviewWithoutIconAndNotSelected() {
 @Composable
 fun SelectionItemPreviewWithoutIcon() {
     CineVerseTheme(isDarkTheme = true) {
-        SelectionItem(type = SelectionType.CHIP, isSelected = true, description = "Text")
+        SelectionItem(
+            modifier = Modifier.size(width = 69.dp, height = 44.dp),
+            type = SelectionType.CHIP,
+            isSelected = true,
+            description = "Text",
+            horizontalPadding = 20.dp,
+            verticalPadding = 12.5.dp
+        )
     }
 }
