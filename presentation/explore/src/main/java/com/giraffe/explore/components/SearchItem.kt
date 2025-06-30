@@ -78,7 +78,7 @@ fun SearchItem(
 @Composable
 fun SearchItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
-        Column(modifier = Modifier.height(120.dp)) {
+        Column {
             SearchItem( text = "Batman", isFromHistory = true, onClick = {})
             SearchItem(text = "The Batman", isFromHistory = false, onClick = {})
         }
