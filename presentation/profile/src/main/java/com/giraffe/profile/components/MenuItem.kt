@@ -5,11 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
+import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
+import androidx.compose.material.TabRowDefaults.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,11 +40,18 @@ fun MenuItem(
             .background(Theme.color.shade.quaternary)
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Row(
-                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 8.dp,
+                    alignment = Alignment.Start
+                ),
             ) {
                 Icon(
                     painter = painterResource(id = icon),
@@ -56,10 +68,23 @@ fun MenuItem(
                 )
             }
             Row(
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 8.dp,
+                    alignment = Alignment.End
+                ),
+                modifier = Modifier
             ) {
                 if (hasSwitch) {
                     // switch from design system
+                    Switch(
+                        checked = false, // This should be a state variable
+                        onCheckedChange = onSwitchChange,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = if (isDanger) Theme.color.additional.primary.red else Theme.color.shade.primary,
+                            uncheckedThumbColor = Theme.color.shade.primary
+                        ),
+                        modifier = Modifier
+                    )
                 }
                 if (hasButton) {
                     Icon(
@@ -74,9 +99,11 @@ fun MenuItem(
             }
         }
         if (hasBottomDivider) {
-            HorizontalDivider(
+            Divider(
                 color = Theme.color.shade.tertiary,
-                thickness = 1.dp
+                thickness = 1.dp,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
             )
         }
     }
@@ -86,15 +113,17 @@ fun MenuItem(
 @Preview
 @Composable
 fun MenuItemPreview() {
-    CineVerseTheme {
+    CineVerseTheme(isDarkTheme = true) {
         MenuItem(
+            modifier = Modifier.width(800.dp),
             icon = Theme.icons.dueTone.moon,
             title = "Profile",
             hasSwitch = true,
             onSwitchChange = {},
-            hasButton = true,
+            hasButton = false,
             onButtonClick = {},
-            isDanger = true,
+            isDanger = false,
+            hasBottomDivider = true
         )
     }
 }
