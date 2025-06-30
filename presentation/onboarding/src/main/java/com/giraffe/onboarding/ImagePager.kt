@@ -14,6 +14,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
@@ -98,12 +99,14 @@ private fun animatedCornerShape(
 ): RoundedCornerShape {
     val isCurrentPage = pageOffsetAbsolute < 0.1f
 
-    val targetTopRadius = 24.dp
+    val targetTopRadius = remember { 24.dp }
 
-    val targetBottomRadius = when {
-        isCurrentPage -> 0.dp
-        pageIndexDiff != 0 -> lerp(0.dp, 24.dp, pageOffsetAbsolute)
-        else -> 0.dp
+    val targetBottomRadius = remember(pageOffsetAbsolute, pageIndexDiff) {
+        when {
+            isCurrentPage -> 0.dp
+            pageIndexDiff != 0 -> lerp(0.dp, 24.dp, pageOffsetAbsolute)
+            else -> 0.dp
+        }
     }
 
     val animatedTopRadius by animateDpAsState(
