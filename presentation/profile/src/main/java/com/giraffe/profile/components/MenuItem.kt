@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.Switch
 import com.giraffe.designsystem.icon.CineVerseIcons
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -30,6 +29,7 @@ fun MenuItem(
     title: String,
     hasSwitch: Boolean,
     onSwitchChange: (Boolean) -> Unit,
+    isSwitchOn: Boolean = true,
     hasButton: Boolean,
     onButtonClick: () -> Unit,
     isDanger: Boolean = false,
@@ -75,15 +75,9 @@ fun MenuItem(
                 modifier = Modifier
             ) {
                 if (hasSwitch) {
-                    // switch from design system
                     Switch(
-                        checked = false, // This should be a state variable
-                        onCheckedChange = onSwitchChange,
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = if (isDanger) Theme.color.additional.primary.red else Theme.color.shade.primary,
-                            uncheckedThumbColor = Theme.color.shade.primary
-                        ),
-                        modifier = Modifier
+                        isOn = isSwitchOn,
+                        onCheckedChange = onSwitchChange
                     )
                 }
                 if (hasButton) {
