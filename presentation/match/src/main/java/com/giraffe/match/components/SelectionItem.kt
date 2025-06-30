@@ -32,8 +32,8 @@ fun SelectionItem(
     type: SelectionType = SelectionType.CARD,
     icon: Painter = painterResource(Theme.icons.dueTone.headphone),
     description: String,
-    horizontalPadding: Dp,
-    verticalPadding: Dp,
+    horizontalPadding: Dp? = null,
+    verticalPadding: Dp? = null,
     onClick: () -> Unit = {}
 ) {
     var backgroundColor = Theme.color.background.card
@@ -45,6 +45,9 @@ fun SelectionItem(
         textColor = Theme.color.brand.primary
     }
     val borderColor = if (isSelected) Theme.color.brand.secondary else Color.Transparent
+
+    val horizontalPadding = horizontalPadding ?: if (type == SelectionType.CHIP) 20.dp else 12.dp
+    val verticalPadding = verticalPadding ?: if (type == SelectionType.CHIP) 12.5.dp else 12.dp
 
     Box(
         modifier = modifier
@@ -61,6 +64,10 @@ fun SelectionItem(
                 shape = RoundedCornerShape(Theme.radius.lg)
             )
             .clickable(onClick = onClick)
+            .size(
+                width = if (type == SelectionType.CARD) 328.dp else 69.dp,
+                height = if (type == SelectionType.CARD) 56.dp else 44.dp
+            )
     ) {
         Row(
             modifier = Modifier
@@ -92,7 +99,6 @@ fun SelectionItem(
 fun SelectionItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
-            modifier = Modifier.size(width = 528.dp, height = 56.dp),
             description = "Text",
             horizontalPadding = 12.dp,
             verticalPadding = 12.dp
@@ -105,11 +111,8 @@ fun SelectionItemPreview() {
 fun SelectionItemPreviewIsSelected() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
-            modifier = Modifier.size(width = 528.dp, height = 56.dp),
             isSelected = true,
-            description = "Text",
-            horizontalPadding = 12.dp,
-            verticalPadding = 12.dp
+            description = "Text"
         )
     }
 }
@@ -119,12 +122,9 @@ fun SelectionItemPreviewIsSelected() {
 fun SelectionItemPreviewWithoutIconAndNotSelected() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
-            modifier = Modifier.size(width = 69.dp, height = 44.dp),
             type = SelectionType.CHIP,
             isSelected = false,
-            description = "Text",
-            horizontalPadding = 20.dp,
-            verticalPadding = 12.5.dp
+            description = "Text"
         )
     }
 }
@@ -134,7 +134,6 @@ fun SelectionItemPreviewWithoutIconAndNotSelected() {
 fun SelectionItemPreviewWithoutIcon() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
-            modifier = Modifier.size(width = 69.dp, height = 44.dp),
             type = SelectionType.CHIP,
             isSelected = true,
             description = "Text",
