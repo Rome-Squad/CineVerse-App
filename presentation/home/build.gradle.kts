@@ -33,8 +33,6 @@ android {
 }
 
 dependencies {
-    implementation (project(":common:presentation"))
-    implementation (project(":common:presentation:composable"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
