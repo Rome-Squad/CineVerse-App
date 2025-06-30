@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.giraffe.cineverseapp.ui.theme.CineVerseAppTheme
-import com.giraffe.presentation.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.theme.CineVerseTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
