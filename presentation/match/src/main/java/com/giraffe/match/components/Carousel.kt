@@ -23,7 +23,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,10 +35,9 @@ import com.giraffe.match.R
 import com.giraffe.match.model.CarouselItem
 import com.giraffe.match.utils.calculateCenterItem
 
-
 @Composable
 fun HeroCarousel(
-    modifier: Modifier = Modifier, items: List<CarouselItem>
+    modifier: Modifier = Modifier, items: List<CarouselItem>, contentPadding: PaddingValues
 ) {
     val listState = rememberLazyListState()
     val heroIndex = remember { mutableIntStateOf(0) }
@@ -52,7 +52,7 @@ fun HeroCarousel(
     LazyRow(
         modifier = modifier,
         state = listState,
-        contentPadding = PaddingValues(horizontal = 40.dp),
+        contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy((-20).dp)
     ) {
         itemsIndexed(items) { index, item ->
@@ -61,7 +61,6 @@ fun HeroCarousel(
         }
     }
 }
-
 
 
 @Composable
@@ -78,29 +77,27 @@ private fun CarouselItemContent(item: CarouselItem, isHero: Boolean) {
         )
     )
     val offsetY by animateDpAsState(
-        targetValue = if (isHero) (-25).dp else 0.dp, animationSpec = spring(
+        targetValue = if (isHero) (-26).dp else 0.dp, animationSpec = spring(
             dampingRatio = 15f, stiffness = 100f
         )
     )
-    val cornerRadius = Theme.radius.xl
 
     Box(
         modifier = Modifier
             .width(width)
             .height(height)
             .offset(y = offsetY)
-            .graphicsLayer {
-                this.alpha = alpha
-                shape = RoundedCornerShape(cornerRadius)
-                clip = true
-            }
             .zIndex(if (isHero) 2f else 0f)
     ) {
         Image(
             painter = painterResource(id = item.imageId),
             contentDescription = "image",
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(alpha)
+                .clip(shape = RoundedCornerShape(Theme.radius.xl))
+
         )
 
         if (!isHero) {
@@ -116,7 +113,7 @@ private fun CarouselItemContent(item: CarouselItem, isHero: Boolean) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewHeroCarouselAutoDetect() {
+private fun Preview() {
 
     val items: List<CarouselItem> = listOf(
         CarouselItem(R.drawable.p1),
@@ -127,6 +124,6 @@ fun PreviewHeroCarouselAutoDetect() {
     )
 
     HeroCarousel(
-        items = items
+        items = items, contentPadding = PaddingValues(horizontal = 40.dp)
     )
 }
