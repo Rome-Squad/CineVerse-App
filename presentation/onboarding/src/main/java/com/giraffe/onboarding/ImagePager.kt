@@ -2,6 +2,7 @@ package com.giraffe.onboarding
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,7 +46,6 @@ fun ImagePager(
         state = pagerState,
         pageSpacing = 16.dp,
         contentPadding = PaddingValues(horizontal = horizontalPadding),
-        userScrollEnabled = false,
         modifier = modifier
     ) { page ->
 
@@ -59,6 +59,10 @@ fun ImagePager(
             else -> 0f
         } * pageOffsetAbsolute
 
+        val animatedRotationZ by animateFloatAsState(
+            targetValue = rotationZ,
+            label = "rotationAnim"
+        )
         val scale = lerp(1f, 0.8f, pageOffsetAbsolute)
 
         val shape = animatedCornerShape(
@@ -72,7 +76,7 @@ fun ImagePager(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .graphicsLayer {
-                    this.rotationZ = rotationZ
+                    this.rotationZ = animatedRotationZ
                     this.scaleX = scale
                     this.scaleY = scale
                 }
