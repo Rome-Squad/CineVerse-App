@@ -24,11 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
@@ -86,13 +86,14 @@ fun AppTextField(
             modifier = modifier
                 .fillMaxWidth()
                 .height(48.dp)
+                .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(color = Theme.color.background.card)
                 .border(
                     width = 1.dp,
                     color = borderColor,
                     shape = RoundedCornerShape(Theme.radius.lg)
                 )
-                .padding(start = 16.dp),
+                .padding(start = 16.dp, end = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -108,6 +109,7 @@ fun AppTextField(
                 tint = Theme.color.shade.tertiary
             )
             TextField(
+                modifier = Modifier.weight(1f),
                 interactionSource = interactionSource,
                 value = text,
                 onValueChange = { text = it },
@@ -130,7 +132,9 @@ fun AppTextField(
                     focusedContainerColor = Theme.color.background.card,
                     cursorColor = Theme.color.brand.primary,
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = Theme.color.shade.primary,
+                    unfocusedTextColor = Theme.color.shade.primary
                 ),
             )
             if (hasError && !isFocused) {
@@ -147,6 +151,7 @@ fun AppTextField(
                     } else {
                         painterResource(Theme.icons.outline.eyeClosed)
                     },
+                    tint = Theme.color.shade.secondary,
                     contentDescription = "password visibility icon",
                     modifier = Modifier
                         .clickable { showPassword = !showPassword }
@@ -177,10 +182,14 @@ fun AppTextField(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFF7F7F7)
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    backgroundColor = 0xFFF7F7F7,
+)
 @Composable
 private fun TextFieldPreview() {
-    CineVerseTheme {
+    CineVerseTheme(isDarkTheme = true) {
         AppTextField(
             placeholder = "Enter your password",
             title = "Label",
