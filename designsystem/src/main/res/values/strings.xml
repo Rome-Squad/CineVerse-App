@@ -13,4 +13,6 @@
     <string name="history">History</string>
     <string name="my_collections">My Collections</string>
     <string name="my_ratings">My Ratings</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
 </resources>
