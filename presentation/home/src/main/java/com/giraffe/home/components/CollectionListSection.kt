@@ -1,5 +1,6 @@
 package com.giraffe.home.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -63,7 +64,9 @@ fun CollectionListSection(
 fun CollectionListSectionPreview() {
     CineVerseTheme(isDarkTheme = true) {
         CollectionListSection(
-            modifier = Modifier.height(234.dp),
+            modifier = Modifier
+                .background(Theme.color.shade.quaternary)
+                .height(250.dp),
             collectionItems =
                 listOf(
                     "Action" to R.drawable.collection_image,
