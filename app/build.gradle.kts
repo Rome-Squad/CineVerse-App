@@ -41,6 +41,7 @@ android {
 
 dependencies {
     implementation(project(":designsystem"))
+    implementation(project(":presentation:home"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
