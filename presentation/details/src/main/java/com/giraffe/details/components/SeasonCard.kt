@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -161,7 +162,7 @@ fun PreviewSeasonCardDark() {
     CineVerseTheme(isDarkTheme = true) {
         SeasonCard(
             poster = painterResource(
-                id = 0 // todo
+                id = R.drawable.reviewer
             ),
             title = "Season",
             caption = "Caption",
@@ -183,7 +184,7 @@ fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
             poster = painterResource(
-                id = 0 // todo
+                id = R.drawable.reviewer
             ),
             title = "Season",
             caption = "Caption",

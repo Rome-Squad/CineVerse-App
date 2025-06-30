@@ -170,7 +170,7 @@ fun PreviewStarCastSectionDark() {
 @Composable
 fun sampleCastList(): List<CastMember> {
     val image = painterResource(
-        id = 0 // todo
+        id = R.drawable.reviewer
     )
     return listOf(
         CastMember("Robert Downey Jr.", "Iron Man", image),
@@ -191,7 +191,7 @@ fun PreviewCastCard() {
             actorName = "Robert Downey.",
             character = "Iron Man",
             actorImage = painterResource(
-                id = 0 // todo
+                id = R.drawable.reviewer
             )
         )
     }
@@ -208,7 +208,7 @@ fun PreviewCastCardDark() {
             actorName = "Robert Downey.",
             character = "Iron Man",
             actorImage = painterResource(
-                id = 0 // todo
+                id = R.drawable.reviewer
             )
         )
     }
