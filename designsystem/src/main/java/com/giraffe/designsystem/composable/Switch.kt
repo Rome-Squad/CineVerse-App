@@ -31,7 +31,7 @@ fun Switch(
     enabled: Boolean,
     isDarkTheme: Boolean,
     modifier: Modifier = Modifier,
-    onCheckedChange: ((Boolean) -> Unit)?,
+    onCheckedChange: (Boolean) -> Unit = {},
 ) {
 
     val switchBackgroundColor by animateColorAsState(
@@ -74,7 +74,8 @@ fun Switch(
             .background(switchBackgroundColor)
             .border(1.dp, borderColor, RoundedCornerShape(Theme.radius.full))
             .clickable(
-                enabled = enabled, onClick = {
+                enabled = enabled,
+                onClick = {
                     onCheckedChange?.invoke(!isDarkTheme)
                 }
             )
@@ -94,7 +95,7 @@ fun Switch(
 @Composable
 private fun SwitchPreview() {
     var isDarkTheme by remember { mutableStateOf(true) }
-    CineVerseTheme {
+    CineVerseTheme(isDarkTheme = true) {
         Switch(
             modifier = Modifier.padding(16.dp),
             isDarkTheme = isDarkTheme,
