@@ -21,12 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.match.model.SelectionType
 
-
-enum class SelectionType {
-    CARD,
-    CHIP
-}
 
 @Composable
 fun SelectionItem(
