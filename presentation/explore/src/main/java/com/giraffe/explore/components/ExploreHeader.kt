@@ -78,7 +78,7 @@ fun ExploreHeader(
                 startIcon = painterResource(Theme.icons.outline.search),
                 onClickStartIcon = onSearchClick,
                 endIcon = endIcon,
-                placeholder = "Search..."
+//                placeholder = "Search..."
             )
         }
         //  Add Tabs
