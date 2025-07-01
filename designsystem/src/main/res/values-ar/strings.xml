@@ -10,4 +10,19 @@
     <string name="unknown_time">وقت غير معروف</string>
     <string name="calendar_icon">أيقونة التقويم</string>
     <string name="unknown_date">تاريخ غير معروف</string>
+    <string name="rating_emoji_animation">رمز تعبيري متحرك للتقييم</string>
+    <string name="rate">قيّم</string>
+    <string name="add_rating">أضف تقييمًا</string>
+    <string name="right_arrow">سهم يمين</string>
+    <string name="you_rated_it">لقد قيّمته</string>
+    <string name="give_it_start">امنحه نجومًا!</string>
+    <string name="tab_to_change_your_rating">اضغط على Tab لتغيير تقييمك</string>
+    <string name="rate_it">أخبر العالم برأيك.</string>
+    <string name="did_you_watch_it">هل شاهدته؟</string>
+    <string name="user_name">\@%1$s</string>
+    <string name="history">التاريخ</string>
+    <string name="my_collections">مجموعاتي</string>
+    <string name="my_ratings">تقييماتي</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
 </resources>
