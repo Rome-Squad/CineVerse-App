@@ -49,7 +49,6 @@ fun TextField(
     onClickStartIcon: ((String) -> Unit)? = null,
     onClickForgotPassword: () -> Unit = {}
 ) {
-    val hasTitle = title != null
     val hasError = errorMessage != null
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -75,7 +74,7 @@ fun TextField(
             },
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        if (hasTitle) {
+        if (title != null) {
             Text(
                 text = title,
                 style = Theme.textStyle.body.md.regular,
