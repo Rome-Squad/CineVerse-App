@@ -24,75 +24,73 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
 
+@Composable
+fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: CollectionItemData) {
+    Column(modifier = modifier) {
+        Box(
+            Modifier
+                .clip(RoundedCornerShape(Theme.radius.s))
+                .fillMaxWidth()
+                .height(80.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(Theme.radius.s)),
+                contentScale = ContentScale.Crop,
+                painter = painterResource(collectionItemData.image),
+                contentDescription = stringResource(R.string.collection_item_image)
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
+                    .align(Alignment.BottomCenter)
+                    .background(color = Theme.color.overlay.primary)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    text = collectionItemData.collectionType,
+                    style = Theme.textStyle.body.sm.medium,
+                    color = Theme.color.shade.primary
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .fillMaxWidth()
+                .height(6.dp)
+                .clip(
+                    RoundedCornerShape(
+                        bottomStart = Theme.radius.s,
+                        bottomEnd = Theme.radius.s
+                    )
+                )
+                .background(Theme.color.brand.tertiary)
+        )
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .height(6.dp)
+                .clip(
+                    RoundedCornerShape(
+                        bottomStart = Theme.radius.s,
+                        bottomEnd = Theme.radius.s
+                    )
+                )
+                .background(Theme.color.shade.quinary)
+        )
+    }
+}
+
 data class CollectionItemData(
     val image: Int,
     val collectionType: String
 )
-
-@Composable
-fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: CollectionItemData) {
-    Box(modifier = modifier) {
-        Column {
-            Box(
-                Modifier
-                    .clip(RoundedCornerShape(Theme.radius.s))
-                    .fillMaxWidth()
-                    .height(80.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(Theme.radius.s)),
-                    contentScale = ContentScale.Crop,
-                    painter = painterResource(collectionItemData.image),
-                    contentDescription = stringResource(R.string.collection_item_image)
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(32.dp)
-                        .align(Alignment.BottomCenter)
-                        .background(color = Theme.color.overlay.primary)
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        text = collectionItemData.collectionType,
-                        style = Theme.textStyle.body.sm.medium,
-                        color = Theme.color.shade.primary
-                    )
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            bottomStart = Theme.radius.s,
-                            bottomEnd = Theme.radius.s
-                        )
-                    )
-                    .background(Theme.color.brand.tertiary)
-            )
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            bottomStart = Theme.radius.s,
-                            bottomEnd = Theme.radius.s
-                        )
-                    )
-                    .background(Theme.color.shade.quinary)
-            )
-        }
-    }
-}
 
 
 @Composable
