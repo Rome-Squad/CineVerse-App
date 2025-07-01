@@ -32,6 +32,7 @@ fun Tabs(
     onTabSelected: (index: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
         TabRow(
             selectedTabIndex = selectedTabIndex,
             modifier = modifier,
@@ -41,7 +42,7 @@ fun Tabs(
                 Box(
                     Modifier
                         .tabIndicatorOffset(currentTabPosition)
-                        .padding(horizontal = 6.dp)
+                        .padding(horizontal = 16.dp)
                         .height(2.dp)
                         .width(currentTabPosition.width)
                         .clip(RoundedCornerShape(
@@ -58,13 +59,13 @@ fun Tabs(
                         .height(1.dp)
                         .background(Theme.color.stroke.primary)
                 )
-            }
+            },
         ) {
             titles.forEachIndexed { index, title ->
                 Tab(
                     selected = selectedTabIndex == index,
                     onClick = { onTabSelected(index) },
-                    modifier = Modifier.padding(horizontal = 6.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     text = {
                         Text(
                             text = title,
