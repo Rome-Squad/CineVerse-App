@@ -2,7 +2,6 @@ package com.giraffe.designsystem.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -33,28 +33,38 @@ fun Tabs(
     onTabSelected: (index: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
         TabRow(
             selectedTabIndex = selectedTabIndex,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            modifier = modifier,
             containerColor = Color.Transparent,
             indicator = { tabPositions ->
                 val currentTabPosition = tabPositions[selectedTabIndex]
                 Box(
                     Modifier
                         .tabIndicatorOffset(currentTabPosition)
+                        .padding(horizontal = 6.dp)
                         .height(2.dp)
                         .width(currentTabPosition.width)
                         .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                         .background(Theme.color.brand.primary)
+                        .zIndex(1f)
                 )
             },
-            divider = {}
+            divider = {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                        .background(Theme.color.stroke.primary)
+                )
+            }
         ) {
             titles.forEachIndexed { index, title ->
                 Tab(
                     selected = selectedTabIndex == index,
                     onClick = { onTabSelected(index) },
+                    modifier = Modifier.padding(horizontal = 6.dp),
                     text = {
                         Text(
                             text = title,
@@ -64,14 +74,6 @@ fun Tabs(
                     }
                 )
             }
-        }
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                .background(Theme.color.stroke.primary)
-        )
     }
 }
 
