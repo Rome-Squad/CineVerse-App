@@ -32,12 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.R
-import com.giraffe.match.model.CarouselItem
 import com.giraffe.match.utils.calculateCenterItem
 
 @Composable
 fun HeroCarousel(
-    modifier: Modifier = Modifier, items: List<CarouselItem>, contentPadding: PaddingValues
+    modifier: Modifier = Modifier, items: List<Int>, contentPadding: PaddingValues
 ) {
     val listState = rememberLazyListState()
     val heroIndex = remember { mutableIntStateOf(0) }
@@ -55,16 +54,16 @@ fun HeroCarousel(
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy((-20).dp)
     ) {
-        itemsIndexed(items) { index, item ->
+        itemsIndexed(items) { index, imageId ->
             val isHero = index == heroIndex.intValue
-            CarouselItemContent(item, isHero)
+            CarouselItemContent(imageId, isHero)
         }
     }
 }
 
 
 @Composable
-private fun CarouselItemContent(item: CarouselItem, isHero: Boolean) {
+private fun CarouselItemContent(imageId: Int, isHero: Boolean) {
     val alpha by animateFloatAsState(targetValue = if (isHero) 1f else 0.6f)
     val width by animateDpAsState(
         targetValue = if (isHero) 240.dp else 200.dp, animationSpec = spring(
@@ -88,9 +87,11 @@ private fun CarouselItemContent(item: CarouselItem, isHero: Boolean) {
             .height(height)
             .offset(y = offsetY)
             .zIndex(if (isHero) 2f else 0f)
+            .clip(shape = RoundedCornerShape(Theme.radius.xl))
+
     ) {
         Image(
-            painter = painterResource(id = item.imageId),
+            painter = painterResource(id = imageId),
             contentDescription = "image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -115,12 +116,12 @@ private fun CarouselItemContent(item: CarouselItem, isHero: Boolean) {
 @Composable
 private fun Preview() {
 
-    val items: List<CarouselItem> = listOf(
-        CarouselItem(R.drawable.p1),
-        CarouselItem(R.drawable.p2),
-        CarouselItem(R.drawable.p3),
-        CarouselItem(R.drawable.p4),
-        CarouselItem(R.drawable.pp1)
+    val items: List<Int> = listOf(
+        R.drawable.p1,
+        R.drawable.p2,
+        R.drawable.p3,
+        R.drawable.p4,
+        R.drawable.pp1
     )
 
     HeroCarousel(
