@@ -14,4 +14,5 @@
     <string name="facebook_icon">facebook icon</string>
     <string name="instgram">Instagram</string>
     <string name="instagram_icon">instagram icon</string>
+    <string name="folder_icon">folder icon</string>
 </resources>
