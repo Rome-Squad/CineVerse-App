@@ -28,4 +28,6 @@
     <string name="circle_image">circle image</string>
     <string name="image_is_empty">image is empty</string>
     <string name="close">Close</string>
+    <string name="collection_item_icon">collection item icon</string>
+    <string name="arrow_right_icon">arrow right icon</string>
 </resources>
