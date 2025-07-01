@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.composable.TextField
+import com.giraffe.designsystem.composable.Tabs
 
 @Composable
 fun ExploreHeader(
@@ -27,12 +28,15 @@ fun ExploreHeader(
     onSearchClick: (String) -> Unit = {},
     endIcon: Painter,
     onEndIconClick: () -> Unit = {},
-    onTabClick: () -> Unit = {}
+    tabsTitles: List<String>,
+    onTabClick: (Int) -> Unit = {},
+    selectedTabIndex: Int
 ) {
     Column(
         modifier = modifier
-            .background(color = Theme.color.background.screen),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .background(color = Theme.color.background.screen)
+            .padding(top = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
             modifier = Modifier,
@@ -63,7 +67,11 @@ fun ExploreHeader(
                 placeholder = "Search..."
             )
         }
-        //  Add Tabs
+        Tabs(
+            titles = tabsTitles,
+            onTabSelected = onTabClick,
+            selectedTabIndex = selectedTabIndex,
+        )
     }
 
 }
@@ -90,11 +98,14 @@ fun EndIcon(
 @Preview
 @Composable
 fun ExploreHeaderPreview() {
-    CineVerseTheme(isDarkTheme = true) {
+    CineVerseTheme(isDarkTheme = false) {
         ExploreHeader(
             onBackClick = {},
             showBackButton = true,
-            endIcon = painterResource(Theme.icons.outline.microphone)
+            endIcon = painterResource(Theme.icons.outline.microphone),
+            tabsTitles = listOf<String>("Movie","Series"),
+            onTabClick = {},
+            selectedTabIndex = 0
         )
     }
 }
