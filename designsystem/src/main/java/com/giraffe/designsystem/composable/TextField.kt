@@ -38,7 +38,7 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
-fun AppTextField(
+fun TextField(
     startIcon: Painter,
     placeholder: String,
     modifier: Modifier = Modifier,
@@ -190,7 +190,7 @@ fun AppTextField(
 @Composable
 private fun TextFieldPreview() {
     CineVerseTheme(isDarkTheme = true) {
-        AppTextField(
+        TextField(
             placeholder = "Enter your password",
             title = "Label",
             startIcon = painterResource(Theme.icons.outline.user),
