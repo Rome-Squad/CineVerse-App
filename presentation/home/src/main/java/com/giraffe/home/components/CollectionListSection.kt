@@ -23,7 +23,7 @@ import com.giraffe.home.R
 @Composable
 fun CollectionListSection(
     modifier: Modifier = Modifier,
-    collectionItems: List<Pair<String, Int>>
+    collectionItems: List<CollectionItemData>
 ) {
     Column(
         modifier = modifier
@@ -50,8 +50,7 @@ fun CollectionListSection(
                     modifier = Modifier
                         .width(280.dp)
                         .height(92.dp),
-                    image = collectionItems[it].second,
-                    collectionType = collectionItems[it].first
+                    collectionItemData = collectionItems[it]
                 )
             }
         }
@@ -69,12 +68,22 @@ fun CollectionListSectionPreview() {
                 .height(250.dp),
             collectionItems =
                 listOf(
-                    "Action" to R.drawable.collection_image,
-                    "Action" to R.drawable.collection_image,
-                    "Action" to R.drawable.collection_image,
-                    "Comedy" to R.drawable.collection_image,
-                    "Action" to R.drawable.collection_image,
-                    "Comedy" to R.drawable.collection_image,
+                    CollectionItemData(
+                        image = R.drawable.collection_image,
+                        collectionType = "Action"
+                    ),
+                    CollectionItemData(
+                        image = R.drawable.collection_image,
+                        collectionType = "Action"
+                    ),
+                    CollectionItemData(
+                        image = R.drawable.collection_image,
+                        collectionType = "Action"
+                    ),
+                    CollectionItemData(
+                        image = R.drawable.collection_image,
+                        collectionType = "Action"
+                    )
                 )
         )
     }
