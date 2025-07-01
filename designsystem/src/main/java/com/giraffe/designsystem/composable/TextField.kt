@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalFocusManager
@@ -37,8 +38,9 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
-fun AppTextField(
+fun TextField(
     startIcon: Painter,
+    placeholder: String,
     modifier: Modifier = Modifier,
     endIcon: @Composable (() -> Unit)? = null,
     title: String? = null,
@@ -47,7 +49,6 @@ fun AppTextField(
     onClickStartIcon: ((String) -> Unit)? = null,
     onClickForgotPassword: () -> Unit = {}
 ) {
-    val hasTitle = title != null
     val hasError = errorMessage != null
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -73,7 +74,7 @@ fun AppTextField(
             },
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        if (hasTitle) {
+        if (title != null) {
             Text(
                 text = title,
                 style = Theme.textStyle.body.md.regular,
@@ -84,13 +85,14 @@ fun AppTextField(
             modifier = modifier
                 .fillMaxWidth()
                 .height(48.dp)
+                .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(color = Theme.color.background.card)
                 .border(
                     width = 1.dp,
                     color = borderColor,
                     shape = RoundedCornerShape(Theme.radius.lg)
                 )
-                .padding(start = 16.dp),
+                .padding(start = 16.dp, end = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -106,6 +108,7 @@ fun AppTextField(
                 tint = Theme.color.shade.tertiary
             )
             TextField(
+                modifier = Modifier.weight(1f),
                 interactionSource = interactionSource,
                 value = text,
                 onValueChange = { text = it },
@@ -116,12 +119,21 @@ fun AppTextField(
                     VisualTransformation.None
                 else
                     PasswordVisualTransformation(),
+                placeholder = {
+                    Text(
+                        placeholder,
+                        style = Theme.textStyle.body.md.regular,
+                        color = Theme.color.shade.tertiary
+                    )
+                },
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Theme.color.background.card,
                     focusedContainerColor = Theme.color.background.card,
                     cursorColor = Theme.color.brand.primary,
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = Theme.color.shade.primary,
+                    unfocusedTextColor = Theme.color.shade.primary
                 ),
             )
             if (hasError && !isFocused) {
@@ -138,6 +150,7 @@ fun AppTextField(
                     } else {
                         painterResource(Theme.icons.outline.eyeClosed)
                     },
+                    tint = Theme.color.shade.secondary,
                     contentDescription = "password visibility icon",
                     modifier = Modifier
                         .clickable { showPassword = !showPassword }
@@ -168,11 +181,16 @@ fun AppTextField(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFF7F7F7)
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    backgroundColor = 0xFFF7F7F7,
+)
 @Composable
-private fun Previewww() {
-    CineVerseTheme {
-        AppTextField(
+private fun TextFieldPreview() {
+    CineVerseTheme(isDarkTheme = true) {
+        TextField(
+            placeholder = "Enter your password",
             title = "Label",
             startIcon = painterResource(Theme.icons.outline.user),
             hasPassword = true
