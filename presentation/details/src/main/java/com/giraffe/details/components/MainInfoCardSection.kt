@@ -40,12 +40,9 @@ fun MainInfoCardSection(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
-            modifier = Modifier
-                .height(93.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Column(
-                modifier = Modifier.height(65.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
@@ -61,7 +58,7 @@ fun MainInfoCardSection(
                 )
              Text(
                     text = genres,
-                    style = Theme.textStyle.body.md.medium,
+                    style = Theme.textStyle.body.sm.medium,
                  color = Theme.color.shade.secondary
 
 
