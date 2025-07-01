@@ -21,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -45,9 +44,11 @@ fun Tabs(
                         .padding(horizontal = 6.dp)
                         .height(2.dp)
                         .width(currentTabPosition.width)
-                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                        .clip(RoundedCornerShape(
+                            topStart = Theme.radius.full,
+                            topEnd = Theme.radius.full,
+                        ))
                         .background(Theme.color.brand.primary)
-                        .zIndex(1f)
                 )
             },
             divider = {
@@ -55,7 +56,6 @@ fun Tabs(
                     Modifier
                         .fillMaxWidth()
                         .height(1.dp)
-                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                         .background(Theme.color.stroke.primary)
                 )
             }
