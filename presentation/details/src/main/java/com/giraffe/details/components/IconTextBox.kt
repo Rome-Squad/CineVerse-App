@@ -8,10 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
 
 @Composable
 fun IconTextBox(
@@ -21,6 +24,7 @@ fun IconTextBox(
     text: String
 ) {
     Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -49,7 +53,9 @@ private fun PreviewIconTextBox() {
         isDarkTheme = false
     ) {
         IconTextBox(
-            modifier = Modifier
+            icon = painterResource(Theme.icons.outline.location),
+            contentDescription = stringResource(R.string.location_icon),
+            text = stringResource(R.string.place_of_birth, "cairo")
         )
     }
 }
@@ -65,7 +71,9 @@ private fun PreviewIconTextBoxDark() {
         isDarkTheme = true
     ) {
         IconTextBox(
-            modifier = Modifier
+            icon = painterResource(Theme.icons.outline.location),
+            contentDescription = stringResource(R.string.location_icon),
+            text = stringResource(R.string.place_of_birth, "Cairo")
         )
     }
 }
