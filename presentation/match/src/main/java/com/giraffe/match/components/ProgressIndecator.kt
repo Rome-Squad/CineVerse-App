@@ -27,7 +27,7 @@ fun ProgressIndicator(
     Box(
         modifier = modifier
             .height(12.dp)
-            .width(328.dp)
+            .fillMaxWidth()
             .background(
                 color = trackColor,
                 shape = RoundedCornerShape(

@@ -3,12 +3,14 @@ package com.giraffe.match.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -49,40 +51,39 @@ fun SelectionItem(
     val horizontalPadding = horizontalPadding ?: if (type == SelectionType.CHIP) 20.dp else 12.dp
     val verticalPadding = verticalPadding ?: if (type == SelectionType.CHIP) 12.5.dp else 12.dp
 
-    Box(
-        modifier = modifier
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(Theme.radius.lg)
-            )
-            .border(
-                width = 1.dp,
-                shape = RoundedCornerShape(Theme.radius.lg),
-                color = borderColor
-            )
-            .clip(
-                shape = RoundedCornerShape(Theme.radius.lg)
-            )
-            .clickable(onClick = onClick)
-            .size(
-                width = if (type == SelectionType.CARD) 328.dp else 69.dp,
-                height = if (type == SelectionType.CARD) 56.dp else 44.dp
-            )
-    ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = modifier
+                .background(
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(Theme.radius.lg)
+                )
+                .border(
+                    width = 1.dp,
+                    shape = RoundedCornerShape(Theme.radius.lg),
+                    color = borderColor
+                )
+                .clip(
+                    shape = RoundedCornerShape(Theme.radius.lg)
+                )
+                .clickable(onClick = onClick)
                 .padding(
                     horizontal = horizontalPadding,
                     vertical = verticalPadding,
                 ),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             if (type == SelectionType.CARD) {
-                SelectionIcon(
-                    modifier = Modifier.padding(end = 12.dp),
-                    icon = icon,
-                    backgroundColor = iconBackgroundColor
+                Icon(
+                    modifier = Modifier
+                        .background(
+                            color = iconBackgroundColor,
+                            shape = RoundedCornerShape(Theme.radius.md)
+                        )
+                        .padding(8.dp),
+                    painter = icon,
+                    tint = Theme.color.brand.primary,
+                    contentDescription = "headphone icon"
                 )
             }
             Text(
@@ -91,7 +92,6 @@ fun SelectionItem(
                 style = Theme.textStyle.body.md.medium
             )
         }
-    }
 }
 
 @Preview(showBackground = true)
@@ -99,6 +99,11 @@ fun SelectionItem(
 fun SelectionItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
+            modifier = Modifier
+                .size(
+                    width = 328.dp,
+                    height = 56.dp
+                ),
             description = "Text",
             horizontalPadding = 12.dp,
             verticalPadding = 12.dp
@@ -111,6 +116,11 @@ fun SelectionItemPreview() {
 fun SelectionItemPreviewIsSelected() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
+            modifier = Modifier
+                .size(
+                    width = 328.dp,
+                    height = 56.dp
+                ),
             isSelected = true,
             description = "Text"
         )
@@ -122,6 +132,11 @@ fun SelectionItemPreviewIsSelected() {
 fun SelectionItemPreviewWithoutIconAndNotSelected() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
+            modifier = Modifier
+                .size(
+                    width = 69.dp,
+                    height = 44.dp
+                ),
             type = SelectionType.CHIP,
             isSelected = false,
             description = "Text"
@@ -134,6 +149,11 @@ fun SelectionItemPreviewWithoutIconAndNotSelected() {
 fun SelectionItemPreviewWithoutIcon() {
     CineVerseTheme(isDarkTheme = true) {
         SelectionItem(
+            modifier = Modifier
+                .size(
+                    width = 69.dp,
+                    height = 44.dp
+                ),
             type = SelectionType.CHIP,
             isSelected = true,
             description = "Text",
