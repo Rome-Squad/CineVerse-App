@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,16 +25,19 @@ fun MoviesListSection(
     title: String,
     movies: List<PosterMovie>,
     modifier: Modifier = Modifier,
+    paddingHorizontal: Int = 16,
     onClickShowMore: () -> Unit = {},
     onClickPoster: () -> Unit = {}
 ) {
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = paddingHorizontal.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -48,15 +50,13 @@ fun MoviesListSection(
                 text = stringResource(R.string.show_more),
                 style = Theme.textStyle.body.md.medium,
                 color = Theme.color.brand.primary,
-                modifier = Modifier
-                    .clickable(onClick = onClickShowMore)
+                modifier = Modifier.clickable(onClick = onClickShowMore)
             )
         }
 
         LazyRow(
-            modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
         ) {
             items(movies.size) { index ->
                 PosterItemVertically(
@@ -72,29 +72,34 @@ fun MoviesListSection(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewMoviesListSection() {
+private fun Preview() {
     CineVerseTheme {
         MoviesListSection(
+            modifier = Modifier.fillMaxWidth(),
             title = "Popular Movies",
             movies = listOf(
                 PosterMovie(
                     title = "The Flash",
-                    image = painterResource(R.drawable.poster_image),
+                    imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                     rating = 7.5f,
                 ),
                 PosterMovie(
                     title = "The Flash",
-                    image = painterResource(R.drawable.poster_image),
+                    imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                     rating = 7.5f,
                 ),
                 PosterMovie(
                     title = "The Flash",
-                    image = painterResource(R.drawable.poster_image),
+                    imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                     rating = 7.5f,
-                )
+                ),
+                PosterMovie(
+                    title = "The Flash",
+                    imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
+                    rating = 7.5f,
+                ),
             ),
             onClickShowMore = {},
-            onClickPoster = {}
-        )
+            onClickPoster = {})
     }
 }
