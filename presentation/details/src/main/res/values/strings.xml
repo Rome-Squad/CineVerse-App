@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="watch">Watch</string>
     <string name="galley_image">galley image</string>
     <string name="gallery">gallery</string>
     <string name="show_more">show more</string>
