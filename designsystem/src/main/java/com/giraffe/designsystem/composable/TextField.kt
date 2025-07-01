@@ -41,6 +41,8 @@ import com.giraffe.designsystem.theme.Theme
 fun TextField(
     startIcon: Painter,
     placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     endIcon: @Composable (() -> Unit)? = null,
     title: String? = null,
@@ -53,7 +55,6 @@ fun TextField(
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
-    var text by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
     val borderColor by animateColorAsState(
         targetValue = if (isFocused)
@@ -64,7 +65,7 @@ fun TextField(
             Theme.color.stroke.primary
     )
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(
                 indication = null,
@@ -100,7 +101,7 @@ fun TextField(
             else startIcon
             Icon(
                 modifier = Modifier.then(
-                    if (onClickStartIcon != null) Modifier.clickable { onClickStartIcon(text) }
+                    if (onClickStartIcon != null) Modifier.clickable { onClickStartIcon(value) }
                     else Modifier
                 ),
                 painter = checkLeftIcon,
@@ -110,8 +111,8 @@ fun TextField(
             TextField(
                 modifier = Modifier.weight(1f),
                 interactionSource = interactionSource,
-                value = text,
-                onValueChange = { text = it },
+                value = value,
+                onValueChange = onValueChange,
                 textStyle = Theme.textStyle.body.md.medium,
                 visualTransformation = if (!hasPassword)
                     VisualTransformation.None
@@ -189,11 +190,14 @@ fun TextField(
 @Composable
 private fun TextFieldPreview() {
     CineVerseTheme(isDarkTheme = true) {
+        var string by remember { mutableStateOf("alaa") }
         TextField(
             placeholder = "Enter your password",
             title = "Label",
             startIcon = painterResource(Theme.icons.outline.user),
-            hasPassword = true
+            hasPassword = true,
+            value = "Alaa",
+            onValueChange = {string = it},
         )
     }
 }
