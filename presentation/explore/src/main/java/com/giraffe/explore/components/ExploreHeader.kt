@@ -54,7 +54,7 @@ fun ExploreHeader(
                 )
             }
             TextField(
-                modifier = modifier,
+                modifier = Modifier,
                 startIcon = painterResource(Theme.icons.outline.search),
                 onClickStartIcon = onSearchClick,
                 endIcon = {
