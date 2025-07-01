@@ -50,7 +50,7 @@ fun PosterItemVertically(
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(Theme.color.background.card)
                 .clickable(onClick = onClickPoster)
-                .aspectRatio(136f / 182f),
+                .aspectRatio(0.74f),
             contentAlignment = Alignment.Center
         ) {
 
