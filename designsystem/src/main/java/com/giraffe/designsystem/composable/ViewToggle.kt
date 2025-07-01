@@ -1,12 +1,14 @@
 package com.giraffe.designsystem.composable
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,14 +31,20 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun ViewToggle(
-    isSelected: Boolean,
+    isListSelected: Boolean,
     modifier: Modifier = Modifier,
-    onCheckedChange: ((Boolean) -> Unit)?,
+    onViewToggle: ((Boolean) -> Unit)?,
 ) {
-    val enabledGridList = onCheckedChange != null
+    val gridBackgroundColor by animateColorAsState(
+        targetValue = if (isListSelected) {
+            Theme.color.shade.secondary
+        } else {
+            Theme.color.brand.primary
+        }
+    )
 
-    val defaultGridBackgroundColor by animateColorAsState(
-        targetValue = if (isSelected) {
+    val listBackgroundColor by animateColorAsState(
+        targetValue = if (isListSelected) {
             Theme.color.brand.primary
         } else {
             Theme.color.shade.secondary
@@ -45,21 +52,26 @@ fun ViewToggle(
     )
 
     val alignment by animateDpAsState(
-        targetValue = if (isSelected) 40.dp else 0.dp,
+        targetValue = if (isListSelected) 40.dp else 0.dp,
     )
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .width(80.dp)
+            .height(40.dp)
             .clip(RoundedCornerShape(Theme.radius.s))
             .background(Theme.color.background.card)
-            .border(1.dp, Theme.color.stroke.primary, RoundedCornerShape(Theme.radius.s))
-            .clickable(
-                enabled = enabledGridList, onClick = {
-                    onCheckedChange?.invoke(!isSelected)
-                }
+            .clickable(onClick = {
+                onViewToggle?.invoke(!isListSelected)
+            }
             )
     ) {
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .border(1.dp, Theme.color.stroke.primary, RoundedCornerShape(Theme.radius.s))
+        )
 
         Box(
             modifier = Modifier
@@ -70,42 +82,55 @@ fun ViewToggle(
                 .border(1.dp, Theme.color.brand.secondary, RoundedCornerShape(Theme.radius.s))
         )
 
-        Icon(
+        Crossfade(
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(horizontal = 10.dp)
-                .size(20.dp),
-            painter = if (enabledGridList)
-                painterResource(Theme.icons.outline.grid)
-            else
-                painterResource(Theme.icons.dueTone.grid),
-            contentDescription = "Grid icon for View Toggle",
-            tint = defaultGridBackgroundColor
-        )
+                .padding(horizontal = 10.dp),
+            targetState = isListSelected,
+            label = "FavoriteIcon"
+        ) { selected ->
+            Icon(
+                modifier = Modifier
+                    .size(20.dp),
+                painter = if (selected)
+                    painterResource(Theme.icons.outline.grid)
+                else
+                    painterResource(Theme.icons.dueTone.grid),
+                contentDescription = "Grid icon for View Toggle",
+                tint = gridBackgroundColor
+            )
+        }
 
-        Icon(
+        Crossfade(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(horizontal = 10.dp)
-                .size(20.dp),
-            painter = painterResource(Theme.icons.outline.rowVertical),
-            contentDescription = "Grid icon for View Toggle",
-            tint = Theme.color.shade.secondary
-        )
-
+                .padding(horizontal = 10.dp),
+            targetState = isListSelected,
+            label = "FavoriteIcon"
+        ) { selected ->
+            Icon(
+                modifier = Modifier
+                    .size(20.dp),
+                painter = if (selected)
+                    painterResource(Theme.icons.dueTone.rowVertical)
+                else
+                    painterResource(Theme.icons.outline.rowVertical),
+                contentDescription = "Grid icon for View Toggle",
+                tint = listBackgroundColor
+            )
+        }
     }
-
 }
 
 @Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFF7F7F7)
 @Composable
 private fun ViewTogglePreview() {
-    var selectedChip by remember { mutableStateOf(false) }
+    var isListSelected by remember { mutableStateOf(false) }
     CineVerseTheme(isDarkTheme = true) {
         ViewToggle(
             modifier = Modifier.padding(40.dp),
-            isSelected = selectedChip,
-            onCheckedChange = { selectedChip = !selectedChip },
+            isListSelected = isListSelected,
+            onViewToggle = { isListSelected = !isListSelected },
         )
     }
 }
