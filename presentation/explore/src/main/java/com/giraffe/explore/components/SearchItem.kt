@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -72,11 +73,9 @@ fun SearchItem(
             tint = Theme.color.shade.tertiary
         )
     }
-    Spacer(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .background(Theme.color.shade.quaternary)
+    HorizontalDivider(
+        thickness = 1.dp,
+        color = Theme.color.shade.quaternary,
     )
 }
 
