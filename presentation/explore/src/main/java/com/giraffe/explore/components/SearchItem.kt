@@ -1,6 +1,5 @@
 package com.giraffe.explore.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,14 +37,18 @@ fun SearchItem(
         modifier = modifier
             .clickable { onClick() }
             .padding(vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        Icon(
             painter = painterResource(id = iconId),
-            contentDescription = null,
-            modifier = Modifier.size(20.dp)
+            contentDescription = "Search",
+
+            modifier = Modifier.size(20.dp),
+            tint = Theme.color.shade.tertiary
         )
+
+
 
 
         Text(
@@ -57,14 +61,15 @@ fun SearchItem(
         )
 
 
-        Image(
+        Icon(
             painter = painterResource(id = Theme.icons.outline.arrowRightUp),
-            contentDescription = null,
+            contentDescription = "Navigate",
             modifier = Modifier
                 .size(20.dp)
                 .graphicsLayer {
                     rotationY = 180f
-                }
+                },
+            tint = Theme.color.shade.tertiary
         )
     }
     Spacer(
