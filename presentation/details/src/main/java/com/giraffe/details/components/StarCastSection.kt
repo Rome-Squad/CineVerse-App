@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -139,7 +140,7 @@ data class CastMember(
 )
 
 @Composable
-@androidx.compose.ui.tooling.preview.Preview(
+@Preview(
     name = "StarCastSection Light",
     showBackground = true,
     apiLevel = 34
@@ -155,7 +156,7 @@ fun PreviewStarCastSectionLight() {
 }
 
 @Composable
-@androidx.compose.ui.tooling.preview.Preview(
+@Preview(
     name = "StarCastSection Dark",
     showBackground = false,
     apiLevel = 34
@@ -182,7 +183,7 @@ fun sampleCastList(): List<CastMember> {
     )
 }
 @Composable
-@androidx.compose.ui.tooling.preview.Preview(
+@Preview(
     name = "CastCard Preview",
     showBackground = false,
     apiLevel = 34
@@ -199,7 +200,7 @@ fun PreviewCastCard() {
     }
 }
 @Composable
-@androidx.compose.ui.tooling.preview.Preview(
+@Preview(
     name = "CastCard Preview Dark",
     showBackground = false,
     apiLevel = 34

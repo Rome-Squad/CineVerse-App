@@ -12,10 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,20 +19,12 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.cineverseapp.ui.theme.CineVerseAppTheme
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.components.ReviewCard
-import com.giraffe.designsystem.R
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var rate by remember {
-                mutableIntStateOf(
-                    3
-                )
-            }
-
             CineVerseTheme {
 
                 Scaffold(
@@ -53,74 +41,6 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-
-
-/*
-
-                        RatingSelector(
-                            modifier = Modifier,
-                            rate = rate,
-                            onRateClick = {
-                                rate = it
-                            }
-                        )
-*/
-                        /*
-                        BSRatingContent(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp),
-                            rate = rate,
-                            onRateClick = {
-                                rate = it
-                            }
-                        ) {
-                            Log.d("TAG", "onCreate: rate added $it")
-                        }*/
-                        /*
-
-                        RatingSection(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    all = 16.dp
-                                ),
-                            rate = rate,
-                        ) {
-                            Log.d("TAG", "onCreate: $rate")
-                        }
-
-
-                        RatingSection(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    all = 16.dp
-                                ),
-                            rate = null,
-                        ) {
-
-                            Log.d("TAG", "onCreate: null")
-                        }
-                    }
-*/
-                        /*
-
-                                                ReadMoreText(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(16.dp),
-                                                    text = "This has no competition. It is the very finest comic-book character movie ever made. Knowing the Burton, Donner and Nolan filmic adaptations of Batman and Superman will be a matter of history, not just of memory.",
-                                                )
-                        */
-                        ReviewCard(
-                            rate = 4,
-                            reviewText = "A sickening, borderline fascist film that is simultaneously dull and harmful. The editing represents thatA sickening, borderline fascist film that is simultaneously dull and harmful. The editing represents that of an anti-pirate commercial and the politics are beyond repr The editing represents that of an anti-pirate commercial and the politics are beyond repr",
-                            reviewerImageSource = R.drawable.reviewer,
-                            reviewerName = "Bilal Azzam",
-                            reviewerUsername = "bilal_azzam",
-                        )
-
                     }
                 }
 
