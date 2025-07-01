@@ -1,4 +1,4 @@
-package com.giraffe.cineverseapp.ui.theme
+package com.giraffe.designsystem.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
