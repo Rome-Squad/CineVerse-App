@@ -15,4 +15,8 @@
     <string name="my_ratings">My Ratings</string>
     <string name="arabic">Arabic</string>
     <string name="english">English</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
+
 </resources>
