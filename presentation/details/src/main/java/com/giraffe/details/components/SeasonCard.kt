@@ -4,12 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -64,7 +61,7 @@ fun SeasonCard(
                 Image(
                     painter = poster,
                     contentDescription = null,
-                    modifier = Modifier
+                    modifier = Modifier.padding(end = 12.dp, bottom = 12.dp)
                         .size(width = posterWidth, height = posterHeight)
                         .clip(
                             RoundedCornerShape(
@@ -76,8 +73,6 @@ fun SeasonCard(
                         ),
                     contentScale = ContentScale.Crop
                 )
-
-                Spacer(modifier = Modifier.width(12.dp))
 
                 Column(
                     modifier = Modifier.weight(1f)
@@ -95,15 +90,12 @@ fun SeasonCard(
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
             HorizontalDivider(thickness = 0.5.dp, color = Theme.color.stroke.primary)
-            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally)
             ) {
                 Icon(
                     painter = ratingIcon,
@@ -111,29 +103,24 @@ fun SeasonCard(
                     contentDescription = "Rating",
                     modifier = Modifier.size(16.dp)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
                 Text(
+                    modifier = Modifier.padding(end = 8.dp),
                     text = rating.toString(),
                     color = Theme.color.shade.secondary,
                     style = Theme.textStyle.label.md.regular,
                 )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
                 Icon(
                     painter = episodesIcon,
                     contentDescription = "Episodes",
                     tint = Theme.color.shade.secondary,
                     modifier = Modifier.size(16.dp)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
                 Text(
+                    modifier = Modifier.padding(end = 8.dp),
                     text = "$episodes Episodes",
                     color = Theme.color.shade.secondary,
                     style = Theme.textStyle.label.md.regular,
                 )
-
-                Spacer(modifier = Modifier.width(12.dp))
 
                 Icon(
                     painter = calendarIcon,
@@ -141,7 +128,6 @@ fun SeasonCard(
                     tint = Theme.color.shade.secondary,
                     modifier = Modifier.size(16.dp)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "$year",
                     color = Theme.color.shade.secondary,
