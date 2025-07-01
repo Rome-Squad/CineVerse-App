@@ -27,4 +27,5 @@
     <string name="english">English</string>
     <string name="circle_image">circle image</string>
     <string name="image_is_empty">image is empty</string>
+    <string name="close">Close</string>
 </resources>

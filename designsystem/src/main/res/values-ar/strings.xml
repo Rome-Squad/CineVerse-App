@@ -25,6 +25,7 @@
     <string name="my_ratings">تقييماتي</string>
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
-    <string name="circle_image">circle image</string>
-    <string name="image_is_empty">image is empty</string>
+    <string name="circle_image">صورة دائرية</string>
+    <string name="image_is_empty">الصورة فارغة</string>
+    <string name="close">إغلاق</string>
 </resources>
