@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -70,36 +69,19 @@ fun MainDetails(
                     color = Theme.color.shade.primary,
                     text = actorName
                 )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        tint = Theme.color.shade.secondary,
-                        painter = painterResource(Theme.icons.outline.cake),
-                        contentDescription = stringResource(R.string.birthday_cake_icon)
-                    )
-                    Text(
-                        style = Theme.textStyle.label.md.regular,
-                        color = Theme.color.shade.secondary,
-                        text = stringResource(R.string.actor_birthday, actorBirthday)
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        tint = Theme.color.shade.secondary,
-                        painter = painterResource(Theme.icons.outline.location),
-                        contentDescription = stringResource(R.string.location_icon),
-                    )
-                    Text(
-                        style = Theme.textStyle.label.md.regular,
-                        color = Theme.color.shade.secondary,
-                        text = stringResource(R.string.place_of_birth, actorPlaceOfBirth)
-                    )
-                }
+
+                IconTextBox(
+                    icon = painterResource(Theme.icons.outline.cake),
+                    contentDescription = stringResource(R.string.birthday_cake_icon),
+                    text = stringResource(R.string.actor_birthday, actorBirthday)
+                )
+
+                IconTextBox(
+                    icon = painterResource(Theme.icons.outline.location),
+                    contentDescription = stringResource(R.string.location_icon),
+                    text = stringResource(R.string.place_of_birth, actorPlaceOfBirth)
+                )
+
             }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
