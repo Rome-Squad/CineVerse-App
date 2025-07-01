@@ -1,18 +1,18 @@
 package com.giraffe.match.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,60 +38,68 @@ fun SelectionItem(
     verticalPadding: Dp? = null,
     onClick: () -> Unit = {}
 ) {
-    var backgroundColor = Theme.color.background.card
-    var iconBackgroundColor = Theme.color.brand.tertiary
-    var textColor = Theme.color.shade.primary
-    if (isSelected) {
-        backgroundColor = Theme.color.brand.tertiary
-        iconBackgroundColor = Theme.color.brand.secondary
-        textColor = Theme.color.brand.primary
-    }
-    val borderColor = if (isSelected) Theme.color.brand.secondary else Color.Transparent
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) Theme.color.brand.tertiary else Theme.color.background.card,
+        label = "BackgroundColor"
+    )
+    val iconBackgroundColor by animateColorAsState(
+        targetValue = if (isSelected) Theme.color.brand.secondary else Theme.color.brand.tertiary,
+        label = "IconBackgroundColor"
+    )
+    val textColor by animateColorAsState(
+        targetValue = if (isSelected) Theme.color.brand.primary else Theme.color.shade.primary,
+        label = "TextColor"
+    )
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) Theme.color.brand.secondary else Color.Transparent,
+        label = "BorderColor"
+    )
 
     val horizontalPadding = horizontalPadding ?: if (type == SelectionType.CHIP) 20.dp else 12.dp
     val verticalPadding = verticalPadding ?: if (type == SelectionType.CHIP) 12.5.dp else 12.dp
 
-        Row(
-            modifier = modifier
-                .background(
-                    color = backgroundColor,
-                    shape = RoundedCornerShape(Theme.radius.lg)
-                )
-                .border(
-                    width = 1.dp,
-                    shape = RoundedCornerShape(Theme.radius.lg),
-                    color = borderColor
-                )
-                .clip(
-                    shape = RoundedCornerShape(Theme.radius.lg)
-                )
-                .clickable(onClick = onClick)
-                .padding(
-                    horizontal = horizontalPadding,
-                    vertical = verticalPadding,
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            if (type == SelectionType.CARD) {
-                Icon(
-                    modifier = Modifier
-                        .background(
-                            color = iconBackgroundColor,
-                            shape = RoundedCornerShape(Theme.radius.md)
-                        )
-                        .padding(8.dp),
-                    painter = icon,
-                    tint = Theme.color.brand.primary,
-                    contentDescription = "headphone icon"
-                )
-            }
-            Text(
-                color = textColor,
-                text = description,
-                style = Theme.textStyle.body.md.medium
+    Row(
+        modifier = modifier
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(Theme.radius.lg)
+            )
+            .border(
+                width = 1.dp,
+                shape = RoundedCornerShape(Theme.radius.lg),
+                color = borderColor
+            )
+            .clip(
+                shape = RoundedCornerShape(Theme.radius.lg)
+            )
+            .clickable(onClick = onClick)
+            .padding(
+                horizontal = horizontalPadding,
+                vertical = verticalPadding,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        if (type == SelectionType.CARD) {
+            Icon(
+                modifier = Modifier
+                    .background(
+                        color = iconBackgroundColor,
+                        shape = RoundedCornerShape(Theme.radius.md)
+                    )
+                    .padding(8.dp),
+                painter = icon,
+                tint = Theme.color.brand.primary,
+                contentDescription = "headphone icon"
             )
         }
+        Text(
+            color = textColor,
+            text = description,
+            style = Theme.textStyle.body.md.medium
+        )
+    }
 }
 
 @Preview(showBackground = true)
