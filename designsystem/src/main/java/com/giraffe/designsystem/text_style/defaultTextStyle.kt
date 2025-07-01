@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.R
 
-private val manropeFontFamily = FontFamily(
+internal val manropeFontFamily = FontFamily(
     Font(R.font.manrope, FontWeight.Normal),
     Font(R.font.manrope_medium, FontWeight.Medium),
     Font(R.font.manrope_semibold, FontWeight.SemiBold),
