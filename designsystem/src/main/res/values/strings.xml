@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="show_more">Show More</string>
+    <string name="card_icon">CTA Card icon</string>
+    <string name="alt_arrow_right_icon">alt arrow right icon</string>
+    <string name="loading_image">Loading image</string>
+    <string name="image_poster_movie">Image poster movie</string>
+    <string name="unknown_genre">Unknown Genre</string>
+    <string name="clock_icon">clock icon</string>
+    <string name="unknown_time">Unknown Time</string>
+    <string name="calendar_icon">calendar icon</string>
+    <string name="unknown_date">Unknown Date</string>
+    <string name="rating_emoji_animation">rating emoji animation</string>
+    <string name="rate">rate</string>
+    <string name="add_rating">Add Rating</string>
+    <string name="right_arrow">Right Arrow</string>
+    <string name="you_rated_it">You rated it</string>
+    <string name="give_it_start">Give it Stars!</string>
+    <string name="tab_to_change_your_rating">Tab to change your rating</string>
+    <string name="rate_it">Let the world know how you felt.</string>
+    <string name="did_you_watch_it">Did You Watch it?</string>
+    <string name="user_name">\@%1$s</string>
+    <string name="history">History</string>
+    <string name="my_collections">My Collections</string>
+    <string name="my_ratings">My Ratings</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="circle_image">circle image</string>
+    <string name="image_is_empty">image is empty</string>
+    <string name="close">Close</string>
+</resources>
