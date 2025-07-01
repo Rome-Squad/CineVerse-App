@@ -1,4 +1,4 @@
-package com.giraffe.composable
+package com.giraffe.designsystem.composable
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background

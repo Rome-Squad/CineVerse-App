@@ -15,9 +15,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.giraffe.composable.AppTextField
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.composable.TextField
 
 @Composable
 fun ExploreHeader(
@@ -49,7 +49,7 @@ fun ExploreHeader(
                     tint = Theme.color.shade.primary
                 )
             }
-            AppTextField(
+            TextField(
                 modifier = modifier,
                 startIcon = painterResource(Theme.icons.outline.search),
                 onClickStartIcon = onSearchClick,
@@ -59,8 +59,8 @@ fun ExploreHeader(
                         onClick = onEndIconClick,
                         contentDescription = "End Icon"
                     )
-                }
-//                placeholder = "Search..."
+                },
+                placeholder = "Search..."
             )
         }
         //  Add Tabs
@@ -93,6 +93,7 @@ fun ExploreHeaderPreview() {
     CineVerseTheme(isDarkTheme = true) {
         ExploreHeader(
             onBackClick = {},
+            showBackButton = true,
             endIcon = painterResource(Theme.icons.outline.microphone)
         )
     }
