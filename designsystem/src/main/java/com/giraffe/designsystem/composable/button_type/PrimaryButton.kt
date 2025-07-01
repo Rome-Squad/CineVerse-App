@@ -1,5 +1,9 @@
 package com.giraffe.designsystem.composable.button_type
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -16,29 +20,34 @@ import com.giraffe.designsystem.theme.Theme
 fun PrimaryButton(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit,
     enabled: Boolean = true,
     isLoading: Boolean = false,
+    onClick: () -> Unit,
 ) {
 
+    val buttonColor =
+        animateColorAsState(targetValue = if (enabled) Theme.color.brand.primary else Theme.color.button.disabled)
     Button(
         modifier = modifier,
         shape = RoundedCornerShape(Theme.radius.lg),
         onClick = if (enabled) onClick else ({}),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) Theme.color.brand.primary else Theme.color.button.disabled,
+            containerColor = buttonColor.value,
             contentColor = if (enabled) Theme.color.button.onPrimary else Theme.color.button.onDisabled,
         ),
     ) {
-        if (isLoading)
+        AnimatedVisibility(visible = isLoading, enter = fadeIn(), exit = fadeOut()) {
             CircularProgressIndicator(
                 color = Theme.color.button.onPrimary
             )
-        else
+        }
+        AnimatedVisibility(visible = !isLoading, enter = fadeIn(), exit = fadeOut()) {
             Text(
                 text = text,
                 style = Theme.textStyle.body.md.regular,
             )
+        }
+
     }
 }
 
