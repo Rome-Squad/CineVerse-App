@@ -62,11 +62,11 @@ fun UserProfileSection(
                 ImageCard(
                     imageSource = userProfileImage,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(56.dp)
                 )
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
