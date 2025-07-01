@@ -36,7 +36,7 @@ fun SearchItem(
     Row(
         modifier = modifier
             .clickable { onClick() }
-            .padding(vertical = 16.dp),
+            .padding(vertical = (14.5).dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
