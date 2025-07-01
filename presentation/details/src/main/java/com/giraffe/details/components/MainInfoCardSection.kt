@@ -7,7 +7,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import com.giraffe.designsystem.R
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
@@ -50,9 +49,7 @@ fun MainInfoCardSection(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = stringResource(
-                        id = R.string.watch
-                    ),
+                    text = stringResource(com.giraffe.details.R.string.watch),
                     style = Theme.textStyle.label.md.medium,
                     color = Theme.color.brand.primary
 
@@ -73,16 +70,16 @@ fun MainInfoCardSection(
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 MovieInfoIconWithText(
-                    icon = painterResource(R.drawable.star),
+                    icon = painterResource(Theme.icons.dueTone.star),
                     text = rating,
                     tint = Theme.color.additional.primary.yellow
                 )
                 MovieInfoIconWithText(
-                    icon = painterResource(R.drawable.clock),
+                    icon = painterResource(Theme.icons.dueTone.clock),
                     text = duration
                 )
                 MovieInfoIconWithText(
-                    icon = painterResource(R.drawable.calendar),
+                    icon = painterResource(Theme.icons.dueTone.calendar),
                     text = releaseDate
                 )
             }
@@ -94,11 +91,11 @@ fun MainInfoCardSection(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RoundedIconButton(
-                icon = painterResource(R.drawable.add),
+                icon = painterResource(Theme.icons.dueTone.add),
                 backgroundColor = Color(0xFF24263B)
             )
             RoundedIconButton(
-                icon = painterResource(R.drawable.play),
+                icon = painterResource(Theme.icons.dueTone.play),
                 backgroundColor = Color(0xFF8C9EFF),
                 iconPaddingTop = 12.dp,
                 iconPaddingBottom = 12.dp

@@ -44,11 +44,11 @@ fun MinimizedInfoRow(posterUrl: Int,title:String) {
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 RoundedIconButton(
-                    icon = painterResource(R.drawable.add),
+                    icon = painterResource(Theme.icons.dueTone.add),
                     backgroundColor = Color(0xFF24263B)
                 )
                 RoundedIconButton(
-                    icon = painterResource(R.drawable.play),
+                    icon = painterResource(Theme.icons.dueTone.play),
                     backgroundColor = Color(0xFF8C9EFF),
                     iconPaddingTop = 12.dp,
                     iconPaddingBottom = 12.dp
