@@ -25,7 +25,7 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun CastItem(
     modifier: Modifier = Modifier,
-    imageResId: Painter,
+    imagePainter: Painter,
     name: String
 ) {
     Column(
@@ -34,7 +34,7 @@ fun CastItem(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Image(
-            painter = imageResId,
+            painter = imagePainter,
             contentDescription = name,
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -61,7 +61,7 @@ fun CastItemPreview() {
     CineVerseTheme {
         Box(Modifier.width(80.dp)){
             CastItem(
-                imageResId = painterResource(id = Theme.icons.colored.instagram),
+                imagePainter = painterResource(id = Theme.icons.colored.instagram),
                 name =    "Tom Hardy"
             )
         }
