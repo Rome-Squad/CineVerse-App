@@ -8,6 +8,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,8 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun FloatingActionButton(
     modifier: Modifier = Modifier,
-    contentDescription: String? = null,
+    icon: Painter,
+    contentDescription: String,
     onClick: () -> Unit,
 ) {
 
@@ -33,7 +35,7 @@ fun FloatingActionButton(
         contentPadding = PaddingValues(0.dp)
     ) {
         Icon(
-            painter = painterResource(id = outlineIcons.plus),
+            painter = icon,
             contentDescription = contentDescription,
             modifier = Modifier.size(24.dp)
         )
@@ -46,7 +48,12 @@ fun FloatingActionButtonPreview() {
     CineVerseTheme(
         isDarkTheme = false
     ) {
-        FloatingActionButton(Modifier.size(56.dp)) {}
+        FloatingActionButton(
+            modifier = Modifier
+                .size(56.dp),
+            icon = painterResource(id = outlineIcons.plus),
+            contentDescription = ""
+        ) {}
     }
 }
 
@@ -56,6 +63,11 @@ fun FloatingActionButtonPreviewDark() {
     CineVerseTheme(
         isDarkTheme = true
     ) {
-        FloatingActionButton(Modifier.size(56.dp)) {}
+        FloatingActionButton(
+            modifier = Modifier
+                .size(56.dp),
+            icon = painterResource(id = outlineIcons.plus),
+            contentDescription = ""
+        ) {}
     }
 }
