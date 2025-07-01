@@ -47,7 +47,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.foundation.layout.android)
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
