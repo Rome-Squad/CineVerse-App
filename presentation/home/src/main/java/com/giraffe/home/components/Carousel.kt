@@ -1,4 +1,4 @@
-package com.giraffe.home.composable
+package com.giraffe.home.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState

@@ -1,4 +1,4 @@
-package com.giraffe.home.composable
+package com.giraffe.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
