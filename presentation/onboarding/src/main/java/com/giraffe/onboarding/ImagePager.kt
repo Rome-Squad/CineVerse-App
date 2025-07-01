@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -39,7 +39,7 @@ fun ImagePager(
     images: List<Int>
 ) {
     val layoutDirection = LocalLayoutDirection.current
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
+    val screenWidthDp = LocalWindowInfo.current.containerSize.width.dp
     val horizontalPadding = screenWidthDp * 0.1f
 
 
