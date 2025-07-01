@@ -2,8 +2,6 @@ package com.giraffe.explore.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,12 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,32 +22,13 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun ExploreHeader(
     modifier: Modifier = Modifier,
+    showBackButton: Boolean = false,
     onBackClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {},
+    endIcon: Painter,
+    onEndIconClick: () -> Unit = {},
+    onTabClick: () -> Unit = {}
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isFocused by interactionSource.collectIsFocusedAsState()
-    val focusManager = LocalFocusManager.current
-
-
-    val endIcon: @Composable (() -> Unit) = {
-        if (isFocused) {
-            EndIcon(
-                icon = painterResource(Theme.icons.outline.close),
-                onClick = {
-                    focusManager.clearFocus()
-                },
-                contentDescription = "Cancel Search"
-            )
-        } else {
-            EndIcon(
-                icon = painterResource(Theme.icons.outline.microphone),
-                onClick = { },
-                contentDescription = "Microphone"
-            )
-        }
-    }
-
     Column(
         modifier = modifier
             .background(color = Theme.color.background.screen),
@@ -62,7 +38,7 @@ fun ExploreHeader(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (isFocused) {
+            if (showBackButton) {
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
@@ -77,7 +53,13 @@ fun ExploreHeader(
                 modifier = modifier,
                 startIcon = painterResource(Theme.icons.outline.search),
                 onClickStartIcon = onSearchClick,
-                endIcon = endIcon,
+                endIcon = {
+                    EndIcon(
+                        icon = endIcon,
+                        onClick = onEndIconClick,
+                        contentDescription = "End Icon"
+                    )
+                }
 //                placeholder = "Search..."
             )
         }
@@ -111,6 +93,7 @@ fun ExploreHeaderPreview() {
     CineVerseTheme(isDarkTheme = true) {
         ExploreHeader(
             onBackClick = {},
+            endIcon = painterResource(Theme.icons.outline.microphone)
         )
     }
 }
