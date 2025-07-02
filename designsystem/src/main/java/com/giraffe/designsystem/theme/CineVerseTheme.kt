@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import com.giraffe.designsystem.color.LocalCineVerseColors
@@ -14,7 +15,7 @@ import com.giraffe.designsystem.text_style.defaultTextStyle
 
 @Composable
 fun CineVerseTheme(
-    isDarkTheme: Boolean = false,
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val theme = if (isDarkTheme) darkThemeColor else lightThemeColor

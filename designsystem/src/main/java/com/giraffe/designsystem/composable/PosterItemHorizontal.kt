@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,7 +41,6 @@ import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun PosterItemHorizontal(
     movie: PosterMovie,
@@ -79,72 +78,69 @@ fun PosterItemHorizontal(
                 .build()
 
             val painter = rememberAsyncImagePainter(model = model)
+            val state by painter.state.collectAsState()
 
-            when (painter.state.collectAsState().value) {
-                is AsyncImagePainter.State.Success -> {
-                    Image(
-                        painter = painter,
-                        contentDescription = stringResource(R.string.image_poster_movie),
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-                else -> {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = stringResource(R.string.loading_image),
-                        modifier = Modifier.size(24.dp),
-                        tint = Theme.color.brand.secondary
-                    )
-                }
+            if (state is AsyncImagePainter.State.Success) {
+                Image(
+                    painter = painter,
+                    contentDescription = stringResource(R.string.image_poster_movie),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = stringResource(R.string.loading_image),
+                    modifier = Modifier.size(24.dp),
+                    tint = Theme.color.brand.secondary
+                )
             }
+        }
+    }
+
+
+    Column(
+        modifier = Modifier.padding(vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = movie.title,
+                    style = Theme.textStyle.body.md.medium,
+                    color = Theme.color.shade.primary
+                )
+                Text(
+                    text = movie.genres ?: stringResource(R.string.unknown_genre),
+                    style = Theme.textStyle.body.sm.regular,
+                    color = Theme.color.shade.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Rating(
+                value = movie.rating,
+            )
         }
 
 
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        text = movie.title,
-                        style = Theme.textStyle.body.md.medium,
-                        color = Theme.color.shade.primary
-                    )
-                    Text(
-                        text = movie.genres ?: stringResource(R.string.unknown_genre),
-                        style = Theme.textStyle.body.sm.regular,
-                        color = Theme.color.shade.secondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Rating(
-                    value = movie.rating,
-                )
-            }
 
 
-
-
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                IconWithText(
-                    icon = painterResource(Theme.icons.dueTone.clock),
-                    text = movie.time ?: stringResource(R.string.unknown_time)
-                )
-                IconWithText(
-                    icon = painterResource(Theme.icons.dueTone.calendar),
-                    text = movie.date ?: stringResource(R.string.unknown_date)
-                )
-            }
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            IconWithText(
+                icon = painterResource(Theme.icons.dueTone.clock),
+                text = movie.time ?: stringResource(R.string.unknown_time)
+            )
+            IconWithText(
+                icon = painterResource(Theme.icons.dueTone.calendar),
+                text = movie.date ?: stringResource(R.string.unknown_date)
+            )
         }
     }
 }
