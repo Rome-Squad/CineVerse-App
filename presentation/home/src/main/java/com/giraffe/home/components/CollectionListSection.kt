@@ -1,15 +1,11 @@
 package com.giraffe.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,46 +22,39 @@ fun CollectionListSection(
     collectionItems: List<CollectionItemData>
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
-            modifier = Modifier.padding(start = 16.dp),
             text = stringResource(R.string.featured_collections),
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary
         )
-
-        LazyHorizontalGrid(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            rows = GridCells.Fixed(2),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(
-                count = collectionItems.size,
-            ) {
-                CollectionItem(
-                    modifier = Modifier
-                        .width(280.dp)
-                        .height(92.dp),
-                    collectionItemData = collectionItems[it]
-                )
+            items(collectionItems.chunked(2)) { rowItems ->
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    rowItems.forEach { item ->
+                        CollectionItem(
+                            modifier = Modifier.width(280.dp),
+                            collectionItemData = item
+                        )
+                    }
+                }
             }
         }
     }
 }
 
-
-@Preview(showBackground = true, showSystemUi = true)
+@Preview
 @Composable
 fun CollectionListSectionPreview() {
     CineVerseTheme(isDarkTheme = true) {
         CollectionListSection(
-            modifier = Modifier
-                .background(Theme.color.shade.quaternary)
-                .height(250.dp),
+            modifier = Modifier,
             collectionItems =
                 listOf(
                     CollectionItemData(

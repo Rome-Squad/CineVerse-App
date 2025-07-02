@@ -94,14 +94,11 @@ data class CollectionItemData(
 
 
 @Composable
-@Preview(showBackground = true, showSystemUi = false)
+@Preview
 fun CollectionItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
         CollectionItem(
-            modifier = Modifier
-                .background(Theme.color.shade.quaternary)
-                .padding(16.dp)
-                .width(280.dp),
+            modifier = Modifier.width(280.dp),
             collectionItemData = CollectionItemData(
                 image = R.drawable.collection_image,
                 collectionType = "Text"
