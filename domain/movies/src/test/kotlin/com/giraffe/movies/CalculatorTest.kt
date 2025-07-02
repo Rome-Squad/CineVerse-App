@@ -9,11 +9,11 @@ class CalculatorTest {
     @Test
     fun `should return 5 when user pass 2 , 3`() {
         //given
-        val x = 2
+        val x = 3
         val y = 3
         //when
         val result = calculator.plus(x, y)
         //then
-        assertThat(result).isEqualTo(5)
+        assertThat(result).isEqualTo(6)
     }
 }
