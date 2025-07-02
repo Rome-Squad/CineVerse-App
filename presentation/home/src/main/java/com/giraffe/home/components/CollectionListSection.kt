@@ -51,7 +51,7 @@ fun CollectionListSection(
 
 @Preview
 @Composable
-fun CollectionListSectionPreview() {
+private fun Preview() {
     CineVerseTheme(isDarkTheme = true) {
         CollectionListSection(
             modifier = Modifier,

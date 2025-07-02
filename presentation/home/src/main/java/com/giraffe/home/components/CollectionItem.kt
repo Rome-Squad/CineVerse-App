@@ -92,10 +92,9 @@ data class CollectionItemData(
     val collectionType: String
 )
 
-
-@Composable
 @Preview
-fun CollectionItemPreview() {
+@Composable
+private fun Preview() {
     CineVerseTheme(isDarkTheme = true) {
         CollectionItem(
             modifier = Modifier.width(280.dp),
