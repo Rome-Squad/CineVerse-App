@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +36,7 @@ import coil3.size.Size
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.uimodel.PosterMovie
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -62,26 +64,25 @@ fun PosterItemVertically(
                 .build()
 
             val painter = rememberAsyncImagePainter(model = model)
+            val state by painter.state.collectAsState()
 
-            when (painter.state.collectAsState().value) {
-                is AsyncImagePainter.State.Success -> {
-                    Image(
-                        painter = painter,
-                        contentDescription = stringResource(R.string.image_poster_movie),
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
 
-                else -> {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = stringResource(R.string.loading_image),
-                        modifier = Modifier.size(32.dp),
-                        tint = Theme.color.brand.secondary
-                    )
-                }
+            if (state is AsyncImagePainter.State.Success) {
+                Image(
+                    painter = painter,
+                    contentDescription = stringResource(R.string.image_poster_movie),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = stringResource(R.string.loading_image),
+                    modifier = Modifier.size(32.dp),
+                    tint = Theme.color.brand.secondary
+                )
             }
+
             Rating(
                 value = movie.rating,
                 modifier = Modifier

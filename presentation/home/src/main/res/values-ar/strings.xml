@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="collection_item_image">صورة عنصر المجموعة</string>
+    <string name="featured_collections">المجموعات المميزة</string>
+    <string name="your_collections">مجموعاتك</string>
+    <string name="show_more">عرض المزيد</string>
+</resources>

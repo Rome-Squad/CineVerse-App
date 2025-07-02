@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.uimodel.PosterMovie
 
 @Composable
 fun MoviesListSection(
