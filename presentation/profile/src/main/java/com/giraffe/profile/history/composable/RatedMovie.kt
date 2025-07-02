@@ -37,9 +37,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterItemHorizontal
-import com.giraffe.designsystem.composable.PosterMovie
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.uimodel.PosterMovie
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
