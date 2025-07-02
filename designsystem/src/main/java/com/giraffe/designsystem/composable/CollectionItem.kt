@@ -3,7 +3,6 @@ package com.giraffe.designsystem.composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +19,6 @@ import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
-
 @Composable
 fun CollectionItem(
     modifier: Modifier = Modifier,
@@ -30,19 +28,20 @@ fun CollectionItem(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
             .background(
                 color = Theme.color.background.bottomSheetCard,
-                shape =RoundedCornerShape(Theme.radius.lg)
-            ) .padding(12.dp)
-        ,
+                shape = RoundedCornerShape(Theme.radius.lg)
+            )
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = stringResource(R.string.collection_item_icon),
             tint = Theme.color.brand.primary,
-            modifier = Modifier.padding(end = 8.dp).size(20.dp)
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .size(20.dp)
         )
         Column(
             modifier = Modifier.weight(1f)
@@ -63,14 +62,16 @@ fun CollectionItem(
             painter = painterResource(Theme.icons.outline.altArrowRight),
             contentDescription = stringResource(R.string.arrow_right_icon),
             tint = Theme.color.shade.tertiary,
-            modifier = Modifier.padding(start = 8.dp).size(20.dp)
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .size(20.dp)
         )
     }
 }
 
-@Preview()
+@Preview
 @Composable
-fun CollectionItemPreview() {
+private fun Preview() {
     CineVerseTheme(
         isDarkTheme = true,
     ) {

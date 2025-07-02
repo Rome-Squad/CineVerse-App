@@ -1,4 +1,4 @@
-package com.giraffe.home.composable
+package com.giraffe.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,10 +16,10 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun AdvertisementSection(
     modifier: Modifier = Modifier,
-    title: String = "What Should I Watch?",
-    cardTitle: String = "Let Us Choose For You!",
-    caption: String = "We’ll help you skip the scroll and go straight to the good stuff.",
-    onCardClick: () -> Unit = {}
+    title: String,
+    cardTitle: String,
+    caption: String,
+    onCardClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -39,13 +39,17 @@ fun AdvertisementSection(
             onClick = onCardClick
         )
     }
-
 }
 
 @Preview
 @Composable
 private fun Preview() {
     CineVerseTheme(isDarkTheme = true) {
-        AdvertisementSection()
+        AdvertisementSection(
+            title = "What Should I Watch?",
+            cardTitle = "Let Us Choose For You!",
+            caption = "We’ll help you skip the scroll and go straight to the good stuff.",
+            onCardClick = {},
+        )
     }
 }

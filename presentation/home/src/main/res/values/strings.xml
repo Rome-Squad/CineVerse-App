@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="collection_item_image">collection item image</string>
+    <string name="featured_collections">Featured Collections</string>
+    <string name="your_collections">Your Collections</string>
+    <string name="show_more">Show More</string>
+</resources>
