@@ -1,4 +1,4 @@
-package com.giraffe.presentation.utils
+package com.giraffe.details.utils
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
