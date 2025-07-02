@@ -1,17 +1,17 @@
-name: 🧪 Test & Coverage
+name: Test & Coverage
 
 on:
   push:
-    branches: [ main, development ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main, development ]
+    branches: [ main, develop ]
 permissions:
   checks: write
   pull-requests: write
   contents: read
 jobs:
   build:
-    name: 🏗️ Build & Test
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
   test:
-    name: 🧪 Test & Coverage Analysis
+    name: Test & Coverage Analysis
     needs: build
     runs-on: ubuntu-latest
 
@@ -126,7 +126,7 @@ jobs:
               body: '❌ Test or Coverage checks failed! Please check the [workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.'
             })
   notify:
-    name: 📢 Notification
+    name: Notification
     needs: [build, test]
     runs-on: ubuntu-latest
     if: always()
