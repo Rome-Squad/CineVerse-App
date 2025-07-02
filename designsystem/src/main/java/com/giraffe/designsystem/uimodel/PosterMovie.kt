@@ -1,4 +1,4 @@
-package com.giraffe.designsystem.composable
+package com.giraffe.designsystem.uimodel
 
 data class PosterMovie(
     val title: String,

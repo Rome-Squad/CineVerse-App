@@ -36,6 +36,7 @@ import coil3.size.Size
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.uimodel.PosterMovie
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
