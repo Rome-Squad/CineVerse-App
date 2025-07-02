@@ -7,10 +7,10 @@ class CalculatorTest {
     val calculator = Calculator()
 
     @Test
-    fun `should return 5 when user pass 2 , 3`() {
+    fun `should return 6 when user pass 5 , 1`() {
         //given
-        val x = 3
-        val y = 3
+        val x = 5
+        val y = 1
         //when
         val result = calculator.plus(x, y)
         //then
