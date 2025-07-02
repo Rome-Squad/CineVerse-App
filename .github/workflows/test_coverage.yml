@@ -1,0 +1,143 @@
+name: 🧪 Test & Coverage
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
+permissions:
+  checks: write
+  pull-requests: write
+  contents: read
+jobs:
+  build:
+    name: 🏗️ Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🛠️ Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: '19'
+          distribution: 'corretto'
+
+      - name: ⚙️ Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: 🔑 Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: 🏗️ Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: 📦 Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+  test:
+    name: 🧪 Test & Coverage Analysis
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🛠️ Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: '19'
+          distribution: 'corretto'
+
+      - name: ⚙️ Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: 🔑 Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: 🧪 Run Tests with Coverage
+        continue-on-error: true
+        run: ./gradlew test jacocoTestReport
+
+      - name: 📊 Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build/reports/jacoco/
+
+      - name: 📝 Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: "**/build/test-results/**/*.xml"
+
+      - name: 📈 Add Coverage PR Comment
+        uses: madrapps/jacoco-report@v1.3
+        if: github.event_name == 'pull_request'
+        with:
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 0
+          min-coverage-changed-files: 0
+          title: "📊 Code Coverage Report"
+          pass-emoji: "✅"
+          fail-emoji: "❌"
+          layout: |
+            ## 📊 Code Coverage Report
+            
+            ### 📈 Overall Coverage
+            ${{ env.coverage-overall }}
+            
+            ### 🔄 Changed Files Coverage
+            ${{ env.coverage-changed }}
+            
+            <details>
+              <summary>📋 Detailed Coverage Report</summary>
+            
+              #### 📦 Coverage by Package
+              ${{ env.coverage-packages }}
+            
+              #### 📝 Coverage by File
+              ${{ env.coverage-details }}
+            </details>
+            
+            ### ✨ Status
+            ${{ env.coverage-status }}
+      - name: 🚨 Check Coverage Verification
+        run: ./gradlew jacocoTestCoverageVerification
+
+      - name: 📨 Notify on Failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Test or Coverage checks failed! Please check the [workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.'
+            })
+  notify:
+    name: 📢 Notification
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: 📝 Check Build Status
+        if: ${{ needs.build.result == 'success' && needs.test.result == 'success' }}
+        run: |
+          echo "✅ Build and tests completed successfully!"
+      - name: ❌ Check Build Status
+        if: ${{ needs.build.result != 'success' || needs.test.result != 'success' }}
+        run: |
+          echo "❌ Build or tests failed!"
+          exit 1
