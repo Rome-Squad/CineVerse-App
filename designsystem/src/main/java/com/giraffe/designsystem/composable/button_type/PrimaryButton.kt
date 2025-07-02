@@ -11,6 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -22,11 +23,12 @@ fun PrimaryButton(
     text: String,
     enabled: Boolean = true,
     isLoading: Boolean = false,
+    buttonColorEnabled: Color = Theme.color.brand.primary,
     onClick: () -> Unit,
 ) {
 
     val buttonColor =
-        animateColorAsState(targetValue = if (enabled) Theme.color.brand.primary else Theme.color.button.disabled)
+        animateColorAsState(targetValue = if (enabled) buttonColorEnabled else Theme.color.button.disabled)
     Button(
         modifier = modifier,
         shape = RoundedCornerShape(Theme.radius.lg),
