@@ -79,38 +79,6 @@ jobs:
         with:
           files: "**/build/test-results/**/*.xml"
 
-      - name: 📈 Add Coverage PR Comment
-        uses: madrapps/jacoco-report@v1.3
-        if: github.event_name == 'pull_request'
-        with:
-          paths: domain/movie/build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 0
-          min-coverage-changed-files: 0
-          title: "📊 Code Coverage Report"
-          pass-emoji: "✅"
-          fail-emoji: "❌"
-          layout: |
-            ## 📊 Code Coverage Report
-            
-            ### 📈 Overall Coverage
-            ${{ env.coverage-overall }}
-            
-            ### 🔄 Changed Files Coverage
-            ${{ env.coverage-changed }}
-            
-            <details>
-              <summary>📋 Detailed Coverage Report</summary>
-            
-              #### 📦 Coverage by Package
-              ${{ env.coverage-packages }}
-            
-              #### 📝 Coverage by File
-              ${{ env.coverage-details }}
-            </details>
-            
-            ### ✨ Status
-            ${{ env.coverage-status }}
       - name: 🚨 Check Coverage Verification
         run: ./gradlew jacocoTestCoverageVerification
 
