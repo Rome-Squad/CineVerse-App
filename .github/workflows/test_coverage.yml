@@ -65,7 +65,7 @@ jobs:
 
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
-        run: ./gradlew test jacocoTestReport --warning-mode=all
+        run: ./gradlew :domain:movie:test :domain:movie:jacocoTestReport
 
       - name: 📊 Upload Coverage Report
         uses: actions/upload-artifact@v4
@@ -83,7 +83,7 @@ jobs:
         uses: madrapps/jacoco-report@v1.3
         if: github.event_name == 'pull_request'
         with:
-          paths: ${{ github.workspace }}/domain/movie/build/reports/jacoco/test/jacocoTestReport.xml
+          paths: domain/movie/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 0
           min-coverage-changed-files: 0
