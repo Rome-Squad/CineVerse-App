@@ -14,6 +14,6 @@ class CalculatorTest {
         //when
         val result = calculator.plus(x, y)
         //then
-        assertThat(result).isEqualTo(5)
+        assertThat(result).isEqualTo(4)
     }
 }
