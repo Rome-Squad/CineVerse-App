@@ -1,8 +1,8 @@
 [versions]
 agp = "8.10.1"
 coilCompose = "3.2.0"
-junitJupiter = "5.12.2"
-junitJupiterApi = "5.12.2"
+junitJupiter = "5.13.2"
+junitJupiterApi = "5.13.2"
 junitJupiterParams = "5.13.2"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
@@ -21,8 +21,8 @@ truth = "1.4.4"
 turbine = "1.2.1"
 uiTooling = "1.8.3"
 readMoreVersion = "1.6.3"
-kotlinxDatetime = "0.6.0"
-
+kotlinxDatetime = "0.7.0"
+junit4 = "1.8.3"
 runtimeAndroid = "1.8.3"
 uiToolingPreviewAndroid = "1.8.3"
 
@@ -41,7 +41,7 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
@@ -69,5 +69,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
-ui = ["androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "coil-compose","coil-network-okhttp"]
-test = ["mockk", "androidx-ui-test-junit4", "truth", "junit-jupiter", "junit-jupiter-api", "junit-jupiter-params","junit"]
+ui = ["androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "coil-compose", "coil-network-okhttp"]
+test = ["mockk", "androidx-ui-test-junit4", "truth", "junit-jupiter", "junit-jupiter-api", "junit-jupiter-params", "junit"]
