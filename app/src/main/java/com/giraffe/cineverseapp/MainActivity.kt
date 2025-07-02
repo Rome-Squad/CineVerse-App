@@ -57,10 +57,10 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    CineVerseAppTheme {
-//        Greeting("Android")
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    CineVerseAppTheme {
+        Greeting("Android")
+    }
+}
