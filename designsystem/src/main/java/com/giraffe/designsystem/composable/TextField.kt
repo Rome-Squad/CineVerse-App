@@ -190,14 +190,13 @@ fun TextField(
 @Composable
 private fun TextFieldPreview() {
     CineVerseTheme(isDarkTheme = true) {
-        var string by remember { mutableStateOf("alaa") }
         TextField(
             placeholder = "Enter your password",
             title = "Label",
             startIcon = painterResource(Theme.icons.outline.user),
             hasPassword = true,
             value = "Alaa",
-            onValueChange = {string = it},
+            onValueChange = {},
         )
     }
 }
