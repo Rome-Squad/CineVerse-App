@@ -7,13 +7,13 @@ class CalculatorTest {
     val calculator = Calculator()
 
     @Test
-    fun `should return 6 when user pass 5 , 1`() {
+    fun `should return 7 when user pass 5 , 2`() {
         //given
         val x = 5
-        val y = 1
+        val y = 2
         //when
         val result = calculator.plus(x, y)
         //then
-        assertThat(result).isEqualTo(6)
+        assertThat(result).isEqualTo(7)
     }
 }
