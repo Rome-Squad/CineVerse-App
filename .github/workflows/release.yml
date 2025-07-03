@@ -34,6 +34,11 @@ jobs:
       - name:  Assemble Release Bundle
         run: ./gradlew bundleRelease
 
+      - name: Debug keystore decode
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 -d > debug-release-key.jks
+          keytool -list -v -keystore debug-release-key.jks -storepass "${{ secrets.KEYSTORE_PASSWORD }}" || echo "Failed to list keystore"
+
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
