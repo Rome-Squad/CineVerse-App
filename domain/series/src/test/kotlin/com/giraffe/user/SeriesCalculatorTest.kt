@@ -11,7 +11,7 @@ class SeriesCalculatorTest {
     fun `should return 7 when user pass 5 , 2`() {
         //given
         val x = 5
-        val y = 1
+        val y = 2
         //when
         val result = calculator.plus(x, y)
         //then

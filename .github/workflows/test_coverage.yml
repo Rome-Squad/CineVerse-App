@@ -63,15 +63,22 @@ jobs:
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Decode and create google-services.json
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
+
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
-        run: ./gradlew :domain:movie:test :domain:movie:jacocoTestReport
+        run: |
+          ./gradlew :domain:movie:test :domain:movie:jacocoTestReport
+          ./gradlew :domain:user:test :domain:user:jacocoTestReport
+          ./gradlew :domain:series:test :domain:series:jacocoTestReport
 
       - name: 📊 Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: build/reports/jacoco/
+          path: build/reports/jacoco/test/html/
 
       - name: 📝 Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
