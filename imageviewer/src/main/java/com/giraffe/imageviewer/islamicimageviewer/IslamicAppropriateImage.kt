@@ -16,6 +16,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.giraffe.imageviewer.classifier.FakeClassifier
 import com.giraffe.imageviewer.classifier.GantManClassifier
+import com.giraffe.imageviewer.classifier.MustafaImageClassifier
 import com.giraffe.imageviewer.utils.BlurTransformation
 
 @Composable
@@ -37,7 +38,7 @@ fun IslamicAppropriateImageViewer(
         val bitmap = result?.bitmap
 
         if (bitmap != null) {
-            val classifier = FakeClassifier()
+            val classifier = MustafaImageClassifier(context)
             shouldBlur = classifier.isInappropriate(bitmap)
             Log.d("TAG", "IslamicAppropriateImageViewer: $shouldBlur")
         }

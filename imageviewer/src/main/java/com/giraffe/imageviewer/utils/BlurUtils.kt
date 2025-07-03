@@ -6,25 +6,38 @@ import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+import androidx.core.graphics.scale
 
 object BlurUtils {
     fun blur(context: Context, bitmap: Bitmap, radius: Int): Bitmap {
-        val rs = RenderScript.create(context)
-        val input = Allocation.createFromBitmap(
-            rs,
-            bitmap)
-        val output = Allocation.createTyped(
-            rs,
-            input.type)
-        val script = ScriptIntrinsicBlur.create(
-            rs,
-            Element.U8_4(rs)
+        val clampedRadius = radius.coerceIn(1, 25)
+
+        // Downscale the image
+        // Trick to increase blur effect
+
+        val scaleFactor = 0.5f
+        val scaledBitmap = bitmap.scale(
+            (bitmap.width * scaleFactor).toInt(),
+            (bitmap.height * scaleFactor).toInt()
         )
-        script.setRadius(radius.coerceIn(1, 25).toFloat())
+
+        // Apply RenderScript blur
+        // It is a deprecated but needed for devices below API 31
+
+        val rs = RenderScript.create(context)
+        val input = Allocation.createFromBitmap(rs, scaledBitmap)
+        val output = Allocation.createTyped(rs, input.type)
+        val script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
+
+        script.setRadius(clampedRadius.toFloat())
         script.setInput(input)
         script.forEach(output)
-        output.copyTo(bitmap)
+        output.copyTo(scaledBitmap)
         rs.destroy()
-        return bitmap
+
+        // Upscale the image again after blur (blurred, lower detail)
+
+        return scaledBitmap.scale(bitmap.width, bitmap.height)
     }
+
 }
