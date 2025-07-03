@@ -1,14 +1,16 @@
 name: Deploy to Google Play
 
 on:
+  push:
+    branches:
+      - feature/add-firebase
+
   pull_request:
-    types: [closed]
     branches:
       - feature/add-firebase
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true
     name: Building and distributing app (Release)
     runs-on: ubuntu-latest
 
