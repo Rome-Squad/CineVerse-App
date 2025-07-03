@@ -33,14 +33,14 @@ jobs:
       - name: Decode google-services.json
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
-      - name:  Assemble Release Bundle
-        run: ./gradlew bundleRelease
+      - name:  Assemble Release APK
+        run: ./gradlew assembleRelease
 
 
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/release/
+          releaseDirectory: app/build/outputs/apk/release/
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
@@ -53,5 +53,5 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
-          file: app/release/app-release.apk
+          file: app/build/outputs/apk/release/app-release.apk
           releaseNotes: "Automatic release build from develop branch"
