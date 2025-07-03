@@ -63,9 +63,12 @@ jobs:
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Decode and create google-services.json
+      - name: Decode and place google-services.json in expected folders
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
+          mkdir -p app/src/debug
+          cp app/google-services.json app/src/debug/google-services.json
+      
 
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
