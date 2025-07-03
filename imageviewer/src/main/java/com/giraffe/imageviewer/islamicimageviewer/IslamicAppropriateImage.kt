@@ -14,6 +14,7 @@ import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.giraffe.imageviewer.R
+import com.giraffe.imageviewer.classifier.FakeClassifier
 import com.giraffe.imageviewer.classifier.IslamicInappropriateImageClassifier
 import com.giraffe.imageviewer.utils.BlurTransformation
 
@@ -39,7 +40,7 @@ fun IslamicAppropriateImageViewer(
 
         if (bitmap != null) {
             val classifier = IslamicInappropriateImageClassifier(context)
-            shouldBlur = classifier.isInappropriate(bitmap)
+            shouldBlur = FakeClassifier.isUnsafe(bitmap)
         }
     }
 

@@ -16,7 +16,7 @@ class IslamicInappropriateImageClassifier(
 
     // Interpreter to run the Model
     private val interpreter: Interpreter
-    private val labels = listOf("inappropriate", "appropriate")
+    private val labels = listOf("unsafe", "safe")
 
     init {
         // Load the TFLite model from assets
@@ -24,7 +24,9 @@ class IslamicInappropriateImageClassifier(
         interpreter = Interpreter(modelFile)
     }
 
-    fun classify(bitmap: Bitmap): Map<String, Float> {
+    fun classify(
+        bitmap: Bitmap
+    ): Map<String, Float> {
 
         // rescale the image to be suitable for the model's expected input
         val resizedBitmap = bitmap.scale(
@@ -45,13 +47,17 @@ class IslamicInappropriateImageClassifier(
         return labels.zip(output[0].toList()).toMap()
     }
 
-    private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
+    private fun convertBitmapToByteBuffer(
+        bitmap: Bitmap
+    ): ByteBuffer {
         val buffer = ByteBuffer.allocateDirect(1 * 224 * 224 * 3 * 4)
         buffer.order(ByteOrder.nativeOrder())
 
         for (y in 0 until 224) {
             for (x in 0 until 224) {
+
                 val pixel = bitmap[x, y]
+
                 buffer.putFloat(((pixel shr 16 and 0xFF) / 255f))
                 buffer.putFloat(((pixel shr 8 and 0xFF) / 255f))
                 buffer.putFloat(((pixel and 0xFF) / 255f))
@@ -66,6 +72,7 @@ class IslamicInappropriateImageClassifier(
         context: Context,
         fileName: String = "mustafa_islamic_safe_image_classifier.tflite"
     ): ByteBuffer {
+
         val assetFileDescriptor = context.assets.openFd(fileName)
         val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
         val fileChannel = inputStream.channel
@@ -80,18 +87,18 @@ class IslamicInappropriateImageClassifier(
         )
     }
 
-    override fun isInappropriate(bitmap: Bitmap): Boolean {
+    override fun isUnsafe(bitmap: Bitmap): Boolean {
 
         val result = classify(bitmap)
 
-        val safeScore = result["appropriate"] ?: 1f
-        val inappropriateScore = result["inappropriate"] ?: 1f
+        val safeScore = result["safe"] ?: 1f
+        val unsafeScore = result["unsafe"] ?: 1f
 
-        val isInappropriate = when {
-            inappropriateScore > .5f -> true
-            inappropriateScore >= safeScore -> true
+        val isUnsafe = when {
+            unsafeScore > .5f -> true
+            unsafeScore >= safeScore -> true
             else -> false
         }
-        return isInappropriate
+        return isUnsafe
     }
 }
