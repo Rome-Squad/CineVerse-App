@@ -78,7 +78,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: build/reports/jacoco/test/html/
+          path: |
+            domain/movies/build/reports/jacoco/test/html
+            domain/user/build/reports/jacoco/test/html
+            domain/series/build/reports/jacoco/test/html
 
       - name: 📝 Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -87,7 +90,10 @@ jobs:
           files: "**/build/test-results/**/*.xml"
 
       - name: 🚨 Check Coverage Verification
-        run: ./gradlew jacocoTestCoverageVerification
+        run: |
+          ./gradlew :domain:movie:jacocoTestCoverageVerification
+          ./gradlew :domain:user:jacocoTestCoverageVerification
+          ./gradlew :domain:series:jacocoTestCoverageVerification
 
       - name: 📨 Notify on Failure
         if: failure()
