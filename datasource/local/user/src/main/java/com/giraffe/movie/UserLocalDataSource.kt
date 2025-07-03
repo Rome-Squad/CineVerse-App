@@ -1,4 +1,4 @@
 package com.giraffe.movie
 
-class MovieDataSource {
+class UserLocalDataSource {
 }
