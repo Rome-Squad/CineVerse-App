@@ -53,5 +53,5 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
-          file: app/release/app-release.aab
+          file: app/release/app-release.apk
           releaseNotes: "Automatic release build from develop branch"
