@@ -30,4 +30,8 @@
     <string name="close">إغلاق</string>
     <string name="collection_item_icon">collection item icon</string>
     <string name="arrow_right_icon">arrow right icon</string>
+    <string name="me">Me</string>
+    <string name="match">Match</string>
+    <string name="explore">Explore</string>
+    <string name="home">Home</string>
 </resources>
