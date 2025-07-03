@@ -96,51 +96,50 @@ fun PosterItemHorizontal(
                 )
             }
         }
-    }
 
-
-    Column(
-        modifier = Modifier.padding(vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        Column(
+            modifier = Modifier.padding(vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(
-                    text = movie.title,
-                    style = Theme.textStyle.body.md.medium,
-                    color = Theme.color.shade.primary
-                )
-                Text(
-                    text = movie.genres ?: stringResource(R.string.unknown_genre),
-                    style = Theme.textStyle.body.sm.regular,
-                    color = Theme.color.shade.secondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = movie.title,
+                        style = Theme.textStyle.body.md.medium,
+                        color = Theme.color.shade.primary
+                    )
+                    Text(
+                        text = movie.genres ?: stringResource(R.string.unknown_genre),
+                        style = Theme.textStyle.body.sm.regular,
+                        color = Theme.color.shade.secondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Rating(
+                    value = movie.rating,
                 )
             }
-            Rating(
-                value = movie.rating,
-            )
-        }
 
 
 
 
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            IconWithText(
-                icon = painterResource(Theme.icons.dueTone.clock),
-                text = movie.time ?: stringResource(R.string.unknown_time)
-            )
-            IconWithText(
-                icon = painterResource(Theme.icons.dueTone.calendar),
-                text = movie.date ?: stringResource(R.string.unknown_date)
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                IconWithText(
+                    icon = painterResource(Theme.icons.dueTone.clock),
+                    text = movie.time ?: stringResource(R.string.unknown_time)
+                )
+                IconWithText(
+                    icon = painterResource(Theme.icons.dueTone.calendar),
+                    text = movie.date ?: stringResource(R.string.unknown_date)
+                )
+            }
         }
     }
 }
