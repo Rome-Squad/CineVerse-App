@@ -31,8 +31,8 @@ jobs:
       - name: Decode google-services.json
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
-      - name: Build unsigned release APK
-        run: ./gradlew assembleRelease
+      - name: Build release AAB
+        run: ./gradlew bundleRelease
 
       - name: Sign release APK (External Signing)
         uses: r0adkll/sign-android-release@v1
@@ -42,7 +42,6 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           alias: ${{ secrets.KEY_ALIAS }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-          buildToolsVersion: "34.0.0"
 
 
       - name: Upload signed APK to Firebase App Distribution
