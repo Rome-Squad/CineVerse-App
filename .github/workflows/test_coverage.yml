@@ -63,30 +63,16 @@ jobs:
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: 🔐 Create Google Services JSON File
+      - name: 🧾 Create google-services.json in app/
         env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          mkdir -p app/src/debug
-          mkdir -p app/src/main
+          echo "$DATA" | base64 --decode > app/google-services.json
 
-          # Decode and place in debug
-          echo "$GOOGLE_SERVICES_JSON" | base64 -d > app/src/debug/google-services.json || {
-            echo "❌ Failed to decode google-services.json"
-            exit 1
-          }
-
-          # Copy to main as well (for release or other variants)
-          cp app/src/debug/google-services.json app/src/main/google-services.json
-
-          echo "✅ google-services.json created and placed in debug & main"
-
-          # Sanity check
-          echo "📁 Listing google-services.json locations:"
-          find app -name google-services.json
-
-          echo "📄 Preview of google-services.json:"
-          head -n 10 app/src/debug/google-services.json || echo "❌ File not found or empty"
+          echo "✅ File created at app/google-services.json"
+          ls -la app/google-services.json
+          head -n 10 app/google-services.json || echo "❌ File is empty"
+          
 
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
