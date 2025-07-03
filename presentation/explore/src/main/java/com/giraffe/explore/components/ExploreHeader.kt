@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.Tabs
-import com.giraffe.designsystem.composable.TextField
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.composable.TextField
+import com.giraffe.designsystem.composable.Tabs
 
 @Composable
 fun ExploreHeader(
@@ -30,7 +30,10 @@ fun ExploreHeader(
     onEndIconClick: () -> Unit = {},
     tabsTitles: List<String>,
     onTabClick: (Int) -> Unit = {},
-    selectedTabIndex: Int
+    selectedTabIndex: Int,
+    value: String,
+    onValueChange: (String) -> Unit
+
 ) {
     Column(
         modifier = modifier
@@ -65,8 +68,8 @@ fun ExploreHeader(
                     )
                 },
                 placeholder = "Search...",
-                value = "",
-                onValueChange = {}
+                onValueChange = onValueChange,
+                value = value,
             )
         }
         Tabs(
@@ -105,9 +108,11 @@ fun ExploreHeaderPreview() {
             onBackClick = {},
             showBackButton = true,
             endIcon = painterResource(Theme.icons.outline.microphone),
-            tabsTitles = listOf<String>("Movie", "Series"),
+            tabsTitles = listOf("Movie", "Series"),
             onTabClick = {},
-            selectedTabIndex = 0
+            selectedTabIndex = 0,
+            onValueChange = {},
+            value = ""
         )
     }
 }
