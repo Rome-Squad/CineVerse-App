@@ -1,10 +1,10 @@
-package com.giraffe.movies
+package com.giraffe.user
 
 import com.google.common.truth.Truth.assertThat
 import kotlin.test.Test
 
-class CalculatorTest {
-    val calculator = Calculator()
+class UserCalculatorTest {
+    val calculator = UserCalculator()
 
     @Test
     fun `should return 7 when user pass 5 , 2`() {

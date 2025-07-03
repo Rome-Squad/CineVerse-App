@@ -5,10 +5,12 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+
 permissions:
   checks: write
   pull-requests: write
   contents: read
+
 jobs:
   build:
     name: Build & Test
@@ -30,6 +32,17 @@ jobs:
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # ✅ FIX: Create google-services.json before build
+      - name: 🧾 Create google-services.json in app/
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          mkdir -p app
+          echo "$DATA" | base64 --decode > app/google-services.json
+          echo "✅ File created at app/google-services.json"
+          ls -la app/google-services.json
+          head -n 10 app/google-services.json || echo "❌ File is empty"
+
       - name: 🏗️ Build with Gradle (ignore warnings)
         run: ./gradlew build -x test --warning-mode=all
 
@@ -42,6 +55,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
   test:
     name: Test & Coverage Analysis
     needs: build
@@ -65,13 +79,19 @@ jobs:
 
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
-        run: ./gradlew :domain:movie:test :domain:movie:jacocoTestReport
+        run: |
+          ./gradlew :domain:movie:test :domain:movie:jacocoTestReport
+          ./gradlew :domain:user:test :domain:user:jacocoTestReport
+          ./gradlew :domain:series:test :domain:series:jacocoTestReport
 
       - name: 📊 Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: build/reports/jacoco/
+          path: |
+            domain/movies/build/reports/jacoco/test/html
+            domain/user/build/reports/jacoco/test/html
+            domain/series/build/reports/jacoco/test/html
 
       - name: 📝 Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -80,7 +100,10 @@ jobs:
           files: "**/build/test-results/**/*.xml"
 
       - name: 🚨 Check Coverage Verification
-        run: ./gradlew jacocoTestCoverageVerification
+        run: |
+          ./gradlew :domain:movie:jacocoTestCoverageVerification
+          ./gradlew :domain:user:jacocoTestCoverageVerification
+          ./gradlew :domain:series:jacocoTestCoverageVerification
 
       - name: 📨 Notify on Failure
         if: failure()
