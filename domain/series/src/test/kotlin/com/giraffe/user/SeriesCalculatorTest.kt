@@ -8,13 +8,13 @@ class SeriesCalculatorTest {
     val calculator = SeriesCalculator()
 
     @Test
-    fun `should return 7 when user pass 5 , 2`() {
+    fun `should return 10 when user pass 5 , 5`() {
         //given
         val x = 5
-        val y = 2
+        val y = 5
         //when
         val result = calculator.plus(x, y)
         //then
-        assertThat(result).isEqualTo(7)
+        assertThat(result).isEqualTo(10)
     }
 }
