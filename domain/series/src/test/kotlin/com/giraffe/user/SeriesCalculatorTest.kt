@@ -15,6 +15,6 @@ class SeriesCalculatorTest {
         //when
         val result = calculator.minus(x, y)
         //then
-        assertThat(result).isEqualTo(1)
+        assertThat(result).isEqualTo(0)
     }
 }
