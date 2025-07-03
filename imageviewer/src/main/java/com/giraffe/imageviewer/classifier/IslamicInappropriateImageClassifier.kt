@@ -69,9 +69,15 @@ class IslamicInappropriateImageClassifier(
         val assetFileDescriptor = context.assets.openFd(fileName)
         val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
         val fileChannel = inputStream.channel
+
         val startOffset = assetFileDescriptor.startOffset
         val declaredLength = assetFileDescriptor.declaredLength
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+
+        return fileChannel.map(
+            FileChannel.MapMode.READ_ONLY,
+            startOffset,
+            declaredLength
+        )
     }
 
     override fun isInappropriate(bitmap: Bitmap): Boolean {
