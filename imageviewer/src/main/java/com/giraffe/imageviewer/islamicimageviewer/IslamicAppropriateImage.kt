@@ -1,7 +1,6 @@
 package com.giraffe.imageviewer.islamicimageviewer
 
 import androidx.compose.runtime.Composable
-import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
@@ -14,9 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.giraffe.imageviewer.classifier.FakeClassifier
-import com.giraffe.imageviewer.classifier.GantManClassifier
-import com.giraffe.imageviewer.classifier.MustafaImageClassifier
+import com.giraffe.imageviewer.classifier.IslamicInappropriateImageClassifier
 import com.giraffe.imageviewer.utils.BlurTransformation
 
 @Composable
@@ -38,7 +35,7 @@ fun IslamicAppropriateImageViewer(
         val bitmap = result?.bitmap
 
         if (bitmap != null) {
-            val classifier = MustafaImageClassifier(context)
+            val classifier = IslamicInappropriateImageClassifier(context)
             shouldBlur = classifier.isInappropriate(bitmap)
             Log.d("TAG", "IslamicAppropriateImageViewer: $shouldBlur")
         }
