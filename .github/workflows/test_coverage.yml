@@ -5,10 +5,12 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+
 permissions:
   checks: write
   pull-requests: write
   contents: read
+
 jobs:
   build:
     name: Build & Test
@@ -30,6 +32,17 @@ jobs:
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # ✅ FIX: Create google-services.json before build
+      - name: 🧾 Create google-services.json in app/
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          mkdir -p app
+          echo "$DATA" | base64 --decode > app/google-services.json
+          echo "✅ File created at app/google-services.json"
+          ls -la app/google-services.json
+          head -n 10 app/google-services.json || echo "❌ File is empty"
+
       - name: 🏗️ Build with Gradle (ignore warnings)
         run: ./gradlew build -x test --warning-mode=all
 
@@ -42,6 +55,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
   test:
     name: Test & Coverage Analysis
     needs: build
@@ -62,17 +76,6 @@ jobs:
 
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: 🧾 Create google-services.json in app/
-        env:
-          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: |
-          echo "$DATA" | base64 --decode > app/google-services.json
-
-          echo "✅ File created at app/google-services.json"
-          ls -la app/google-services.json
-          head -n 10 app/google-services.json || echo "❌ File is empty"
-          
 
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
