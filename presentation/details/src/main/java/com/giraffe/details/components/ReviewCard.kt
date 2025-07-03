@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.utils.getCurrentLocalDate
+import com.giraffe.details.utils.getCurrentLocalDate
 import kotlinx.datetime.LocalDate
 
 @Composable

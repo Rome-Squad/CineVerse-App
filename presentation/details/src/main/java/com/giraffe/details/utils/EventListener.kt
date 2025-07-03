@@ -1,4 +1,4 @@
-package com.giraffe.presentation.utils
+package com.giraffe.details.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

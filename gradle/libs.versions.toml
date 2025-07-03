@@ -2,6 +2,9 @@
 agp = "8.10.1"
 coilCompose = "3.2.0"
 coilComposeVersion = "2.4.0"
+junitJupiter = "5.13.2"
+junitJupiterApi = "5.13.2"
+junitJupiterParams = "5.13.2"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -19,12 +22,16 @@ truth = "1.4.4"
 turbine = "1.2.1"
 uiTooling = "1.8.3"
 readMoreVersion = "1.6.3"
-kotlinxDatetime = "0.6.0"
-
+kotlinxDatetime = "0.7.0"
+junit4 = "1.8.3"
 runtimeAndroid = "1.8.3"
 uiToolingPreviewAndroid = "1.8.3"
 tensorflowLite = "2.17.0"
 tensorflowLiteSupport = "0.5.0"
+googleGmsGoogleServices = "4.4.3"
+firebaseAnalytics = "22.5.0"
+firebaseCrashlytics = "19.4.4"
+googleFirebaseCrashlytics = "3.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,9 +49,12 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiterParams" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
@@ -60,6 +70,8 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 
 
 [plugins]
@@ -68,3 +80,9 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
+
+[bundles]
+ui = ["androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "coil-compose", "coil-network-okhttp"]
+test = ["mockk", "androidx-ui-test-junit4", "truth", "junit-jupiter", "junit-jupiter-api", "junit-jupiter-params", "junit"]

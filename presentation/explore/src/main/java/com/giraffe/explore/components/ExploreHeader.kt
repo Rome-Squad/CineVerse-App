@@ -30,7 +30,10 @@ fun ExploreHeader(
     onEndIconClick: () -> Unit = {},
     tabsTitles: List<String>,
     onTabClick: (Int) -> Unit = {},
-    selectedTabIndex: Int
+    selectedTabIndex: Int,
+    value: String,
+    onValueChange: (String) -> Unit
+
 ) {
     Column(
         modifier = modifier
@@ -64,7 +67,9 @@ fun ExploreHeader(
                         contentDescription = "End Icon"
                     )
                 },
-                placeholder = "Search..."
+                placeholder = "Search...",
+                onValueChange = onValueChange,
+                value = value,
             )
         }
         Tabs(
@@ -103,9 +108,11 @@ fun ExploreHeaderPreview() {
             onBackClick = {},
             showBackButton = true,
             endIcon = painterResource(Theme.icons.outline.microphone),
-            tabsTitles = listOf<String>("Movie","Series"),
+            tabsTitles = listOf("Movie", "Series"),
             onTabClick = {},
-            selectedTabIndex = 0
+            selectedTabIndex = 0,
+            onValueChange = {},
+            value = ""
         )
     }
 }
