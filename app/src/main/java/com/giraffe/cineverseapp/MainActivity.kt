@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.cineverseapp.ui.theme.CineVerseAppTheme
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,9 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
+                        IslamicAppropriateImageViewer(
+                            imageUrl = "https://cdn.prod.website-files.com/6009ec8cda7f305645c9d91b/66a4263d01a185d5ea22eec6_6408f35499e9a3dfbab1a22f_phantom%2520of%2520the%2520opera-min.png",
+                        )
                     }
                 }
 

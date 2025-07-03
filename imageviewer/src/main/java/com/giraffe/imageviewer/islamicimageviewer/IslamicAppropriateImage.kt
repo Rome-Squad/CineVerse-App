@@ -10,18 +10,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.giraffe.imageviewer.classifier.FakeClassifier
 import com.giraffe.imageviewer.classifier.GantManClassifier
 import com.giraffe.imageviewer.utils.BlurTransformation
 
 @Composable
 fun IslamicAppropriateImageViewer(
     imageUrl: String,
-    context: Context,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     var shouldBlur by remember { mutableStateOf(false) }
 
     LaunchedEffect(imageUrl) {
@@ -35,7 +37,7 @@ fun IslamicAppropriateImageViewer(
         val bitmap = result?.bitmap
 
         if (bitmap != null) {
-            val classifier = GantManClassifier(context)
+            val classifier = FakeClassifier()
             shouldBlur = classifier.isInappropriate(bitmap)
             Log.d("TAG", "IslamicAppropriateImageViewer: $shouldBlur")
         }
@@ -47,7 +49,7 @@ fun IslamicAppropriateImageViewer(
             .crossfade(true)
             .apply {
                 if (shouldBlur) {
-                    transformations(BlurTransformation(context, radius = 500f))
+                    transformations(BlurTransformation(context, radius = 25f))
                 }
             }
             .build(),

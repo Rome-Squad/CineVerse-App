@@ -20,12 +20,11 @@ object BlurUtils {
             rs,
             Element.U8_4(rs)
         )
-        script.setRadius(radius.coerceIn(1, 300).toFloat())
+        script.setRadius(radius.coerceIn(1, 25).toFloat())
         script.setInput(input)
         script.forEach(output)
         output.copyTo(bitmap)
         rs.destroy()
-
         return bitmap
     }
 }
