@@ -93,19 +93,3 @@ jobs:
               repo: context.repo.repo,
               body: '❌ Test or Coverage checks failed! Please check the [workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.'
             })
-  notify:
-    name: Notification
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    if: always()
-
-    steps:
-      - name: 📝 Check Build Status
-        if: ${{ needs.build.result == 'success' && needs.test.result == 'success' }}
-        run: |
-          echo "✅ Build and tests completed successfully!"
-      - name: ❌ Check Build Status
-        if: ${{ needs.build.result != 'success' || needs.test.result != 'success' }}
-        run: |
-          echo "❌ Build or tests failed!"
-          exit 1
