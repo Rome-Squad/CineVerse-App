@@ -32,10 +32,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil3.compose.rememberAsyncImagePainter
+import com.giraffe.designsystem.composable.CinePreview
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -180,7 +180,7 @@ data class MovieCard(
     val tags: List<String>,
 )
 
-@Preview
+@CinePreview
 @Composable
 private fun Preview() {
     val movieCards = listOf(
