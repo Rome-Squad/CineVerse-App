@@ -35,8 +35,7 @@ jobs:
 
       - name: 📦 Install Android SDK Build Tools
         run: |
-         echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
-
+          echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
 
       - name: Assemble Release APK
         run: ./gradlew assembleRelease
@@ -44,11 +43,13 @@ jobs:
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/release/
+          releaseDirectory: app/build/outputs/apk/release/
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
           keyPassword: ${{ secrets.ANDROID_DEVS_ALIAS_PASSWORD }}
+          # Optional: explicitly set the output filename to ensure consistency
+          signedOutputFile: app/build/outputs/apk/release/app-release.apk
 
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
