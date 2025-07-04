@@ -1,13 +1,9 @@
 name: Deploy to Firebase
 
 on:
-  push:
-    branches:
-      - feature/add-firebase
   pull_request:
-    branches:
-      - feature/add-firebase
-
+    types: [closed]
+    branches: [ main, develop ]
 jobs:
   build:
     name: Building and distributing app (Release)
