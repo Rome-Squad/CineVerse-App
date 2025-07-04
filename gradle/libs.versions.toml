@@ -32,6 +32,8 @@ googleGmsGoogleServices = "4.4.3"
 firebaseAnalytics = "22.5.0"
 firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
+firebasePerf = "21.0.5"
+googleFirebaseFirebasePerf = "1.4.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,6 +74,7 @@ tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "te
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "firebasePerf" }
 
 
 [plugins]
@@ -82,6 +85,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
+google-firebase-firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "googleFirebaseFirebasePerf" }
 
 [bundles]
 ui = ["androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "coil-compose", "coil-network-okhttp"]
