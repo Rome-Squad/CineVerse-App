@@ -3,9 +3,7 @@ name: Deploy to Google Play
 on:
   pull_request:
     types: [closed]
-    branches:
-      - develop
-
+    branches: [ main, develop ]
 jobs:
   build:
     if: github.event.pull_request.merged == true
