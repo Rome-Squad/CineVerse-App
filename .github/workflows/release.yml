@@ -37,7 +37,7 @@ jobs:
           echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
 
       - name: Assemble Release APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew :app:assembleRelease
 
       - name: Sign Release APK
         uses: r0adkll/sign-android-release@v1
