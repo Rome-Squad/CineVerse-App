@@ -1,4 +1,4 @@
-name: Deploy to Google Play
+name: Deploy to Firebase
 
 on:
   push:
@@ -33,9 +33,13 @@ jobs:
       - name: Decode google-services.json
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
-      - name:  Assemble Release APK
-        run: ./gradlew assembleRelease
+      - name: 📦 Install Android SDK Build Tools
+        run: |
+         echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
 
+
+      - name: Assemble Release APK
+        run: ./gradlew assembleRelease
 
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
@@ -45,7 +49,6 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
           keyPassword: ${{ secrets.ANDROID_DEVS_ALIAS_PASSWORD }}
-
 
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
