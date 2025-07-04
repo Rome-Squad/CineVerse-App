@@ -1,5 +1,6 @@
 package com.giraffe.match.preview
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -43,19 +44,18 @@ private fun ProgressIndicatorPreviewLight() {
 @Composable
 private fun ProgressIndicatorPreviewDark() {
     CineVerseTheme(isDarkTheme = true) {
-        Column {
+        Column (
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ){
             ProgressIndicator(
                 progress = 0.25f,
             )
-            Spacer(Modifier.height(8.dp))
             ProgressIndicator(
                 progress = 0.5f,
             )
-            Spacer(Modifier.height(8.dp))
             ProgressIndicator(
                 progress = 0.75f,
             )
-            Spacer(Modifier.height(8.dp))
             ProgressIndicator(
                 progress = 1f,
             )
