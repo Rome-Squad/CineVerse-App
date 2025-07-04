@@ -38,6 +38,8 @@ android {
 
 dependencies {
     implementation(project(":designsystem"))
+    implementation(project(":imageviewer"))
+
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui)

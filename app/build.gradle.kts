@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation(project(":designsystem"))
+    implementation(project(":imageviewer"))
     implementation(project(":presentation:home"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
