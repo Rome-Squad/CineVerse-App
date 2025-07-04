@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - feature/add-firebase
-
   pull_request:
     branches:
       - feature/add-firebase
@@ -38,12 +37,12 @@ jobs:
           echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
 
       - name: Assemble Release APK
-        run: ./gradlew bundleRelease
+        run: ./gradlew assembleRelease
 
-      - name: Sign Release
+      - name: Sign Release APK
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/release
+          releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
@@ -55,5 +54,5 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
-          file: app/build/outputs/bundle/release/app-release.aab
+          file: app/build/outputs/apk/release/app-release.apk
           releaseNotes: "Automatic release build from develop branch"
