@@ -9,11 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -46,15 +50,21 @@ fun ExploreHeader(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (showBackButton) {
+                val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
                 Icon(
                     modifier = Modifier
                         .padding(8.dp)
                         .size(20.dp)
-                        .clickable(onClick = onBackClick),
+                        .clickable(onClick = onBackClick)
+                        .graphicsLayer {
+                            rotationY = if (isRtl) 180f else 0f
+                        },
                     painter = painterResource(Theme.icons.outline.arrowLeft),
                     contentDescription = "Back",
                     tint = Theme.color.shade.primary
                 )
+
             }
             TextField(
                 modifier = Modifier,
