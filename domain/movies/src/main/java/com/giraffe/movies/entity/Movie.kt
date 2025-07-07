@@ -1,5 +1,7 @@
 package com.giraffe.movies.entity
 
+import kotlinx.datetime.LocalDate
+
 
 data class Movie (
     val id: Int,
@@ -8,18 +10,6 @@ data class Movie (
     val rate: Float,
     val duration: String,
     val posterUrl: String,
-    val actorsId: List<Int>,
-    val genresID: List<Int>,
-    val createdAt: LocalDate,
-    val seasons: List<Season>
-)
-
-data class Season(
-    val id: Int,
-    val posterUrl: String,
-    val seasonNumber: Int,
-    val title: String,
-    val description: String,
-    val rate: Float,
-    createdAt: LocalDate
+    val genresID: List<Int>, // genre id
+    val releaseYear: LocalDate
 )

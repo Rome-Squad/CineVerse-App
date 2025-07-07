@@ -16,6 +16,8 @@ kotlin {
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.test)
+
+    implementation(libs.kotlinx.datetime)
 }
 
 tasks.test {
