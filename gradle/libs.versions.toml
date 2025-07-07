@@ -30,6 +30,14 @@ googleGmsGoogleServices = "4.4.3"
 firebaseAnalytics = "22.5.0"
 firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
+room = "2.7.2"
+ksp = "2.0.21-1.0.26"
+koinAndroidxCompose = "4.1.0"
+kotlinxSerializationJson = "1.9.0"
+uiTextGoogleFonts = "1.8.3"
+gson = "2.13.1"
+datastore = "1.1.7"
+ktorVersion="3.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,6 +74,22 @@ ui = { module = "androidx.compose.ui:ui" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorVersion" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorVersion" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorVersion" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorVersion" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
 
 
 [plugins]
@@ -76,7 +100,10 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 ui = ["androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "coil-compose", "coil-network-okhttp"]
 test = ["mockk", "androidx-ui-test-junit4", "truth", "junit-jupiter", "junit-jupiter-api", "junit-jupiter-params", "junit"]
+ktor = ["ktor-client-core", "ktor-client-cio", "ktor-client-content-negotiation", "ktor-client-logging", "ktor-serialization-kotlinx-json"]

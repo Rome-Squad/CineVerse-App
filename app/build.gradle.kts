@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -44,6 +45,7 @@ android {
 dependencies {
     implementation(project(":designsystem"))
     implementation(project(":presentation:home"))
+    implementation(project(":datasource:local:movie"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -54,6 +56,15 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.datastore.preferences)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.gson)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.bundles.ktor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
