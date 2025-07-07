@@ -1,6 +1,6 @@
 package com.giraffe.series.entity
 
-data class Genre(
+data class SeriesGenre(
     val id: Int,
     val title: String
 )

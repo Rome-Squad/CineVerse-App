@@ -1,6 +1,6 @@
 package com.giraffe.movies.entity
 
-data class Genre(
+data class MovieGenre(
     val id: Int,
     val title: String
 )
