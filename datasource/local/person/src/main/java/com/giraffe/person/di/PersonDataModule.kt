@@ -9,15 +9,6 @@ import org.koin.dsl.module
 
 
 val PersonDataModule = module {
-
-    single {
-        fun provideDatabase(application: Application): PersonDatabase {
-            return Room.databaseBuilder(application, PersonDatabase::class.java, "person_database")
-                .fallbackToDestructiveMigration() // Be careful with this in production
-                .build()
-        }
-        provideDatabase(androidApplication())
-    }
     single {
         Room.databaseBuilder(
             androidContext(),
