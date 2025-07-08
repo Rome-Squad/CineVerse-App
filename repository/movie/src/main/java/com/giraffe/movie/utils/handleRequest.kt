@@ -1,5 +1,10 @@
 package com.giraffe.movie.utils
 
+import com.giraffe.movie.exceptions.RequestTimeoutException
+import com.giraffe.movie.exceptions.SerializationException
+import com.giraffe.movie.exceptions.ServerException
+import com.giraffe.movie.exceptions.TooManyRequestsException
+import com.giraffe.movie.exceptions.UnknownRemoteException
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
@@ -12,21 +17,21 @@ suspend inline fun <reified  T> handleRequest(
             try {
                 response.body<T>()
             } catch (e: NoTransformationFoundException) {
-                throw Exception()
+                throw SerializationException()
             }
         }
 
         408 -> { //timeout
-            throw Exception()
+            throw RequestTimeoutException()
         }
 
         429 -> { //too many requests
-            throw Exception()
+            throw TooManyRequestsException()
         }
 
         in 500 ..599 -> { //server side error
-            throw Exception()
+            throw ServerException()
         }
-        else -> throw Exception()
+        else -> throw UnknownRemoteException()
     }
 }

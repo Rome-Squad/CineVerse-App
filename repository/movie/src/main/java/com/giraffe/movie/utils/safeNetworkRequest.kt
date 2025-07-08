@@ -2,9 +2,11 @@ package com.giraffe.movie.utils
 
 import com.giraffe.movie.exceptions.NetworkException
 import io.ktor.client.statement.HttpResponse
+import io.ktor.util.network.UnresolvedAddressException
+import kotlinx.serialization.SerializationException
 
 
-suspend inline fun <reified T> safeRequest (
+suspend inline fun <reified T> safeNetworkRequest (
     block: () -> HttpResponse
 ): T {
 
@@ -12,8 +14,6 @@ suspend inline fun <reified T> safeRequest (
         block()
 
     } catch (e: Throwable) {
-        // the client is unable to resolve the address from the backend,
-        // commonly happens when no Internet connection
         throw mapToNetworkException(e)
     }
     return handleRequest(response)
@@ -22,8 +22,8 @@ suspend inline fun <reified T> safeRequest (
 
 fun mapToNetworkException(e: Throwable): Throwable {
     return when (e) {
-        is NoSuchElementException -> NetworkException()
-        is IllegalArgumentException -> NetworkException()
+        is UnresolvedAddressException -> NetworkException()
+        is SerializationException -> SerializationException()
         else -> NetworkException()
     }
 }
