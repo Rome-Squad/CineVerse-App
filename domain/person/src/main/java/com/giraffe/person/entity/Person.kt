@@ -7,7 +7,7 @@ data class Person(
     val imageUrl: String
 )
 
-abstract class Role(
+sealed class Role(
     val character: String? = null
 ) {
     class Actor(character: String?): Role(character)
