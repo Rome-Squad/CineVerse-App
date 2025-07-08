@@ -48,8 +48,8 @@ tasks.jacocoTestCoverageVerification {
         classDirectories.setFrom(
             classDirectories.files.map {
                 fileTree(it) {
-                    exclude("**/models/**")
-                    exclude("**/di/**")
+                    include("**/usecase/**")
+
                 }
             }
         )

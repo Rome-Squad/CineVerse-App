@@ -80,7 +80,7 @@ jobs:
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
         run: |
-          ./gradlew :domain:movie:test :domain:movie:jacocoTestReport
+          ./gradlew :domain:movies:test :domain:movie:jacocoTestReport
           ./gradlew :domain:user:test :domain:user:jacocoTestReport
           ./gradlew :domain:series:test :domain:series:jacocoTestReport
           ./gradlew :domain:person:test :domain:person:jacocoTestReport
@@ -105,7 +105,7 @@ jobs:
 
       - name: 🚨 Check Coverage Verification
         run: |
-          ./gradlew :domain:movie:jacocoTestCoverageVerification
+          ./gradlew :domain:movies:jacocoTestCoverageVerification
           ./gradlew :domain:user:jacocoTestCoverageVerification
           ./gradlew :domain:series:jacocoTestCoverageVerification
           ./gradlew :domain:person:jacocoTestCoverageVerification
