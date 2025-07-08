@@ -13,4 +13,8 @@ interface MoviesLocalDataSource {
     suspend fun getMovieGenres(): List<MovieGenre>
 
     suspend fun getMoviesByGenre(genreId: Int): List<Movie>
+
+    suspend fun insertMovies(movies: List<Movie>)
+
+    suspend fun insertMovieGenres(movies: List<MovieGenre>)
 }
