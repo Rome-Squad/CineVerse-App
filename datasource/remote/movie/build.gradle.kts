@@ -34,10 +34,23 @@ android {
 
 dependencies {
 
+    implementation(project(":repository:movie"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.kotlinx.datetime)
+
+
+    //serialization
+    implementation(libs.gson)
+    implementation(libs.kotlinx.serialization.json)
+
+    //ktor
+    implementation(libs.bundles.ktor)
+
 }

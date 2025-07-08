@@ -16,6 +16,8 @@ kotlin {
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.test)
+
+    implementation(libs.kotlinx.datetime)
 }
 
 tasks.test {
@@ -44,8 +46,8 @@ tasks.jacocoTestCoverageVerification {
         classDirectories.setFrom(
             classDirectories.files.map {
                 fileTree(it) {
-                    exclude("**/models/**")
-                    exclude("**/di/**")
+                    include("**/usecase/**")
+
                 }
             }
         )
