@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":presentation:home"))
     implementation(project(":datasource:local:movie"))
+    implementation(project(":datasource:remote:series"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
