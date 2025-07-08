@@ -46,6 +46,8 @@ android {
 dependencies {
     implementation(project(":designsystem"))
     implementation(project(":presentation:home"))
+    implementation(project(":datasource:local:movie"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -56,6 +58,26 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+
+    //datastore
+    implementation(libs.datastore.preferences)
+
+    //koin
+    implementation(libs.koin.androidx.compose)
+
+    //serialization
+    implementation(libs.gson)
+    implementation(libs.kotlinx.serialization.json)
+
+    //room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
+
+    //ktor
+    implementation(libs.bundles.ktor)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
