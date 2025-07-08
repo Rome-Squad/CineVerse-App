@@ -35,3 +35,7 @@ suspend inline fun <reified  T> handleRequest(
         else -> throw UnknownRemoteException()
     }
 }
+
+//400 -> 499 clint side error
+//500 -> 599 server side error
+//200 -> 299 success

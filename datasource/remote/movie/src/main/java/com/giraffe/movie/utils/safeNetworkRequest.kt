@@ -1,6 +1,7 @@
 package com.giraffe.movie.utils
 
 import com.giraffe.movie.exceptions.NetworkException
+import com.giraffe.movie.exceptions.NoInternetException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
@@ -22,7 +23,7 @@ suspend inline fun <reified T> safeNetworkRequest (
 
 fun mapToNetworkException(e: Throwable): Throwable {
     return when (e) {
-        is UnresolvedAddressException -> NetworkException()
+        is UnresolvedAddressException -> NoInternetException()
         is SerializationException -> SerializationException()
         else -> NetworkException()
     }
