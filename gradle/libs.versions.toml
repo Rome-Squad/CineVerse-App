@@ -116,4 +116,10 @@ room = { id = "androidx.room", version.ref = "room" }
 [bundles]
 ui = ["androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "coil-compose", "coil-network-okhttp"]
 test = ["mockk", "androidx-ui-test-junit4", "truth", "junit-jupiter", "junit-jupiter-api", "junit-jupiter-params", "junit"]
-ktor = ["ktor-client-core", "ktor-client-cio", "ktor-client-content-negotiation", "ktor-client-logging", "ktor-serialization-kotlinx-json"]
+ktor = [
+    "ktor-client-core",
+    "ktor-client-cio",
+    "ktor-client-content-negotiation",
+    "ktor-client-logging",
+    "ktor-serialization-kotlinx-json"
+]

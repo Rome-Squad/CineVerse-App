@@ -49,4 +49,7 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
+
+    //serialization
+    implementation(libs.kotlinx.serialization.json)
 }
