@@ -1,6 +1,8 @@
 package com.giraffe.movie.utils
 
-import com.giraffe.movie.exceptions.LocalDatabaseException
+import com.giraffe.movie.exceptions.NotFoundException
+import com.giraffe.movie.exceptions.UnKnownLocalDatabaseException
+import com.giraffe.movie.exceptions.ValidationException
 
 
 suspend inline fun <reified T> safeLocalRequest (
@@ -16,8 +18,8 @@ suspend inline fun <reified T> safeLocalRequest (
 
 fun mapToLocalDatabaseException(e: Throwable): Throwable {
     return when (e) {
-        is NoSuchElementException -> LocalDatabaseException()
-        is IllegalArgumentException -> LocalDatabaseException()
-        else -> UnknownError()
+        is NoSuchElementException -> NotFoundException()
+        is IllegalArgumentException -> ValidationException()
+        else -> UnKnownLocalDatabaseException()
     }
 }
