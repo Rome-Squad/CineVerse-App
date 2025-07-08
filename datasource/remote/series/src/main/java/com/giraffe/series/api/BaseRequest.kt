@@ -1,16 +1,19 @@
 package com.giraffe.series.api
 
+import com.giraffe.series.BuildConfig
 import io.ktor.http.HttpMethod
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 
-data class BaseRequest(
-    val baseURL: String
-) {
+internal class BaseRequest {
+    val baseURL: String = "https://api.themoviedb.org/3/"
     var endPoint: String = ""
     var method: HttpMethod = HttpMethod.Companion.Get
-    var headers: Map<String, String> = emptyMap()
+    var headers: Map<String, String> = mapOf(
+        "Authorization" to "Bearer ${BuildConfig.TMDB_API_KEY}",
+        "accept" to "application/json"
+    )
     var parameters: Map<String, Any> = emptyMap()
     var body: Any? = null
 

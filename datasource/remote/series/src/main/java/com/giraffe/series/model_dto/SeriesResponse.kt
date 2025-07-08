@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SeriesInfoDto(
+data class SeriesResponse(
     @SerialName("page")
     val page: Int,
     @SerialName("results")

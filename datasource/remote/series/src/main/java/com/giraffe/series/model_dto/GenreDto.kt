@@ -10,9 +10,3 @@ data class GenreDto(
     @SerialName("name")
     val name: String
 )
-
-@Serializable
-data class GenresResponse(
-    @SerialName("genres")
-    val genres: List<GenreDto>
-)

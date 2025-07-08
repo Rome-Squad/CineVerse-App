@@ -1,6 +1,5 @@
 package com.giraffe.series.model_dto
 
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

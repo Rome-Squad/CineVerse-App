@@ -1,10 +1,7 @@
 package com.giraffe.series.api
 
-import com.giraffe.series.ClientException
 import com.giraffe.series.InvalidRequestException
 import com.giraffe.series.InvalidRequestMethodException
-import com.giraffe.series.ServerException
-import com.giraffe.series.UnknownException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -21,19 +18,15 @@ import io.ktor.http.contentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RequestBuilder(
+internal class RequestBuilder(
     private val httpClient: HttpClient
 ) {
-    suspend inline fun <reified T> request(baseRequest: BaseRequest): ApiResult<T> {
+    suspend inline fun <reified T> request(baseRequest: BaseRequest): T {
         return withContext(Dispatchers.IO) {
             if (!baseRequest.validate()) {
-                return@withContext ApiResult.Error(
-                    exception = InvalidRequestException(),
-                    message = "Request validation failed"
-                )
+                throw InvalidRequestException()
             }
-            val response = executeRequest(baseRequest)
-            handleResponse<T>(response)
+            executeRequest(baseRequest).body()
         }
     }
 
@@ -93,31 +86,6 @@ class RequestBuilder(
                 contentType(ContentType.Application.Json)
                 setBody(body)
             }
-        }
-    }
-
-    suspend inline fun <reified T> handleResponse(response: HttpResponse): ApiResult<T> {
-        val statusCode = response.status.value
-
-        return when (statusCode) {
-            in 200..299 -> ApiResult.Success(response.body(), statusCode)
-            in 400..499 -> ApiResult.Error(
-                ClientException(),
-                "Client error",
-                statusCode
-            )
-
-            in 500..599 -> ApiResult.Error(
-                ServerException(),
-                "Server error",
-                statusCode
-            )
-
-            else -> ApiResult.Error(
-                UnknownException(),
-                "Unexpected",
-                statusCode
-            )
         }
     }
 }
