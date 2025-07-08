@@ -34,8 +34,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":datasource:local:movie"))
-    implementation(project(":datasource:remote:movie"))
+    implementation(project(":domain:movies"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
