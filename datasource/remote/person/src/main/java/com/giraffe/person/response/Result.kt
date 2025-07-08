@@ -17,5 +17,5 @@ data class Result(
     val originalName: String,
     val popularity: Double,
     @SerialName("profile_path")
-    val profilePath: String
+    val profilePath: String? = null
 )
