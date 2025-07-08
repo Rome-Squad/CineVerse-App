@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -29,6 +31,7 @@ fun SearchItem(
     onClick: () -> Unit
 ) {
     val iconId = if (isFromHistory) Theme.icons.outline.history else Theme.icons.outline.search
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     Row(
         modifier = modifier
@@ -64,7 +67,7 @@ fun SearchItem(
             modifier = Modifier
                 .size(20.dp)
                 .graphicsLayer {
-                    rotationY = 180f
+                    rotationY = if (isRtl) 0f else 180f
                 },
             tint = Theme.color.shade.tertiary
         )
@@ -72,9 +75,9 @@ fun SearchItem(
     HorizontalDivider(
         thickness = 1.dp,
         color = Theme.color.shade.quaternary,
+        modifier = modifier
     )
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFF121321)
 @Composable

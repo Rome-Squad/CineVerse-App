@@ -12,8 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.CinePreview
 import com.giraffe.designsystem.composable.CollectionItem
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -71,10 +71,10 @@ data class UserCollection(
     val description: String
 )
 
-@Preview
+@CinePreview
 @Composable
 private fun Preview() {
-    CineVerseTheme(isDarkTheme = true) {
+    CineVerseTheme {
         val collections = listOf(
             UserCollection("My Favorite TV Shows", "5 shows"),
             UserCollection("Animated Series", "4 shows"),
