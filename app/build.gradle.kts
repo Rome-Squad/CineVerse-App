@@ -19,9 +19,10 @@ val secrets = Properties().apply {
 }
 
 fun getSecret(key: String): String {
-    return (project.findProperty(key) ?: secrets[key])?.toString()
+    return secrets[key]?.toString()
         ?: throw GradleException("Missing required secret: $key")
 }
+
 
 android {
     namespace = "com.giraffe.cineverseapp"
