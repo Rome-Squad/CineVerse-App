@@ -21,8 +21,11 @@ class MovieRemoteDataSource : MoviesRepository {
                 append("Authorization", "Bearer $API_KEY")
             }
         }
-        val movieResponse: MovieResponse = handleRequest<MovieResponse>(httpResponse)
-        return movieResponse.results.map { it.toMovie() }
+        val movieResponse: MovieByNameResponse = handleRequest<MovieByNameResponse>(httpResponse)
+        return movieResponse.results.map {
+            val duration = getMovieDetails(it.id).runtime
+            it.toMovie(duration)
+        }
     }
 
     override suspend fun getMovieGenres(): List<MovieGenre> {
@@ -44,8 +47,20 @@ class MovieRemoteDataSource : MoviesRepository {
                 append("Authorization", "Bearer $API_KEY")
             }
         }
-        val movieResponse: MovieResponse = handleRequest<MovieResponse>(httpResponse)
-        return movieResponse.results.map { it.toMovie() }
+        val movieResponse: MovieByNameResponse = handleRequest<MovieByNameResponse>(httpResponse)
+        return movieResponse.results.map {
+            val duration = getMovieDetails(it.id).runtime
+            it.toMovie(duration)
+        }
+    }
+
+    suspend fun getMovieDetails(movieId: Int): MovieDetailsResponse {
+        val response = client.get("$MOVIE_DETAILS_URL$movieId") {
+            headers {
+                append("Authorization", "Bearer $API_KEY")
+            }
+        }
+        return handleRequest<MovieDetailsResponse>(response)
     }
 
     companion object {
@@ -54,5 +69,6 @@ class MovieRemoteDataSource : MoviesRepository {
         private const val MOVIES_BY_NAME_URL = "https://api.themoviedb.org/3/search/movie"
         private const val GENRES_URL = "https://api.themoviedb.org/3/genre/movie/list"
         private const val MOVIES_BY_GENRE_URL = "https://api.themoviedb.org/3/discover/movie"
+        private const val MOVIE_DETAILS_URL = "https://api.themoviedb.org/3/movie/"
     }
 }

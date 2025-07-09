@@ -4,7 +4,7 @@ import com.giraffe.movies.entity.Movie
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 
-data class MovieResponse(
+data class MovieByNameResponse(
     val page: Int,
     val results: List<MovieDTO>,
     @SerialName("total_pages") val totalPages: Int,
@@ -28,13 +28,13 @@ data class MovieDTO(
     @SerialName("vote_count") val voteCount: Int
 )
 
-fun MovieDTO.toMovie(): Movie {
+fun MovieDTO.toMovie(duration : String): Movie {
     return Movie(
         id = id,
         title = title,
         description = overview,
         rate = voteAverage,
-        duration = "", // TODO: Duration is not provided in the response
+        duration = duration ,
         posterUrl = posterPath,
         genresID = genreIds,
         releaseYear = LocalDate.parse(releaseDate)
