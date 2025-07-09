@@ -10,7 +10,6 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-// Load from secrets.properties (for local dev)
 val secretsProps = File(rootDir, "app/secrets.properties")
 val secrets = Properties().apply {
     if (secretsProps.exists()) {
