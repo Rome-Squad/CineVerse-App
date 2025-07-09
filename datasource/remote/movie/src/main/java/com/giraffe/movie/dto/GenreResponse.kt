@@ -1,4 +1,4 @@
-package com.giraffe.movie
+package com.giraffe.movie.dto
 
 import com.giraffe.movies.entity.MovieGenre
 

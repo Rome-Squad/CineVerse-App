@@ -1,5 +1,10 @@
 package com.giraffe.movie
 
+import com.giraffe.movie.dto.GenreResponse
+import com.giraffe.movie.dto.MovieByNameResponse
+import com.giraffe.movie.dto.MovieDetailsResponse
+import com.giraffe.movie.dto.toMovie
+import com.giraffe.movie.dto.toMovieGenre
 import com.giraffe.movie.utils.handleRequest
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
