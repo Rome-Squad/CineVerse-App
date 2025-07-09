@@ -16,7 +16,7 @@ class RemoteExploreDataSourceImpl(
 ) : RemoteExploreDataSource {
     override suspend fun getSearchKeywords(
         query: String,
-        page: Int = 1
+        page: Int
     ): List<SearchKeywordDto> {
         val response = safeNetworkRequest<SearchKeywordResponse> {
             httpClient.get("${baseUrl}search/keyword") {

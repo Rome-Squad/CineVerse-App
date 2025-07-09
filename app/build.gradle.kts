@@ -11,7 +11,7 @@ plugins {
 }
 
 // Load from secrets.properties (for local dev)
-val secretsProps = File(rootDir, "secrets.properties")
+val secretsProps = File(rootDir, "app/secrets.properties")
 val secrets = Properties().apply {
     if (secretsProps.exists()) {
         load(secretsProps.inputStream())

@@ -43,12 +43,14 @@ jobs:
           ls -la app/google-services.json
           head -n 10 app/google-services.json || echo "❌ File is empty"
 
-      - name: 🧾 Create secret.properties
+      - name: 🧾 Create app/secret.properties
         run: |
-          echo "API_KEY=${{ secrets.API_KEY }}" >> secret.properties
-          echo "BASE_URL=${{ secrets.BASE_URL }}" >> secret.properties
-          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> secret.properties
-
+          mkdir -p app
+          echo "API_KEY=${{ secrets.API_KEY }}" > app/secret.properties
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> app/secret.properties
+          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> app/secret.properties
+      
+      
 
       - name: 🏗️ Build with Gradle (ignore warnings)
         run: ./gradlew build -x test --warning-mode=all
