@@ -1,6 +1,7 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.cineverseapp.BuildConfig
+import com.giraffe.cineverseapp.data.network.HttpClientFactory
 import com.giraffe.explore.RemoteExploreDataSourceImpl
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
 import org.koin.core.qualifier.named
@@ -8,6 +9,10 @@ import org.koin.dsl.module
 
 
 val networkModule = module {
+
+    single {
+        HttpClientFactory.create()
+    }
     single<String>(named("BASE_URL")) {
         BuildConfig.BASE_URL
     }
