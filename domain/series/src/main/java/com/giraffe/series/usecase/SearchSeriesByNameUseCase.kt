@@ -3,10 +3,10 @@ package com.giraffe.series.usecase
 import com.giraffe.series.entity.Series
 import com.giraffe.series.repository.SeriesRepository
 
-class GetSeriesByGenreUseCase(
+class SearchSeriesByNameUseCase(
     private val seriesRepository: SeriesRepository
 ) {
-    suspend operator fun invoke(genreId: Int): Result<List<Series>> {
-        return seriesRepository.getSeriesByGenre(genreId)
+    suspend fun searchSeriesByName(seriesName: String): Result<List<Series>> {
+        return seriesRepository.searchSeriesByName(seriesName)
     }
 }
