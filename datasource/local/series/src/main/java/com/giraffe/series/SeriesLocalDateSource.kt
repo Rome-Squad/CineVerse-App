@@ -19,4 +19,6 @@ interface SeriesLocalDateSource {
 
     suspend fun getCachedGenres(): List<SeriesGenreEntity>
     suspend fun saveGenres(genres: List<SeriesGenreEntity>)
+
+    suspend fun getCachedSeriesByGenre(genreId: Int): List<SeriesFullData>?
 }
