@@ -10,16 +10,18 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-val secretsProps = File(rootDir, "app/secrets.properties")
-val secrets = Properties().apply {
-    if (secretsProps.exists()) {
+fun getSecret(key: String): String {
+    val secretsProps = File(rootDir, "app/secrets.properties")
+    if (!secretsProps.exists()) {
+        throw GradleException("Missing secrets.properties file at app/secrets.properties")
+    }
+
+    val props = Properties().apply {
         load(secretsProps.inputStream())
     }
-}
 
-fun getSecret(key: String): String {
-    return secrets[key]?.toString()
-        ?: throw GradleException("Missing required secret: $key")
+    return props[key]?.toString()
+        ?: throw GradleException("Missing required secret key: $key in secrets.properties")
 }
 
 
