@@ -17,4 +17,6 @@ interface SeriesLocalDateSource {
     )
     suspend fun clearAllData()
 
+    suspend fun getCachedGenres(): List<SeriesGenreEntity>
+    suspend fun saveGenres(genres: List<SeriesGenreEntity>)
 }

@@ -58,6 +58,15 @@ class SeriesRoomLocalDateSource(
         }
     }
 
+    override suspend fun getCachedGenres(): List<SeriesGenreEntity> {
+        return seriesDao.getAllGenres().first()
+    }
+
+    override suspend fun saveGenres(genres: List<SeriesGenreEntity>) {
+        seriesDao.insertGenres(genres)
+    }
+
+
     private suspend fun getSeriesFullDataFromCache(seriesIds: List<Int>): List<SeriesFullData> {
         val seriesList = seriesDao.getSeriesByIds(seriesIds)
         val allGenres = seriesDao.getAllGenres().first()
