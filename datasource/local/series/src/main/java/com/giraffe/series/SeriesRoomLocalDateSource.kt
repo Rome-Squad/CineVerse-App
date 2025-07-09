@@ -20,12 +20,11 @@ class SeriesRoomLocalDateSource(
         seasons: List<SeasonEntity>,
         genres: List<SeriesGenreEntity>
     ) {
-        if (seriesList.isEmpty()) {
-            throw IllegalArgumentException("seriesList must not be empty when saving search result.")
-        }
-
         val now = System.currentTimeMillis()
-        seriesDao.insertSeries(seriesList)
+
+        if (seriesList.isNotEmpty()) {
+            seriesDao.insertSeries(seriesList)
+        }
 
         if (seasons.isNotEmpty()) {
             seriesDao.insertSeasons(seasons)
@@ -43,6 +42,7 @@ class SeriesRoomLocalDateSource(
             )
         )
     }
+
 
 
     override suspend fun getCachedSeriesForKeyword(keyword: String): List<SeriesFullData>? {
