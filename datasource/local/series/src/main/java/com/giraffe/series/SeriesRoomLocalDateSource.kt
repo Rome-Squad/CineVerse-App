@@ -15,7 +15,7 @@ class SeriesRoomLocalDateSource(
 ) :SeriesLocalDateSource {
 
     override suspend fun saveSearchResult(
-        keyword: String,
+        name: String,
         seriesList: List<SeriesEntity>,
         seasons: List<SeasonEntity>,
         genres: List<SeriesGenreEntity>
@@ -36,7 +36,7 @@ class SeriesRoomLocalDateSource(
 
         cacheDao.insertSearchCache(
             SearchCacheEntity(
-                keyword = keyword,
+                name = name,
                 seriesIds = seriesList.map { it.id },
                 timestamp = now
             )
@@ -45,15 +45,15 @@ class SeriesRoomLocalDateSource(
 
 
 
-    override suspend fun getCachedSeriesForKeyword(keyword: String): List<SeriesFullData>? {
-        val cache = cacheDao.getCacheForKeyword(keyword) ?: return null
+    override suspend fun getCachedSeriesForKeyword(name: String): List<SeriesFullData>? {
+        val cache = cacheDao.getCacheForKeyword(name) ?: return null
         val now = System.currentTimeMillis()
         val isValid = now - cache.timestamp <= CACHE_VALIDITY_DURATION_MS
 
         return if (isValid) {
             getSeriesFullDataFromCache(cache.seriesIds)
         } else {
-            invalidateCache(keyword, cache.seriesIds)
+            invalidateCache(name, cache.seriesIds)
             null
         }
     }
@@ -82,7 +82,7 @@ class SeriesRoomLocalDateSource(
 
         cacheDao.insertSearchCache(
             SearchCacheEntity(
-                keyword = GENRE_CACHE_KEY,
+                name = GENRE_CACHE_KEY,
                 seriesIds = emptyList(),
                 timestamp = System.currentTimeMillis()
             )
@@ -106,8 +106,8 @@ class SeriesRoomLocalDateSource(
             )
         }
     }
-    private suspend fun invalidateCache(keyword: String, expiredSeriesIds: List<Int>) {
-        cacheDao.deleteCacheForKeyword(keyword)
+    private suspend fun invalidateCache(name: String, expiredSeriesIds: List<Int>) {
+        cacheDao.deleteCacheForKeyword(name)
 
         val allCaches = cacheDao.getAllCaches()
         val stillUsedIds = allCaches.flatMap { it.seriesIds }.toSet()
