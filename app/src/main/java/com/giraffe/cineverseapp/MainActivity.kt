@@ -23,12 +23,13 @@ import androidx.lifecycle.lifecycleScope
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-    private val remoteExploreDataSource: RemoteExploreDataSource by inject()
+    private val getSearchKeywordsUseCase: GetSearchKeywordsUseCase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     lifecycleScope.launch {
                         try {
-                            val result = remoteExploreDataSource.getSearchKeywords("batman")
+                            val result = getSearchKeywordsUseCase("batman")
                             Log.d("TestSearchKeywords", "Result: $result")
                         } catch (e: Exception) {
                             Log.e("TestSearchKeywords", "Error: ${e.message}", e)
