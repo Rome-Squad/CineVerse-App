@@ -8,7 +8,7 @@ import androidx.room.Query
 import com.giraffe.explore.model.SearchKeywordCacheDto
 
 @Dao
-interface SearchKeywordDao {
+interface ExploreSearchKeywordDao {
     @Query(
         value =
             "SELECT * " +

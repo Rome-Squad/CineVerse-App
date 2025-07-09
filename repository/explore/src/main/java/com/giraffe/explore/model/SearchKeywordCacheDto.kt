@@ -11,5 +11,5 @@ data class SearchKeywordCacheDto(
     @PrimaryKey(autoGenerate = false)
     val keyword: String,
 
-    val lastSearchedTime: LocalDateTime
+    val lastSearchedTime: String
 )
