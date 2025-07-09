@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.giraffe.person"
+    namespace = "com.giraffe.explore"
     compileSdk = 36
 
     defaultConfig {
@@ -34,10 +35,28 @@ android {
 
 dependencies {
 
+    implementation(project(":domain:explore"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
+    //kotlin date time
+    implementation(libs.kotlinx.datetime)
+
+    //room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
+
+    //serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    //ktor
+    implementation(libs.bundles.ktor)
 }

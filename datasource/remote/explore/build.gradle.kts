@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.person"
+    namespace = "com.giraffe.explore"
     compileSdk = 36
 
     defaultConfig {
@@ -33,6 +33,8 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":repository:explore"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

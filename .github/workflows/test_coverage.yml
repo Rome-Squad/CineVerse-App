@@ -85,6 +85,7 @@ jobs:
           ./gradlew :domain:series:test :domain:series:jacocoTestReport
           ./gradlew :domain:person:test :domain:person:jacocoTestReport
           ./gradlew :domain:review:test :domain:review:jacocoTestReport
+          ./gradlew :domain:explore:test :domain:review:jacocoTestReport
 
       - name: 📊 Upload Coverage Report
         uses: actions/upload-artifact@v4
@@ -96,6 +97,7 @@ jobs:
             domain/series/build/reports/jacoco/test/html
             domain/review/build/reports/jacoco/test/html
             domain/person/build/reports/jacoco/test/html
+            domain/explore/build/reports/jacoco/test/html
 
       - name: 📝 Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -110,6 +112,7 @@ jobs:
           ./gradlew :domain:series:jacocoTestCoverageVerification
           ./gradlew :domain:person:jacocoTestCoverageVerification
           ./gradlew :domain:review:jacocoTestCoverageVerification
+          ./gradlew :domain:explore:jacocoTestCoverageVerification
 
       - name: 📨 Notify on Failure
         if: failure()
