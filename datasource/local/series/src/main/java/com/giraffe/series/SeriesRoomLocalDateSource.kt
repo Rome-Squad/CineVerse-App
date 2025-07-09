@@ -14,12 +14,16 @@ class SeriesRoomLocalDateSource(
     private val cacheDao: SearchCacheDao
 ) :SeriesLocalDateSource {
 
-  override suspend fun saveSearchResult(
+    override suspend fun saveSearchResult(
         keyword: String,
         seriesList: List<SeriesEntity>,
-        seasons: List<SeasonEntity> ,
+        seasons: List<SeasonEntity>,
         genres: List<SeriesGenreEntity>
     ) {
+        if (seriesList.isEmpty()) {
+            throw IllegalArgumentException("seriesList must not be empty when saving search result.")
+        }
+
         val now = System.currentTimeMillis()
         seriesDao.insertSeries(seriesList)
 
