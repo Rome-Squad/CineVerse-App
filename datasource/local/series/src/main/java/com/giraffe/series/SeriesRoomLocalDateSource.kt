@@ -45,7 +45,7 @@ class SeriesRoomLocalDateSource(
 
 
 
-    override suspend fun getCachedSeriesForKeyword(name: String): List<SeriesFullData>? {
+    override suspend fun getCachedSeriesForName(name: String): List<SeriesFullData>? {
         val cache = cacheDao.getCacheForKeyword(name) ?: return null
         val now = System.currentTimeMillis()
         val isValid = now - cache.timestamp <= CACHE_VALIDITY_DURATION_MS
@@ -59,7 +59,7 @@ class SeriesRoomLocalDateSource(
     }
     override suspend fun getCachedSeriesByGenre(genreId: Int): List<SeriesFullData>? {
         val keyword = genreCacheKey(genreId)
-        return getCachedSeriesForKeyword(keyword)
+        return getCachedSeriesForName(keyword)
     }
 
 

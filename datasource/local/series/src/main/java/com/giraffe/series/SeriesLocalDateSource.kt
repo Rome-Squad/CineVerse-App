@@ -7,7 +7,7 @@ import com.giraffe.series.dto.SeriesGenreEntity
 
 interface SeriesLocalDateSource {
 
-    suspend fun getCachedSeriesForKeyword(name: String): List<SeriesFullData>?
+    suspend fun getCachedSeriesForName(name: String): List<SeriesFullData>?
 
     suspend fun saveSearchResult(
         name: String,
