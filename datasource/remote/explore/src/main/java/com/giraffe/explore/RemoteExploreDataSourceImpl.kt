@@ -2,6 +2,7 @@ package com.giraffe.explore
 
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
 import com.giraffe.explore.model.SearchKeywordDto
+import com.giraffe.explore.model.SearchKeywordResponse
 import com.giraffe.explore.utils.safeNetworkRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -14,7 +15,7 @@ class RemoteExploreDataSourceImpl(
     private val accessToken: String
 ) : RemoteExploreDataSource {
     override suspend fun getSearchKeywords(query: String): List<SearchKeywordDto> {
-        return safeNetworkRequest<List<SearchKeywordDto>> {
+        val response = safeNetworkRequest<SearchKeywordResponse> {
             httpClient.get("${baseUrl}search/keyword") {
                 parameter("query", query)
                 parameter("page", 1)
@@ -24,5 +25,7 @@ class RemoteExploreDataSourceImpl(
                 }
             }
         }
+
+        return response.results
     }
 }

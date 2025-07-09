@@ -3,7 +3,11 @@ package com.giraffe.explore
 import com.giraffe.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
 import com.giraffe.explore.entity.SearchKeyword
+import com.giraffe.explore.mapper.toCacheDto
+import com.giraffe.explore.mapper.toEntity
 import com.giraffe.explore.repository.ExploreRepository
+import com.giraffe.explore.utils.getCurrentLocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 class ExploreRepositoryImpl(
     private val cache: LocalExploreDataSource,
@@ -11,18 +15,30 @@ class ExploreRepositoryImpl(
 ): ExploreRepository {
 
     override suspend fun getSearchKeywords(query: String): List<SearchKeyword> {
-        TODO("Not yet implemented")
+        val history = cache.getSearchKeywords(query).map {
+            it.toEntity()
+        }
+
+        val remoteResults = remote.getSearchKeywords(query).map {
+            it.toEntity()
+        }
+
+        return (history + remoteResults)
+            .distinctBy { it.keyword }
+            .sortedByDescending { it.lastSearchedTime }
     }
 
     override suspend fun insertSearchKeyword(searchKeyword: SearchKeyword) {
-        TODO("Not yet implemented")
+        val cacheDto = searchKeyword.toCacheDto()
+        cache.insertSearchKeyword(cacheDto)
     }
 
     override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) {
-        TODO("Not yet implemented")
+        val cacheDto = searchKeyword.toCacheDto()
+        cache.deleteSearchKeyword(cacheDto)
     }
 
     override suspend fun clearSearchHistory() {
-        TODO("Not yet implemented")
+        cache.clearSearchHistory()
     }
 }
