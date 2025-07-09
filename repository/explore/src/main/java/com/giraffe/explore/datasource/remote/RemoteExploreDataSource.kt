@@ -4,6 +4,9 @@ import com.giraffe.explore.model.SearchKeywordDto
 
 interface RemoteExploreDataSource {
 
-    suspend fun getSearchKeywords(query: String): List<SearchKeywordDto>
+    suspend fun getSearchKeywords(
+        query: String,
+        page: Int = 1
+    ): List<SearchKeywordDto>
 
 }
