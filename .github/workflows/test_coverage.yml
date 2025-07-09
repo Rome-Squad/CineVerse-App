@@ -85,6 +85,13 @@ jobs:
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: 🧾 Create app/secrets.properties
+        run: |
+          mkdir -p app
+          echo "API_KEY=${{ secrets.API_KEY }}" > app/secrets.properties
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> app/secrets.properties
+          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> app/secrets.properties
+
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
         run: |
