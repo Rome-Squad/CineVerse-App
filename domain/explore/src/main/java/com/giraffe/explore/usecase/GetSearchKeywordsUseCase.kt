@@ -6,7 +6,7 @@ import com.giraffe.explore.repository.ExploreRepository
 class GetSearchKeywordsUseCase(
     private val repository: ExploreRepository
 ) {
-    suspend operator fun invoke(query: String): List<SearchKeyword> {
+    suspend fun execute(query: String): List<SearchKeyword> {
         return repository.getSearchKeywords(query)
     }
 }

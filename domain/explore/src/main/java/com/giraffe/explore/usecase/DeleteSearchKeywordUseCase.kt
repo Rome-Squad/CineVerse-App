@@ -6,7 +6,7 @@ import com.giraffe.explore.repository.ExploreRepository
 class DeleteSearchKeywordUseCase(
     private val repository: ExploreRepository
 ) {
-    suspend operator fun invoke(searchKeyword: SearchKeyword) {
+    suspend fun execute(searchKeyword: SearchKeyword) {
         repository.deleteSearchKeyword(searchKeyword)
     }
 }

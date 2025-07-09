@@ -5,7 +5,7 @@ import com.giraffe.explore.repository.ExploreRepository
 class ClearSearchHistoryUseCase(
     private val repository: ExploreRepository
 ) {
-    suspend operator fun invoke() {
+    suspend fun execute() {
         repository.clearSearchHistory()
     }
 }
