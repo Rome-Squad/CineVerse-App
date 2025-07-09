@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "persons")
-data class PersonEntity(
+data class PersonDto(
     @PrimaryKey
     val id: Int,
     val name: String,
@@ -13,14 +13,14 @@ data class PersonEntity(
     val character: String? = null
 )
 
-fun Person.toEntity(): PersonEntity {
+fun Person.toDto(): PersonDto {
     val role = when (this.role) {
         is Role.Actor -> "Actor"
         is Role.Director -> "Director"
         is Role.ScreenPlay -> "ScreenPlay"
         is Role.Story -> "Story"
     }
-    return PersonEntity(
+    return PersonDto(
         id = this.id,
         name = this.name,
         imageUrl = this.imageUrl,
@@ -29,7 +29,7 @@ fun Person.toEntity(): PersonEntity {
     )
 }
 
-fun PersonEntity.toDomain(): Person {
+fun PersonDto.toEntity(): Person {
     val role = when (this.role) {
         "Actor" -> Role.Actor(this.character)
         "Director" -> Role.Director
