@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:movies"))
+    api(project(":domain:movies"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
