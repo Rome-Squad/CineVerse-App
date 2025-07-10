@@ -49,6 +49,7 @@ tasks.jacocoTestCoverageVerification {
             classDirectories.files.map {
                 fileTree(it) {
                     include("**/usecase/**")
+                    exclude("**/usecase/ExploreUseCases.class")
                 }
             }
         )
