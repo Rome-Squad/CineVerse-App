@@ -1,4 +1,4 @@
-package com.giraffe.series
+package com.giraffe.explore
 
 import org.junit.Test
 
