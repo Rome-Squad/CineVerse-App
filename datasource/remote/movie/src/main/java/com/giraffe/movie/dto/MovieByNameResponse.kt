@@ -28,15 +28,19 @@ data class MovieDTO(
     @SerialName("vote_count") val voteCount: Int
 )
 
-fun MovieDTO.toMovie(duration : String): Movie {
+fun MovieDTO.toMovie(durationInMins: Int): Movie {
     return Movie(
         id = id,
         title = title,
         description = overview,
         rate = voteAverage,
-        duration = duration ,
+        duration = getDurationInHours(durationInMins),
         posterUrl = posterPath,
         genresID = genreIds,
         releaseYear = LocalDate.parse(releaseDate)
     )
+}
+
+private fun getDurationInHours(duration: Int): String {
+    return "${duration / 60} h ${duration % 60} mins"
 }

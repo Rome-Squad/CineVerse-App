@@ -22,7 +22,7 @@ data class MovieDetailsResponse(
     @SerialName("production_countries") val productionCountries: List<ProductionCountry>,
     @SerialName("release_date") val releaseDate: String,
     val revenue: Int,
-    val runtime: String,
+    val runtime: Int,
     @SerialName("spoken_languages") val spokenLanguages: List<SpokenLanguage>,
     val status: String,
     val tagline: String,
