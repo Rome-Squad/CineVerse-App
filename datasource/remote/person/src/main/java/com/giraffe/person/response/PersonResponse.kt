@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Result(
+data class PersonResponse(
     val adult: Boolean,
     val gender: Int,
     val id: Int,

@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain:person"))
+    api(project(":datasource:remote:person"))
+    api(project(":datasource:local:person"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

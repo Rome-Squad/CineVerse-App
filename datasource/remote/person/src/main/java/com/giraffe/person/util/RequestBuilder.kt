@@ -64,6 +64,6 @@ class RequestBuilder(val client: HttpClient) {
 }
 
 class ApiException(
-    messageText: String,
-    code: Int
+    val messageText: String,
+    val code: Int
 ) : Exception("API Error $code: $messageText")

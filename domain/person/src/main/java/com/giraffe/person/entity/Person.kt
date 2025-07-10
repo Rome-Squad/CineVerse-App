@@ -4,7 +4,7 @@ data class Person(
     val id: Int,
     val name: String,
     val role: Role,
-    val imageUrl: String
+    val imageUrl: String?
 )
 
 sealed class Role(

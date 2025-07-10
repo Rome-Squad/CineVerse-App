@@ -49,6 +49,8 @@ dependencies {
     implementation(project(":datasource:local:movie"))
     implementation(project(":datasource:remote:person"))
     implementation(project(":datasource:local:person"))
+    implementation(project(":repository:person"))
+    implementation(project(":domain:person"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

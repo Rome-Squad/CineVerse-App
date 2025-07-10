@@ -2,6 +2,6 @@ package com.giraffe.person
 
 import com.giraffe.person.response.SearchPersonResponse
 
-interface RemoteDataSource {
+interface PersonRemoteDataSource {
     suspend fun searchByName(personName: String): SearchPersonResponse
 }
