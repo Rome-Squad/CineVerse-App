@@ -26,18 +26,18 @@ suspend inline fun <reified T> safeCall(
     return try {
         block()
     } catch (e: Throwable) {
-        throw mapToLocalDatabaseException(e)
+        throw mapToDomainException(e)
     }
 }
 
-fun mapToLocalDatabaseException(e: Throwable): SeriesException {
+fun mapToDomainException(e: Throwable): SeriesException {
     return when (e) {
         is NoInternetNetworkException -> NoInternetException()
         is RequestTimeoutNetworkException -> TimeoutException()
         is TooManyRequestsNetworkException -> SeriesException()
         is ServerNetworkException -> ServerException()
-        is  RedirectException-> RedirectedException()
-        is ClientException->ClientErrorException()
+        is RedirectException -> RedirectedException()
+        is ClientException ->ClientErrorException()
 
 
 
