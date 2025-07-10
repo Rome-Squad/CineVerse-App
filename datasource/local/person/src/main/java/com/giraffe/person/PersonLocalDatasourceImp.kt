@@ -8,4 +8,5 @@ class PersonLocalDatasourceImp(private val dao: PersonDao) : PersonLocalDatasour
     override suspend fun searchByName(personName: String) = dao.searchByName(personName)
     override suspend fun getPersonById(id: Int) = dao.getPersonById(id)
     override suspend fun getPersonByName(personName: String) = dao.getPersonByName(personName)
+    override suspend fun getRecentPeople() = dao.getRecentPeople()
 }

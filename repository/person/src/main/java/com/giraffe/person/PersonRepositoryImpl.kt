@@ -43,11 +43,15 @@ class PersonRepositoryImpl(
                     val person = remotePerson.toEntity()
                     localDatasource.storePerson(person.toDto())
                     person
-                }else{
+                } else {
                     localDatasource.getPersonByName(personName).toEntity()
                 }
-            }else{
+            } else {
                 localDatasource.getPersonByName(personName).toEntity()
             }
         }
+
+    override suspend fun getRecentPeople() = safeCall {
+        localDatasource.getRecentPeople().map { it.toEntity() }
+    }
 }

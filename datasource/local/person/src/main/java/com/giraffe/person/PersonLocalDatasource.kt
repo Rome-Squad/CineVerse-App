@@ -7,4 +7,5 @@ interface PersonLocalDatasource {
     suspend fun searchByName(personName: String): List<PersonDto>
     suspend fun getPersonById(id: Int): PersonDto
     suspend fun getPersonByName(personName: String): PersonDto
+    suspend fun getRecentPeople(): List<PersonDto>
 }
