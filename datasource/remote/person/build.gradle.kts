@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 android {
@@ -8,10 +9,20 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 31
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField(
+            "String",
+            "API_KEY",
+            "\"${rootProject.extra["API_KEY"]}\""
+        )
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -33,6 +44,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.bundles.ktor)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
