@@ -1,13 +1,13 @@
 package com.giraffe.series.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.giraffe.series.util.DatabaseConstants.GENRE_TABLE
+import com.giraffe.series.util.DatabaseConstants.SEASON_TABLE
+import com.giraffe.series.util.DatabaseConstants.SERIES_TABLE
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.giraffe.series.util.DatabaseConstants.SERIES_TABLE
-import com.giraffe.series.util.DatabaseConstants.SEASON_TABLE
-import com.giraffe.series.util.DatabaseConstants.GENRE_TABLE
 
 @Entity(tableName = SERIES_TABLE)
 data class CachedSeriesDto(
@@ -26,11 +26,7 @@ data class CachedSeriesDto(
 data class CachedSeasonDto(
     @PrimaryKey val id: Int,
     val seriesId: Int, // foreign key
-@Serializable
-data class SeriesDto(
-    val id: Int,
     val name: String,
-    val voteCount: Int,
     val overview: String,
     val rate: Float,
     val posterUrl: String,
@@ -44,6 +40,14 @@ data class SeriesDto(
 data class CachedSeriesGenreDto(
     @PrimaryKey val id: Int,
     val name: String
+)
+
+@Serializable
+data class SeriesDto(
+    val id: Int,
+    val name: String,
+    val voteCount: Int,
+    val overview: String,
     val popularity: Double,
     @SerialName("original_name")
     val originalName: String,
