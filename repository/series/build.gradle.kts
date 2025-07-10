@@ -35,6 +35,8 @@ android {
 
 dependencies {
     implementation(project(":domain:series"))
+    api(project(":datasource:local:series"))
+    api(project(":datasource:remote:series"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -4,12 +4,13 @@ import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.repository.SeriesRepository
 
-class SeriesRepositoryImpl: SeriesRepository {
+class SeriesRepositoryImpl(): SeriesRepository {
     override suspend fun searchSeriesByName(seriesName: String): List<Series> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun searchSeriesByGenre(genreId: Int): List<Series> {
+
+    override suspend fun storeSeries(series: List<Series>) {
         TODO("Not yet implemented")
     }
 
