@@ -39,7 +39,11 @@ android {
 dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
+    implementation(project(":domain:movies"))
+    implementation(project(":domain:series"))
+    implementation(project(":domain:person"))
 
+    implementation(libs.kotlinx.datetime.v041)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui)

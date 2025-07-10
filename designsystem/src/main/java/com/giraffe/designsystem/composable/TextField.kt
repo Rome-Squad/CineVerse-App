@@ -163,7 +163,7 @@ fun TextField(
         }
         if (hasError && !isFocused) {
             Text(
-                text = errorMessage,
+                text = errorMessage ?: "",
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.additional.primary.red
             )
