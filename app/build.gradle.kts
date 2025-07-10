@@ -78,9 +78,8 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":presentation:authentication"))
     implementation(project(":presentation:home"))
+    implementation(project(":presentation:authentication"))
     implementation(project(":presentation:details"))
     implementation(project(":presentation:explore"))
     implementation(project(":presentation:match"))

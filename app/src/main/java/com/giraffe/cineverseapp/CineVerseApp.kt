@@ -2,6 +2,7 @@ package com.giraffe.cineverseapp
 
 import android.app.Application
 import com.giraffe.cineverseapp.di.dataModule
+import com.giraffe.series.di.seriesRemoteDataModule
 import com.giraffe.cineverseapp.di.localDataSourceModule
 import com.giraffe.cineverseapp.di.networkModule
 import com.giraffe.cineverseapp.di.repositoryModule
@@ -19,7 +20,8 @@ class CineVerseApp : Application() {
                 localDataSourceModule,
                 networkModule,
                 repositoryModule,
-                useCaseModule
+                useCaseModule,
+                seriesRemoteDataModule
             )
         }
     }
