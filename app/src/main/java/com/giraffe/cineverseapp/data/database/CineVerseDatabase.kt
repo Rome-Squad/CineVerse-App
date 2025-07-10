@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.model.SearchKeywordCacheDto
+import com.giraffe.movie.dao.MoviesSearchHistoryDao
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto
 
@@ -18,6 +19,7 @@ import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto
 )
 abstract class CineVerseDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
+    abstract fun moviesSearchHistoryDao(): MoviesSearchHistoryDao
 
     abstract fun exploreSearchKeywordDao(): ExploreSearchKeywordDao
 }

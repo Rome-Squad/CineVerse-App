@@ -2,7 +2,9 @@ package com.giraffe.movie.datasource.remote.dto
 
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MovieDto(
     val id: Int,
     val title: String,
