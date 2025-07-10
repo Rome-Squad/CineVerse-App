@@ -1,4 +1,4 @@
-package com.giraffe.person.dto
+package com.giraffe.person.local.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

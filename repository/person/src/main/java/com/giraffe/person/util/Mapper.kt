@@ -1,8 +1,8 @@
 package com.giraffe.person.util
 
 import com.giraffe.person.entity.Person
-import com.giraffe.person.dto.PersonDto
-import com.giraffe.person.response.PersonResponse
+import com.giraffe.person.local.dto.PersonDto
+import com.giraffe.person.remote.response.PersonResponse
 
 fun Person.toDto(): PersonDto {
     return PersonDto(
