@@ -1,7 +1,7 @@
 package com.giraffe.person.util
 
 import com.giraffe.person.entity.Person
-import com.giraffe.person.entity.PersonDto
+import com.giraffe.person.dto.PersonDto
 import com.giraffe.person.response.PersonResponse
 
 fun Person.toDto(): PersonDto {
@@ -27,6 +27,13 @@ fun PersonResponse.toEntity() = Person(
     id = id,
     name = name,
     role = knownForDepartment.toRole(),
+    imageUrl = profilePath
+)
+
+fun PersonResponse.toDto() = PersonDto(
+    id = id,
+    name = name,
+    role = knownForDepartment,
     imageUrl = profilePath
 )
 

@@ -1,4 +1,4 @@
-package com.giraffe.person.entity
+package com.giraffe.person.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,5 +10,6 @@ data class PersonDto(
     val name: String,
     val imageUrl: String? = null,
     val role: String,
-    val character: String? = null
+    val character: String? = null,
+    val isRecent: Boolean = false
 )
