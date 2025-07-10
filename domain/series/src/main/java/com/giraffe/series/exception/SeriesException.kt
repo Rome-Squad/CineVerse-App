@@ -8,14 +8,14 @@ open class SeriesException: Exception()
 class NoInternetException : SeriesException()
 class ServerException : SeriesException()
 class TimeoutException :SeriesException()
-class RedirectedException():SeriesException()
-class ClientErrorException():SeriesException()
+class RedirectedException:SeriesException()
+class ClientErrorException:SeriesException()
 
 //local exceptions
 class NotFoundElementException :SeriesException()
-class ValidationExceptions() : SeriesException()
-class CorruptDatabaseException():SeriesException()
-class DiskAccessException():SeriesException()
+class ValidationExceptions : SeriesException()
+class CorruptDatabaseException:SeriesException()
+class DiskAccessException:SeriesException()
 
 //Unknown exceptions
 class UnknownException : SeriesException()
