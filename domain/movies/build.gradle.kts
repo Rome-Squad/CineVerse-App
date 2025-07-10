@@ -32,7 +32,7 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
         csv.required.set(true)
-        html.required.set(true) // Added HTML report
+        html.required.set(true)
     }
     doLast {
         println("Coverage report: file://${layout.buildDirectory}/reports/jacoco/test/html/index.html") // Adds clickable report link after test
