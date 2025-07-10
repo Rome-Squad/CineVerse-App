@@ -4,6 +4,8 @@ import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.HttpClientFactory
 import com.giraffe.explore.RemoteExploreDataSourceImpl
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.movie.MovieRemoteDataSource
+import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -28,6 +30,14 @@ val networkModule = module {
     single<RemoteExploreDataSource> {
         RemoteExploreDataSourceImpl(
             httpClient = get(),
+            baseUrl = get(named("BASE_URL")),
+            accessToken = get(named("ACCESS_TOKEN"))
+        )
+    }
+
+    single<MoviesRemoteDataSource>{
+        MovieRemoteDataSource(
+            client = get(),
             baseUrl = get(named("BASE_URL")),
             accessToken = get(named("ACCESS_TOKEN"))
         )
