@@ -42,7 +42,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.kotlinx.datetime)
-//ktor
-    implementation(libs.bundles.ktor)
+
 
 }
