@@ -11,13 +11,14 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 
 class MovieRemoteDataSource(
-    val client: HttpClient
+    val client: HttpClient,
+    val accessToken: String,
 ) : MoviesRemoteDataSource {
     override suspend fun getMovieById(movieId: Int): MovieDto {
         return handleRequest<MovieDto> {
             client.get("$MOVIE_BY_ID_URL$movieId") {
                 headers {
-                    append("Authorization", "Bearer $ACCESS_TOKEN")
+                    append("Authorization", "Bearer $accessToken")
                 }
             }
         }
@@ -30,7 +31,7 @@ class MovieRemoteDataSource(
                     parameters.append("query", movieName)
                 }
                 headers {
-                    append("Authorization", "Bearer $ACCESS_TOKEN")
+                    append("Authorization", "Bearer $accessToken")
                 }
             }
         }
@@ -42,7 +43,7 @@ class MovieRemoteDataSource(
             handleRequest<GenreResponse> {
             client.get(GENRES_URL) {
                 headers {
-                    append("Authorization", "Bearer $ACCESS_TOKEN")
+                    append("Authorization", "Bearer $accessToken")
                 }
             }
         }
@@ -57,7 +58,7 @@ class MovieRemoteDataSource(
                     parameters.append("with_genres", genreId.toString())
                 }
                 headers {
-                    append("Authorization", "Bearer $ACCESS_TOKEN")
+                    append("Authorization", "Bearer $accessToken")
                 }
             }
         }
@@ -65,8 +66,6 @@ class MovieRemoteDataSource(
     }
 
     companion object {
-        private const val ACCESS_TOKEN =
-            "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmYjA4OTZlNmZlMmIxMGI1YTViYzE1ZDBkODM0YWU1YSIsIm5iZiI6MTc1MTk5MzA1NC43MDQsInN1YiI6IjY4NmQ0YWRlYTFhYWI0OTRiYzcwMzQzMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pvTPNoLWrO9AAD2MU0PqtJb7hgeyIooBthUlM4XqR38"
         private const val MOVIE_BY_ID_URL = "https://api.themoviedb.org/3/movie"
         private const val MOVIES_BY_NAME_URL = "https://api.themoviedb.org/3/search/movie"
         private const val GENRES_URL = "https://api.themoviedb.org/3/genre/movie/list"
