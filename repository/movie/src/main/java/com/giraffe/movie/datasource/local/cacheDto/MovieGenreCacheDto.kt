@@ -2,13 +2,13 @@ package com.giraffe.movie.datasource.local.cacheDto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.movie.datasource.local.cacheDto.MovieGenreDto.Companion.MOVIE_GENRE_TABLE
+import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto.Companion.MOVIE_GENRE_TABLE
 
 
 @Entity(tableName = MOVIE_GENRE_TABLE)
-data class MovieGenreDto(
+data class MovieGenreCacheDto(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val id : Int,
     val name : String
 ){
@@ -16,4 +16,3 @@ data class MovieGenreDto(
         const val MOVIE_GENRE_TABLE = "movie_genre_table"
     }
 }
-

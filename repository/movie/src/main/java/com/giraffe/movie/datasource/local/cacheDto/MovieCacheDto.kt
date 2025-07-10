@@ -2,15 +2,15 @@ package com.giraffe.movie.datasource.local.cacheDto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.movie.datasource.local.cacheDto.MovieDto.Companion.MOVIE_TABLE
+import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto.Companion.MOVIE_TABLE
 import kotlinx.datetime.LocalDate
 
 
 
 @Entity(tableName = MOVIE_TABLE)
-data class MovieDto(
+data class MovieCacheDto(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val title: String,
     val overview: String,
