@@ -1,23 +1,22 @@
 package com.giraffe.series.database
 
 import androidx.room.*
-import com.giraffe.series.dto.SearchCacheEntity
-
+import com.giraffe.series.model.CachedSearchCacheDto
 @Dao
 interface SearchCacheDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSearchCache(cache: SearchCacheEntity)
+    suspend fun insertSearchCache(cache: CachedSearchCacheDto)
 
-    @Query("SELECT * FROM search_cache WHERE LOWER(keyword) = LOWER(:keyword)")
-    suspend fun getCacheForKeyword(keyword: String): SearchCacheEntity?
+    @Query("SELECT * FROM SEARCH_KEYWORD_TABLE WHERE LOWER(keyword) = LOWER(:keyword)")
+    suspend fun getCacheForKeyword(keyword: String): CachedSearchCacheDto?
 
-    @Query("DELETE FROM search_cache WHERE LOWER(keyword) = LOWER(:keyword)")
+    @Query("DELETE FROM SEARCH_KEYWORD_TABLE WHERE LOWER(keyword) = LOWER(:keyword)")
     suspend fun deleteCacheForKeyword(keyword: String)
 
-    @Query("SELECT * FROM search_cache")
-    suspend fun getAllCaches(): List<SearchCacheEntity>
+    @Query("SELECT * FROM SEARCH_KEYWORD_TABLE")
+    suspend fun getAllCaches(): List<CachedSearchCacheDto>
 
-    @Query("DELETE FROM search_cache")
+    @Query("DELETE FROM SEARCH_KEYWORD_TABLE")
     suspend fun clearAll()
 }

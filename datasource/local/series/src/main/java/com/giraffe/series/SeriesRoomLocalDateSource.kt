@@ -2,23 +2,20 @@ package com.giraffe.series
 
 import com.giraffe.series.database.SearchCacheDao
 import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.dto.SearchCacheEntity
-import com.giraffe.series.dto.SeasonEntity
-import com.giraffe.series.dto.SeriesEntity
-import com.giraffe.series.dto.SeriesFullData
-import com.giraffe.series.dto.SeriesGenreEntity
+import com.giraffe.series.datasource.local.SeriesLocalDateSource
+
+import com.giraffe.series.model.*
 import kotlinx.coroutines.flow.first
 
 class SeriesRoomLocalDateSource(
     private val seriesDao: SeriesDao,
     private val cacheDao: SearchCacheDao
 ) : SeriesLocalDateSource {
-
     override suspend fun saveSearchResult(
         name: String,
-        seriesList: List<SeriesEntity>,
-        seasons: List<SeasonEntity>,
-        genres: List<SeriesGenreEntity>
+        seriesList: List<CachedSeriesDto>,
+        seasons: List<CachedSeasonDto>,
+        genres: List<CachedSeriesGenreDto>
     ) {
         val now = System.currentTimeMillis()
 
@@ -35,9 +32,9 @@ class SeriesRoomLocalDateSource(
         }
 
         cacheDao.insertSearchCache(
-            SearchCacheEntity(
+            CachedSearchCacheDto(
                 keyword = name,
-                timestamp = now
+                lastSearchedTime = now
             )
         )
     }
@@ -46,7 +43,7 @@ class SeriesRoomLocalDateSource(
         val cache = cacheDao.getCacheForKeyword(name)
         val now = System.currentTimeMillis()
 
-        if (cache != null && now - cache.timestamp > CACHE_VALIDITY_DURATION_MS) {
+        if (cache != null && now - cache.lastSearchedTime > CACHE_VALIDITY_DURATION_MS) {
             cacheDao.deleteCacheForKeyword(name)
             return null
         }
@@ -82,10 +79,10 @@ class SeriesRoomLocalDateSource(
         }
     }
 
-    override suspend fun getCachedGenres(): List<SeriesGenreEntity> {
+    override suspend fun getCachedGenres(): List<CachedSeriesGenreDto> {
         val cache = cacheDao.getCacheForKeyword(GENRE_CACHE_KEY)
         val now = System.currentTimeMillis()
-        val isValid = cache != null && (now - cache.timestamp <= CACHE_VALIDITY_DURATION_MS)
+        val isValid = cache != null && (now - cache.lastSearchedTime <= CACHE_VALIDITY_DURATION_MS)
 
         return if (isValid) {
             seriesDao.getAllGenres().first()
@@ -94,13 +91,13 @@ class SeriesRoomLocalDateSource(
         }
     }
 
-    override suspend fun saveGenres(genres: List<SeriesGenreEntity>) {
+    override suspend fun saveGenres(genres: List<CachedSeriesGenreDto>) {
         seriesDao.insertGenres(genres)
 
         cacheDao.insertSearchCache(
-            SearchCacheEntity(
+            CachedSearchCacheDto(
                 keyword = GENRE_CACHE_KEY,
-                timestamp = System.currentTimeMillis()
+                lastSearchedTime = System.currentTimeMillis()
             )
         )
     }
@@ -113,7 +110,8 @@ class SeriesRoomLocalDateSource(
     }
 
     companion object {
-        private const val CACHE_VALIDITY_DURATION_MS = 60 * 60 * 1000
+        internal  const val CACHE_VALIDITY_DURATION_MS = 60 * 60 * 1000
         private const val GENRE_CACHE_KEY = "genres"
     }
+
 }

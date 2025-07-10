@@ -1,56 +1,56 @@
 package com.giraffe.series.database
 
 import androidx.room.*
-import com.giraffe.series.dto.*
+import com.giraffe.series.model.*
 
 import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface SeriesDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSeries(series: List<SeriesEntity>)
+    suspend fun insertSeries(series: List<CachedSeriesDto>)
 
-    @Query("SELECT * FROM series")
-    fun getAllSeries(): Flow<List<SeriesEntity>>
+    @Query("SELECT * FROM cached_series")
+    fun getAllSeries(): Flow<List<CachedSeriesDto>>
 
-    @Query("DELETE FROM series")
+    @Query("DELETE FROM cached_series")
     suspend fun clearAllSeries()
 
-    @Query("DELETE FROM series WHERE id IN (:ids)")
+    @Query("DELETE FROM cached_series WHERE id IN (:ids)")
     suspend fun deleteSeriesByIds(ids: List<Int>)
 
-    @Query("SELECT * FROM series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
-    suspend fun getSeriesByKeyword(keyword: String): List<SeriesEntity>
+    @Query("SELECT * FROM cached_series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
+    suspend fun getSeriesByKeyword(keyword: String): List<CachedSeriesDto>
 
-    @Query("DELETE FROM series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
+    @Query("DELETE FROM cached_series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
     suspend fun deleteSeriesByKeyword(keyword: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSeasons(seasons: List<SeasonEntity>)
+    suspend fun insertSeasons(seasons: List<CachedSeasonDto>)
 
-    @Query("SELECT * FROM seasons WHERE seriesId = :seriesId")
-    fun getSeasonsForSeries(seriesId: Int): Flow<List<SeasonEntity>>
+    @Query("SELECT * FROM cached_season WHERE seriesId = :seriesId")
+    fun getSeasonsForSeries(seriesId: Int): Flow<List<CachedSeasonDto>>
 
-    @Query("SELECT * FROM series")
-    suspend fun getAllSeriesDirect(): List<SeriesEntity>
+    @Query("SELECT * FROM cached_series")
+    suspend fun getAllSeriesDirect(): List<CachedSeriesDto>
 
-
-    @Query("DELETE FROM seasons")
+    @Query("DELETE FROM cached_season")
     suspend fun clearAllSeasons()
 
-    @Query("DELETE FROM seasons WHERE seriesId IN (:seriesIds)")
+    @Query("DELETE FROM cached_season WHERE seriesId IN (:seriesIds)")
     suspend fun deleteSeasonsBySeriesIds(seriesIds: List<Int>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGenres(genres: List<SeriesGenreEntity>)
+    suspend fun insertGenres(genres: List<CachedSeriesGenreDto>)
 
-    @Query("SELECT * FROM series_genres")
-    fun getAllGenres(): Flow<List<SeriesGenreEntity>>
+    @Query("SELECT * FROM cached_series_genres")
+    fun getAllGenres(): Flow<List<CachedSeriesGenreDto>>
 
-    @Query("DELETE FROM series_genres")
+    @Query("DELETE FROM cached_series_genres")
     suspend fun clearAllGenres()
 
-    @Query("DELETE FROM series_genres WHERE id IN (:ids)")
+    @Query("DELETE FROM cached_series_genres WHERE id IN (:ids)")
     suspend fun deleteGenresByIds(ids: List<Int>)
 }

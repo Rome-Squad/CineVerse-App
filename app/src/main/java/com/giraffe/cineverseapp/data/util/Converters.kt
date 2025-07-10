@@ -1,4 +1,4 @@
-package com.giraffe.series.util
+package com.giraffe.cineverseapp.data.util
 
 import androidx.room.TypeConverter
 
