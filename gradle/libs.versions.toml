@@ -4,6 +4,7 @@ coilCompose = "3.2.0"
 coilComposeVersion = "2.4.0"
 junitJupiter = "5.13.2"
 junitJupiterApi = "5.13.2"
+koinAndroid = "3.5.6"
 junitJupiterParams = "5.13.2"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
@@ -67,6 +68,7 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiterParams" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
