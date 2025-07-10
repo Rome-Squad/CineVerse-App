@@ -7,6 +7,6 @@ data class Season(
     val rating: Float,
     val posterUrl: String,
     val seasonNumber: Int,
-    val releaseYear: Int,
+    val releaseYear: String,
     val episodeCount: Int
 )

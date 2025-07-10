@@ -9,6 +9,6 @@ data class Series (
     val duration: String,
     val posterUrl: String,
     val genreIDs: List<Int>,
-    val releaseYear: Int,
+    val releaseYear: String,
     val seasons: List<Season> = emptyList(),
 )

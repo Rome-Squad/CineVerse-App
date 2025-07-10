@@ -1,9 +1,11 @@
 package com.giraffe.series.exception
 
-open class SeriesException(message: String = ""): Exception(message)
+open class SeriesException: Exception()
 
-class NotFoundError : SeriesException()
-class NetworkError : SeriesException()
+
+class NotFoundException : SeriesException()
+class NoInternetException : SeriesException()
 class InvalidApiKey : SeriesException()
-class ServerError : SeriesException()
-class UnknownError() : SeriesException()
+class ServerErrorException : SeriesException()
+class UnknownException : SeriesException()
+class ValidationException : SeriesException()
