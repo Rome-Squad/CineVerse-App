@@ -126,8 +126,8 @@ class SearchViewModel(
                 )
             }
             searchDebounceJob = viewModelScope.launch {
-                fetchSearchSuggestions(query)
                 delay(1500)
+                fetchSearchSuggestions(query)
                 performSearch(query, _state.value.selectedTab)
                 saveSearchHistory(query)
             }
@@ -148,9 +148,25 @@ class SearchViewModel(
 
     private fun fetchSearchSuggestions(query: String) {
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true, errorMessage = null) }
             getSearchSuggestionsUseCase(query)
-                .onSuccess { suggestions -> _state.update { it.copy(searchSuggestions = suggestions) } }
-                .onFailure { error -> _state.update { it.copy(errorMessage = error.message) } }
+                .onSuccess { suggestions ->
+                    _state.update {
+                        it.copy(
+                            searchSuggestions = suggestions,
+                            isLoading = false,
+                            errorMessage = null
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            errorMessage = error.message,
+                            isLoading = false
+                        )
+                    }
+                }
         }
     }
 
@@ -172,6 +188,7 @@ class SearchViewModel(
         }
     }
 
+    //using flows to update it
     private fun handleClearItemHistory(item: String) {
         viewModelScope.launch {
             removeSearchHistoryItemUseCase(item)
@@ -188,6 +205,7 @@ class SearchViewModel(
         }
     }
 
+    //using flows to update it
     private fun handleClearAllHistory() {
         viewModelScope.launch {
             clearAllSearchHistoryUseCase()
@@ -212,6 +230,7 @@ class SearchViewModel(
         }
     }
 
+    //handle from screen
     private fun handleVoiceSearchClick() {}
 
     private fun handleChooseSuggestionClick(suggestion: String) {
@@ -219,7 +238,7 @@ class SearchViewModel(
             currentState.copy(
                 searchQuery = suggestion,
                 isSearchHistoryVisible = false,
-                isSearchSuggestionsVisible = false
+                isSearchSuggestionsVisible = false,
             )
         }
         performSearch(suggestion, _state.value.selectedTab)
@@ -248,7 +267,7 @@ class SearchViewModel(
     private fun performSearch(query: String, tab: SearchTab) {
         searchApiJob?.cancel()
         searchApiJob = viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+            _state.update { it.copy(isLoading = true, errorMessage = null) }
 
             when (tab) {
                 SearchTab.MOVIES -> {

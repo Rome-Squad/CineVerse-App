@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +38,7 @@ import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
 
 @Composable
 fun PosterItemHorizontal(
@@ -81,11 +80,15 @@ fun PosterItemHorizontal(
             val state by painter.state.collectAsState()
 
             if (state is AsyncImagePainter.State.Success) {
-                Image(
-                    painter = painter,
-                    contentDescription = stringResource(R.string.image_poster_movie),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+//                Image(
+//                    painter = painter,
+//                    contentDescription = stringResource(R.string.image_poster_movie),
+//                    modifier = Modifier.fillMaxSize(),
+//                    contentScale = ContentScale.Crop
+//                )
+                IslamicAppropriateImageViewer(
+                    imageUrl = movie.imageUri,
+                    modifier = Modifier.fillMaxSize()
                 )
             } else {
                 Icon(

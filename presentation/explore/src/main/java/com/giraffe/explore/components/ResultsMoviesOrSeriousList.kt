@@ -12,9 +12,13 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.explore.MediaStateUi
+import com.giraffe.explore.toPosterMovie
 
 @Composable
-fun ResultsMoviesOrSeriousList() {
+fun ResultsMoviesOrSeriousList(
+    media: List<MediaStateUi>
+) {
 
     val listOfMovies: List<PosterMovie> = listOf(
         PosterMovie(
@@ -97,10 +101,8 @@ fun ResultsMoviesOrSeriousList() {
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(listOfMovies) { movie ->
-            PosterItemHorizontal(
-                movie = movie,
-            )
+        items(media) { media ->
+            PosterItemHorizontal(movie = media.toPosterMovie())
         }
     }
 }
@@ -109,6 +111,6 @@ fun ResultsMoviesOrSeriousList() {
 @Composable
 private fun ResultsMoviesOrSeriousListPreview() {
     CineVerseTheme {
-        ResultsMoviesOrSeriousList()
+        ResultsMoviesOrSeriousList(media = emptyList())
     }
 }

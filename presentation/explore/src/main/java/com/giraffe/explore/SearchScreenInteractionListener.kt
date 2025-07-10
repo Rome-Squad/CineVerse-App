@@ -6,7 +6,7 @@ sealed class SearchIntent {
     data class OnClearItemHistory(val item: String) : SearchIntent()
     object OnClearHistory : SearchIntent()
     object OnClearRecentViewed : SearchIntent()
-    object OnVoiceSearchClick : SearchIntent()
+    object OnVoiceSearchClick : SearchIntent() ////
     data class OnChooseSuggestion(val suggestion: String) : SearchIntent()
     data class OnSelectedTabChanged(val tab: SearchTab) : SearchIntent()
 }

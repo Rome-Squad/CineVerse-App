@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.explore.SearchScreenState
 
 
 @Composable
@@ -28,7 +29,9 @@ fun SearchItem(
     modifier: Modifier = Modifier,
     text: String,
     isFromHistory: Boolean,
-    onClick: () -> Unit
+    state: SearchScreenState,
+    onClick: () -> Unit,
+    onArrowClick: () -> Unit
 ) {
     val iconId = if (isFromHistory) Theme.icons.outline.history else Theme.icons.outline.search
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -56,17 +59,19 @@ fun SearchItem(
             modifier = Modifier.weight(1f)
         )
 
-
-        Icon(
-            painter = painterResource(id = Theme.icons.outline.arrowRightUp),
-            contentDescription = "Navigate",
-            modifier = Modifier
-                .size(20.dp)
-                .graphicsLayer {
-                    rotationY = if (isRtl) 0f else 180f
-                },
-            tint = Theme.color.shade.tertiary
-        )
+        if (state.isSearchSuggestionsVisible) {
+            Icon(
+                painter = painterResource(id = Theme.icons.outline.arrowRightUp),
+                contentDescription = "Navigate",
+                modifier = Modifier
+                    .size(20.dp)
+                    .graphicsLayer {
+                        rotationY = if (isRtl) 0f else 180f
+                    }
+                    .clickable { onArrowClick() },
+                tint = Theme.color.shade.tertiary
+            )
+        }
     }
     HorizontalDivider(
         thickness = 1.dp,
@@ -80,8 +85,18 @@ fun SearchItem(
 fun SearchItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
         Column {
-            SearchItem( text = "Batman", isFromHistory = true, onClick = {})
-            SearchItem(text = "The Batman", isFromHistory = false, onClick = {})
+            SearchItem(
+                text = "Batman",
+                isFromHistory = true,
+                onClick = {},
+                state = SearchScreenState(),
+                onArrowClick = {})
+            SearchItem(
+                text = "The Batman",
+                isFromHistory = false,
+                onClick = {},
+                state = SearchScreenState(),
+                onArrowClick = {})
         }
     }
 }

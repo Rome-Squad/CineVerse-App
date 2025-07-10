@@ -7,33 +7,87 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.PosterMovie
-import com.giraffe.explore.SearchDataClass
+import com.giraffe.explore.R
+import com.giraffe.explore.SearchIntent
+import com.giraffe.explore.SearchScreenState
+import com.giraffe.explore.toPosterMovie
 
 @Composable
 fun HistoryAndRecentItems(
-    value: String,
-    isThereHistories: Boolean,
-    isThereRecentView: Boolean,
-    avilableHistory: Boolean,
-    onBackClicked: () -> Unit,
-    onChangeValue: (value: String) -> Unit,
+    state: SearchScreenState,
+    onIntent: (SearchIntent) -> Unit
 ) {
 
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        if (state.isSearchHistoryVisible) {
+            SectionTitle(
+                modifier = Modifier
+                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+                title = stringResource(R.string.history),
+                clickableText = stringResource(R.string.clear_all)
+            )
+        } else {
+            SectionTitle(
+                modifier = Modifier
+                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+                title = stringResource(R.string.search_suggestions),
+                clickableText = ""
+            )
+        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            if (state.isSearchHistoryVisible) {
+                items(state.searchHistory) {
+                    SearchItem(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp),
+                        text = it,
+                        isFromHistory = true,
+                        onClick = {},
+                        onArrowClick = {},
+                        state = state
+                    )
+                }
+                item {
+                    MoviesListSection(
+                        modifier = Modifier
+                            .padding(top = 16.dp),
+                        title = stringResource(R.string.you_recent_viewed),
+                        movies = state.recentViews.map { it.toPosterMovie() }
+                    )
+                }
+            }
+            items(state.searchSuggestions) {
+                SearchItem(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
+                    text = it,
+                    isFromHistory = false,
+                    onClick = {},
+                    onArrowClick = { onIntent(SearchIntent.OnChooseSuggestion(it)) },
+                    state = state
+                )
+            }
+        }
+    }
+}
 
+@Preview()
+@Composable
+private fun HistoryAndRecentItemsPreview() {
     val listOfMovies: List<PosterMovie> = listOf(
         PosterMovie(
             title = "The Flash",
@@ -109,85 +163,10 @@ fun HistoryAndRecentItems(
         )
     )
 
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        ExploreHeader(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            showBackButton = true,
-            endIcon = painterResource(Theme.icons.outline.microphone),
-            tabsTitles = listOf("Movies", "Series", "Actors"),
-            selectedTabIndex = selectedIndex,
-            onTabClick = { selectedIndex = it },
-            onBackClick = onBackClicked,
-            onValueChange = onChangeValue,
-            value = value
-        )
-        if (avilableHistory) {
-            SectionTitle(
-                modifier = Modifier
-                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-                title = "History",
-                clickableText = "Clear All"
-            )
-        } else {
-            SectionTitle(
-                modifier = Modifier
-                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-                title = "You Recent Viewed",
-                clickableText = "Clear All"
-            )
-        }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            items(tempList) {
-                SearchItem(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    text = it.text,
-                    isFromHistory = it.isFromHistory,
-                    onClick = {}
-                )
-            }
-        }
-        if (isThereRecentView) {
-            MoviesListSection(
-                modifier = Modifier
-                    .padding(top = 16.dp),
-                title = "You Recent Viewed",
-                movies = listOfMovies
-            )
-        }
-    }
-}
-
-val tempList = listOf(
-    SearchDataClass("alaa", true),
-    SearchDataClass("alaa", true),
-    SearchDataClass("alaa", true),
-    SearchDataClass("alaa", true),
-    SearchDataClass("alaa", true),
-    SearchDataClass("alaa", true),
-    SearchDataClass("alaa", true),
-    SearchDataClass("alaa", true)
-)
-
-@Preview()
-@Composable
-private fun HistoryAndRecentItemsPreview() {
     CineVerseTheme {
         HistoryAndRecentItems(
-            value = "",
-            isThereHistories = true,
-            isThereRecentView = true,
-            avilableHistory = true,
-            onBackClicked = {},
-            onChangeValue = {}
+            state = SearchScreenState(),
+            onIntent = {}
         )
     }
 }
