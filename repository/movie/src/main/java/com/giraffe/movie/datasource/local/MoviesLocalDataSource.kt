@@ -1,20 +1,27 @@
 package com.giraffe.movie.datasource.local
 
-import com.giraffe.movies.entity.Movie
-import com.giraffe.movies.entity.MovieGenre
+import com.giraffe.movie.datasource.local.cacheDto.MovieDto
+import com.giraffe.movie.datasource.local.cacheDto.MovieGenreDto
 
 interface MoviesLocalDataSource {
     suspend fun getMovieById(
         movieId: Int
-    ): Movie
+    ): MovieDto
 
-    suspend fun getMovieByName(movieName: String): List<Movie>
+    suspend fun insertMovies(movies: List<MovieDto>)
 
-    suspend fun getMovieGenres(): List<MovieGenre>
+    suspend fun insertMovieGenres(movies: List<MovieGenreDto>)
 
-    suspend fun getMoviesByGenre(genreId: Int): List<Movie>
+    suspend fun getMoviesByName(movieName: String): List<MovieDto>
 
-    suspend fun insertMovies(movies: List<Movie>)
+    suspend fun getMoviesByGenre(genreId: Int): List<MovieDto>
 
-    suspend fun insertMovieGenres(movies: List<MovieGenre>)
+    suspend fun getMovieGenres(): List<MovieGenreDto>
+
+    suspend fun getMovieGenreById(genreId: Int): MovieGenreDto
+
+    suspend fun getMovieGenresById(ids : List<Int>) : List<MovieGenreDto>
+
+    suspend fun clearCache()
+
 }

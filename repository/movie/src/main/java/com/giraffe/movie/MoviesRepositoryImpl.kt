@@ -16,4 +16,16 @@ class MoviesRepositoryImpl: MoviesRepository {
     override suspend fun getMoviesByGenre(genreId: Int): List<Movie> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun insertMovies(movie: List<Movie>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertGenres(genres: List<MovieGenre>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun clearCache() {
+        TODO("Not yet implemented")
+    }
 }
