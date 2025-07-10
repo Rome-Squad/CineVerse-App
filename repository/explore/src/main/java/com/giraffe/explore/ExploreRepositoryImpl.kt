@@ -7,6 +7,7 @@ import com.giraffe.explore.mapper.toCacheDto
 import com.giraffe.explore.mapper.toEntity
 import com.giraffe.explore.repository.ExploreRepository
 import com.giraffe.explore.utils.getCurrentLocalDateTime
+import com.giraffe.explore.utils.safeCall
 import kotlinx.datetime.LocalDateTime
 
 class ExploreRepositoryImpl(
@@ -15,30 +16,38 @@ class ExploreRepositoryImpl(
 ): ExploreRepository {
 
     override suspend fun getSearchKeywords(query: String): List<SearchKeyword> {
-        val history = cache.getSearchKeywords(query).map {
-            it.toEntity()
-        }
+        return safeCall {
+            val history = cache.getSearchKeywords(query).map {
+                it.toEntity()
+            }
 
-        val remoteResults = remote.getSearchKeywords(query).map {
-            it.toEntity()
-        }
+            val remoteResults = remote.getSearchKeywords(query).map {
+                it.toEntity()
+            }
 
-        return (history + remoteResults)
-            .distinctBy { it.keyword }
-            .sortedByDescending { it.lastSearchedTime }
+            (history + remoteResults)
+                .distinctBy { it.keyword }
+                .sortedByDescending { it.lastSearchedTime }
+        }
     }
 
     override suspend fun insertSearchKeyword(searchKeyword: SearchKeyword) {
-        val cacheDto = searchKeyword.toCacheDto()
-        cache.insertSearchKeyword(cacheDto)
+        safeCall {
+            val cacheDto = searchKeyword.toCacheDto()
+            cache.insertSearchKeyword(cacheDto)
+        }
     }
 
     override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) {
-        val cacheDto = searchKeyword.toCacheDto()
-        cache.deleteSearchKeyword(cacheDto)
+        safeCall {
+            val cacheDto = searchKeyword.toCacheDto()
+            cache.deleteSearchKeyword(cacheDto)
+        }
     }
 
     override suspend fun clearSearchHistory() {
-        cache.clearSearchHistory()
+        safeCall {
+            cache.clearSearchHistory()
+        }
     }
 }

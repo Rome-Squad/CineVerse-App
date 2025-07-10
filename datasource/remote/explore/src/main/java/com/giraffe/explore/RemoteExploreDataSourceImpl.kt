@@ -3,7 +3,7 @@ package com.giraffe.explore
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
 import com.giraffe.explore.model.SearchKeywordDto
 import com.giraffe.explore.model.SearchKeywordResponse
-import com.giraffe.explore.utils.safeNetworkRequest
+import com.giraffe.explore.utils.handleRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -18,7 +18,7 @@ class RemoteExploreDataSourceImpl(
         query: String,
         page: Int
     ): List<SearchKeywordDto> {
-        val response = safeNetworkRequest<SearchKeywordResponse> {
+        val response = handleRequest<SearchKeywordResponse> {
             httpClient.get("${baseUrl}search/keyword") {
                 parameter("query", query)
                 parameter("page", 1)
