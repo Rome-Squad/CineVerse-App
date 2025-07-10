@@ -1,15 +1,14 @@
 package com.giraffe.series.entity
 
-import kotlinx.datetime.LocalDate
 
 data class Series (
     val id: Int,
     val name: String,
     val overview: String,
-    val rate: Float,
+    val rating: Float,
     val duration: String,
     val posterUrl: String,
-    val genresID: List<Int>,
-    val releaseYear: LocalDate,
-    val seasons: List<Season>
+    val genreIDs: List<Int>,
+    val releaseYear: String,
+    val seasons: List<Season> = emptyList(),
 )
