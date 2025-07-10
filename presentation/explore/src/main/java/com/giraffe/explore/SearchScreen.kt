@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.giraffe.designsystem.R
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.ViewToggle
@@ -50,51 +52,14 @@ fun SearchScreen(
     onChangeValue: (value: String) -> Unit,
 ) {
     var selectedTapsIndex by remember { mutableIntStateOf(0) }
-//    var searchString by remember { mutableIntStateOf(0) }
     var isListSelected by remember { mutableStateOf(false) }
-    val searches = listOf(
-        SearchItem(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            text = "Batman",
-            isFromHistory = true,
-            onClick = {}
-        ),
-        SearchItem(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            text = "Batman",
-            isFromHistory = true,
-            onClick = {}
-        ),
-        SearchItem(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            text = "Batman",
-            isFromHistory = true,
-            onClick = {}
-        ),
-        SearchItem(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            text = "Batman",
-            isFromHistory = true,
-            onClick = {}
-        ),
-        SearchItem(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            text = "Batman",
-            isFromHistory = true,
-            onClick = {}
-        ),
-    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
     ) {
+
 //        HistoryAndRecentItems(
 //            value = value,
 //            isThereHistories = isThereHistories,
@@ -109,7 +74,11 @@ fun SearchScreen(
                 showBackButton = true,
                 endIcon = painterResource(Theme.icons.outline.microphone),
                 viewTaps = true,
-                tabsTitles = listOf("Movies", "Series", "Actors"),
+                tabsTitles = listOf(
+                    stringResource(R.string.movies),
+                    stringResource(R.string.series),
+                    stringResource(R.string.actors)
+                ),
                 selectedTabIndex = selectedTapsIndex,
                 onTabClick = { selectedTapsIndex = it },
                 onValueChange = {},
