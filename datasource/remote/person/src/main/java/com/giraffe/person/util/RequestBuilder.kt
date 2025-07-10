@@ -1,6 +1,6 @@
 package com.giraffe.person.util
 
-import com.giraffe.person.response.ApiErrorResponse
+import com.giraffe.person.remote.response.ApiErrorResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -55,7 +55,7 @@ class RequestBuilder(
                         success = false
                     )
                 }
-                throw ApiException(errorBody.statusMessage, errorBody.statusCode)
+                throw ApiException(errorBody.statusCode)
             }
         }
     }
@@ -64,8 +64,3 @@ class RequestBuilder(
         const val AUTHORIZATION = "Authorization"
     }
 }
-
-class ApiException(
-    val messageText: String,
-    val code: Int
-) : Exception("API Error $code: $messageText")

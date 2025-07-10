@@ -1,6 +1,7 @@
 package com.giraffe.person
 
-import com.giraffe.person.response.SearchPersonResponse
+import com.giraffe.person.remote.PersonRemoteDataSource
+import com.giraffe.person.remote.response.SearchPersonResponse
 import com.giraffe.person.util.RequestBuilder
 import io.ktor.client.HttpClient
 

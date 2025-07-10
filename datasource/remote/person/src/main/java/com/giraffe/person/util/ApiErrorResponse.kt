@@ -1,4 +1,4 @@
-package com.giraffe.person.response
+package com.giraffe.person.util
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,6 +1,8 @@
 package com.giraffe.person
 
 import com.giraffe.person.entity.Person
+import com.giraffe.person.local.PersonLocalDatasource
+import com.giraffe.person.remote.PersonRemoteDataSource
 import com.giraffe.person.repository.PersonRepository
 import com.giraffe.person.util.safeCall
 import com.giraffe.person.util.toDto
