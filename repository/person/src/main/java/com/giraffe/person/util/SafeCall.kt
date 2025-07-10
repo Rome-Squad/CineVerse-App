@@ -20,6 +20,7 @@ suspend fun <T> safeCall(execute: suspend () -> T): T {
 }
 
 private fun Exception.toDomainException(): PersonException = when (this) {
+
     is ApiException -> {
         when (this.code) {
             7 -> InvalidApiKeyException()
