@@ -1,7 +1,7 @@
 package com.giraffe.movie.datasource.remote
 
+import com.giraffe.movie.datasource.remote.dto.GenreDTO
 import com.giraffe.movie.datasource.remote.dto.MovieDto
-import com.giraffe.movies.entity.MovieGenre
 
 interface MoviesRemoteDataSource {
 
@@ -11,7 +11,7 @@ interface MoviesRemoteDataSource {
 
     suspend fun getMovieByName(movieName: String): List<MovieDto>
 
-    suspend fun getMovieGenres(): List<MovieGenre>
+    suspend fun getMovieGenres(): List<GenreDTO>
 
     suspend fun getMoviesByGenre(genreId: Int): List<MovieDto>
 }
