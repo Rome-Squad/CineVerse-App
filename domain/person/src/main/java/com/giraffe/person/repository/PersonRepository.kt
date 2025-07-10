@@ -7,4 +7,5 @@ interface PersonRepository {
     suspend fun storePerson(person: Person)
     suspend fun getPersonById(id: Int): Person
     suspend fun getPersonByName(personName: String): Person
+    suspend fun getRecentPeople(): List<Person>
 }

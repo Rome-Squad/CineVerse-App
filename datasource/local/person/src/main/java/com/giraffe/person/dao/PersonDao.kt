@@ -19,4 +19,7 @@ interface PersonDao {
 
     @Query("SELECT * FROM persons WHERE name = :personName LIMIT 1")
     suspend fun getPersonByName(personName: String): PersonDto
+
+    @Query("SELECT * FROM persons")
+    suspend fun getRecentPeople(): List<PersonDto>
 }
