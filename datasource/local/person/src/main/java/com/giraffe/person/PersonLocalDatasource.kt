@@ -1,6 +1,6 @@
 package com.giraffe.person
 
-import com.giraffe.person.entity.PersonDto
+import com.giraffe.person.dto.PersonDto
 
 interface PersonLocalDatasource {
     suspend fun storePerson(person: PersonDto)
@@ -8,4 +8,5 @@ interface PersonLocalDatasource {
     suspend fun getPersonById(id: Int): PersonDto
     suspend fun getPersonByName(personName: String): PersonDto
     suspend fun getRecentPeople(): List<PersonDto>
+    suspend fun clearRecentPeople()
 }

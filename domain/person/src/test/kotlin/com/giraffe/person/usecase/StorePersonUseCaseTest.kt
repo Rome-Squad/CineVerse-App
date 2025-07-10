@@ -12,22 +12,22 @@ import kotlin.test.Test
 
 class StorePersonUseCaseTest {
     private lateinit var repository: PersonRepository
-    private lateinit var storePersonUseCase: StorePersonUseCase
+    private lateinit var storeRecentPersonUseCase: StoreRecentPersonUseCase
 
     val personToStore = Person(1, "Tarek", Role.Story, "url")
 
     @BeforeEach
     fun setup() {
         repository = mockk()
-        storePersonUseCase = StorePersonUseCase(repository)
+        storeRecentPersonUseCase = StoreRecentPersonUseCase(repository)
     }
 
     @Test
     fun `invoke should call storePerson on repository with correct data`() = runTest {
-        coEvery { repository.storePerson(any()) } returns Unit
+        coEvery { repository.storeRecentPerson(any()) } returns Unit
 
-        storePersonUseCase(personToStore)
+        storeRecentPersonUseCase(personToStore)
 
-        coVerify(exactly = 1) { repository.storePerson(personToStore) }
+        coVerify(exactly = 1) { repository.storeRecentPerson(personToStore) }
     }
 }

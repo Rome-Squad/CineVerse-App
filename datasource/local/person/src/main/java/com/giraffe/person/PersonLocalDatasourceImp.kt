@@ -1,7 +1,7 @@
 package com.giraffe.person
 
 import com.giraffe.person.dao.PersonDao
-import com.giraffe.person.entity.PersonDto
+import com.giraffe.person.dto.PersonDto
 
 class PersonLocalDatasourceImp(private val dao: PersonDao) : PersonLocalDatasource {
     override suspend fun storePerson(person: PersonDto) = dao.storePerson(person)
@@ -9,4 +9,5 @@ class PersonLocalDatasourceImp(private val dao: PersonDao) : PersonLocalDatasour
     override suspend fun getPersonById(id: Int) = dao.getPersonById(id)
     override suspend fun getPersonByName(personName: String) = dao.getPersonByName(personName)
     override suspend fun getRecentPeople() = dao.getRecentPeople()
+    override suspend fun clearRecentPeople() = dao.clearRecentPeople()
 }

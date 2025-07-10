@@ -4,8 +4,7 @@ import com.giraffe.person.entity.Person
 
 interface PersonRepository {
     suspend fun searchByName(personName: String): List<Person>
-    suspend fun storePerson(person: Person)
-    suspend fun getPersonById(id: Int): Person
-    suspend fun getPersonByName(personName: String): Person
+    suspend fun storeRecentPerson(person: Person)
     suspend fun getRecentPeople(): List<Person>
+    suspend fun clearRecentPeople()
 }

@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.giraffe.person.entity.PersonDto
+import com.giraffe.person.dto.PersonDto
 
 @Dao
 interface PersonDao {
@@ -20,6 +20,9 @@ interface PersonDao {
     @Query("SELECT * FROM persons WHERE name = :personName LIMIT 1")
     suspend fun getPersonByName(personName: String): PersonDto
 
-    @Query("SELECT * FROM persons")
+    @Query("SELECT * FROM persons WHERE isRecent = 1")
     suspend fun getRecentPeople(): List<PersonDto>
+
+    @Query("DELETE FROM persons WHERE isRecent = 1")
+    suspend fun clearRecentPeople()
 }

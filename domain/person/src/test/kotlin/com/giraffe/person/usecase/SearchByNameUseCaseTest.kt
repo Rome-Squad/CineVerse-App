@@ -13,7 +13,7 @@ import kotlin.test.Test
 
 class SearchByNameUseCaseTest {
     private lateinit var repository: PersonRepository
-    private lateinit var searchByNameUseCase: SearchByNameUseCase
+    private lateinit var searchPeopleByNameUseCase: SearchPeopleByNameUseCase
 
     val expectedList = listOf(
         Person(1, "Tarek", Role.ScreenPlay, "url")
@@ -22,14 +22,14 @@ class SearchByNameUseCaseTest {
     @BeforeEach
     fun setup() {
         repository = mockk()
-        searchByNameUseCase = SearchByNameUseCase(repository)
+        searchPeopleByNameUseCase = SearchPeopleByNameUseCase(repository)
     }
 
     @Test
     fun `invoke should call searchByName on repository`() = runTest {
         coEvery { repository.searchByName(any()) } returns emptyList()
 
-        searchByNameUseCase("Tarek")
+        searchPeopleByNameUseCase("Tarek")
 
         coVerify(exactly = 1) { repository.searchByName("Tarek") }
     }
@@ -38,7 +38,7 @@ class SearchByNameUseCaseTest {
     fun `invoke should return list of persons from repository`() = runTest {
         coEvery { repository.searchByName("Tarek") } returns expectedList
 
-        val result = searchByNameUseCase("Tarek")
+        val result = searchPeopleByNameUseCase("Tarek")
 
         assertThat(result).isEqualTo(expectedList)
     }

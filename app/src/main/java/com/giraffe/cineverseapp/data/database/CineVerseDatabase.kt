@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.model.SearchKeywordCacheDto
 import com.giraffe.movie.dto.MovieDto
+import com.giraffe.person.dao.PersonDao
 
 @Database(
     entities = [
@@ -18,4 +19,5 @@ abstract class CineVerseDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 
     abstract fun exploreSearchKeywordDao(): ExploreSearchKeywordDao
+    abstract fun personDao(): PersonDao
 }
