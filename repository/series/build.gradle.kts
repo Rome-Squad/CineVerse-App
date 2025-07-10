@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation(project(":domain:series"))
 
+
     //serialization
     implementation(libs.gson)
     implementation(libs.kotlinx.serialization.json)
@@ -49,4 +50,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
 }
