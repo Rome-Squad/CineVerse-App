@@ -5,7 +5,7 @@ import com.giraffe.person.util.RequestBuilder
 import io.ktor.client.HttpClient
 
 class PersonRemoteDataSourceImp(
-    private val client: HttpClient
+    private val client: HttpClient,
 ) : PersonRemoteDataSource {
     override suspend fun searchByName(personName: String): SearchPersonResponse {
         return RequestBuilder(client)

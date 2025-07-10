@@ -24,7 +24,7 @@ class RequestBuilder(val client: HttpClient) {
                     }
                 }
                 headers {
-                    append(AUTHORIZATION, "Bearer ${BuildConfig.API_KEY}00")
+                    append(AUTHORIZATION, "Bearer ${BuildConfig.API_KEY}")
                 }
             }
         }

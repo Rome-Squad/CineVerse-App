@@ -6,12 +6,8 @@ class InvalidPersonIdException : PersonException()
 class InvalidPersonNameException : PersonException()
 class NetworkException : PersonException()
 class UnknownException : PersonException()
-
-// API-related
 class InvalidApiKeyException : PersonException()
 class RateLimitExceededException : PersonException()
 class UnauthorizedAccessException : PersonException()
 class ForbiddenAccessException : PersonException()
-
-// Network-related
 class ServerErrorException : PersonException()
