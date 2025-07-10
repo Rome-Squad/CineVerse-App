@@ -10,7 +10,7 @@ interface MoviesLocalDataSource {
 
     suspend fun insertMovies(movies: List<MovieCacheDto>)
 
-    suspend fun insertMovieGenres(movies: List<MovieGenreCacheDto>)
+    suspend fun insertMovieGenres(movieGenres: List<MovieGenreCacheDto>)
 
     suspend fun getMoviesByName(movieName: String): List<MovieCacheDto>
 
@@ -22,7 +22,7 @@ interface MoviesLocalDataSource {
 
     suspend fun getMovieGenresById(ids : List<Int>) : List<MovieGenreCacheDto>
 
-    suspend fun clearCache()
+    suspend fun clearMovieCache()
 
-
+    suspend fun clearMovieGenreCache()
 }
