@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
 class SeriesRoomLocalDateSource(
     private val seriesDao: SeriesDao,
     private val cacheDao: SearchCacheDao
-) :SeriesLocalDateSource {
+) : SeriesLocalDateSource {
 
     override suspend fun saveSearchResult(
         name: String,
@@ -36,63 +36,24 @@ class SeriesRoomLocalDateSource(
 
         cacheDao.insertSearchCache(
             SearchCacheEntity(
-                name = name,
-                seriesIds = seriesList.map { it.id },
+                keyword = name,
                 timestamp = now
             )
         )
     }
 
-
-
     override suspend fun getCachedSeriesForName(name: String): List<SeriesFullData>? {
-        val cache = cacheDao.getCacheForKeyword(name) ?: return null
+        val cache = cacheDao.getCacheForKeyword(name)
         val now = System.currentTimeMillis()
-        val isValid = now - cache.timestamp <= CACHE_VALIDITY_DURATION_MS
 
-        return if (isValid) {
-            getSeriesFullDataFromCache(cache.seriesIds)
-        } else {
-            invalidateCache(name, cache.seriesIds)
-            null
+        if (cache != null && now - cache.timestamp > CACHE_VALIDITY_DURATION_MS) {
+            cacheDao.deleteCacheForKeyword(name)
+            return null
         }
-    }
-    override suspend fun getCachedSeriesByGenre(genreId: Int): List<SeriesFullData>? {
-        val keyword = genreCacheKey(genreId)
-        return getCachedSeriesForName(keyword)
-    }
 
+        val seriesList = seriesDao.getSeriesByKeyword(name)
+        if (seriesList.isEmpty()) return null
 
-    override suspend fun getCachedGenres(): List<SeriesGenreEntity> {
-        val cache = cacheDao.getCacheForKeyword(GENRE_CACHE_KEY)
-        val now = System.currentTimeMillis()
-        val isValid = cache != null && (now - cache.timestamp <= CACHE_VALIDITY_DURATION_MS)
-
-        return if (isValid) {
-            seriesDao.getAllGenres().first()
-        } else {
-            emptyList()
-        }
-    }
-
-
-
-    override suspend fun saveGenres(genres: List<SeriesGenreEntity>) {
-        seriesDao.insertGenres(genres)
-
-        cacheDao.insertSearchCache(
-            SearchCacheEntity(
-                name = GENRE_CACHE_KEY,
-                seriesIds = emptyList(),
-                timestamp = System.currentTimeMillis()
-            )
-        )
-    }
-
-
-
-    private suspend fun getSeriesFullDataFromCache(seriesIds: List<Int>): List<SeriesFullData> {
-        val seriesList = seriesDao.getSeriesByIds(seriesIds)
         val allGenres = seriesDao.getAllGenres().first()
 
         return seriesList.map { series ->
@@ -106,30 +67,43 @@ class SeriesRoomLocalDateSource(
             )
         }
     }
-    private suspend fun invalidateCache(name: String, expiredSeriesIds: List<Int>) {
-        cacheDao.deleteCacheForKeyword(name)
 
-        val allCaches = cacheDao.getAllCaches()
-        val stillUsedIds = allCaches.flatMap { it.seriesIds }.toSet()
-        val toDelete = expiredSeriesIds.filterNot { it in stillUsedIds }
-
-        seriesDao.deleteSeriesByIds(toDelete)
-        seriesDao.deleteSeasonsBySeriesIds(toDelete)
-        cleanupUnusedGenres()
-    }
-
-    private suspend fun cleanupUnusedGenres() {
+    override suspend fun getCachedSeriesByGenre(genreId: Int): List<SeriesFullData> {
         val allSeries = seriesDao.getAllSeries().first()
-        val usedGenreIds = allSeries.flatMap { it.genresID }.toSet()
-        val allGenres = seriesDao.getAllGenres().first()
-        val unusedGenres = allGenres.filterNot { it.id in usedGenreIds }
+        val matchedSeries = allSeries.filter { genreId in it.genresID }
+        if (matchedSeries.isEmpty()) return emptyList()
 
-        if (unusedGenres.isNotEmpty()) {
-            seriesDao.deleteGenresByIds(unusedGenres.map { it.id })
+        val allGenres = seriesDao.getAllGenres().first()
+
+        return matchedSeries.map { series ->
+            val seasons = seriesDao.getSeasonsForSeries(series.id).first()
+            val seriesGenres = allGenres.filter { it.id in series.genresID }
+            SeriesFullData(series, seasons, seriesGenres)
         }
     }
 
+    override suspend fun getCachedGenres(): List<SeriesGenreEntity> {
+        val cache = cacheDao.getCacheForKeyword(GENRE_CACHE_KEY)
+        val now = System.currentTimeMillis()
+        val isValid = cache != null && (now - cache.timestamp <= CACHE_VALIDITY_DURATION_MS)
 
+        return if (isValid) {
+            seriesDao.getAllGenres().first()
+        } else {
+            emptyList()
+        }
+    }
+
+    override suspend fun saveGenres(genres: List<SeriesGenreEntity>) {
+        seriesDao.insertGenres(genres)
+
+        cacheDao.insertSearchCache(
+            SearchCacheEntity(
+                keyword = GENRE_CACHE_KEY,
+                timestamp = System.currentTimeMillis()
+            )
+        )
+    }
 
     override suspend fun clearAllData() {
         seriesDao.clearAllSeries()
@@ -141,9 +115,5 @@ class SeriesRoomLocalDateSource(
     companion object {
         private const val CACHE_VALIDITY_DURATION_MS = 60 * 60 * 1000
         private const val GENRE_CACHE_KEY = "genres"
-        fun genreCacheKey(genreId: Int) = "genre:$genreId"
     }
 }
-
-
-

@@ -20,11 +20,21 @@ interface SeriesDao {
     @Query("DELETE FROM series WHERE id IN (:ids)")
     suspend fun deleteSeriesByIds(ids: List<Int>)
 
+    @Query("SELECT * FROM series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
+    suspend fun getSeriesByKeyword(keyword: String): List<SeriesEntity>
+
+    @Query("DELETE FROM series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
+    suspend fun deleteSeriesByKeyword(keyword: String)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSeasons(seasons: List<SeasonEntity>)
 
     @Query("SELECT * FROM seasons WHERE seriesId = :seriesId")
     fun getSeasonsForSeries(seriesId: Int): Flow<List<SeasonEntity>>
+
+    @Query("SELECT * FROM series")
+    suspend fun getAllSeriesDirect(): List<SeriesEntity>
+
 
     @Query("DELETE FROM seasons")
     suspend fun clearAllSeasons()
@@ -43,8 +53,4 @@ interface SeriesDao {
 
     @Query("DELETE FROM series_genres WHERE id IN (:ids)")
     suspend fun deleteGenresByIds(ids: List<Int>)
-
-    @Query("SELECT * FROM series WHERE id IN (:ids)")
-    suspend fun getSeriesByIds(ids: List<Int>): List<SeriesEntity>
 }
-

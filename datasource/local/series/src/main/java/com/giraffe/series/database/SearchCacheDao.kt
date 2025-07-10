@@ -9,10 +9,10 @@ interface SearchCacheDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchCache(cache: SearchCacheEntity)
 
-    @Query("SELECT * FROM search_cache WHERE name = :keyword")
+    @Query("SELECT * FROM search_cache WHERE LOWER(keyword) = LOWER(:keyword)")
     suspend fun getCacheForKeyword(keyword: String): SearchCacheEntity?
 
-    @Query("DELETE FROM search_cache WHERE name = :keyword")
+    @Query("DELETE FROM search_cache WHERE LOWER(keyword) = LOWER(:keyword)")
     suspend fun deleteCacheForKeyword(keyword: String)
 
     @Query("SELECT * FROM search_cache")
