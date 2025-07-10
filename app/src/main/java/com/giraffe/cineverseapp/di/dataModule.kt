@@ -1,8 +1,8 @@
 package com.giraffe.cineverseapp.di
 
 import androidx.room.Room
-import com.giraffe.cineverseapp.data.network.HttpClientFactory
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
+import com.giraffe.cineverseapp.data.network.HttpClientFactory
 import com.giraffe.cineverseapp.data.preference.DataStorePreferences
 import com.giraffe.person.RemoteDataSource
 import com.giraffe.person.RemoteDataSourceImp
@@ -19,6 +19,17 @@ val dataModule = module {
         Room.databaseBuilder(androidContext(), CineVerseDatabase::class.java, DATABASE_NAME).build()
     }
     single<RemoteDataSource> { RemoteDataSourceImp(get()) }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            CineVerseDatabase::class.java,
+            DATABASE_NAME
+        ).build()
+    }
+
+    single {
+        get<CineVerseDatabase>().personDao()
+    }
 }
 
 private const val DATABASE_NAME = "CineVerseDataBase"
