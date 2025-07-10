@@ -32,9 +32,10 @@ fun ExploreHeader(
     onSearchClick: (String) -> Unit = {},
     endIcon: Painter,
     onEndIconClick: () -> Unit = {},
-    tabsTitles: List<String>,
+    viewTaps: Boolean = false,
+    tabsTitles: List<String> = listOf(""),
     onTabClick: (Int) -> Unit = {},
-    selectedTabIndex: Int,
+    selectedTabIndex: Int = 0,
     value: String,
     onValueChange: (String) -> Unit
 
@@ -82,11 +83,13 @@ fun ExploreHeader(
                 value = value,
             )
         }
-        Tabs(
-            titles = tabsTitles,
-            onTabSelected = onTabClick,
-            selectedTabIndex = selectedTabIndex,
-        )
+        if (viewTaps) {
+            Tabs(
+                titles = tabsTitles,
+                onTabSelected = onTabClick,
+                selectedTabIndex = selectedTabIndex,
+            )
+        }
     }
 
 }
@@ -118,9 +121,10 @@ fun ExploreHeaderPreview() {
             onBackClick = {},
             showBackButton = true,
             endIcon = painterResource(Theme.icons.outline.microphone),
-            tabsTitles = listOf("Movie", "Series"),
-            onTabClick = {},
-            selectedTabIndex = 0,
+            viewTaps = false,
+//            tabsTitles = listOf("Movie", "Series"),
+//            onTabClick = {},
+//            selectedTabIndex = 0,
             onValueChange = {},
             value = ""
         )
