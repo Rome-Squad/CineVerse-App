@@ -35,8 +35,7 @@ android {
 
 dependencies {
     implementation(project(":domain:series"))
-    api(project(":datasource:local:series"))
-    api(project(":datasource:remote:series"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -45,4 +44,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
 }
