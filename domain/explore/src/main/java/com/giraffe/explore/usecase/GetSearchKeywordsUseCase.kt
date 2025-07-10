@@ -7,6 +7,6 @@ class GetSearchKeywordsUseCase(
     private val repository: ExploreRepository
 ) {
     suspend fun execute(query: String): List<SearchKeyword> {
-        return repository.getSearchKeywords(query)
+        return repository.getSearchKeywords(query.trim())
     }
 }
