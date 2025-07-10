@@ -1,17 +1,17 @@
 package com.giraffe.series.api
 
-import com.giraffe.series.BuildConfig
 import io.ktor.http.HttpMethod
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-
-internal class BaseRequest {
-    val baseURL: String = "https://api.themoviedb.org/3/"
+internal class BaseRequest(
+    private val baseURL: String,
+    accessToken: String
+) {
     var endPoint: String = ""
     var method: HttpMethod = HttpMethod.Companion.Get
     var headers: Map<String, String> = mapOf(
-        "Authorization" to "Bearer ${BuildConfig.TMDB_API_KEY}",
+        "Authorization" to "Bearer $accessToken",
         "accept" to "application/json"
     )
     var parameters: Map<String, Any> = emptyMap()
@@ -21,19 +21,9 @@ internal class BaseRequest {
 
     fun method(method: HttpMethod) = apply { this.method = method }
 
-    fun parameters(params: Map<String, Any>) = apply { this.parameters = params }
-
     fun addParameter(key: String, value: Any) = apply {
         this.parameters = this.parameters + (key to value)
     }
-
-    fun headers(headers: Map<String, String>) = apply { this.headers = headers }
-
-    fun addHeader(key: String, value: String) = apply {
-        this.headers = this.headers + (key to value)
-    }
-
-    fun body(body: Any?) = apply { this.body = body }
 
     fun buildFullUrl(): String {
         val fullUrl = if (endPoint.isEmpty()) baseURL else "$baseURL$endPoint"

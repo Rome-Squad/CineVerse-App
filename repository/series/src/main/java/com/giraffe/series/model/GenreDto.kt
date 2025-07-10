@@ -1,4 +1,4 @@
-package com.giraffe.series.model_dto
+package com.giraffe.series.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

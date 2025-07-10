@@ -1,13 +1,12 @@
 package com.giraffe.series.model_dto
 
+import com.giraffe.series.model.SeriesDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SeriesResponse(
-    @SerialName("page")
     val page: Int,
-    @SerialName("results")
     val results: List<SeriesDto>,
     @SerialName("total_pages")
     val totalPages: Int,

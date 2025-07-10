@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    kotlin("plugin.serialization") version "1.9.22"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -41,9 +41,12 @@ android {
 
 dependencies {
 
+    implementation(project(":repository:series"))
+
     //koin
     implementation(libs.koin.androidx.compose)
-    // ktor
+
+    //ktor
     implementation(libs.bundles.ktor)
 
     implementation(libs.androidx.core.ktx)
