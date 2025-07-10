@@ -33,4 +33,15 @@ val useCaseModule = module {
     single { InsertMoviesUseCase(get()) }
     single { InsertGenresUseCase(get()) }
     single { ClearCacheUseCase(get()) }
+
+    single {
+        MoviesUseCases(
+            searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
+            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
+            getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
+            insertMoviesUseCase = InsertMoviesUseCase(get()),
+            insertGenresUseCase = InsertGenresUseCase(get()),
+            clearCacheUseCase = ClearCacheUseCase(get())
+        )
+    }
 }
