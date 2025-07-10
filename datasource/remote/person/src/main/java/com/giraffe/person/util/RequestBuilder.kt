@@ -7,8 +7,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
-import kotlinx.coroutines.ensureActive
-import kotlin.coroutines.coroutineContext
 
 class RequestBuilder(
     val client: HttpClient,
@@ -34,27 +32,11 @@ class RequestBuilder(
     }
 
     suspend inline fun <reified T> safeCall(execute: () -> HttpResponse): T {
-        val response = try {
-            execute()
-        } catch (exception: Exception) {
-            coroutineContext.ensureActive()
-            throw exception
-        }
+        val response = execute()
         return when (response.status.value) {
-            in 200..299 -> {
-                response.body<T>()
-            }
-
+            in 200..299 -> response.body<T>()
             else -> {
-                val errorBody = try {
-                    response.body<ApiErrorResponse>()
-                } catch (e: Exception) {
-                    ApiErrorResponse(
-                        statusCode = response.status.value,
-                        statusMessage = "Unknown error: ${e.message}",
-                        success = false
-                    )
-                }
+                val errorBody = response.body<ApiErrorResponse>()
                 throw ApiException(errorBody.statusCode)
             }
         }
