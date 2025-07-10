@@ -1,14 +1,12 @@
 package com.giraffe.series.entity
 
-
-data class Series (
+data class Season(
     val id: Int,
     val name: String,
     val overview: String,
     val rating: Float,
-    val duration: String,
     val posterUrl: String,
-    val genreIDs: List<Int>,
+    val seasonNumber: Int,
     val releaseYear: String,
-    val seasons: List<Season> = emptyList(),
+    val episodeCount: Int
 )
