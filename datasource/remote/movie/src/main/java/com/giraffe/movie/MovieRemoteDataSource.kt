@@ -10,13 +10,13 @@ import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
 import com.giraffe.movies.repository.MoviesRepository
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 
-class MovieRemoteDataSource : MoviesRepository {
+class MovieRemoteDataSource(
+    val client: HttpClient
+) : MoviesRepository {
 
-    val client: HttpClient = HttpClient(CIO)
     override suspend fun searchMovieByName(movieName: String): List<Movie> {
         val httpResponse = client.get(MOVIES_BY_NAME_URL) {
             url {

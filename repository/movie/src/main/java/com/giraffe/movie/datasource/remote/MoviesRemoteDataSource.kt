@@ -5,9 +5,7 @@ import com.giraffe.movies.entity.MovieGenre
 
 interface MoviesRemoteDataSource {
 
-    suspend fun getMovieById(
-        movieId: Int
-    ): Movie
+    suspend fun getMovieById(movieId: Int): Movie
 
     suspend fun getMovieByName(movieName: String): List<Movie>
 
