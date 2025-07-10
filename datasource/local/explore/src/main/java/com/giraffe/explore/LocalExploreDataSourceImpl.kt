@@ -1,0 +1,25 @@
+package com.giraffe.explore
+
+import com.giraffe.explore.dao.ExploreSearchKeywordDao
+import com.giraffe.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.explore.model.SearchKeywordCacheDto
+
+class LocalExploreDataSourceImpl(
+    private val dao: ExploreSearchKeywordDao
+): LocalExploreDataSource {
+    override suspend fun getSearchKeywords(query: String): List<SearchKeywordCacheDto> {
+        return dao.getSearchKeywords(query)
+    }
+
+    override suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto) {
+        dao.insertSearchKeyword(searchKeyword)
+    }
+
+    override suspend fun deleteSearchKeyword(searchKeyword: SearchKeywordCacheDto) {
+        dao.deleteSearchKeyword(searchKeyword)
+    }
+
+    override suspend fun clearSearchHistory() {
+        dao.clearSearchHistory()
+    }
+}
