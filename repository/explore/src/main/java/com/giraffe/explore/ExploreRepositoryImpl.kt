@@ -6,9 +6,7 @@ import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.mapper.toCacheDto
 import com.giraffe.explore.mapper.toEntity
 import com.giraffe.explore.repository.ExploreRepository
-import com.giraffe.explore.utils.getCurrentLocalDateTime
 import com.giraffe.explore.utils.safeCall
-import kotlinx.datetime.LocalDateTime
 
 class ExploreRepositoryImpl(
     private val cache: LocalExploreDataSource,
