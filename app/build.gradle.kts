@@ -111,12 +111,14 @@ dependencies {
 
     implementation(project(":datasource:local:user"))
     implementation(project(":datasource:local:movie"))
+    implementation(project(":repository:movie"))
+
     implementation(project(":datasource:local:series"))
     implementation(project(":datasource:local:person"))
     implementation(project(":datasource:local:review"))
     implementation(project(":datasource:local:explore"))
 
-    
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
