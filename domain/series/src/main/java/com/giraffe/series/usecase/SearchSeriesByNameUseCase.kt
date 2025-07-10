@@ -6,7 +6,7 @@ import com.giraffe.series.repository.SeriesRepository
 class SearchSeriesByNameUseCase(
     private val seriesRepository: SeriesRepository
 ) {
-    suspend fun searchSeriesByName(seriesName: String): Result<List<Series>> {
+    suspend fun searchSeriesByName(seriesName: String): List<Series> {
         return seriesRepository.searchSeriesByName(seriesName)
     }
 }

@@ -6,7 +6,7 @@ import com.giraffe.series.repository.SeriesRepository
 class GetSeriesGenresUseCase(
     private val seriesRepository: SeriesRepository
 ) {
-    suspend fun getSeriesGenres(): Result<List<SeriesGenre>> {
+    suspend fun getSeriesGenres(): List<SeriesGenre> {
         return seriesRepository.getSeriesGenres()
     }
 }
