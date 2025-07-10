@@ -8,6 +8,21 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+fun getSecret(key: String): String {
+    val secretsProps = File(rootDir, "app/secrets.properties")
+    if (!secretsProps.exists()) {
+        throw GradleException("Missing secrets.properties file at app/secrets.properties")
+    }
+
+    val props = Properties().apply {
+        load(secretsProps.inputStream())
+    }
+
+    return props[key]?.toString()
+        ?: throw GradleException("Missing required secret key: $key in secrets.properties")
+}
+
+
 android {
     namespace = "com.giraffe.cineverseapp"
     compileSdk = 36
@@ -20,15 +35,29 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+        buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
         }
     }
     compileOptions {
@@ -39,15 +68,52 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
 
 dependencies {
-    implementation(project(":designsystem"))
+
+    implementation(project(":presentation:authentication"))
     implementation(project(":presentation:home"))
+    implementation(project(":presentation:details"))
+    implementation(project(":presentation:explore"))
+    implementation(project(":presentation:match"))
+    implementation(project(":presentation:profile"))
+    implementation(project(":presentation:onboarding"))
+
+    implementation(project(":designsystem"))
+    implementation(project(":imageviewer"))
+
+    implementation(project(":domain:user"))
+    implementation(project(":domain:movies"))
+    implementation(project(":domain:series"))
+    implementation(project(":domain:review"))
+    implementation(project(":domain:person"))
+    implementation(project(":domain:explore"))
+
+    implementation(project(":repository:user"))
+    implementation(project(":repository:movie"))
+    implementation(project(":repository:series"))
+    implementation(project(":repository:person"))
+    implementation(project(":repository:review"))
+    implementation(project(":repository:explore"))
+
+    implementation(project(":datasource:remote:user"))
+    implementation(project(":datasource:remote:movie"))
+    implementation(project(":datasource:remote:series"))
+    implementation(project(":datasource:remote:person"))
+    implementation(project(":datasource:remote:review"))
+    implementation(project(":datasource:remote:explore"))
+
+    implementation(project(":datasource:local:user"))
     implementation(project(":datasource:local:movie"))
     implementation(project(":datasource:local:series"))
+    implementation(project(":datasource:local:person"))
+    implementation(project(":datasource:local:review"))
+    implementation(project(":datasource:local:explore"))
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
