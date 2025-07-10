@@ -6,11 +6,13 @@ import androidx.room.RoomDatabase
 import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.model.SearchKeywordCacheDto
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto
+import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto
 
 @Database(
     entities = [
         MovieCacheDto::class,
-        SearchKeywordCacheDto::class
+        SearchKeywordCacheDto::class,
+        MovieGenreCacheDto::class,
     ],
     version = 1
 )
