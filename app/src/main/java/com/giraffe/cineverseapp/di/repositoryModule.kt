@@ -7,6 +7,18 @@ import com.giraffe.movies.repository.MoviesRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<ExploreRepository> { ExploreRepositoryImpl(get(), get()) }
-    single<MoviesRepository> { MoviesRepositoryImpl(get(), get()) }
+    single<ExploreRepository> {
+        ExploreRepositoryImpl(
+            cache = get(),
+            remote = get()
+        )
+    }
+
+    single<MoviesRepository> {
+        MoviesRepositoryImpl(
+            cache = get(),
+            remote = get(),
+            searchHistory = get()
+        )
+    }
 }
