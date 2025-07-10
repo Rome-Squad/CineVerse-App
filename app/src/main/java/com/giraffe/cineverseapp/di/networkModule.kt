@@ -4,7 +4,6 @@ import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.HttpClientFactory
 import com.giraffe.explore.RemoteExploreDataSourceImpl
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
-import com.giraffe.person.BuildConfig
 import com.giraffe.person.PersonRemoteDataSource
 import com.giraffe.person.PersonRemoteDataSourceImp
 import org.koin.core.qualifier.named
