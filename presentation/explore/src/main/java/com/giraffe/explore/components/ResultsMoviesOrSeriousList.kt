@@ -1,22 +1,16 @@
 package com.giraffe.explore.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterItemHorizontal
-import com.giraffe.designsystem.composable.PosterItemVertically
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.PosterMovie
 
 @Composable
