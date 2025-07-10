@@ -47,10 +47,6 @@ fun SearchItem(
             modifier = Modifier.size(20.dp),
             tint = Theme.color.shade.tertiary
         )
-
-
-
-
         Text(
             text = text,
             style = Theme.textStyle.body.md.medium,

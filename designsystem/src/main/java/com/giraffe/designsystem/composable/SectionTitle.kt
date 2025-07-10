@@ -16,6 +16,7 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun SectionTitle(
     title: String,
+    clickableText: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -31,7 +32,7 @@ fun SectionTitle(
             maxLines = 1,
         )
         Text(
-            text = stringResource(R.string.show_more),
+            text = clickableText,
             style = Theme.textStyle.body.md.medium,
             color = Theme.color.brand.primary
         )
@@ -43,7 +44,8 @@ fun SectionTitle(
 fun SectionTitlePreview() {
     CineVerseTheme {
         SectionTitle(
-            title = "Movies"
+            title = "Movies",
+            clickableText = "ShowMore"
         )
     }
 }
