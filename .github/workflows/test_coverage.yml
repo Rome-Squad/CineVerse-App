@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  buildAndTest:
     name: Build & Test
     runs-on: ubuntu-latest
 
@@ -63,34 +63,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-  test:
-    name: Test & Coverage Analysis
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v3
-
-      - name: 🛠️ Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: ⚙️ Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: 🔑 Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: 🧾 Create app/secrets.properties
-        run: |
-          mkdir -p app
-          echo "API_KEY=${{ secrets.API_KEY }}" > app/secrets.properties
-          echo "BASE_URL=${{ secrets.BASE_URL }}" >> app/secrets.properties
-          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> app/secrets.properties
 
       - name: 🧪 Run Tests with Coverage
         continue-on-error: true
