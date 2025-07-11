@@ -85,6 +85,7 @@ class SearchViewModel(
             is SearchIntent.OnClearHistory -> handleClearAllHistory()
             is SearchIntent.OnClearRecentViewed -> handleRecentViewsClear()
             is SearchIntent.OnVoiceSearchClick -> handleVoiceSearchClick()
+            is SearchIntent.OnVoiceSearchResult -> handleVoiceSearchResult(intent.result)
             is SearchIntent.OnChooseSuggestion -> handleChooseSuggestionClick(intent.suggestion)
             is SearchIntent.OnSelectedTabChanged -> handleSelectedTabChanged(intent.tab)
         }
@@ -230,8 +231,17 @@ class SearchViewModel(
         }
     }
 
-    //handle from screen
-    private fun handleVoiceSearchClick() {}
+    private fun handleVoiceSearchClick() {
+        _state.update { it.copy(isVoiceRecording = true) }
+    }
+
+    private fun handleVoiceSearchResult(result: String) {
+        _state.update { it.copy(isVoiceRecording = false, searchQuery = result) }
+        if (result.isNotBlank()) {
+            performSearch(result, _state.value.selectedTab)
+            saveSearchHistory(result)
+        }
+    }
 
     private fun handleChooseSuggestionClick(suggestion: String) {
         _state.update { currentState ->

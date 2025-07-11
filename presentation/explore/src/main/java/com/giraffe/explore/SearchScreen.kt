@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +51,24 @@ fun SearchContent(
     //using view model
     var isListSelected by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val voiceHelper = remember {
+        VoiceSearchHelper(context) { result ->
+            onIntent(SearchIntent.OnVoiceSearchResult(result))
+        }
+    }
+
+    LaunchedEffect(state.isVoiceRecording) {
+        if (state.isVoiceRecording) {
+            voiceHelper.startListening()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { voiceHelper.destroy() }
+    }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -75,7 +96,8 @@ fun SearchContent(
                     onIntent(SearchIntent.OnSelectedTabChanged(selectedTab))
                 },
                 onValueChange = { query -> onIntent(SearchIntent.OnSearchQueryChange(query)) },
-                value = state.searchQuery
+                value = state.searchQuery,
+                onEndIconClick = { onIntent(SearchIntent.OnVoiceSearchClick) }
             )
             Column(
                 modifier = Modifier

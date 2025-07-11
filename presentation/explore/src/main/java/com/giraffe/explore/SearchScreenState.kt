@@ -16,6 +16,8 @@ data class SearchScreenState(
     val isSearchResultsVisible: Boolean = false,
     val selectedTab: SearchTab = SearchTab.MOVIES,
 
+    val isVoiceRecording: Boolean = false,
+
     ///////////////////////////
     val movieResults: List<MediaStateUi> = emptyList(),
     val seriesResults: List<MediaStateUi> = emptyList(),
