@@ -12,29 +12,27 @@ import org.junit.jupiter.api.Test
 
 class StoreSeriesUseCaseTest {
     private lateinit var seriesRepository: SeriesRepository
-    private lateinit var storeSeriesUseCase: StoreSeriesUseCase
+    private lateinit var storeRecentSeriesUseCase: StoreRecentSeriesUseCase
 
 
     @BeforeEach
     fun setUp() {
         seriesRepository = mockk()
-        storeSeriesUseCase = StoreSeriesUseCase(seriesRepository)
+        storeRecentSeriesUseCase = StoreRecentSeriesUseCase(seriesRepository)
     }
 
     @Test
     fun `Should store list of series When repository returns success`() = runTest {
         // Given
-        val series = listOf(
-            fakeSeries(id = 1, name = "Batman 1"),
-            fakeSeries(id = 2, name = "Batman 3"),
-            fakeSeries(id = 3, name = "Batman 2")
-        )
-        coEvery { seriesRepository.storeSeries(series) } just Runs
+        val series = fakeSeries(id = 1, name = "Batman 1")
+
+
+        coEvery { seriesRepository.storeRecentSeries(series) } just Runs
 
         // When
-        storeSeriesUseCase(series)
+        storeRecentSeriesUseCase(series)
 
         // Then
-        coVerify(exactly = 1) { seriesRepository.storeSeries(series) }
+        coVerify(exactly = 1) { seriesRepository.storeRecentSeries(series) }
     }
 }
