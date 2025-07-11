@@ -10,7 +10,7 @@ import com.giraffe.explore.model.SearchKeywordCacheDto
 import com.giraffe.movie.dto.MovieDto
 import com.giraffe.person.dao.PersonDao
 import com.giraffe.person.local.dto.PersonDto
-import com.giraffe.series.database.SearchCacheDao
+import com.giraffe.series.database.searchHistoryDao
 import com.giraffe.series.database.SeriesDao
 import com.giraffe.series.model.SearchCacheDto
 import com.giraffe.series.model.CachedSeasonDto
@@ -35,6 +35,6 @@ abstract class CineVerseDatabase : RoomDatabase() {
 
     abstract fun exploreSearchKeywordDao(): ExploreSearchKeywordDao
     abstract fun seriesDao(): SeriesDao
-    abstract fun searchCacheDao(): SearchCacheDao
+    abstract fun searchCacheDao(): searchHistoryDao
     abstract fun personDao(): PersonDao
 }

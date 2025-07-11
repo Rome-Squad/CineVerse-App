@@ -5,7 +5,7 @@ import com.giraffe.series.model.SearchCacheDto
 import com.giraffe.series.utils.DatabaseConstants.SEARCH_KEYWORD_TABLE_CACHE
 
 @Dao
-interface SearchCacheDao {
+interface searchHistoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchCache(cache: SearchCacheDto)

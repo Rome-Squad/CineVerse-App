@@ -38,7 +38,7 @@ interface SeriesDao {
     suspend fun insertSeasons(seasons: List<CachedSeasonDto>)
 
     @Query("SELECT * FROM $SEASON_TABLE WHERE seriesId = :seriesId")
-    fun getSeasonsForSeries(seriesId: Int): Flow<List<CachedSeasonDto>>
+    fun getSeasonsForSeries(seriesId: Int): List<CachedSeasonDto>
 
     @Query("DELETE FROM $SEASON_TABLE")
     suspend fun clearAllSeasons()
@@ -47,7 +47,7 @@ interface SeriesDao {
     suspend fun insertGenres(genres: List<CachedSeriesGenreDto>)
 
     @Query("SELECT * FROM $GENRE_TABLE")
-    fun getAllGenres(): Flow<List<CachedSeriesGenreDto>>
+    fun getAllGenres(): List<CachedSeriesGenreDto>
 
     @Query("DELETE FROM $GENRE_TABLE")
     suspend fun clearAllGenres()

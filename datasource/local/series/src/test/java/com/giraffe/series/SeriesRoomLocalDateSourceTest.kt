@@ -1,6 +1,6 @@
 package com.giraffe.series
 
-import com.giraffe.series.database.SearchCacheDao
+import com.giraffe.series.database.searchHistoryDao
 import com.giraffe.series.database.SeriesDao
 import com.giraffe.series.model.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.hours
 class SeriesRoomLocalDataSourceTest {
 
  private lateinit var dao: SeriesDao
- private lateinit var cacheDao: SearchCacheDao
+ private lateinit var cacheDao: searchHistoryDao
  private lateinit var dataSource: SeriesRoomLocalDateSource
 
  private val sampleSeries = listOf(
@@ -81,7 +81,7 @@ class SeriesRoomLocalDataSourceTest {
   val now = System.currentTimeMillis()
   val validCache = SearchCacheDto("genres", now)
   coEvery { cacheDao.getCacheForKeyword("genres") } returns validCache
-  every { dao.getAllGenres() } returns flowOf(sampleGenres)
+  every { dao.getAllGenres() } returns sampleGenres
 
   val result = dataSource.getCachedGenres()
   assertEquals(sampleGenres, result)
@@ -113,8 +113,8 @@ class SeriesRoomLocalDataSourceTest {
 
   coEvery { cacheDao.getCacheForKeyword("vikings") } returns cache
   coEvery { dao.getSeriesByKeyword("vikings") } returns sampleSeries
-  every { dao.getSeasonsForSeries(1) } returns flowOf(sampleSeasons)
-  every { dao.getAllGenres() } returns flowOf(sampleGenres)
+  every { dao.getSeasonsForSeries(1) } returns sampleSeasons
+  every { dao.getAllGenres() } returns sampleGenres
 
   val result = dataSource.getCachedSeriesForName("vikings")
 
@@ -128,8 +128,8 @@ class SeriesRoomLocalDataSourceTest {
  fun `getCachedSeriesByGenre should return matched series`() = runTest {
   val genreId = 1
   coEvery { dao.getAllSeries() } returns flowOf(sampleSeries)
-  every { dao.getSeasonsForSeries(1) } returns flowOf(sampleSeasons)
-  every { dao.getAllGenres() } returns flowOf(sampleGenres)
+  every { dao.getSeasonsForSeries(1) } returns sampleSeasons
+  every { dao.getAllGenres() } returns sampleGenres
 
   val result = dataSource.getCachedSeriesByGenre(genreId)
 
@@ -221,7 +221,7 @@ class SeriesRoomLocalDataSourceTest {
 
   @Test
   fun `getSeasonsForSeries should return list of seasons`() = runTest {
-   every { dao.getSeasonsForSeries(1) } returns flowOf(sampleSeasons)
+   every { dao.getSeasonsForSeries(1) } returns sampleSeasons
 
    val result = dataSource.getSeasonsForSeries(1)
 
