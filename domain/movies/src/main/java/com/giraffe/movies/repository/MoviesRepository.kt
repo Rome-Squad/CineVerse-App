@@ -15,5 +15,9 @@ interface MoviesRepository {
 
     suspend fun insertGenres(genres:List<MovieGenre>)
 
+    suspend fun setMovieRecent(
+        movie: Movie,
+        isRecent: Boolean
+    )
     suspend fun clearCache()
 }

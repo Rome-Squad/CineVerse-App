@@ -2,6 +2,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto.Companion.MOVIE_TABLE
 import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto
@@ -40,4 +41,7 @@ interface MovieDao {
 
     @Query("DELETE FROM $MOVIE_GENRE_TABLE")
     suspend fun clearMovieGenreCache()
+
+    @Update
+    suspend fun updateMovie(movie: MovieCacheDto)
 }

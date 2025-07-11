@@ -23,6 +23,10 @@ class MovieLocalDataSourceImp(
         movieDao.insertMovieGenres(movieGenres)
     }
 
+    override suspend fun updateMovie(movie: MovieCacheDto) {
+        movieDao.updateMovie(movie)
+    }
+
     override suspend fun getMoviesByName(movieName: String): List<MovieCacheDto> {
         return movieDao.getMovieByName(movieName)
     }

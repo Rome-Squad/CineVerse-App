@@ -16,7 +16,8 @@ data class MovieCacheDto(
     val voteAverage : Float,
     val genresID: List<Int>,
     val releaseDate : String,
-    val duration : Int?
+    val duration : Int?,
+    val isRecent : Boolean
 ){
     companion object {
         const val MOVIE_TABLE = "movies"

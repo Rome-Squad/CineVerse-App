@@ -12,6 +12,8 @@ interface MoviesLocalDataSource {
 
     suspend fun insertMovieGenres(movieGenres: List<MovieGenreCacheDto>)
 
+    suspend fun updateMovie(movie: MovieCacheDto)
+
     suspend fun getMoviesByName(movieName: String): List<MovieCacheDto>
 
     suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>

@@ -92,6 +92,15 @@ class MoviesRepositoryImpl(
         )
     }
 
+    override suspend fun setMovieRecent(
+        movie: Movie,
+        isRecent: Boolean
+    ) {
+        cache.updateMovie(
+            movie = movie.toMovieCacheDto().copy(isRecent = isRecent)
+        )
+    }
+
     override suspend fun clearCache() {
         cache.clearMovieCache()
     }
