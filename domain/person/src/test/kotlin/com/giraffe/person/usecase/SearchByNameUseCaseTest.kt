@@ -2,13 +2,14 @@ package com.giraffe.person.usecase
 
 import com.giraffe.person.entity.Person
 import com.giraffe.person.entity.Role
+import com.giraffe.person.exception.SearchResultNotFoundException
 import com.giraffe.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
 class SearchByNameUseCaseTest {
@@ -26,20 +27,21 @@ class SearchByNameUseCaseTest {
     }
 
     @Test
-    fun `invoke should call searchByName on repository`() = runTest {
-        coEvery { repository.searchByName(any()) } returns emptyList()
-
-        searchPeopleByNameUseCase("Tarek")
-
-        coVerify(exactly = 1) { repository.searchByName("Tarek") }
-    }
+    fun `should throw SearchResultNotFoundException when repository has no search result`() =
+        runTest {
+            //given
+            coEvery { repository.searchByName(any()) } returns emptyList()
+            //when && then
+            assertThrows<SearchResultNotFoundException> { searchPeopleByNameUseCase("Tarek") }
+        }
 
     @Test
-    fun `invoke should return list of persons from repository`() = runTest {
+    fun `should returns list of people when repository returns search result`() = runTest {
+        //given
         coEvery { repository.searchByName("Tarek") } returns expectedList
-
+        //when
         val result = searchPeopleByNameUseCase("Tarek")
-
+        //then
         assertThat(result).isEqualTo(expectedList)
     }
 }

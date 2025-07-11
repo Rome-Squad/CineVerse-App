@@ -40,7 +40,7 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     implementation(libs.bundles.ktor)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
