@@ -117,8 +117,24 @@ room = { id = "androidx.room", version.ref = "room" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
-ui = ["androidx-compose-bom", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "coil-compose", "coil-network-okhttp"]
-test = ["mockk", "androidx-ui-test-junit4", "truth", "junit-jupiter", "junit-jupiter-api", "junit-jupiter-params", "junit"]
+ui = [
+    "androidx-compose-bom",
+    "androidx-ui",
+    "androidx-ui-graphics",
+    "androidx-ui-tooling-preview",
+    "androidx-material3",
+    "coil-compose",
+    "coil-network-okhttp"
+]
+test = [
+    "mockk",
+    "androidx-ui-test-junit4",
+    "truth",
+    "junit-jupiter",
+    "junit-jupiter-api",
+    "junit-jupiter-params",
+    "junit"
+]
 ktor = [
     "ktor-client-core",
     "ktor-client-cio",
