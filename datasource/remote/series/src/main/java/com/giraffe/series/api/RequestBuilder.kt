@@ -1,7 +1,7 @@
 package com.giraffe.series.api
 
-import com.giraffe.series.InvalidRequestException
-import com.giraffe.series.InvalidRequestMethodException
+import com.giraffe.series.exceptions.InvalidRequestException
+import com.giraffe.series.exceptions.InvalidRequestMethodException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -18,7 +18,7 @@ import io.ktor.http.contentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
- class RequestBuilder(
+class RequestBuilder(
     private val httpClient: HttpClient
 ) {
     suspend inline fun <reified T> request(baseRequest: BaseRequest): T {

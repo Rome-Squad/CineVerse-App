@@ -20,6 +20,8 @@ import com.giraffe.series.exception.ServerException
 import com.giraffe.series.exception.TimeoutException
 import com.giraffe.series.exception.UnknownException
 import com.giraffe.series.exception.ValidationExceptions
+import com.giraffe.series.exceptions.InvalidRequestException
+import com.giraffe.series.exceptions.InvalidRequestMethodException
 
 import kotlin.NoSuchElementException
 
@@ -42,6 +44,8 @@ fun mapToDomainException(e: Throwable): SeriesException {
         is RedirectException -> RedirectedException()
         is ClientException ->ClientErrorException()
         is SerializationNetworkException -> SerializationException()
+        is InvalidRequestMethodException -> ValidationExceptions()
+        is InvalidRequestException -> ValidationExceptions()
 
 
         is NoSuchElementException -> NotFoundElementException()
