@@ -42,7 +42,7 @@ fun Movie.toMovieDto(): MovieDto {
         voteAverage = rate,
         posterPath = posterUrl,
         genresID = genresID,
-        releaseDate = releaseYear
+        releaseDate = releaseYear.toString()
     )
 }
 
@@ -55,7 +55,7 @@ fun MovieDto.toMovie(): Movie {
         duration = null,
         posterUrl = posterPath,
         genresID = genresID,
-        releaseYear = releaseDate
+        releaseYear = LocalDate.parse(releaseDate)
     )
 }
 

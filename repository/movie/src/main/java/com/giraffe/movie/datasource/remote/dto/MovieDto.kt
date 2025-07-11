@@ -1,6 +1,5 @@
 package com.giraffe.movie.datasource.remote.dto
 
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -20,5 +19,5 @@ data class MovieDto(
     val genresID: List<Int>,
 
     @SerialName("release_date")
-    val releaseDate : LocalDate
+    val releaseDate : String
 )
