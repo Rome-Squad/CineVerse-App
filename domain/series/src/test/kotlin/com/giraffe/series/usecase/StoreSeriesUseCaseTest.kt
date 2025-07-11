@@ -1,0 +1,38 @@
+package com.giraffe.series.usecase
+
+import com.giraffe.series.repository.SeriesRepository
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.just
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+class StoreSeriesUseCaseTest {
+    private lateinit var seriesRepository: SeriesRepository
+    private lateinit var storeRecentSeriesUseCase: StoreRecentSeriesUseCase
+
+
+    @BeforeEach
+    fun setUp() {
+        seriesRepository = mockk()
+        storeRecentSeriesUseCase = StoreRecentSeriesUseCase(seriesRepository)
+    }
+
+    @Test
+    fun `Should store list of series When repository returns success`() = runTest {
+        // Given
+        val series = fakeSeries(id = 1, name = "Batman 1")
+
+
+        coEvery { seriesRepository.storeRecentSeries(series) } just Runs
+
+        // When
+        storeRecentSeriesUseCase(series)
+
+        // Then
+        coVerify(exactly = 1) { seriesRepository.storeRecentSeries(series) }
+    }
+}

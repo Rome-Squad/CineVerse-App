@@ -10,6 +10,8 @@ import com.giraffe.movie.MoviesSearchHistoryDataSourceImpl
 import com.giraffe.movie.dao.MoviesSearchHistoryDao
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.movie.datasource.local.MoviesSearchHistoryDataSource
+import com.giraffe.series.SeriesRoomLocalDateSource
+import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.person.PersonLocalDataSourceImp
 import com.giraffe.person.dao.PersonDao
 import com.giraffe.person.local.PersonLocalDataSource
@@ -27,6 +29,12 @@ val localDataSourceModule = module {
     single <MoviesSearchHistoryDataSource> { MoviesSearchHistoryDataSourceImpl(get()) }
     single<MoviesLocalDataSource>{ MovieLocalDataSourceImp(get()) }
 
+    single<LocalExploreDataSource> {
+        LocalExploreDataSourceImpl(get())
+    }
+    single { get<CineVerseDatabase>().seriesDao() }
+    single<SeriesLocalDateSource> { SeriesRoomLocalDateSource(get()) }
+    single<LocalExploreDataSource> { LocalExploreDataSourceImpl(get()) }
     single<PersonDao> { get<CineVerseDatabase>().personDao() }
     single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }
 }

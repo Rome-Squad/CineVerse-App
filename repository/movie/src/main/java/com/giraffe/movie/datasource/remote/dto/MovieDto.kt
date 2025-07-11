@@ -10,7 +10,7 @@ data class MovieDto(
     val overview: String,
 
     @SerialName("poster_path")
-    val posterPath : String,
+    val posterPath : String?,
 
     @SerialName("vote_average")
     val voteAverage : Float,
@@ -19,5 +19,5 @@ data class MovieDto(
     val genresID: List<Int>,
 
     @SerialName("release_date")
-    val releaseDate : String
+    val releaseDate : String?
 )

@@ -6,6 +6,7 @@ import com.giraffe.explore.usecase.ExploreUseCases
 import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.explore.usecase.InsertSearchKeywordUseCase
 import com.giraffe.movies.usecase.SearchMovieByNameUseCase
+import com.giraffe.series.usecase.*
 import com.giraffe.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.person.usecase.SearchPeopleByNameUseCase
@@ -29,6 +30,12 @@ val useCaseModule = module {
             clearSearchHistory = ClearSearchHistoryUseCase(get())
         )
     }
+    single { ClearRecentSeriesUseCase(get()) }
+    single { GetRecentSeriesUseCase(get()) }
+    single { GetSeriesGenresUseCase(get()) }
+    single { SearchSeriesByNameUseCase(get()) }
+    single { StoreRecentSeriesUseCase(get()) }
+
 
     // Movies Use Cases
     single { SearchMovieByNameUseCase(get()) }
