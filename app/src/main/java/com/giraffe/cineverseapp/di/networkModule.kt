@@ -4,8 +4,12 @@ import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.HttpClientFactory
 import com.giraffe.explore.RemoteExploreDataSourceImpl
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import com.giraffe.series.api.BaseRequest
+import com.giraffe.series.api.RequestBuilder
+import com.giraffe.series.TmdbSeriesApiRemoteDataSource
 
 
 val networkModule = module {
@@ -30,6 +34,27 @@ val networkModule = module {
             httpClient = get(),
             baseUrl = get(named("BASE_URL")),
             accessToken = get(named("ACCESS_TOKEN"))
+        )
+    }
+
+    single {
+        BaseRequest(
+        baseURL = get(named("BASE_URL")),
+        accessToken = get(named("ACCESS_TOKEN"))
+    )
+
+    }
+
+    single {
+        RequestBuilder(
+            httpClient = get()
+        )
+    }
+
+    single<SeriesRemoteDataSource> {
+        TmdbSeriesApiRemoteDataSource(
+            requestBuilder = get(),
+            baseRequest = get()
         )
     }
 }

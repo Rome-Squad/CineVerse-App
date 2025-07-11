@@ -18,7 +18,7 @@ import io.ktor.http.contentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-internal class RequestBuilder(
+ class RequestBuilder(
     private val httpClient: HttpClient
 ) {
     suspend inline fun <reified T> request(baseRequest: BaseRequest): T {
