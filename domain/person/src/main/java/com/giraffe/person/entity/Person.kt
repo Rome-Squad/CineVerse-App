@@ -4,14 +4,14 @@ data class Person(
     val id: Int,
     val name: String,
     val role: Role,
-    val imageUrl: String
+    val imageUrl: String? = null
 )
 
-abstract class Role(
+sealed class Role(
     val character: String? = null
 ) {
-    class Actor(character: String?): Role(character)
-    object Director: Role()
-    object ScreenPlay: Role()
-    object Story: Role()
+    class Actor(character: String?) : Role(character)
+    object Director : Role()
+    object ScreenPlay : Role()
+    object Story : Role()
 }
