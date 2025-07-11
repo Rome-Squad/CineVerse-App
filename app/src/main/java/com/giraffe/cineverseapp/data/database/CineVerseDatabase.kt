@@ -7,11 +7,13 @@ import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.model.SearchKeywordCacheDto
 import com.giraffe.movie.dto.MovieDto
 import com.giraffe.person.dao.PersonDao
+import com.giraffe.person.local.dto.PersonDto
 
 @Database(
     entities = [
         MovieDto::class,
-        SearchKeywordCacheDto::class
+        SearchKeywordCacheDto::class,
+        PersonDto::class,
     ],
     version = 1
 )
