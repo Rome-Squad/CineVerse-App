@@ -12,7 +12,7 @@ import com.giraffe.person.dao.PersonDao
 import com.giraffe.person.local.dto.PersonDto
 import com.giraffe.series.database.SearchCacheDao
 import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.model.CachedSearchCacheDto
+import com.giraffe.series.model.SearchCacheDto
 import com.giraffe.series.model.CachedSeasonDto
 import com.giraffe.series.model.CachedSeriesDto
 import com.giraffe.series.model.CachedSeriesGenreDto
@@ -24,7 +24,7 @@ import com.giraffe.series.model.CachedSeriesGenreDto
         CachedSeriesDto::class,
         CachedSeasonDto::class,
         CachedSeriesGenreDto::class,
-        CachedSearchCacheDto::class,
+        SearchCacheDto::class,
         PersonDto::class,
     ],
     version = 1

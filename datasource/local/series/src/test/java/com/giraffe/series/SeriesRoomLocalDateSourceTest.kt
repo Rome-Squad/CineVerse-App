@@ -47,7 +47,7 @@ class SeriesRoomLocalDataSourceTest {
   coVerify { dao.insertGenres(sampleGenres) }
   coVerify {
    cacheDao.insertSearchCache(
-    match<CachedSearchCacheDto> {
+    match<SearchCacheDto> {
      it.keyword == "vikings" && it.lastSearchedTime > 0
     }
    )
@@ -68,7 +68,7 @@ class SeriesRoomLocalDataSourceTest {
 
  @Test
  fun `getCachedGenres should return empty if cache is invalid`() = runTest {
-  val oldCache = CachedSearchCacheDto("genres", 0L)
+  val oldCache = SearchCacheDto("genres", 0L)
   coEvery { cacheDao.getCacheForKeyword("genres") } returns oldCache
 
   val result = dataSource.getCachedGenres()
@@ -79,7 +79,7 @@ class SeriesRoomLocalDataSourceTest {
  @Test
  fun `getCachedGenres should return genres if cache is valid`() = runTest {
   val now = System.currentTimeMillis()
-  val validCache = CachedSearchCacheDto("genres", now)
+  val validCache = SearchCacheDto("genres", now)
   coEvery { cacheDao.getCacheForKeyword("genres") } returns validCache
   every { dao.getAllGenres() } returns flowOf(sampleGenres)
 
@@ -98,7 +98,7 @@ class SeriesRoomLocalDataSourceTest {
  @Test
  fun `getCachedSeriesForName should return null if cache is expired`() = runTest {
   val expiredTime = System.currentTimeMillis() - 2.hours.inWholeMilliseconds
-  val cache = CachedSearchCacheDto("vikings", expiredTime)
+  val cache = SearchCacheDto("vikings", expiredTime)
   coEvery { cacheDao.getCacheForKeyword("vikings") } returns cache
 
   val result = dataSource.getCachedSeriesForName("vikings")
@@ -109,7 +109,7 @@ class SeriesRoomLocalDataSourceTest {
  @Test
  fun `getCachedSeriesForName should return full data if valid`() = runTest {
   val now = System.currentTimeMillis()
-  val cache = CachedSearchCacheDto("vikings", now)
+  val cache = SearchCacheDto("vikings", now)
 
   coEvery { cacheDao.getCacheForKeyword("vikings") } returns cache
   coEvery { dao.getSeriesByKeyword("vikings") } returns sampleSeries
@@ -158,7 +158,7 @@ class SeriesRoomLocalDataSourceTest {
 
   coVerify {
    cacheDao.insertSearchCache(
-    match<CachedSearchCacheDto> {
+    match<SearchCacheDto> {
      it.keyword == "genres" && it.lastSearchedTime > 0
     }
    )
@@ -178,7 +178,7 @@ class SeriesRoomLocalDataSourceTest {
  @Test
  fun `getCachedGenres should return empty when cache is expired`() = runTest {
   val expiredTime = System.currentTimeMillis() - SeriesRoomLocalDateSource.CACHE_VALIDITY_DURATION_MS - 1
-  coEvery { cacheDao.getCacheForKeyword("genres") } returns CachedSearchCacheDto("genres", expiredTime)
+  coEvery { cacheDao.getCacheForKeyword("genres") } returns SearchCacheDto("genres", expiredTime)
 
   val result = dataSource.getCachedGenres()
 

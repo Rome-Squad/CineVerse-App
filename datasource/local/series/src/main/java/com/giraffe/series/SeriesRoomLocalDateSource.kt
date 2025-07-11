@@ -43,7 +43,7 @@ class SeriesRoomLocalDateSource(
         }
 
         cacheDao.insertSearchCache(
-            CachedSearchCacheDto(
+            SearchCacheDto(
                 keyword = name,
                 lastSearchedTime = now
             )
@@ -107,7 +107,7 @@ class SeriesRoomLocalDateSource(
         seriesDao.insertGenres(genres)
 
         cacheDao.insertSearchCache(
-            CachedSearchCacheDto(
+            SearchCacheDto(
                 keyword = GENRE_CACHE_KEY,
                 lastSearchedTime = System.currentTimeMillis()
             )
