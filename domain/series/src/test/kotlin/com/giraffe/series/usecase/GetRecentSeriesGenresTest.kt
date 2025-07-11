@@ -26,8 +26,8 @@ class GetRecentSeriesGenresTest {
  fun `should return recent series from repository`() = runTest {
   // Given
   val expectedSeries = listOf(
-   Series(id = 1, name = "Loki", overview = "", rating = 8.5f, duration = "", posterUrl = "", genreIDs = listOf(1, 2), releaseYear = "2021", seasons = emptyList()),
-   Series(id = 2, name = "Moon Knight", overview = "", rating = 8.2f, duration = "", posterUrl = "", genreIDs = listOf(3), releaseYear = "2022", seasons = emptyList())
+   Series(id = 1, name = "Loki", overview = "", rating = 8.5f, posterUrl = "", genreIDs = listOf(1, 2), releaseYear = "2021", seasons = emptyList()),
+   Series(id = 2, name = "Moon Knight", overview = "", rating = 8.2f, posterUrl = "", genreIDs = listOf(3), releaseYear = "2022", seasons = emptyList())
   )
   coEvery { repository.getRecentSeries() } returns expectedSeries
 
