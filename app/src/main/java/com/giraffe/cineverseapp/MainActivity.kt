@@ -7,19 +7,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
+import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-val getKeywords: GetSearchKeywordsUseCase by inject()
+val remote: MoviesRemoteDataSource by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
                 LaunchedEffect(Unit) {
-                    val keywords = getKeywords.execute("Batman")
+                    val keywords = remote.getMovieById(268)
                     Log.d("TAG", "onCreate: $keywords")
                 }
             }

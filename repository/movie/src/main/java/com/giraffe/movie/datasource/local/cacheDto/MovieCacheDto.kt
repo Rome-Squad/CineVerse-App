@@ -3,8 +3,6 @@ package com.giraffe.movie.datasource.local.cacheDto
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto.Companion.MOVIE_TABLE
-import kotlinx.datetime.LocalDate
-
 
 
 @Entity(tableName = MOVIE_TABLE)
@@ -17,11 +15,11 @@ data class MovieCacheDto(
     val posterPath : String,
     val voteAverage : Float,
     val genresID: List<Int>,
-    val releaseDate : LocalDate,
+    val releaseDate : String,
     val duration : Int?
 ){
     companion object {
-        const val MOVIE_TABLE = "movie_table"
+        const val MOVIE_TABLE = "movies"
     }
 }
 
