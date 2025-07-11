@@ -10,18 +10,18 @@ import org.junit.jupiter.api.Test
 class ClearRecentSeriesTest {
 
  private lateinit var repository: SeriesRepository
- private lateinit var clearRecentSeries: ClearRecentSeries
+ private lateinit var clearRecentSeriesUseCase: ClearRecentSeriesUseCase
 
  @BeforeEach
  fun setUp() {
   repository = mockk(relaxed = true)
-  clearRecentSeries = ClearRecentSeries(repository)
+  clearRecentSeriesUseCase = ClearRecentSeriesUseCase(repository)
  }
 
  @Test
  fun `Should call clearRecentSeries once`() = runTest {
   // When
-  clearRecentSeries()
+  clearRecentSeriesUseCase()
 
   // Then
   coVerify(exactly = 1) { repository.clearRecentSeries() }

@@ -1,4 +1,4 @@
-package com.giraffe.series.util
+package com.giraffe.series.utils
 
 object DatabaseConstants {
     const val SEARCH_KEYWORD_TABLE_CACHE = "search_keyword_table_cache"

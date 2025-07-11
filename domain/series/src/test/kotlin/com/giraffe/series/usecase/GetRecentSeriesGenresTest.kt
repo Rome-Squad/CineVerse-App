@@ -14,12 +14,12 @@ import org.junit.jupiter.api.Test
 class GetRecentSeriesGenresTest {
 
  private lateinit var repository: SeriesRepository
- private lateinit var useCase: GetRecentSeriesGenres
+ private lateinit var useCase: GetRecentSeriesUseCase
 
  @BeforeEach
  fun setUp() {
   repository = mockk()
-  useCase = GetRecentSeriesGenres(repository)
+  useCase = GetRecentSeriesUseCase(repository)
  }
 
  @Test
