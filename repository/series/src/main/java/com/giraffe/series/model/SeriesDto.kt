@@ -19,6 +19,7 @@ data class CachedSeriesDto(
     val posterUrl: String,
     val genresID: List<Int>,
     val releaseYear: String,
+    val isRecent : Boolean = false
 )
 
 
@@ -68,3 +69,4 @@ data class SeriesDto(
     @SerialName("original_language")
     val originalLanguage: String,
 )
+

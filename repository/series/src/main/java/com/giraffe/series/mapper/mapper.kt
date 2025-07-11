@@ -47,7 +47,7 @@ fun Series.toCachedDto(): CachedSeriesDto {
         duration = duration,
         posterUrl = posterUrl,
         genresID = genreIDs,
-        releaseYear = releaseYear
+        releaseYear = releaseYear,
     )
 }
 
@@ -71,3 +71,44 @@ fun SeriesGenre.toCachedDto(): CachedSeriesGenreDto {
         name = name
     )
 }
+
+fun SeriesDto.toCachedDto(): CachedSeriesDto {
+    return CachedSeriesDto(
+        id = id,
+        name = name,
+        overview = overview,
+        rate = voteAverage.toFloat(),
+        duration = "",
+        posterUrl = posterPath.orEmpty(),
+        genresID = genreIds,
+        releaseYear = firstAirDate,
+    )
+}
+
+fun SeriesDto.toEntity(): Series {
+    return Series(
+        id = id,
+        name = name,
+        overview = overview,
+        rating = voteAverage.toFloat(),
+        duration = "",
+        posterUrl = posterPath.orEmpty(),
+        genreIDs = genreIds,
+        releaseYear = firstAirDate,
+        seasons = emptyList()
+    )
+}
+fun GenreDto.toEntity(): SeriesGenre {
+    return SeriesGenre(
+        id = id,
+        name = name
+    )
+}
+fun GenreDto.toCachedDto(): CachedSeriesGenreDto {
+    return CachedSeriesGenreDto(
+        id = id,
+        name = name
+    )
+}
+
+
