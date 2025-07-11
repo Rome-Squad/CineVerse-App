@@ -9,18 +9,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+
 
 @Composable
 fun AppBar(
@@ -84,10 +86,11 @@ private fun Logo(showLogo: Boolean) {
 private fun Caption(showCaption: Boolean, caption: String) {
     if (showCaption) {
         Text(
-            caption,
+            text = caption,
             maxLines = 1,
             style = Theme.textStyle.body.sm.regular,
-            color = Theme.color.shade.secondary
+            color = Theme.color.shade.secondary,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -96,10 +99,11 @@ private fun Caption(showCaption: Boolean, caption: String) {
 private fun Title(showTitle: Boolean, title: String) {
     if (showTitle) {
         Text(
-            title,
+            text = title,
             maxLines = 1,
             style = Theme.textStyle.title.sm,
-            color = Theme.color.shade.primary
+            color = Theme.color.shade.primary,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -117,7 +121,6 @@ private fun EndIcon(showEndIcon: Boolean, endIcon: Painter) {
         )
     }
 }
-
 
 @PreviewLightDark
 @Composable
