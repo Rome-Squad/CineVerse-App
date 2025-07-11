@@ -1,4 +1,6 @@
 import java.util.Properties
+import java.io.File
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -76,9 +78,8 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":presentation:authentication"))
     implementation(project(":presentation:home"))
+    implementation(project(":presentation:authentication"))
     implementation(project(":presentation:details"))
     implementation(project(":presentation:explore"))
     implementation(project(":presentation:match"))
@@ -116,7 +117,7 @@ dependencies {
     implementation(project(":datasource:local:review"))
     implementation(project(":datasource:local:explore"))
 
-    
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
