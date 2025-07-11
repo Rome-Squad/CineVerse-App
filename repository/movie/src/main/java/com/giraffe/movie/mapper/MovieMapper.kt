@@ -1,9 +1,12 @@
 package com.giraffe.movie.mapper
 
 
-import com.giraffe.movies.entity.Movie
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto
+import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.movie.datasource.remote.dto.MovieDto
+import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
+import com.giraffe.movies.entity.Movie
+import kotlinx.datetime.LocalDate
 
 fun MovieCacheDto.toMovie(): Movie {
     return Movie(
@@ -14,7 +17,7 @@ fun MovieCacheDto.toMovie(): Movie {
         duration = duration,
         posterUrl = posterPath,
         genresID = genresID,
-        releaseYear = releaseDate
+        releaseYear = LocalDate.parse(releaseDate)
     )
 }
 
@@ -26,7 +29,7 @@ fun Movie.toMovieCacheDto(): MovieCacheDto {
         voteAverage = rate,
         posterPath = posterUrl,
         genresID = genresID,
-        releaseDate = releaseYear,
+        releaseDate = releaseYear.toString(),
         duration = duration
     )
 }
@@ -54,4 +57,25 @@ fun MovieDto.toMovie(): Movie {
         genresID = genresID,
         releaseYear = releaseDate
     )
+}
+
+fun MovieDetailsDto.toEntity(): Movie {
+    return Movie(
+        id = id,
+        title = title,
+        description = overview,
+        rate = voteAverage,
+        duration = runtime,
+        posterUrl = posterPath,
+        genresID = genres.toMovieGenreId(),
+        releaseYear = LocalDate.parse(releaseDate)
+    )
+}
+
+fun MovieGenreDto.toMovieGenreId(): Int {
+    return id
+}
+
+fun List<MovieGenreDto>.toMovieGenreId(): List<Int> {
+    return map { it.toMovieGenreId() }
 }

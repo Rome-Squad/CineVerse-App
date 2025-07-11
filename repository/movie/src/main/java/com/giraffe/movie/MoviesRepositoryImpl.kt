@@ -27,7 +27,7 @@ class MoviesRepositoryImpl(
             val isCached = cachedMovies.isNotEmpty()
 
             if (!(isSearchedWithinLastHour && isCached)) {
-                val remoteMovies = remote.getMovieByName(movieName).map { it.toMovie() }
+                val remoteMovies = remote.getMoviesByName(movieName).map { it.toMovie() }
                 val distinctMovies = (remoteMovies + cachedMovies).distinct()
 
                 insertMovies(distinctMovies)

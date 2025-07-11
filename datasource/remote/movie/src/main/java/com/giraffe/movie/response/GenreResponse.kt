@@ -1,8 +1,8 @@
 package com.giraffe.movie.response
 
-import com.giraffe.movie.datasource.remote.dto.GenreDTO
+import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
 
 
 data class GenreResponse(
-    val genres: List<GenreDTO>
+    val genres: List<MovieGenreDto>
 )

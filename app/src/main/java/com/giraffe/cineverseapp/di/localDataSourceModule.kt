@@ -23,4 +23,5 @@ val localDataSourceModule = module {
     single <MoviesSearchHistoryDao> { get<CineVerseDatabase>().moviesSearchHistoryDao() }
     single <MoviesSearchHistoryDataSource> { MoviesSearchHistoryDataSourceImpl(get()) }
     single<MoviesLocalDataSource>{ MovieLocalDataSourceImp(get()) }
+
 }

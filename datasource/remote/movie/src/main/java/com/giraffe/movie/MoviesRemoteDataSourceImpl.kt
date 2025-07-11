@@ -1,8 +1,9 @@
 package com.giraffe.movie
 
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.movie.datasource.remote.dto.GenreDTO
+import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.movie.datasource.remote.dto.MovieDto
+import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.movie.response.GenreResponse
 import com.giraffe.movie.response.MoviesListResponse
 import com.giraffe.movie.utils.handleRequest
@@ -10,14 +11,14 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 
-class MovieRemoteDataSource(
+class MoviesRemoteDataSourceImpl(
     val client: HttpClient,
     val baseUrl: String,
     val accessToken: String,
 ) : MoviesRemoteDataSource {
-    override suspend fun getMovieById(movieId: Int): MovieDto {
-        return handleRequest<MovieDto> {
-            client.get(baseUrl + "$MOVIE_BY_ID_URL$movieId") {
+    override suspend fun getMovieById(movieId: Int): MovieDetailsDto {
+        return handleRequest<MovieDetailsDto> {
+            client.get("$baseUrl$MOVIE_BY_ID_URL/$movieId") {
                 headers {
                     append("Authorization", "Bearer $accessToken")
                 }
@@ -25,7 +26,7 @@ class MovieRemoteDataSource(
         }
     }
 
-    override suspend fun getMovieByName(movieName: String): List<MovieDto> {
+    override suspend fun getMoviesByName(movieName: String): List<MovieDto> {
         val response: MoviesListResponse = handleRequest<MoviesListResponse> {
             client.get(baseUrl + MOVIES_BY_NAME_URL) {
                 url {
@@ -39,7 +40,7 @@ class MovieRemoteDataSource(
         return response.results
     }
 
-    override suspend fun getMovieGenres(): List<GenreDTO> {
+    override suspend fun getMovieGenres(): List<MovieGenreDto> {
         val response =
             handleRequest<GenreResponse> {
                 client.get(baseUrl + GENRES_URL) {
