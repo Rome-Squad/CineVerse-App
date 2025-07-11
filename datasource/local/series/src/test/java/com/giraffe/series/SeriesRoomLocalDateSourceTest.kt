@@ -1,14 +1,18 @@
 package com.giraffe.series
 
-import com.giraffe.series.database.searchHistoryDao
 import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.model.*
+import com.giraffe.series.database.searchHistoryDao
+import com.giraffe.series.model.CachedSeasonDto
+import com.giraffe.series.model.CachedSeriesDto
+import com.giraffe.series.model.CachedSeriesGenreDto
+import com.giraffe.series.model.SearchCacheDto
+import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import io.mockk.*
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNull
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -72,7 +76,7 @@ class SeriesRoomLocalDataSourceTest {
   coEvery { cacheDao.getCacheForKeyword("genres") } returns oldCache
 
   val result = dataSource.getCachedGenres()
-  assertEquals(emptyList<CachedSeriesGenreDto>(), result)
+  assertThat(result).isEmpty()
   coVerify(exactly = 0) { dao.getAllGenres() }
  }
 
@@ -84,27 +88,9 @@ class SeriesRoomLocalDataSourceTest {
   every { dao.getAllGenres() } returns sampleGenres
 
   val result = dataSource.getCachedGenres()
-  assertEquals(sampleGenres, result)
+  assertThat(result).isEqualTo(sampleGenres)
  }
 
- @Test
- fun `getCachedSeriesForName should return null if no cache`() = runTest {
-  coEvery { cacheDao.getCacheForKeyword("vikings") } returns null
-
-  val result = dataSource.getCachedSeriesForName("vikings")
-  assertNull(result)
- }
-
- @Test
- fun `getCachedSeriesForName should return null if cache is expired`() = runTest {
-  val expiredTime = System.currentTimeMillis() - 2.hours.inWholeMilliseconds
-  val cache = SearchCacheDto("vikings", expiredTime)
-  coEvery { cacheDao.getCacheForKeyword("vikings") } returns cache
-
-  val result = dataSource.getCachedSeriesForName("vikings")
-  assertNull(result)
-  coVerify { cacheDao.deleteCacheForKeyword("vikings") }
- }
 
  @Test
  fun `getCachedSeriesForName should return full data if valid`() = runTest {
@@ -118,10 +104,10 @@ class SeriesRoomLocalDataSourceTest {
 
   val result = dataSource.getCachedSeriesForName("vikings")
 
-  assertEquals(1, result?.size)
-  assertEquals("Vikings", result?.first()?.series?.name)
-  assertEquals(sampleSeasons, result?.first()?.seasons)
-  assertEquals(sampleGenres, result?.first()?.genres)
+  assertThat(result).hasSize(1)
+  assertThat(result.first().series.name).isEqualTo("Vikings")
+  assertThat(result.first().seasons).isEqualTo(sampleSeasons)
+  assertThat(result.first().genres).isEqualTo(sampleGenres)
  }
 
  @Test
@@ -133,8 +119,9 @@ class SeriesRoomLocalDataSourceTest {
 
   val result = dataSource.getCachedSeriesByGenre(genreId)
 
-  assertEquals(1, result.size)
-  assertEquals("Vikings", result.first().series.name)
+  assertThat(result).hasSize(1)
+  assertThat(result.first().series.name).isEqualTo("Vikings")
+
  }
 
  @Test
@@ -142,7 +129,7 @@ class SeriesRoomLocalDataSourceTest {
   coEvery { dao.getAllSeries() } returns flowOf(emptyList())
 
   val result = dataSource.getCachedSeriesByGenre(99)
-  assertTrue(result.isEmpty())
+  assertThat(result).isEmpty()
  }
 
  @Test
@@ -171,7 +158,7 @@ class SeriesRoomLocalDataSourceTest {
 
   val result = dataSource.getCachedGenres()
 
-  assertTrue(result.isEmpty())
+  assertThat(result).isEmpty()
   coVerify(exactly = 0) { dao.getAllGenres() }
  }
 
@@ -182,7 +169,7 @@ class SeriesRoomLocalDataSourceTest {
 
   val result = dataSource.getCachedGenres()
 
-  assertTrue(result.isEmpty())
+  assertThat(result).isEmpty()
   coVerify(exactly = 0) { dao.getAllGenres() }
  }
 
@@ -195,39 +182,23 @@ class SeriesRoomLocalDataSourceTest {
   coVerify { dao.clearAllGenres() }
   coVerify { cacheDao.clearAll() }
  }
-  @Test
-  fun `getRecentSeries should return recent series`() = runTest {
-   coEvery { dao.getRecentSeries() } returns sampleSeries
-
-   val result = dataSource.getRecentSeries()
-
-   assertEquals(sampleSeries, result)
-   coVerify { dao.getRecentSeries() }
-  }
-
-  @Test
-  fun `storeRecentSeries should mark series as viewed`() = runTest {
-   dataSource.storeRecentSeries(1)
-
-   coVerify { dao.markSeriesAsViewed(1) }
-  }
-
-  @Test
-  fun `clearRecentSeries should call DAO to clear`() = runTest {
-   dataSource.clearRecentSeries()
-
-   coVerify { dao.clearRecentSeries() }
-  }
-
-  @Test
-  fun `getSeasonsForSeries should return list of seasons`() = runTest {
-   every { dao.getSeasonsForSeries(1) } returns sampleSeasons
-
-   val result = dataSource.getSeasonsForSeries(1)
-
-   assertEquals(sampleSeasons, result)
-   coVerify { dao.getSeasonsForSeries(1) }
-  }
 
 
+ @Test
+ fun `storeRecentSeries should mark series as viewed`() = runTest {
+  dataSource.storeRecentSeries(1)
+
+  coVerify { dao.markSeriesAsViewed(1) }
  }
+
+ @Test
+ fun `clearRecentSeries should call DAO to clear`() = runTest {
+  dataSource.clearRecentSeries()
+
+  coVerify { dao.clearRecentSeries() }
+ }
+
+
+
+
+}

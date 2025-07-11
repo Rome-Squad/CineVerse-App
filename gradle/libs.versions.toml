@@ -26,6 +26,7 @@ mockk = "1.14.4"
 mockkMockk = "1.13.8"
 mockkVersion = "1.13.9"
 truth = "1.4.4"
+truthVersion = "1.4.0"
 turbine = "1.2.1"
 uiTooling = "1.8.3"
 readMoreVersion = "1.6.3"
@@ -84,6 +85,7 @@ mockk-v1138 = { module = "io.mockk:mockk", version.ref = "mockkMockk" }
 mockk-v1139 = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+truth-v140 = { module = "com.google.truth:truth", version.ref = "truthVersion" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 readmore-material3 = { group = "com.webtoonscorp.android", name = "readmore-material3", version.ref = "readMoreVersion" }

@@ -3,17 +3,12 @@ package com.giraffe.series
 import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.series.entity.Series
-import com.giraffe.series.model.CachedSeasonDto
-import com.giraffe.series.model.CachedSeriesDto
-import com.giraffe.series.model.CachedSeriesGenreDto
-import com.giraffe.series.model.GenreDto
-import com.giraffe.series.model.SeriesDto
-import com.giraffe.series.model.SeriesFullData
+import com.giraffe.series.model.*
 import com.giraffe.series.repository.SeriesRepository
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -25,6 +20,7 @@ class SeriesRepositoryImplTest {
  private lateinit var local: SeriesLocalDateSource
  private lateinit var remote: SeriesRemoteDataSource
  private lateinit var repository: SeriesRepository
+
  private val remoteSeriesDto = listOf(
   SeriesDto(
    id = 1,
@@ -55,6 +51,7 @@ class SeriesRepositoryImplTest {
    releaseYear = "2015"
   )
  )
+
  private val remoteGenres = listOf(
   GenreDto(id = 1, name = "Action")
  )
@@ -86,18 +83,18 @@ class SeriesRepositoryImplTest {
 
   val result = repository.searchSeriesByName("vikings")
 
-  assertEquals("Vikings", result.first().name)
+  assertThat(result.first().name).isEqualTo("Vikings")
   coVerify(exactly = 0) { remote.getSeriesByName(any()) }
  }
 
  @Test
  fun `searchSeriesByName fetches remote if cache empty and saves`() = runTest {
-  coEvery { local.getCachedSeriesForName("vikings") } returns null
+  coEvery { local.getCachedSeriesForName("vikings") } returns emptyList()
   coEvery { remote.getSeriesByName("vikings") } returns remoteSeriesDto
 
   val result = repository.searchSeriesByName("vikings")
 
-  assertEquals("Vikings", result.first().name)
+  assertThat(result.first().name).isEqualTo("Vikings")
   coVerify { remote.getSeriesByName("vikings") }
   coVerify {
    local.saveSearchResult(
@@ -115,8 +112,8 @@ class SeriesRepositoryImplTest {
 
   val result = repository.getSeriesGenres()
 
-  assertEquals(1, result.size)
-  assertEquals("Action", result.first().name)
+  assertThat(result).hasSize(1)
+  assertThat(result.first().name).isEqualTo("Action")
   coVerify(exactly = 0) { remote.getGenres() }
  }
 
@@ -127,8 +124,8 @@ class SeriesRepositoryImplTest {
 
   val result = repository.getSeriesGenres()
 
-  assertEquals(1, result.size)
-  assertEquals("Action", result.first().name)
+  assertThat(result).hasSize(1)
+  assertThat(result.first().name).isEqualTo("Action")
   coVerify { local.saveGenres(match { it.first().id == 1 }) }
  }
 
@@ -139,8 +136,8 @@ class SeriesRepositoryImplTest {
 
   val result = repository.getRecentSeries()
 
-  assertEquals(1, result.size)
-  assertEquals("Vikings", result.first().name)
+  assertThat(result).hasSize(1)
+  assertThat(result.first().name).isEqualTo("Vikings")
   coVerify { local.getSeasonsForSeries(1) }
  }
 
