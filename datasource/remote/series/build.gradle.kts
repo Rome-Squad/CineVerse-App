@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -34,12 +35,24 @@ android {
 
 dependencies {
 
+    implementation(project(":repository:series"))
+
+    //koin
+    implementation(libs.koin.androidx.compose)
+
+    //ktor
+    implementation(libs.bundles.ktor)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    testImplementation(libs.mockk.v1139)
+    testImplementation(libs.kotlinx.coroutines.test.v173)
+    testImplementation(kotlin("test"))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.kotlinx.datetime)
+    testImplementation(libs.androidx.core.testing)
 }

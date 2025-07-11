@@ -9,7 +9,7 @@ data class Movie (
     val description: String,
     val rating: Float,
     val duration: Int?,
-    val posterUrl: String,
+    val posterUrl: String?,
     val genresID: List<Int>,
-    val releaseYear: LocalDate
+    val releaseYear: LocalDate?
 )
