@@ -49,17 +49,17 @@ class SeriesRoomLocalDateSource(
         )
     }
 
-    override suspend fun getCachedSeriesForName(name: String): List<SeriesFullData>? = withContext(Dispatchers.IO) {
+    override suspend fun getCachedSeriesForName(name: String): List<SeriesFullData> = withContext(Dispatchers.IO) {
         val cache = searchHistoryDao.getCacheForKeyword(name)
         val now = System.currentTimeMillis()
 
         if (cache != null && now - cache.lastSearchedTime > CACHE_VALIDITY_DURATION_MS) {
             searchHistoryDao.deleteCacheForKeyword(name)
-            return@withContext null
+            return@withContext emptyList()
         }
 
         val seriesList = seriesDao.getSeriesByKeyword(name)
-        if (seriesList.isEmpty()) return@withContext null
+        if (seriesList.isEmpty()) return@withContext emptyList()
 
         val allGenres = seriesDao.getAllGenres()
 
@@ -74,6 +74,7 @@ class SeriesRoomLocalDateSource(
             )
         }
     }
+
 
     override suspend fun getCachedSeriesByGenre(genreId: Int): List<SeriesFullData> = withContext(Dispatchers.IO) {
         val allSeries = seriesDao.getAllSeries().first()

@@ -46,15 +46,11 @@ fun mapToDomainException(e: Throwable): SeriesException {
         is InvalidRequestMethodException -> ValidationExceptions()
         is InvalidRequestException -> ValidationExceptions()
         is UnknownNetworkException -> UnknownException()
-
-
         is NoSuchElementException -> NotFoundElementException()
         is IllegalArgumentException -> ValidationExceptions()
         is CorruptDatabaseException -> SeriesException()
         is DiskAccessException -> SeriesException()
         else -> UnknownException()
-
-
     }
 
 
