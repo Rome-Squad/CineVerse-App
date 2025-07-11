@@ -80,12 +80,6 @@ fun PosterItemHorizontal(
             val state by painter.state.collectAsState()
 
             if (state is AsyncImagePainter.State.Success) {
-//                Image(
-//                    painter = painter,
-//                    contentDescription = stringResource(R.string.image_poster_movie),
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentScale = ContentScale.Crop
-//                )
                 IslamicAppropriateImageViewer(
                     imageUrl = movie.imageUri,
                     modifier = Modifier.fillMaxSize()

@@ -120,9 +120,6 @@ fun ExploreHeaderPreview() {
             showBackButton = true,
             endIcon = painterResource(Theme.icons.outline.microphone),
             viewTaps = false,
-//            tabsTitles = listOf("Movie", "Series"),
-//            onTabClick = {},
-//            selectedTabIndex = 0,
             onValueChange = {},
             value = ""
         )
