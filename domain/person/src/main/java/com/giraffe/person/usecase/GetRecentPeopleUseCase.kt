@@ -1,6 +1,5 @@
 package com.giraffe.person.usecase
 
-import com.giraffe.person.exception.PersonNotFoundException
 import com.giraffe.person.exception.RecentPeopleNotFoundException
 import com.giraffe.person.repository.PersonRepository
 
