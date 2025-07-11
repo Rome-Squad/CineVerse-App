@@ -15,16 +15,20 @@ interface SeriesDao {
     @Query("SELECT * FROM cached_series")
     fun getAllSeries(): Flow<List<CachedSeriesDto>>
 
-    @Query("DELETE FROM cached_series")
-    suspend fun clearAllSeries()
+    @Query("SELECT * FROM cached_series WHERE id IN (:ids)")
+    suspend fun getSeriesByIds(ids: List<Int>): List<CachedSeriesDto>
 
-    @Query("DELETE FROM cached_series WHERE id IN (:ids)")
-    suspend fun deleteSeriesByIds(ids: List<Int>)
+    @Query("DELETE FROM cached_series WHERE isRecent = 0")
+    suspend fun clearAllSeries()
 
     @Query("SELECT * FROM cached_series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
     suspend fun getSeriesByKeyword(keyword: String): List<CachedSeriesDto>
 
-    @Query("DELETE FROM cached_series WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
+    @Query("""
+    DELETE FROM cached_series 
+    WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%' 
+    AND isRecent = 0
+""")
     suspend fun deleteSeriesByKeyword(keyword: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -33,14 +37,9 @@ interface SeriesDao {
     @Query("SELECT * FROM cached_season WHERE seriesId = :seriesId")
     fun getSeasonsForSeries(seriesId: Int): Flow<List<CachedSeasonDto>>
 
-    @Query("SELECT * FROM cached_series")
-    suspend fun getAllSeriesDirect(): List<CachedSeriesDto>
 
     @Query("DELETE FROM cached_season")
     suspend fun clearAllSeasons()
-
-    @Query("DELETE FROM cached_season WHERE seriesId IN (:seriesIds)")
-    suspend fun deleteSeasonsBySeriesIds(seriesIds: List<Int>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenres(genres: List<CachedSeriesGenreDto>)
@@ -51,6 +50,14 @@ interface SeriesDao {
     @Query("DELETE FROM cached_series_genres")
     suspend fun clearAllGenres()
 
-    @Query("DELETE FROM cached_series_genres WHERE id IN (:ids)")
-    suspend fun deleteGenresByIds(ids: List<Int>)
+    @Query("UPDATE cached_series SET isRecent = 1 WHERE id = :seriesId")
+    suspend fun markSeriesAsViewed(seriesId: Int)
+
+    @Query("UPDATE cached_series SET isRecent = 0")
+    suspend fun clearRecentSeries()
+
+    @Query("SELECT * FROM cached_series WHERE isRecent = 1")
+    suspend fun getRecentSeries(): List<CachedSeriesDto>
+
+
 }

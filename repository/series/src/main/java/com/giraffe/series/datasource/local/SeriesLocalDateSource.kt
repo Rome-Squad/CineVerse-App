@@ -21,4 +21,9 @@ interface SeriesLocalDateSource {
     suspend fun saveGenres(genres: List<CachedSeriesGenreDto>)
 
     suspend fun getCachedSeriesByGenre(genreId: Int): List<SeriesFullData>?
+    suspend fun getRecentSeries(): List<CachedSeriesDto>
+    suspend fun storeRecentSeries(seriesId: Int)
+    suspend fun clearRecentSeries()
+    suspend fun getSeasonsForSeries(seriesId: Int): List<CachedSeasonDto>
+
 }

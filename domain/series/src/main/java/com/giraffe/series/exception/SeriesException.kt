@@ -1,6 +1,5 @@
 package com.giraffe.series.exception
 
-import java.rmi.ServerException
 
 open class SeriesException: Exception()
 
@@ -10,6 +9,7 @@ class ServerException : SeriesException()
 class TimeoutException :SeriesException()
 class RedirectedException:SeriesException()
 class ClientErrorException:SeriesException()
+class SerializationException:SeriesException()
 
 //local exceptions
 class NotFoundElementException :SeriesException()

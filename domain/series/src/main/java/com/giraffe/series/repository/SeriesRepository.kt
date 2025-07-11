@@ -6,6 +6,9 @@ import com.giraffe.series.entity.SeriesGenre
 
 interface SeriesRepository {
     suspend fun searchSeriesByName(seriesName: String): List<Series>
-    suspend fun storeSeries(series: List<Series>)
+    suspend fun storeRecentSeries(series: Series)
     suspend fun getSeriesGenres(): List<SeriesGenre>
+    suspend fun getRecentSeries(): List<Series>
+    suspend fun clearRecentSeries()
+
 }

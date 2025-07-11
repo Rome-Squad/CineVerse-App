@@ -11,6 +11,8 @@ class SeriesRoomLocalDateSource(
     private val seriesDao: SeriesDao,
     private val cacheDao: SearchCacheDao
 ) : SeriesLocalDateSource {
+
+
     override suspend fun saveSearchResult(
         name: String,
         seriesList: List<CachedSeriesDto>,
@@ -19,8 +21,17 @@ class SeriesRoomLocalDateSource(
     ) {
         val now = System.currentTimeMillis()
 
-        if (seriesList.isNotEmpty()) {
-            seriesDao.insertSeries(seriesList)
+        val existingSeries = seriesDao.getSeriesByIds(seriesList.map { it.id })
+        val isRecentMap = existingSeries.associateBy({ it.id }, { it.isRecent })
+
+
+        val mergedSeries = seriesList.map { remote ->
+            val wasRecent = isRecentMap[remote.id] ?: false
+            remote.copy(isRecent = wasRecent)
+        }
+
+        if (mergedSeries.isNotEmpty()) {
+            seriesDao.insertSeries(mergedSeries)
         }
 
         if (seasons.isNotEmpty()) {
@@ -38,6 +49,7 @@ class SeriesRoomLocalDateSource(
             )
         )
     }
+
 
     override suspend fun getCachedSeriesForName(name: String): List<SeriesFullData>? {
         val cache = cacheDao.getCacheForKeyword(name)
@@ -108,6 +120,21 @@ class SeriesRoomLocalDateSource(
         seriesDao.clearAllGenres()
         cacheDao.clearAll()
     }
+    override suspend fun getRecentSeries(): List<CachedSeriesDto> {
+        return seriesDao.getRecentSeries()
+    }
+    override suspend fun storeRecentSeries(seriesId: Int) {
+        seriesDao.markSeriesAsViewed(seriesId)
+    }
+    override suspend fun clearRecentSeries() {
+        seriesDao.clearRecentSeries()
+    }
+
+    override suspend fun getSeasonsForSeries(seriesId: Int): List<CachedSeasonDto> {
+        return seriesDao.getSeasonsForSeries(seriesId).first()
+    }
+
+
 
     companion object {
         internal  const val CACHE_VALIDITY_DURATION_MS = 60 * 60 * 1000

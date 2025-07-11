@@ -10,7 +10,7 @@ import com.giraffe.series.model_dto.SeriesResponse
 import io.ktor.http.HttpMethod
 
 
-internal class TmdbSeriesApiRemoteDataSource(
+class TmdbSeriesApiRemoteDataSource(
     val requestBuilder: RequestBuilder,
     val baseRequest: BaseRequest
 ) : SeriesRemoteDataSource {
