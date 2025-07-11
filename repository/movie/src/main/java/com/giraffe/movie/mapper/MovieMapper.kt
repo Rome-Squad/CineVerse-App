@@ -9,6 +9,7 @@ import com.giraffe.movies.entity.Movie
 import kotlinx.datetime.LocalDate
 
 fun MovieCacheDto.toMovie(): Movie {
+    val date = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
     return Movie(
         id = id,
         title = title,
@@ -17,7 +18,7 @@ fun MovieCacheDto.toMovie(): Movie {
         duration = duration,
         posterUrl = posterPath,
         genresID = genresID,
-        releaseYear = LocalDate.parse(releaseDate)
+        releaseYear = date
     )
 }
 
@@ -29,7 +30,7 @@ fun Movie.toMovieCacheDto(): MovieCacheDto {
         voteAverage = rating,
         posterPath = posterUrl,
         genresID = genresID,
-        releaseDate = releaseYear.toString(),
+        releaseDate = releaseYear?.toString(),
         duration = duration,
         isRecent = false
     )
@@ -43,11 +44,12 @@ fun Movie.toMovieDto(): MovieDto {
         voteAverage = rating,
         posterPath = posterUrl,
         genresID = genresID,
-        releaseDate = releaseYear.toString()
+        releaseDate = releaseYear?.toString()
     )
 }
 
 fun MovieDto.toMovie(): Movie {
+    val date = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
     return Movie(
         id = id,
         title = title,
@@ -56,7 +58,7 @@ fun MovieDto.toMovie(): Movie {
         duration = null,
         posterUrl = posterPath,
         genresID = genresID,
-        releaseYear = LocalDate.parse(releaseDate)
+        releaseYear = date
     )
 }
 

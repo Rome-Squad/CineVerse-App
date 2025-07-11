@@ -12,10 +12,10 @@ data class MovieCacheDto(
     val id: Int,
     val title: String,
     val overview: String,
-    val posterPath : String,
+    val posterPath : String?,
     val voteAverage : Float,
     val genresID: List<Int>,
-    val releaseDate : String,
+    val releaseDate : String?,
     val duration : Int?,
     val isRecent : Boolean
 ){
