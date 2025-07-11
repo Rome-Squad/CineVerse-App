@@ -6,7 +6,6 @@ data class Series (
     val name: String,
     val overview: String,
     val rating: Float,
-    val duration: String,
     val posterUrl: String,
     val genreIDs: List<Int>,
     val releaseYear: String,
