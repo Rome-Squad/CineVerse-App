@@ -30,7 +30,8 @@ fun Movie.toMovieCacheDto(): MovieCacheDto {
         posterPath = posterUrl,
         genresID = genresID,
         releaseDate = releaseYear.toString(),
-        duration = duration
+        duration = duration,
+        isRecent = false
     )
 }
 
