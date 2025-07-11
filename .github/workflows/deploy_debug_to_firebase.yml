@@ -1,4 +1,4 @@
-name: Deploy to Firebase
+name: Deploy Debug to Firebase
 
 on:
   pull_request:
@@ -29,6 +29,14 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
 
+      # ✅ Add secrets.properties file before Gradle build
+      - name: Create app/secrets.properties
+        run: |
+          mkdir -p app
+          echo "API_KEY=${{ secrets.API_KEY }}" > app/secrets.properties
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> app/secrets.properties
+          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> app/secrets.properties
+
       - name: Execute Gradle command - assembleDebug
         run: ./gradlew assembleDebug
 
@@ -36,7 +44,7 @@ jobs:
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT}}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
           file: app/build/outputs/apk/debug/app-debug.apk
           releaseNotes: "Automatic build from develop branch"
