@@ -21,4 +21,6 @@ val repositoryModule = module {
             searchHistory = get()
         )
     }
+
+    single<PersonRepository> { PersonRepositoryImpl(get(), get()) }
 }

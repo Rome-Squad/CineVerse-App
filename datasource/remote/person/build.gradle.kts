@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    kotlin("plugin.serialization") version "2.2.0"
 }
 
 android {
@@ -12,6 +13,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
     }
 
     buildTypes {
@@ -33,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":repository:person"))
+    implementation(libs.bundles.ktor)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

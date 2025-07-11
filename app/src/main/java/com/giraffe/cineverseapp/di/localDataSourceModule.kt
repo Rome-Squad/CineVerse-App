@@ -10,6 +10,9 @@ import com.giraffe.movie.MoviesSearchHistoryDataSourceImpl
 import com.giraffe.movie.dao.MoviesSearchHistoryDao
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.movie.datasource.local.MoviesSearchHistoryDataSource
+import com.giraffe.person.PersonLocalDataSourceImp
+import com.giraffe.person.dao.PersonDao
+import com.giraffe.person.local.PersonLocalDataSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
@@ -24,4 +27,6 @@ val localDataSourceModule = module {
     single <MoviesSearchHistoryDataSource> { MoviesSearchHistoryDataSourceImpl(get()) }
     single<MoviesLocalDataSource>{ MovieLocalDataSourceImp(get()) }
 
+    single<PersonDao> { get<CineVerseDatabase>().personDao() }
+    single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }
 }

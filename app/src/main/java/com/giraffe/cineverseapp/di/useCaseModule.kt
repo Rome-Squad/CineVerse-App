@@ -6,6 +6,10 @@ import com.giraffe.explore.usecase.ExploreUseCases
 import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.explore.usecase.InsertSearchKeywordUseCase
 import com.giraffe.movies.usecase.SearchMovieByNameUseCase
+import com.giraffe.person.usecase.ClearRecentPeopleUseCase
+import com.giraffe.person.usecase.GetRecentPeopleUseCase
+import com.giraffe.person.usecase.SearchPeopleByNameUseCase
+import com.giraffe.person.usecase.StoreRecentPersonUseCase
 import org.koin.dsl.module
 import com.giraffe.movies.usecase.*
 
@@ -44,4 +48,9 @@ val useCaseModule = module {
             clearCacheUseCase = ClearCacheUseCase(get())
         )
     }
+
+    single { ClearRecentPeopleUseCase(get()) }
+    single { GetRecentPeopleUseCase(get()) }
+    single { SearchPeopleByNameUseCase(get()) }
+    single { StoreRecentPersonUseCase(get()) }
 }

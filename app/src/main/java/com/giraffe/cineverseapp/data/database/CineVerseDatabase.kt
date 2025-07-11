@@ -10,12 +10,15 @@ import com.giraffe.movie.converter.Converters
 import com.giraffe.movie.dao.MoviesSearchHistoryDao
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.person.dao.PersonDao
+import com.giraffe.person.local.dto.PersonDto
 
 @Database(
     entities = [
         SearchKeywordCacheDto::class,
         MovieCacheDto::class,
         MovieGenreCacheDto::class,
+        PersonDto::class,
     ],
     version = 1
 )
@@ -25,4 +28,5 @@ abstract class CineVerseDatabase : RoomDatabase() {
     abstract fun moviesSearchHistoryDao(): MoviesSearchHistoryDao
 
     abstract fun exploreSearchKeywordDao(): ExploreSearchKeywordDao
+    abstract fun personDao(): PersonDao
 }

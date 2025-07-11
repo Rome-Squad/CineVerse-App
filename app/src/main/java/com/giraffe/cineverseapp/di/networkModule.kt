@@ -6,12 +6,13 @@ import com.giraffe.explore.RemoteExploreDataSourceImpl
 import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
 import com.giraffe.movie.MoviesRemoteDataSourceImpl
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
+import com.giraffe.person.PersonRemoteDataSourceImp
+import com.giraffe.person.remote.PersonRemoteDataSource
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 
 val networkModule = module {
-
     single {
         HttpClientFactory.create()
     }
@@ -29,6 +30,13 @@ val networkModule = module {
 
     single<RemoteExploreDataSource> {
         RemoteExploreDataSourceImpl(
+            httpClient = get(),
+            baseUrl = get(named("BASE_URL")),
+            accessToken = get(named("ACCESS_TOKEN"))
+        )
+    }
+    single<PersonRemoteDataSource> {
+        PersonRemoteDataSourceImp(
             httpClient = get(),
             baseUrl = get(named("BASE_URL")),
             accessToken = get(named("ACCESS_TOKEN"))
