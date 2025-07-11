@@ -1,9 +1,10 @@
-name: Deploy to Firebase
+name: Deploy release to Firebase
 
 on:
   pull_request:
     types: [closed]
     branches: [ main, develop ]
+
 jobs:
   build:
     name: Building and distributing app (Release)
@@ -27,6 +28,13 @@ jobs:
 
       - name: Decode google-services.json
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > app/google-services.json
+
+      - name: 🧾 Create app/secrets.properties
+        run: |
+          mkdir -p app
+          echo "API_KEY=${{ secrets.API_KEY }}" > app/secrets.properties
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> app/secrets.properties
+          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> app/secrets.properties
 
       - name: 📦 Install Android SDK Build Tools
         run: |
@@ -52,3 +60,4 @@ jobs:
           groups: testers
           file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
           releaseNotes: "Automatic release build from develop branch"
+
