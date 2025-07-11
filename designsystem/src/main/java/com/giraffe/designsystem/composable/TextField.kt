@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +32,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.TextField
+import com.giraffe.designsystem.composable.custom.TextFieldColors
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -127,15 +127,12 @@ fun TextField(
                         color = Theme.color.shade.tertiary
                     )
                 },
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Theme.color.background.card,
-                    focusedContainerColor = Theme.color.background.card,
+                colors = TextFieldColors(
+                    unfocusedBorderColor = Color.Transparent,
+                    backgroundColor = Theme.color.background.card,
                     cursorColor = Theme.color.brand.primary,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedTextColor = Theme.color.shade.primary,
-                    unfocusedTextColor = Theme.color.shade.primary
-                ),
+                    textColor = Theme.color.shade.primary
+                )
             )
             if (hasError && !isFocused) {
                 Icon(
