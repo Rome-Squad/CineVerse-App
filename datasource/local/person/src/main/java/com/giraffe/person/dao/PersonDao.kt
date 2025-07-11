@@ -25,4 +25,13 @@ interface PersonDao {
 
     @Query("DELETE FROM persons WHERE isRecent = 1")
     suspend fun clearRecentPeople()
+
+    @Query(
+        """
+    DELETE FROM persons 
+    WHERE isRecent = 0 
+    AND cachedAt <= :currentTime - 3600000
+"""
+    )
+    suspend fun clearCachedPeople(currentTime: Long)
 }
