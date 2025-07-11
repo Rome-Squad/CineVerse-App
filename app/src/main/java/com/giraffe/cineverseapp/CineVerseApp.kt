@@ -10,6 +10,7 @@ import com.giraffe.cineverseapp.di.localDataSourceModule
 import com.giraffe.cineverseapp.di.networkModule
 import com.giraffe.cineverseapp.di.repositoryModule
 import com.giraffe.cineverseapp.di.useCaseModule
+import com.giraffe.cineverseapp.di.viewModelModule
 import com.giraffe.cineverseapp.worker.CacheCleanupWorker
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -26,7 +27,9 @@ class CineVerseApp : Application() {
                 networkModule,
                 repositoryModule,
                 useCaseModule,
-                seriesRemoteDataModule
+                seriesRemoteDataModule,
+                useCaseModule,
+                viewModelModule
             )
         }
         val workRequest = PeriodicWorkRequestBuilder<CacheCleanupWorker>(

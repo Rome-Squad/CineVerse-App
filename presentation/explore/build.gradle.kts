@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":domain:movies"))
     implementation(project(":domain:series"))
     implementation(project(":domain:person"))
+    implementation(project(":domain:explore"))
 
     implementation(libs.koin.androidx.compose)
 

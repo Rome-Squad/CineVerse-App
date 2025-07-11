@@ -1,14 +1,13 @@
 package com.giraffe.designsystem.composable
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -18,6 +17,7 @@ fun SectionTitle(
     title: String,
     clickableText: String,
     modifier: Modifier = Modifier,
+    onClickableText: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -34,7 +34,8 @@ fun SectionTitle(
         Text(
             text = clickableText,
             style = Theme.textStyle.body.md.medium,
-            color = Theme.color.brand.primary
+            color = Theme.color.brand.primary,
+            modifier = Modifier.clickable { onClickableText() }
         )
     }
 }
@@ -45,7 +46,8 @@ fun SectionTitlePreview() {
     CineVerseTheme {
         SectionTitle(
             title = "Movies",
-            clickableText = "ShowMore"
+            clickableText = "ShowMore",
+            onClickableText = {}
         )
     }
 }

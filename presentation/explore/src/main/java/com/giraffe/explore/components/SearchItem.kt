@@ -30,21 +30,20 @@ fun SearchItem(
     text: String,
     isFromHistory: Boolean,
     state: SearchScreenState,
-    onClick: () -> Unit,
-    onArrowClick: () -> Unit
+    onClickItem: (item: String) -> Unit,
+    onClickIcon: () -> Unit
 ) {
-    val iconId = if (isFromHistory) Theme.icons.outline.history else Theme.icons.outline.search
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     Row(
         modifier = modifier
-            .clickable { onClick() }
+            .clickable { onClickItem(text) }
             .padding(vertical = (14.5).dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = iconId),
+            painter = painterResource(id = if (isFromHistory) Theme.icons.outline.history else Theme.icons.outline.search),
             contentDescription = "Search",
 
             modifier = Modifier.size(20.dp),
@@ -59,19 +58,19 @@ fun SearchItem(
             modifier = Modifier.weight(1f)
         )
 
-        if (state.isSearchSuggestionsVisible) {
-            Icon(
-                painter = painterResource(id = Theme.icons.outline.arrowRightUp),
-                contentDescription = "Navigate",
-                modifier = Modifier
-                    .size(20.dp)
-                    .graphicsLayer {
-                        rotationY = if (isRtl) 0f else 180f
-                    }
-                    .clickable { onArrowClick() },
-                tint = Theme.color.shade.tertiary
-            )
-        }
+
+        Icon(
+            painter = painterResource(id = if (state.isSearchSuggestionsVisible) Theme.icons.outline.arrowRightUp else Theme.icons.outline.close),
+            contentDescription = "Navigate",
+            modifier = Modifier
+                .size(20.dp)
+                .graphicsLayer {
+                    rotationY = if (isRtl) 0f else 180f
+                }
+                .clickable { onClickIcon() },
+            tint = Theme.color.shade.tertiary
+        )
+
     }
     HorizontalDivider(
         thickness = 1.dp,
@@ -88,15 +87,19 @@ fun SearchItemPreview() {
             SearchItem(
                 text = "Batman",
                 isFromHistory = true,
-                onClick = {},
                 state = SearchScreenState(),
-                onArrowClick = {})
+                modifier = Modifier,
+                onClickItem = {},
+                onClickIcon = {},
+            )
             SearchItem(
                 text = "The Batman",
                 isFromHistory = false,
-                onClick = {},
                 state = SearchScreenState(),
-                onArrowClick = {})
+                modifier = Modifier,
+                onClickItem = {},
+                onClickIcon = {},
+            )
         }
     }
 }

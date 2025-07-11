@@ -10,10 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +23,6 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.PosterMovie
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.HistoryAndRecentItems
 import com.giraffe.explore.components.NoResult
@@ -48,8 +44,6 @@ fun SearchContent(
     state: SearchScreenState,
     onIntent: (SearchIntent) -> Unit
 ) {
-    //using view model
-    var isListSelected by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val voiceHelper = remember {
@@ -116,7 +110,9 @@ fun SearchContent(
                 } else if (!state.isSearchResultsVisible) {
                     HistoryAndRecentItems(
                         state = state,
-                        onIntent = onIntent
+                        onClickClearAll = {},
+                        onClickItem = {},
+                        onClickIcon = {},
                     )
                 } else {
                     when (state.selectedTab) {
@@ -124,7 +120,7 @@ fun SearchContent(
                             if (state.movieResults.isEmpty()) {
                                 NoResult()
                             } else {
-                                if (isListSelected) {
+                                if (state.isGridSelected) {
                                     ResultsMoviesOrSeriousList(media = state.movieResults)
                                 } else {
                                     ResultsMoviesOrSeriousGrid(
@@ -138,7 +134,7 @@ fun SearchContent(
                             if (state.seriesResults.isEmpty()) {
                                 NoResult()
                             } else {
-                                if (isListSelected) {
+                                if (state.isGridSelected) {
                                     ResultsMoviesOrSeriousList(media = state.seriesResults)
                                 } else {
                                     ResultsMoviesOrSeriousGrid(
@@ -164,23 +160,13 @@ fun SearchContent(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 16.dp),
-                isListSelected = isListSelected,
-                onViewToggle = { newValue -> isListSelected = newValue },
+                isListSelected = !state.isGridSelected,
+                onViewToggle = { onIntent(SearchIntent.onClickToggleView) },
             )
         }
     }
 }
 
-fun MediaStateUi.toPosterMovie(): PosterMovie {
-    return PosterMovie(
-        title = title,
-        imageUri = imageUrl,
-        rating = rate.toFloat(),
-        genres = genresId.toString(),
-        date = releaseDate.toString(),
-        time = duration
-    )
-}
 
 @Preview()
 @Composable

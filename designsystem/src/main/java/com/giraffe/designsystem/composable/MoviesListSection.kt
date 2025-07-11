@@ -48,6 +48,7 @@ fun MoviesListSection(
                 color = Theme.color.shade.primary,
             )
             Text(
+                ///
                 text = stringResource(R.string.show_more),
                 style = Theme.textStyle.body.md.medium,
                 color = Theme.color.brand.primary,

@@ -1,9 +1,7 @@
 package com.giraffe.explore
 
-import com.giraffe.movies.entity.Movie
-import com.giraffe.person.entity.Person
-import com.giraffe.series.entity.Series
-import kotlinx.datetime.LocalDate
+import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.explore.entity.SearchKeyword
 
 
 data class SearchScreenState(
@@ -18,65 +16,96 @@ data class SearchScreenState(
 
     val isVoiceRecording: Boolean = false,
 
-    ///////////////////////////
-    val movieResults: List<MediaStateUi> = emptyList(),
-    val seriesResults: List<MediaStateUi> = emptyList(),
-    val actorResults: List<ActorStateUi> = emptyList(),
+    val movieResults: List<PosterMovie> = emptyList(),
+    val seriesResults: List<PosterMovie> = emptyList(),
+    val actorResults: List<PosterMovie> = emptyList(),
 
-    val searchHistory: List<String> = emptyList(),
-    val searchSuggestions: List<String> = emptyList(),
-    val recentViews: List<MediaStateUi> = emptyList()
+    val resultSearchKeyword: List<SearchKeywordResults> = listOf(
+        SearchKeywordResults(
+            keyword = "",
+            isFromSearchHistory = true,
+        )
+    ),
+
+    val recentViews: List<PosterMovie> = emptyList(),
+    val isGridSelected: Boolean = true
 )
 
 enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
 
-fun Movie.toMediaStateUi(): MediaStateUi {
-    return MediaStateUi(
-        id = id,
-        title = title,
-        imageUrl = posterUrl,
-        rate = rate.toString(),
-        genresId = genresID,
-        releaseDate = releaseYear,
-        duration = duration
+//fun Movie.toMovieUi(): MovieStateUi {
+//    return MovieStateUi(
+//        id = id,
+//        title = title,
+//        imageUrl = posterUrl,
+//        rate = rating.toString(),
+//        genres = genresID,
+//        releaseDate = releaseYear,
+//        duration = duration.toString()
+//    )
+//}
+//
+//fun Series.toSeriesUi(): SeriesStateUi {
+//    return SeriesStateUi(
+//        id = id,
+//        title = title,
+//        imageUrl = posterUrl,
+//        rate = rate.toString(),
+//        genres = genresID,
+//        releaseDate = releaseYear,
+//    )
+//}
+//
+//fun Person.toActorStateUi(): ActorStateUi {
+//    return ActorStateUi(
+//        id = id,
+//        name = name,
+//        imageUrl = imageUrl.toString()
+//    )
+//}
+
+fun SearchKeyword.toSearchKeywordResults(): SearchKeywordResults {
+    return SearchKeywordResults(
+        keyword = keyword,
+        isFromSearchHistory = isFromSearchHistory
     )
 }
 
-fun Series.toMediaStateUi(): MediaStateUi {
-    return MediaStateUi(
-        id = id,
-        title = title,
-        imageUrl = posterUrl,
-        rate = rate.toString(),
-        genresId = genresID,
-        releaseDate = releaseYear,
-        duration = duration
-    )
-}
+//data class RecentViewsStateUi(
+//    val title: String,
+//    val imageUrl: String,
+//    val rate: String? = null
+//)
 
-fun Person.toActorStateUi(): ActorStateUi {
-    return ActorStateUi(
-        id = id,
-        name = name,
-        imageUrl = imageUrl
-    )
-}
+//data class MovieStateUi(
+//    val id: Int,
+//    val title: String,
+//    val imageUrl: String,
+//    val rate: String,
+//    val genres: List<Int>,
+//    val releaseDate: LocalDate,
+//    val duration: String
+//)
+//
+//data class SeriesStateUi(
+//    val id: Int,
+//    val title: String,
+//    val imageUrl: String,
+//    val rate: String,
+//    val genres: List<Int>,
+//    val releaseDate: LocalDate,
+//)
+//
+//
+//data class ActorStateUi(
+//    val id: Int,
+//    val name: String,
+//    val imageUrl: String,
+//)
 
-
-data class MediaStateUi(
-    val id: Int,
-    val title: String,
-    val imageUrl: String,
-    val rate: String,
-    val genresId: List<Int>,
-    val releaseDate: LocalDate,
-    val duration: String
-)
-
-data class ActorStateUi(
-    val id: Int,
-    val name: String,
-    val imageUrl: String,
+data class SearchKeywordResults(
+    val keyword: String,
+    val isFromSearchHistory: Boolean,
 )

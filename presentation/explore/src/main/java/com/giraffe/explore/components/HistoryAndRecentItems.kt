@@ -16,70 +16,53 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.PosterMovie
 import com.giraffe.explore.R
-import com.giraffe.explore.SearchIntent
 import com.giraffe.explore.SearchScreenState
-import com.giraffe.explore.toPosterMovie
 
 @Composable
 fun HistoryAndRecentItems(
     state: SearchScreenState,
-    onIntent: (SearchIntent) -> Unit
+    onClickClearAll: () -> Unit,
+    onClickItem: (item: String) -> Unit,
+    onClickIcon: () -> Unit
 ) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        if (state.isSearchHistoryVisible) {
-            SectionTitle(
-                modifier = Modifier
-                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-                title = stringResource(R.string.history),
-                clickableText = stringResource(R.string.clear_all)
-            )
-        } else {
-            SectionTitle(
-                modifier = Modifier
-                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-                title = stringResource(R.string.search_suggestions),
-                clickableText = ""
-            )
-        }
+        SectionTitle(
+            modifier = Modifier
+                .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+            title = if (state.isSearchHistoryVisible) stringResource(R.string.history) else stringResource(
+                R.string.search_suggestions
+            ),
+            clickableText = if (state.isSearchHistoryVisible) stringResource(R.string.clear_all) else "",
+            onClickableText = onClickClearAll
+        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
+            items(state.resultSearchKeyword) {
+                SearchItem(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
+                    text = it.keyword,
+                    isFromHistory = it.isFromSearchHistory,
+                    onClickItem = onClickItem,
+                    onClickIcon = onClickIcon,
+                    state = state
+                )
+            }
             if (state.isSearchHistoryVisible) {
-                items(state.searchHistory) {
-                    SearchItem(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp),
-                        text = it,
-                        isFromHistory = true,
-                        onClick = {},
-                        onArrowClick = {},
-                        state = state
-                    )
-                }
                 item {
                     MoviesListSection(
                         modifier = Modifier
                             .padding(top = 16.dp),
                         title = stringResource(R.string.you_recent_viewed),
-                        movies = state.recentViews.map { it.toPosterMovie() }
+                        movies = state.recentViews
                     )
                 }
-            }
-            items(state.searchSuggestions) {
-                SearchItem(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    text = it,
-                    isFromHistory = false,
-                    onClick = {},
-                    onArrowClick = { onIntent(SearchIntent.OnChooseSuggestion(it)) },
-                    state = state
-                )
             }
         }
     }
@@ -166,7 +149,9 @@ private fun HistoryAndRecentItemsPreview() {
     CineVerseTheme {
         HistoryAndRecentItems(
             state = SearchScreenState(),
-            onIntent = {}
+            onClickClearAll = {},
+            onClickItem = {},
+            onClickIcon = {}
         )
     }
 }
