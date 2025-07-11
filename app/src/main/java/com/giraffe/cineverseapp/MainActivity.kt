@@ -19,8 +19,8 @@ val getKeywords: GetSearchKeywordsUseCase by inject()
         setContent {
             CineVerseTheme {
                 LaunchedEffect(Unit) {
-                    val keywords = getKeywords.execute("Batman")
-                    Log.d("TAG", "onCreate: $keywords")
+//                    val keywords = getKeywords.execute("Batman")
+//                    Log.d("TAG", "onCreate: $keywords")
                 }
             }
         }

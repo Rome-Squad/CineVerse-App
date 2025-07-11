@@ -6,11 +6,13 @@ import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.series.SeriesRoomLocalDateSource
 import com.giraffe.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.person.PersonLocalDataSourceImp
+import com.giraffe.person.dao.PersonDao
+import com.giraffe.person.local.PersonLocalDataSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
     single { get<CineVerseDatabase>().movieDao() }
-
     single<ExploreSearchKeywordDao> { get<CineVerseDatabase>().exploreSearchKeywordDao() }
     single<LocalExploreDataSource> {
         LocalExploreDataSourceImpl(get())
@@ -18,4 +20,7 @@ val localDataSourceModule = module {
     single { get<CineVerseDatabase>().seriesDao() }
     single { get<CineVerseDatabase>().searchCacheDao() }
     single<SeriesLocalDateSource> { SeriesRoomLocalDateSource(get(), get()) }
+    single<LocalExploreDataSource> { LocalExploreDataSourceImpl(get()) }
+    single<PersonDao> { get<CineVerseDatabase>().personDao() }
+    single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }
 }

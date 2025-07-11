@@ -1,0 +1,15 @@
+package com.giraffe.person.exception
+
+abstract class PersonException : Exception()
+class PersonNotFoundException : PersonException()
+class RecentPeopleNotFoundException : PersonException()
+class SearchResultNotFoundException : PersonException()
+class InvalidPersonIdException : PersonException()
+class InvalidPersonNameException : PersonException()
+class NetworkException : PersonException()
+class UnknownException : PersonException()
+class InvalidApiKeyException : PersonException()
+class RateLimitExceededException : PersonException()
+class UnauthorizedAccessException : PersonException()
+class ForbiddenAccessException : PersonException()
+class ServerErrorException : PersonException()
