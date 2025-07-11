@@ -11,33 +11,34 @@ import com.giraffe.person.exception.ServerErrorException
 import com.giraffe.person.exception.UnauthorizedAccessException
 import com.giraffe.person.exception.UnknownException
 
-suspend fun <T> safeCall(execute: suspend () -> T): T {
-    return try {
-        execute()
-    } catch (e: Exception) {
-        throw e.toDomainException()
-    }
-}
-
-private fun Exception.toDomainException(): PersonException = when (this) {
-
-    is ApiException -> {
-        when (this.code) {
-            7 -> InvalidApiKeyException()
-            34 -> PersonNotFoundException()
-            401 -> UnauthorizedAccessException()
-            403 -> ForbiddenAccessException()
-            429 -> RateLimitExceededException()
-            in 500..599 -> ServerErrorException()
-            else -> UnknownException()
+object SafeCall {
+    suspend operator fun <T> invoke(execute: suspend () -> T): T {
+        return try {
+            execute()
+        } catch (e: Exception) {
+            throw e.toDomainException()
         }
     }
 
-    is java.net.UnknownHostException,
-    is java.net.SocketTimeoutException -> NetworkException()
+    private fun Exception.toDomainException(): PersonException = when (this) {
+        is ApiException -> {
+            when (this.code) {
+                7 -> InvalidApiKeyException()
+                34 -> PersonNotFoundException()
+                401 -> UnauthorizedAccessException()
+                403 -> ForbiddenAccessException()
+                429 -> RateLimitExceededException()
+                in 500..599 -> ServerErrorException()
+                else -> UnknownException()
+            }
+        }
 
-    is kotlinx.serialization.SerializationException,
-    is java.lang.IllegalArgumentException -> InvalidPersonIdException()
+        is java.net.UnknownHostException,
+        is java.net.SocketTimeoutException -> NetworkException()
 
-    else -> UnknownException()
+        is kotlinx.serialization.SerializationException,
+        is java.lang.IllegalArgumentException -> InvalidPersonIdException()
+
+        else -> UnknownException()
+    }
 }

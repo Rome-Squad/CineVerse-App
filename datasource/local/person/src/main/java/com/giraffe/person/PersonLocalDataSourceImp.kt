@@ -1,10 +1,10 @@
 package com.giraffe.person
 
 import com.giraffe.person.dao.PersonDao
-import com.giraffe.person.local.PersonLocalDatasource
+import com.giraffe.person.local.PersonLocalDataSource
 import com.giraffe.person.local.dto.PersonDto
 
-class PersonLocalDatasourceImp(private val dao: PersonDao) : PersonLocalDatasource {
+class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSource {
     override suspend fun storePerson(person: PersonDto) = dao.storePerson(person)
     override suspend fun searchByName(personName: String) = dao.searchByName(personName)
     override suspend fun getPersonById(id: Int) = dao.getPersonById(id)

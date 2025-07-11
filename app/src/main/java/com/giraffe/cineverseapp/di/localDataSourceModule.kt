@@ -4,9 +4,9 @@ import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.explore.LocalExploreDataSourceImpl
 import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.person.PersonLocalDatasourceImp
+import com.giraffe.person.PersonLocalDataSourceImp
 import com.giraffe.person.dao.PersonDao
-import com.giraffe.person.local.PersonLocalDatasource
+import com.giraffe.person.local.PersonLocalDataSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
@@ -14,5 +14,5 @@ val localDataSourceModule = module {
     single<ExploreSearchKeywordDao> { get<CineVerseDatabase>().exploreSearchKeywordDao() }
     single<LocalExploreDataSource> { LocalExploreDataSourceImpl(get()) }
     single<PersonDao> { get<CineVerseDatabase>().personDao() }
-    single<PersonLocalDatasource> { PersonLocalDatasourceImp(get()) }
+    single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }
 }

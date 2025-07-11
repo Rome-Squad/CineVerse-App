@@ -2,7 +2,7 @@ package com.giraffe.person.local
 
 import com.giraffe.person.local.dto.PersonDto
 
-interface PersonLocalDatasource {
+interface PersonLocalDataSource {
     suspend fun storePerson(person: PersonDto)
     suspend fun searchByName(personName: String): List<PersonDto>
     suspend fun getPersonById(id: Int): PersonDto
