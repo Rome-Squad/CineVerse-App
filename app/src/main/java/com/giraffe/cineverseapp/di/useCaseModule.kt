@@ -37,6 +37,7 @@ val useCaseModule = module {
     single { InsertMoviesUseCase(get()) }
     single { InsertGenresUseCase(get()) }
     single { ClearCacheUseCase(get()) }
+    single { SetMovieRecentUseCase(get()) }
 
     single {
         MoviesUseCases(
@@ -45,7 +46,8 @@ val useCaseModule = module {
             getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
             insertMoviesUseCase = InsertMoviesUseCase(get()),
             insertGenresUseCase = InsertGenresUseCase(get()),
-            clearCacheUseCase = ClearCacheUseCase(get())
+            clearCacheUseCase = ClearCacheUseCase(get()),
+            setMovieRecentUseCase = SetMovieRecentUseCase(get())
         )
     }
 
