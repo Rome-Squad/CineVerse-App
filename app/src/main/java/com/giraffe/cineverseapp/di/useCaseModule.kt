@@ -5,18 +5,23 @@ import com.giraffe.explore.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.explore.usecase.ExploreUseCases
 import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.explore.usecase.InsertSearchKeywordUseCase
+import com.giraffe.movies.usecase.SearchMovieByNameUseCase
 import com.giraffe.series.usecase.*
 import com.giraffe.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.person.usecase.StoreRecentPersonUseCase
 import org.koin.dsl.module
+import com.giraffe.movies.usecase.*
 
 val useCaseModule = module {
+
+    // Explore Use Cases
     single { GetSearchKeywordsUseCase(get()) }
     single { InsertSearchKeywordUseCase(get()) }
     single { DeleteSearchKeywordUseCase(get()) }
     single { ClearSearchHistoryUseCase(get()) }
+
     single {
         ExploreUseCases(
             getSearchKeywords = GetSearchKeywordsUseCase(get()),
@@ -31,6 +36,27 @@ val useCaseModule = module {
     single { SearchSeriesByNameUseCase(get()) }
     single { StoreRecentSeriesUseCase(get()) }
 
+
+    // Movies Use Cases
+    single { SearchMovieByNameUseCase(get()) }
+    single { GetMovieGenresUseCase(get()) }
+    single { GetMoviesByGenreUseCase(get()) }
+    single { InsertMoviesUseCase(get()) }
+    single { InsertGenresUseCase(get()) }
+    single { ClearCacheUseCase(get()) }
+    single { SetMovieRecentUseCase(get()) }
+
+    single {
+        MoviesUseCases(
+            searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
+            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
+            getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
+            insertMoviesUseCase = InsertMoviesUseCase(get()),
+            insertGenresUseCase = InsertGenresUseCase(get()),
+            clearCacheUseCase = ClearCacheUseCase(get()),
+            setMovieRecentUseCase = SetMovieRecentUseCase(get())
+        )
+    }
 
     single { ClearRecentPeopleUseCase(get()) }
     single { GetRecentPeopleUseCase(get()) }

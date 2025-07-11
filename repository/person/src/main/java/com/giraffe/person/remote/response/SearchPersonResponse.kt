@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchPersonResponse(
     val page: Int,
+    @SerialName("results")
     val people: List<PersonResponse>,
     @SerialName("total_pages")
     val totalPages: Int,

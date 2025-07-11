@@ -148,6 +148,11 @@ dependencies {
     //ktor
     implementation(libs.bundles.ktor)
 
+    //worker
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.koin.androidx.workmanager)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
