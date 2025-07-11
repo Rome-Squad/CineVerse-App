@@ -29,7 +29,7 @@ class InsertMoviesUseCaseTest {
                 id = 1,
                 title = "Movie 1",
                 description = "Some description",
-                rate = 7.5f,
+                rating = 7.5f,
                 duration = 120,
                 posterUrl = "https://example.com/movie1.jpg",
                 genresID = listOf(1, 2),

@@ -5,7 +5,7 @@ import com.giraffe.movies.repository.MoviesRepository
 class ClearCacheUseCase(
     private val repository: MoviesRepository
 ) {
-    suspend fun execute() {
+    suspend operator fun invoke() {
         repository.clearCache()
     }
 }

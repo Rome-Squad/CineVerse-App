@@ -21,7 +21,7 @@ class ClearCacheUseCaseTest {
     @Test
     fun `should call repository to clear cache`() = runTest {
         // When
-        useCase.execute()
+        useCase()
 
         // Then
         coVerify { repository.clearCache() }

@@ -19,8 +19,9 @@ val remote: MoviesRemoteDataSource by inject()
         setContent {
             CineVerseTheme {
                 LaunchedEffect(Unit) {
-                    val keywords = remote.getMovieById(268)
-                    Log.d("TAG", "onCreate: $keywords")
+                    //val movie = remote.getMovieById(268)
+                    val movie = remote.getMoviesByName("Batman")
+                    Log.d("TAG", "onCreate: $movie")
                 }
             }
         }

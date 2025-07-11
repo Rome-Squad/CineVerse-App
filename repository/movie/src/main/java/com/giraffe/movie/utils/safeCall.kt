@@ -20,12 +20,12 @@ suspend inline fun <reified T> safeCall(
     return try {
         block()
     } catch (e: Throwable) {
-        throw mapToLocalDatabaseException(e)
+        throw mapToMoviesException(e)
     }
 }
 
 
-fun mapToLocalDatabaseException(e: Throwable): MoviesException {
+fun mapToMoviesException(e: Throwable): MoviesException {
     return when (e) {
         //network exceptions
         is NoInternetNetworkException -> ServerError()

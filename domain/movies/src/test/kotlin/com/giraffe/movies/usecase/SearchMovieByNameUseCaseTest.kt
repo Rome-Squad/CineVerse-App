@@ -31,7 +31,7 @@ class SearchMovieByNameUseCaseTest {
                 id = 1,
                 title = "Inception",
                 description = "A mind-bending thriller",
-                rate = 8.8f,
+                rating = 8.8f,
                 duration = 148,
                 posterUrl = "https://example.com/inception.jpg",
                 genresID = listOf(878, 28),
