@@ -6,6 +6,7 @@ junitJupiter = "5.13.2"
 junitJupiterApi = "5.13.2"
 koinAndroid = "3.5.6"
 junitJupiterParams = "5.13.2"
+koinAndroidxWorkmanager = "4.1.0"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -43,6 +44,7 @@ uiTextGoogleFonts = "1.8.3"
 gson = "2.13.1"
 datastore = "1.1.7"
 ktorVersion="3.2.1"
+workRuntimeKtx = "2.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,6 +68,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitJupiterParams" }
+koin-androidx-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koinAndroidxWorkmanager" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
@@ -100,6 +103,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorVersion" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 
 
 

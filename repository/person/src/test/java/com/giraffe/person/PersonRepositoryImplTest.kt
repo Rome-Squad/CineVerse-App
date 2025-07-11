@@ -1,7 +1,6 @@
 package com.giraffe.person
 
 import com.giraffe.person.entity.Person
-import com.giraffe.person.entity.Role
 import com.giraffe.person.exception.PersonException
 import com.giraffe.person.local.PersonLocalDataSource
 import com.giraffe.person.local.dto.PersonDto
@@ -10,7 +9,6 @@ import com.giraffe.person.remote.response.PersonResponse
 import com.giraffe.person.remote.response.SearchPersonResponse
 import com.giraffe.person.repository.PersonRepository
 import com.giraffe.person.util.toEntity
-import com.giraffe.person.util.toStr
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -27,7 +25,7 @@ class PersonRepositoryImplTest {
     private val remoteDataSource: PersonRemoteDataSource = mockk(relaxed = true)
     private val localDataSource: PersonLocalDataSource = mockk(relaxed = true)
     private val keyword = "Mohannad"
-    private val dummyPersonDto = PersonDto(id = 5, name = "Mohannad", role = Role.Director.toStr())
+    private val dummyPersonDto = PersonDto(id = 5, name = "Mohannad", role = "Acting")
     private val dummyPersonResponse = PersonResponse(
         adult = false,
         gender = 1,

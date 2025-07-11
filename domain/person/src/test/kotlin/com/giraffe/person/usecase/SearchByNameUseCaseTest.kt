@@ -1,7 +1,6 @@
 package com.giraffe.person.usecase
 
 import com.giraffe.person.entity.Person
-import com.giraffe.person.entity.Role
 import com.giraffe.person.exception.SearchResultNotFoundException
 import com.giraffe.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
@@ -17,7 +16,7 @@ class SearchByNameUseCaseTest {
     private lateinit var searchPeopleByNameUseCase: SearchPeopleByNameUseCase
 
     val expectedList = listOf(
-        Person(1, "Tarek", Role.ScreenPlay, "url")
+        Person(1, "Tarek", "Acting", "url")
     )
 
     @BeforeEach

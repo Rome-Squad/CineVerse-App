@@ -1,7 +1,6 @@
 package com.giraffe.person.usecase
 
 import com.giraffe.person.entity.Person
-import com.giraffe.person.entity.Role
 import com.giraffe.person.exception.RecentPeopleNotFoundException
 import com.giraffe.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
@@ -16,7 +15,7 @@ class GetRecentPeopleUseCaseTest {
     private lateinit var getRecentPeopleUseCase: GetRecentPeopleUseCase
     private val repository: PersonRepository = mockk(relaxed = true)
 
-    private val dummyPerson = Person(id = 5, name = "Mohannad", role = Role.Director)
+    private val dummyPerson = Person(id = 5, name = "Mohannad", role = "Acting")
     private val dummyPeople = listOf(dummyPerson, dummyPerson, dummyPerson)
 
     @BeforeEach
