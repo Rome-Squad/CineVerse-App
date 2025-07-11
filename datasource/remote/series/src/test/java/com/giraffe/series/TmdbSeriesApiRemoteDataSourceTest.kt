@@ -47,12 +47,7 @@ class TmdbSeriesApiRemoteDataSourceTest {
         coEvery { requestBuilder.request(any()).body<SeriesResponse>() } returns mockResponse
 
         // When
-        val result = dataSource.getSeriesByName(
-            name = "Batman",
-            language = "en-US",
-            includeAdult = false,
-            page = 1
-        )
+        val result = dataSource.getSeriesByName(name = "Batman", page = 1)
 
         // Then
         assertEquals(expectedSeries, result)
@@ -91,7 +86,7 @@ class TmdbSeriesApiRemoteDataSourceTest {
         coEvery { requestBuilder.request(any()).body<GenresResponse>() } returns mockResponse
 
         // When
-        val result = dataSource.getGenres("en")
+        val result = dataSource.getGenres()
 
         // Then
         assertEquals(expectedGenres, result)
