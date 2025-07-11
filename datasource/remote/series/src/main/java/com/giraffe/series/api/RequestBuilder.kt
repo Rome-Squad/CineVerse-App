@@ -1,9 +1,18 @@
 package com.giraffe.series.api
 
+import com.giraffe.series.exceptions.ClientException
 import com.giraffe.series.exceptions.InvalidRequestException
 import com.giraffe.series.exceptions.InvalidRequestMethodException
+import com.giraffe.series.exceptions.NetworkExceptios
+import com.giraffe.series.exceptions.NoInternetNetworkException
+import com.giraffe.series.exceptions.RedirectException
+import com.giraffe.series.exceptions.RequestTimeoutNetworkException
+import com.giraffe.series.exceptions.SerializationNetworkException
+import com.giraffe.series.exceptions.ServerNetworkException
+import com.giraffe.series.exceptions.TooManyRequestsNetworkException
+import com.giraffe.series.exceptions.UnknownNetworkException
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
+import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -15,22 +24,31 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
+import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerializationException
 
-class RequestBuilder(
+interface RequestBuilder {
+    suspend fun request(baseRequest: BaseRequest): HttpResponse
+}
+
+internal class DefaultRequestBuilder(
     private val httpClient: HttpClient
-) {
-    suspend inline fun <reified T> request(baseRequest: BaseRequest): T {
+) : RequestBuilder {
+
+    override suspend fun request(baseRequest: BaseRequest): HttpResponse {
         return withContext(Dispatchers.IO) {
             if (!baseRequest.validate()) {
                 throw InvalidRequestException()
             }
-            executeRequest(baseRequest).body()
+            handleRequest {
+                executeRequest(baseRequest)
+            }
         }
     }
 
-    suspend fun executeRequest(baseRequest: BaseRequest): HttpResponse {
+    private suspend fun executeRequest(baseRequest: BaseRequest): HttpResponse {
         val url = baseRequest.buildFullUrl()
         return when (baseRequest.method) {
             HttpMethod.Companion.Get -> httpClient.get(url) {
@@ -86,6 +104,39 @@ class RequestBuilder(
                 contentType(ContentType.Application.Json)
                 setBody(body)
             }
+        }
+    }
+
+    private suspend fun handleRequest(request: suspend () -> HttpResponse): HttpResponse {
+        val response = try {
+            request()
+        } catch (e: Throwable) {
+            throw mapToNetworkException(e)
+        }
+
+        return when (response.status.value) {
+            in 200..299 -> response
+
+            in 300..399 -> throw RedirectException()
+
+            408 -> throw RequestTimeoutNetworkException()
+
+            429 -> throw TooManyRequestsNetworkException()
+
+            in 400..499 -> throw ClientException()
+
+            in 500..599 -> throw ServerNetworkException()
+
+            else -> throw UnknownNetworkException()
+        }
+    }
+
+    private fun mapToNetworkException(e: Throwable): NetworkExceptios {
+        return when (e) {
+            is UnresolvedAddressException -> NoInternetNetworkException()
+            is SerializationException -> SerializationNetworkException()
+            is NoTransformationFoundException -> SerializationNetworkException()
+            else -> UnknownNetworkException()
         }
     }
 }

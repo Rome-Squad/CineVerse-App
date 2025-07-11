@@ -2,6 +2,7 @@
 agp = "8.10.1"
 coilCompose = "3.2.0"
 coilComposeVersion = "2.4.0"
+coreTesting = "2.2.0"
 junitJupiter = "5.13.2"
 junitJupiterApi = "5.13.2"
 junitJupiterParams = "5.13.2"
@@ -22,6 +23,7 @@ material = "1.12.0"
 jetbrainsKotlinJvm = "2.2.0"
 kotlinxCoroutinesTest = "1.10.2"
 mockk = "1.14.4"
+mockkMockk = "1.13.8"
 mockkVersion = "1.13.9"
 truth = "1.4.4"
 turbine = "1.2.1"
@@ -51,6 +53,7 @@ junitJupiterVersion = "5.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
@@ -77,6 +80,7 @@ ktor-client-content-negotiation-v313 = { module = "io.ktor:ktor-client-content-n
 ktor-serialization-kotlinx-json-v313 = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorSerializationKotlinxJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-v1138 = { module = "io.mockk:mockk", version.ref = "mockkMockk" }
 mockk-v1139 = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }

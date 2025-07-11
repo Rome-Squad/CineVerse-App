@@ -7,6 +7,7 @@ import com.giraffe.series.model.GenreDto
 import com.giraffe.series.model.SeriesDto
 import com.giraffe.series.model_dto.GenresResponse
 import com.giraffe.series.model_dto.SeriesResponse
+import io.ktor.client.call.body
 import io.ktor.http.HttpMethod
 
 
@@ -32,7 +33,7 @@ class TmdbSeriesApiRemoteDataSource(
             .addParameter(key = languageKey, value = language)
             .addParameter(key = pageKey, value = page)
             .addParameter(key = queryKey, value = name)
-        val response = requestBuilder.request<SeriesResponse>(baseRequest)
+        val response = requestBuilder.request(baseRequest).body<SeriesResponse>()
         return response.results
 
     }
@@ -57,7 +58,7 @@ class TmdbSeriesApiRemoteDataSource(
             .addParameter(key = pageKey, value = page)
             .addParameter(key = withGenresKey, value = genreId)
             .addParameter(key = includeNullFirstAirDatesKey, value = includeNullFirstAirDates)
-        val response = requestBuilder.request<SeriesResponse>(baseRequest)
+        val response = requestBuilder.request(baseRequest).body<SeriesResponse>()
         return response.results
     }
 
@@ -66,7 +67,7 @@ class TmdbSeriesApiRemoteDataSource(
         baseRequest.endpoint(endpoint)
             .method(HttpMethod.Get)
             .addParameter(key = languageKey, value = language)
-        val response = requestBuilder.request<GenresResponse>(baseRequest)
+        val response = requestBuilder.request(baseRequest).body<GenresResponse>()
         return response.genres
     }
 }

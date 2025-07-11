@@ -4,7 +4,7 @@ import io.ktor.http.HttpMethod
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
- class BaseRequest(
+class BaseRequest(
     private val baseURL: String,
     accessToken: String
 ) {

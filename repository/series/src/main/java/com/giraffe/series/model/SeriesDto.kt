@@ -47,10 +47,10 @@ data class CachedSeriesGenreDto(
 data class SeriesDto(
     val id: Int,
     val name: String,
-    @SerialName("vote_count")
-    val voteCount: Int,
+    val adult: Boolean = false,
     val overview: String,
     val popularity: Double,
+    val seasons: List<SeasonDto> = emptyList(),
     @SerialName("original_name")
     val originalName: String,
     @SerialName("first_air_date")
@@ -61,12 +61,29 @@ data class SeriesDto(
     val backdropPath: String?,
     @SerialName("vote_average")
     val voteAverage: Double,
-    val adult: Boolean = false,
+    @SerialName("vote_count")
+    val voteCount: Int,
     @SerialName("genre_ids")
     val genreIds: List<Int> = emptyList(),
     @SerialName("origin_country")
     val originCountry: List<String> = emptyList(),
     @SerialName("original_language")
     val originalLanguage: String,
-)
+    )
 
+@Serializable
+data class SeasonDto(
+    val id: Int,
+    val name: String,
+    val overview: String,
+    @SerialName("vote_average")
+    val voteAverage: Float,
+    @SerialName("poster_path")
+    val posterPath: String,
+    @SerialName("season_number")
+    val seasonNumber: Int,
+    @SerialName("air_date")
+    val airDate: String,
+    @SerialName("episode_count")
+    val episodeCount: Int
+)
