@@ -1,6 +1,6 @@
 package com.giraffe.person.exception
 
-abstract class PersonException(message: String = "") : Exception(message)
+abstract class PersonException : Exception()
 class PersonNotFoundException : PersonException()
 class RecentPeopleNotFoundException : PersonException()
 class SearchResultNotFoundException : PersonException()
