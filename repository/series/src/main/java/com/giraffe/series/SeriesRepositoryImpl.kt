@@ -15,45 +15,40 @@ class SeriesRepositoryImpl(
 ) : SeriesRepository {
 
     override suspend fun searchSeriesByName(seriesName: String) = safeCall {
-        local.getCachedSeriesForName(seriesName)
-            ?.map {
-                val seasons = it.seasons.map { s -> s.toEntity() }
-                it.series.toEntity(seasons)
-            }.orEmpty()
-            .ifEmpty {
-                remote.getSeriesByName(seriesName)
-                    .map { it.toEntity() }
-                    .also { seriesList ->
-                        val cachedSeries = seriesList.map { it.toCachedDto() }
-                        local.saveSearchResult(
-                            name = seriesName,
-                            seriesList = cachedSeries,
-                            seasons = emptyList(),
-                            genres = emptyList()
-                        )
-                    }
+        val cached = local.getCachedSeriesForName(seriesName)
+        if (cached.isNotEmpty()) {
+            cached.map { dto ->
+                val seasons = local.getSeasonsForSeries(dto.id).map { it.toEntity() }
+                dto.toEntity(seasons)
             }
+        } else {
+            val remoteSeries = remote.getSeriesByName(seriesName)
+            val cachedSeries = remoteSeries.map { it.toCachedDto() }
+
+            local.saveSearchResult(
+                seriesList = cachedSeries
+            )
+
+            remoteSeries.map { it.toEntity() }
+        }
     }
 
     override suspend fun getSeriesGenres(): List<SeriesGenre> = safeCall {
-        local.getCachedGenres()
-            .map { it.toEntity() }
-            .ifEmpty {
-                val remoteGenres = remote.getGenres().map { it.toEntity() }
-                val cachedGenres = remoteGenres.map { it.toCachedDto() }
-
-                local.saveGenres(cachedGenres)
-                remoteGenres
-            }
+        val cachedGenres = local.getCachedGenres()
+        if (cachedGenres.isNotEmpty()) {
+            cachedGenres.map { it.toEntity() }
+        } else {
+            val remoteGenres = remote.getGenres().map { it.toEntity() }
+            local.saveGenres(remoteGenres.map { it.toCachedDto() })
+            remoteGenres
+        }
     }
 
     override suspend fun getRecentSeries(): List<Series> = safeCall {
-        val recent = local.getRecentSeries()
-        val recentSeriesList = recent.map { series ->
-            val seasons = local.getSeasonsForSeries(series.id)
-            series.toEntity(seasons.map { it.toEntity() })
+        local.getRecentSeries().map { dto ->
+            val seasons = local.getSeasonsForSeries(dto.id).map { it.toEntity() }
+            dto.toEntity(seasons)
         }
-        recentSeriesList
     }
 
     override suspend fun storeRecentSeries(series: Series) = safeCall {
@@ -63,5 +58,4 @@ class SeriesRepositoryImpl(
     override suspend fun clearRecentSeries() = safeCall {
         local.clearRecentSeries()
     }
-
 }

@@ -18,8 +18,7 @@ val localDataSourceModule = module {
         LocalExploreDataSourceImpl(get())
     }
     single { get<CineVerseDatabase>().seriesDao() }
-    single { get<CineVerseDatabase>().searchCacheDao() }
-    single<SeriesLocalDateSource> { SeriesRoomLocalDateSource(get(), get()) }
+    single<SeriesLocalDateSource> { SeriesRoomLocalDateSource(get()) }
     single<LocalExploreDataSource> { LocalExploreDataSourceImpl(get()) }
     single<PersonDao> { get<CineVerseDatabase>().personDao() }
     single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }

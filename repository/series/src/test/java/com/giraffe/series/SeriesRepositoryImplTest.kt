@@ -45,7 +45,6 @@ class SeriesRepositoryImplTest {
    name = "Vikings",
    overview = "desc",
    rating = 8.0f,
-   duration = "45m",
    posterUrl = "poster",
    genreIDs = listOf(1),
    releaseYear = "2015"
@@ -57,7 +56,7 @@ class SeriesRepositoryImplTest {
  )
 
  private val cachedSeries = listOf(
-  CachedSeriesDto(1, "Vikings", "desc", 8.0f, "45m", "poster", listOf(1), "2015")
+  CachedSeriesDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
  )
 
  private val cachedSeasons = listOf(
@@ -77,12 +76,12 @@ class SeriesRepositoryImplTest {
 
  @Test
  fun `searchSeriesByName returns cached result if available`() = runTest {
-  coEvery { local.getCachedSeriesForName("vikings") } returns listOf(
-   SeriesFullData(cachedSeries[0], cachedSeasons, cachedGenres)
-  )
+  coEvery { local.getCachedSeriesForName("vikings") } returns cachedSeries
+  coEvery { local.getSeasonsForSeries(1) } returns cachedSeasons
 
   val result = repository.searchSeriesByName("vikings")
 
+  assertThat(result).hasSize(1)
   assertThat(result.first().name).isEqualTo("Vikings")
   coVerify(exactly = 0) { remote.getSeriesByName(any()) }
  }
@@ -98,10 +97,7 @@ class SeriesRepositoryImplTest {
   coVerify { remote.getSeriesByName("vikings") }
   coVerify {
    local.saveSearchResult(
-    name = "vikings",
-    seriesList = match { it.first().id == 1 },
-    seasons = emptyList(),
-    genres = emptyList()
+    seriesList = match { it.first().id == 1 }
    )
   }
  }

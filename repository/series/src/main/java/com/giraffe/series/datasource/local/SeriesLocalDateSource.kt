@@ -3,12 +3,12 @@ package com.giraffe.series.datasource.local
 import com.giraffe.series.model.CachedSeasonDto
 import com.giraffe.series.model.CachedSeriesDto
 import com.giraffe.series.model.CachedSeriesGenreDto
+
 interface SeriesLocalDateSource {
 
     suspend fun getCachedSeriesForName(name: String): List<CachedSeriesDto>
 
     suspend fun saveSearchResult(
-        name: String,
         seriesList: List<CachedSeriesDto>
     )
 
@@ -23,4 +23,3 @@ interface SeriesLocalDateSource {
 
     suspend fun clearAllData()
 }
-

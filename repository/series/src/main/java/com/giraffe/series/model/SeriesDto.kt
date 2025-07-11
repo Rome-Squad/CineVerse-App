@@ -15,7 +15,6 @@ data class CachedSeriesDto(
     val name: String,
     val overview: String,
     val rate: Float,
-    val duration: String,
     val posterUrl: String,
     val genresID: List<Int>,
     val releaseYear: String,
