@@ -5,7 +5,7 @@ import com.giraffe.explore.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.explore.usecase.ExploreUseCases
 import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.explore.usecase.InsertSearchKeywordUseCase
-import com.giraffe.series.usecase.SeriesUseCases
+import com.giraffe.series.usecase.*
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -23,14 +23,11 @@ val useCaseModule = module {
             clearSearchHistory = ClearSearchHistoryUseCase(get())
         )
     }
-    single {
-        SeriesUseCases(
-            clearRecentSeries = get(),
-            getRecentSeriesGenres = get(),
-            getSeriesGenres = get(),
-            searchSeriesByName = get(),
-            storeRecentSeries = get()
-        )
-    }
+    single { ClearRecentSeriesUseCase(get()) }
+    single { GetRecentSeriesUseCase(get()) }
+    single { GetSeriesGenresUseCase(get()) }
+    single { SearchSeriesByNameUseCase(get()) }
+    single { StoreRecentSeriesUseCase(get()) }
+
 
 }

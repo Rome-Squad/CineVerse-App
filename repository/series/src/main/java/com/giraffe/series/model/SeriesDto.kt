@@ -2,9 +2,9 @@ package com.giraffe.series.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.series.util.DatabaseConstants.GENRE_TABLE
-import com.giraffe.series.util.DatabaseConstants.SEASON_TABLE
-import com.giraffe.series.util.DatabaseConstants.SERIES_TABLE
+import com.giraffe.series.utils.DatabaseConstants.GENRE_TABLE
+import com.giraffe.series.utils.DatabaseConstants.SEASON_TABLE
+import com.giraffe.series.utils.DatabaseConstants.SERIES_TABLE
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -47,6 +47,7 @@ data class CachedSeriesGenreDto(
 data class SeriesDto(
     val id: Int,
     val name: String,
+    @SerialName("vote_count")
     val voteCount: Int,
     val overview: String,
     val popularity: Double,
@@ -60,7 +61,6 @@ data class SeriesDto(
     val backdropPath: String?,
     @SerialName("vote_average")
     val voteAverage: Double,
-    @SerialName("vote_count")
     val adult: Boolean = false,
     @SerialName("genre_ids")
     val genreIds: List<Int> = emptyList(),

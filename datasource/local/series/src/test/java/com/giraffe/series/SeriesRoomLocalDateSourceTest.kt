@@ -195,4 +195,39 @@ class SeriesRoomLocalDataSourceTest {
   coVerify { dao.clearAllGenres() }
   coVerify { cacheDao.clearAll() }
  }
-}
+  @Test
+  fun `getRecentSeries should return recent series`() = runTest {
+   coEvery { dao.getRecentSeries() } returns sampleSeries
+
+   val result = dataSource.getRecentSeries()
+
+   assertEquals(sampleSeries, result)
+   coVerify { dao.getRecentSeries() }
+  }
+
+  @Test
+  fun `storeRecentSeries should mark series as viewed`() = runTest {
+   dataSource.storeRecentSeries(1)
+
+   coVerify { dao.markSeriesAsViewed(1) }
+  }
+
+  @Test
+  fun `clearRecentSeries should call DAO to clear`() = runTest {
+   dataSource.clearRecentSeries()
+
+   coVerify { dao.clearRecentSeries() }
+  }
+
+  @Test
+  fun `getSeasonsForSeries should return list of seasons`() = runTest {
+   every { dao.getSeasonsForSeries(1) } returns flowOf(sampleSeasons)
+
+   val result = dataSource.getSeasonsForSeries(1)
+
+   assertEquals(sampleSeasons, result)
+   coVerify { dao.getSeasonsForSeries(1) }
+  }
+
+
+ }

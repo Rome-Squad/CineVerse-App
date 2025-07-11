@@ -9,8 +9,9 @@ import com.giraffe.series.mapper.toEntity
 import com.giraffe.series.repository.SeriesRepository
 import com.giraffe.series.utils.safeCall
 
-class SeriesRepositoryImpl(private val remote: SeriesRemoteDataSource,
-                           private val local: SeriesLocalDateSource
+class SeriesRepositoryImpl(
+    private val remote: SeriesRemoteDataSource,
+    private val local: SeriesLocalDateSource
 ) : SeriesRepository {
 
     override suspend fun searchSeriesByName(seriesName: String) = safeCall {
@@ -34,8 +35,6 @@ class SeriesRepositoryImpl(private val remote: SeriesRemoteDataSource,
             }
     }
 
-
-
     override suspend fun getSeriesGenres(): List<SeriesGenre> = safeCall {
         local.getCachedGenres()
             .map { it.toEntity() }
@@ -57,8 +56,6 @@ class SeriesRepositoryImpl(private val remote: SeriesRemoteDataSource,
         recentSeriesList
     }
 
-
-
     override suspend fun storeRecentSeries(series: Series) = safeCall {
         local.storeRecentSeries(series.id)
     }
@@ -66,6 +63,5 @@ class SeriesRepositoryImpl(private val remote: SeriesRemoteDataSource,
     override suspend fun clearRecentSeries() = safeCall {
         local.clearRecentSeries()
     }
-
 
 }

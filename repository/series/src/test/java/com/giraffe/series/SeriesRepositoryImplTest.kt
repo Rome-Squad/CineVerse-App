@@ -1,0 +1,158 @@
+package com.giraffe.series
+
+import com.giraffe.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.series.entity.Series
+import com.giraffe.series.model.CachedSeasonDto
+import com.giraffe.series.model.CachedSeriesDto
+import com.giraffe.series.model.CachedSeriesGenreDto
+import com.giraffe.series.model.GenreDto
+import com.giraffe.series.model.SeriesDto
+import com.giraffe.series.model.SeriesFullData
+import com.giraffe.series.repository.SeriesRepository
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class SeriesRepositoryImplTest {
+
+ private lateinit var local: SeriesLocalDateSource
+ private lateinit var remote: SeriesRemoteDataSource
+ private lateinit var repository: SeriesRepository
+ private val remoteSeriesDto = listOf(
+  SeriesDto(
+   id = 1,
+   name = "Vikings",
+   voteCount = 1000,
+   overview = "desc",
+   popularity = 90.0,
+   originalName = "Vikings",
+   firstAirDate = "2015-01-01",
+   posterPath = "poster",
+   backdropPath = "backdrop",
+   voteAverage = 8.0,
+   genreIds = listOf(1),
+   originCountry = listOf("US"),
+   originalLanguage = "en"
+  )
+ )
+
+ private val sampleSeries = listOf(
+  Series(
+   id = 1,
+   name = "Vikings",
+   overview = "desc",
+   rating = 8.0f,
+   duration = "45m",
+   posterUrl = "poster",
+   genreIDs = listOf(1),
+   releaseYear = "2015"
+  )
+ )
+ private val remoteGenres = listOf(
+  GenreDto(id = 1, name = "Action")
+ )
+
+ private val cachedSeries = listOf(
+  CachedSeriesDto(1, "Vikings", "desc", 8.0f, "45m", "poster", listOf(1), "2015")
+ )
+
+ private val cachedSeasons = listOf(
+  CachedSeasonDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
+ )
+
+ private val cachedGenres = listOf(
+  CachedSeriesGenreDto(1, "Action")
+ )
+
+ @Before
+ fun setup() {
+  local = mockk(relaxed = true)
+  remote = mockk(relaxed = true)
+  repository = SeriesRepositoryImpl(remote, local)
+ }
+
+ @Test
+ fun `searchSeriesByName returns cached result if available`() = runTest {
+  coEvery { local.getCachedSeriesForName("vikings") } returns listOf(
+   SeriesFullData(cachedSeries[0], cachedSeasons, cachedGenres)
+  )
+
+  val result = repository.searchSeriesByName("vikings")
+
+  assertEquals("Vikings", result.first().name)
+  coVerify(exactly = 0) { remote.getSeriesByName(any()) }
+ }
+
+ @Test
+ fun `searchSeriesByName fetches remote if cache empty and saves`() = runTest {
+  coEvery { local.getCachedSeriesForName("vikings") } returns null
+  coEvery { remote.getSeriesByName("vikings") } returns remoteSeriesDto
+
+  val result = repository.searchSeriesByName("vikings")
+
+  assertEquals("Vikings", result.first().name)
+  coVerify { remote.getSeriesByName("vikings") }
+  coVerify {
+   local.saveSearchResult(
+    name = "vikings",
+    seriesList = match { it.first().id == 1 },
+    seasons = emptyList(),
+    genres = emptyList()
+   )
+  }
+ }
+
+ @Test
+ fun `getSeriesGenres returns cached if valid`() = runTest {
+  coEvery { local.getCachedGenres() } returns cachedGenres
+
+  val result = repository.getSeriesGenres()
+
+  assertEquals(1, result.size)
+  assertEquals("Action", result.first().name)
+  coVerify(exactly = 0) { remote.getGenres() }
+ }
+
+ @Test
+ fun `getSeriesGenres fetches from remote if cache empty and saves`() = runTest {
+  coEvery { local.getCachedGenres() } returns emptyList()
+  coEvery { remote.getGenres() } returns remoteGenres
+
+  val result = repository.getSeriesGenres()
+
+  assertEquals(1, result.size)
+  assertEquals("Action", result.first().name)
+  coVerify { local.saveGenres(match { it.first().id == 1 }) }
+ }
+
+ @Test
+ fun `getRecentSeries returns correct entities`() = runTest {
+  coEvery { local.getRecentSeries() } returns cachedSeries
+  coEvery { local.getSeasonsForSeries(1) } returns cachedSeasons
+
+  val result = repository.getRecentSeries()
+
+  assertEquals(1, result.size)
+  assertEquals("Vikings", result.first().name)
+  coVerify { local.getSeasonsForSeries(1) }
+ }
+
+ @Test
+ fun `storeRecentSeries should call local storage`() = runTest {
+  repository.storeRecentSeries(sampleSeries[0])
+  coVerify { local.storeRecentSeries(1) }
+ }
+
+ @Test
+ fun `clearRecentSeries should call local clear`() = runTest {
+  repository.clearRecentSeries()
+  coVerify { local.clearRecentSeries() }
+ }
+}
