@@ -53,9 +53,9 @@ data class TextFieldColors(
  */
 @Composable
 fun TextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
     placeholder: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,

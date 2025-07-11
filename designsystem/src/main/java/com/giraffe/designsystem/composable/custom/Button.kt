@@ -30,8 +30,8 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun Button(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit,
     containerColor: Color = Theme.color.brand.primary,
     contentColor: Color = Theme.color.button.onPrimary,
     shape: Shape = RoundedCornerShape(Theme.radius.lg),

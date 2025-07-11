@@ -12,9 +12,9 @@ import androidx.compose.ui.semantics.semantics
 
 @Composable
 fun Icon(
+    modifier: Modifier = Modifier,
     painter: Painter,
     contentDescription: String?,
-    modifier: Modifier = Modifier,
     tint: Color = LocalContentColor.current
 ) {
     Canvas(

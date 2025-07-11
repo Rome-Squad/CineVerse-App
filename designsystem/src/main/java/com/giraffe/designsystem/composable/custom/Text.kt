@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.TextUnit
 
 @Composable
 fun Text(
-    text: String,
     modifier: Modifier = Modifier,
+    text: String,
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
     fontStyle: FontStyle? = null,
