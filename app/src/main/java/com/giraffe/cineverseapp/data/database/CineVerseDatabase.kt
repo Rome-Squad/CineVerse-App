@@ -4,8 +4,6 @@ import MovieDao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.giraffe.cineverseapp.data.util.Converters
-import androidx.room.TypeConverters
 import com.giraffe.cineverseapp.data.database.converter.Converters
 import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.model.SearchKeywordCacheDto
