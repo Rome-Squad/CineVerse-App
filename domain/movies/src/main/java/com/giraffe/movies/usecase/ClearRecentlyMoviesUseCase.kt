@@ -2,8 +2,10 @@ package com.giraffe.movies.usecase
 
 import com.giraffe.movies.repository.MoviesRepository
 
-class GetMovieGenresUseCase (
+class ClearRecentlyMoviesUseCase (
     private val repository: MoviesRepository
 ){
-    suspend operator fun invoke(genreIDs : List<Int>) : List<String> = repository.getMovieGenres(genreIDs)
+    suspend operator fun invoke(){
+        repository.clearRecentlyMovies()
+    }
 }

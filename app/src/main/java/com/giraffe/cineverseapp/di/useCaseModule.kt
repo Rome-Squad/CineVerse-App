@@ -39,22 +39,28 @@ val useCaseModule = module {
 
     // Movies Use Cases
     single { SearchMovieByNameUseCase(get()) }
-    single { GetMovieGenresUseCase(get()) }
+    single { GetMoviesGenresUseCase(get()) }
     single { GetMoviesByGenreUseCase(get()) }
     single { InsertMoviesUseCase(get()) }
     single { InsertGenresUseCase(get()) }
     single { ClearCacheUseCase(get()) }
     single { SetMovieRecentUseCase(get()) }
+    single { GetRecentlyMoviesUseCase(get()) }
+    single { ClearRecentlyMoviesUseCase(get()) }
+    single { GetMovieGenresUseCase(get()) }
 
     single {
         MoviesUseCases(
             searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
-            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
+            getMoviesGenresUseCase = GetMoviesGenresUseCase(get()),
             getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
             insertMoviesUseCase = InsertMoviesUseCase(get()),
             insertGenresUseCase = InsertGenresUseCase(get()),
             clearCacheUseCase = ClearCacheUseCase(get()),
-            setMovieRecentUseCase = SetMovieRecentUseCase(get())
+            setMovieRecentUseCase = SetMovieRecentUseCase(get()),
+            getRecentlyMovies = GetRecentlyMoviesUseCase(get()),
+            clearRecentlyMovies = ClearRecentlyMoviesUseCase(get()),
+            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
         )
     }
 
