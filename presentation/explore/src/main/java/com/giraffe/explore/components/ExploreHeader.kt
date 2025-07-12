@@ -38,12 +38,14 @@ fun ExploreHeader(
     value: String,
     onValueChange: (String) -> Unit,
 ) {
+
     Column(
         modifier = modifier
             .background(color = Theme.color.background.screen)
             .padding(top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
         Row(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically
