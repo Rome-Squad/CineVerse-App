@@ -1,5 +1,6 @@
 package com.giraffe.movie
 
+import android.util.Log
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.movie.datasource.local.MoviesSearchHistoryDataSource
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
@@ -26,6 +27,7 @@ class MoviesRepositoryImpl(
             val isCached = cachedMovies.isNotEmpty()
 
             if (!(isSearchedWithinLastHour && isCached)) {
+                Log.d("fix", "searchMovieByName: here")
                 val remoteMovies = remote.getMoviesByName(movieName).map { it.toMovie() }
                 val distinctMovies = (remoteMovies + cachedMovies).distinct()
 
@@ -41,7 +43,9 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenre> {
         return safeCall {
-            cache.getMovieGenres(genreIds).map { it.toEntity() }
+            cache.getMovieGenres(genreIds).map { it.toEntity() }.ifEmpty {
+                remote.getMovieGenres().map { it.toEntity() }
+            }
         }
     }
 

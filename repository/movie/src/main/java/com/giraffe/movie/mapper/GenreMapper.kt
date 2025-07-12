@@ -8,6 +8,9 @@ fun MovieGenreCacheDto.toEntity() = MovieGenre(id, name)
 
 fun MovieGenre.toMovieGenreDto() = MovieGenreCacheDto(id, title)
 
-fun MovieGenreDto.toEntity() = MovieGenre(id, name)
+fun MovieGenreDto.toEntity() = MovieGenre(
+    id = id,
+    title = name
+)
 
 fun MovieGenre.toDto() = MovieGenreDto(id, title)
