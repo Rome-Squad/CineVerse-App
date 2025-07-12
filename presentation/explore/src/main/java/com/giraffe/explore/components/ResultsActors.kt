@@ -8,11 +8,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.designsystem.uimodel.Poster
 
 @Composable
 fun ResultsActors(
-    actorList: List<PosterMovie>
+    actorList: List<Poster>
 ) {
     LazyVerticalGrid(
         modifier = Modifier
@@ -24,7 +24,7 @@ fun ResultsActors(
         items(actorList) { media ->
             CastItem(
                 imageUrl = media.imageUri,
-                name = media.title,
+                name = media.name,
             )
         }
     }

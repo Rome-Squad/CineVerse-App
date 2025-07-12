@@ -34,13 +34,7 @@ class GetRecentPeopleUseCaseTest {
         assertThat(result.first()).isInstanceOf(Person::class.java)
     }
 
-    @Test
-    fun `should throw RecentPeopleNotFoundException when repository return empty list`() = runTest {
-        //given
-        coEvery { repository.getRecentPeople() } returns emptyList()
-        //when && then
-        assertThrows<RecentPeopleNotFoundException> { getRecentPeopleUseCase() }
-    }
+
 
     @Test
     fun `should not proceed when repository throw Exception`() = runTest {

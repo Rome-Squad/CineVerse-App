@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="history">History</string>
-    <string name="clear_all">Clear All</string>
-    <string name="you_recent_viewed">You Recent Viewed</string>
-    <string name="search_suggestions">Search Suggestions</string>
-    <string name="voice_permission_granted">Voice permission granted</string>
-    <string name="voice_permission_denied">Voice permission denied</string>
+    <string name="clear_all" translatable="false">Clear All</string>
+    <string name="you_recent_viewed" translatable="false">You Recent Viewed</string>
+    <string name="search_suggestions" translatable="false">Search Suggestions</string>
+    <string name="voice_permission_granted" translatable="false">Voice permission granted</string>
+    <string name="voice_permission_denied" translatable="false">Voice permission denied</string>
 </resources>

@@ -39,14 +39,14 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.designsystem.uimodel.Poster
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
 fun RatedMovie(
     modifier: Modifier = Modifier,
-    posterMovie: PosterMovie,
+    poster: Poster,
     onDeleteClick: () -> Unit = {}
 ) {
     Column(
@@ -56,15 +56,15 @@ fun RatedMovie(
     ) {
         RateSection(
             modifier = Modifier.fillMaxWidth(),
-            rate = posterMovie.rating.toDouble(),
-            date = posterMovie.date ?: "--- --, 20--"
+            rate = poster.rating.toDouble(),
+            date = poster.date ?: "--- --, 20--"
         )
         SwipableItem(
             actionButton = { DeleteButton(onDeleteClick = onDeleteClick) },
         ) {
             PosterItemHorizontal(
                 modifier = modifier.fillMaxWidth(),
-                movie = posterMovie,
+                movie = poster,
             )
         }
     }
@@ -207,8 +207,9 @@ private fun Stars(modifier: Modifier = Modifier, rate: Double) {
 @Preview
 @Composable
 private fun Preview() {
-    val posterMovie = PosterMovie(
-        title = "The Flash",
+    val poster = Poster(
+        id = 1,
+        name = "The Flash",
         imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
         rating = 7.5f,
         genres = "Drama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, Thriller",
@@ -218,6 +219,6 @@ private fun Preview() {
     CineVerseTheme {
         //Stars(rate = 8.0)
         //RateSection(rate = 4.0, date = "Apr 12, 2025")
-        RatedMovie(modifier = Modifier.width(328.dp), posterMovie)
+        RatedMovie(modifier = Modifier.width(328.dp), poster)
     }
 }
