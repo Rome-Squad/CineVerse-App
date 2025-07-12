@@ -1,5 +1,8 @@
 package com.giraffe.explore
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,31 +50,55 @@ fun SearchContent(
     state: SearchScreenState,
     onIntent: (SearchIntent) -> Unit
 ) {
-
     val context = LocalContext.current
-    val voiceHelper = remember {
-        VoiceSearchHelper(context) { result ->
-            onIntent(SearchIntent.OnVoiceSearchResult(result))
+    var permissionGranted by remember { mutableStateOf(false) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        permissionGranted = granted
+        val message = if (granted) {
+            context.getString(com.giraffe.explore.R.string.voice_permission_granted)
+        } else {
+            context.getString(com.giraffe.explore.R.string.voice_permission_denied)
         }
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+    val voiceSearchHelper = remember {
+        VoiceSearchHelper(
+            context = context,
+            onResult = { result ->
+                if (result.isNotBlank()) {
+                    onIntent(SearchIntent.OnVoiceSearchResult(result))
+                    Toast.makeText(context, "You said: $result", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onError = { error ->
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     LaunchedEffect(state.isVoiceRecording) {
         if (state.isVoiceRecording) {
-            voiceHelper.startListening()
+            if (permissionGranted) {
+                voiceSearchHelper.startListening()
+            } else {
+                permissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+            }
         }
     }
 
     DisposableEffect(Unit) {
-        onDispose { voiceHelper.destroy() }
+        onDispose { voiceSearchHelper.destroy() }
     }
-
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
     ) {
-        Column() {
+        Column {
             ExploreHeader(
                 showBackButton = true,
                 endIcon = painterResource(Theme.icons.outline.microphone),
@@ -80,7 +110,6 @@ fun SearchContent(
                 ),
                 selectedTabIndex = state.selectedTab.ordinal,
                 onTabClick = { index ->
-                    //move to view model
                     val selectedTab = when (index) {
                         0 -> SearchTab.MOVIES
                         1 -> SearchTab.SERIES
@@ -93,69 +122,51 @@ fun SearchContent(
                 value = state.searchQuery,
                 onEndIconClick = { onIntent(SearchIntent.OnVoiceSearchClick) }
             )
+
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (state.isLoading) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Progress()
-                    }
-                } else if (!state.isSearchResultsVisible) {
-                    HistoryAndRecentItems(
+                when {
+                    state.isLoading -> Progress()
+
+                    !state.isSearchResultsVisible -> HistoryAndRecentItems(
                         state = state,
                         onClickClearAll = {},
                         onClickItem = {},
                         onClickIcon = {},
                     )
-                } else {
-                    when (state.selectedTab) {
+
+                    else -> when (state.selectedTab) {
                         SearchTab.MOVIES -> {
-                            if (state.movieResults.isEmpty()) {
-                                NoResult()
-                            } else {
-                                if (state.isGridSelected) {
-                                    ResultsMoviesOrSeriousList(media = state.movieResults)
-                                } else {
-                                    ResultsMoviesOrSeriousGrid(
-                                        media = state.movieResults,
-                                    )
-                                }
-                            }
+                            if (state.movieResults.isEmpty()) NoResult()
+                            else if (state.isGridSelected)
+                                ResultsMoviesOrSeriousList(media = state.movieResults)
+                            else
+                                ResultsMoviesOrSeriousGrid(media = state.movieResults)
                         }
 
                         SearchTab.SERIES -> {
-                            if (state.seriesResults.isEmpty()) {
-                                NoResult()
-                            } else {
-                                if (state.isGridSelected) {
-                                    ResultsMoviesOrSeriousList(media = state.seriesResults)
-                                } else {
-                                    ResultsMoviesOrSeriousGrid(
-                                        media = state.seriesResults,
-                                    )
-                                }
-                            }
+                            if (state.seriesResults.isEmpty()) NoResult()
+                            else if (state.isGridSelected)
+                                ResultsMoviesOrSeriousList(media = state.seriesResults)
+                            else
+                                ResultsMoviesOrSeriousGrid(media = state.seriesResults)
                         }
 
                         SearchTab.ACTORS -> {
-                            if (state.actorResults.isEmpty()) {
-                                NoResult()
-                            } else {
-                                ResultsActors(state.actorResults)
-                            }
+                            if (state.actorResults.isEmpty()) NoResult()
+                            else ResultsActors(state.actorResults)
                         }
                     }
                 }
             }
         }
-        if (state.isSearchResultsVisible && (state.selectedTab == SearchTab.MOVIES || state.selectedTab == SearchTab.SERIES)) {
+
+        if (state.isSearchResultsVisible &&
+            (state.selectedTab == SearchTab.MOVIES || state.selectedTab == SearchTab.SERIES)
+        ) {
             ViewToggle(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
