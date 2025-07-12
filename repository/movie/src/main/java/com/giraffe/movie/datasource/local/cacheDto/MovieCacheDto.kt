@@ -17,7 +17,8 @@ data class MovieCacheDto(
     val genresID: List<Int>,
     val releaseDate : String?,
     val duration : Int?,
-    val isRecent : Boolean
+    val isRecent : Boolean,
+    val cachedAt: Long = System.currentTimeMillis()
 ){
     companion object {
         const val MOVIE_TABLE = "movies"

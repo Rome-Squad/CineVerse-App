@@ -53,4 +53,13 @@ interface MovieDao {
 
     @Update
     suspend fun updateMovie(movie: MovieCacheDto)
+
+    @Query(
+        """
+    DELETE FROM $MOVIE_TABLE 
+    WHERE isRecent = 0 
+    AND cachedAt <= :currentTime - 3600000
+"""
+    )
+    suspend fun clearMovieCache(currentTime: Long)
 }

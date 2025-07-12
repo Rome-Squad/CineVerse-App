@@ -60,4 +60,13 @@ interface SeriesDao {
 
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecent = 1")
     suspend fun getRecentSeries(): List<CachedSeriesDto>
+
+    @Query(
+        """
+    DELETE FROM $SERIES_TABLE 
+    WHERE isRecent = 0 
+    AND cachedAt <= :currentTime - 3600000
+"""
+    )
+    suspend fun clearSeriesCache(currentTime: Long)
 }
