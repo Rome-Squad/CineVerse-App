@@ -45,21 +45,27 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            val recentSeries = getRecentSeriesUseCase().map { series ->
-                series.toPosterMovie(seriesGenres())
-            }
 
-            val recentPeople = getRecentPeopleUseCase().map { series ->
-                series.toPosterMovie()
-            }
+            try {
+                val recentSeries = getRecentSeriesUseCase().map { series ->
+                    series.toPosterMovie(seriesGenres())
+                }
 
-            val recentMovies = getRecentlyMoviesUseCase().map { movies ->
-                movies.toPosterMovie(movieGenres(movies.genresID))
-            }
-            _state.update {
-                it.copy(
-                    recentViews = recentMovies + recentSeries + recentPeople
-                )
+                val recentPeople = getRecentPeopleUseCase().map { series ->
+                    series.toPosterMovie()
+                }
+
+                val recentMovies = getRecentlyMoviesUseCase().map { movies ->
+                    movies.toPosterMovie(movieGenres(movies.genresID))
+                }
+                _state.update {
+                    it.copy(
+                        recentViews = recentMovies + recentSeries + recentPeople
+                    )
+                }
+
+            } catch (_: Exception) {
+
             }
         }
     }
