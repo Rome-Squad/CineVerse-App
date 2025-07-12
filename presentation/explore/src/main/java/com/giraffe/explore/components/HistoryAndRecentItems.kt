@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.R
 import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.screen.SearchScreenState
@@ -76,73 +76,82 @@ fun HistoryAndRecentItems(
 @Preview()
 @Composable
 private fun HistoryAndRecentItemsPreview() {
-    val listOfMovies: List<PosterMovie> = listOf(
-        PosterMovie(
-            title = "The Flash",
+    val listOfMovies: List<Poster> = listOf(
+        Poster(
+            id = 1,
+            name = "The Flash",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 7.5f,
             genres = "Drama, Action, Crime, Thriller",
             time = "2h 32m",
             date = "2008, Jul 18"
         ),
-        PosterMovie(
-            title = "The Flash 2",
+        Poster(
+            id = 2,
+            name = "The Flash 2",
             imageUri = "https://images.app.goo.gl/sUTYc8FLRCbWJ9Zp6",
             rating = 8.0f,
             genres = "Action, Adventure",
             time = "2h 45m",
             date = "2010, Jun 10"
         ),
-        PosterMovie(
-            title = "The Flash 3",
+        Poster(
+            id = 3,
+            name = "The Flash 3",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 8.0f,
             genres = "Action, Adventure",
             time = "2h 40m",
             date = "2012, Jun 10"
         ),
-        PosterMovie(
-            title = "The Flash 3",
+        Poster(
+            id = 4,
+            name = "The Flash 3",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 8.0f,
             genres = "Action, Adventure",
             time = "2h 40m",
             date = "2012, Jun 10"
         ),
-        PosterMovie(
-            title = "The Flash 3",
+        Poster(
+            id = 5,
+            name = "The Flash 3",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 8.0f,
             genres = "Action, Adventure",
             time = "2h 40m",
             date = "2012, Jun 10"
         ),
-        PosterMovie(
-            title = "The Flash 3",
+        Poster(
+            id = 6,
+            name = "The Flash 3",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 8.0f,
             genres = "Action, Adventure",
             time = "2h 40m",
             date = "2012, Jun 10"
         ),
-        PosterMovie(
-            title = "The Flash 3",
+        Poster(
+            id = 7,
+            name = "The Flash 3",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 8.0f,
             genres = "Action, Adventure",
             time = "2h 40m",
             date = "2012, Jun 10"
         ),
-        PosterMovie(
-            title = "The Flash 3",
+        Poster(
+            id = 8,
+            name = "The Flash 3",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 8.0f,
             genres = "Action, Adventure",
             time = "2h 40m",
             date = "2012, Jun 10"
         ),
-        PosterMovie(
-            title = "The Flash 3",
+        Poster(
+            id = 9,
+            name = "The Flash 3",
             imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
             rating = 8.0f,
             genres = "Action, Adventure",

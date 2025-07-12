@@ -36,8 +36,7 @@ import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.HistoryAndRecentItems
 import com.giraffe.explore.components.NoResult
 import com.giraffe.explore.components.ResultsActors
-import com.giraffe.explore.components.ResultsMoviesOrSeriousGrid
-import com.giraffe.explore.components.ResultsMoviesOrSeriousList
+import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -153,18 +152,18 @@ fun SearchContent(
                     else -> when (state.selectedTab) {
                         SearchTab.MOVIES -> {
                             if (state.mediaResults.isEmpty()) NoResult()
-                            else if (state.isGridSelected)
-                                ResultsMoviesOrSeriousList(media = state.mediaResults)
-                            else
-                                ResultsMoviesOrSeriousGrid(media = state.mediaResults)
+                            TransitionLazyColumnToGrid(
+                                poster = state.mediaResults,
+                                isListSelected = !state.isGridSelected
+                            )
                         }
 
                         SearchTab.SERIES -> {
                             if (state.mediaResults.isEmpty()) NoResult()
-                            else if (state.isGridSelected)
-                                ResultsMoviesOrSeriousList(media = state.mediaResults)
-                            else
-                                ResultsMoviesOrSeriousGrid(media = state.mediaResults)
+                            TransitionLazyColumnToGrid(
+                                poster = state.mediaResults,
+                                isListSelected = !state.isGridSelected
+                            )
                         }
 
                         SearchTab.ACTORS -> {

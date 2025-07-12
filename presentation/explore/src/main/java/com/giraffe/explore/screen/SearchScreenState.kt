@@ -1,6 +1,6 @@
 package com.giraffe.explore.screen
 
-import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
@@ -19,9 +19,9 @@ data class SearchScreenState(
     val isSearchResultsVisible: Boolean = false,
     val selectedTab: SearchTab = SearchTab.SERIES,
     val isVoiceRecording: Boolean = false,
-    val mediaResults: List<PosterMovie> = emptyList(),
+    val mediaResults: List<Poster> = emptyList(),
     val resultSearchKeyword: List<SearchKeyword> = emptyList(),
-    val recentViews: List<PosterMovie> = emptyList(),
+    val recentViews: List<Poster> = emptyList(),
     val isGridSelected: Boolean = true
 )
 
@@ -30,14 +30,15 @@ enum class SearchTab {
 }
 
 
-fun Movie.toPosterMovie(allGenres: List<MovieGenre>): PosterMovie {
+fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genresID }
         .joinToString(", ") { it.title }
         .ifBlank { null }
 
-    return PosterMovie(
-        title = title,
+    return Poster(
+        id = id,
+        name = title,
         imageUri = posterUrl.orEmpty(),
         rating = rating,
         genres = genreTitles,
@@ -46,23 +47,25 @@ fun Movie.toPosterMovie(allGenres: List<MovieGenre>): PosterMovie {
     )
 }
 
-fun Series.toPosterMovie(allGenres: List<SeriesGenre>): PosterMovie {
+fun Series.toPosterMovie(allGenres: List<SeriesGenre>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genreIDs }
         .joinToString(", ") { it.name }
         .ifBlank { null }
 
-    return PosterMovie(
-        title = name,
+    return Poster(
+        id = id,
+        name = this@toPosterMovie.name,
         imageUri = posterUrl,
         rating = rating,
         genres = genreTitles,
     )
 }
 
-fun Person.toPosterMovie(): PosterMovie =
-    PosterMovie(
-        title = name,
+fun Person.toPosterMovie(): Poster =
+    Poster(
+        id = id,
+        name = this@toPosterMovie.name,
         imageUri = imageUrl.orEmpty(),
         rating = 0f
     )

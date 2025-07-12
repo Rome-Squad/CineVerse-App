@@ -12,21 +12,19 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.designsystem.uimodel.Poster
 
 @Composable
 fun MoviesListSection(
     modifier: Modifier = Modifier,
     title: String,
     endText: String? = null,
-    movies: List<PosterMovie>,
+    movies: List<Poster>,
     paddingHorizontal: Int = 16,
     onClickShowMore: () -> Unit = {},
     onClickPoster: () -> Unit = {}
@@ -82,23 +80,27 @@ private fun Preview() {
             modifier = Modifier.fillMaxWidth(),
             title = "Popular Movies",
             movies = listOf(
-                PosterMovie(
-                    title = "The Flash",
+                Poster(
+                    id = 1,
+                    name = "The Flash",
                     imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                     rating = 7.5f,
                 ),
-                PosterMovie(
-                    title = "The Flash",
+                Poster(
+                    id = 2,
+                    name = "The Flash",
                     imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                     rating = 7.5f,
                 ),
-                PosterMovie(
-                    title = "The Flash",
+                Poster(
+                    id = 3,
+                    name = "The Flash",
                     imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                     rating = 7.5f,
                 ),
-                PosterMovie(
-                    title = "The Flash",
+                Poster(
+                    id = 4,
+                    name = "The Flash",
                     imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                     rating = 7.5f,
                 ),

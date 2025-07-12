@@ -34,13 +34,13 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun PosterItemVertically(
-    movie: PosterMovie,
+    movie: Poster,
     modifier: Modifier = Modifier,
     onClickPoster: () -> Unit = {}
 ) {
@@ -91,7 +91,7 @@ fun PosterItemVertically(
 
 
         Text(
-            text = movie.title,
+            text = movie.name,
             style = Theme.textStyle.body.md.medium,
             color = Theme.color.shade.secondary,
             maxLines = 1,
@@ -106,8 +106,9 @@ fun PosterItemVertically(
 private fun Preview() {
     CineVerseTheme {
         PosterItemVertically(
-            movie = PosterMovie(
-                title = "The Flash",
+            movie = Poster(
+                id = 1,
+                name = "The Flash",
                 imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                 rating = 7.5f,
             ),
