@@ -16,7 +16,7 @@ val dataModule = module {
         Room.databaseBuilder(androidContext(), CineVerseDatabase::class.java, DATABASE_NAME).build()
     }
     single<PersonCacheCleaner> { PersonCacheCleanerImp(get()) }
-    worker { CacheCleanupWorker(get(), get(),get()) }
+    worker { CacheCleanupWorker(get(), get()) }
 }
 
 private const val DATABASE_NAME = "CineVerseDataBase"
