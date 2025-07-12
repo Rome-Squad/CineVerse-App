@@ -18,7 +18,8 @@ data class CachedSeriesDto(
     val posterUrl: String,
     val genresID: List<Int>,
     val releaseYear: String,
-    val isRecent : Boolean = false
+    val isRecent : Boolean = false,
+    val cachedAt: Long = System.currentTimeMillis()
 )
 
 

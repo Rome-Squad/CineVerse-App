@@ -33,5 +33,5 @@ interface PersonDao {
     AND cachedAt <= :currentTime - 3600000
 """
     )
-    suspend fun clearCachedPeople(currentTime: Long)
+    suspend fun clearPersonCache(currentTime: Long)
 }
