@@ -52,31 +52,26 @@ fun PosterHorizontal(
     ) {
         with(sharedTransitionScope) {
 
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(64.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg
-                        )
-                    )
-                    .background(Theme.color.brand.tertiary),
-                contentAlignment = Alignment.Center
-            ) {
+
                 IslamicAppropriateImageViewer(
                     imageUrl = poster.imageUri,
                     placeHolderResId = Theme.icons.dueTone.image,
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxHeight()
+                        .width(64.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = Theme.radius.lg,
+                                bottomStart = Theme.radius.lg,
+                                topEnd = Theme.radius.lg
+                            )
+                        )
                         .sharedElement(
                             sharedContentState = rememberSharedContentState(key = poster.imageUri),
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                 )
-            }
+
 
             Column(
                 modifier = Modifier.padding(vertical = 12.dp),
