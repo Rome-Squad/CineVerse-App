@@ -6,7 +6,6 @@ import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.movie.mapper.toEntity
 import com.giraffe.movie.mapper.toMovie
 import com.giraffe.movie.mapper.toMovieCacheDto
-import com.giraffe.movie.mapper.toMovieGenre
 import com.giraffe.movie.mapper.toMovieGenreDto
 import com.giraffe.movie.utils.safeCall
 import com.giraffe.movies.entity.Movie
@@ -40,9 +39,9 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override suspend fun getMovieGenres(genreIds: List<Int>): List<String> {
+    override suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenre> {
         return safeCall {
-            cache.getMovieGenres(genreIds)
+            cache.getMovieGenres(genreIds).map { it.toEntity() }
         }
     }
 
@@ -50,7 +49,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMoviesGenres(): List<MovieGenre> {
         return safeCall {
-            val cachedMovieGenres = cache.getMoviesGenres().map { it.toMovieGenre() }
+            val cachedMovieGenres = cache.getMoviesGenres().map { it.toEntity() }
             val isCached = cachedMovieGenres.isNotEmpty()
             if (!isCached) {
                 val remoteMovieGenres = remote.getMovieGenres().map { it.toEntity() }
