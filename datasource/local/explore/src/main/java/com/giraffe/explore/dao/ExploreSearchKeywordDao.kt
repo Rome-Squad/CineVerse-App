@@ -6,9 +6,18 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.giraffe.explore.model.SearchKeywordCacheDto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExploreSearchKeywordDao {
+
+    @Query(
+        value =
+            "SELECT * " +
+            "FROM SEARCH_KEYWORD_TABLE " +
+            "ORDER BY lastSearchedTime DESC"
+    )
+    fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>>
     @Query(
         value =
             "SELECT * " +
@@ -16,7 +25,7 @@ interface ExploreSearchKeywordDao {
             "WHERE keyword = :query " +
             "ORDER BY lastSearchedTime DESC"
     )
-    suspend fun getSearchKeywords(query: String): List<SearchKeywordCacheDto>
+    fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto)

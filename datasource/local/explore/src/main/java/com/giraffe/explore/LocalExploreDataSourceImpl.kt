@@ -3,11 +3,17 @@ package com.giraffe.explore
 import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.explore.model.SearchKeywordCacheDto
+import kotlinx.coroutines.flow.Flow
 
 class LocalExploreDataSourceImpl(
     private val dao: ExploreSearchKeywordDao
 ): LocalExploreDataSource {
-    override suspend fun getSearchKeywords(query: String): List<SearchKeywordCacheDto> {
+
+    override fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>> {
+        return dao.getSearchHistory()
+    }
+
+    override fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>> {
         return dao.getSearchKeywords(query)
     }
 

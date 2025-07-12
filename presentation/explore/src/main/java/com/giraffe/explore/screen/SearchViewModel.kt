@@ -1,12 +1,12 @@
 package com.giraffe.explore.screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.usecase.ExploreUseCases
 import com.giraffe.movies.usecase.ClearCacheUseCase
 import com.giraffe.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.movies.usecase.SearchMovieByNameUseCase
 import com.giraffe.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.person.usecase.GetRecentPeopleUseCase
@@ -34,6 +34,7 @@ class SearchViewModel(
     private val clearSeries: ClearRecentSeriesUseCase,
     private val clearPeople: ClearRecentPeopleUseCase,
     private val getRecentPeopleUseCase: GetRecentPeopleUseCase,
+    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecentSeriesUseCase: GetRecentSeriesUseCase
 ) : ViewModel() {
 
@@ -44,11 +45,20 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            val recentMovies = getRecentSeriesUseCase()
-       //     val recentPeople = getRecentPeopleUseCase()
+            val recentSeries = getRecentSeriesUseCase().map { series ->
+                series.toPosterMovie(seriesGenres())
+            }
+
+            val recentPeople = getRecentPeopleUseCase().map { series ->
+                series.toPosterMovie()
+            }
+
+            val recentMovies = getRecentlyMoviesUseCase().map { movies ->
+                movies.toPosterMovie(movieGenres(movies.genresID))
+            }
             _state.update {
                 it.copy(
-                    recentViews = recentMovies.map { it.toPosterMovie(seriesGenres()) }
+                    recentViews = recentMovies + recentSeries + recentPeople
                 )
             }
         }
@@ -74,7 +84,14 @@ class SearchViewModel(
     private fun loadResults(keyword: SearchKeyword, tab: SearchTab) {
         viewModelScope.launch {
             val list = when (tab) {
-                SearchTab.MOVIES -> searchMovie(keyword.keyword).map { it.toPosterMovie(movieGenres()) }
+                SearchTab.MOVIES -> searchMovie(keyword.keyword).map {
+                    it.toPosterMovie(
+                        movieGenres(
+                            it.genresID
+                        )
+                    )
+                }
+
                 SearchTab.SERIES -> searchSeries(keyword.keyword).map {
                     it.toPosterMovie(
                         seriesGenres()
@@ -109,13 +126,14 @@ class SearchViewModel(
         }
         debounceJob = viewModelScope.launch {
             delay(1500)
-            val keys = exploreUseCases.getSearchKeywords.execute(q)
-            _state.update {
-                it.copy(
-                    resultSearchKeyword = keys,
-                    isLoading = false,
-                    errorMessage = null
-                )
+            exploreUseCases.getSearchKeywords(q).collect { keys ->
+                _state.update {
+                    it.copy(
+                        resultSearchKeyword = keys,
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
             }
         }
     }
@@ -135,13 +153,11 @@ class SearchViewModel(
     }
 
     private fun clearHistory() = viewModelScope.launch {
-        exploreUseCases.clearSearchHistory.execute(); _state.update { it.copy(resultSearchKeyword = emptyList()) }
+        exploreUseCases.clearSearchHistory(); _state.update { it.copy(resultSearchKeyword = emptyList()) }
     }
 
     private fun deleteHistory(item: SearchKeyword) = viewModelScope.launch {
-        exploreUseCases.deleteSearchKeyword.execute(item); exploreUseCases.getSearchKeywords.execute(
-        _state.value.searchQuery
-    )
+        exploreUseCases.deleteSearchKeyword(item)
     }
 
     private fun clearRecent() = viewModelScope.launch {

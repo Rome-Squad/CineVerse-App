@@ -129,6 +129,7 @@ fun TextField(
                 },
                 colors = TextFieldColors(
                     unfocusedBorderColor = Color.Transparent,
+                    focusedBorderColor = Color.Transparent,
                     backgroundColor = Theme.color.background.card,
                     cursorColor = Theme.color.brand.primary,
                     textColor = Theme.color.shade.primary
@@ -160,7 +161,7 @@ fun TextField(
         }
         if (hasError && !isFocused) {
             Text(
-                text = errorMessage ?: "",
+                text = errorMessage,
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.additional.primary.red
             )

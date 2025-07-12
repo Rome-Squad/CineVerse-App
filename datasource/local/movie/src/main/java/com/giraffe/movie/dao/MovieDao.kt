@@ -31,7 +31,10 @@ interface MovieDao {
     suspend fun getMovieGenreById(id: Int): MovieGenreCacheDto
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE")
-    suspend fun getMovieGenres(): List<MovieGenreCacheDto>
+    suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
+
+    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:genreIds)")
+    suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenreCacheDto>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE genresID =:genreId")
     suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
@@ -42,6 +45,21 @@ interface MovieDao {
     @Query("DELETE FROM $MOVIE_GENRE_TABLE")
     suspend fun clearMovieGenreCache()
 
+    @Query("DELETE FROM $MOVIE_TABLE WHERE isRecent = 1")
+    suspend fun clearRecentlyMovies()
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE isRecent = 1")
+    suspend fun getRecentlyMovies(): List<MovieCacheDto>
+
     @Update
     suspend fun updateMovie(movie: MovieCacheDto)
+
+    @Query(
+        """
+    DELETE FROM $MOVIE_TABLE 
+    WHERE isRecent = 0 
+    AND cachedAt <= :currentTime - 3600000
+"""
+    )
+    suspend fun clearMovieCache(currentTime: Long)
 }

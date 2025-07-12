@@ -1,15 +1,16 @@
 package com.giraffe.explore.datasource.local
 
 import com.giraffe.explore.model.SearchKeywordCacheDto
+import kotlinx.coroutines.flow.Flow
 
 interface LocalExploreDataSource {
 
-    suspend fun getSearchKeywords(query: String): List<SearchKeywordCacheDto>
+    fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>>
+    fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>>
 
     suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto)
 
     suspend fun deleteSearchKeyword(searchKeyword: SearchKeywordCacheDto)
 
     suspend fun clearSearchHistory()
-
 }

@@ -5,6 +5,7 @@ import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.movie.datasource.remote.dto.MovieDto
 import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
+import com.giraffe.movie.utils.BASE_IMAGE_URL
 import com.giraffe.movies.entity.Movie
 import kotlinx.datetime.LocalDate
 
@@ -56,7 +57,7 @@ fun MovieDto.toMovie(): Movie {
         description = overview,
         rating = voteAverage,
         duration = null,
-        posterUrl = posterPath,
+        posterUrl = BASE_IMAGE_URL + posterPath,
         genresID = genresID,
         releaseYear = date
     )

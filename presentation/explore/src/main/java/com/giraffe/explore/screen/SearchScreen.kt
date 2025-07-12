@@ -41,14 +41,16 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
+    modifier: Modifier = Modifier,
     viewModel: SearchViewModel = koinViewModel(),
 ) {
     val state = viewModel.state.collectAsState().value
-    SearchContent(state = state, onIntent = viewModel::onIntent)
+    SearchContent(modifier = modifier, state = state, onIntent = viewModel::onIntent)
 }
 
 @Composable
 fun SearchContent(
+    modifier: Modifier = Modifier,
     state: SearchScreenState,
     onIntent: (SearchIntent) -> Unit
 ) {
@@ -66,6 +68,7 @@ fun SearchContent(
         }
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
+
     val voiceSearchHelper = remember {
         VoiceSearchHelper(
             context = context,
@@ -96,13 +99,15 @@ fun SearchContent(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .statusBarsPadding()
             .background(Theme.color.background.screen)
     ) {
         Column {
             ExploreHeader(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
                 showBackButton = true,
                 endIcon = painterResource(Theme.icons.outline.microphone),
                 viewTaps = state.isSearchResultsVisible,

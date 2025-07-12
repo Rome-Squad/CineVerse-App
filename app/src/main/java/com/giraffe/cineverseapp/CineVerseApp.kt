@@ -4,14 +4,13 @@ import android.app.Application
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.giraffe.cineverseapp.di.dataModule
-import com.giraffe.series.di.seriesRemoteDataModule
+import com.giraffe.cineverseapp.di.databaseModule
 import com.giraffe.cineverseapp.di.localDataSourceModule
 import com.giraffe.cineverseapp.di.networkModule
 import com.giraffe.cineverseapp.di.repositoryModule
 import com.giraffe.cineverseapp.di.useCaseModule
-import com.giraffe.cineverseapp.di.viewModelModule
 import com.giraffe.cineverseapp.worker.CacheCleanupWorker
+import com.giraffe.series.di.seriesRemoteDataModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
@@ -22,14 +21,12 @@ class CineVerseApp : Application() {
         startKoin {
             androidContext(this@CineVerseApp)
             modules(
-                dataModule,
+                databaseModule,
                 localDataSourceModule,
                 networkModule,
                 repositoryModule,
                 useCaseModule,
-                seriesRemoteDataModule,
-                useCaseModule,
-                viewModelModule
+                seriesRemoteDataModule
             )
         }
         val workRequest = PeriodicWorkRequestBuilder<CacheCleanupWorker>(
