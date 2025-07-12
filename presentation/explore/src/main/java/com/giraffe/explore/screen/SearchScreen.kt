@@ -1,6 +1,7 @@
 package com.giraffe.explore.screen
 
 import android.Manifest
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,10 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -56,12 +54,11 @@ fun SearchContent(
     onIntent: (SearchIntent) -> Unit
 ) {
     val context = LocalContext.current
-    var permissionGranted by remember { mutableStateOf(false) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
-        permissionGranted = granted
+        onIntent(SearchIntent.OnPermissionResult(granted))
         val message = if (granted) {
             context.getString(com.giraffe.explore.R.string.voice_permission_granted)
         } else {
@@ -78,23 +75,28 @@ fun SearchContent(
                     onIntent(SearchIntent.OnSearchQueryChange(result))
                     Toast.makeText(context, "You said: $result", Toast.LENGTH_SHORT).show()
                 }
+                onIntent(SearchIntent.OnVoiceSearchFinished)
             },
             onError = { error ->
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                onIntent(SearchIntent.OnVoiceSearchFinished)
             }
         )
     }
 
     LaunchedEffect(state.isVoiceRecording) {
         if (state.isVoiceRecording) {
-            if (permissionGranted) {
-                voiceSearchHelper.startListening()
-            } else {
-                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-            }
+            // Always ask for permission first; startListening() will happen after state update
+            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
 
+    LaunchedEffect(state.isVoiceRecording, state.isPermissionGranted) {
+        if (state.isVoiceRecording && state.isPermissionGranted) {
+            Log.v("VoiceSearch", "Voice recording started")
+            voiceSearchHelper.startListening()
+        }
+    }
     DisposableEffect(Unit) {
         onDispose { voiceSearchHelper.destroy() }
     }

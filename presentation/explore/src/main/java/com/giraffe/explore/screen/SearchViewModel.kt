@@ -80,6 +80,13 @@ class SearchViewModel(
         is SearchIntent.OnClearRecentViewed -> clearRecent()
         is SearchIntent.onClickToggleView -> toggleView()
         SearchIntent.OnVoiceSearchClick -> _state.update { it.copy(isVoiceRecording = true) }
+        is SearchIntent.OnPermissionResult -> updatePermissionState(intent.granted)
+        is SearchIntent.OnVoiceSearchFinished -> _state.update { it.copy(isVoiceRecording = false) }
+
+    }
+
+    private fun updatePermissionState(granted: Boolean) {
+        _state.update { it.copy(isPermissionGranted = granted) }
     }
 
     private fun selectTab(tab: SearchTab) {

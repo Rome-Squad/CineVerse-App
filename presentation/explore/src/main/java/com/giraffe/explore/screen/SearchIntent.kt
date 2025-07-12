@@ -12,4 +12,8 @@ sealed class SearchIntent {
     data class OnClickItem(val suggestion: SearchKeyword) : SearchIntent()
     data class OnSelectedTabChanged(val tab: SearchTab) : SearchIntent()
     object onClickToggleView : SearchIntent()
+
+    data class OnPermissionResult(val granted: Boolean) : SearchIntent()
+    object OnVoiceSearchFinished : SearchIntent()
+
 }
