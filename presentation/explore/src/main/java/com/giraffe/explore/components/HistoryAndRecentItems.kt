@@ -16,13 +16,14 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.PosterMovie
 import com.giraffe.explore.R
-import com.giraffe.explore.SearchScreenState
+import com.giraffe.explore.screen.SearchKeywordResults
+import com.giraffe.explore.screen.SearchScreenState
 
 @Composable
 fun HistoryAndRecentItems(
     state: SearchScreenState,
     onClickClearAll: () -> Unit,
-    onClickItem: (item: String) -> Unit,
+    onClickItem: (item: SearchKeywordResults) -> Unit,
     onClickIcon: () -> Unit
 ) {
 
@@ -39,31 +40,35 @@ fun HistoryAndRecentItems(
             clickableText = if (state.isSearchHistoryVisible) stringResource(R.string.clear_all) else "",
             onClickableText = onClickClearAll
         )
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            items(state.resultSearchKeyword) {
-                SearchItem(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    text = it.keyword,
-                    isFromHistory = it.isFromSearchHistory,
-                    onClickItem = onClickItem,
-                    onClickIcon = onClickIcon,
-                    state = state
-                )
-            }
-            if (state.isSearchHistoryVisible) {
-                item {
-                    MoviesListSection(
+
+        if (state.resultSearchKeyword.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(2f)
+            ) {
+                items(state.resultSearchKeyword) { keyWord ->
+                    SearchItem(
                         modifier = Modifier
-                            .padding(top = 16.dp),
-                        title = stringResource(R.string.you_recent_viewed),
-                        movies = state.recentViews
+                            .padding(horizontal = 16.dp),
+                        text = keyWord.keyword,
+                        isFromHistory = keyWord.isFromSearchHistory,
+                        onClickItem = { onClickItem(keyWord) },
+                        onClickIcon = onClickIcon,
                     )
                 }
             }
+        }
+
+        if (state.recentViews.isNotEmpty()) {
+            MoviesListSection(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .weight(1f),
+                endText = stringResource(R.string.clear_all),
+                title = stringResource(R.string.you_recent_viewed),
+                movies = state.recentViews
+            )
         }
     }
 }

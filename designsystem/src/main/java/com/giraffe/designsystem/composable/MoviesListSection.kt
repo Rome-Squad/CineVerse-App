@@ -23,9 +23,10 @@ import com.giraffe.designsystem.uimodel.PosterMovie
 
 @Composable
 fun MoviesListSection(
-    title: String,
-    movies: List<PosterMovie>,
     modifier: Modifier = Modifier,
+    title: String,
+    endText: String? = null,
+    movies: List<PosterMovie>,
     paddingHorizontal: Int = 16,
     onClickShowMore: () -> Unit = {},
     onClickPoster: () -> Unit = {}
@@ -47,13 +48,14 @@ fun MoviesListSection(
                 style = Theme.textStyle.title.sm,
                 color = Theme.color.shade.primary,
             )
-            Text(
-                ///
-                text = stringResource(R.string.show_more),
-                style = Theme.textStyle.body.md.medium,
-                color = Theme.color.brand.primary,
-                modifier = Modifier.clickable(onClick = onClickShowMore)
-            )
+            endText?.let {
+                Text(
+                    text = endText,
+                    style = Theme.textStyle.body.md.medium,
+                    color = Theme.color.brand.primary,
+                    modifier = Modifier.clickable(onClick = onClickShowMore)
+                )
+            }
         }
 
         LazyRow(

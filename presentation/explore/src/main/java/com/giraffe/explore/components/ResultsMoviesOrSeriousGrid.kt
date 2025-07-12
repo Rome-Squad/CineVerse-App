@@ -12,12 +12,11 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterItemVertically
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.PosterMovie
-import com.giraffe.explore.MediaStateUi
-import com.giraffe.explore.toPosterMovie
+
 
 @Composable
 fun ResultsMoviesOrSeriousGrid(
-    media: List<MediaStateUi>
+    media: List<PosterMovie>
 ) {
     LazyVerticalGrid(
         modifier = Modifier
@@ -27,7 +26,7 @@ fun ResultsMoviesOrSeriousGrid(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         items(items = media) { media ->
-            PosterItemVertically(movie = media.toPosterMovie())
+            PosterItemVertically(movie = media)
         }
     }
 }
@@ -111,6 +110,6 @@ private fun ResultsMoviesOrSeriousGridPreview() {
     )
 
     CineVerseTheme {
-        ResultsMoviesOrSeriousGrid(media = emptyList())
+        ResultsMoviesOrSeriousGrid(media = listOfMovies)
     }
 }

@@ -46,6 +46,9 @@ dependencies {
 
     implementation(libs.koin.androidx.compose)
 
+    implementation(libs.coil.kt.coil.compose)
+    implementation(libs.coil.compose)
+
     implementation(libs.kotlinx.datetime.v041)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)

@@ -1,4 +1,4 @@
-package com.giraffe.explore
+package com.giraffe.explore.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +24,7 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.explore.VoiceSearchHelper
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.HistoryAndRecentItems
 import com.giraffe.explore.components.NoResult
@@ -48,7 +50,7 @@ fun SearchContent(
     val context = LocalContext.current
     val voiceHelper = remember {
         VoiceSearchHelper(context) { result ->
-            onIntent(SearchIntent.OnVoiceSearchResult(result))
+            onIntent(SearchIntent.OnSearchQueryChange(result))
         }
     }
 
@@ -66,12 +68,13 @@ fun SearchContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .background(Theme.color.background.screen)
     ) {
-        Column() {
+        Column {
             ExploreHeader(
                 showBackButton = true,
-                endIcon = painterResource(Theme.icons.outline.microphone),
+                endIcon = painterResource(if (state.searchQuery.isEmpty()) Theme.icons.outline.microphone else Theme.icons.outline.close),
                 viewTaps = state.isSearchResultsVisible,
                 tabsTitles = listOf(
                     stringResource(R.string.movies),
@@ -80,7 +83,6 @@ fun SearchContent(
                 ),
                 selectedTabIndex = state.selectedTab.ordinal,
                 onTabClick = { index ->
-                    //move to view model
                     val selectedTab = when (index) {
                         0 -> SearchTab.MOVIES
                         1 -> SearchTab.SERIES
@@ -91,7 +93,10 @@ fun SearchContent(
                 },
                 onValueChange = { query -> onIntent(SearchIntent.OnSearchQueryChange(query)) },
                 value = state.searchQuery,
-                onEndIconClick = { onIntent(SearchIntent.OnVoiceSearchClick) }
+                onEndIconClick = {
+                    if (state.searchQuery.isEmpty())
+                    else onIntent(SearchIntent.OnClearSearchQuery)
+                }
             )
             Column(
                 modifier = Modifier
@@ -110,8 +115,10 @@ fun SearchContent(
                 } else if (!state.isSearchResultsVisible) {
                     HistoryAndRecentItems(
                         state = state,
-                        onClickClearAll = {},
-                        onClickItem = {},
+                        onClickClearAll = { onIntent(SearchIntent.OnClearHistory) },
+                        onClickItem = {
+                            onIntent(SearchIntent.OnClickItem(it))
+                        },
                         onClickIcon = {},
                     )
                 } else {

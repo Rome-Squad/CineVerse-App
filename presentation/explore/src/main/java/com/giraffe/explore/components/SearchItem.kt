@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.SearchScreenState
 
 
 @Composable
@@ -29,7 +28,6 @@ fun SearchItem(
     modifier: Modifier = Modifier,
     text: String,
     isFromHistory: Boolean,
-    state: SearchScreenState,
     onClickItem: (item: String) -> Unit,
     onClickIcon: () -> Unit
 ) {
@@ -60,7 +58,7 @@ fun SearchItem(
 
 
         Icon(
-            painter = painterResource(id = if (state.isSearchSuggestionsVisible) Theme.icons.outline.arrowRightUp else Theme.icons.outline.close),
+            painter = painterResource(id = if (isFromHistory) Theme.icons.outline.close else Theme.icons.outline.arrowRightUp),
             contentDescription = "Navigate",
             modifier = Modifier
                 .size(20.dp)
@@ -87,7 +85,6 @@ fun SearchItemPreview() {
             SearchItem(
                 text = "Batman",
                 isFromHistory = true,
-                state = SearchScreenState(),
                 modifier = Modifier,
                 onClickItem = {},
                 onClickIcon = {},
@@ -95,7 +92,6 @@ fun SearchItemPreview() {
             SearchItem(
                 text = "The Batman",
                 isFromHistory = false,
-                state = SearchScreenState(),
                 modifier = Modifier,
                 onClickItem = {},
                 onClickIcon = {},

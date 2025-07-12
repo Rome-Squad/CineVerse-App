@@ -1,7 +1,8 @@
-package com.giraffe.explore
+package com.giraffe.explore.screen
 
 import com.giraffe.designsystem.uimodel.PosterMovie
 import com.giraffe.explore.entity.SearchKeyword
+import com.giraffe.movies.entity.Movie
 
 
 data class SearchScreenState(
@@ -35,12 +36,12 @@ enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
 
-//fun Movie.toMovieUi(): MovieStateUi {
-//    return MovieStateUi(
-//        id = id,
+//fun Movie.toMovieUi(): PosterMovie {
+//    return PosterMovie(
+//
 //        title = title,
-//        imageUrl = posterUrl,
-//        rate = rating.toString(),
+//        imageUri = posterUrl?:"",
+//        rating = rating,
 //        genres = genresID,
 //        releaseDate = releaseYear,
 //        duration = duration.toString()
