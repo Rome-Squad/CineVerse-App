@@ -28,3 +28,9 @@ fun SearchKeyword.toCacheDto(): SearchKeywordCacheDto {
         lastSearchedTime = this.lastSearchedTime.toString()
     )
 }
+
+fun  List<SearchKeywordCacheDto>.toEntity(): List<SearchKeyword> {
+    return this.map {
+        it.toEntity()
+    }
+}

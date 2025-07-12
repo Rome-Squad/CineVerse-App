@@ -6,6 +6,8 @@ import com.giraffe.explore.utils.getCurrentLocalDateTime
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -34,10 +36,10 @@ class GetSearchKeywordsUseCaseTest {
             SearchKeyword("popular", isFromSearchHistory = true, lastSearchedTime = now)
         )
 
-        coEvery { repository.getSearchKeywords(trimmedQuery) } returns expected
+        coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(expected)
 
         // When
-        val result = useCase.execute(rawQuery)
+        val result = useCase(rawQuery).first()
 
         // Then
         assertEquals(expected, result)
@@ -49,12 +51,14 @@ class GetSearchKeywordsUseCaseTest {
         // Given
         val rawQuery = "  horror "
         val trimmedQuery = "horror"
-        coEvery { repository.getSearchKeywords(trimmedQuery) } returns emptyList()
+
+        coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(emptyList())
 
         // When
-        useCase.execute(rawQuery)
+        useCase(rawQuery).first() // Collect the flow to trigger the repository call
 
         // Then
         coVerify { repository.getSearchKeywords(trimmedQuery) }
     }
+
 }

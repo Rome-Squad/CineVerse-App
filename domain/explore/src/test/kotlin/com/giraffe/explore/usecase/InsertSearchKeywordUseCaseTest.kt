@@ -1,7 +1,5 @@
 package com.giraffe.explore.usecase
-import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.repository.ExploreRepository
-import com.giraffe.explore.utils.getCurrentLocalDateTime
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -21,17 +19,11 @@ class InsertSearchKeywordUseCaseTest {
 
     @Test
     fun `should call repository with given search keyword when execute is invoked`() = runTest {
-        // Given
-        val keyword = SearchKeyword(
-            keyword = "sci-fi",
-            isFromSearchHistory = false,
-            lastSearchedTime = getCurrentLocalDateTime()
-        )
 
         // When
-        useCase.execute(keyword)
+        useCase("sci-fi")
 
         // Then
-        coVerify { repository.insertSearchKeyword(keyword) }
+        coVerify { repository.insertSearchKeyword("sci-fi") }
     }
 }

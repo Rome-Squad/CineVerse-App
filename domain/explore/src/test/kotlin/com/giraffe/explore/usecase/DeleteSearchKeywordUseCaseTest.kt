@@ -30,7 +30,7 @@ class DeleteSearchKeywordUseCaseTest {
         )
 
         // When
-        useCase.execute(keyword)
+        useCase(keyword)
 
         // Then
         coVerify { repository.deleteSearchKeyword(keyword) }

@@ -7,7 +7,9 @@ interface MoviesRepository {
 
     suspend fun searchMovieByName(movieName: String): List<Movie>
 
-    suspend fun getMovieGenres(): List<MovieGenre>
+    suspend fun getMovieGenres(genreIds : List<Int>): List<String>
+
+    suspend fun getMoviesGenres() : List<MovieGenre>
 
     suspend fun getMoviesByGenre(genreId: Int): List<Movie>
 
@@ -20,4 +22,8 @@ interface MoviesRepository {
         isRecent: Boolean
     )
     suspend fun clearCache()
+
+    suspend fun getRecentlyMovies() : List<Movie>
+
+    suspend fun clearRecentlyMovies()
 }
