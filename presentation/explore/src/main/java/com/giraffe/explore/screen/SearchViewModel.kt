@@ -60,6 +60,7 @@ class SearchViewModel(
             is SearchIntent.OnClearRecentViewed -> handleOnClearRecentViewed()
             is SearchIntent.OnSelectedTabChanged -> _state.update { it.copy(selectedTab = intent.tab) }
             is SearchIntent.onClickToggleView -> handleClickToggleView()
+            SearchIntent.OnVoiceSearchClick -> _state.update { it.copy(isVoiceRecording = true) }
         }
     }
 
@@ -237,8 +238,6 @@ class SearchViewModel(
             )
         }
     }
-
-
 }
 
 

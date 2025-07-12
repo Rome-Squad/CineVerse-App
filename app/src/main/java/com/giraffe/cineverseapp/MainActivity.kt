@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.screen.SearchScreen
+import com.giraffe.explore.SearchScreen
 
 class MainActivity : ComponentActivity() {
 

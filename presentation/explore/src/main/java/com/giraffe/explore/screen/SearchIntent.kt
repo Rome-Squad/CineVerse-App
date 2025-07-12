@@ -7,6 +7,7 @@ sealed class SearchIntent {
     object OnClearSearchQuery : SearchIntent()
     data class OnDeleteItemHistory(val item: SearchKeyword) : SearchIntent()
     object OnClearHistory : SearchIntent()
+    object OnVoiceSearchClick : SearchIntent()
     object OnClearRecentViewed : SearchIntent()
     data class OnClickItem(val suggestion: SearchKeywordResults) : SearchIntent()
     data class OnSelectedTabChanged(val tab: SearchTab) : SearchIntent()

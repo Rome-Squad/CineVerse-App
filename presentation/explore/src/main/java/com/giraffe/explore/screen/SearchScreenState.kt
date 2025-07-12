@@ -13,7 +13,7 @@ data class SearchScreenState(
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
-    val selectedTab: SearchTab = SearchTab.MOVIES,
+    val selectedTab: SearchTab = SearchTab.ACTORS,
 
     val isVoiceRecording: Boolean = false,
 
