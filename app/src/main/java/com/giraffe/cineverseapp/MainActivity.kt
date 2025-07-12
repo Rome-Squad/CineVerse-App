@@ -27,13 +27,13 @@ class MainActivity : ComponentActivity() {
                     //val movie = remote.getMovieById(268)
                     //Log.d("TAG", "onCreate: $movie")
 
-                    val keywords = keywords.execute("")
+                    val keywords = keywords("")
                     keywords.collect {
                         Log.d("TAG", "onCreate: $it")
                     }
                     val movie = remote.getMoviesByName("Batman")
                     Log.d("TAG", "onCreate: $movie")
-                    search.execute("Batman")
+                    search("Batman")
 
 
 
