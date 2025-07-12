@@ -28,6 +28,9 @@
     <string name="circle_image">صورة دائرية</string>
     <string name="image_is_empty">الصورة فارغة</string>
     <string name="close">إغلاق</string>
+    <string name="movies">افلام</string>
+    <string name="series">مسلسلات</string>
+    <string name="actors">ممثلين</string>
     <string name="collection_item_icon">collection item icon</string>
     <string name="arrow_right_icon">arrow right icon</string>
     <string name="me">Me</string>

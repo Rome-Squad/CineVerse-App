@@ -1,6 +1,5 @@
 package com.giraffe.explore.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,26 +9,21 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.R
 
 @Composable
 fun CastItem(
     modifier: Modifier = Modifier,
-    imagePainter: Painter,
+    imageUrl: String,
     name: String
 ) {
     Column(
@@ -37,18 +31,20 @@ fun CastItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Image(
-            painter = imagePainter,
+        AsyncImage(
+            model = imageUrl,
             contentDescription = name,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
                 .clip(RoundedCornerShape(Theme.radius.lg))
         )
 
         Text(
             text = name,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             style = Theme.textStyle.body.sm.medium,
             color = Theme.color.shade.secondary
         )
@@ -59,10 +55,10 @@ fun CastItem(
 @Composable
 fun CastItemPreview() {
     CineVerseTheme {
-        Box(Modifier.width(80.dp)){
+        Box(Modifier.width(80.dp)) {
             CastItem(
-                imagePainter = painterResource(id = R.drawable.tom),
-                name =    "Tom Hardy"
+                imageUrl = "",
+                name = "Tom Hardy"
             )
         }
 

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -19,10 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.Tabs
+import com.giraffe.designsystem.composable.TextField
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.composable.TextField
-import com.giraffe.designsystem.composable.Tabs
 
 @Composable
 fun ExploreHeader(
@@ -32,19 +31,21 @@ fun ExploreHeader(
     onSearchClick: (String) -> Unit = {},
     endIcon: Painter,
     onEndIconClick: () -> Unit = {},
-    tabsTitles: List<String>,
+    viewTaps: Boolean = false,
+    tabsTitles: List<String> = listOf(""),
     onTabClick: (Int) -> Unit = {},
-    selectedTabIndex: Int,
+    selectedTabIndex: Int = 0,
     value: String,
-    onValueChange: (String) -> Unit
-
+    onValueChange: (String) -> Unit,
 ) {
+
     Column(
         modifier = modifier
             .background(color = Theme.color.background.screen)
             .padding(top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
         Row(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically
@@ -82,11 +83,13 @@ fun ExploreHeader(
                 value = value,
             )
         }
-        Tabs(
-            titles = tabsTitles,
-            onTabSelected = onTabClick,
-            selectedTabIndex = selectedTabIndex,
-        )
+        if (viewTaps) {
+            Tabs(
+                titles = tabsTitles,
+                onTabSelected = onTabClick,
+                selectedTabIndex = selectedTabIndex,
+            )
+        }
     }
 
 }
@@ -118,9 +121,7 @@ fun ExploreHeaderPreview() {
             onBackClick = {},
             showBackButton = true,
             endIcon = painterResource(Theme.icons.outline.microphone),
-            tabsTitles = listOf("Movie", "Series"),
-            onTabClick = {},
-            selectedTabIndex = 0,
+            viewTaps = false,
             onValueChange = {},
             value = ""
         )

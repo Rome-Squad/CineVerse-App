@@ -129,6 +129,7 @@ fun TextField(
                 },
                 colors = TextFieldColors(
                     unfocusedBorderColor = Color.Transparent,
+                    focusedBorderColor = Color.Transparent,
                     backgroundColor = Theme.color.background.card,
                     cursorColor = Theme.color.brand.primary,
                     textColor = Theme.color.shade.primary

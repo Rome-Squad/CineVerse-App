@@ -28,29 +28,25 @@ fun SearchItem(
     modifier: Modifier = Modifier,
     text: String,
     isFromHistory: Boolean,
-    onClick: () -> Unit
+    onClickItem: (item: String) -> Unit,
+    onClickIcon: () -> Unit
 ) {
-    val iconId = if (isFromHistory) Theme.icons.outline.history else Theme.icons.outline.search
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     Row(
         modifier = modifier
-            .clickable { onClick() }
+            .clickable { onClickItem(text) }
             .padding(vertical = (14.5).dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = iconId),
+            painter = painterResource(id = if (isFromHistory) Theme.icons.outline.history else Theme.icons.outline.search),
             contentDescription = "Search",
 
             modifier = Modifier.size(20.dp),
             tint = Theme.color.shade.tertiary
         )
-
-
-
-
         Text(
             text = text,
             style = Theme.textStyle.body.md.medium,
@@ -62,15 +58,17 @@ fun SearchItem(
 
 
         Icon(
-            painter = painterResource(id = Theme.icons.outline.arrowRightUp),
+            painter = painterResource(id = if (isFromHistory) Theme.icons.outline.close else Theme.icons.outline.arrowRightUp),
             contentDescription = "Navigate",
             modifier = Modifier
                 .size(20.dp)
                 .graphicsLayer {
                     rotationY = if (isRtl) 0f else 180f
-                },
+                }
+                .clickable { onClickIcon() },
             tint = Theme.color.shade.tertiary
         )
+
     }
     HorizontalDivider(
         thickness = 1.dp,
@@ -84,8 +82,20 @@ fun SearchItem(
 fun SearchItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
         Column {
-            SearchItem( text = "Batman", isFromHistory = true, onClick = {})
-            SearchItem(text = "The Batman", isFromHistory = false, onClick = {})
+            SearchItem(
+                text = "Batman",
+                isFromHistory = true,
+                modifier = Modifier,
+                onClickItem = {},
+                onClickIcon = {},
+            )
+            SearchItem(
+                text = "The Batman",
+                isFromHistory = false,
+                modifier = Modifier,
+                onClickItem = {},
+                onClickIcon = {},
+            )
         }
     }
 }

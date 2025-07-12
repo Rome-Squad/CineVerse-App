@@ -1,7 +1,6 @@
 package com.giraffe.designsystem.composable
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,12 +34,13 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.PosterMovie
+import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun PosterItemVertically(
-    movie: PosterMovie,
+    movie: Poster,
     modifier: Modifier = Modifier,
     onClickPoster: () -> Unit = {}
 ) {
@@ -68,11 +67,9 @@ fun PosterItemVertically(
 
 
             if (state is AsyncImagePainter.State.Success) {
-                Image(
-                    painter = painter,
-                    contentDescription = stringResource(R.string.image_poster_movie),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+                IslamicAppropriateImageViewer(
+                    imageUrl = movie.imageUri,
+                    modifier = Modifier.fillMaxSize()
                 )
             } else {
                 Icon(
@@ -94,7 +91,7 @@ fun PosterItemVertically(
 
 
         Text(
-            text = movie.title,
+            text = movie.name,
             style = Theme.textStyle.body.md.medium,
             color = Theme.color.shade.secondary,
             maxLines = 1,
@@ -109,8 +106,9 @@ fun PosterItemVertically(
 private fun Preview() {
     CineVerseTheme {
         PosterItemVertically(
-            movie = PosterMovie(
-                title = "The Flash",
+            movie = Poster(
+                id = 1,
+                name = "The Flash",
                 imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                 rating = 7.5f,
             ),

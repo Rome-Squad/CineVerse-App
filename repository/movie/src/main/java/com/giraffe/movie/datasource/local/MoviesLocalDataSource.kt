@@ -20,7 +20,7 @@ interface MoviesLocalDataSource {
 
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
-    suspend fun getMovieGenres(genreIds : List<Int>): List<String>
+    suspend fun getMovieGenres(genreIds : List<Int>): List<MovieGenreCacheDto>
 
     suspend fun getMovieGenreById(genreId: Int): MovieGenreCacheDto
 

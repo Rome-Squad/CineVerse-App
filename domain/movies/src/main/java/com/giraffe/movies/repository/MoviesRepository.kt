@@ -7,7 +7,7 @@ interface MoviesRepository {
 
     suspend fun searchMovieByName(movieName: String): List<Movie>
 
-    suspend fun getMovieGenres(genreIds : List<Int>): List<String>
+    suspend fun getMovieGenres(genreIds : List<Int>): List<MovieGenre>
 
     suspend fun getMoviesGenres() : List<MovieGenre>
 

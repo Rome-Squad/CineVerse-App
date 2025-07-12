@@ -26,7 +26,7 @@ class MovieLocalDataSourceImp(
         movieDao.getMoviesByGenre(genreId)
 
 
-    override suspend fun getMovieGenres(genreIds: List<Int>): List<String> {
+    override suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenreCacheDto> {
        return movieDao.getMovieGenres(genreIds)
     }
 

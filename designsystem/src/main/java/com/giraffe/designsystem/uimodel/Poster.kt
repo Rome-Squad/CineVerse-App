@@ -1,7 +1,8 @@
 package com.giraffe.designsystem.uimodel
 
-data class PosterMovie(
-    val title: String,
+data class Poster(
+    val id: Int,
+    val name: String,
     val imageUri: String,
     val rating: Float,
     val genres: String? = null,
