@@ -16,15 +16,15 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.PosterMovie
 import com.giraffe.explore.R
-import com.giraffe.explore.screen.SearchKeywordResults
+import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.screen.SearchScreenState
 
 @Composable
 fun HistoryAndRecentItems(
     state: SearchScreenState,
     onClickClearAll: () -> Unit,
-    onClickItem: (item: SearchKeywordResults) -> Unit,
-    onClickIcon: () -> Unit
+    onClickItem: (item: SearchKeyword) -> Unit,
+    onClickIcon: (item: SearchKeyword) -> Unit
 ) {
 
     Column(
@@ -54,7 +54,7 @@ fun HistoryAndRecentItems(
                         text = keyWord.keyword,
                         isFromHistory = keyWord.isFromSearchHistory,
                         onClickItem = { onClickItem(keyWord) },
-                        onClickIcon = onClickIcon,
+                        onClickIcon = { onClickIcon(keyWord) },
                     )
                 }
             }

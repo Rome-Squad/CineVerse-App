@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.SearchScreen
+import com.giraffe.explore.screen.SearchScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -14,10 +14,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-//                LaunchedEffect(Unit) {
-//                    val keywords = getKeywords.execute("Batman")
-//                    Log.d("TAG", "onCreate: $keywords")
-//                }
                 SearchScreen()
             }
         }

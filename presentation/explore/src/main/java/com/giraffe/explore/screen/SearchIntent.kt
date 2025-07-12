@@ -9,7 +9,7 @@ sealed class SearchIntent {
     object OnClearHistory : SearchIntent()
     object OnVoiceSearchClick : SearchIntent()
     object OnClearRecentViewed : SearchIntent()
-    data class OnClickItem(val suggestion: SearchKeywordResults) : SearchIntent()
+    data class OnClickItem(val suggestion: SearchKeyword) : SearchIntent()
     data class OnSelectedTabChanged(val tab: SearchTab) : SearchIntent()
     object onClickToggleView : SearchIntent()
 }

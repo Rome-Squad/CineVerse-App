@@ -1,5 +1,6 @@
-package com.giraffe.explore
+package com.giraffe.explore.screen
 
+import android.Manifest
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -29,16 +31,13 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.explore.VoiceSearchHelper
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.HistoryAndRecentItems
 import com.giraffe.explore.components.NoResult
 import com.giraffe.explore.components.ResultsActors
 import com.giraffe.explore.components.ResultsMoviesOrSeriousGrid
 import com.giraffe.explore.components.ResultsMoviesOrSeriousList
-import com.giraffe.explore.screen.SearchIntent
-import com.giraffe.explore.screen.SearchScreenState
-import com.giraffe.explore.screen.SearchTab
-import com.giraffe.explore.screen.SearchViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -46,7 +45,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel(),
 ) {
     val state = viewModel.state.collectAsState().value
-    SearchContent(state = state, onIntent = viewModel::onIntents)
+    SearchContent(state = state, onIntent = viewModel::onIntent)
 }
 
 @Composable
@@ -88,7 +87,7 @@ fun SearchContent(
             if (permissionGranted) {
                 voiceSearchHelper.startListening()
             } else {
-                permissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
             }
         }
     }
@@ -100,6 +99,7 @@ fun SearchContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .background(Theme.color.background.screen)
     ) {
         Column {
@@ -137,31 +137,39 @@ fun SearchContent(
 
                     !state.isSearchResultsVisible -> HistoryAndRecentItems(
                         state = state,
-                        onClickClearAll = {},
-                        onClickItem = {},
-                        onClickIcon = {},
+                        onClickClearAll = {
+                            onIntent(SearchIntent.OnClearHistory)
+                        },
+                        onClickItem = {
+                            onIntent(SearchIntent.OnClickItem(it))
+                        },
+                        onClickIcon = {
+                            if (it.isFromSearchHistory) onIntent(SearchIntent.OnDeleteItemHistory(it))
+                            else
+                                onIntent(SearchIntent.OnSearchQueryChange(it.keyword))
+                        },
                     )
 
                     else -> when (state.selectedTab) {
                         SearchTab.MOVIES -> {
-                            if (state.movieResults.isEmpty()) NoResult()
+                            if (state.mediaResults.isEmpty()) NoResult()
                             else if (state.isGridSelected)
-                                ResultsMoviesOrSeriousList(media = state.movieResults)
+                                ResultsMoviesOrSeriousList(media = state.mediaResults)
                             else
-                                ResultsMoviesOrSeriousGrid(media = state.movieResults)
+                                ResultsMoviesOrSeriousGrid(media = state.mediaResults)
                         }
 
                         SearchTab.SERIES -> {
-                            if (state.seriesResults.isEmpty()) NoResult()
+                            if (state.mediaResults.isEmpty()) NoResult()
                             else if (state.isGridSelected)
-                                ResultsMoviesOrSeriousList(media = state.seriesResults)
+                                ResultsMoviesOrSeriousList(media = state.mediaResults)
                             else
-                                ResultsMoviesOrSeriousGrid(media = state.seriesResults)
+                                ResultsMoviesOrSeriousGrid(media = state.mediaResults)
                         }
 
                         SearchTab.ACTORS -> {
-                            if (state.actorResults.isEmpty()) NoResult()
-                            else ResultsActors(state.actorResults)
+                            if (state.mediaResults.isEmpty()) NoResult()
+                            else ResultsActors(state.mediaResults)
                         }
                     }
                 }

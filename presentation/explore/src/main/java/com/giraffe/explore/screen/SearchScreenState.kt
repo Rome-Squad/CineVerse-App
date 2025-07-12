@@ -3,31 +3,24 @@ package com.giraffe.explore.screen
 import com.giraffe.designsystem.uimodel.PosterMovie
 import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.movies.entity.Movie
+import com.giraffe.movies.entity.MovieGenre
+import com.giraffe.person.entity.Person
+import com.giraffe.series.entity.Series
+import com.giraffe.series.entity.SeriesGenre
 
 
 data class SearchScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
+    val searchKeyword: SearchKeyword? = null,
     var errorMessage: String? = null,
-
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
-    val selectedTab: SearchTab = SearchTab.ACTORS,
-
+    val selectedTab: SearchTab = SearchTab.SERIES,
     val isVoiceRecording: Boolean = false,
-
-    val movieResults: List<PosterMovie> = emptyList(),
-    val seriesResults: List<PosterMovie> = emptyList(),
-    val actorResults: List<PosterMovie> = emptyList(),
-
-    val resultSearchKeyword: List<SearchKeywordResults> = listOf(
-        SearchKeywordResults(
-            keyword = "",
-            isFromSearchHistory = true,
-        )
-    ),
-
+    val mediaResults: List<PosterMovie> = emptyList(),
+    val resultSearchKeyword: List<SearchKeyword> = emptyList(),
     val recentViews: List<PosterMovie> = emptyList(),
     val isGridSelected: Boolean = true
 )
@@ -36,77 +29,40 @@ enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
 
-//fun Movie.toMovieUi(): PosterMovie {
-//    return PosterMovie(
-//
-//        title = title,
-//        imageUri = posterUrl?:"",
-//        rating = rating,
-//        genres = genresID,
-//        releaseDate = releaseYear,
-//        duration = duration.toString()
-//    )
-//}
-//
-//fun Series.toSeriesUi(): SeriesStateUi {
-//    return SeriesStateUi(
-//        id = id,
-//        title = title,
-//        imageUrl = posterUrl,
-//        rate = rate.toString(),
-//        genres = genresID,
-//        releaseDate = releaseYear,
-//    )
-//}
-//
-//fun Person.toActorStateUi(): ActorStateUi {
-//    return ActorStateUi(
-//        id = id,
-//        name = name,
-//        imageUrl = imageUrl.toString()
-//    )
-//}
 
-fun SearchKeyword.toSearchKeywordResults(): SearchKeywordResults {
-    return SearchKeywordResults(
-        keyword = keyword,
-        isFromSearchHistory = isFromSearchHistory
+fun Movie.toPosterMovie(allGenres: List<MovieGenre>): PosterMovie {
+    val genreTitles = allGenres
+        .filter { it.id in genresID }
+        .joinToString(", ") { it.title }
+        .ifBlank { null }
+
+    return PosterMovie(
+        title = title,
+        imageUri = posterUrl.orEmpty(),
+        rating = rating,
+        genres = genreTitles,
+        time = duration.toString(),
+        date = releaseYear?.toString()
     )
 }
 
-//data class RecentViewsStateUi(
-//    val title: String,
-//    val imageUrl: String,
-//    val rate: String? = null
-//)
+fun Series.toPosterMovie(allGenres: List<SeriesGenre>): PosterMovie {
+    val genreTitles = allGenres
+        .filter { it.id in genreIDs }
+        .joinToString(", ") { it.name }
+        .ifBlank { null }
 
-//data class MovieStateUi(
-//    val id: Int,
-//    val title: String,
-//    val imageUrl: String,
-//    val rate: String,
-//    val genres: List<Int>,
-//    val releaseDate: LocalDate,
-//    val duration: String
-//)
-//
-//data class SeriesStateUi(
-//    val id: Int,
-//    val title: String,
-//    val imageUrl: String,
-//    val rate: String,
-//    val genres: List<Int>,
-//    val releaseDate: LocalDate,
-//)
-//
-//
-//data class ActorStateUi(
-//    val id: Int,
-//    val name: String,
-//    val imageUrl: String,
-//)
+    return PosterMovie(
+        title = name,
+        imageUri = posterUrl,
+        rating = rating,
+        genres = genreTitles,
+    )
+}
 
-data class SearchKeywordResults(
-    val keyword: String,
-    val isFromSearchHistory: Boolean,
-)
+fun Person.toPosterMovie(): PosterMovie =
+    PosterMovie(
+        title = name,
+        imageUri = imageUrl.orEmpty(),
+        rating = 0f
+    )
