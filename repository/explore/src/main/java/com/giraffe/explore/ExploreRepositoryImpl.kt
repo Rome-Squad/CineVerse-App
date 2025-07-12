@@ -6,6 +6,7 @@ import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.mapper.toCacheDto
 import com.giraffe.explore.mapper.toEntity
 import com.giraffe.explore.repository.ExploreRepository
+import com.giraffe.explore.utils.getCurrentLocalDateTime
 import com.giraffe.explore.utils.safeCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -38,8 +39,13 @@ class ExploreRepositoryImpl(
         }
     }
 
-    override suspend fun insertSearchKeyword(searchKeyword: SearchKeyword) {
+    override suspend fun insertSearchKeyword(searchKeyword: String) {
         safeCall {
+            val searchKeyword = SearchKeyword(
+                keyword = searchKeyword,
+                isFromSearchHistory = true,
+                lastSearchedTime = getCurrentLocalDateTime()
+            )
             val cacheDto = searchKeyword.toCacheDto()
             cache.insertSearchKeyword(cacheDto)
         }

@@ -7,7 +7,7 @@ interface ExploreRepository {
 
     suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>>
 
-    suspend fun insertSearchKeyword(searchKeyword: SearchKeyword)
+    suspend fun insertSearchKeyword(searchKeyword: String)
 
     suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword)
 
