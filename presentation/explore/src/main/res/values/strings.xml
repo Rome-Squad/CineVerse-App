@@ -4,4 +4,6 @@
     <string name="clear_all">Clear All</string>
     <string name="you_recent_viewed">You Recent Viewed</string>
     <string name="search_suggestions">Search Suggestions</string>
+    <string name="voice_permission_granted">Voice permission granted</string>
+    <string name="voice_permission_denied">Voice permission denied</string>
 </resources>
