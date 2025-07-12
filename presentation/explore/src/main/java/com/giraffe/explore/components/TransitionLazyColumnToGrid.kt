@@ -6,6 +6,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -24,6 +25,7 @@ fun TransitionLazyColumnToGrid(
 ) {
     SharedTransitionLayout {
         AnimatedContent(
+            modifier = Modifier.padding(horizontal = 16.dp),
             targetState = isListSelected,
             label = "ViewToggleAnimation"
         ) {
