@@ -21,7 +21,7 @@ class InsertSearchKeywordUseCaseTest {
     fun `should call repository with given search keyword when execute is invoked`() = runTest {
 
         // When
-        useCase.execute("sci-fi")
+        useCase("sci-fi")
 
         // Then
         coVerify { repository.insertSearchKeyword("sci-fi") }

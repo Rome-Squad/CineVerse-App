@@ -39,7 +39,7 @@ class GetSearchKeywordsUseCaseTest {
         coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(expected)
 
         // When
-        val result = useCase.execute(rawQuery).first()
+        val result = useCase(rawQuery).first()
 
         // Then
         assertEquals(expected, result)
@@ -55,7 +55,7 @@ class GetSearchKeywordsUseCaseTest {
         coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(emptyList())
 
         // When
-        useCase.execute(rawQuery).first() // Collect the flow to trigger the repository call
+        useCase(rawQuery).first() // Collect the flow to trigger the repository call
 
         // Then
         coVerify { repository.getSearchKeywords(trimmedQuery) }

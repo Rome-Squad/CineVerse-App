@@ -5,7 +5,7 @@ import androidx.work.Configuration
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.giraffe.cineverseapp.di.dataModule
+import com.giraffe.cineverseapp.di.databaseModule
 import com.giraffe.series.di.seriesRemoteDataModule
 import com.giraffe.cineverseapp.di.localDataSourceModule
 import com.giraffe.cineverseapp.di.networkModule
@@ -23,7 +23,7 @@ class CineVerseApp : Application(), Configuration.Provider {
         startKoin {
             androidContext(this@CineVerseApp)
             modules(
-                dataModule,
+                databaseModule,
                 localDataSourceModule,
                 networkModule,
                 repositoryModule,
@@ -31,13 +31,12 @@ class CineVerseApp : Application(), Configuration.Provider {
                 seriesRemoteDataModule
             )
         }
-        val workRequest = PeriodicWorkRequestBuilder<CacheCleanupWorker>(
-            1, TimeUnit.HOURS
-        ).build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "CacheCleanupWork",
             ExistingPeriodicWorkPolicy.KEEP,
-            workRequest
+            PeriodicWorkRequestBuilder<CacheCleanupWorker>(
+                1, TimeUnit.HOURS
+            ).build()
         )
     }
 

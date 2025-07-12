@@ -21,7 +21,7 @@ class ClearSearchHistoryUseCaseTest {
     @Test
     fun `should call repository to clear search history when execute is invoked`() = runTest {
         // When
-        useCase.execute()
+        useCase()
 
         // Then
         coVerify { repository.clearSearchHistory() }

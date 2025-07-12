@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetSearchKeywordsUseCase(
     private val repository: ExploreRepository
 ) {
-    suspend fun execute(query: String): Flow<List<SearchKeyword>> {
+    suspend operator fun invoke(query: String): Flow<List<SearchKeyword>> {
         return repository.getSearchKeywords(query.trim())
     }
 }
