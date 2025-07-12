@@ -19,6 +19,7 @@ dependencies {
     testImplementation(libs.bundles.test)
 
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.coroutines.android)
 }
 
 
