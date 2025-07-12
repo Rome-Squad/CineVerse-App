@@ -1,23 +1,32 @@
 package com.giraffe.cineverseapp.worker
-/*
 
 import android.content.Context
+import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.giraffe.person.cleaner.PersonCacheCleaner
-import org.koin.core.component.KoinComponent
+import com.giraffe.cineverseapp.data.database.CineVerseDatabase
+import com.giraffe.cineverseapp.di.DATABASE_NAME
+import com.giraffe.movie.cleaner.MovieCacheCleanerImp
+import com.giraffe.person.cleaner.PersonCacheCleanerImp
+import com.giraffe.series.cleaner.SeriesCacheCleanerImp
+
 class CacheCleanupWorker(
     appContext: Context,
     workerParams: WorkerParameters,
-) : CoroutineWorker(appContext, workerParams), KoinComponent {
-    private val personCacheCleaner: PersonCacheCleaner = getKoin().get()
+) : CoroutineWorker(appContext, workerParams) {
+    private val database =
+        Room.databaseBuilder(appContext, CineVerseDatabase::class.java, DATABASE_NAME).build()
+    private val personCacheCleaner = PersonCacheCleanerImp(database.personDao())
+    private val seriesCacheCleaner = SeriesCacheCleanerImp(database.seriesDao())
+    private val movieCacheCleaner = MovieCacheCleanerImp(database.movieDao())
     override suspend fun doWork(): Result {
         return try {
             personCacheCleaner.clearPersonCache()
+            seriesCacheCleaner.clearSeriesCache()
+            movieCacheCleaner.clearMovieCache()
             Result.success()
         } catch (_: Exception) {
             Result.retry()
         }
     }
 }
-*/
