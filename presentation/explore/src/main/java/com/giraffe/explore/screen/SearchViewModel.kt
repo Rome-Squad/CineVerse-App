@@ -69,22 +69,27 @@ class SearchViewModel(
             }
         }
     }
-
-    fun onIntent(intent: SearchIntent) = try {
+    fun onIntent(intent: SearchIntent) = try{
         when (intent) {
-            is SearchIntent.OnSearchQueryChange -> queryChanged(intent.query)
-            is SearchIntent.OnClearSearchQuery -> clearQuery()
-            is SearchIntent.OnClickItem -> loadResults(intent.suggestion, _state.value.selectedTab)
-            is SearchIntent.OnSelectedTabChanged -> selectTab(intent.tab)
-            is SearchIntent.OnClearHistory -> clearHistory()
-            is SearchIntent.OnDeleteItemHistory -> deleteHistory(intent.item)
-            is SearchIntent.OnClearRecentViewed -> clearRecent()
-            is SearchIntent.onClickToggleView -> toggleView()
-            SearchIntent.OnVoiceSearchClick -> _state.update { it.copy(isVoiceRecording = true) }
-        }
-    } catch (_: Exception) {
+          is SearchIntent.OnSearchQueryChange -> queryChanged(intent.query)
+          is SearchIntent.OnClearSearchQuery -> clearQuery()
+          is SearchIntent.OnClickItem -> loadResults(intent.suggestion, _state.value.selectedTab)
+          is SearchIntent.OnSelectedTabChanged -> selectTab(intent.tab)
+          is SearchIntent.OnClearHistory -> clearHistory()
+          is SearchIntent.OnDeleteItemHistory -> deleteHistory(intent.item)
+          is SearchIntent.OnClearRecentViewed -> clearRecent()
+          is SearchIntent.onClickToggleView -> toggleView()
+          is SearchIntent.OnVoiceSearchClick -> _state.update { it.copy(isVoiceRecording = true) }
+          is SearchIntent.OnPermissionResult -> updatePermissionState(intent.granted)
+          is SearchIntent.OnVoiceSearchFinished -> _state.update { it.copy(isVoiceRecording = false) }
+      }
+    }catch (_: Exception) {
         _state.update { it.copy(errorMessage = "An error occurred") }
     }
+
+    private fun updatePermissionState(granted: Boolean) {
+        _state.update { it.copy(isPermissionGranted = granted) 
+        }
 
     private fun selectTab(tab: SearchTab) {
         _state.value.searchKeyword?.let { loadResults(it, tab) }
