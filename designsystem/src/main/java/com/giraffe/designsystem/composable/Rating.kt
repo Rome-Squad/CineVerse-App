@@ -32,7 +32,7 @@ fun Rating(
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
-            text = value.toString(),
+            text = (((value * 10).toInt()).toFloat() / 10).toString(),
             style = Theme.textStyle.label.md.medium,
             color = Theme.color.shade.primary
         )
