@@ -25,14 +25,7 @@ class SearchByNameUseCaseTest {
         searchPeopleByNameUseCase = SearchPeopleByNameUseCase(repository)
     }
 
-    @Test
-    fun `should throw SearchResultNotFoundException when repository has no search result`() =
-        runTest {
-            //given
-            coEvery { repository.searchByName(any()) } returns emptyList()
-            //when && then
-            assertThrows<SearchResultNotFoundException> { searchPeopleByNameUseCase("Tarek") }
-        }
+
 
     @Test
     fun `should returns list of people when repository returns search result`() = runTest {

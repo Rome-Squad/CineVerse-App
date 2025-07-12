@@ -70,16 +70,20 @@ class SearchViewModel(
         }
     }
 
-    fun onIntent(intent: SearchIntent) = when (intent) {
-        is SearchIntent.OnSearchQueryChange -> queryChanged(intent.query)
-        is SearchIntent.OnClearSearchQuery -> clearQuery()
-        is SearchIntent.OnClickItem -> loadResults(intent.suggestion, _state.value.selectedTab)
-        is SearchIntent.OnSelectedTabChanged -> selectTab(intent.tab)
-        is SearchIntent.OnClearHistory -> clearHistory()
-        is SearchIntent.OnDeleteItemHistory -> deleteHistory(intent.item)
-        is SearchIntent.OnClearRecentViewed -> clearRecent()
-        is SearchIntent.onClickToggleView -> toggleView()
-        SearchIntent.OnVoiceSearchClick -> _state.update { it.copy(isVoiceRecording = true) }
+    fun onIntent(intent: SearchIntent) = try {
+        when (intent) {
+            is SearchIntent.OnSearchQueryChange -> queryChanged(intent.query)
+            is SearchIntent.OnClearSearchQuery -> clearQuery()
+            is SearchIntent.OnClickItem -> loadResults(intent.suggestion, _state.value.selectedTab)
+            is SearchIntent.OnSelectedTabChanged -> selectTab(intent.tab)
+            is SearchIntent.OnClearHistory -> clearHistory()
+            is SearchIntent.OnDeleteItemHistory -> deleteHistory(intent.item)
+            is SearchIntent.OnClearRecentViewed -> clearRecent()
+            is SearchIntent.onClickToggleView -> toggleView()
+            SearchIntent.OnVoiceSearchClick -> _state.update { it.copy(isVoiceRecording = true) }
+        }
+    } catch (_: Exception) {
+        _state.update { it.copy(errorMessage = "An error occurred") }
     }
 
     private fun selectTab(tab: SearchTab) {
