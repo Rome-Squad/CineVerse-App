@@ -4,6 +4,8 @@ import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.movie.datasource.remote.dto.MovieDto
 import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
+import com.giraffe.movie.datasource.remote.dto.MovieReviewDto
+import com.giraffe.movie.datasource.remote.dto.ReviewsResponseDto
 import com.giraffe.movie.response.GenreResponse
 import com.giraffe.movie.response.MoviesListResponse
 import com.giraffe.movie.utils.handleRequest
@@ -64,6 +66,17 @@ class MoviesRemoteDataSourceImpl(
                     }
                 }
             }
+        return response.results
+    }
+
+    override suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto> {
+        val response = handleRequest<ReviewsResponseDto> {
+            client.get ("$baseUrl/movie/$movieId/reviews"){
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                }
+            }
+        }
         return response.results
     }
 
