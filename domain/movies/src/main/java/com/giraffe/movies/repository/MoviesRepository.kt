@@ -2,6 +2,7 @@ package com.giraffe.movies.repository
 
 import com.giraffe.movies.entity.MovieGenre
 import com.giraffe.movies.entity.Movie
+import com.giraffe.movies.entity.MovieReview
 
 interface MoviesRepository {
 
@@ -26,4 +27,11 @@ interface MoviesRepository {
     suspend fun getRecentlyMovies() : List<Movie>
 
     suspend fun clearRecentlyMovies()
+
+    suspend fun getMovieDetails(movieId : Int) : Movie
+
+    suspend fun getMovieReviews(movieId : Int,pageNumber : Int, pageSize:Int) : List<MovieReview>
+
+    suspend fun addMovieReview(review: MovieReview)
+
 }

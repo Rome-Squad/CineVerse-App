@@ -11,6 +11,7 @@ import com.giraffe.movie.mapper.toMovieGenreDto
 import com.giraffe.movie.utils.safeCall
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
+import com.giraffe.movies.entity.MovieReview
 import com.giraffe.movies.repository.MoviesRepository
 
 class MoviesRepositoryImpl(
@@ -126,5 +127,22 @@ class MoviesRepositoryImpl(
         safeCall {
             cache.clearRecentlyMovies()
         }
+    }
+
+    override suspend fun getMovieDetails(movieId: Int): Movie {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMovieReviews(
+        movieId: Int,
+        pageNumber: Int,
+        pageSize: Int
+    ): List<MovieReview> {
+        TODO("Not yet implemented")
+    }
+
+
+    override suspend fun addMovieReview(review: MovieReview) {
+        TODO("Not yet implemented")
     }
 }
