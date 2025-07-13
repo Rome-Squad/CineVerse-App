@@ -19,18 +19,21 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.utils.formatAsMonthDayYear
 import com.giraffe.details.utils.getCurrentLocalDate
+import com.giraffe.details.utils.imageSourceToPainter
 import kotlinx.datetime.LocalDate
+
 
 @Composable
 fun ReviewCard(
     modifier: Modifier = Modifier,
-    rate: Int = 0,
-    reviewText: String = "",
+    rate: Int,
+    reviewText: String,
     reviewDate: LocalDate = getCurrentLocalDate(),
-    reviewerImageSource: Any? = null,
-    reviewerName: String = "",
-    reviewerUsername: String = ""
+    reviewerImageSource: Any?,
+    reviewerName: String,
+    reviewerUsername: String
 ) {
 
     Column(
@@ -54,9 +57,7 @@ fun ReviewCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             ImageCard(
-                imageSource = reviewerImageSource,
-                modifier = Modifier
-                    .size(40.dp)
+                imageSource = reviewerImageSource, modifier = Modifier.size(40.dp)
             )
 
             Column(
@@ -68,8 +69,6 @@ fun ReviewCard(
                     style = Theme.textStyle.body.md.medium,
                     color = Theme.color.shade.primary
                 )
-
-
                 Text(
                     text = stringResource(R.string.user_name, reviewerUsername),
                     style = Theme.textStyle.body.sm.regular,
@@ -83,20 +82,16 @@ fun ReviewCard(
         )
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             RatingStars(
-                rate = rate,
-                onRateClickEnabled = false,
-                starSize = 16.dp,
-                starSpace = 4.dp
+                rate = rate, onRateClickEnabled = false, starSize = 16.dp, starSpace = 4.dp
             )
 
             Text(
-                text = reviewDate.toString(),
+                text = reviewDate.formatAsMonthDayYear(),
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.shade.secondary
             )
@@ -107,34 +102,44 @@ fun ReviewCard(
 }
 
 
-@Composable
 @Preview(
     showBackground = true,
-    showSystemUi = false
 )
+@Composable
 fun PreviewReviewCard() {
 
     CineVerseTheme(
         isDarkTheme = false
     ) {
         ReviewCard(
-            modifier = Modifier
+            modifier = Modifier,
+            rate = 5,
+            reviewText = "very good",
+            reviewDate = getCurrentLocalDate(),
+            reviewerImageSource = imageSourceToPainter(R.drawable.reviewer),
+            reviewerName = "Hend",
+            reviewerUsername = "Hend sayed",
         )
     }
 }
 
-@Composable
 @Preview(
     showBackground = true,
-    showSystemUi = false
 )
+@Composable
 fun PreviewReviewCardDark() {
 
     CineVerseTheme(
         isDarkTheme = true
     ) {
         ReviewCard(
-            modifier = Modifier
+            modifier = Modifier,
+            rate = 5,
+            reviewText = "very good",
+            reviewDate = getCurrentLocalDate(),
+            reviewerImageSource = imageSourceToPainter(R.drawable.reviewer),
+            reviewerName = "Hend",
+            reviewerUsername = "Hend sayed"
         )
     }
 }
