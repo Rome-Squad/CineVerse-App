@@ -30,7 +30,7 @@ interface MoviesRepository {
 
     suspend fun getMovieDetails(movieId : Int) : Movie
 
-    suspend fun getMovieReviews(movieId : Int,pageNumber : Int, pageSize:Int) : List<MovieReview>
+    suspend fun getMovieReviews(movieId : Int) : List<MovieReview>
 
     suspend fun addMovieReview(review: MovieReview)
 
