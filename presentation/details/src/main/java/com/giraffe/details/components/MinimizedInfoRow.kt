@@ -98,7 +98,7 @@ fun MinimizedInfoRow(
 fun PreviewMinimizedInfoRow() {
     CineVerseTheme(isDarkTheme = true) {
         MinimizedInfoRow(
-            poster = imageSourceToPainter(R.drawable.main_poster_test),
+            poster = R.drawable.main_poster_test.imageSourceToPainter(),
             title = "The Dark Knight",
             modifier = Modifier.padding(bottom = 12.dp)
         )

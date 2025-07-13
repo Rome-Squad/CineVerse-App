@@ -25,6 +25,7 @@ import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
 import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.details.utils.getCurrentLocalDate
 
 
 @Composable
@@ -102,7 +103,7 @@ fun PreviewMainMovieDetails() {
     ) {
         MainMovieOrSeriesDetails(
             modifier = Modifier.width(360.dp),
-            poster = imageSourceToPainter(com.giraffe.designsystem.R.drawable.main_poster_test),
+            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
             name = "The Dark Knight",
             genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
             rating = 8.5f,
@@ -121,7 +122,7 @@ fun PreviewMainMovieDetails() {
 fun PreviewMinimizedInfoRow() {
     CineVerseTheme(isDarkTheme = true) {
         MinimizedInfoRow(
-            poster = imageSourceToPainter(com.giraffe.designsystem.R.drawable.main_poster_test),
+            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
             title = "The Dark Knight",
             modifier = Modifier.padding(bottom = 12.dp)
         )
@@ -195,7 +196,9 @@ fun PreviewReviewCard() {
             reviewText = "While we were focusing on some videos due to the need of the tasks, we still need to cover some important topics in compose now. without restriction to finish it at the first day of the week.\n" +
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
-            reviewerUsername = "bilal_azzam"
+            reviewerUsername = "bilal_azzam",
+            reviewDate = getCurrentLocalDate(),
+            reviewerImageSource = ""
         )
     }
 }
@@ -212,7 +215,9 @@ fun PreviewReviewCardDark() {
             reviewText = "While we were focusing on some videos due to the need of the tasks, we still need to cover some important topics in compose now. without restriction to finish it at the first day of the week.\n" +
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
-            reviewerUsername = "bilal_azzam"
+            reviewerUsername = "bilal_azzam",
+            reviewDate = getCurrentLocalDate(),
+            reviewerImageSource = ""
         )
     }
 }
@@ -226,14 +231,13 @@ fun PreviewReviewCardDark() {
 fun PreviewSeasonCardDark() {
     CineVerseTheme(isDarkTheme = true) {
         SeasonCard(
-            poster = painterResource(
-                id = com.giraffe.designsystem.R.drawable.reviewer
-            ),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
             episodes = 20,
-            year = 2019
+            year = 2019,
+            onClick = {}
         )
     }
 }
@@ -246,14 +250,13 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-            poster = painterResource(
-                id = com.giraffe.designsystem.R.drawable.reviewer
-            ),
+        poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
             episodes = 20,
-            year = 2019
+            year = 2019,
+            onClick = {}
         )
     }
 }

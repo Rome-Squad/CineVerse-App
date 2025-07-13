@@ -17,10 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
 
 @Composable
 fun StaffInfoSection(
@@ -44,7 +46,7 @@ fun StaffInfoSection(
             )
 
             Text(
-                text = "Show More",
+                text = stringResource(R.string.show_more),
                 color = Theme.color.brand.primary,
                 modifier = Modifier
                     .padding(start = 12.dp)
@@ -66,7 +68,7 @@ fun StaffInfoSection(
 
                     if (index != staffList.lastIndex) {
                         HorizontalDivider(
-                            thickness = 0.5.dp,
+                            thickness = 1.dp,
                             color = Theme.color.stroke.primary,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
@@ -113,7 +115,7 @@ data class StaffMember(
 fun PreviewStaffInfoSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
-            title = "Staff Info",
+            title = "Behind the Scenes",
             onShowMoreClick = {},
             staffList = listOf(
                 StaffMember(name = "John Doe", role = "Director"),
@@ -133,7 +135,7 @@ fun PreviewStaffInfoSectionDark() {
 fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
-            title = "Staff Info",
+            title = "Behind the Scenes",
             onShowMoreClick = {},
             staffList = listOf(
                 StaffMember(name = "John Doe", role = "Director"),
