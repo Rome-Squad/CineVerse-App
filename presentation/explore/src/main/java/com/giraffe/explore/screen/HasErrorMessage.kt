@@ -1,7 +1,8 @@
 package com.giraffe.explore.screen
 
+import androidx.annotation.StringRes
+
 
 interface HasErrorMessage<T> {
-    val errorMessage: String?
-    fun withErrorMessage(msg: String): T
+    fun withErrorMessage(@StringRes id: Int): T
 }

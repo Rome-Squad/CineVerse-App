@@ -1,6 +1,5 @@
 package com.giraffe.explore.screen
 
-import android.content.Context
 import androidx.annotation.StringRes
 import com.giraffe.explore.R
 import com.giraffe.series.exception.NoInternetException as NoInternetExceptionSeries
@@ -35,12 +34,11 @@ import kotlinx.coroutines.flow.update
 
 
 fun <T> exceptionHandler(
-    context: Context,
     state: MutableStateFlow<T>
 ): CoroutineExceptionHandler where T : HasErrorMessage<T> {
     return CoroutineExceptionHandler { _, throwable ->
-        val message = context.getString(mapExceptionToStringRes(throwable))
-        state.update { it.withErrorMessage(message) }
+        val resId = mapExceptionToStringRes(throwable)
+        state.update { it.withErrorMessage(resId) }
     }
 }
 

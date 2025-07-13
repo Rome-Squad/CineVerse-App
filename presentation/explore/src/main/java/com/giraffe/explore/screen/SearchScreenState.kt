@@ -8,12 +8,13 @@ import com.giraffe.person.entity.Person
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 
+import androidx.annotation.StringRes
 
 data class SearchScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val searchKeyword: SearchKeyword? = null,
-    override val errorMessage: String? = null,
+    @StringRes val errorMessage: Int? = null,
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
@@ -24,9 +25,9 @@ data class SearchScreenState(
     val resultSearchKeyword: List<SearchKeyword> = emptyList(),
     val recentViews: List<Poster> = emptyList(),
     val isGridSelected: Boolean = true
-)  : HasErrorMessage<SearchScreenState> {
-    override fun withErrorMessage(msg: String): SearchScreenState {
-        return copy(errorMessage = msg)
+) : HasErrorMessage<SearchScreenState> {
+    override fun withErrorMessage(@StringRes resId: Int): SearchScreenState {
+        return copy(errorMessage = resId)
     }
 }
 
