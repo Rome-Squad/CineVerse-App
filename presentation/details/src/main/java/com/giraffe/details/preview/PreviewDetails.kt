@@ -1,6 +1,7 @@
 package com.giraffe.details.preview
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +14,8 @@ import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.CastCard
 import com.giraffe.details.components.GallerySection
 import com.giraffe.details.components.MainDetails
-import com.giraffe.details.components.MainMovieDetails
+import com.giraffe.details.components.MainMovieOrSeriesDetails
+import com.giraffe.details.components.MinimizedInfoRow
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
@@ -22,8 +24,8 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
-import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.details.utils.getCurrentLocalDate
 
 
 @Composable
@@ -92,21 +94,34 @@ fun MainDetailsPreview() {
 @Composable
 @Preview
 fun PreviewMainMovieDetails() {
-
     CineVerseTheme (
         isDarkTheme = true
     ) {
-        MainMovieDetails(
-            modifier = Modifier
-                .width(360.dp),
-            posterRes = com.giraffe.designsystem.R.drawable.main_poster_test,
-            title = "The Dark Knight",
-            genres = "Drama, Action, Crime, Thriller",
-            rating = "8.5",
+        MainMovieOrSeriesDetails(
+            modifier = Modifier.width(360.dp),
+            poster = imageSourceToPainter(com.giraffe.designsystem.R.drawable.main_poster_test),
+            name = "The Dark Knight",
+            genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
+            rating = 8.5f,
             duration = "2h 32m",
-            releaseDate = "2008, Jul 18"
+            releaseDate = "2008, Jul 18",
+            type = "Movie"
         )
+    }
+}
 
+@Composable
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFF121321
+)
+fun PreviewMinimizedInfoRow() {
+    CineVerseTheme(isDarkTheme = true) {
+        MinimizedInfoRow(
+            poster = imageSourceToPainter(com.giraffe.designsystem.R.drawable.main_poster_test),
+            title = "The Dark Knight",
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
     }
 }
 
