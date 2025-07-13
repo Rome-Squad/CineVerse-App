@@ -11,10 +11,5 @@ data class SeriesDetails(
     val releaseYear: LocalDate?,
     val overview: String,
     val seasons: List<Season> = emptyList(),
-    val cast: List<Cast> = emptyList(),
     val topOfReviews: List<Review> = emptyList(),
-    val director: String,
-    val characters: String,
-    val screenplay: String,
-    val story: String
 )
