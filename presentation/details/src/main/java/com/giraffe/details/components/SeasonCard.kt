@@ -1,5 +1,7 @@
 package com.giraffe.details.components
 
+import android.R.attr.onClick
+import android.R.attr.rating
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -150,7 +152,7 @@ fun SeasonCard(
 fun PreviewSeasonCardDark() {
     CineVerseTheme(isDarkTheme = true) {
         SeasonCard(
-            poster = imageSourceToPainter(R.drawable.gallery_item),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
@@ -167,7 +169,7 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-            poster = imageSourceToPainter(R.drawable.gallery_item),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,

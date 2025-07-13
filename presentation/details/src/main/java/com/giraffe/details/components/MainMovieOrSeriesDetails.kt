@@ -65,7 +65,7 @@ fun PreviewMainMovieDetails() {
     CineVerseTheme(isDarkTheme = true) {
         MainMovieOrSeriesDetails(
             modifier = Modifier.width(360.dp),
-            poster = imageSourceToPainter(R.drawable.main_poster_test),
+            poster = R.drawable.main_poster_test.imageSourceToPainter(),
             name = "The Dark Knight",
             genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
             rating = 8.5f,

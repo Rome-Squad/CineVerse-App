@@ -99,7 +99,7 @@ fun PreviewMainMovieDetails() {
     ) {
         MainMovieOrSeriesDetails(
             modifier = Modifier.width(360.dp),
-            poster = imageSourceToPainter(com.giraffe.designsystem.R.drawable.main_poster_test),
+            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
             name = "The Dark Knight",
             genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
             rating = 8.5f,
@@ -118,7 +118,7 @@ fun PreviewMainMovieDetails() {
 fun PreviewMinimizedInfoRow() {
     CineVerseTheme(isDarkTheme = true) {
         MinimizedInfoRow(
-            poster = imageSourceToPainter(com.giraffe.designsystem.R.drawable.main_poster_test),
+            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
             title = "The Dark Knight",
             modifier = Modifier.padding(bottom = 12.dp)
         )
@@ -227,7 +227,7 @@ fun PreviewReviewCardDark() {
 fun PreviewSeasonCardDark() {
     CineVerseTheme(isDarkTheme = true) {
         SeasonCard(
-            poster = imageSourceToPainter(R.drawable.gallery_item),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
@@ -246,7 +246,7 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-        poster = imageSourceToPainter(R.drawable.gallery_item),
+        poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
