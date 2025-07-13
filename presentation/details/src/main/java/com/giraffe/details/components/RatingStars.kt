@@ -45,26 +45,20 @@ fun RatingStars(
             Icon(
                 painter = painterResource(
 
-                    id = if (isSelected)
-                        R.drawable.bold_star
-                    else
-                        R.drawable.outline_star
+                id = if (isSelected) R.drawable.bold_star
+                else R.drawable.outline_star
 
-                ),
-                tint = if (isSelected)
-                    Theme.color.additional.primary.yellow
-                else
-                    Theme.color.shade.tertiary,
+            ),
+                tint = if (isSelected) Theme.color.additional.primary.yellow
+                else Theme.color.shade.tertiary,
 
                 contentDescription = stringResource(R.string.rate, rate),
                 modifier = Modifier
                     .size(starSize)
                     .then(
 
-                        if (onRateClickEnabled)
-                            Modifier.clickable { onRateClick(i + 1) }
-                        else
-                            Modifier
+                        if (onRateClickEnabled) Modifier.clickable { onRateClick(i + 1) }
+                        else Modifier
 
                     )
 
@@ -79,8 +73,7 @@ fun RatingStars(
 
 @Composable
 @Preview(
-    showBackground = true,
-    showSystemUi = true
+    showBackground = true, showSystemUi = true
 )
 fun PreviewRatingStars() {
 
@@ -103,8 +96,7 @@ fun PreviewRatingStars() {
 
 @Composable
 @Preview(
-    showBackground = true,
-    showSystemUi = false
+    showBackground = true, showSystemUi = false
 )
 fun PreviewRatingStarsNight() {
 
