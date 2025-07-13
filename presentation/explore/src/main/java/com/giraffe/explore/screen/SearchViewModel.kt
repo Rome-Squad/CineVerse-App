@@ -1,5 +1,6 @@
 package com.giraffe.explore.screen
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.explore.entity.SearchKeyword
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
+    context: Context,
     private val exploreUseCases: ExploreUseCases,
     private val clearCache: ClearCacheUseCase,
     private val searchMovie: SearchMovieByNameUseCase,
@@ -42,7 +44,7 @@ class SearchViewModel(
 
     private val _state = MutableStateFlow(SearchScreenState())
     val state: StateFlow<SearchScreenState> = _state.asStateFlow()
-    private val exceptionHandler = exceptionHandler(_state)
+    private val exceptionHandler = exceptionHandler(context,_state )
 
     private var debounceJob: Job? = null
 
