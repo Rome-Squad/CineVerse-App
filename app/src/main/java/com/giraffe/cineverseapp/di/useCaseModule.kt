@@ -14,6 +14,7 @@ import com.giraffe.person.usecase.StoreRecentPersonUseCase
 import org.koin.dsl.module
 import com.giraffe.movies.usecase.*
 import com.giraffe.person.usecase.GetPeopleByMovieIdUseCase
+import com.giraffe.person.usecase.GetPeopleByShowIdUseCase
 
 val useCaseModule = module {
 
@@ -70,5 +71,6 @@ val useCaseModule = module {
     single { SearchPeopleByNameUseCase(get()) }
     single { StoreRecentPersonUseCase(get()) }
     single { GetPeopleByMovieIdUseCase(get()) }
+    single { GetPeopleByShowIdUseCase(get()) }
 
 }
