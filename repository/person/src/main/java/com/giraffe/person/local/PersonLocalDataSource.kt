@@ -9,4 +9,7 @@ interface PersonLocalDataSource {
     suspend fun getPersonByName(personName: String): PersonDto
     suspend fun getRecentPeople(): List<PersonDto>
     suspend fun clearRecentPeople()
+
+    suspend fun getPeopleByMovieId(movieId: Int): List<PersonDto>
+
 }

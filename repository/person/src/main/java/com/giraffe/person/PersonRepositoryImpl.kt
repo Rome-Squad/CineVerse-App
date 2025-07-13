@@ -1,6 +1,7 @@
 package com.giraffe.person
 
 import com.giraffe.person.entity.Person
+import com.giraffe.person.entity.PersonType
 import com.giraffe.person.local.PersonLocalDataSource
 import com.giraffe.person.remote.PersonRemoteDataSource
 import com.giraffe.person.repository.PersonRepository
@@ -33,26 +34,19 @@ class PersonRepositoryImpl(
         localDataSource.clearRecentPeople()
     }
 
-    override suspend fun getPeopleByMovieId(movieId: Int): List<Person> {
-        return listOf(
-            Person(
-                id = 1,
-                name = "Christian Bale",
-                role = "Bruce Wayne / Batman",
-                imageUrl = "https://image.tmdb.org/t/p/w500/profile/christian_bale.jpg"
-            ),
-            Person(
-                id = 2,
-                name = "Michael Caine",
-                role = "Alfred Pennyworth",
-                imageUrl = "https://image.tmdb.org/t/p/w500/profile/michael_caine.jpg"
-            ),
-            Person(
-                id = 3,
-                name = "Heath Ledger",
-                role = "The Joker",
-                imageUrl = "https://image.tmdb.org/t/p/w500/profile/heath_ledger.jpg"
-            )
-        )
+    override suspend fun getPeopleByMovieId(movieId: Int) = SafeCall {
+        localDataSource.getPeopleByMovieId(movieId).map { it.toEntity() }.ifEmpty {
+            val response = remoteDataSource.getCreditsByMovieId(movieId)
+
+            val cast = response.cast.map { it.toEntity(PersonType.CAST) }
+            val crew = response.crew.map { it.toEntity(PersonType.CREW) }
+
+            (cast + crew).also { people ->
+                people.forEach {
+                    localDataSource.storePerson(it.toDto())
+                }
+            }
+        }
     }
+
 }
