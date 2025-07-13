@@ -10,14 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -30,13 +33,15 @@ fun AppBar(
     modifier: Modifier = Modifier,
     title: String = "",
     caption: String = "",
+    image: Painter = painterResource(Theme.icons.colored.logo),
+    imageSize: Dp = 32.dp,
     endIcon: Painter = painterResource(Theme.icons.outline.add),
     hasBackground: Boolean = true,
-    showBackButton: Boolean = true,
-    showLogo: Boolean = true,
-    showTitle: Boolean = true,
-    showCaption: Boolean = true,
-    showEndIcon: Boolean = true,
+    showBackButton: Boolean = false,
+    showImage: Boolean = false,
+    showTitle: Boolean = false,
+    showCaption: Boolean = false,
+    showEndIcon: Boolean = false,
     onBackButtonClick: () -> Unit = {},
     onEndIconClick: () -> Unit = {},
 ) {
@@ -48,12 +53,17 @@ fun AppBar(
             .fillMaxWidth()
             .height(56.dp)
             .background(background)
+            .padding(horizontal = 16.dp)
     ) {
         BackButton(
             showBackButton = showBackButton,
             onBackButtonClick = onBackButtonClick
         )
-        Logo(showLogo)
+        DisplayImage(
+            showImage = showImage,
+            image = image,
+            imageSize = imageSize
+        )
         Column(
             modifier = Modifier.weight(1f)
         ) {
@@ -82,12 +92,14 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
 }
 
 @Composable
-private fun Logo(showLogo: Boolean) {
-    if (showLogo) {
+private fun DisplayImage(showImage: Boolean, image: Painter, imageSize: Dp) {
+    if (showImage) {
         Image(
-            painter = painterResource(Theme.icons.colored.logo),
+            painter = image,
             contentDescription = "",
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier
+                .size(imageSize)
+                .clip(CircleShape)
         )
     }
 }
@@ -146,35 +158,51 @@ fun AppBarPreview() {
             AppBar(
                 title = "Title",
                 caption = "Caption",
+                showBackButton = true,
+                showImage = true,
+                showTitle = true,
+                showCaption = true,
+                showEndIcon = true,
             )
             AppBar(
                 title = "Title",
-                showCaption = false
+                showCaption = false,
+                showBackButton = true,
+                showImage = true,
+                showTitle = true,
+                showEndIcon = true,
             )
             AppBar(
                 title = "Title",
                 caption = "Caption",
                 showBackButton = false,
-                showEndIcon = false
+                showEndIcon = false,
+                showImage = true,
+                showTitle = true,
+                showCaption = true,
             )
             AppBar(
                 title = "Title",
-                showEndIcon = false,
-                showLogo = false,
+                showImage = false,
                 showCaption = false,
+                showEndIcon = false,
+                showBackButton = true,
+                showTitle = true,
             )
             AppBar(
-                showEndIcon = false,
-                showLogo = false,
-                showCaption = false,
+                showImage = false,
                 showTitle = false,
+                showCaption = false,
+                showEndIcon = false,
+                showBackButton = true,
             )
             AppBar(
                 title = "Title",
-                showEndIcon = false,
-                showLogo = false,
-                showCaption = false,
                 showBackButton = false,
+                showImage = false,
+                showCaption = false,
+                showEndIcon = false,
+                showTitle = true,
             )
         }
     }
