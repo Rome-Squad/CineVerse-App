@@ -14,61 +14,43 @@ import com.giraffe.person.usecase.StoreRecentPersonUseCase
 import org.koin.dsl.module
 import com.giraffe.movies.usecase.*
 import com.giraffe.person.usecase.GetPeopleByMovieIdUseCase
+import org.koin.core.module.dsl.singleOf
 
 val useCaseModule = module {
 
     // Explore Use Cases
-    single { GetSearchKeywordsUseCase(get()) }
-    single { InsertSearchKeywordUseCase(get()) }
-    single { DeleteSearchKeywordUseCase(get()) }
-    single { ClearSearchHistoryUseCase(get()) }
+    singleOf(::GetSearchKeywordsUseCase)
+    singleOf(::InsertSearchKeywordUseCase)
+    singleOf(::DeleteSearchKeywordUseCase)
+    singleOf(::ClearSearchHistoryUseCase)
 
-    single {
-        ExploreUseCases(
-            getSearchKeywords = GetSearchKeywordsUseCase(get()),
-            insertSearchKeyword = InsertSearchKeywordUseCase(get()),
-            deleteSearchKeyword = DeleteSearchKeywordUseCase(get()),
-            clearSearchHistory = ClearSearchHistoryUseCase(get())
-        )
-    }
-    single { ClearRecentSeriesUseCase(get()) }
-    single { GetRecentSeriesUseCase(get()) }
-    single { GetSeriesGenresUseCase(get()) }
-    single { SearchSeriesByNameUseCase(get()) }
-    single { StoreRecentSeriesUseCase(get()) }
+    singleOf(::ExploreUseCases)
+
+    singleOf(::ClearRecentSeriesUseCase)
+    singleOf(::GetRecentSeriesUseCase)
+    singleOf(::GetSeriesGenresUseCase)
+    singleOf(::SearchSeriesByNameUseCase)
+    singleOf(::StoreRecentSeriesUseCase)
 
 
     // Movies Use Cases
-    single { SearchMovieByNameUseCase(get()) }
-    single { GetMoviesGenresUseCase(get()) }
-    single { GetMoviesByGenreUseCase(get()) }
-    single { InsertMoviesUseCase(get()) }
-    single { InsertGenresUseCase(get()) }
-    single { ClearCacheUseCase(get()) }
-    single { SetMovieRecentUseCase(get()) }
-    single { GetRecentlyMoviesUseCase(get()) }
-    single { ClearRecentlyMoviesUseCase(get()) }
-    single { GetMovieGenresUseCase(get()) }
+    singleOf(::SearchMovieByNameUseCase)
+    singleOf(::GetMoviesGenresUseCase)
+    singleOf(::GetMoviesByGenreUseCase)
+    singleOf(::InsertMoviesUseCase)
+    singleOf(::InsertGenresUseCase)
+    singleOf(::ClearCacheUseCase)
+    singleOf(::SetMovieRecentUseCase)
+    singleOf(::GetRecentlyMoviesUseCase)
+    singleOf(::ClearRecentlyMoviesUseCase)
+    singleOf(::GetMovieGenresUseCase)
 
-    single {
-        MoviesUseCases(
-            searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
-            getMoviesGenresUseCase = GetMoviesGenresUseCase(get()),
-            getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
-            insertMoviesUseCase = InsertMoviesUseCase(get()),
-            insertGenresUseCase = InsertGenresUseCase(get()),
-            clearCacheUseCase = ClearCacheUseCase(get()),
-            setMovieRecentUseCase = SetMovieRecentUseCase(get()),
-            getRecentlyMovies = GetRecentlyMoviesUseCase(get()),
-            clearRecentlyMovies = ClearRecentlyMoviesUseCase(get()),
-            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
-        )
-    }
+    singleOf(::MoviesUseCases)
 
-    single { ClearRecentPeopleUseCase(get()) }
-    single { GetRecentPeopleUseCase(get()) }
-    single { SearchPeopleByNameUseCase(get()) }
-    single { StoreRecentPersonUseCase(get()) }
-    single { GetPeopleByMovieIdUseCase(get()) }
+    singleOf(::ClearRecentPeopleUseCase)
+    singleOf(::GetRecentPeopleUseCase)
+    singleOf(::SearchPeopleByNameUseCase)
+    singleOf(::StoreRecentPersonUseCase)
+    singleOf(::GetPeopleByMovieIdUseCase)
 
 }
