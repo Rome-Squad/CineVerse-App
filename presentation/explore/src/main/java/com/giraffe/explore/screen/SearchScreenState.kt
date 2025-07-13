@@ -9,27 +9,37 @@ import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 
 
-data class SearchScreenState(
+
+data class SearchScreenState
+
+    (
     val searchQuery: String = "",
     val isLoading: Boolean = false,
+    val errorMessage: String? = null,
     val searchKeyword: SearchKeyword? = null,
-    var errorMessage: String? = null,
+
+    // UI Section Visibility
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
-    val selectedTab: SearchTab = SearchTab.SERIES,
-    val isVoiceRecording: Boolean = false,
-    val isPermissionGranted: Boolean = false,
+
+    // Tab , View Mode
+    val selectedTab: SearchTab = SearchTab.MOVIES,
+    val isGridSelected: Boolean = true,
+
+    // Media Content
     val mediaResults: List<Poster> = emptyList(),
     val resultSearchKeyword: List<SearchKeyword> = emptyList(),
     val recentViews: List<Poster> = emptyList(),
-    val isGridSelected: Boolean = true
+
+    // Voice Input
+    val isVoiceRecording: Boolean = false,
+    val isPermissionGranted: Boolean = false,
 )
 
 enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
-
 
 fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
     val genreTitles = allGenres
@@ -56,17 +66,21 @@ fun Series.toPosterMovie(allGenres: List<SeriesGenre>): Poster {
 
     return Poster(
         id = id,
-        name = this@toPosterMovie.name,
+        name = name,
         imageUri = posterUrl,
         rating = rating,
-        genres = genreTitles,
+        genres = genreTitles
     )
 }
 
-fun Person.toPosterMovie(): Poster =
-    Poster(
-        id = id,
-        name = this@toPosterMovie.name,
-        imageUri = imageUrl.orEmpty(),
-        rating = 0f
-    )
+fun Person.toPoster(): Poster = Poster(
+    id = id,
+    name = name,
+    imageUri = imageUrl.orEmpty(),
+    rating = 0f
+)
+
+
+
+
+
