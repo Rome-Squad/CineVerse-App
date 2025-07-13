@@ -4,18 +4,37 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PersonResponse(
+data class CrewMovieResponse(
+    @SerialName("adult")
     val adult: Boolean,
-    val gender: Int,
+
+    @SerialName("gender")
+    val gender: Int?,
+
+    @SerialName("id")
     val id: Int,
-    @SerialName("known_for")
-    val knownFor: List<KnownFor>,
+
     @SerialName("known_for_department")
     val role: String,
+
+    @SerialName("name")
     val name: String,
+
     @SerialName("original_name")
     val originalName: String,
+
+    @SerialName("popularity")
     val popularity: Double,
+
     @SerialName("profile_path")
-    val profilePath: String? = null
+    val profilePath: String? = null,
+
+    @SerialName("credit_id")
+    val creditId: String,
+
+    @SerialName("department")
+    val department: String,
+
+    @SerialName("job")
+    val job: String
 )

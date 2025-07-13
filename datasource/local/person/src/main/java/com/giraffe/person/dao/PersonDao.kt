@@ -10,7 +10,8 @@ import com.giraffe.person.local.dto.PersonDto
 interface PersonDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun storePerson(person: PersonDto)
-
+    @Query("SELECT * FROM persons WHERE movieId = :movieId")
+    suspend fun getPeopleByMovieId(movieId: Int): List<PersonDto>
     @Query("SELECT * FROM persons WHERE name LIKE '%' || :personName || '%'")
     suspend fun searchByName(personName: String): List<PersonDto>
 
