@@ -2,6 +2,7 @@ package com.giraffe.details.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -33,7 +34,11 @@ fun MainDetails(
     actorName: String,
     actorBirthday: String,
     actorPlaceOfBirth: String,
+    onYoutubeClick: () -> Unit,
+    onFacebookClick: () -> Unit,
+    onInstagramClick: () -> Unit,
 ) {
+    val singleSpace = " "
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -73,13 +78,13 @@ fun MainDetails(
                 IconTextBox(
                     icon = painterResource(Theme.icons.outline.cake),
                     contentDescription = stringResource(R.string.birthday_cake_icon),
-                    text = stringResource(R.string.actor_birthday, actorBirthday)
+                    text = stringResource(R.string.actor_birthday) + singleSpace + actorBirthday
                 )
 
                 IconTextBox(
                     icon = painterResource(Theme.icons.outline.location),
                     contentDescription = stringResource(R.string.location_icon),
-                    text = stringResource(R.string.place_of_birth, actorPlaceOfBirth)
+                    text = stringResource(R.string.place_of_birth) + singleSpace + actorPlaceOfBirth
                 )
 
             }
@@ -89,19 +94,22 @@ fun MainDetails(
                 modifier = Modifier.weight(1f),
                 image = painterResource(Theme.icons.colored.youtube),
                 name = stringResource(R.string.youtube),
-                contentDescription = stringResource(R.string.youtube_icon)
+                contentDescription = stringResource(R.string.youtube_icon),
+                onClick = onYoutubeClick
             )
             SocialMediaComponent(
                 modifier = Modifier.weight(1f),
                 image = painterResource(Theme.icons.colored.facebook),
                 name = stringResource(R.string.facebook),
-                contentDescription = stringResource(R.string.facebook_icon)
+                contentDescription = stringResource(R.string.facebook_icon),
+                onClick = onFacebookClick
             )
             SocialMediaComponent(
                 modifier = Modifier.weight(1f),
                 image = painterResource(Theme.icons.colored.instagram),
                 name = stringResource(R.string.instgram),
-                contentDescription = stringResource(R.string.instagram_icon)
+                contentDescription = stringResource(R.string.instagram_icon),
+                onClick = onInstagramClick
             )
         }
     }
@@ -113,12 +121,14 @@ fun SocialMediaComponent(
     modifier: Modifier = Modifier,
     image: Painter,
     name: String,
-    contentDescription: String
+    contentDescription: String,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .clip(shape = RoundedCornerShape(Theme.radius.full))
             .background(Theme.color.shade.quinary)
+            .clickable(onClick = onClick)
             .padding(
                 start = 10.dp,
                 end = 12.dp,
@@ -142,14 +152,17 @@ fun SocialMediaComponent(
 
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
+@PreviewLightDark
 fun MainDetailsPreview() {
     CineVerseTheme(isDarkTheme = true) {
         MainDetails(
             actorImage = painterResource(R.drawable.gallery_item),
             actorName = "Christian Bale",
             actorBirthday = "Jan 30, 1970",
-            actorPlaceOfBirth = "Cardiff, Wales, UK"
+            actorPlaceOfBirth = "Cardiff, Wales, UK",
+            onInstagramClick = {},
+            onYoutubeClick = {},
+            onFacebookClick = {}
         )
     }
 }

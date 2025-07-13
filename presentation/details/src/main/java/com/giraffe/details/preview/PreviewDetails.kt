@@ -67,7 +67,7 @@ fun GallerySectionPreview() {
                 Pair(null, "gallery_image_one"),
                 Pair(null, "gallery_image_two"),
                 Pair(R.drawable.gallery_item3, "gallery_image_three"),
-            )
+            ),
         )
     }
 }
@@ -82,7 +82,10 @@ fun MainDetailsPreview() {
             actorImage = painterResource(R.drawable.gallery_item),
             actorName = "Christian Bale",
             actorBirthday = "Jan 30, 1970",
-            actorPlaceOfBirth = "Cardiff, Wales, UK"
+            actorPlaceOfBirth = "Cardiff, Wales, UK",
+            onInstagramClick = {},
+            onYoutubeClick = {},
+            onFacebookClick = {}
         )
     }
 }
