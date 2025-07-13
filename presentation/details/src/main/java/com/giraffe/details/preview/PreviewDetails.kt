@@ -22,6 +22,8 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
+import com.giraffe.details.utils.getCurrentLocalDate
+import com.giraffe.details.utils.imageSourceToPainter
 
 
 @Composable
@@ -175,7 +177,9 @@ fun PreviewReviewCard() {
             reviewText = "While we were focusing on some videos due to the need of the tasks, we still need to cover some important topics in compose now. without restriction to finish it at the first day of the week.\n" +
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
-            reviewerUsername = "bilal_azzam"
+            reviewerUsername = "bilal_azzam",
+            reviewDate = getCurrentLocalDate(),
+            reviewerImageSource = ""
         )
     }
 }
@@ -192,7 +196,9 @@ fun PreviewReviewCardDark() {
             reviewText = "While we were focusing on some videos due to the need of the tasks, we still need to cover some important topics in compose now. without restriction to finish it at the first day of the week.\n" +
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
-            reviewerUsername = "bilal_azzam"
+            reviewerUsername = "bilal_azzam",
+            reviewDate = getCurrentLocalDate(),
+            reviewerImageSource = ""
         )
     }
 }
@@ -206,14 +212,13 @@ fun PreviewReviewCardDark() {
 fun PreviewSeasonCardDark() {
     CineVerseTheme(isDarkTheme = true) {
         SeasonCard(
-            poster = painterResource(
-                id = com.giraffe.designsystem.R.drawable.reviewer
-            ),
+            poster = imageSourceToPainter(R.drawable.gallery_item),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
             episodes = 20,
-            year = 2019
+            year = 2019,
+            onClick = {}
         )
     }
 }
@@ -226,14 +231,13 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-            poster = painterResource(
-                id = com.giraffe.designsystem.R.drawable.reviewer
-            ),
+        poster = imageSourceToPainter(R.drawable.gallery_item),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
             episodes = 20,
-            year = 2019
+            year = 2019,
+            onClick = {}
         )
     }
 }
