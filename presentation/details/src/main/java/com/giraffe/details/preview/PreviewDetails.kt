@@ -68,6 +68,7 @@ fun GallerySectionPreview() {
                 Pair(null, "gallery_image_two"),
                 Pair(R.drawable.gallery_item3, "gallery_image_three"),
             ),
+            onShowMoreClick = {}
         )
     }
 }

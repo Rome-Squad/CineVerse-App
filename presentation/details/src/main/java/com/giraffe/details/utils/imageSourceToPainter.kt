@@ -6,12 +6,11 @@ import androidx.compose.ui.res.painterResource
 import coil3.compose.rememberAsyncImagePainter
 
 @Composable
-fun imageSourceToPainter(
-    imageSource: Any?
+fun Any.imageSourceToPainter(
 ): Painter {
-    return when (imageSource) {
-        is String -> rememberAsyncImagePainter(model = imageSource) // URL
-        is Int -> painterResource(id = imageSource) // drawable resource
-        else -> throw IllegalArgumentException("Unsupported image source: $imageSource")
+    return when (this) {
+        is String -> rememberAsyncImagePainter(model = this) // URL
+        is Int -> painterResource(id = this) // drawable resource
+        else -> throw IllegalArgumentException("Unsupported image source: $this")
     }
 }
