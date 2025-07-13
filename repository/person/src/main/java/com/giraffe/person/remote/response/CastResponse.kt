@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CastMovieResponse(
+data class CastResponse(
     @SerialName("adult")
     val adult: Boolean,
 
@@ -30,7 +30,7 @@ data class CastMovieResponse(
     val profilePath: String?,
 
     @SerialName("cast_id")
-    val castId: Int,
+    val castId: Int? = null,
 
     @SerialName("character")
     val character: String,
