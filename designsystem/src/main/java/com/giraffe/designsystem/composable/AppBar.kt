@@ -37,7 +37,8 @@ fun AppBar(
     showTitle: Boolean = true,
     showCaption: Boolean = true,
     showEndIcon: Boolean = true,
-    onClickBack: () -> Unit = {}
+    onBackButtonClick: () -> Unit = {},
+    onEndIconClick: () -> Unit = {},
 ) {
     val background = if (hasBackground) Theme.color.background.screen else Color.Transparent
     Row(
@@ -50,7 +51,7 @@ fun AppBar(
     ) {
         BackButton(
             showBackButton = showBackButton,
-            onClickBack = onClickBack
+            onBackButtonClick = onBackButtonClick
         )
         Logo(showLogo)
         Column(
@@ -59,16 +60,12 @@ fun AppBar(
             Caption(showCaption, caption)
             Title(showTitle, title)
         }
-        EndIcon(showEndIcon, endIcon)
-
+        EndIcon(isVisible = showEndIcon, painter = endIcon, onEndIconClick = onEndIconClick)
     }
 }
 
 @Composable
-private fun BackButton(
-    showBackButton: Boolean,
-    onClickBack: () -> Unit = {}
-) {
+private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
     if (showBackButton) {
         Icon(
             painter = painterResource(Theme.icons.outline.arrowLeft),
@@ -76,7 +73,10 @@ private fun BackButton(
             tint = Theme.color.shade.primary,
             modifier = Modifier
                 .size(24.dp)
-                .clickable(onClick = onClickBack),
+                .clickable(
+                    enabled = true,
+                    onClick = onBackButtonClick
+                ),
         )
     }
 }
@@ -119,15 +119,19 @@ private fun Title(showTitle: Boolean, title: String) {
 }
 
 @Composable
-private fun EndIcon(showEndIcon: Boolean, endIcon: Painter) {
-    if (showEndIcon) {
+private fun EndIcon(isVisible: Boolean, painter: Painter, onEndIconClick: () -> Unit) {
+    if (isVisible) {
         Icon(
-            painter = endIcon,
+            painter = painter,
             contentDescription = "",
             tint = Theme.color.shade.primary,
             modifier = Modifier
                 .size(40.dp)
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable(
+                    enabled = true,
+                    onClick = onEndIconClick
+                ),
         )
     }
 }
@@ -139,6 +143,14 @@ fun AppBarPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            AppBar(
+                title = "Title",
+                caption = "Caption",
+            )
+            AppBar(
+                title = "Title",
+                showCaption = false
+            )
             AppBar(
                 title = "Title",
                 caption = "Caption",
