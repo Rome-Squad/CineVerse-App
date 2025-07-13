@@ -84,7 +84,6 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
             modifier = Modifier
                 .size(24.dp)
                 .clickable(
-                    enabled = true,
                     onClick = onBackButtonClick
                 ),
         )

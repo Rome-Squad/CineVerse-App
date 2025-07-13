@@ -17,8 +17,8 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun SectionTitle(
     title: String,
-    clickableText: String? = null,
     modifier: Modifier = Modifier,
+    clickableText: String? = null,
     onClickableText: () -> Unit = {}
 ) {
     Row(

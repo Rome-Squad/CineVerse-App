@@ -17,10 +17,10 @@ import com.giraffe.designsystem.uimodel.Poster
 
 @Composable
 fun MoviesListSection(
-    modifier: Modifier = Modifier,
     title: String,
-    endText: String? = null,
     movies: List<Poster>,
+    modifier: Modifier = Modifier,
+    endText: String? = null,
     paddingHorizontal: Int = 16,
     onClickEndText: () -> Unit = {},
     onClickPoster: () -> Unit = {}
