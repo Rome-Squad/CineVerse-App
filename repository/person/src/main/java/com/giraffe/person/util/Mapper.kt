@@ -3,8 +3,8 @@ package com.giraffe.person.util
 import com.giraffe.person.entity.Person
 import com.giraffe.person.entity.PersonType
 import com.giraffe.person.local.dto.PersonDto
-import com.giraffe.person.remote.response.CastMovieResponse
-import com.giraffe.person.remote.response.CrewMovieResponse
+import com.giraffe.person.remote.response.CastResponse
+import com.giraffe.person.remote.response.CrewResponse
 import com.giraffe.person.remote.response.PersonResponse
 
 fun Person.toDto() = PersonDto(
@@ -13,7 +13,8 @@ fun Person.toDto() = PersonDto(
     imageUrl = imageUrl,
     role = role,
     type = type.name,
-    movieId = movieId
+    movieId = movieId,
+    showId = showId
 )
 
 fun PersonDto.toEntity(): Person = Person(
@@ -21,7 +22,8 @@ fun PersonDto.toEntity(): Person = Person(
     name = name,
     imageUrl = imageUrl,
     role = role,
-    type = type?.let { PersonType.valueOf(it) } ?: PersonType.CAST, movieId = movieId
+    type = type.let { PersonType.valueOf(it) },
+    movieId = movieId, showId = showId
 )
 
 fun PersonResponse.toEntity(type: PersonType = PersonType.CAST) = Person(
@@ -31,7 +33,7 @@ fun PersonResponse.toEntity(type: PersonType = PersonType.CAST) = Person(
     imageUrl = profilePath,
     type = type
 )
-fun CastMovieResponse.toEntity(type: PersonType, movieId: Int) = Person(
+fun CastResponse.toEntityForMovie(type: PersonType, movieId: Int) = Person(
     id = id,
     name = name,
     role = character,
@@ -40,11 +42,30 @@ fun CastMovieResponse.toEntity(type: PersonType, movieId: Int) = Person(
     movieId = movieId
 )
 
-fun CrewMovieResponse.toEntity(type: PersonType, movieId: Int) = Person(
+fun CrewResponse.toEntityForMovie(type: PersonType, movieId: Int) = Person(
     id = id,
     name = name,
     role = job,
     imageUrl = profilePath,
     type = type,
     movieId = movieId
+)
+fun CastResponse.toEntityForShow(type: PersonType, showId: Int): Person = Person(
+    id = id,
+    name = name,
+    role = character,
+    imageUrl = profilePath,
+    type = type,
+    movieId = -1,
+    showId = showId
+)
+
+fun CrewResponse.toEntityForShow(type: PersonType, showId: Int): Person = Person(
+    id = id,
+    name = name,
+    role = job,
+    imageUrl = profilePath,
+    type = type,
+    movieId = -1,
+    showId = showId
 )
