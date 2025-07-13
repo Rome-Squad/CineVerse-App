@@ -116,7 +116,7 @@ fun PreviewReviewCard() {
             rate = 5,
             reviewText = "very good",
             reviewDate = getCurrentLocalDate(),
-            reviewerImageSource = imageSourceToPainter(R.drawable.reviewer),
+            reviewerImageSource = R.drawable.reviewer.imageSourceToPainter(),
             reviewerName = "Hend",
             reviewerUsername = "Hend sayed",
         )
@@ -137,7 +137,7 @@ fun PreviewReviewCardDark() {
             rate = 5,
             reviewText = "very good",
             reviewDate = getCurrentLocalDate(),
-            reviewerImageSource = imageSourceToPainter(R.drawable.reviewer),
+            reviewerImageSource = R.drawable.reviewer.imageSourceToPainter(),
             reviewerName = "Hend",
             reviewerUsername = "Hend sayed"
         )

@@ -2,6 +2,7 @@ package com.giraffe.details.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +32,8 @@ fun IconTextBox(
         Icon(
             tint = Theme.color.shade.secondary,
             painter = icon,
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
+            modifier = Modifier.size(16.dp)
         )
         Text(
             style = Theme.textStyle.label.md.regular,
