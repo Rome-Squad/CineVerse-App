@@ -51,7 +51,6 @@ class MoviesRepositoryImpl(
     }
 
 
-
     override suspend fun getMoviesGenres(): List<MovieGenre> {
         return safeCall {
             val cachedMovieGenres = cache.getMoviesGenres().map { it.toEntity() }
@@ -119,7 +118,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun getRecentlyMovies(): List<Movie> {
         return safeCall {
-             cache.getRecentlyMovies().map { it.toMovie() }
+            cache.getRecentlyMovies().map { it.toMovie() }
         }
     }
 
@@ -130,15 +129,29 @@ class MoviesRepositoryImpl(
     }
 
     override suspend fun getMovieDetails(movieId: Int): Movie {
-        TODO("Not yet implemented")
+        return safeCall {
+            try {
+                val cashedMovie = cache.getMovieById(movieId)
+
+                cashedMovie.toMovie()
+            } catch (e: NoSuchElementException) {
+
+                val remoteMovieDetails = remote.getMovieById(movieId)
+
+                val remoteToCash = remoteMovieDetails.toEntity().toMovieCacheDto()
+                cache.insertMovies(listOf(remoteToCash))
+
+                remoteMovieDetails.toEntity()
+            }
+        }
     }
 
     override suspend fun getMovieReviews(
-        movieId: Int,
-        pageNumber: Int,
-        pageSize: Int
+        movieId: Int
     ): List<MovieReview> {
-        TODO("Not yet implemented")
+        return safeCall {
+            remote.getMovieReviews(movieId).map { it.toEntity() }
+        }
     }
 
 
