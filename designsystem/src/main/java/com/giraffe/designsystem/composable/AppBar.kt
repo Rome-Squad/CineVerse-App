@@ -49,7 +49,10 @@ fun AppBar(
             .height(56.dp)
             .background(background)
     ) {
-        BackButton(showBackButton, onBackButtonClick)
+        BackButton(
+            showBackButton = showBackButton,
+            onBackButtonClick = onBackButtonClick
+        )
         Logo(showLogo)
         Column(
             modifier = Modifier.weight(1f)
@@ -58,7 +61,6 @@ fun AppBar(
             Title(showTitle, title)
         }
         EndIcon(isVisible = showEndIcon, painter = endIcon, onEndIconClick = onEndIconClick)
-
     }
 }
 
