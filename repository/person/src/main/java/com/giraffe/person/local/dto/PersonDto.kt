@@ -11,7 +11,7 @@ data class PersonDto(
     val imageUrl: String? = null,
     val role: String,
     val character: String? = null,
-    val type: String,
+    val type: String?=null,
     val isRecent: Boolean = false,
     val cachedAt: Long = System.currentTimeMillis(),
     val movieId: Int? = null

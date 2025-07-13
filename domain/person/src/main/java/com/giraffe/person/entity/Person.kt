@@ -5,6 +5,7 @@ data class Person(
     val name: String,
     val role: String,
     val imageUrl: String? = null,
+    val movieId: Int? = null,
     val type: PersonType = PersonType.CAST
 )
 

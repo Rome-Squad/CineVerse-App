@@ -35,18 +35,21 @@ class PersonRepositoryImpl(
     }
 
     override suspend fun getPeopleByMovieId(movieId: Int) = SafeCall {
-        localDataSource.getPeopleByMovieId(movieId).map { it.toEntity() }.ifEmpty {
+        val localPeople = localDataSource.getPeopleByMovieId(movieId).map { it.toEntity() }
+
+        localPeople.ifEmpty {
+
             val response = remoteDataSource.getCreditsByMovieId(movieId)
 
-            val cast = response.cast.map { it.toEntity(PersonType.CAST) }
-            val crew = response.crew.map { it.toEntity(PersonType.CREW) }
+            val cast = response.cast.map { it.toEntity(PersonType.CAST, movieId) }
+            val crew = response.crew.map { it.toEntity(PersonType.CREW, movieId) }
 
-            (cast + crew).also { people ->
-                people.forEach {
-                    localDataSource.storePerson(it.toDto())
-                }
+            val people = cast + crew
+
+            people.forEach {
+                localDataSource.storePerson(it.toDto())
             }
+            people
         }
     }
-
 }

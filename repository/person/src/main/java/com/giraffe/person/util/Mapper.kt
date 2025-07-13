@@ -12,15 +12,16 @@ fun Person.toDto() = PersonDto(
     name = name,
     imageUrl = imageUrl,
     role = role,
-    type = type.name
+    type = type.name,
+    movieId = movieId
 )
 
-fun PersonDto.toEntity() = Person(
-    id = this.id,
-    name = this.name,
-    imageUrl = this.imageUrl,
-    role = this.role,
-    type = PersonType.valueOf(type)
+fun PersonDto.toEntity(): Person = Person(
+    id = id,
+    name = name,
+    imageUrl = imageUrl,
+    role = role,
+    type = type?.let { PersonType.valueOf(it) } ?: PersonType.CAST, movieId = movieId
 )
 
 fun PersonResponse.toEntity(type: PersonType = PersonType.CAST) = Person(
@@ -30,26 +31,20 @@ fun PersonResponse.toEntity(type: PersonType = PersonType.CAST) = Person(
     imageUrl = profilePath,
     type = type
 )
-
-fun PersonResponse.toDto(type: PersonType) = PersonDto(
-    id = id,
-    name = name,
-    role = role,
-    imageUrl = profilePath,
-    type = type.name
-)
-fun CastMovieResponse.toEntity(type: PersonType) = Person(
+fun CastMovieResponse.toEntity(type: PersonType, movieId: Int) = Person(
     id = id,
     name = name,
     role = character,
     imageUrl = profilePath,
-    type = type
+    type = type,
+    movieId = movieId
 )
 
-fun CrewMovieResponse.toEntity(type: PersonType) = Person(
+fun CrewMovieResponse.toEntity(type: PersonType, movieId: Int) = Person(
     id = id,
     name = name,
     role = job,
     imageUrl = profilePath,
-    type = type
+    type = type,
+    movieId = movieId
 )
