@@ -145,12 +145,7 @@ fun SeasonCard(
     }
 }
 
-@Preview(
-    name = "SeasonCard Dark",
-    apiLevel = 34,
-    showBackground = true,
-    showSystemUi = false
-)
+@Preview(name = "SeasonCard Dark")
 @Composable
 fun PreviewSeasonCardDark() {
     CineVerseTheme(isDarkTheme = true) {
@@ -167,12 +162,7 @@ fun PreviewSeasonCardDark() {
 }
 
 
-@Preview(
-    name = "SeasonCard Light",
-    apiLevel = 34,
-    showBackground = true,
-    showSystemUi = false
-)
+@Preview(name = "SeasonCard Light")
 @Composable
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {

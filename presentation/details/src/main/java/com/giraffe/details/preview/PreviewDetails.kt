@@ -29,33 +29,29 @@ import com.giraffe.details.utils.getCurrentLocalDate
 
 
 @Composable
-@Preview(
-    name = "AddToCollection Light",
-    apiLevel = 34,
-    showBackground = false,
-    showSystemUi = false
-)
+@Preview()
 fun PreviewAddToCollectionContentLight() {
     CineVerseTheme(isDarkTheme = false) {
         AddToCollectionContent(
             title = "My Folder",
-            isLoading = true
+            isLoading = true,
+            modifier = Modifier
+                .width(304.dp)
+                .height(48.dp)
         )
     }
 }
 
 @Composable
-@Preview(
-    name = "AddToCollection Dark",
-    apiLevel = 34,
-    showBackground = false,
-    showSystemUi = false
-)
+@Preview()
 fun PreviewAddToCollectionContentDark() {
     CineVerseTheme(isDarkTheme = true) {
         AddToCollectionContent(
             title = "My Folder",
-            isLoading = true
+            isLoading = true,
+            modifier = Modifier
+                .width(304.dp)
+                .height(48.dp)
         )
     }
 }
