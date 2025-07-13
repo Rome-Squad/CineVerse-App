@@ -2,6 +2,7 @@ package com.giraffe.designsystem.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ fun AppBar(
     showTitle: Boolean = true,
     showCaption: Boolean = true,
     showEndIcon: Boolean = true,
+    onClickBack: () -> Unit = {}
 ) {
     val background = if (hasBackground) Theme.color.background.screen else Color.Transparent
     Row(
@@ -46,7 +48,10 @@ fun AppBar(
             .height(56.dp)
             .background(background)
     ) {
-        BackButton(showBackButton)
+        BackButton(
+            showBackButton = showBackButton,
+            onClickBack = onClickBack
+        )
         Logo(showLogo)
         Column(
             modifier = Modifier.weight(1f)
@@ -60,13 +65,18 @@ fun AppBar(
 }
 
 @Composable
-private fun BackButton(showBackButton: Boolean) {
+private fun BackButton(
+    showBackButton: Boolean,
+    onClickBack: () -> Unit = {}
+) {
     if (showBackButton) {
         Icon(
             painter = painterResource(Theme.icons.outline.arrowLeft),
             contentDescription = "",
             tint = Theme.color.shade.primary,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .size(24.dp)
+                .clickable(onClick = onClickBack),
         )
     }
 }
