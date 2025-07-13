@@ -13,4 +13,6 @@ class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSour
     override suspend fun clearRecentPeople() = dao.clearRecentPeople()
     override suspend fun getPeopleByMovieId(movieId: Int): List<PersonDto> =
         dao.getPeopleByMovieId(movieId)
+    override suspend fun getPeopleByShowId(showId: Int): List<PersonDto> =
+        dao.getPeopleByShowId(showId)
 }
