@@ -56,8 +56,6 @@ class PersonRepositoryImpl(
     }
 
     override suspend fun getPeopleByShowId(showId: Int) = SafeCall {
-        val localPeopdle = localDataSource.getPeopleByShowId(showId)
-        println("📦 Local people size for showId $showId: ${localPeopdle.size}")
 
         val localPeople = localDataSource.getPeopleByShowId(showId).map { it.toEntity() }
 
