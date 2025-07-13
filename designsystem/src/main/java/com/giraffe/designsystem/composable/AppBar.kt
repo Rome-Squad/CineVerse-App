@@ -2,6 +2,7 @@ package com.giraffe.designsystem.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,8 @@ fun AppBar(
     showTitle: Boolean = true,
     showCaption: Boolean = true,
     showEndIcon: Boolean = true,
+    onBackButtonClick: () -> Unit = {},
+    onEndIconClick: () -> Unit = {},
 ) {
     val background = if (hasBackground) Theme.color.background.screen else Color.Transparent
     Row(
@@ -46,7 +49,7 @@ fun AppBar(
             .height(56.dp)
             .background(background)
     ) {
-        BackButton(showBackButton)
+        BackButton(showBackButton, onBackButtonClick)
         Logo(showLogo)
         Column(
             modifier = Modifier.weight(1f)
@@ -54,19 +57,24 @@ fun AppBar(
             Caption(showCaption, caption)
             Title(showTitle, title)
         }
-        EndIcon(showEndIcon, endIcon)
+        EndIcon(isVisible = showEndIcon, painter = endIcon, onEndIconClick = onEndIconClick)
 
     }
 }
 
 @Composable
-private fun BackButton(showBackButton: Boolean) {
+private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
     if (showBackButton) {
         Icon(
             painter = painterResource(Theme.icons.outline.arrowLeft),
             contentDescription = "",
             tint = Theme.color.shade.primary,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .size(24.dp)
+                .clickable(
+                    enabled = true,
+                    onClick = onBackButtonClick
+                ),
         )
     }
 }
@@ -109,15 +117,19 @@ private fun Title(showTitle: Boolean, title: String) {
 }
 
 @Composable
-private fun EndIcon(showEndIcon: Boolean, endIcon: Painter) {
-    if (showEndIcon) {
+private fun EndIcon(isVisible: Boolean, painter: Painter, onEndIconClick: () -> Unit) {
+    if (isVisible) {
         Icon(
-            painter = endIcon,
+            painter = painter,
             contentDescription = "",
             tint = Theme.color.shade.primary,
             modifier = Modifier
                 .size(40.dp)
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable(
+                    enabled = true,
+                    onClick = onEndIconClick
+                ),
         )
     }
 }
@@ -129,6 +141,14 @@ fun AppBarPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            AppBar(
+                title = "Title",
+                caption = "Caption",
+            )
+            AppBar(
+                title = "Title",
+                showCaption = false
+            )
             AppBar(
                 title = "Title",
                 caption = "Caption",
