@@ -1,44 +1,43 @@
 package com.giraffe.movie
 
-import android.util.Log
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
-import com.giraffe.movie.datasource.local.MoviesSearchHistoryDataSource
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
+import com.giraffe.movie.datasource.remote.SessionRepository
+import com.giraffe.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.movie.mapper.toEntity
 import com.giraffe.movie.mapper.toMovie
 import com.giraffe.movie.mapper.toMovieCacheDto
 import com.giraffe.movie.mapper.toMovieGenreDto
 import com.giraffe.movie.utils.safeCall
+import com.giraffe.movies.entity.AccountStates
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
 import com.giraffe.movies.entity.MovieReview
 import com.giraffe.movies.repository.MoviesRepository
+import kotlinx.serialization.json.Json
 
 class MoviesRepositoryImpl(
     private val cache: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
-    private val searchHistory: MoviesSearchHistoryDataSource
+    private val sessionRepository: SessionRepository,
+    private val json: Json
 ) : MoviesRepository {
     override suspend fun searchMovieByName(movieName: String): List<Movie> {
         return safeCall {
-            val lastHourKeywords = searchHistory.getLastHourSearchHistory()
-            val isSearchedWithinLastHour = lastHourKeywords.any { it.keyword == movieName }
 
-            val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
-            val isCached = cachedMovies.isNotEmpty()
+            return safeCall {
+                val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
+                val isCached = cachedMovies.isNotEmpty()
 
-            if (!(isSearchedWithinLastHour && isCached)) {
-                Log.d("fix", "searchMovieByName: here")
-                val remoteMovies = remote.getMoviesByName(movieName).map { it.toMovie() }
-                val distinctMovies = (remoteMovies + cachedMovies).distinct()
+                if (!isCached) {
+                    val remoteMovies =
+                        remote.getMoviesByName(movieName).map { it.toMovie() }
+                    insertMovies(remoteMovies)
+                    return remoteMovies
+                }
 
-                insertMovies(distinctMovies)
-
-                return distinctMovies
+                return cachedMovies
             }
-
-            return cachedMovies
-
         }
     }
 
@@ -130,18 +129,14 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieDetails(movieId: Int): Movie {
         return safeCall {
-            try {
-                val cashedMovie = cache.getMovieById(movieId)
-
-                cashedMovie.toMovie()
-            } catch (e: NoSuchElementException) {
-
+            val cachedMovie = cache.getMovieById(movieId)
+            if (cachedMovie != null) {
+                return cachedMovie.toMovie()
+            } else {
                 val remoteMovieDetails = remote.getMovieById(movieId)
-
-                val remoteToCash = remoteMovieDetails.toEntity().toMovieCacheDto()
-                cache.insertMovies(listOf(remoteToCash))
-
-                remoteMovieDetails.toEntity()
+                val remoteEntity = remoteMovieDetails.toEntity()
+                insertMovies(listOf(remoteEntity))
+                return remoteEntity
             }
         }
     }
@@ -154,8 +149,37 @@ class MoviesRepositoryImpl(
         }
     }
 
+    override suspend fun createGuestSession(): String {
+        return safeCall {
+            val dto = remote.createGuestSession()
+            if (dto.success) {
+                return dto.guestSessionId
+            } else {
+                throw Exception("Failed to create guest session")
+            }
+        }
+    }
 
-    override suspend fun addMovieReview(review: MovieReview) {
-        TODO("Not yet implemented")
+    override suspend fun addRating(
+        movieId: Int,
+        ratingValue: Float
+    ) {
+        return safeCall {
+            val sessionId = sessionRepository.getGuestSessionId()
+                ?: throw Exception("Guest session not available")
+
+            val requestBody = RatingRequest(value = ratingValue)
+            remote.addRating(movieId, sessionId, requestBody)
+        }
+    }
+
+    override suspend fun getAccountStates(movieId: Int): AccountStates {
+        return safeCall {
+            val sessionId = sessionRepository.getGuestSessionId()
+                ?: throw Exception("Guest session not available")
+
+            val dto = remote.getAccountStates(movieId, sessionId)
+            dto.toEntity(json)
+        }
     }
 }

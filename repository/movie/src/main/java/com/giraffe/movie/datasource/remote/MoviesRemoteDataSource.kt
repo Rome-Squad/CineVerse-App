@@ -1,9 +1,12 @@
 package com.giraffe.movie.datasource.remote
 
+import com.giraffe.movie.datasource.remote.dto.AccountStatesDto
+import com.giraffe.movie.datasource.remote.dto.GuestSessionDto
 import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.movie.datasource.remote.dto.MovieDto
 import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.movie.datasource.remote.dto.MovieReviewDto
+import com.giraffe.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.movie.datasource.remote.dto.ReviewsResponseDto
 
 interface MoviesRemoteDataSource {
@@ -19,4 +22,10 @@ interface MoviesRemoteDataSource {
     suspend fun getMoviesByGenre(genreId: Int): List<MovieDto>
 
     suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto>
+
+    suspend fun createGuestSession(): GuestSessionDto
+
+    suspend fun addRating(movieId: Int, sessionId: String, request: RatingRequest)
+
+    suspend fun getAccountStates(movieId: Int, sessionId: String): AccountStatesDto
 }

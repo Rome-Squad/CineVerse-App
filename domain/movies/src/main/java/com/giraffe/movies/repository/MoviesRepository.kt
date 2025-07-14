@@ -1,5 +1,6 @@
 package com.giraffe.movies.repository
 
+import com.giraffe.movies.entity.AccountStates
 import com.giraffe.movies.entity.MovieGenre
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieReview
@@ -32,6 +33,10 @@ interface MoviesRepository {
 
     suspend fun getMovieReviews(movieId : Int) : List<MovieReview>
 
-    suspend fun addMovieReview(review: MovieReview)
+    suspend fun createGuestSession(): String
+
+    suspend fun addRating(movieId: Int, ratingValue: Float)
+
+    suspend fun getAccountStates(movieId: Int): AccountStates
 
 }

@@ -1,10 +1,13 @@
 package com.giraffe.movie
 
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
+import com.giraffe.movie.datasource.remote.dto.AccountStatesDto
+import com.giraffe.movie.datasource.remote.dto.GuestSessionDto
 import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.movie.datasource.remote.dto.MovieDto
 import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.movie.datasource.remote.dto.MovieReviewDto
+import com.giraffe.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.movie.datasource.remote.dto.ReviewsResponseDto
 import com.giraffe.movie.response.GenreResponse
 import com.giraffe.movie.response.MoviesListResponse
@@ -12,6 +15,10 @@ import com.giraffe.movie.utils.handleRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 
 class MoviesRemoteDataSourceImpl(
     val client: HttpClient,
@@ -78,6 +85,51 @@ class MoviesRemoteDataSourceImpl(
             }
         }
         return response.results
+    }
+
+    override suspend fun createGuestSession(): GuestSessionDto {
+        return handleRequest {
+            client.get("$baseUrl/authentication/guest_session/new") {
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                }
+            }
+        }
+    }
+
+    override suspend fun addRating(
+        movieId: Int,
+        sessionId: String,
+        request: RatingRequest
+    ) {
+        return handleRequest {
+            client.post("$baseUrl/movie/$movieId/rating") {
+                url {
+                    parameters.append("session_id", sessionId)
+                }
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                }
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun getAccountStates(
+        movieId: Int,
+        sessionId: String
+    ): AccountStatesDto {
+        return handleRequest {
+            client.get("$baseUrl/movie/$movieId/account_states") {
+                url {
+                    parameters.append("session_id", sessionId)
+                }
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                }
+            }
+        }
     }
 
     companion object {
