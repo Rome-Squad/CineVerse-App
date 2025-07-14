@@ -1,19 +1,42 @@
 package com.giraffe.details.preview
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.CastCard
 import com.giraffe.details.components.GallerySection
 import com.giraffe.details.components.MainDetails
+import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.MainMovieOrSeriesDetails
 import com.giraffe.details.components.MinimizedInfoRow
 import com.giraffe.details.components.RatingSection
@@ -75,19 +98,74 @@ fun GallerySectionPreview() {
 
 
 
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 @Preview
 fun MainDetailsPreview() {
     CineVerseTheme(isDarkTheme = true) {
-        MainDetails(
-            actorImage = painterResource(R.drawable.gallery_item),
-            actorName = "Christian Bale",
-            actorBirthday = "Jan 30, 1970",
-            actorPlaceOfBirth = "Cardiff, Wales, UK",
-            onInstagramClick = {},
-            onYoutubeClick = {},
-            onFacebookClick = {}
-        )
+        val scrollState = rememberScrollState()
+        var isScroll by remember {
+            mutableStateOf(false)
+        }
+        isScroll = scrollState.value > 5
+        Box(
+            modifier = Modifier
+                .background(Theme.color.background.screen)
+                .padding(horizontal = 16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+
+            ) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 252.dp)
+                        .height(2000.dp)
+                        .fillMaxWidth()
+                        .background(Color.Red)
+                )
+            }
+            SharedTransitionLayout {
+                AnimatedContent(
+                    isScroll,
+                    transitionSpec = {
+                        fadeIn(
+                            animationSpec = tween(100)
+                        ) togetherWith fadeOut(animationSpec = tween(100))
+                    },
+                    label = "Animated Content"
+                ) { targetState ->
+                    when (targetState) {
+                        true -> MainDetailsHeader(
+                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorName = "Christian Bale",
+                            animatedVisibilityScope = this@AnimatedContent,
+                            sharedTransitionScope = this@SharedTransitionLayout,
+                        )
+
+                        false -> MainDetails(
+                            modifier = Modifier.padding(top = 72.dp),
+                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorName = "Christian Bale",
+                            actorBirthday = "Jan 30, 1974",
+                            actorPlaceOfBirth = "Cardiff, Wales, UK",
+                            animatedVisibilityScope = this@AnimatedContent,
+                            sharedTransitionScope = this@SharedTransitionLayout,
+                            onYoutubeClick = {},
+                            onFacebookClick = {},
+                            onInstagramClick = {}
+                        )
+                    }
+                }
+            }
+            AppBar(
+                showBackButton = true,
+                hasBackground = false,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
     }
 }
 

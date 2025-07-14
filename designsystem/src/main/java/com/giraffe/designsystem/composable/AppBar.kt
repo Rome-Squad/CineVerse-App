@@ -53,7 +53,6 @@ fun AppBar(
             .fillMaxWidth()
             .height(56.dp)
             .background(background)
-            .padding(horizontal = 16.dp)
     ) {
         BackButton(
             showBackButton = showBackButton,
