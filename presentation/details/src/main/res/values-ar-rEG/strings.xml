@@ -24,4 +24,9 @@
     <string name="rating">التقييم</string>
     <string name="episodes">الحلقات</string>
     <string name="year">سنة</string>
+    <string name="top_reviews">الاعلى تقييم</string>
+    <string name="storyline">القصه</string>
+    <string name="behind_the_scenes">خلف الاحداث</string>
+    <string name="you_might_also_like">ربما يعجبك هذا ايضا</string>
+    <string name="star_cast">طاقم العمل</string>
 </resources>

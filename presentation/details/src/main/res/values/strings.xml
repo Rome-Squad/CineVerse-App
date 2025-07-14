@@ -24,4 +24,9 @@
     <string name="unknown_error">Sorry, something went wrong!</string>
     <string name="server_error">Sorry, Server Error!</string>
     <string name="movie_not_found">Sorry, we couldn\'t find the movie!</string>
+    <string name="top_reviews">Top Reviews</string>
+    <string name="storyline">Storyline</string>
+    <string name="behind_the_scenes">Behind the Scenes</string>
+    <string name="you_might_also_like">You Might Also Like</string>
+    <string name="star_cast">Star Cast</string>
 </resources>
