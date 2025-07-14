@@ -112,7 +112,6 @@ fun SearchContent(
                     .padding(horizontal = 16.dp),
                 showBackButton = true,
                 endIcon = painterResource(Theme.icons.outline.microphone),
-                viewTaps = state.isSearchResultsVisible,
                 tabsTitles = listOf(
                     stringResource(R.string.movies),
                     stringResource(R.string.series),
