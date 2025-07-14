@@ -4,7 +4,7 @@ import androidx.room.Entity
 
 @Entity(
     tableName = "persons",
-    primaryKeys = ["id", "movieId", "showId"]
+    primaryKeys = ["id", "movieId", "seriesId"]
 )
 data class PersonDto(
     val id: Int,
@@ -13,7 +13,7 @@ data class PersonDto(
     val role: String,
     val type: String,
     val movieId: Int = -1,
-    val showId: Int = -1,
+    val seriesId: Int = -1,
     val isRecent: Boolean = false,
     val cachedAt: Long = System.currentTimeMillis()
 )

@@ -24,10 +24,10 @@ class PersonRemoteDataSourceImp(
             )
     }
 
-    override suspend fun getCreditsByShowId(showId: Int): CreditsResponse {
+    override suspend fun getCreditsBySeriesId(seriesId: Int): CreditsResponse {
         return RequestBuilder(httpClient, baseUrl, accessToken)
             .get(
-                endpoint = "$CREDITS_SHOW_END_POINT/$showId/$CREDITS",
+                endpoint = "$CREDITS_SHOW_END_POINT/$seriesId/$CREDITS",
                 params = mapOf(LANGUAGE to "en-US")
             )
     }

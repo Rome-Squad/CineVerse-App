@@ -9,10 +9,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class GetPeopleByShowIdUseCaseTest {
+class GetPeopleBySeriesIdUseCaseTest {
 
     private lateinit var repository: PersonRepository
-    private lateinit var getPeopleByShowIdUseCase: GetPeopleByShowIdUseCase
+    private lateinit var getPeopleBySeriesIdUseCase: GetPeopleBySeriesIdUseCase
 
     private val expectedPeople = listOf(
         Person(
@@ -32,7 +32,7 @@ class GetPeopleByShowIdUseCaseTest {
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        getPeopleByShowIdUseCase = GetPeopleByShowIdUseCase(repository)
+        getPeopleBySeriesIdUseCase = GetPeopleBySeriesIdUseCase(repository)
     }
 
     @Test
@@ -42,7 +42,7 @@ class GetPeopleByShowIdUseCaseTest {
         coEvery { repository.getPeopleByShowId(showId) } returns expectedPeople
 
         // When
-        val result = getPeopleByShowIdUseCase(showId)
+        val result = getPeopleBySeriesIdUseCase(showId)
 
         // Then
         assertThat(result).isEqualTo(expectedPeople)

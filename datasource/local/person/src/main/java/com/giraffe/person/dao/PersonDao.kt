@@ -12,8 +12,8 @@ interface PersonDao {
     suspend fun storePerson(person: PersonDto)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPeople(people: List<PersonDto>)
-    @Query("SELECT * FROM persons WHERE showId = :showId")
-    suspend fun getPeopleByShowId(showId: Int): List<PersonDto>
+    @Query("SELECT * FROM persons WHERE seriesId = :seriesId")
+    suspend fun getPeopleBySeriesId(seriesId: Int): List<PersonDto>
     @Query("SELECT * FROM persons WHERE movieId = :movieId")
     suspend fun getPeopleByMovieId(movieId: Int): List<PersonDto>
 

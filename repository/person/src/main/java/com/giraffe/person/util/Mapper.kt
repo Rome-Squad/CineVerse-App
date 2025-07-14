@@ -7,14 +7,14 @@ import com.giraffe.person.remote.response.CastResponse
 import com.giraffe.person.remote.response.CrewResponse
 import com.giraffe.person.remote.response.PersonResponse
 
-fun Person.toDto( movieId: Int=-1,showId: Int=-1) = PersonDto(
+fun Person.toDto(movieId: Int=-1, seriesId: Int=-1) = PersonDto(
     id = id,
     name = name,
     imageUrl = imageUrl,
     role = role,
     type = type.name,
     movieId = movieId,
-    showId = showId
+    seriesId = seriesId
 )
 
 fun PersonDto.toEntity(): Person = Person(
