@@ -20,9 +20,8 @@ import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.formatAsMonthDayYear
-import com.giraffe.details.utils.getCurrentLocalDate
-import com.giraffe.details.utils.imageSourceToPainter
-import kotlinx.datetime.LocalDate
+import com.giraffe.details.utils.getCurrentLocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 
 @Composable
@@ -30,7 +29,7 @@ fun ReviewCard(
     modifier: Modifier = Modifier,
     rate: Int,
     reviewText: String,
-    reviewDate: LocalDate = getCurrentLocalDate(),
+    reviewDate: LocalDateTime = getCurrentLocalDateTime(),
     reviewerImageSource: Any?,
     reviewerName: String,
     reviewerUsername: String
@@ -115,7 +114,7 @@ fun PreviewReviewCard() {
             modifier = Modifier,
             rate = 5,
             reviewText = "very good",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = R.drawable.reviewer,
             reviewerName = "Hend",
             reviewerUsername = "Hend sayed",
@@ -136,7 +135,7 @@ fun PreviewReviewCardDark() {
             modifier = Modifier,
             rate = 5,
             reviewText = "very good",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = R.drawable.reviewer,
             reviewerName = "Hend",
             reviewerUsername = "Hend sayed"
