@@ -92,7 +92,7 @@ class SearchViewModel(
                         }
                         _state.update {
                             it.copy(
-                                movieSeriesResults = results,
+                                movieResults = results,
                                 searchKeyword = keyword,
                                 isSearchResultsVisible = true,
                                 isSearchSuggestionsVisible = false,
@@ -107,7 +107,7 @@ class SearchViewModel(
                         }
                         _state.update {
                             it.copy(
-                                movieSeriesResults = results,
+                                seriesResults = results,
                                 searchKeyword = keyword,
                                 isSearchResultsVisible = true,
                                 isSearchSuggestionsVisible = false,
@@ -124,8 +124,10 @@ class SearchViewModel(
                                 searchKeyword = keyword,
                                 isSearchResultsVisible = true,
                                 isSearchSuggestionsVisible = false,
-                                movieSeriesResults = emptyList()
-                            )
+                                movieResults = emptyList(),
+                                seriesResults = emptyList(),
+
+                                )
                         }
                     }
                 }
@@ -183,7 +185,8 @@ class SearchViewModel(
                 isSearchHistoryVisible = true,
                 isSearchSuggestionsVisible = false,
                 isSearchResultsVisible = false,
-                movieSeriesResults = emptyList(),
+                movieResults = emptyList(),
+                seriesResults = emptyList(),
                 actorResults = emptyList(),
                 resultSearchKeyword = emptyList()
             )

@@ -52,8 +52,6 @@ fun SearchScreen(
                 is SearchScreenEffect.ShowError -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
-                SearchScreenEffect.ShowLoading -> { /* Show custom loading */ }
-                SearchScreenEffect.HideLoading -> { /* Hide custom loading */ }
                 SearchScreenEffect.RefreshCompleted -> {
                     Toast.makeText(context, "Refreshed", Toast.LENGTH_SHORT).show()
                 }
@@ -180,16 +178,16 @@ fun SearchContent(
 
                     else -> when (state.selectedTab) {
                         SearchTab.MOVIES, SearchTab.SERIES -> {
-                            if (state.mediaResults.isEmpty()) NoResult()
+                            if (state.movieResults.isEmpty()) NoResult()
                             else TransitionLazyColumnToGrid(
-                                poster = state.mediaResults,
+                                poster = state.movieResults,
                                 isListSelected = !state.isGridSelected
                             )
                         }
 
                         SearchTab.ACTORS -> {
-                            if (state.mediaResults.isEmpty()) NoResult()
-                            else ResultsActors(state.mediaResults)
+                            if (state.actorResults.isEmpty()) NoResult()
+                            else ResultsActors(state.actorResults)
                         }
                     }
                 }
