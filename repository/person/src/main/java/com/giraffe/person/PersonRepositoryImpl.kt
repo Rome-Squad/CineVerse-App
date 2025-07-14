@@ -60,7 +60,7 @@ class PersonRepositoryImpl(
     }
 
     override suspend fun getPeopleByShowId(showId: Int) = SafeCall {
-        val localPeople = localDataSource.getPeopleByShowId(showId).map { it.toEntity() }
+        val localPeople = localDataSource.getPeopleBySeriesId(showId).map { it.toEntity() }
 
         localPeople.ifEmpty {
             val response = remoteDataSource.getCreditsByShowId(showId)
