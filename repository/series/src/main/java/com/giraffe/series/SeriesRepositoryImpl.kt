@@ -6,6 +6,7 @@ import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.mapper.toCachedDto
 import com.giraffe.series.mapper.toEntity
+import com.giraffe.series.model.SeriesDto
 import com.giraffe.series.repository.SeriesRepository
 import com.giraffe.series.utils.safeCall
 
@@ -62,5 +63,12 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = safeCall {
         remote.getSeriesDetails(seriesId).toEntity()
+    }
+
+    override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {
+        return safeCall {
+            remote.getSeriesRecommendations(seriesId, page)
+                .map(SeriesDto::toEntity)
+        }
     }
 }

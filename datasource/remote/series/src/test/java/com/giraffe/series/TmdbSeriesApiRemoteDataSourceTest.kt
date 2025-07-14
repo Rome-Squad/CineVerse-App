@@ -93,6 +93,29 @@ class TmdbSeriesApiRemoteDataSourceTest {
         coVerify(exactly = 1) { requestBuilder.request(any()) }
     }
 
+    @Test
+    fun `getSeriesRecommendations returns list of series`() = runTest {
+        // Given
+        val seriesId = 1L
+        val page = 1
+        val expectedSeries = listOf(
+            createSeriesDto(
+                id = 1,
+                name = "Batman",
+                overview = "Overview batman",
+                posterPath = "/poster.jpg"
+            )
+        )
+        val mockResponse = createSeriesResponse(seriesList = expectedSeries)
+        coEvery { requestBuilder.request(any()).body<SeriesResponse>() } returns mockResponse
+
+        // When
+        val result = dataSource.getSeriesRecommendations(seriesId, page)
+
+        // Then
+        assertEquals(expectedSeries, result)
+    }
+
     private fun createSeriesDto(
         id: Int = 1,
         name: String = "Demo Series",

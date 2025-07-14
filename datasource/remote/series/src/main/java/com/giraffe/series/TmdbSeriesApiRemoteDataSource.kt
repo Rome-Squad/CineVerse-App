@@ -1,6 +1,5 @@
 package com.giraffe.series
 
-import android.util.Log
 import com.giraffe.series.api.BaseRequest
 import com.giraffe.series.api.RequestBuilder
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
@@ -54,7 +53,15 @@ class TmdbSeriesApiRemoteDataSource(
         baseRequest.endpoint(endpoint)
             .method(HttpMethod.Get)
         val result = requestBuilder.request(baseRequest).body<SeriesDetailsResponse>()
-        Log.d("result", result.toString())
         return result
+    }
+
+    override suspend fun getSeriesRecommendations(seriesId: Long, page: Int): List<SeriesDto> {
+        val endpoint = "genre/tv/$seriesId/recommendations"
+        return baseRequest
+            .endpoint(endpoint)
+            .method(HttpMethod.Get)
+            .addParameter(key = "page", value = 1)
+            .run { requestBuilder.request(this).body<SeriesResponse>().results }
     }
 }
