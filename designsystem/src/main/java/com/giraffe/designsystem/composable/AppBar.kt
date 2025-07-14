@@ -31,17 +31,13 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
-    title: String = "",
-    caption: String = "",
-    image: Painter = painterResource(Theme.icons.colored.logo),
+    title: String? = null,
+    caption: String? = null,
+    image: Painter? = null,
     imageSize: Dp = 32.dp,
-    endIcon: Painter = painterResource(Theme.icons.outline.add),
+    endIcon: Painter? = null,
     hasBackground: Boolean = true,
     showBackButton: Boolean = false,
-    showImage: Boolean = false,
-    showTitle: Boolean = false,
-    showCaption: Boolean = false,
-    showEndIcon: Boolean = false,
     onBackButtonClick: () -> Unit = {},
     onEndIconClick: () -> Unit = {},
 ) {
@@ -59,17 +55,16 @@ fun AppBar(
             onBackButtonClick = onBackButtonClick
         )
         DisplayImage(
-            showImage = showImage,
             image = image,
             imageSize = imageSize
         )
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Caption(showCaption, caption)
-            Title(showTitle, title)
+            Caption(caption)
+            Title(title)
         }
-        EndIcon(isVisible = showEndIcon, painter = endIcon, onEndIconClick = onEndIconClick)
+        EndIcon(painter = endIcon, onEndIconClick = onEndIconClick)
     }
 }
 
@@ -90,10 +85,10 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
 }
 
 @Composable
-private fun DisplayImage(showImage: Boolean, image: Painter, imageSize: Dp) {
-    if (showImage) {
+private fun DisplayImage(image: Painter?, imageSize: Dp) {
+    image?.let {
         Image(
-            painter = image,
+            painter = it,
             contentDescription = "",
             modifier = Modifier
                 .size(imageSize)
@@ -103,10 +98,10 @@ private fun DisplayImage(showImage: Boolean, image: Painter, imageSize: Dp) {
 }
 
 @Composable
-private fun Caption(showCaption: Boolean, caption: String) {
-    if (showCaption) {
+private fun Caption(caption: String?) {
+    caption?.let {
         Text(
-            text = caption,
+            text = it,
             maxLines = 1,
             style = Theme.textStyle.body.sm.regular,
             color = Theme.color.shade.secondary,
@@ -116,10 +111,10 @@ private fun Caption(showCaption: Boolean, caption: String) {
 }
 
 @Composable
-private fun Title(showTitle: Boolean, title: String) {
-    if (showTitle) {
+private fun Title(title: String?) {
+    title?.let {
         Text(
-            text = title,
+            text = it,
             maxLines = 1,
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary,
@@ -129,10 +124,10 @@ private fun Title(showTitle: Boolean, title: String) {
 }
 
 @Composable
-private fun EndIcon(isVisible: Boolean, painter: Painter, onEndIconClick: () -> Unit) {
-    if (isVisible) {
+private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit) {
+    painter?.let {
         Icon(
-            painter = painter,
+            painter = it,
             contentDescription = "",
             tint = Theme.color.shade.primary,
             modifier = Modifier
@@ -156,51 +151,32 @@ fun AppBarPreview() {
             AppBar(
                 title = "Title",
                 caption = "Caption",
+                image = painterResource(Theme.icons.colored.logo),
+                endIcon = painterResource(Theme.icons.outline.add),
                 showBackButton = true,
-                showImage = true,
-                showTitle = true,
-                showCaption = true,
-                showEndIcon = true,
             )
             AppBar(
                 title = "Title",
-                showCaption = false,
                 showBackButton = true,
-                showImage = true,
-                showTitle = true,
-                showEndIcon = true,
+                image = painterResource(Theme.icons.colored.logo),
+                endIcon = painterResource(Theme.icons.outline.add),
             )
             AppBar(
                 title = "Title",
                 caption = "Caption",
+                image = painterResource(Theme.icons.colored.logo),
                 showBackButton = false,
-                showEndIcon = false,
-                showImage = true,
-                showTitle = true,
-                showCaption = true,
             )
             AppBar(
                 title = "Title",
-                showImage = false,
-                showCaption = false,
-                showEndIcon = false,
                 showBackButton = true,
-                showTitle = true,
             )
             AppBar(
-                showImage = false,
-                showTitle = false,
-                showCaption = false,
-                showEndIcon = false,
                 showBackButton = true,
             )
             AppBar(
                 title = "Title",
                 showBackButton = false,
-                showImage = false,
-                showCaption = false,
-                showEndIcon = false,
-                showTitle = true,
             )
         }
     }
