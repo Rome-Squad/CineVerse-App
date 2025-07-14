@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,6 +58,7 @@ fun StarCastSection(
                 text = title,
                 color = Theme.color.shade.primary,
                 style = Theme.textStyle.title.sm,
+                modifier = Modifier.padding(start = 16.dp),
             )
 
             Text(
@@ -71,7 +73,10 @@ fun StarCastSection(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             items(chunkedList) { pair ->
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     pair.forEach { cast ->
