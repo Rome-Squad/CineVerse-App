@@ -2,7 +2,7 @@ package com.giraffe.series.entity
 
 import kotlinx.datetime.LocalDate
 
-data class SeriesDetails(
+data class  SeriesDetails(
     val id: Int,
     val posterUrl: String,
     val name: String,
@@ -11,10 +11,5 @@ data class SeriesDetails(
     val releaseYear: LocalDate?,
     val overview: String,
     val seasons: List<Season> = emptyList(),
-    val cast: List<Cast> = emptyList(),
     val topOfReviews: List<Review> = emptyList(),
-    val director: String,
-    val characters: String,
-    val screenplay: String,
-    val story: String
 )

@@ -1,9 +1,13 @@
 package com.giraffe.series
 
+import android.util.Log
 import com.giraffe.series.api.BaseRequest
 import com.giraffe.series.api.RequestBuilder
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.series.datasource.remote.response.seriesdetails.ReviewsResponse
+import com.giraffe.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
 import com.giraffe.series.model.GenreDto
+import com.giraffe.series.model.ReviewItemDto
 import com.giraffe.series.model.SeriesDto
 import com.giraffe.series.model_dto.GenresResponse
 import com.giraffe.series.model_dto.SeriesResponse
@@ -45,5 +49,22 @@ class TmdbSeriesApiRemoteDataSource(
             .method(HttpMethod.Get)
         val response = requestBuilder.request(baseRequest).body<GenresResponse>()
         return response.genres
+    }
+
+    override suspend fun getSeriesDetails(seriesId: Int): SeriesDetailsResponse {
+        val endpoint = "tv/$seriesId"
+        baseRequest.endpoint(endpoint)
+            .method(HttpMethod.Get)
+        val result = requestBuilder.request(baseRequest).body<SeriesDetailsResponse>()
+        Log.d("result", result.toString())
+        return result
+    }
+
+    override suspend fun getSeriesReviews(seriesId: Int): List<ReviewItemDto> {
+        val endpoint = "tv/$seriesId/reviews"
+        baseRequest.endpoint(endpoint)
+            .method(HttpMethod.Get)
+        val response = requestBuilder.request(baseRequest).body<ReviewsResponse>()
+        return response.results
     }
 }

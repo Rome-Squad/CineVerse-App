@@ -2,6 +2,7 @@ package com.giraffe.series
 
 import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.series.entity.Review
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesDetails
 import com.giraffe.series.entity.SeriesGenre
@@ -61,6 +62,14 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun getSeriesById(seriesId: Int): List<SeriesDetails> {
-        TODO("Not yet implemented")
+        return emptyList()
+    }
+
+    override suspend fun getSeriesDetails(seriesId: Int): SeriesDetails = safeCall {
+        remote.getSeriesDetails(seriesId).toEntity()
+    }
+
+    override suspend fun getSeriesReviews(seriesId: Int): List<Review> = safeCall {
+        emptyList()
     }
 }

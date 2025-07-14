@@ -1,6 +1,7 @@
 package com.giraffe.series.utils
 
 
+import android.util.Log
 import com.giraffe.series.exception.ClientErrorException
 import com.giraffe.series.exception.CorruptDatabaseException
 import com.giraffe.series.exception.DiskAccessException
@@ -30,6 +31,7 @@ suspend inline fun <reified T> safeCall(
     return try {
         block()
     } catch (e: Throwable) {
+        Log.d("Throw", e.toString())
         throw mapToDomainException(e)
     }
 }
