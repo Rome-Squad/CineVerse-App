@@ -56,13 +56,20 @@ fun AppBar(
         )
         DisplayImage(
             image = image,
-            imageSize = imageSize
+            imageSize = imageSize,
+            modifier = Modifier.padding(start = 8.dp)
         )
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Caption(caption)
-            Title(title)
+            Caption(
+                caption=caption,
+                modifier= Modifier.padding(start = 8.dp)
+            )
+            Title(
+                title = title,
+                modifier= Modifier.padding(start = 8.dp)
+            )
         }
         EndIcon(painter = endIcon, onEndIconClick = onEndIconClick)
     }
@@ -85,12 +92,12 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
 }
 
 @Composable
-private fun DisplayImage(image: Painter?, imageSize: Dp) {
+private fun DisplayImage(image: Painter?, imageSize: Dp,modifier: Modifier= Modifier) {
     image?.let {
         Image(
             painter = it,
             contentDescription = "",
-            modifier = Modifier
+            modifier = modifier
                 .size(imageSize)
                 .clip(CircleShape)
         )
@@ -98,39 +105,41 @@ private fun DisplayImage(image: Painter?, imageSize: Dp) {
 }
 
 @Composable
-private fun Caption(caption: String?) {
+private fun Caption(caption: String?,modifier: Modifier = Modifier) {
     caption?.let {
         Text(
             text = it,
             maxLines = 1,
             style = Theme.textStyle.body.sm.regular,
             color = Theme.color.shade.secondary,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = modifier
         )
     }
 }
 
 @Composable
-private fun Title(title: String?) {
+private fun Title(title: String?,modifier: Modifier) {
     title?.let {
         Text(
             text = it,
             maxLines = 1,
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = modifier
         )
     }
 }
 
 @Composable
-private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit) {
+private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit,modifier: Modifier = Modifier) {
     painter?.let {
         Icon(
             painter = it,
             contentDescription = "",
             tint = Theme.color.shade.primary,
-            modifier = Modifier
+            modifier = modifier
                 .size(40.dp)
                 .padding(8.dp)
                 .clickable(
