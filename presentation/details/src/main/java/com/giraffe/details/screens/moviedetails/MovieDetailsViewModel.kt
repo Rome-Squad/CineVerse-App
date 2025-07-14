@@ -165,6 +165,10 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.NavigateToMovies)
     }
 
+    override fun onShowMoreReviewsClick() {
+        sendEffect(MovieDetailsEffect.NavigateToReviews)
+    }
+
     override fun onMovieClick(movieId: Int) {
         updateState {
             MovieDetailsScreenState()

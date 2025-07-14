@@ -8,6 +8,8 @@ sealed interface MovieDetailsEffect {
 
     object NavigateToMovies : MovieDetailsEffect
 
+    object NavigateToReviews: MovieDetailsEffect
+
     data class Error(val error: Throwable) : MovieDetailsEffect
 
 }
