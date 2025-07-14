@@ -1,6 +1,7 @@
 package com.giraffe.details.components
 
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,29 +44,25 @@ fun RatingStars(
         for (i in 0 until 5) {
 
             val isSelected = i < rate
+            val iconColor: Color by animateColorAsState(
+                if (isSelected) Theme.color.additional.primary.yellow
+                else Theme.color.shade.tertiary
+            )
             Icon(
                 painter = painterResource(
 
-                    id = if (isSelected)
-                        R.drawable.bold_star
-                    else
-                        R.drawable.outline_star
+                    id = if (isSelected) R.drawable.bold_star
+                    else R.drawable.outline_star
 
                 ),
-                tint = if (isSelected)
-                    Theme.color.additional.primary.yellow
-                else
-                    Theme.color.shade.tertiary,
+                tint = iconColor,
 
                 contentDescription = stringResource(R.string.rate, rate),
                 modifier = Modifier
                     .size(starSize)
                     .then(
-
-                        if (onRateClickEnabled)
-                            Modifier.clickable { onRateClick(i + 1) }
-                        else
-                            Modifier
+                        if (onRateClickEnabled) Modifier.clickable { onRateClick(i + 1) }
+                        else Modifier
 
                     )
 
@@ -73,14 +71,12 @@ fun RatingStars(
         }
 
     }
-
 }
 
 
 @Composable
 @Preview(
-    showBackground = true,
-    showSystemUi = true
+    showBackground = true, showSystemUi = true
 )
 fun PreviewRatingStars() {
 
@@ -103,8 +99,7 @@ fun PreviewRatingStars() {
 
 @Composable
 @Preview(
-    showBackground = true,
-    showSystemUi = false
+    showBackground = true, showSystemUi = false
 )
 fun PreviewRatingStarsNight() {
 
