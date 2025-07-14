@@ -33,7 +33,7 @@ import com.giraffe.designsystem.theme.Theme
 fun ViewToggle(
     isListSelected: Boolean,
     modifier: Modifier = Modifier,
-    onViewToggle: ((Boolean) -> Unit)?,
+    onGridSelected: (Boolean) -> Unit = {},
 ) {
     val gridBackgroundColor by animateColorAsState(
         targetValue = if (isListSelected) {
@@ -61,10 +61,6 @@ fun ViewToggle(
             .height(40.dp)
             .clip(RoundedCornerShape(Theme.radius.s))
             .background(Theme.color.background.card)
-            .clickable(onClick = {
-                onViewToggle?.invoke(!isListSelected)
-            }
-            )
     ) {
 
         Box(
@@ -85,7 +81,10 @@ fun ViewToggle(
         Crossfade(
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 10.dp)
+                .clickable {
+                    onGridSelected(true)
+                },
             targetState = isListSelected,
             label = "FavoriteIcon"
         ) { selected ->
@@ -104,7 +103,10 @@ fun ViewToggle(
         Crossfade(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 10.dp)
+                .clickable {
+                    onGridSelected(false)
+                },
             targetState = isListSelected,
             label = "FavoriteIcon"
         ) { selected ->
@@ -122,15 +124,14 @@ fun ViewToggle(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFF7F7F7)
+@Preview
 @Composable
 private fun ViewTogglePreview() {
     var isListSelected by remember { mutableStateOf(false) }
     CineVerseTheme(isDarkTheme = true) {
         ViewToggle(
-            modifier = Modifier.padding(40.dp),
             isListSelected = isListSelected,
-            onViewToggle = { isListSelected = !isListSelected },
+            onGridSelected = {  },
         )
     }
 }

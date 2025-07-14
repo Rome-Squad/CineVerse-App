@@ -3,10 +3,15 @@ package com.giraffe.explore.components
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,17 +28,26 @@ import com.giraffe.designsystem.uimodel.Poster
 fun TransitionLazyColumnToGrid(
     poster: List<Poster>,
     isListSelected: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(vertical = 16.dp)
 ) {
     SharedTransitionLayout {
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             targetState = isListSelected,
-            label = "ViewToggleAnimation"
+            label = "ViewToggleAnimation",
+            transitionSpec = {
+                (fadeIn(animationSpec = tween(220, delayMillis = 90, easing = EaseIn)) +
+                        scaleIn(
+                            initialScale = 0.92f,
+                            animationSpec = tween(220, delayMillis = 90, EaseIn)
+                        ))
+                    .togetherWith(fadeOut(animationSpec = tween(90, easing = EaseOut)))
+            }
         ) {
             if (it) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(vertical = 16.dp)
+                    contentPadding = contentPadding
                 ) {
                     items(items = poster) { poster ->
                         PosterHorizontal(
@@ -48,7 +62,7 @@ fun TransitionLazyColumnToGrid(
                     columns = GridCells.Fixed(2),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(vertical = 16.dp)
+                    contentPadding = contentPadding
                 ) {
                     items(items = poster) { poster ->
                         PosterVertically(

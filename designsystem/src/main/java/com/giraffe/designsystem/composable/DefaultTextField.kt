@@ -7,15 +7,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,38 +31,52 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.custom.TextField
-import com.giraffe.designsystem.composable.custom.TextFieldColors
+import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
-fun TextField(
+fun DefaultTextField(
+    modifier: Modifier = Modifier,
     startIcon: Painter,
     placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     endIcon: @Composable (() -> Unit)? = null,
-    title: String? = null,
+    label: String? = null,
+    maxLines: Int = 1,
     errorMessage: String? = null,
-    hasPassword: Boolean = false,
-    onClickStartIcon: ((String) -> Unit)? = null,
-    onClickForgotPassword: () -> Unit = {}
+    isPassword: Boolean = false,
+    onStartIconClick: ((String) -> Unit)? = null,
+    onForgotPasswordClick: () -> Unit = {},
+    onFocusChanged: (Boolean) -> Unit = {}
 ) {
-    val hasError = errorMessage != null
+
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    //val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(isFocused) {
+        onFocusChanged(isFocused)
+    }
+
+
+    val hasError = errorMessage != null
     var showPassword by remember { mutableStateOf(false) }
     val borderColor by animateColorAsState(
         targetValue = if (isFocused)
@@ -65,25 +87,18 @@ fun TextField(
             Theme.color.stroke.primary
     )
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                focusManager.clearFocus()
-            },
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        if (title != null) {
+        if (label != null) {
             Text(
-                text = title,
+                text = label,
                 style = Theme.textStyle.body.md.regular,
                 color = Theme.color.shade.secondary
             )
         }
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
                 .clip(RoundedCornerShape(Theme.radius.lg))
@@ -93,15 +108,15 @@ fun TextField(
                     color = borderColor,
                     shape = RoundedCornerShape(Theme.radius.lg)
                 )
-                .padding(start = 16.dp, end = 14.dp),
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val checkLeftIcon = if (hasPassword) painterResource(Theme.icons.outline.lock)
+            val checkLeftIcon = if (isPassword) painterResource(Theme.icons.outline.lock)
             else startIcon
             Icon(
                 modifier = Modifier.then(
-                    if (onClickStartIcon != null) Modifier.clickable { onClickStartIcon(value) }
+                    if (onStartIconClick != null) Modifier.clickable { onStartIconClick(value) }
                     else Modifier
                 ),
                 painter = checkLeftIcon,
@@ -109,12 +124,15 @@ fun TextField(
                 tint = Theme.color.shade.tertiary
             )
             TextField(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .focusRequester(focusRequester),
                 interactionSource = interactionSource,
                 value = value,
                 onValueChange = onValueChange,
                 textStyle = Theme.textStyle.body.md.medium,
-                visualTransformation = if (!hasPassword)
+                visualTransformation = if (!isPassword)
                     VisualTransformation.None
                 else if (showPassword)
                     VisualTransformation.None
@@ -127,6 +145,7 @@ fun TextField(
                         color = Theme.color.shade.tertiary
                     )
                 },
+                maxLines = maxLines,
                 colors = TextFieldColors(
                     unfocusedBorderColor = Color.Transparent,
                     focusedBorderColor = Color.Transparent,
@@ -142,7 +161,7 @@ fun TextField(
                     tint = Theme.color.additional.primary.red
                 )
             }
-            if (hasPassword) {
+            if (isPassword) {
                 Icon(
                     if (showPassword) {
                         painterResource(Theme.icons.outline.eyeOpened)
@@ -154,9 +173,10 @@ fun TextField(
                     modifier = Modifier
                         .clickable { showPassword = !showPassword }
                 )
-            }
-            if (endIcon != null) {
-                endIcon()
+            } else {
+                if (endIcon != null) {
+                    endIcon()
+                }
             }
         }
         if (hasError && !isFocused) {
@@ -166,7 +186,7 @@ fun TextField(
                 color = Theme.color.additional.primary.red
             )
         }
-        if (hasPassword) {
+        if (isPassword) {
             Text(
                 text = "Forgot Password?",
                 style = Theme.textStyle.body.md.regular,
@@ -174,26 +194,90 @@ fun TextField(
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .clickable(onClick = onClickForgotPassword)
+                    .clickable(onClick = onForgotPasswordClick)
             )
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-    backgroundColor = 0xFFF7F7F7,
+data class TextFieldColors(
+    val focusedBorderColor: Color = Color.Black,
+    val unfocusedBorderColor: Color = Color.Gray,
+    val backgroundColor: Color = Color.White,
+    val cursorColor: Color = Color.Black,
+    val textColor: Color = Color.Black
 )
+
+@Composable
+private fun TextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
+    placeholder: @Composable (() -> Unit)? = null,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    singleLine: Boolean = false,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
+    contentPadding: Dp = 8.dp,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    colors: TextFieldColors = TextFieldColors(),
+    interactionSource: MutableInteractionSource? = null,
+    alignment: Alignment = Alignment.CenterStart
+) {
+    val source = interactionSource ?: remember { MutableInteractionSource() }
+    val focused = source.collectIsFocusedAsState().value
+    val borderCol = if (focused) colors.focusedBorderColor else colors.unfocusedBorderColor
+    val mergedTextStyle = textStyle.merge(
+        TextStyle(color = textStyle.color.takeOrElse { colors.textColor })
+    )
+    CompositionLocalProvider(LocalTextSelectionColors provides LocalTextSelectionColors.current) {
+        Box(
+            modifier = modifier
+                .border(width = 1.dp, color = borderCol)
+                .background(color = colors.backgroundColor)
+                .padding(contentPadding),
+
+            ) {
+            BasicTextField(
+                modifier = Modifier
+                    .align(alignment)
+                    .fillMaxWidth(),
+                value = value,
+                onValueChange = onValueChange,
+                enabled = enabled,
+                readOnly = readOnly,
+                textStyle = mergedTextStyle,
+                cursorBrush = SolidColor(colors.cursorColor),
+                visualTransformation = visualTransformation,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                interactionSource = source,
+                singleLine = singleLine,
+                maxLines = maxLines,
+                minLines = minLines,
+                decorationBox = { innerTextField ->
+                    if (value.isEmpty() && placeholder != null) {
+                        placeholder()
+                    }
+                    innerTextField()
+                }
+            )
+        }
+    }
+}
+
+@Preview
 @Composable
 private fun TextFieldPreview() {
     CineVerseTheme(isDarkTheme = true) {
-        TextField(
-            placeholder = "Enter your password",
-            title = "Label",
+        DefaultTextField(
+            placeholder = "Enter your username",
             startIcon = painterResource(Theme.icons.outline.user),
-            hasPassword = true,
-            value = "Alaa",
+            value = "",
             onValueChange = {},
         )
     }
