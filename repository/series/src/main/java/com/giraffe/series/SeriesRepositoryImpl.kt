@@ -2,6 +2,7 @@ package com.giraffe.series
 
 import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.series.entity.Review
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.mapper.toCachedDto
@@ -13,7 +14,6 @@ class SeriesRepositoryImpl(
     private val remote: SeriesRemoteDataSource,
     private val local: SeriesLocalDateSource
 ) : SeriesRepository {
-
     override suspend fun searchSeriesByName(seriesName: String) = safeCall {
         val cached = local.getCachedSeriesForName(seriesName)
         if (cached.isNotEmpty()) {
@@ -62,5 +62,9 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = safeCall {
         remote.getSeriesDetails(seriesId).toEntity()
+    }
+
+    override suspend fun getSeriesReviews(seriesId: Int): List<Review> = safeCall {
+        remote.getSeriesReviews(seriesId).toEntity()
     }
 }

@@ -1,6 +1,8 @@
 package com.giraffe.series.mapper
 
 import com.giraffe.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
+import com.giraffe.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
+import com.giraffe.series.entity.Review
 import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
@@ -11,6 +13,10 @@ import com.giraffe.series.model.GenreDto
 import com.giraffe.series.model.SeasonDto
 import com.giraffe.series.model.SeriesDto
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 fun CachedSeriesDto.toEntity(
     seasons: List<Season>,
@@ -143,4 +149,28 @@ fun SeriesDetailsResponse.toEntity(): Series {
         overview = overview,
         seasons = seasons.map { it.toEntity() },
     )
+}
+
+fun SeriesReviewsResponse.toEntity(): List<Review> {
+    return results.map { item ->
+        Review(
+            id = item.id,
+            userImageUrl = item.authorDetails.avatarPath,
+            name = item.authorDetails.name,
+            userName = item.authorDetails.username,
+            review = item.content,
+            rating = item.authorDetails.rating,
+            releaseYear = parseData(item.createdAt)
+        )
+    }
+}
+
+@OptIn(ExperimentalTime::class)
+fun parseData(dateString: String): LocalDate? {
+    return try {
+        val instant = Instant.parse(dateString)
+        instant.toLocalDateTime(TimeZone.UTC).date
+    } catch (e: Exception) {
+        null
+    }
 }
