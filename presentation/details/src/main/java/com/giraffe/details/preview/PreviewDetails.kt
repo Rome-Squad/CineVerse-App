@@ -86,11 +86,8 @@ fun GallerySectionPreview() {
     CineVerseTheme(isDarkTheme = true) {
         GallerySection(
             modifier = Modifier.height(314.dp),
-            images = listOf(
-                Pair(null, "gallery_image_one"),
-                Pair(null, "gallery_image_two"),
-                Pair(R.drawable.gallery_item3, "gallery_image_three"),
-            ),
+            images = listOf(null,null,"https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"),
+            imageContentDescriptions = listOf("gallery_image_one","gallery_image_two","gallery_image_three"),
             onShowMoreClick = {}
         )
     }
