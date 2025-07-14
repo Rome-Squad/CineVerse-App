@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.explore.screen.SearchScreen
 
+
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

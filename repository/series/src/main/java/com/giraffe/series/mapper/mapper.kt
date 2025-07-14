@@ -1,10 +1,8 @@
 package com.giraffe.series.mapper
 
 import com.giraffe.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
-import com.giraffe.series.entity.GenreInfo.FullGenre
 import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Series
-import com.giraffe.series.entity.SeriesDetails
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.model.CachedSeasonDto
 import com.giraffe.series.model.CachedSeriesDto
@@ -134,14 +132,14 @@ fun SeasonDto.toEntity(): Season {
     )
 }
 
-fun SeriesDetailsResponse.toEntity(): SeriesDetails {
-    return SeriesDetails(
+fun SeriesDetailsResponse.toEntity(): Series {
+    return Series(
         id = id,
         posterUrl = posterPath,
         name = name,
-        genres = genres.map { FullGenre(it.toEntity()) },
+        genreIDs = genres.map { it.id },
         rating = voteAverage.toFloat(),
-        releaseYear = firstAirDate.let { LocalDate.parse(it) },
+        releaseYear = firstAirDate,
         overview = overview,
         seasons = seasons.map { it.toEntity() },
     )

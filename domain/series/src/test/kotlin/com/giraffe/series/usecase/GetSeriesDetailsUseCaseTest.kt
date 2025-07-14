@@ -24,7 +24,7 @@ class GetSeriesDetailsUseCaseTest {
     fun `Should return details of series When repository returns success`() = runTest {
         // Given
         val seriesId = 1
-        val expectedResult = fakeSeriesDetails(id = 1, name = "batman")
+        val expectedResult = fakeSeries(id = 1, name = "batman")
         coEvery { seriesRepository.getSeriesDetails(seriesId) } returns expectedResult
 
         // When

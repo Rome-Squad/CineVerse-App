@@ -3,7 +3,6 @@ package com.giraffe.series
 import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.series.entity.Series
-import com.giraffe.series.entity.SeriesDetails
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.mapper.toCachedDto
 import com.giraffe.series.mapper.toEntity
@@ -60,11 +59,8 @@ class SeriesRepositoryImpl(
         local.clearRecentSeries()
     }
 
-    override suspend fun getSeriesById(seriesId: Int): List<SeriesDetails> {
-        return emptyList()
-    }
 
-    override suspend fun getSeriesDetails(seriesId: Int): SeriesDetails = safeCall {
+    override suspend fun getSeriesDetails(seriesId: Int): Series = safeCall {
         remote.getSeriesDetails(seriesId).toEntity()
     }
 }
