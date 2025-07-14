@@ -5,50 +5,68 @@ import com.giraffe.explore.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.explore.usecase.ExploreUseCases
 import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.explore.usecase.InsertSearchKeywordUseCase
+import com.giraffe.movies.usecase.ClearCacheUseCase
+import com.giraffe.movies.usecase.ClearRecentlyMoviesUseCase
+import com.giraffe.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.movies.usecase.GetMoviesByGenreUseCase
+import com.giraffe.movies.usecase.GetMoviesGenresUseCase
+import com.giraffe.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.movies.usecase.InsertGenresUseCase
+import com.giraffe.movies.usecase.InsertMoviesUseCase
+import com.giraffe.movies.usecase.MoviesUseCases
 import com.giraffe.movies.usecase.SearchMovieByNameUseCase
-import com.giraffe.series.usecase.*
+import com.giraffe.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.person.usecase.ClearRecentPeopleUseCase
+import com.giraffe.person.usecase.GetPeopleByMovieIdUseCase
+import com.giraffe.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.person.usecase.StoreRecentPersonUseCase
+import com.giraffe.series.usecase.ClearRecentSeriesUseCase
+import com.giraffe.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.series.usecase.SearchSeriesByNameUseCase
+import com.giraffe.series.usecase.StoreRecentSeriesUseCase
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import com.giraffe.movies.usecase.*
 import com.giraffe.person.usecase.GetPeopleByMovieIdUseCase
 
 val useCaseModule = module {
 
-    // Explore Use Cases
-    single { GetSearchKeywordsUseCase(get()) }
-    single { InsertSearchKeywordUseCase(get()) }
-    single { DeleteSearchKeywordUseCase(get()) }
-    single { ClearSearchHistoryUseCase(get()) }
+    // Explore UseCases
+    singleOf(::GetSearchKeywordsUseCase)
+    singleOf(::InsertSearchKeywordUseCase)
+    singleOf(::DeleteSearchKeywordUseCase)
+    singleOf(::ClearSearchHistoryUseCase)
 
     single {
         ExploreUseCases(
-            getSearchKeywords = GetSearchKeywordsUseCase(get()),
-            insertSearchKeyword = InsertSearchKeywordUseCase(get()),
-            deleteSearchKeyword = DeleteSearchKeywordUseCase(get()),
-            clearSearchHistory = ClearSearchHistoryUseCase(get())
+            getSearchKeywords = get(),
+            insertSearchKeyword = get(),
+            deleteSearchKeyword = get(),
+            clearSearchHistory = get()
         )
     }
-    single { ClearRecentSeriesUseCase(get()) }
-    single { GetRecentSeriesUseCase(get()) }
-    single { GetSeriesGenresUseCase(get()) }
-    single { SearchSeriesByNameUseCase(get()) }
-    single { StoreRecentSeriesUseCase(get()) }
 
+    // Series UseCases
+    singleOf(::ClearRecentSeriesUseCase)
+    singleOf(::GetRecentSeriesUseCase)
+    singleOf(::GetSeriesGenresUseCase)
+    singleOf(::SearchSeriesByNameUseCase)
+    singleOf(::StoreRecentSeriesUseCase)
 
-    // Movies Use Cases
-    single { SearchMovieByNameUseCase(get()) }
-    single { GetMoviesGenresUseCase(get()) }
-    single { GetMoviesByGenreUseCase(get()) }
-    single { InsertMoviesUseCase(get()) }
-    single { InsertGenresUseCase(get()) }
-    single { ClearCacheUseCase(get()) }
-    single { SetMovieRecentUseCase(get()) }
-    single { GetRecentlyMoviesUseCase(get()) }
-    single { ClearRecentlyMoviesUseCase(get()) }
-    single { GetMovieGenresUseCase(get()) }
+    // Movie UseCases
+    singleOf(::SearchMovieByNameUseCase)
+    singleOf(::GetMoviesGenresUseCase)
+    singleOf(::GetMoviesByGenreUseCase)
+    singleOf(::InsertMoviesUseCase)
+    singleOf(::InsertGenresUseCase)
+    singleOf(::ClearCacheUseCase)
+    singleOf(::SetMovieRecentUseCase)
+    singleOf(::GetRecentlyMoviesUseCase)
+    singleOf(::ClearRecentlyMoviesUseCase)
+    singleOf(::GetMovieGenresUseCase)
 
     // NEW: Add UseCases for Movie Details and Rating
     single { GetMovieDetailsUseCase(get()) }
@@ -75,10 +93,11 @@ val useCaseModule = module {
         )
     }
 
-    single { ClearRecentPeopleUseCase(get()) }
-    single { GetRecentPeopleUseCase(get()) }
-    single { SearchPeopleByNameUseCase(get()) }
-    single { StoreRecentPersonUseCase(get()) }
-    single { GetPeopleByMovieIdUseCase(get()) }
-
+    // Person UseCases
+    singleOf(::ClearRecentPeopleUseCase)
+    singleOf(::GetRecentPeopleUseCase)
+    singleOf(::SearchPeopleByNameUseCase)
+    singleOf(::StoreRecentPersonUseCase)
+    singleOf(::GetPeopleByMovieIdUseCase)
+    singleOf(::GetPeopleBySeriesIdUseCase)
 }

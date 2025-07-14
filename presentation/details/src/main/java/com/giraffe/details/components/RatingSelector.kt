@@ -44,8 +44,7 @@ fun RatingSelector(
 
 @Composable
 @Preview(
-    showBackground = true,
-    showSystemUi = false
+    showBackground = true, showSystemUi = false
 )
 fun PreviewRatingSelector() {
 
@@ -60,8 +59,7 @@ fun PreviewRatingSelector() {
 
 @Composable
 @Preview(
-    showBackground = true,
-    showSystemUi = false
+    showBackground = true, showSystemUi = false
 )
 fun PreviewRatingSelectorDark() {
 

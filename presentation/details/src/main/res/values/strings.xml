@@ -21,4 +21,7 @@
     <string name="unknown_error">Sorry, something went wrong!</string>
     <string name="server_error">Sorry, Server Error!</string>
     <string name="movie_not_found">Sorry, we couldn\'t find the movie!</string>
+    <string name="rating">Rating</string>
+    <string name="episodes">Episodes</string>
+    <string name="year">Year</string>
 </resources>
