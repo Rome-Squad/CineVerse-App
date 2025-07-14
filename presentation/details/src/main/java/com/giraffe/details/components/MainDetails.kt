@@ -27,7 +27,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -149,7 +149,7 @@ fun MainDetails(
                     modifier = Modifier
                         .weight(1f),
                     image = painterResource(Theme.icons.colored.instagram),
-                    name = stringResource(R.string.instagram),
+                    name = stringResource(R.string.instgram),
                     contentDescription = stringResource(R.string.instagram_icon),
                     onClick = onInstagramClick
                 )
@@ -240,7 +240,7 @@ fun MainDetailsHeader(
                         )
                 )
             }
-            Divider(thickness = 1.dp, color = Theme.color.stroke.primary)
+            HorizontalDivider(thickness = 1.dp, color = Theme.color.stroke.primary)
         }
     }
 }
