@@ -1,5 +1,6 @@
 package com.giraffe.explore
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.explore.entity.SearchKeyword
@@ -20,7 +21,6 @@ import com.giraffe.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.series.usecase.SearchSeriesByNameUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,8 +28,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 
 class ExploreViewModel(
     private val exploreUseCases: ExploreUseCases,
@@ -57,7 +55,12 @@ class ExploreViewModel(
     private var debounceJob: Job? = null
 
     init {
+        getGenres()
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+
+
+
+
             _state.update { it.copy(isLoading = true, errorMessage = null) }
 
             val recentSeries = retryIO {
@@ -77,6 +80,13 @@ class ExploreViewModel(
 
             _state.update { it.copy(isLoading = false) }
 
+        }
+    }
+
+    private fun getGenres(){
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            val genres = seriesGenres().map { it.toUi() }
+            _state.update { it.copy(genres = genres) }
         }
     }
 
@@ -155,32 +165,12 @@ class ExploreViewModel(
 
         if (query.isBlank()) return onClearSearchQuery()
 
-        _state.update {
-            it.copy(
-                isSearchSuggestionsVisible = true,
-                isSearchResultsVisible = false,
-                isSearchHistoryVisible = false,
-                isLoading = true
-            )
-        }
-
-        debounceJob = viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            delay(1500)
-            retryIO {
-                exploreUseCases.getSearchKeywords(query)
-                    .flowOn(Dispatchers.IO)
-                    .collect { keys ->
-                        withContext(Dispatchers.Main) {
-                            _state.update {
-                                it.copy(
-                                    resultSearchKeyword = keys,
-                                    isLoading = false,
-                                    errorMessage = null
-                                )
-                            }
-                        }
-                    }
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            exploreUseCases.getSearchKeywords(query)
+                .collect { result ->
+                    Log.d("messi", "onSearchQueryChange: ${result.map { it.keyword }}")
+                    _state.update { it.copy(resultSearchKeyword = result) }
+                }
         }
     }
 
@@ -258,6 +248,12 @@ class ExploreViewModel(
     override fun onGenreSelected(genre: GenreUi) {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(selectedGenre = genre) }
+        }
+    }
+
+    override fun onFocusChanged(isFocused: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.update { it.copy(isSearchFieldFocused = isFocused) }
         }
     }
 

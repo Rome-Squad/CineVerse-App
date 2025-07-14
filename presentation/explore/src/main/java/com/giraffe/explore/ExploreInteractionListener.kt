@@ -17,4 +17,6 @@ interface ExploreInteractionListener {
     fun onVoiceSearchFinished()
 
     fun onGenreSelected(genre: GenreUi)
+
+    fun onFocusChanged(isFocused:Boolean)
 }

@@ -36,7 +36,6 @@ import com.giraffe.explore.GenreUi
 import com.giraffe.explore.SearchTab
 import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.explore.components.ExploreHeader
-import com.giraffe.explore.components.HistoryAndRecentItems
 import com.giraffe.explore.components.NoResult
 import com.giraffe.explore.components.ResultsActors
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
@@ -169,18 +168,6 @@ fun SearchContent(
                 when {
                     state.isLoading -> Progress()
 
-                    !state.isSearchResultsVisible -> HistoryAndRecentItems(
-                        state = state,
-                        onClickClearAll = { listener.onClearHistory() },
-                        onClickItem = { listener.onSuggestionClick(it) },
-                        onClickIcon = {
-                            if (it.isFromSearchHistory) {
-                                listener.onDeleteItemFromHistory(it)
-                            } else {
-                                listener.onSearchQueryChange(it.keyword)
-                            }
-                        }
-                    )
 
                     else -> when (state.selectedTab) {
                         SearchTab.MOVIES, SearchTab.SERIES -> {
@@ -234,6 +221,7 @@ private fun ExploreScreenPreview() {
                 override fun onPermissionResult(granted: Boolean) {}
                 override fun onVoiceSearchFinished() {}
                 override fun onGenreSelected(genre: GenreUi) {}
+                override fun onFocusChanged(isFocused: Boolean) {}
             }
         )
     }

@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
@@ -59,11 +62,21 @@ fun DefaultTextField(
     errorMessage: String? = null,
     isPassword: Boolean = false,
     onStartIconClick: ((String) -> Unit)? = null,
-    onForgotPasswordClick: () -> Unit = {}
+    onForgotPasswordClick: () -> Unit = {},
+    onFocusChanged: (Boolean) -> Unit = {}
 ) {
-    val hasError = errorMessage != null
+
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
+    val focusRequester = remember { FocusRequester() }
+    //val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(isFocused) {
+        onFocusChanged(isFocused)
+    }
+
+
+    val hasError = errorMessage != null
     var showPassword by remember { mutableStateOf(false) }
     val borderColor by animateColorAsState(
         targetValue = if (isFocused)
@@ -113,7 +126,8 @@ fun DefaultTextField(
             TextField(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
+                    .fillMaxHeight()
+                    .focusRequester(focusRequester),
                 interactionSource = interactionSource,
                 value = value,
                 onValueChange = onValueChange,
@@ -229,7 +243,9 @@ private fun TextField(
 
             ) {
             BasicTextField(
-                modifier = Modifier.align(alignment),
+                modifier = Modifier
+                    .align(alignment)
+                    .fillMaxWidth(),
                 value = value,
                 onValueChange = onValueChange,
                 enabled = enabled,

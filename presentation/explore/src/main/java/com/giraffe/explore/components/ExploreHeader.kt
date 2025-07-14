@@ -40,6 +40,7 @@ fun ExploreHeader(
     placeholder: String = "",
     value: String,
     onValueChange: (String) -> Unit,
+    onFocusChanged: (Boolean) -> Unit = {}
 ) {
     Column(
         modifier = modifier.background(color = Theme.color.background.screen),
@@ -80,6 +81,7 @@ fun ExploreHeader(
                 placeholder = placeholder,
                 onValueChange = onValueChange,
                 value = value,
+                onFocusChanged = onFocusChanged
             )
         }
         if (tabsTitles.isNotEmpty()) {
