@@ -55,7 +55,6 @@ class TmdbSeriesApiRemoteDataSource(
         baseRequest.endpoint(endpoint)
             .method(HttpMethod.Get)
         val result = requestBuilder.request(baseRequest).body<SeriesDetailsResponse>()
-        Log.d("result", result.toString())
         return result
     }
 
