@@ -2,18 +2,16 @@ package com.giraffe.explore.screen
 
 import com.giraffe.explore.entity.SearchKeyword
 
-sealed class SearchIntent {
-    data class OnSearchQueryChange(val query: String) : SearchIntent()
-    object OnClearSearchQuery : SearchIntent()
-    data class OnDeleteItemHistory(val item: SearchKeyword) : SearchIntent()
-    object OnClearHistory : SearchIntent()
-    object OnVoiceSearchClick : SearchIntent()
-    object OnClearRecentViewed : SearchIntent()
-    data class OnClickItem(val suggestion: SearchKeyword) : SearchIntent()
-    data class OnSelectedTabChanged(val tab: SearchTab) : SearchIntent()
-    object onClickToggleView : SearchIntent()
-
-    data class OnPermissionResult(val granted: Boolean) : SearchIntent()
-    object OnVoiceSearchFinished : SearchIntent()
-
+interface SearchInteractionListener {
+    fun onSearchQueryChange(query: String)
+    fun onClearSearchQuery()
+    fun onDeleteItemFromHistory(item: SearchKeyword)
+    fun onClearHistory()
+    fun onVoiceSearchClick()
+    fun onClearRecentViewed()
+    fun onSuggestionClick(suggestion: SearchKeyword)
+    fun onTabSelected(tab: SearchTab)
+    fun onToggleViewClick()
+    fun onPermissionResult(granted: Boolean)
+    fun onVoiceSearchFinished()
 }
