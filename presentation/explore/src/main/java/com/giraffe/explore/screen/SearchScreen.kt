@@ -49,12 +49,12 @@ fun SearchScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is SearchUIEvent.ShowError -> {
+                is SearchScreenEffect.ShowError -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
-                SearchUIEvent.ShowLoading -> { /* Show custom loading */ }
-                SearchUIEvent.HideLoading -> { /* Hide custom loading */ }
-                SearchUIEvent.RefreshCompleted -> {
+                SearchScreenEffect.ShowLoading -> { /* Show custom loading */ }
+                SearchScreenEffect.HideLoading -> { /* Hide custom loading */ }
+                SearchScreenEffect.RefreshCompleted -> {
                     Toast.makeText(context, "Refreshed", Toast.LENGTH_SHORT).show()
                 }
             }

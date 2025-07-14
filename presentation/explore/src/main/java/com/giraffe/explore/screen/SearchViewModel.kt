@@ -46,8 +46,8 @@ class SearchViewModel(
     private val _state = MutableStateFlow(SearchScreenState())
     val state: StateFlow<SearchScreenState> = _state.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<SearchUIEvent>()
-    val uiEvent: SharedFlow<SearchUIEvent> = _uiEvent
+    private val _uiEvent = MutableSharedFlow<SearchScreenEffect>()
+    val uiEvent: SharedFlow<SearchScreenEffect> = _uiEvent
 
 
     private var debounceJob: Job? = null
@@ -73,7 +73,7 @@ class SearchViewModel(
                 }
 
             } catch (e: Exception) {
-                _uiEvent.emit(SearchUIEvent.ShowError("Failed to load recent views"))
+                _uiEvent.emit(SearchScreenEffect.ShowError("Failed to load recent views"))
             } finally {
                 _state.update { it.copy(isLoading = false) }
             }
@@ -108,7 +108,7 @@ class SearchViewModel(
                     )
                 }
             } catch (e: Exception) {
-                _uiEvent.emit(SearchUIEvent.ShowError("Failed to search for ${keyword.keyword}"))
+                _uiEvent.emit(SearchScreenEffect.ShowError("Failed to search for ${keyword.keyword}"))
             } finally {
                 _state.update { it.copy(isLoading = false) }
             }
@@ -162,7 +162,7 @@ class SearchViewModel(
                         }
                     }
             } catch (e: Exception) {
-                _uiEvent.emit(SearchUIEvent.ShowError("Failed to load suggestions"))
+                _uiEvent.emit(SearchScreenEffect.ShowError("Failed to load suggestions"))
                 _state.update { it.copy(isLoading = false) }
             }
         }
@@ -228,17 +228,17 @@ class SearchViewModel(
         _state.update { it.copy(isVoiceRecording = false) }
     }
 
-    fun refresh() {
+   private fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true) }
             try {
                 val keyword = _state.value.searchKeyword
                 if (keyword != null) {
                     loadResults(keyword, _state.value.selectedTab)
-                    _uiEvent.emit(SearchUIEvent.RefreshCompleted)
+                    _uiEvent.emit(SearchScreenEffect.RefreshCompleted)
                 }
             } catch (e: Exception) {
-                _uiEvent.emit(SearchUIEvent.ShowError("Refresh failed"))
+                _uiEvent.emit(SearchScreenEffect.ShowError("Refresh failed"))
             } finally {
                 _state.update { it.copy(isLoading = false) }
             }
