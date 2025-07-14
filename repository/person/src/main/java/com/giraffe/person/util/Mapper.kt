@@ -1,11 +1,17 @@
 package com.giraffe.person.util
 
 import com.giraffe.person.entity.Person
+import com.giraffe.person.entity.PersonCredit
+import com.giraffe.person.entity.PersonInfo
 import com.giraffe.person.entity.PersonType
 import com.giraffe.person.local.dto.PersonDto
 import com.giraffe.person.remote.response.CastResponse
 import com.giraffe.person.remote.response.CrewResponse
+import com.giraffe.person.remote.response.PersonDetailsResponse
+import com.giraffe.person.remote.response.PersonMovieCastItemResponse
+import com.giraffe.person.remote.response.PersonProfileImageResponse
 import com.giraffe.person.remote.response.PersonResponse
+import com.giraffe.person.remote.response.PersonTvCastItem
 
 fun Person.toDto(movieId: Int=-1, seriesId: Int=-1) = PersonDto(
     id = id,
@@ -62,3 +68,37 @@ fun CrewResponse.toEntityForShow(type: PersonType): Person = Person(
     imageUrl = profilePath,
     type = type,
 )
+fun PersonDetailsResponse.toPersonInfo() = PersonInfo(
+    id = id,
+    name = name,
+    biography = biography,
+    birthday = birthday,
+    placeOfBirth = placeOfBirth,
+    imageUrl = profilePath
+)
+
+fun PersonProfileImageResponse.toImageList(): List<String> {
+    return profiles.map { it.filePath }
+}
+
+fun List<PersonMovieCastItemResponse>.toPersonMovieCredits(): List<PersonCredit> {
+    return map {
+        PersonCredit(
+            id = it.id,
+            title = it.title,
+            posterPath = it.posterPath,
+            voteAverage = it.voteAverage
+        )
+    }
+}
+
+fun List<PersonTvCastItem>.toPersonTvCredits(): List<PersonCredit> {
+    return map {
+        PersonCredit(
+            id = it.id,
+            title = it.name,
+            posterPath = it.posterPath,
+            voteAverage = it.voteAverage
+        )
+    }
+}

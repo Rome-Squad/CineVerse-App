@@ -1,6 +1,7 @@
 package com.giraffe.person
 
 import com.giraffe.person.entity.Person
+import com.giraffe.person.entity.PersonDetails
 import com.giraffe.person.entity.PersonType
 import com.giraffe.person.local.PersonLocalDataSource
 import com.giraffe.person.remote.PersonRemoteDataSource
@@ -10,6 +11,13 @@ import com.giraffe.person.util.toDto
 import com.giraffe.person.util.toEntity
 import com.giraffe.person.util.toEntityForMovie
 import com.giraffe.person.util.toEntityForShow
+import com.giraffe.person.util.toImageList
+import com.giraffe.person.util.toPersonInfo
+import com.giraffe.person.util.toPersonMovieCredits
+import com.giraffe.person.util.toPersonTvCredits
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 class PersonRepositoryImpl(
     private val remoteDataSource: PersonRemoteDataSource,
@@ -75,6 +83,21 @@ class PersonRepositoryImpl(
             localDataSource.storePeople(peopleDto)
 
             people
+        }
+    }
+    override suspend fun getPersonDetails(personId: Int) = SafeCall {
+        withContext(Dispatchers.IO) {
+            val details = async { remoteDataSource.getPersonDetails(personId) }
+            val images = async { remoteDataSource.getPersonImages(personId) }
+            val movies = async { remoteDataSource.getPersonMovieCredits(personId) }
+            val shows = async { remoteDataSource.getPersonTvCredits(personId) }
+
+            PersonDetails(
+                personInfo = details.await().toPersonInfo(),
+                images = images.await().toImageList(),
+                movieCredits = movies.await().cast.toPersonMovieCredits(),
+                tvCredits = shows.await().cast.toPersonTvCredits()
+            )
         }
     }
 }
