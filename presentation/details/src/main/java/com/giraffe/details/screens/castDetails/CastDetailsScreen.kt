@@ -118,6 +118,7 @@ fun CastDetailsContent(
                     .fillMaxWidth()
                     .padding(horizontal = padding16),
                 images = state.actorGalleryImages,
+                imageContentDescriptions = state.actorGalleryImagesDescriptions,
                 onShowMoreClick = onShowMoreActorGalleryClick
             )
         }

@@ -24,10 +24,11 @@ import com.giraffe.details.utils.imageSourceToPainter
 @Composable
 fun GallerySection(
     modifier: Modifier = Modifier,
-    images: List<Pair<String?, String?>>,
+    images: List<String?>,
+    imageContentDescriptions: List<String?>,
     onShowMoreClick: () -> Unit,
 ) {
-    if (images.isEmpty()) {
+    if (images.isEmpty() || imageContentDescriptions.isEmpty()) {
         return
     }
     Column(
@@ -66,23 +67,23 @@ fun GallerySection(
 
             ) {
                 GalleryItem(
-                    image = images[0].first?.imageSourceToPainter(),
-                    contentDescription = images[0].second,
+                    image = images[0]?.imageSourceToPainter(),
+                    contentDescription = imageContentDescriptions[0],
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
                 )
                 GalleryItem(
-                    image = images[1].first?.imageSourceToPainter(),
-                    contentDescription = images[1].second,
+                    image = images[1]?.imageSourceToPainter(),
+                    contentDescription = imageContentDescriptions[1],
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxSize()
                 )
             }
             GalleryItem(
-                image = images[2].first?.imageSourceToPainter(),
-                contentDescription = images[2].second,
+                image = images[2]?.imageSourceToPainter(),
+                contentDescription = imageContentDescriptions[2],
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -102,12 +103,14 @@ fun GallerySectionPreview() {
                 .height(314.dp)
                 .fillMaxWidth(),
             images = listOf(
-                Pair(null, "gallery_image_one"),
-                Pair(null, "gallery_image_two"),
-                Pair(
-                    "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
-                    "gallery_image_three"
-                ),
+                null,
+                null,
+                "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
+            ),
+            imageContentDescriptions = listOf(
+                "gallery_image_one",
+                "gallery_image_two",
+                "gallery_image_three"
             ),
             onShowMoreClick = {}
         )
