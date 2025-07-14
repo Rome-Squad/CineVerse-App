@@ -50,7 +50,6 @@ fun PosterItemVertically(
             modifier = modifier
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(Theme.color.background.card)
-                .clickable(onClick = onClickPoster)
                 .aspectRatio(0.74f),
             contentAlignment = Alignment.Center
         ) {
@@ -70,6 +69,7 @@ fun PosterItemVertically(
                 IslamicAppropriateImageViewer(
                     imageUrl = movie.imageUri,
                     modifier = Modifier.fillMaxSize()
+                        .clickable(onClick = onClickPoster)
                 )
             } else {
                 Icon(

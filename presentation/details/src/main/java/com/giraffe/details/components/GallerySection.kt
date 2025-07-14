@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,9 +24,12 @@ import com.giraffe.details.utils.imageSourceToPainter
 @Composable
 fun GallerySection(
     modifier: Modifier = Modifier,
-    images: List<Pair<Int?, String?>>,
+    images: List<Pair<String?, String?>>,
     onShowMoreClick: () -> Unit,
 ) {
+    if (images.isEmpty()) {
+        return
+    }
     Column(
         modifier = modifier
             .fillMaxWidth(),
@@ -98,11 +100,14 @@ fun GallerySectionPreview() {
         GallerySection(
             modifier = Modifier
                 .height(314.dp)
-                .width(328.dp),
+                .fillMaxWidth(),
             images = listOf(
                 Pair(null, "gallery_image_one"),
                 Pair(null, "gallery_image_two"),
-                Pair(R.drawable.gallery_item3, "gallery_image_three"),
+                Pair(
+                    "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
+                    "gallery_image_three"
+                ),
             ),
             onShowMoreClick = {}
         )
