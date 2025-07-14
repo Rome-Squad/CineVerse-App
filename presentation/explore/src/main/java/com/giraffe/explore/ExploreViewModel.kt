@@ -56,13 +56,18 @@ class ExploreViewModel(
 
     init {
         getGenres()
+        getRecent()
+    }
+
+    private fun getGenres() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            val genres = seriesGenres().map { it.toUi() }
+            _state.update { it.copy(genres = genres) }
+        }
+    }
 
-
-
-
-            _state.update { it.copy(isLoading = true, errorMessage = null) }
-
+    private fun getRecent() {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val recentSeries = retryIO {
                 getRecentSeriesUseCase().map { it.toPosterMovie(seriesGenres()) }
             }
@@ -77,19 +82,8 @@ class ExploreViewModel(
             _state.update {
                 it.copy(recentViews = recentMovies + recentSeries + recentPeople)
             }
-
-            _state.update { it.copy(isLoading = false) }
-
         }
     }
-
-    private fun getGenres(){
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val genres = seriesGenres().map { it.toUi() }
-            _state.update { it.copy(genres = genres) }
-        }
-    }
-
 
     private fun loadMoviesResult(keyword: SearchKeyword) {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {

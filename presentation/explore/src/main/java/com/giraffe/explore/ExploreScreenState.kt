@@ -41,7 +41,7 @@ data class ExploreScreenState(
     val mediaResults: List<Poster> = emptyList(),
 ) : HasErrorMessage<ExploreScreenState> {
     override fun withErrorMessage(@StringRes id: Int): ExploreScreenState {
-        return copy(errorMessage = id)
+        return copy(errorMessage = id, isLoading = false)
     }
 }
 
