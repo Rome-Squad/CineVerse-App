@@ -1,16 +1,19 @@
 package com.giraffe.person.local.dto
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "persons")
+@Entity(
+    tableName = "persons",
+    primaryKeys = ["id", "movieId", "seriesId"]
+)
 data class PersonDto(
-    @PrimaryKey
     val id: Int,
     val name: String,
-    val imageUrl: String? = null,
+    val imageUrl: String?,
     val role: String,
-    val character: String? = null,
+    val type: String,
+    val movieId: Int = -1,
+    val seriesId: Int = -1,
     val isRecent: Boolean = false,
     val cachedAt: Long = System.currentTimeMillis()
 )

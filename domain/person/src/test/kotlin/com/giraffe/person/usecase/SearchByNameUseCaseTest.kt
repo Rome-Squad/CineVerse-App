@@ -1,14 +1,12 @@
 package com.giraffe.person.usecase
 
 import com.giraffe.person.entity.Person
-import com.giraffe.person.exception.SearchResultNotFoundException
 import com.giraffe.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
 class SearchByNameUseCaseTest {
