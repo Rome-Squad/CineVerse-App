@@ -10,6 +10,8 @@ import com.giraffe.person.local.dto.PersonDto
 interface PersonDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun storePerson(person: PersonDto)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPeople(people: List<PersonDto>)
     @Query("SELECT * FROM persons WHERE showId = :showId")
     suspend fun getPeopleByShowId(showId: Int): List<PersonDto>
     @Query("SELECT * FROM persons WHERE movieId = :movieId")

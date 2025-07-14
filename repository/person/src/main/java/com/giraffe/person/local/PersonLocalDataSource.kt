@@ -11,5 +11,5 @@ interface PersonLocalDataSource {
     suspend fun clearRecentPeople()
     suspend fun getPeopleByShowId(showId: Int): List<PersonDto>
     suspend fun getPeopleByMovieId(movieId: Int): List<PersonDto>
-
+    suspend fun storePeople(people: List<PersonDto>)
 }
