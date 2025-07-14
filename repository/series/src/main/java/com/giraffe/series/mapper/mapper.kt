@@ -151,7 +151,7 @@ fun SeriesDetailsResponse.toSeriesEntity(): Series {
     )
 }
 
-fun SeriesReviewsResponse.toEntity(): List<Review> {
+fun SeriesReviewsResponse.toSeriesReviewsEntity(): List<Review> {
     return results.map { item ->
         Review(
             id = item.id,
@@ -182,7 +182,7 @@ fun SeriesDetailsResponse.toSeasonEntity(): List<Season> {
             id = it.id,
             posterUrl = it.posterPath,
             name = it.name,
-            rating = it.voteAverage.toFloat(),
+            rating = it.voteAverage,
             releaseYear = it.airDate,
             overview = it.overview,
             episodeCount = it.episodeCount,

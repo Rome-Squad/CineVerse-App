@@ -2,13 +2,14 @@ package com.giraffe.series
 
 import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
-import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Review
+import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.mapper.toCachedDto
 import com.giraffe.series.mapper.toSeasonEntity
 import com.giraffe.series.mapper.toSeriesEntity
+import com.giraffe.series.mapper.toSeriesReviewsEntity
 import com.giraffe.series.repository.SeriesRepository
 import com.giraffe.series.utils.safeCall
 
@@ -71,6 +72,6 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun getSeriesReviews(seriesId: Int): List<Review> = safeCall {
-        remote.getSeriesReviews(seriesId).toEntity()
+        remote.getSeriesReviews(seriesId).toSeriesReviewsEntity()
     }
 }
