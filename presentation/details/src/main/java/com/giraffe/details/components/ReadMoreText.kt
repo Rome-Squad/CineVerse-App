@@ -55,8 +55,7 @@ fun PreviewReadMoreText() {
         isDarkTheme = false
     ) {
         ReadMoreText(
-            text = "",
-
+            text = "very good",
             modifier = Modifier
         )
     }
@@ -73,7 +72,7 @@ fun PreviewReadMoreTextDark() {
         isDarkTheme = true
     ) {
         ReadMoreText(
-            text = "",
+            text = "very good",
             modifier = Modifier
         )
     }
