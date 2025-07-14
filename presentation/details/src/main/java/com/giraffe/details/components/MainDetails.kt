@@ -27,7 +27,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -97,8 +97,7 @@ fun MainDetails(
                                 bottomEnd = Theme.radius.xl
                             )
                         )
-                        .fillMaxHeight()
-                    ,
+                        .fillMaxHeight(),
                     painter = actorImage,
                     contentDescription = stringResource(R.string.actor_image)
                 )
@@ -202,12 +201,12 @@ fun MainDetailsHeader(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,
-    ) {
+) {
     val key = "_KEY"
     with(sharedTransitionScope) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(Theme.color.background.screen)
                 .padding(top = 8.dp)
@@ -215,7 +214,7 @@ fun MainDetailsHeader(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(start = 40.dp)
+                modifier = modifier.padding(start = 40.dp)
             ) {
                 Image(
                     painter = actorImage,
@@ -240,7 +239,7 @@ fun MainDetailsHeader(
                         )
                 )
             }
-            Divider(thickness = 1.dp, color = Theme.color.stroke.primary)
+            HorizontalDivider(thickness = 1.dp, color = Theme.color.stroke.primary)
         }
     }
 }
