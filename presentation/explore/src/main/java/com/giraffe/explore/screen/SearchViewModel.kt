@@ -85,27 +85,49 @@ class SearchViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             try {
-                val list = when (tab) {
-                    SearchTab.MOVIES -> searchMovie(keyword.keyword).map {
-                        it.toPosterMovie(movieGenres(it.genresID))
+                when (tab) {
+                    SearchTab.MOVIES -> {
+                        val results = searchMovie(keyword.keyword).map {
+                            it.toPosterMovie(movieGenres(it.genresID))
+                        }
+                        _state.update {
+                            it.copy(
+                                movieSeriesResults = results,
+                                searchKeyword = keyword,
+                                isSearchResultsVisible = true,
+                                isSearchSuggestionsVisible = false,
+                                actorResults = emptyList()
+                            )
+                        }
                     }
 
-                    SearchTab.SERIES -> searchSeries(keyword.keyword).map {
-                        it.toPosterMovie(seriesGenres())
+                    SearchTab.SERIES -> {
+                        val results = searchSeries(keyword.keyword).map {
+                            it.toPosterMovie(seriesGenres())
+                        }
+                        _state.update {
+                            it.copy(
+                                movieSeriesResults = results,
+                                searchKeyword = keyword,
+                                isSearchResultsVisible = true,
+                                isSearchSuggestionsVisible = false,
+                                actorResults = emptyList()
+                            )
+                        }
                     }
 
-                    SearchTab.ACTORS -> searchPeople(keyword.keyword).map {
-                        it.toPoster()
+                    SearchTab.ACTORS -> {
+                        val results = searchPeople(keyword.keyword).map { it.toPoster() }
+                        _state.update {
+                            it.copy(
+                                actorResults = results,
+                                searchKeyword = keyword,
+                                isSearchResultsVisible = true,
+                                isSearchSuggestionsVisible = false,
+                                movieSeriesResults = emptyList()
+                            )
+                        }
                     }
-                }
-
-                _state.update {
-                    it.copy(
-                        mediaResults = list,
-                        searchKeyword = keyword,
-                        isSearchResultsVisible = true,
-                        isSearchSuggestionsVisible = false
-                    )
                 }
             } catch (e: Exception) {
                 _uiEvent.emit(SearchScreenEffect.ShowError("Failed to search for ${keyword.keyword}"))
@@ -115,26 +137,11 @@ class SearchViewModel(
         }
     }
 
-    private fun clearQuery() {
-        debounceJob?.cancel()
-        _state.update {
-            it.copy(
-                searchQuery = "",
-                isSearchHistoryVisible = true,
-                isSearchSuggestionsVisible = false,
-                isSearchResultsVisible = false,
-                mediaResults = emptyList(),
-                resultSearchKeyword = emptyList()
-            )
-        }
-    }
-
-
     override fun onSearchQueryChange(query: String) {
         _state.update { it.copy(searchQuery = query) }
         debounceJob?.cancel()
 
-        if (query.isBlank()) return clearQuery()
+        if (query.isBlank()) return onClearSearchQuery()
 
         _state.update {
             it.copy(
@@ -176,7 +183,8 @@ class SearchViewModel(
                 isSearchHistoryVisible = true,
                 isSearchSuggestionsVisible = false,
                 isSearchResultsVisible = false,
-                mediaResults = emptyList(),
+                movieSeriesResults = emptyList(),
+                actorResults = emptyList(),
                 resultSearchKeyword = emptyList()
             )
         }

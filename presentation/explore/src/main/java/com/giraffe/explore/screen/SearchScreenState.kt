@@ -28,9 +28,12 @@ data class SearchScreenState
     val isGridSelected: Boolean = true,
 
     // Media Content
-    val mediaResults: List<Poster> = emptyList(),
+    //for movie and series
+    val movieSeriesResults: List<Poster> = emptyList(),
+    val actorResults: List<Poster> = emptyList(),
     val resultSearchKeyword: List<SearchKeyword> = emptyList(),
     val recentViews: List<Poster> = emptyList(),
+    val availableTabs: List<SearchTab> = listOf(SearchTab.MOVIES, SearchTab.SERIES),
 
     // Voice Input
     val isVoiceRecording: Boolean = false,
