@@ -10,7 +10,7 @@ interface SearchInteractionListener {
     fun onVoiceSearchClick()
     fun onClearRecentViewed()
     fun onSuggestionClick(suggestion: SearchKeyword)
-    fun onTabSelected(tab: SearchTab)
+    fun onTabSelected(keyword: SearchKeyword, tab: SearchTab)
     fun onToggleViewClick()
     fun onPermissionResult(granted: Boolean)
     fun onVoiceSearchFinished()

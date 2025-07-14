@@ -49,46 +49,42 @@ class SearchViewModel(
     private val _uiEvent = MutableSharedFlow<SearchScreenEffect>()
     val uiEvent: SharedFlow<SearchScreenEffect> = _uiEvent
 
+    private val exceptionHandler = exceptionHandler(_state )
 
     private var debounceJob: Job? = null
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
-            try {
-                val recentSeries = getRecentSeriesUseCase().map {
-                    it.toPosterMovie(seriesGenres())
-                }
 
-                val recentPeople = getRecentPeopleUseCase().map {
-                    it.toPoster()
+                val recentSeries = retryIO {
+                    getRecentSeriesUseCase().map { it.toPosterMovie(seriesGenres()) }
                 }
-
-                val recentMovies = getRecentlyMoviesUseCase().map {
-                    it.toPosterMovie(movieGenres(it.genresID))
+                val recentPeople = retryIO {
+                    getRecentPeopleUseCase().map { it.toPoster() }
                 }
-
+                val recentMovies = retryIO {
+                    getRecentlyMoviesUseCase().map {
+                        it.toPosterMovie(movieGenres(it.genresID))
+                    }
+                }
                 _state.update {
                     it.copy(recentViews = recentMovies + recentSeries + recentPeople)
                 }
 
-            } catch (e: Exception) {
-                _uiEvent.emit(SearchScreenEffect.ShowError("Failed to load recent views"))
-            } finally {
                 _state.update { it.copy(isLoading = false) }
-            }
+
         }
     }
 
 
-    private fun loadResults(keyword: SearchKeyword, tab: SearchTab) {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun loadMoviesResult(keyword: SearchKeyword) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
-            try {
-                when (tab) {
-                    SearchTab.MOVIES -> {
-                        val results = searchMovie(keyword.keyword).map {
-                            it.toPosterMovie(movieGenres(it.genresID))
+                        val results = retryIO {
+                            searchMovie(keyword.keyword).map {
+                                it.toPosterMovie(movieGenres(it.genresID))
+                            }
                         }
                         _state.update {
                             it.copy(
@@ -99,43 +95,47 @@ class SearchViewModel(
                                 actorResults = emptyList()
                             )
                         }
-                    }
+        }
+    }
+    private fun loadSeriesResults(keyword: SearchKeyword) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            _state.update { it.copy(isLoading = true, errorMessage = null) }
 
-                    SearchTab.SERIES -> {
-                        val results = searchSeries(keyword.keyword).map {
+
+
+                    val results = retryIO {
+                        searchSeries(keyword.keyword).map {
                             it.toPosterMovie(seriesGenres())
                         }
-                        _state.update {
-                            it.copy(
-                                seriesResults = results,
-                                searchKeyword = keyword,
-                                isSearchResultsVisible = true,
-                                isSearchSuggestionsVisible = false,
-                                actorResults = emptyList()
-                            )
-                        }
                     }
-
-                    SearchTab.ACTORS -> {
-                        val results = searchPeople(keyword.keyword).map { it.toPoster() }
-                        _state.update {
-                            it.copy(
-                                actorResults = results,
-                                searchKeyword = keyword,
-                                isSearchResultsVisible = true,
-                                isSearchSuggestionsVisible = false,
-                                movieResults = emptyList(),
-                                seriesResults = emptyList(),
-
-                                )
-                        }
+                    _state.update {
+                        it.copy(
+                            seriesResults = results,
+                            searchKeyword = keyword,
+                            isSearchResultsVisible = true,
+                            isSearchSuggestionsVisible = false,
+                            actorResults = emptyList()
+                        )
                     }
-                }
-            } catch (e: Exception) {
-                _uiEvent.emit(SearchScreenEffect.ShowError("Failed to search for ${keyword.keyword}"))
-            } finally {
-                _state.update { it.copy(isLoading = false) }
-            }
+        }
+    }
+    private fun loadPeopleResults(keyword: SearchKeyword) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            _state.update { it.copy(isLoading = true, errorMessage = null) }
+
+                    val results = retryIO {
+                        searchPeople(keyword.keyword).map { it.toPoster() }
+                    }
+                    _state.update {
+                        it.copy(
+                            actorResults = results,
+                            searchKeyword = keyword,
+                            isSearchResultsVisible = true,
+                            isSearchSuggestionsVisible = false,
+                            movieResults = emptyList(),
+                            seriesResults = emptyList(),
+                        )
+                    }
         }
     }
 
@@ -154,9 +154,9 @@ class SearchViewModel(
             )
         }
 
-        debounceJob = viewModelScope.launch(Dispatchers.IO) {
+        debounceJob = viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             delay(1500)
-            try {
+            retryIO {
                 exploreUseCases.getSearchKeywords(query)
                     .flowOn(Dispatchers.IO)
                     .collect { keys ->
@@ -170,9 +170,6 @@ class SearchViewModel(
                             }
                         }
                     }
-            } catch (e: Exception) {
-                _uiEvent.emit(SearchScreenEffect.ShowError("Failed to load suggestions"))
-                _state.update { it.copy(isLoading = false) }
             }
         }
     }
@@ -194,13 +191,13 @@ class SearchViewModel(
     }
 
     override fun onDeleteItemFromHistory(item: SearchKeyword) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             exploreUseCases.deleteSearchKeyword(item)
         }
     }
 
     override fun onClearHistory() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             exploreUseCases.clearSearchHistory()
             _state.update { it.copy(resultSearchKeyword = emptyList()) }
         }
@@ -211,18 +208,24 @@ class SearchViewModel(
     }
 
     override fun onClearRecentViewed() {
-        viewModelScope.launch(Dispatchers.IO) {
-            clearSeries(); clearPeople(); clearCache(); _state.update { it.copy(recentViews = emptyList()) }
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            clearSeries(); clearPeople(); clearCache();
+            _state.update { it.copy(recentViews = emptyList()) }
         }
     }
 
     override fun onSuggestionClick(suggestion: SearchKeyword) {
-        loadResults(suggestion, _state.value.selectedTab)
+        loadMoviesResult(suggestion)
+        loadSeriesResults(suggestion)
+        loadSeriesResults(suggestion)
     }
 
-    override fun onTabSelected(tab: SearchTab) {
-        _state.value.searchKeyword?.let { loadResults(it, tab) }
-        _state.update { it.copy(selectedTab = tab) }
+    override fun onTabSelected(keyword: SearchKeyword, tab: SearchTab) {
+        when (tab) {
+            SearchTab.MOVIES -> loadMoviesResult(keyword)
+            SearchTab.SERIES -> loadSeriesResults(keyword)
+            SearchTab.ACTORS -> loadPeopleResults(keyword)
+        }
     }
 
     override fun onToggleViewClick() {
@@ -230,30 +233,26 @@ class SearchViewModel(
     }
 
     override fun onPermissionResult(granted: Boolean) {
-        _state.update {
-            it.copy(isPermissionGranted = granted)
-        }
+        _state.update { it.copy(isPermissionGranted = granted) }
     }
 
     override fun onVoiceSearchFinished() {
         _state.update { it.copy(isVoiceRecording = false) }
     }
 
-   private fun refresh() {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun refresh() {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             _state.update { it.copy(isLoading = true) }
-            try {
+
                 val keyword = _state.value.searchKeyword
                 if (keyword != null) {
-                    loadResults(keyword, _state.value.selectedTab)
+                    loadMoviesResult(keyword)
+                    loadSeriesResults(keyword)
+                    loadSeriesResults(keyword)
                     _uiEvent.emit(SearchScreenEffect.RefreshCompleted)
                 }
-            } catch (e: Exception) {
-                _uiEvent.emit(SearchScreenEffect.ShowError("Refresh failed"))
-            } finally {
                 _state.update { it.copy(isLoading = false) }
-            }
+
         }
     }
 }
-

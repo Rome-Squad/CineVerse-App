@@ -37,8 +37,8 @@ data class SearchScreenState(
     val isPermissionGranted: Boolean = false,
     val mediaResults: List<Poster> = emptyList(),
 ) : HasErrorMessage<SearchScreenState> {
-    override fun withErrorMessage(@StringRes resId: Int): SearchScreenState {
-        return copy(errorMessage = resId)
+    override fun withErrorMessage(@StringRes id: Int): SearchScreenState {
+        return copy(errorMessage = id)
     }
 }
 
