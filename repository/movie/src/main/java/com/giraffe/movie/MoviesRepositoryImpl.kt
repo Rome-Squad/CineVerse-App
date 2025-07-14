@@ -2,26 +2,25 @@ package com.giraffe.movie
 
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.movie.datasource.remote.SessionRepository
 import com.giraffe.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.movie.mapper.toEntity
 import com.giraffe.movie.mapper.toMovie
 import com.giraffe.movie.mapper.toMovieCacheDto
 import com.giraffe.movie.mapper.toMovieGenreDto
 import com.giraffe.movie.utils.safeCall
-import com.giraffe.movies.entity.AccountStates
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
 import com.giraffe.movies.entity.MovieReview
+import com.giraffe.movies.exception.NetworkError
 import com.giraffe.movies.repository.MoviesRepository
-import kotlinx.serialization.json.Json
+import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(
     private val cache: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
-    private val sessionRepository: SessionRepository,
-    private val json: Json
+    private val sessionManager: SessionManager
 ) : MoviesRepository {
+
     override suspend fun searchMovieByName(movieName: String): List<Movie> {
         return safeCall {
 
@@ -149,37 +148,29 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override suspend fun createGuestSession(): String {
-        return safeCall {
-            val dto = remote.createGuestSession()
-            if (dto.success) {
-                return dto.guestSessionId
-            } else {
-                throw Exception("Failed to create guest session")
-            }
-        }
-    }
-
     override suspend fun addRating(
         movieId: Int,
         ratingValue: Float
     ) {
         return safeCall {
-            val sessionId = sessionRepository.getGuestSessionId()
-                ?: throw Exception("Guest session not available")
+            val sessionId = getSessionId()
 
             val requestBody = RatingRequest(value = ratingValue)
             remote.addRating(movieId, sessionId, requestBody)
         }
     }
 
-    override suspend fun getAccountStates(movieId: Int): AccountStates {
-        return safeCall {
-            val sessionId = sessionRepository.getGuestSessionId()
-                ?: throw Exception("Guest session not available")
 
-            val dto = remote.getAccountStates(movieId, sessionId)
-            dto.toEntity(json)
+    override suspend fun getUserMovieRating(movieId: Int): Float {
+        return safeCall {
+            val sessionId = getSessionId()
+            remote.getUserMovieRating(movieId, sessionId)
+        }
+    }
+
+    private suspend fun getSessionId(): String {
+        return safeCall {
+            sessionManager.createGuestSessionId() ?: throw NetworkError()
         }
     }
 }

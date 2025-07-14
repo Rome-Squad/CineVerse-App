@@ -53,9 +53,8 @@ val useCaseModule = module {
     // NEW: Add UseCases for Movie Details and Rating
     single { GetMovieDetailsUseCase(get()) }
     single { GetMovieReviewsUseCase(get()) }
-    single { AddRatingUseCase(get()) }
-    single { GetAccountStatesUseCase(get()) }
-    single { CreateGuestSessionUseCase(get()) }
+    single { AddMovieRatingUseCase(get()) }
+    single { GetUserMovieRatingUseCase(get()) }
 
     single {
         MoviesUseCases(
@@ -69,6 +68,10 @@ val useCaseModule = module {
             getRecentlyMovies = GetRecentlyMoviesUseCase(get()),
             clearRecentlyMovies = ClearRecentlyMoviesUseCase(get()),
             getMovieGenresUseCase = GetMovieGenresUseCase(get()),
+            getMovieDetailsUseCase = GetMovieDetailsUseCase(get()),
+            getMovieReviewsUseCase = GetMovieReviewsUseCase(get()),
+            addMovieRatingUseCase = AddMovieRatingUseCase(get()),
+            getUserMovieRatingUseCase = GetUserMovieRatingUseCase(get())
         )
     }
 

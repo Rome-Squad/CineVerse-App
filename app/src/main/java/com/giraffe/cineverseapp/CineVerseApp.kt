@@ -12,9 +12,8 @@ import com.giraffe.cineverseapp.di.repositoryModule
 import com.giraffe.cineverseapp.di.useCaseModule
 import com.giraffe.cineverseapp.di.viewModelModule
 import com.giraffe.cineverseapp.worker.CacheCleanupWorker
-import com.giraffe.movie.datasource.remote.SessionRepository
-import com.giraffe.movies.usecase.CreateGuestSessionUseCase
 import com.giraffe.series.di.seriesRemoteDataModule
+import com.giraffe.user.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -28,8 +27,8 @@ class CineVerseApp : Application() {
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    private val createGuestSessionUseCase: CreateGuestSessionUseCase by inject()
-    private val sessionRepository: SessionRepository by inject()
+    private val sessionManager: SessionManager by inject()
+
     override fun onCreate() {
         super.onCreate()
         startKoin {
@@ -49,18 +48,18 @@ class CineVerseApp : Application() {
 
         setupCacheCleanupWorker()
     }
+
     private fun createGuestSessionIfNotExists() {
         applicationScope.launch {
-            if (sessionRepository.getGuestSessionId() == null) {
+            //TODO ("store session id when authenticated")
+            try {
+                val newGuestSessionId = sessionManager.createGuestSessionId()
+                    ?: throw Exception("Failed to create guest session")
 
-                try {
-                    val newGuestSessionId = createGuestSessionUseCase()
-
-                    sessionRepository.saveGuestSessionId(newGuestSessionId)
-                } catch (e: Exception) {
-                    Log.e("CineVerseApp", "Failed to create guest session", e)
-                }
+            } catch (e: Exception) {
+                Log.e("CineVerseApp", "Failed to create guest session", e)
             }
+
         }
     }
 
