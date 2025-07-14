@@ -20,14 +20,12 @@ class GetPeopleByShowIdUseCaseTest {
             name = "Lee Jung-jae",
             role = "Seong Gi-hun / Player 456",
             imageUrl = "https://image.tmdb.org/t/p/w500/3h5Cfm0X8ohWn7psZkqdNWqXAHH.jpg",
-            showId = 93405
         ),
         Person(
             id = 11,
             name = "Wi Ha-jun",
             role = "Detective Hwang Jun-ho",
             imageUrl = "https://image.tmdb.org/t/p/w500/tEZuIaMESdBw4LfNq3vshGR4VlP.jpg",
-            showId = 93405
         )
     )
 
