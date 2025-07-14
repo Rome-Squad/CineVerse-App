@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.rememberAsyncImagePainter
 import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.details.R
 
 @Composable
 fun ImageCard(
@@ -47,7 +48,7 @@ fun PreviewImageCard() {
         isDarkTheme = false
     ) {
         ImageCard(
-            imageSource = null,
+            imageSource = R.drawable.gallery_item,
             modifier = Modifier
         )
     }
@@ -64,7 +65,7 @@ fun PreviewImageCardDark() {
         isDarkTheme = true
     ) {
         ImageCard(
-            imageSource = null,
+            imageSource = R.drawable.gallery_item,
             modifier = Modifier
         )
     }
