@@ -69,7 +69,7 @@ class TmdbSeriesApiRemoteDataSource(
         return baseRequest
             .endpoint(endpoint)
             .method(HttpMethod.Get)
-            .addParameter(key = "page", value = 1)
+            .addParameter(key = "page", value = page)
             .run { requestBuilder.request(this).body<SeriesResponse>().results }
     }
 }
