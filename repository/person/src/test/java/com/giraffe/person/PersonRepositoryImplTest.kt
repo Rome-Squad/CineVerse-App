@@ -31,7 +31,7 @@ class PersonRepositoryImplTest {
         gender = 1,
         id = 5,
         knownFor = listOf(),
-        knownForDepartment = "Actor",
+        role = "Actor",
         name = "Mohannad",
         originalName = "مهند",
         popularity = 100.0,

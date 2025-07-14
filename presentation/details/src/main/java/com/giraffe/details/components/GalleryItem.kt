@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,7 +23,11 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 
 @Composable
-fun GalleryItem(contentDescription: String?, image: Int?, modifier: Modifier = Modifier) {
+fun GalleryItem(
+    image: Painter?,
+    contentDescription: String?,
+    modifier: Modifier = Modifier
+) {
     if (image == null) {
         Box(
             modifier = modifier
@@ -38,7 +43,7 @@ fun GalleryItem(contentDescription: String?, image: Int?, modifier: Modifier = M
         }
     } else {
         Image(
-            painter = painterResource(image),
+            painter = image,
             contentDescription = stringResource(R.string.galley_image),
             contentScale = ContentScale.Crop,
             modifier = modifier
@@ -48,7 +53,7 @@ fun GalleryItem(contentDescription: String?, image: Int?, modifier: Modifier = M
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview()
 @Composable
 fun GalleryItemPreview() {
     CineVerseTheme(isDarkTheme = true) {

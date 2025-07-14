@@ -1,24 +1,31 @@
 package com.giraffe.person
 
 import com.giraffe.person.entity.Person
+import com.giraffe.person.entity.PersonType
 import com.giraffe.person.local.PersonLocalDataSource
 import com.giraffe.person.remote.PersonRemoteDataSource
 import com.giraffe.person.repository.PersonRepository
 import com.giraffe.person.util.SafeCall
 import com.giraffe.person.util.toDto
 import com.giraffe.person.util.toEntity
+import com.giraffe.person.util.toEntityForMovie
+import com.giraffe.person.util.toEntityForShow
 
 class PersonRepositoryImpl(
     private val remoteDataSource: PersonRemoteDataSource,
     private val localDataSource: PersonLocalDataSource,
 ) : PersonRepository {
+
     override suspend fun searchByName(personName: String) = SafeCall {
         localDataSource.searchByName(personName).map { it.toEntity() }.ifEmpty {
-            remoteDataSource.searchByName(personName).people
+            val people = remoteDataSource.searchByName(personName).people
                 .map { it.toEntity() }
-                .also { people ->
-                    people.map { localDataSource.storePerson(it.toDto()) }
-                }
+
+            val peopleDto = people.map { it.toDto() }
+
+            localDataSource.storePeople(peopleDto)
+
+            people
         }
     }
 
@@ -33,26 +40,41 @@ class PersonRepositoryImpl(
         localDataSource.clearRecentPeople()
     }
 
-    override suspend fun getPeopleByMovieId(movieId: Int): List<Person> {
-        return listOf(
-            Person(
-                id = 1,
-                name = "Christian Bale",
-                role = "Bruce Wayne / Batman",
-                imageUrl = "https://image.tmdb.org/t/p/w500/profile/christian_bale.jpg"
-            ),
-            Person(
-                id = 2,
-                name = "Michael Caine",
-                role = "Alfred Pennyworth",
-                imageUrl = "https://image.tmdb.org/t/p/w500/profile/michael_caine.jpg"
-            ),
-            Person(
-                id = 3,
-                name = "Heath Ledger",
-                role = "The Joker",
-                imageUrl = "https://image.tmdb.org/t/p/w500/profile/heath_ledger.jpg"
-            )
-        )
+    override suspend fun getPeopleByMovieId(movieId: Int) = SafeCall {
+        val localPeople = localDataSource.getPeopleByMovieId(movieId).map { it.toEntity() }
+
+        localPeople.ifEmpty {
+            val response = remoteDataSource.getCreditsByMovieId(movieId)
+
+            val cast = response.cast.map { it.toEntityForMovie(PersonType.CAST) }
+            val crew = response.crew.map { it.toEntityForMovie(PersonType.CREW) }
+
+            val people = cast + crew
+
+            val peopleDto = people.map { it.toDto(movieId = movieId) }
+
+            localDataSource.storePeople(peopleDto)
+
+            people
+        }
+    }
+
+    override suspend fun getPeopleByShowId(seriesId: Int) = SafeCall {
+        val localPeople = localDataSource.getPeopleBySeriesId(seriesId).map { it.toEntity() }
+
+        localPeople.ifEmpty {
+            val response = remoteDataSource.getCreditsBySeriesId(seriesId)
+
+            val cast = response.cast.map { it.toEntityForShow(PersonType.CAST) }
+            val crew = response.crew.map { it.toEntityForShow(PersonType.CREW) }
+
+            val people = cast + crew
+
+            val peopleDto = people.map { it.toDto(seriesId = seriesId) }
+
+            localDataSource.storePeople(peopleDto)
+
+            people
+        }
     }
 }

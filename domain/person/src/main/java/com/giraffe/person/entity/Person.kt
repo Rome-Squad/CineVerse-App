@@ -4,5 +4,11 @@ data class Person(
     val id: Int,
     val name: String,
     val role: String,
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+    val type: PersonType = PersonType.CAST
 )
+
+enum class PersonType {
+    CAST,
+    CREW
+}

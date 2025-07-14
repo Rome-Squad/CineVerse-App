@@ -31,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
@@ -39,6 +42,7 @@ dependencies {
     implementation(project(":imageviewer"))
     implementation(project(":domain:movies"))
     implementation(project(":domain:person"))
+    implementation(project(":domain:series"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -60,4 +64,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.readmore.material3)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.koin.androidx.compose)
+
 }

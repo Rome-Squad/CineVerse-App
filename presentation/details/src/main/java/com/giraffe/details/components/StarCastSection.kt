@@ -24,12 +24,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+
+data class CastMember(
+    val actorName: String,
+    val character: String,
+    val image: Painter
+)
 
 @Composable
 fun StarCastSection(
@@ -56,7 +63,7 @@ fun StarCastSection(
             )
 
             Text(
-                text = "Show More",
+                text = stringResource(R.string.show_more),
                 color = Theme.color.brand.primary,
                 modifier = Modifier
                     .padding(start = 12.dp)
@@ -133,11 +140,7 @@ fun CastCard(
         }
     }
 }
-data class CastMember(
-    val actorName: String,
-    val character: String,
-    val image: Painter
-)
+
 
 @Composable
 @Preview(

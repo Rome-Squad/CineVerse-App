@@ -2,6 +2,7 @@ package com.giraffe.designsystem.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,14 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -27,15 +31,15 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
-    title: String = "",
-    caption: String = "",
-    endIcon: Painter = painterResource(Theme.icons.outline.add),
+    title: String? = null,
+    caption: String? = null,
+    image: Painter? = null,
+    imageSize: Dp = 32.dp,
+    endIcon: Painter? = null,
     hasBackground: Boolean = true,
-    showBackButton: Boolean = true,
-    showLogo: Boolean = true,
-    showTitle: Boolean = true,
-    showCaption: Boolean = true,
-    showEndIcon: Boolean = true,
+    showBackButton: Boolean = false,
+    onBackButtonClick: () -> Unit = {},
+    onEndIconClick: () -> Unit = {},
 ) {
     val background = if (hasBackground) Theme.color.background.screen else Color.Transparent
     Row(
@@ -46,47 +50,58 @@ fun AppBar(
             .height(56.dp)
             .background(background)
     ) {
-        BackButton(showBackButton)
-        Logo(showLogo)
+        BackButton(
+            showBackButton = showBackButton,
+            onBackButtonClick = onBackButtonClick
+        )
+        DisplayImage(
+            image = image,
+            imageSize = imageSize
+        )
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Caption(showCaption, caption)
-            Title(showTitle, title)
+            Caption(caption)
+            Title(title)
         }
-        EndIcon(showEndIcon, endIcon)
-
+        EndIcon(painter = endIcon, onEndIconClick = onEndIconClick)
     }
 }
 
 @Composable
-private fun BackButton(showBackButton: Boolean) {
+private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
     if (showBackButton) {
         Icon(
             painter = painterResource(Theme.icons.outline.arrowLeft),
             contentDescription = "",
             tint = Theme.color.shade.primary,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .size(24.dp)
+                .clickable(
+                    onClick = onBackButtonClick
+                ),
         )
     }
 }
 
 @Composable
-private fun Logo(showLogo: Boolean) {
-    if (showLogo) {
+private fun DisplayImage(image: Painter?, imageSize: Dp) {
+    image?.let {
         Image(
-            painter = painterResource(Theme.icons.colored.logo),
+            painter = it,
             contentDescription = "",
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier
+                .size(imageSize)
+                .clip(CircleShape)
         )
     }
 }
 
 @Composable
-private fun Caption(showCaption: Boolean, caption: String) {
-    if (showCaption) {
+private fun Caption(caption: String?) {
+    caption?.let {
         Text(
-            text = caption,
+            text = it,
             maxLines = 1,
             style = Theme.textStyle.body.sm.regular,
             color = Theme.color.shade.secondary,
@@ -96,10 +111,10 @@ private fun Caption(showCaption: Boolean, caption: String) {
 }
 
 @Composable
-private fun Title(showTitle: Boolean, title: String) {
-    if (showTitle) {
+private fun Title(title: String?) {
+    title?.let {
         Text(
-            text = title,
+            text = it,
             maxLines = 1,
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary,
@@ -109,15 +124,19 @@ private fun Title(showTitle: Boolean, title: String) {
 }
 
 @Composable
-private fun EndIcon(showEndIcon: Boolean, endIcon: Painter) {
-    if (showEndIcon) {
+private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit) {
+    painter?.let {
         Icon(
-            painter = endIcon,
+            painter = it,
             contentDescription = "",
             tint = Theme.color.shade.primary,
             modifier = Modifier
                 .size(40.dp)
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable(
+                    enabled = true,
+                    onClick = onEndIconClick
+                ),
         )
     }
 }
@@ -132,26 +151,31 @@ fun AppBarPreview() {
             AppBar(
                 title = "Title",
                 caption = "Caption",
+                image = painterResource(Theme.icons.colored.logo),
+                endIcon = painterResource(Theme.icons.outline.add),
+                showBackButton = true,
+            )
+            AppBar(
+                title = "Title",
+                showBackButton = true,
+                image = painterResource(Theme.icons.colored.logo),
+                endIcon = painterResource(Theme.icons.outline.add),
+            )
+            AppBar(
+                title = "Title",
+                caption = "Caption",
+                image = painterResource(Theme.icons.colored.logo),
                 showBackButton = false,
-                showEndIcon = false
             )
             AppBar(
                 title = "Title",
-                showEndIcon = false,
-                showLogo = false,
-                showCaption = false,
+                showBackButton = true,
             )
             AppBar(
-                showEndIcon = false,
-                showLogo = false,
-                showCaption = false,
-                showTitle = false,
+                showBackButton = true,
             )
             AppBar(
                 title = "Title",
-                showEndIcon = false,
-                showLogo = false,
-                showCaption = false,
                 showBackButton = false,
             )
         }
