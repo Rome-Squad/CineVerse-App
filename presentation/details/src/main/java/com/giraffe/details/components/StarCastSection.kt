@@ -33,9 +33,7 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
 data class CastMember(
-    val actorName: String,
-    val character: String,
-    val image: Painter
+    val actorName: String, val character: String, val image: Painter
 )
 
 @Composable
@@ -48,8 +46,7 @@ fun StarCastSection(
     val chunkedList = castList.chunked(2)
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -66,7 +63,7 @@ fun StarCastSection(
                 text = stringResource(R.string.show_more),
                 color = Theme.color.brand.primary,
                 modifier = Modifier
-                    .padding(start = 12.dp)
+                    .padding(start = 12.dp, end = 16.dp)
                     .clickable { onShowMoreClick() },
                 style = Theme.textStyle.body.md.medium
             )
@@ -89,12 +86,10 @@ fun StarCastSection(
         }
     }
 }
+
 @Composable
 fun CastCard(
-    actorName: String,
-    character: String,
-    actorImage: Painter,
-    modifier: Modifier = Modifier
+    actorName: String, character: String, actorImage: Painter, modifier: Modifier = Modifier
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -102,8 +97,7 @@ fun CastCard(
         modifier = modifier.width(200.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = actorImage,
@@ -144,35 +138,28 @@ fun CastCard(
 
 @Composable
 @Preview(
-    name = "StarCastSection Light",
-    showBackground = true,
-    apiLevel = 34
+    name = "StarCastSection Light", showBackground = true, apiLevel = 34
 )
 fun PreviewStarCastSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StarCastSection(
-            title = "Star Cast",
-            onShowMoreClick = {},
-            castList = sampleCastList()
+            title = "Star Cast", onShowMoreClick = {}, castList = sampleCastList()
         )
     }
 }
 
 @Composable
 @Preview(
-    name = "StarCastSection Dark",
-    showBackground = false,
-    apiLevel = 34
+    name = "StarCastSection Dark", showBackground = false, apiLevel = 34
 )
 fun PreviewStarCastSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StarCastSection(
-            title = "Star Cast",
-            onShowMoreClick = {},
-            castList = sampleCastList()
+            title = "Star Cast", onShowMoreClick = {}, castList = sampleCastList()
         )
     }
 }
+
 @Composable
 fun sampleCastList(): List<CastMember> {
     val image = painterResource(
@@ -185,35 +172,29 @@ fun sampleCastList(): List<CastMember> {
         CastMember("Mark Ruffalo", "Hulk", image)
     )
 }
+
 @Composable
 @Preview(
-    name = "CastCard Preview",
-    showBackground = false,
-    apiLevel = 34
+    name = "CastCard Preview", showBackground = false, apiLevel = 34
 )
 fun PreviewCastCard() {
     CineVerseTheme(isDarkTheme = false) {
         CastCard(
-            actorName = "Robert Downey.",
-            character = "Iron Man",
-            actorImage = painterResource(
+            actorName = "Robert Downey", character = "Iron Man", actorImage = painterResource(
                 id = R.drawable.reviewer
             )
         )
     }
 }
+
 @Composable
 @Preview(
-    name = "CastCard Preview Dark",
-    showBackground = false,
-    apiLevel = 34
+    name = "CastCard Preview Dark", showBackground = false, apiLevel = 34
 )
 fun PreviewCastCardDark() {
     CineVerseTheme(isDarkTheme = true) {
         CastCard(
-            actorName = "Robert Downey.",
-            character = "Iron Man",
-            actorImage = painterResource(
+            actorName = "Robert Downey", character = "Iron Man", actorImage = painterResource(
                 id = R.drawable.reviewer
             )
         )
