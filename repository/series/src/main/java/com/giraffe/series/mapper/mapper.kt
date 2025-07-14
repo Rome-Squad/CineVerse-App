@@ -10,9 +10,8 @@ import com.giraffe.series.model.CachedSeriesGenreDto
 import com.giraffe.series.model.GenreDto
 import com.giraffe.series.model.SeasonDto
 import com.giraffe.series.model.SeriesDto
-import kotlinx.datetime.LocalDate
 
-fun CachedSeriesDto.toEntity(
+fun CachedSeriesDto.toSeriesEntity(
     seasons: List<Season>,
 ): Series {
     return Series(
@@ -27,7 +26,7 @@ fun CachedSeriesDto.toEntity(
     )
 }
 
-fun CachedSeasonDto.toEntity(): Season {
+fun CachedSeasonDto.toSeriesEntity(): Season {
     return Season(
         id = id,
         name = name,
@@ -40,7 +39,7 @@ fun CachedSeasonDto.toEntity(): Season {
     )
 }
 
-fun CachedSeriesGenreDto.toEntity(): SeriesGenre {
+fun CachedSeriesGenreDto.toSeriesEntity(): SeriesGenre {
     return SeriesGenre(
         id = id,
         name = name
@@ -92,7 +91,7 @@ fun SeriesDto.toCachedDto(): CachedSeriesDto {
     )
 }
 
-fun SeriesDto.toEntity(): Series {
+fun SeriesDto.toSeriesEntity(): Series {
     return Series(
         id = id,
         name = name,
@@ -105,7 +104,7 @@ fun SeriesDto.toEntity(): Series {
     )
 }
 
-fun GenreDto.toEntity(): SeriesGenre {
+fun GenreDto.toSeriesEntity(): SeriesGenre {
     return SeriesGenre(
         id = id,
         name = name
@@ -119,7 +118,7 @@ fun GenreDto.toCachedDto(): CachedSeriesGenreDto {
     )
 }
 
-fun SeasonDto.toEntity(): Season {
+fun SeasonDto.toSeriesEntity(): Season {
     return Season(
         id = id,
         name = name,
@@ -132,7 +131,7 @@ fun SeasonDto.toEntity(): Season {
     )
 }
 
-fun SeriesDetailsResponse.toEntity(): Series {
+fun SeriesDetailsResponse.toSeriesEntity(): Series {
     return Series(
         id = id,
         posterUrl = posterPath,
@@ -141,6 +140,21 @@ fun SeriesDetailsResponse.toEntity(): Series {
         rating = voteAverage.toFloat(),
         releaseYear = firstAirDate,
         overview = overview,
-        seasons = seasons.map { it.toEntity() },
+        seasons = seasons.map { it.toSeriesEntity() }
     )
+}
+
+fun SeriesDetailsResponse.toSeasonEntity(): List<Season> {
+    return seasons.map {
+        Season(
+            id = it.id,
+            posterUrl = it.posterPath,
+            name = it.name,
+            rating = it.voteAverage.toFloat(),
+            releaseYear = it.airDate,
+            overview = it.overview,
+            episodeCount = it.episodeCount,
+            seasonNumber = it.seasonNumber
+        )
+    }
 }

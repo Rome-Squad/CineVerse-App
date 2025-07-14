@@ -29,14 +29,14 @@ class GetLastSeasonsUseCaseTest {
             fakeSeason(id = 2, name = "season 2"),
             fakeSeason(id = 3, name = "season 3")
         )
-        coEvery { seriesRepository.getSeriesDetails(seriesId).seasons } returns expectedResult
+        coEvery { seriesRepository.getSeasonOfSeries(seriesId) } returns expectedResult
 
         // When
         val result = getLastSeasonsUseCase(seriesId)
 
         // Then
         assertThat(expectedResult).isEqualTo(result)
-        coVerify(exactly = 1) { seriesRepository.getSeriesDetails(seriesId).seasons }
+        coVerify(exactly = 1) { seriesRepository.getSeasonOfSeries(seriesId) }
     }
 
 
