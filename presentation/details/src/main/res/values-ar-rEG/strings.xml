@@ -21,4 +21,7 @@
     <string name="unknown_error">عذراً، حدث خطأ ما!</string>
     <string name="server_error">عذراً، هناك خطأ في الخادم!</string>
     <string name="movie_not_found">عذراً، لم نتمكن من العثور على الفيلم!</string>
+    <string name="rating">التقييم</string>
+    <string name="episodes">الحلقات</string>
+    <string name="year">سنة</string>
 </resources>
