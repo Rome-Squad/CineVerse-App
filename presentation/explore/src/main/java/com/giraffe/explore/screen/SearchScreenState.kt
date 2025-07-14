@@ -8,17 +8,13 @@ import com.giraffe.person.entity.Person
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 
+import androidx.annotation.StringRes
 
-
-data class SearchScreenState
-
-    (
+data class SearchScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
     val searchKeyword: SearchKeyword? = null,
-
-    // UI Section Visibility
+    @StringRes val errorMessage: Int? = null,
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
@@ -39,7 +35,12 @@ data class SearchScreenState
     // Voice Input
     val isVoiceRecording: Boolean = false,
     val isPermissionGranted: Boolean = false,
-)
+    val mediaResults: List<Poster> = emptyList(),
+) : HasErrorMessage<SearchScreenState> {
+    override fun withErrorMessage(@StringRes resId: Int): SearchScreenState {
+        return copy(errorMessage = resId)
+    }
+}
 
 enum class SearchTab {
     MOVIES, SERIES, ACTORS
@@ -83,8 +84,3 @@ fun Person.toPoster(): Poster = Poster(
     imageUri = imageUrl.orEmpty(),
     rating = 0f
 )
-
-
-
-
-
