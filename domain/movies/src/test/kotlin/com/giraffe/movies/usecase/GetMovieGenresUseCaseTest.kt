@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test
 class GetMovieGenresUseCaseTest {
 
     private lateinit var repository: MoviesRepository
-    private lateinit var useCase: GetMoviesGenresUseCase
+    private lateinit var useCase: GetMovieGenresUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        useCase = GetMoviesGenresUseCase(repository)
+        useCase = GetMovieGenresUseCase(repository)
     }
 
     @Test
@@ -27,13 +27,13 @@ class GetMovieGenresUseCaseTest {
             MovieGenre(id = 1, title = "Action"),
             MovieGenre(id = 2, title = "Comedy")
         )
-        coEvery { repository.getMoviesGenres() } returns expectedGenres
+        coEvery { repository.getMovieGenres(listOf(1,2)) } returns expectedGenres
 
         // When
-        val result = useCase()
+        val result = useCase(listOf(1,2))
 
         // Then
-        coVerify { repository.getMoviesGenres() }
+        coVerify { repository.getMovieGenres(listOf(1,2)) }
         assertThat(result).isEqualTo(expectedGenres)
     }
 }
