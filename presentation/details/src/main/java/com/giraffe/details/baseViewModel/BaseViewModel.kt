@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 open class BaseViewModel<STATE>(initialState: STATE) : ViewModel() {
 
-    protected val _state: MutableStateFlow<STATE> by lazy { MutableStateFlow(initialState) }
+    private val _state = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
 
     protected fun <T> tryToExecute(
