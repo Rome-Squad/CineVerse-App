@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
@@ -31,6 +33,7 @@ import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
 import com.giraffe.details.R
 import com.giraffe.details.components.CastMember
+import com.giraffe.details.utils.getCurrentLocalDateTime
 
 @Composable
 fun MovieDetails(
@@ -154,7 +157,7 @@ private fun MovieDetailsContent(
                 modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
                 rate = 5,
                 reviewText = "very good",
-                reviewDate = getCurrentLocalDate(),
+                reviewDate = getCurrentLocalDateTime(),
                 reviewerImageSource = R.drawable.reviewer,
                 reviewerName = "Hend",
                 reviewerUsername = "Hend sayed"
@@ -165,7 +168,7 @@ private fun MovieDetailsContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 rate = 5,
                 reviewText = "very good",
-                reviewDate = getCurrentLocalDate(),
+                reviewDate = getCurrentLocalDateTime(),
                 reviewerImageSource = R.drawable.reviewer,
                 reviewerName = "Hend",
                 reviewerUsername = "Hend sayed"
@@ -176,11 +179,15 @@ private fun MovieDetailsContent(
                 modifier = Modifier.padding(top=12.dp, start = 16.dp,end=16.dp),
                 rate = 5,
                 reviewText = "very good",
-                reviewDate = getCurrentLocalDate(),
+                reviewDate = getCurrentLocalDateTime(),
                 reviewerImageSource = R.drawable.reviewer,
                 reviewerName = "Hend",
                 reviewerUsername = "Hend sayed"
             )
+        }
+
+        item{
+            Spacer(Modifier.height(30.dp))
         }
     }
 }
