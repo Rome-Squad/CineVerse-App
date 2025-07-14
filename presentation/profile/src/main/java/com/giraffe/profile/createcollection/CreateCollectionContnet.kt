@@ -9,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
-import com.giraffe.designsystem.composable.TextField
+import com.giraffe.designsystem.composable.DefaultTextField
 
 @Composable
 fun CreateCollectionContent(
@@ -28,11 +28,11 @@ fun CreateCollectionContent(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
 
-        TextField(
+        DefaultTextField(
             startIcon = painterResource(startIcon),
             placeholder = hintText,
             modifier = Modifier,
-            title = title,
+            label = title,
             value = value,
             onValueChange = onValueChange,
         )

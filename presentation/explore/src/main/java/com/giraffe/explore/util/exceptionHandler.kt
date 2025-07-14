@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen
+package com.giraffe.explore.util
 
 import androidx.annotation.StringRes
 import com.giraffe.explore.R
@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 
-
 fun <T> exceptionHandler(
     state: MutableStateFlow<T>
 ): CoroutineExceptionHandler where T : HasErrorMessage<T> {
@@ -41,7 +40,6 @@ fun <T> exceptionHandler(
         state.update { it.withErrorMessage(resId) }
     }
 }
-
 
 
 @StringRes

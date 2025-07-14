@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.uimodel.Poster
 
@@ -23,6 +24,7 @@ import com.giraffe.designsystem.uimodel.Poster
 fun TransitionLazyColumnToGrid(
     poster: List<Poster>,
     isListSelected: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(vertical = 16.dp)
 ) {
     SharedTransitionLayout {
         AnimatedContent(
@@ -33,7 +35,7 @@ fun TransitionLazyColumnToGrid(
             if (it) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(vertical = 16.dp)
+                    contentPadding = contentPadding
                 ) {
                     items(items = poster) { poster ->
                         PosterHorizontal(
@@ -48,7 +50,7 @@ fun TransitionLazyColumnToGrid(
                     columns = GridCells.Fixed(2),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(vertical = 16.dp)
+                    contentPadding = contentPadding
                 ) {
                     items(items = poster) { poster ->
                         PosterVertically(

@@ -29,9 +29,13 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.VoiceSearchHelper
+import com.giraffe.explore.ExploreInteractionListener
+import com.giraffe.explore.ExploreViewModel
+import com.giraffe.explore.ExploreScreenState
+import com.giraffe.explore.GenreUi
+import com.giraffe.explore.SearchTab
+import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.explore.components.ExploreHeader
-import com.giraffe.explore.components.HistoryAndRecentItems
 import com.giraffe.explore.components.NoResult
 import com.giraffe.explore.components.ResultsActors
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
@@ -41,7 +45,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = koinViewModel()
+    viewModel: ExploreViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
@@ -52,6 +56,7 @@ fun SearchScreen(
                 is SearchScreenEffect.ShowError -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+
                 SearchScreenEffect.RefreshCompleted -> {
                     Toast.makeText(context, "Refreshed", Toast.LENGTH_SHORT).show()
                 }
@@ -65,11 +70,12 @@ fun SearchScreen(
         listener = viewModel
     )
 }
+
 @Composable
 fun SearchContent(
     modifier: Modifier = Modifier,
-    state: SearchScreenState,
-    listener: SearchInteractionListener
+    state: ExploreScreenState,
+    listener: ExploreInteractionListener
 ) {
     val context = LocalContext.current
 
@@ -130,7 +136,6 @@ fun SearchContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 showBackButton = true,
                 endIcon = painterResource(Theme.icons.outline.microphone),
-                viewTaps = state.isSearchResultsVisible,
                 tabsTitles = listOf(
                     stringResource(R.string.movies),
                     stringResource(R.string.series),
@@ -144,7 +149,7 @@ fun SearchContent(
                         2 -> SearchTab.ACTORS
                         else -> SearchTab.MOVIES
                     }
-                    listener.onTabSelected(selectedTab)
+                    listener.onTabSelected(selectedTab.ordinal)
                 },
                 onValueChange = { query ->
                     listener.onSearchQueryChange(query)
@@ -163,18 +168,6 @@ fun SearchContent(
                 when {
                     state.isLoading -> Progress()
 
-                    !state.isSearchResultsVisible -> HistoryAndRecentItems(
-                        state = state,
-                        onClickClearAll = { listener.onClearHistory() },
-                        onClickItem = { listener.onSuggestionClick(it) },
-                        onClickIcon = {
-                            if (it.isFromSearchHistory) {
-                                listener.onDeleteItemFromHistory(it)
-                            } else {
-                                listener.onSearchQueryChange(it.keyword)
-                            }
-                        }
-                    )
 
                     else -> when (state.selectedTab) {
                         SearchTab.MOVIES, SearchTab.SERIES -> {
@@ -202,9 +195,7 @@ fun SearchContent(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 16.dp),
                 isListSelected = !state.isGridSelected,
-                onViewToggle = {
-                    listener.onToggleViewClick()
-                },
+                onGridSelected = {},
             )
         }
     }
@@ -215,8 +206,9 @@ fun SearchContent(
 private fun ExploreScreenPreview() {
     CineVerseTheme {
         SearchContent(
-            state = SearchScreenState(),
-            listener = object : SearchInteractionListener {
+            state = ExploreScreenState(),
+            listener = object : ExploreInteractionListener {
+                override fun onTextChange(text: String) {}
                 override fun onSearchQueryChange(query: String) {}
                 override fun onClearSearchQuery() {}
                 override fun onDeleteItemFromHistory(item: SearchKeyword) {}
@@ -224,10 +216,12 @@ private fun ExploreScreenPreview() {
                 override fun onVoiceSearchClick() {}
                 override fun onClearRecentViewed() {}
                 override fun onSuggestionClick(suggestion: SearchKeyword) {}
-                override fun onTabSelected(tab: SearchTab) {}
-                override fun onToggleViewClick() {}
+                override fun onTabSelected(tabIndex: Int) {}
+                override fun onViewChanged(isGrid: Boolean) {}
                 override fun onPermissionResult(granted: Boolean) {}
                 override fun onVoiceSearchFinished() {}
+                override fun onGenreSelected(genre: GenreUi) {}
+                override fun onFocusChanged(isFocused: Boolean) {}
             }
         )
     }

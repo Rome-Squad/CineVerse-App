@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -57,7 +58,7 @@ fun PosterHorizontal(
                     imageUrl = poster.imageUri,
                     placeHolderResId = Theme.icons.dueTone.image,
                     modifier = Modifier
-                        .fillMaxHeight()
+                        .height(88.dp)
                         .width(64.dp)
                         .clip(
                             RoundedCornerShape(
@@ -67,7 +68,7 @@ fun PosterHorizontal(
                             )
                         )
                         .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = poster.imageUri),
+                            sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                 )
@@ -92,7 +93,7 @@ fun PosterHorizontal(
                             maxLines = 1,
                             modifier = Modifier
                                 .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = poster.name),
+                                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
                         )
@@ -108,7 +109,7 @@ fun PosterHorizontal(
                         value = poster.rating,
                         modifier = Modifier
                             .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = poster.id),
+                                sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
                     )

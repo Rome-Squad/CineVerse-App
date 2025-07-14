@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen
+package com.giraffe.explore
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.entity.SearchKeyword
@@ -9,8 +9,9 @@ import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 
 import androidx.annotation.StringRes
+import com.giraffe.explore.util.HasErrorMessage
 
-data class SearchScreenState(
+data class ExploreScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val searchKeyword: SearchKeyword? = null,
@@ -18,7 +19,9 @@ data class SearchScreenState(
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
-
+    val selectedGenre: GenreUi? = null,
+    val genres: List<GenreUi> = listOf(),
+    val isSearchFieldFocused: Boolean = false,
     // Tab , View Mode
     val selectedTab: SearchTab = SearchTab.MOVIES,
     val isGridSelected: Boolean = true,
@@ -36,8 +39,8 @@ data class SearchScreenState(
     val isVoiceRecording: Boolean = false,
     val isPermissionGranted: Boolean = false,
     val mediaResults: List<Poster> = emptyList(),
-) : HasErrorMessage<SearchScreenState> {
-    override fun withErrorMessage(@StringRes id: Int): SearchScreenState {
+) : HasErrorMessage<ExploreScreenState> {
+    override fun withErrorMessage(@StringRes id: Int): ExploreScreenState {
         return copy(errorMessage = id)
     }
 }
@@ -84,3 +87,11 @@ fun Person.toPoster(): Poster = Poster(
     imageUri = imageUrl.orEmpty(),
     rating = 0f
 )
+
+data class GenreUi(
+    val id: Int = -1,
+    val title: String
+)
+
+fun MovieGenre.toUi() = GenreUi(id, title)
+fun SeriesGenre.toUi() = GenreUi(id, name)
