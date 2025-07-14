@@ -1,9 +1,8 @@
 package com.giraffe.movie
 
-import android.util.Log
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
-import com.giraffe.movie.datasource.local.MoviesSearchHistoryDataSource
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
+import com.giraffe.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.movie.mapper.toEntity
 import com.giraffe.movie.mapper.toMovie
 import com.giraffe.movie.mapper.toMovieCacheDto
@@ -12,33 +11,32 @@ import com.giraffe.movie.utils.safeCall
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
 import com.giraffe.movies.entity.MovieReview
+import com.giraffe.movies.exception.NetworkError
 import com.giraffe.movies.repository.MoviesRepository
+import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(
     private val cache: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
-    private val searchHistory: MoviesSearchHistoryDataSource
+    private val sessionManager: SessionManager
 ) : MoviesRepository {
+
     override suspend fun searchMovieByName(movieName: String): List<Movie> {
         return safeCall {
-            val lastHourKeywords = searchHistory.getLastHourSearchHistory()
-            val isSearchedWithinLastHour = lastHourKeywords.any { it.keyword == movieName }
 
-            val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
-            val isCached = cachedMovies.isNotEmpty()
+            return safeCall {
+                val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
+                val isCached = cachedMovies.isNotEmpty()
 
-            if (!(isSearchedWithinLastHour && isCached)) {
-                Log.d("fix", "searchMovieByName: here")
-                val remoteMovies = remote.getMoviesByName(movieName).map { it.toMovie() }
-                val distinctMovies = (remoteMovies + cachedMovies).distinct()
+                if (!isCached) {
+                    val remoteMovies =
+                        remote.getMoviesByName(movieName).map { it.toMovie() }
+                    insertMovies(remoteMovies)
+                    return remoteMovies
+                }
 
-                insertMovies(distinctMovies)
-
-                return distinctMovies
+                return cachedMovies
             }
-
-            return cachedMovies
-
         }
     }
 
@@ -49,7 +47,6 @@ class MoviesRepositoryImpl(
             }
         }
     }
-
 
 
     override suspend fun getMoviesGenres(): List<MovieGenre> {
@@ -119,7 +116,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun getRecentlyMovies(): List<Movie> {
         return safeCall {
-             cache.getRecentlyMovies().map { it.toMovie() }
+            cache.getRecentlyMovies().map { it.toMovie() }
         }
     }
 
@@ -130,19 +127,50 @@ class MoviesRepositoryImpl(
     }
 
     override suspend fun getMovieDetails(movieId: Int): Movie {
-        TODO("Not yet implemented")
+        return safeCall {
+            val cachedMovie = cache.getMovieById(movieId)
+            if (cachedMovie != null) {
+                return cachedMovie.toMovie()
+            } else {
+                val remoteMovieDetails = remote.getMovieById(movieId)
+                val remoteEntity = remoteMovieDetails.toEntity()
+                insertMovies(listOf(remoteEntity))
+                return remoteEntity
+            }
+        }
     }
 
     override suspend fun getMovieReviews(
-        movieId: Int,
-        pageNumber: Int,
-        pageSize: Int
+        movieId: Int
     ): List<MovieReview> {
-        TODO("Not yet implemented")
+        return safeCall {
+            remote.getMovieReviews(movieId).map { it.toEntity() }
+        }
+    }
+
+    override suspend fun addRating(
+        movieId: Int,
+        ratingValue: Float
+    ) {
+        return safeCall {
+            val sessionId = getSessionId()
+
+            val requestBody = RatingRequest(value = ratingValue)
+            remote.addRating(movieId, sessionId, requestBody)
+        }
     }
 
 
-    override suspend fun addMovieReview(review: MovieReview) {
-        TODO("Not yet implemented")
+    override suspend fun getUserMovieRating(movieId: Int): Float {
+        return safeCall {
+            val sessionId = getSessionId()
+            remote.getUserMovieRating(movieId, sessionId)
+        }
+    }
+
+    private suspend fun getSessionId(): String {
+        return safeCall {
+            sessionManager.createGuestSessionId() ?: throw NetworkError()
+        }
     }
 }

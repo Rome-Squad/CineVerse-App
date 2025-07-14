@@ -8,6 +8,10 @@ import com.giraffe.movie.MoviesRemoteDataSourceImpl
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.person.PersonRemoteDataSourceImp
 import com.giraffe.person.remote.PersonRemoteDataSource
+import com.giraffe.repository.SessionManagerImpl
+import com.giraffe.repository.datasource.UserRemoteDataSource
+import com.giraffe.user.SessionManager
+import com.giraffe.user.UserRemoteDataSourceImpl
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -28,6 +32,10 @@ val networkModule = module {
         BuildConfig.ACCESS_TOKEN
     }
 
+    single<SessionManager> {
+        SessionManagerImpl(get())
+    }
+
     single<RemoteExploreDataSource> {
         RemoteExploreDataSourceImpl(
             httpClient = get(),
@@ -45,6 +53,14 @@ val networkModule = module {
 
     single<MoviesRemoteDataSource>{
         MoviesRemoteDataSourceImpl(
+            client = get(),
+            baseUrl = get(named("BASE_URL")),
+            accessToken = get(named("ACCESS_TOKEN"))
+        )
+    }
+
+    single<UserRemoteDataSource>{
+        UserRemoteDataSourceImpl(
             client = get(),
             baseUrl = get(named("BASE_URL")),
             accessToken = get(named("ACCESS_TOKEN"))

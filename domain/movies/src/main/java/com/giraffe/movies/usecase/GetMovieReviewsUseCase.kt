@@ -6,7 +6,7 @@ import com.giraffe.movies.repository.MoviesRepository
 class GetMovieReviewsUseCase(
     private val repository : MoviesRepository
 ) {
-    suspend operator fun invoke(movieId : Int,pageNumber : Int, pageSize:Int) : List<MovieReview> {
-        return repository.getMovieReviews(movieId,pageNumber,pageSize)
+    suspend operator fun invoke(movieId : Int, pageNumber : Int, pageSize : Int) : List<MovieReview> {
+        return repository.getMovieReviews(movieId)
     }
 }
