@@ -5,6 +5,6 @@ import com.giraffe.series.repository.SeriesRepository
 
 class GetLastSeasonsUseCase(private val seriesRepository: SeriesRepository) {
     suspend operator fun invoke(seriesId: Int): List<Season> {
-        return seriesRepository.getSeriesDetails(seriesId).seasons
+        return seriesRepository.getSeasonOfSeries(seriesId)
     }
 }

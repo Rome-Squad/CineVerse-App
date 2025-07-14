@@ -3,6 +3,7 @@ package com.giraffe.series
 import com.giraffe.series.api.BaseRequest
 import com.giraffe.series.api.RequestBuilder
 import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
 import com.giraffe.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
 import com.giraffe.series.model.GenreDto
 import com.giraffe.series.model.SeriesDto
@@ -54,6 +55,13 @@ class TmdbSeriesApiRemoteDataSource(
             .method(HttpMethod.Get)
         val result = requestBuilder.request(baseRequest).body<SeriesDetailsResponse>()
         return result
+    }
+
+    override suspend fun getSeriesReviews(seriesId: Int): SeriesReviewsResponse {
+        val endPoint = "tv/$seriesId/reviews"
+        baseRequest.endpoint(endPoint)
+            .method(HttpMethod.Get)
+        return requestBuilder.request(baseRequest).body<SeriesReviewsResponse>()
     }
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int): List<SeriesDto> {
