@@ -49,6 +49,13 @@ val useCaseModule = module {
     single { ClearRecentlyMoviesUseCase(get()) }
     single { GetMovieGenresUseCase(get()) }
 
+    // NEW: Add UseCases for Movie Details and Rating
+    single { GetMovieDetailsUseCase(get()) }
+    single { GetMovieReviewsUseCase(get()) }
+    single { AddRatingUseCase(get()) }
+    single { GetAccountStatesUseCase(get()) }
+    single { CreateGuestSessionUseCase(get()) }
+
     single {
         MoviesUseCases(
             searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
