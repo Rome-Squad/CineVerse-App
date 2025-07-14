@@ -65,7 +65,7 @@ class TmdbSeriesApiRemoteDataSource(
     }
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int): List<SeriesDto> {
-        val endpoint = "genre/tv/$seriesId/recommendations"
+        val endpoint = "tv/$seriesId/recommendations"
         return baseRequest
             .endpoint(endpoint)
             .method(HttpMethod.Get)
