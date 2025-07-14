@@ -8,12 +8,13 @@ import com.giraffe.person.entity.Person
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 
+import androidx.annotation.StringRes
 
 data class SearchScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val searchKeyword: SearchKeyword? = null,
-    var errorMessage: String? = null,
+    @StringRes val errorMessage: Int? = null,
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
@@ -24,49 +25,62 @@ data class SearchScreenState(
     val resultSearchKeyword: List<SearchKeyword> = emptyList(),
     val recentViews: List<Poster> = emptyList(),
     val isGridSelected: Boolean = true
-)
+) : HasErrorMessage<SearchScreenState> {
+    override fun withErrorMessage(@StringRes resId: Int): SearchScreenState {
+        return copy(errorMessage = resId)
+    }
+}
 
 enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
 
 
-fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
-    val genreTitles = allGenres
-        .filter { it.id in genresID }
-        .joinToString(", ") { it.title }
-        .ifBlank { null }
+    private const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
-    return Poster(
-        id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
-        rating = rating,
-        genres = genreTitles,
-        time = duration.toString(),
-        date = releaseYear?.toString()
-    )
-}
+    fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
+        val genreTitles = allGenres
+            .filter { it.id in genresID }
+            .joinToString(", ") { it.title }
+            .ifBlank { null }
 
-fun Series.toPosterMovie(allGenres: List<SeriesGenre>): Poster {
-    val genreTitles = allGenres
-        .filter { it.id in genreIDs }
-        .joinToString(", ") { it.name }
-        .ifBlank { null }
+        val fullImageUrl = posterUrl?.let { IMAGE_BASE_URL + it }.orEmpty()
 
-    return Poster(
-        id = id,
-        name = this@toPosterMovie.name,
-        imageUri = posterUrl,
-        rating = rating,
-        genres = genreTitles,
-    )
-}
+        return Poster(
+            id = id,
+            name = title,
+            imageUri = fullImageUrl,
+            rating = rating,
+            genres = genreTitles,
+            time = duration.toString(),
+            date = releaseYear?.toString()
+        )
+    }
 
-fun Person.toPosterMovie(): Poster =
-    Poster(
-        id = id,
-        name = this@toPosterMovie.name,
-        imageUri = imageUrl.orEmpty(),
-        rating = 0f
-    )
+    fun Series.toPosterMovie(allGenres: List<SeriesGenre>): Poster {
+        val genreTitles = allGenres
+            .filter { it.id in genreIDs }
+            .joinToString(", ") { it.name }
+            .ifBlank { null }
+
+        val fullImageUrl = posterUrl?.let { IMAGE_BASE_URL + it }.orEmpty()
+
+        return Poster(
+            id = id,
+            name = name,
+            imageUri = fullImageUrl,
+            rating = rating,
+            genres = genreTitles
+        )
+    }
+
+    fun Person.toPosterMovie(): Poster {
+        val fullImageUrl = imageUrl?.let { IMAGE_BASE_URL + it }.orEmpty()
+
+        return Poster(
+            id = id,
+            name = name,
+            imageUri = fullImageUrl,
+            rating = 0f
+        )
+    }
