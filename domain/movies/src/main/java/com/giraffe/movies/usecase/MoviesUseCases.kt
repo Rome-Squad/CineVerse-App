@@ -13,5 +13,6 @@ data class MoviesUseCases(
     val getMovieGenresUseCase: GetMovieGenresUseCase,
     val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    val addMovieReviewUseCase: AddMovieReviewUseCase
+    val getUserMovieRatingUseCase: GetUserMovieRatingUseCase,
+    val addMovieRatingUseCase: AddMovieRatingUseCase
 )

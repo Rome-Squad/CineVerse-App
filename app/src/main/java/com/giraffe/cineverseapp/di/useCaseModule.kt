@@ -29,6 +29,8 @@ import com.giraffe.series.usecase.SearchSeriesByNameUseCase
 import com.giraffe.series.usecase.StoreRecentSeriesUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+import com.giraffe.movies.usecase.*
+import com.giraffe.person.usecase.GetPeopleByMovieIdUseCase
 
 val useCaseModule = module {
 
@@ -66,18 +68,28 @@ val useCaseModule = module {
     singleOf(::ClearRecentlyMoviesUseCase)
     singleOf(::GetMovieGenresUseCase)
 
+    // NEW: Add UseCases for Movie Details and Rating
+    single { GetMovieDetailsUseCase(get()) }
+    single { GetMovieReviewsUseCase(get()) }
+    single { AddMovieRatingUseCase(get()) }
+    single { GetUserMovieRatingUseCase(get()) }
+
     single {
         MoviesUseCases(
-            searchMovieByNameUseCase = get(),
-            getMoviesGenresUseCase = get(),
-            getMoviesByGenreUseCase = get(),
-            insertMoviesUseCase = get(),
-            insertGenresUseCase = get(),
-            clearCacheUseCase = get(),
-            setMovieRecentUseCase = get(),
-            getRecentlyMovies = get(),
-            clearRecentlyMovies = get(),
-            getMovieGenresUseCase = get(),
+            searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
+            getMoviesGenresUseCase = GetMoviesGenresUseCase(get()),
+            getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
+            insertMoviesUseCase = InsertMoviesUseCase(get()),
+            insertGenresUseCase = InsertGenresUseCase(get()),
+            clearCacheUseCase = ClearCacheUseCase(get()),
+            setMovieRecentUseCase = SetMovieRecentUseCase(get()),
+            getRecentlyMovies = GetRecentlyMoviesUseCase(get()),
+            clearRecentlyMovies = ClearRecentlyMoviesUseCase(get()),
+            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
+            getMovieDetailsUseCase = GetMovieDetailsUseCase(get()),
+            getMovieReviewsUseCase = GetMovieReviewsUseCase(get()),
+            addMovieRatingUseCase = AddMovieRatingUseCase(get()),
+            getUserMovieRatingUseCase = GetUserMovieRatingUseCase(get())
         )
     }
 
