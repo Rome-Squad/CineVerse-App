@@ -7,7 +7,6 @@ import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.mapper.toCachedDto
-import com.giraffe.series.mapper.toEntity
 import com.giraffe.series.model.SeriesDto
 import com.giraffe.series.mapper.toSeasonEntity
 import com.giraffe.series.mapper.toSeriesEntity
@@ -80,7 +79,7 @@ class SeriesRepositoryImpl(
     override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {
         return safeCall {
             remote.getSeriesRecommendations(seriesId, page)
-                .map(SeriesDto::toEntity)
+                .map(SeriesDto::toSeriesEntity)
         }
     }
 }
