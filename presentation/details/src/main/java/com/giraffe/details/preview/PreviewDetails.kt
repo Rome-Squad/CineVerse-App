@@ -49,6 +49,7 @@ import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
 import com.giraffe.details.utils.imageSourceToPainter
 import com.giraffe.details.utils.getCurrentLocalDate
+import com.giraffe.details.utils.getCurrentLocalDateTime
 
 
 @Composable
@@ -271,7 +272,7 @@ fun PreviewReviewCard() {
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
             reviewerUsername = "bilal_azzam",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = ""
         )
     }
@@ -290,7 +291,7 @@ fun PreviewReviewCardDark() {
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
             reviewerUsername = "bilal_azzam",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = ""
         )
     }
