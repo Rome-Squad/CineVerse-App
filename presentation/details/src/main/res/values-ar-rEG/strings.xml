@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="watch">شاهد</string>
+    <string name="galley_image">صورة من المعرض</string>
+    <string name="gallery">المعرض</string>
+    <string name="show_more">عرض المزيد</string>
+    <string name="actor_image">صورة الممثل</string>
+    <string name="birthday_cake_icon">أيقونة كعكة عيد الميلاد</string>
+    <string name="actor_birthday">تاريخ الميلاد</string>
+    <string name="location_icon">أيقونة الموقع</string>
+    <string name="place_of_birth">في</string>
+    <string name="youtube">يوتيوب</string>
+    <string name="youtube_icon">أيقونة يوتيوب</string>
+    <string name="facebook">فيسبوك</string>
+    <string name="facebook_icon">أيقونة فيسبوك</string>
+    <string name="instgram">إنستغرام</string>
+    <string name="instagram_icon">أيقونة إنستغرام</string>
+    <string name="folder_icon">أيقونة المجلد</string>
+    <string name="authentication_error">خطأ في المصادقة!</string>
+    <string name="network_error">خطأ في الشبكة، يرجى التحقق من الاتصال</string>
+    <string name="unknown_error">عذراً، حدث خطأ ما!</string>
+    <string name="server_error">عذراً، هناك خطأ في الخادم!</string>
+    <string name="movie_not_found">عذراً، لم نتمكن من العثور على الفيلم!</string>
+</resources>
