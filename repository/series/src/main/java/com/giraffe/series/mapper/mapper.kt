@@ -1,6 +1,7 @@
 package com.giraffe.series.mapper
 
 import com.giraffe.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
+import com.giraffe.series.entity.GenreInfo.FullGenre
 import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesDetails
@@ -138,24 +139,10 @@ fun SeriesDetailsResponse.toEntity(): SeriesDetails {
         id = id,
         posterUrl = posterPath,
         name = name,
-        genreIDs = genres.map { it.toEntity() },
+        genres = genres.map { FullGenre(it.toEntity()) },
         rating = voteAverage.toFloat(),
         releaseYear = firstAirDate.let { LocalDate.parse(it) },
         overview = overview,
         seasons = seasons.map { it.toEntity() },
     )
 }
-
-//fun ReviewItemDto.toEntity(): Review {
-//    return Review(
-//        id = id.toInt(),
-//        userImageUrl = im,
-//        name = TODO(),
-//        userName = TODO(),
-//        review = TODO(),
-//        rating = TODO(),
-//        releaseYear = TODO()
-//    )
-//}
-
-

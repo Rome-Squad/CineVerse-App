@@ -1,6 +1,5 @@
 package com.giraffe.series.repository
 
-import com.giraffe.series.entity.Review
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesDetails
 import com.giraffe.series.entity.SeriesGenre
@@ -14,5 +13,4 @@ interface SeriesRepository {
     suspend fun clearRecentSeries()
     suspend fun getSeriesById(seriesId: Int): List<SeriesDetails>
     suspend fun getSeriesDetails(seriesId: Int): SeriesDetails
-    suspend fun getSeriesReviews(seriesId: Int): List<Review>
 }
