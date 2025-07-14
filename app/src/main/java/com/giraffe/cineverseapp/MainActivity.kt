@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.ui.Modifier
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.screen.ExploreScreen
+import com.giraffe.explore.ExploreScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -17,11 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-                ExploreScreen(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .systemBarsPadding()
-                )
+                ExploreScreen()
             }
         }
     }

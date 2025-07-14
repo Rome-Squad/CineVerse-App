@@ -1,8 +1,9 @@
-package com.giraffe.explore.screen
+package com.giraffe.explore
 
 import com.giraffe.explore.entity.SearchKeyword
 
-interface SearchInteractionListener {
+interface ExploreInteractionListener {
+    fun onTextChange(text: String)
     fun onSearchQueryChange(query: String)
     fun onClearSearchQuery()
     fun onDeleteItemFromHistory(item: SearchKeyword)
@@ -10,8 +11,10 @@ interface SearchInteractionListener {
     fun onVoiceSearchClick()
     fun onClearRecentViewed()
     fun onSuggestionClick(suggestion: SearchKeyword)
-    fun onTabSelected(keyword: SearchKeyword, tab: SearchTab)
-    fun onToggleViewClick()
+    fun onTabSelected(tabIndex: Int)
+    fun onViewChanged(isGrid: Boolean)
     fun onPermissionResult(granted: Boolean)
     fun onVoiceSearchFinished()
+
+    fun onGenreSelected(genre: GenreUi)
 }

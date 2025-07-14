@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen
+package com.giraffe.explore.util
 
 import kotlinx.coroutines.delay
 

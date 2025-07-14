@@ -33,7 +33,7 @@ import com.giraffe.designsystem.theme.Theme
 fun ViewToggle(
     isListSelected: Boolean,
     modifier: Modifier = Modifier,
-    onViewToggle: () -> Unit = {},
+    onGridSelected: (Boolean) -> Unit = {},
 ) {
     val gridBackgroundColor by animateColorAsState(
         targetValue = if (isListSelected) {
@@ -61,24 +61,30 @@ fun ViewToggle(
             .height(40.dp)
             .clip(RoundedCornerShape(Theme.radius.s))
             .background(Theme.color.background.card)
-            .clickable(onClick = onViewToggle)
     ) {
 
-        Box(modifier = Modifier
+        Box(
+            modifier = Modifier
                 .fillMaxSize()
-                .border(1.dp, Theme.color.stroke.primary, RoundedCornerShape(Theme.radius.s)))
+                .border(1.dp, Theme.color.stroke.primary, RoundedCornerShape(Theme.radius.s))
+        )
 
-        Box(modifier = Modifier
+        Box(
+            modifier = Modifier
                 .offset(x = alignment)
                 .size(40.dp)
                 .clip(RoundedCornerShape(Theme.radius.s))
                 .background(Theme.color.brand.tertiary)
-                .border(1.dp, Theme.color.brand.secondary, RoundedCornerShape(Theme.radius.s)))
+                .border(1.dp, Theme.color.brand.secondary, RoundedCornerShape(Theme.radius.s))
+        )
 
         Crossfade(
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 10.dp)
+                .clickable {
+                    onGridSelected(true)
+                },
             targetState = isListSelected,
             label = "FavoriteIcon"
         ) { selected ->
@@ -97,7 +103,10 @@ fun ViewToggle(
         Crossfade(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 10.dp)
+                .clickable {
+                    onGridSelected(false)
+                },
             targetState = isListSelected,
             label = "FavoriteIcon"
         ) { selected ->
@@ -122,7 +131,7 @@ private fun ViewTogglePreview() {
     CineVerseTheme(isDarkTheme = true) {
         ViewToggle(
             isListSelected = isListSelected,
-            onViewToggle = { isListSelected = !isListSelected },
+            onGridSelected = {  },
         )
     }
 }

@@ -3,4 +3,7 @@
     <string name="search">Search…</string>
     <string name="back">Back</string>
     <string name="end_icon">End Icon</string>
+    <string name="movies">Movies</string>
+    <string name="series">Series</string>
+    <string name="actors">Actors</string>
 </resources>

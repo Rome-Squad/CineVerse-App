@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen
+package com.giraffe.explore
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
@@ -13,13 +13,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,35 +29,27 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
+import com.giraffe.explore.entity.SearchKeyword
+import com.giraffe.explore.util.toTitle
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ExploreScreen(modifier: Modifier = Modifier) {
-    ExploreContent()
+fun ExploreScreen(
+    viewModel: ExploreViewModel = koinViewModel()
+) {
+    val state by viewModel.state.collectAsState()
+    ExploreContent(state, viewModel)
 }
 
 @Composable
-fun ExploreContent(modifier: Modifier = Modifier) {
-    var text by remember { mutableStateOf("") }
-    val tabs by remember { mutableStateOf(listOf("Movies", "Series")) }
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val genres by remember {
-        mutableStateOf(
-            listOf(
-                "all",
-                "animation",
-                "drama",
-                "science",
-                "action",
-                "comedy",
-                "adventure"
-            )
-        )
-    }
-    var selectedGenre by remember { mutableStateOf(genres.first()) }
-    var isGrid by remember { mutableStateOf(true) }
+fun ExploreContent(
+    state: ExploreScreenState,
+    interactions: ExploreInteractionListener
+) {
+    val context = LocalContext.current
     Box {
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .background(Theme.color.background.screen)
                 .statusBarsPadding()
@@ -69,26 +59,27 @@ fun ExploreContent(modifier: Modifier = Modifier) {
                 ExploreHeader(
                     modifier = Modifier.padding(bottom = 12.dp),
                     endIcon = painterResource(Theme.icons.outline.microphone),
-                    onValueChange = { text = it },
-                    value = text,
+                    onValueChange = interactions::onSearchQueryChange,
+                    value = state.searchQuery,
                     placeholder = "Search..."
                 )
             }
             stickyHeader {
                 Tabs(
                     modifier = Modifier.background(Theme.color.background.screen),
-                    titles = tabs,
-                    selectedTabIndex = selectedTabIndex,
-                    onTabSelected = { selectedTabIndex = it })
+                    titles = state.searchTabs.map { it.toTitle(context) },
+                    selectedTabIndex = state.selectedTab.ordinal,
+                    onTabSelected = interactions::onTabSelected
+                )
             }
             item {
                 ExploreItemsSection(
                     Modifier.fillParentMaxHeight(),
-                    selectedGenre = selectedGenre,
-                    genres = genres,
-                    isListSelected = !isGrid,
-
-                    ) { selectedGenre = it }
+                    selectedGenre = state.selectedGenre ?: GenreUi(title = "All"),
+                    genres = state.genres + GenreUi(title = "All"),
+                    isGridSelected = state.isGridSelected,
+                    onGenreSelected = interactions::onGenreSelected
+                )
                 //SearchResult
                 //Keywords
             }
@@ -97,8 +88,8 @@ fun ExploreContent(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 16.dp, end = 16.dp),
-            isListSelected = !isGrid,
-            onViewToggle = { isGrid = !isGrid },
+            isListSelected = !state.isGridSelected,
+            onGridSelected = interactions::onViewChanged,
         )
     }
 }
@@ -106,17 +97,17 @@ fun ExploreContent(modifier: Modifier = Modifier) {
 @Composable
 private fun ExploreItemsSection(
     modifier: Modifier = Modifier,
-    selectedGenre: String,
-    genres: List<String>,
-    isListSelected: Boolean,
-    onGenreSelected: (String) -> Unit,
+    selectedGenre: GenreUi,
+    genres: List<GenreUi>,
+    isGridSelected: Boolean,
+    onGenreSelected: (GenreUi) -> Unit,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(Theme.color.background.screen)
     ) {
-        CardsSection(isListSelected = isListSelected)
+        CardsSection(isGridSelected = isGridSelected)
         GenresSection(
             selectedGenre = selectedGenre,
             genres = genres,
@@ -128,20 +119,20 @@ private fun ExploreItemsSection(
 @Composable
 private fun GenresSection(
     modifier: Modifier = Modifier,
-    selectedGenre: String,
-    genres: List<String>,
-    onGenreSelected: (String) -> Unit
+    selectedGenre: GenreUi,
+    genres: List<GenreUi>,
+    onGenreSelected: (GenreUi) -> Unit
 ) {
     LazyRow(
         modifier = modifier.padding(top = 12.dp, bottom = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
-        items(genres) {
+        items(genres) { genre ->
             Chip(
-                text = it,
-                isSelected = it == selectedGenre,
-                onCheckedChange = onGenreSelected
+                text = genre.title,
+                isSelected = genre == selectedGenre,
+                onCheckedChange = { onGenreSelected(genre) }
             )
         }
     }
@@ -149,7 +140,7 @@ private fun GenresSection(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun CardsSection(modifier: Modifier = Modifier, isListSelected: Boolean) {
+fun CardsSection(isGridSelected: Boolean) {
     val poster = Poster(
         id = 5,
         name = "spider man",
@@ -157,34 +148,47 @@ fun CardsSection(modifier: Modifier = Modifier, isListSelected: Boolean) {
         rating = 6.5f
     )
     TransitionLazyColumnToGrid(
-        isListSelected = isListSelected,
+        isListSelected = !isGridSelected,
         poster = List(25) {
             poster.copy(id = it)
         },
         contentPadding = PaddingValues(vertical = 60.dp)
     )
-
-
-    /*LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(vertical = 60.dp, horizontal = 16.dp)
-    ) {
-        items(10) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(88.dp)
-                    .background(Color.Red)
-            )
-        }
-    }*/
 }
 
 @Preview
 @Composable
 private fun Preview() {
     CineVerseTheme(isDarkTheme = true) {
-        ExploreContent()
+        ExploreContent(
+            state = ExploreScreenState(),
+            interactions = object : ExploreInteractionListener {
+                override fun onTextChange(text: String) {}
+
+                override fun onSearchQueryChange(query: String) {}
+
+                override fun onClearSearchQuery() {}
+
+                override fun onDeleteItemFromHistory(item: SearchKeyword) {}
+
+                override fun onClearHistory() {}
+
+                override fun onVoiceSearchClick() {}
+
+                override fun onClearRecentViewed() {}
+
+                override fun onSuggestionClick(suggestion: SearchKeyword) {}
+
+                override fun onTabSelected(tabIndex: Int) {}
+
+                override fun onViewChanged(isGrid: Boolean) {}
+
+                override fun onPermissionResult(granted: Boolean) {}
+
+                override fun onVoiceSearchFinished() {}
+
+                override fun onGenreSelected(genre: GenreUi) {}
+            }
+        )
     }
 }

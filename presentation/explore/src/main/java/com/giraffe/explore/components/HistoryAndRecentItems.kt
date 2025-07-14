@@ -17,11 +17,11 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.R
 import com.giraffe.explore.entity.SearchKeyword
-import com.giraffe.explore.screen.SearchScreenState
+import com.giraffe.explore.ExploreScreenState
 
 @Composable
 fun HistoryAndRecentItems(
-    state: SearchScreenState,
+    state: ExploreScreenState,
     onClickClearAll: () -> Unit,
     onClickItem: (item: SearchKeyword) -> Unit,
     onClickIcon: (item: SearchKeyword) -> Unit
@@ -162,7 +162,7 @@ private fun HistoryAndRecentItemsPreview() {
 
     CineVerseTheme {
         HistoryAndRecentItems(
-            state = SearchScreenState(),
+            state = ExploreScreenState(),
             onClickClearAll = {},
             onClickItem = {},
             onClickIcon = {}
