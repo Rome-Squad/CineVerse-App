@@ -16,4 +16,9 @@
     <string name="instgram">Instagram</string>
     <string name="instagram_icon">instagram icon</string>
     <string name="folder_icon">folder icon</string>
+    <string name="authentication_error">Authentication Error!</string>
+    <string name="network_error">Network Error, Please chack your connection</string>
+    <string name="unknown_error">Sorry, something went wrong!</string>
+    <string name="server_error">Sorry, Server Error!</string>
+    <string name="movie_not_found">Sorry, we couldn\'t find the movie!</string>
 </resources>
