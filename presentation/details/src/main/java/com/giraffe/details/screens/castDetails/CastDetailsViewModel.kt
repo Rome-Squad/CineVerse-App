@@ -1,11 +1,11 @@
 package com.giraffe.details.screens.castDetails
 
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.details.screens.CostDetailsEffect
 
 class CastDetailsViewModel(
 
-) : BaseViewModel<CastDetailsUiState, CostDetailsEffect>(CastDetailsUiState()), CastDetailsInteractionListener {
+) : BaseViewModel<CastDetailsUiState, CostDetailsEffect>(CastDetailsUiState()),
+    CastDetailsInteractionListener {
     override fun onActorYoutubeLinkClicked() {
         TODO("Not yet implemented")
     }

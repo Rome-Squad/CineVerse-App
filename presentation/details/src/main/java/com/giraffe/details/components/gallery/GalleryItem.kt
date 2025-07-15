@@ -1,4 +1,4 @@
-package com.giraffe.details.components
+package com.giraffe.details.components.gallery
 
 
 import androidx.compose.foundation.Image
@@ -38,13 +38,13 @@ fun GalleryItem(
             Icon(
                 tint = Theme.color.brand.secondary,
                 painter = painterResource(Theme.icons.dueTone.image),
-                contentDescription = contentDescription
+                contentDescription = stringResource(R.string.galley_image)
             )
         }
     } else {
         Image(
             painter = image,
-            contentDescription = stringResource(R.string.galley_image),
+            contentDescription = contentDescription,
             contentScale = ContentScale.Crop,
             modifier = modifier
                 .clip(RoundedCornerShape(Theme.radius.lg))
