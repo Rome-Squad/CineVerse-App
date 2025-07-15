@@ -2,11 +2,12 @@ package com.giraffe.series.usecase
 
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.repository.SeriesRepository
+import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -23,7 +24,6 @@ class GetSeriesGenresUseCaseTest {
 
     @Test
     fun `Should return list of genres When repository returns success`() = runTest {
-        // Given
         val expectedGenres = listOf(
             SeriesGenre(id = 1, name = "Action"),
             SeriesGenre(id = 2, name = "Drama"),
@@ -32,12 +32,10 @@ class GetSeriesGenresUseCaseTest {
         )
         coEvery { seriesRepository.getSeriesGenres() } returns expectedGenres
 
-        // When
         val result = getSeriesGenresUseCase()
 
-        // Then
-        assertEquals(expectedGenres, result)
-        assertEquals(4, result.size)
+        assertThat(result).isEqualTo(expectedGenres)
+        assertThat(result).hasSize(4)
         coVerify(exactly = 1) { seriesRepository.getSeriesGenres() }
     }
 

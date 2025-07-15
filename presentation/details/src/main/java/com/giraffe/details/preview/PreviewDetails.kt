@@ -180,7 +180,9 @@ fun PreviewMainMovieDetails() {
             rating = 8.5f,
             duration = "2h 32m",
             releaseDate = "2008, Jul 18",
-            type = "Movie"
+            type = "Movie",
+            onClickAdd = {},
+            onClickPlay = {}
         )
     }
 }

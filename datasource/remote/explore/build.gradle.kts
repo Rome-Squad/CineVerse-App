@@ -58,4 +58,5 @@ dependencies {
     //koin
     implementation(libs.koin.androidx.compose)
 
+    testImplementation(libs.bundles.test)
 }

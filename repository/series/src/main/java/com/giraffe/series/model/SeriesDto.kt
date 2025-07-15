@@ -18,7 +18,7 @@ data class CachedSeriesDto(
     val posterUrl: String,
     val genresID: List<Int>,
     val releaseYear: String,
-    val isRecent : Boolean = false,
+    val isRecent: Boolean = false,
     val cachedAt: Long = System.currentTimeMillis()
 )
 
@@ -69,7 +69,7 @@ data class SeriesDto(
     val originCountry: List<String> = emptyList(),
     @SerialName("original_language")
     val originalLanguage: String,
-    )
+)
 
 @Serializable
 data class SeasonDto(
@@ -79,11 +79,11 @@ data class SeasonDto(
     @SerialName("vote_average")
     val voteAverage: Float,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerialName("season_number")
     val seasonNumber: Int,
     @SerialName("air_date")
-    val airDate: String,
+    val airDate: String?,
     @SerialName("episode_count")
     val episodeCount: Int
 )

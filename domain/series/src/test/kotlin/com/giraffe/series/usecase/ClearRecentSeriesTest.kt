@@ -20,10 +20,8 @@ class ClearRecentSeriesTest {
 
  @Test
  fun `Should call clearRecentSeries once`() = runTest {
-  // When
   clearRecentSeriesUseCase()
 
-  // Then
   coVerify(exactly = 1) { repository.clearRecentSeries() }
  }
 }

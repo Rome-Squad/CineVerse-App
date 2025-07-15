@@ -3,13 +3,13 @@ package com.giraffe.explore.usecase
 import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.repository.ExploreRepository
 import com.giraffe.explore.utils.getCurrentLocalDateTime
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -42,7 +42,7 @@ class GetSearchKeywordsUseCaseTest {
         val result = useCase(rawQuery).first()
 
         // Then
-        assertEquals(expected, result)
+        assertThat(result).isEqualTo(expected)
         coVerify { repository.getSearchKeywords(trimmedQuery) }
     }
 

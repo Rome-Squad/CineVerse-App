@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.explore.ExploreScreen
 
-class MainActivity : ComponentActivity() {
 
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

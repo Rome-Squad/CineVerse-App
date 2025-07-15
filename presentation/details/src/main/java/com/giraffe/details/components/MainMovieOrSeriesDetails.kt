@@ -31,6 +31,8 @@ fun MainMovieOrSeriesDetails(
     rating: Float,
     duration: String?,
     releaseDate: String,
+    onClickPlay: () -> Unit,
+    onClickAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -54,7 +56,9 @@ fun MainMovieOrSeriesDetails(
             genres = genres.joinToString(", "),
             rating = rating,
             duration = duration,
-            releaseDate = releaseDate
+            releaseDate = releaseDate,
+            onClickAdd = onClickAdd,
+            onClickPlay = onClickPlay
         )
     }
 }
@@ -71,7 +75,9 @@ fun PreviewMainMovieDetails() {
             rating = 8.5f,
             duration = "2h 32m",
             releaseDate = "2008, Jul 18",
-            type = "Movie"
+            type = "Movie",
+            onClickAdd = {},
+            onClickPlay = {}
         )
     }
 }

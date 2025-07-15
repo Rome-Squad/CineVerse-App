@@ -32,6 +32,7 @@ import com.giraffe.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.series.usecase.SearchSeriesByNameUseCase
 import com.giraffe.series.usecase.StoreRecentSeriesUseCase
+import com.giraffe.series.usecase.GetRecommendedSeriesUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -58,6 +59,7 @@ val useCaseModule = module {
     singleOf(::GetSeriesGenresUseCase)
     singleOf(::SearchSeriesByNameUseCase)
     singleOf(::StoreRecentSeriesUseCase)
+    singleOf(::GetRecommendedSeriesUseCase)
 
     // Movie UseCases
     singleOf(::SearchMovieByNameUseCase)
