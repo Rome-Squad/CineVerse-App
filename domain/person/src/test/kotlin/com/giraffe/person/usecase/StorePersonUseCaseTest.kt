@@ -13,7 +13,7 @@ class StorePersonUseCaseTest {
     private lateinit var repository: PersonRepository
     private lateinit var storeRecentPersonUseCase: StoreRecentPersonUseCase
 
-    val personToStore = Person(1, "Tarek", "Acting", "url")
+    val personToStore = Person(1, "Tarek", "Acting")
 
     @BeforeEach
     fun setup() {
