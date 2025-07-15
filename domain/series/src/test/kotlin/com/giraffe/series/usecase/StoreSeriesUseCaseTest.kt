@@ -23,16 +23,12 @@ class StoreSeriesUseCaseTest {
 
     @Test
     fun `Should store list of series When repository returns success`() = runTest {
-        // Given
         val series = fakeSeries(id = 1, name = "Batman 1")
-
 
         coEvery { seriesRepository.storeRecentSeries(series) } just Runs
 
-        // When
         storeRecentSeriesUseCase(series)
 
-        // Then
         coVerify(exactly = 1) { seriesRepository.storeRecentSeries(series) }
     }
 }

@@ -22,7 +22,6 @@ class GetLastSeasonsUseCaseTest {
 
     @Test
     fun `Should return list of season When repository returns success`() = runTest {
-        // Given
         val seriesId = 1
         val expectedResult = listOf(
             fakeSeason(id = 1, name = "season 1"),
@@ -31,13 +30,9 @@ class GetLastSeasonsUseCaseTest {
         )
         coEvery { seriesRepository.getSeasonOfSeries(seriesId) } returns expectedResult
 
-        // When
         val result = getLastSeasonsUseCase(seriesId)
 
-        // Then
         assertThat(expectedResult).isEqualTo(result)
         coVerify(exactly = 1) { seriesRepository.getSeasonOfSeries(seriesId) }
     }
-
-
 }

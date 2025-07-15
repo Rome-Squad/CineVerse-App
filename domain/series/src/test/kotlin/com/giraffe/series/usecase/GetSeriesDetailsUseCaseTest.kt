@@ -21,16 +21,13 @@ class GetSeriesDetailsUseCaseTest {
     }
 
     @Test
-    fun `Should return details of series When repository returns success`() = runTest {
-        // Given
+    fun `Should return details of series reviews When repository returns success`() = runTest {
         val seriesId = 1
         val expectedResult = fakeSeries(id = 1, name = "batman")
         coEvery { seriesRepository.getSeriesDetails(seriesId) } returns expectedResult
 
-        // When
         val result = getSeriesDetailsUseCase(seriesId)
 
-        // Then
         assertThat(expectedResult).isEqualTo(result)
         coVerify(exactly = 1) { seriesRepository.getSeriesDetails(seriesId) }
     }

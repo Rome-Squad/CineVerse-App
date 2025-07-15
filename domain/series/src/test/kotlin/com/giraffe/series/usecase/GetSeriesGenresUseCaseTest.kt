@@ -24,7 +24,6 @@ class GetSeriesGenresUseCaseTest {
 
     @Test
     fun `Should return list of genres When repository returns success`() = runTest {
-        // Given
         val expectedGenres = listOf(
             SeriesGenre(id = 1, name = "Action"),
             SeriesGenre(id = 2, name = "Drama"),
@@ -33,10 +32,8 @@ class GetSeriesGenresUseCaseTest {
         )
         coEvery { seriesRepository.getSeriesGenres() } returns expectedGenres
 
-        // When
         val result = getSeriesGenresUseCase()
 
-        // Then
         assertThat(result).isEqualTo(expectedGenres)
         assertThat(result).hasSize(4)
         coVerify(exactly = 1) { seriesRepository.getSeriesGenres() }

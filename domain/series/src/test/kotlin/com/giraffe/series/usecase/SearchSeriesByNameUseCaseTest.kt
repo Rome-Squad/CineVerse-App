@@ -23,7 +23,6 @@ class SearchSeriesByNameUseCaseTest {
 
     @Test
     fun `Should return list of series When repository returns success`() = runTest {
-        // Given
         val seriesName = "Batman"
         val expectedSeries = listOf(
             fakeSeries(id = 1, name = "Batman 1"),
@@ -32,10 +31,8 @@ class SearchSeriesByNameUseCaseTest {
         )
         coEvery { seriesRepository.searchSeriesByName(seriesName) } returns expectedSeries
 
-        // When
         val result = searchSeriesByNameUseCase(seriesName)
 
-        // Then
         assertThat(result).isEqualTo(expectedSeries)
         assertThat(result.size).isEqualTo(3)
         coVerify(exactly = 1) { seriesRepository.searchSeriesByName(seriesName) }
