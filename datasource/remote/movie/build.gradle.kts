@@ -35,8 +35,6 @@ android {
 
 dependencies {
 
-    implementation(project(":repository:movie"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

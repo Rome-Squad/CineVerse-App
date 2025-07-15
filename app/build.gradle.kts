@@ -97,11 +97,6 @@ dependencies {
     implementation(project(":domain:explore"))
 
     implementation(project(":repository:user"))
-    implementation(project(":repository:movie"))
-    implementation(project(":repository:series"))
-    implementation(project(":repository:person"))
-    implementation(project(":repository:review"))
-    implementation(project(":repository:explore"))
 
     implementation(project(":datasource:remote:user"))
     implementation(project(":datasource:remote:movie"))

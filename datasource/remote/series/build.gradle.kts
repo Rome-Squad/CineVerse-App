@@ -35,8 +35,6 @@ android {
 
 dependencies {
 
-    implementation(project(":repository:series"))
-
     //koin
     implementation(libs.koin.androidx.compose)
 

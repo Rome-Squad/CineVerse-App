@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":repository:person"))
     implementation(libs.bundles.ktor)
 
     implementation(libs.androidx.core.ktx)
