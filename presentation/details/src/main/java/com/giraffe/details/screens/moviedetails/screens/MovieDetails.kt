@@ -1,4 +1,4 @@
-package com.giraffe.details.screen
+package com.giraffe.details.screens.moviedetails.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
