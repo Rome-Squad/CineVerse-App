@@ -81,23 +81,6 @@ fun PreviewAddToCollectionContentDark() {
 }
 
 
-@Preview
-@Composable
-fun GallerySectionPreview() {
-    CineVerseTheme(isDarkTheme = true) {
-        GallerySection(
-            modifier = Modifier.height(314.dp),
-            images = listOf(
-                Pair(null, "gallery_image_one"),
-                Pair(null, "gallery_image_two"),
-                Pair(R.drawable.gallery_item3, "gallery_image_three"),
-            ),
-            onShowMoreClick = {}
-        )
-    }
-}
-
-
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)

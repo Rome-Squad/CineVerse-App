@@ -14,8 +14,8 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.utils.getCurrentLocalDateTime
-import com.giraffe.movies.entity.MovieReview
-import com.giraffe.movies.entity.MovieReviewAuthor
+import com.giraffe.media.movies.entity.MovieReview
+import com.giraffe.media.movies.entity.MovieReviewAuthor
 
 @Composable
 fun MovieReviewsScreen(
