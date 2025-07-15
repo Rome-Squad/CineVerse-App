@@ -1,6 +1,5 @@
 package com.giraffe.details.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,17 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.R
 
 @Composable
 fun StaffInfoSection(
     title: String,
-    onShowMoreClick: () -> Unit,
     staffList: List<StaffMember>,
     modifier: Modifier = Modifier
 ) {
@@ -43,15 +39,6 @@ fun StaffInfoSection(
                 text = title,
                 color = Theme.color.shade.primary,
                 style = Theme.textStyle.title.sm,
-            )
-
-            Text(
-                text = stringResource(R.string.show_more),
-                color = Theme.color.brand.primary,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .clickable { onShowMoreClick() },
-                style = Theme.textStyle.body.md.medium
             )
         }
 
@@ -116,7 +103,6 @@ fun PreviewStaffInfoSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Behind the Scenes",
-            onShowMoreClick = {},
             staffList = listOf(
                 StaffMember(name = "John Doe", role = "Director"),
                 StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
@@ -136,7 +122,6 @@ fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
             title = "Behind the Scenes",
-            onShowMoreClick = {},
             staffList = listOf(
                 StaffMember(name = "John Doe", role = "Director"),
                 StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
