@@ -1,6 +1,8 @@
 package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.details.base.BaseViewModel
+import com.giraffe.details.components.CastMember
+import com.giraffe.details.components.StaffMember
 import com.giraffe.details.screens.moviedetails.model.MovieUi
 import com.giraffe.movies.entity.Movie
 import com.giraffe.movies.entity.MovieGenre
@@ -23,11 +25,16 @@ class MovieDetailsViewModel(
     //loading movie data
     fun loadMovieDetails(movieId: Int) {
         safeExecute(
-            onSuccess = ::loadMovieDetailsSuccess,
-            onError = ::loadMovieDetailsError
+            onSuccess = {
+                loadMovieDetailsSuccess(it)
+            },
+            onError = {
+                loadMovieDetailsError(it)
+            }
         ) {
             getMovieDetails(movieId)
         }
+
     }
 
     private fun loadMovieDetailsSuccess(movie: Movie) {
@@ -63,13 +70,16 @@ class MovieDetailsViewModel(
     private fun loadMovieGenresSuccess(genres: List<MovieGenre>) {
         updateState {
             it.copy(
-                movieGenres = genres,
+                movieGenres = genres.map { genre->
+                     genre.title
+                },
                 isLoadingMovieGenres = false
             )
         }
     }
 
     private fun loadMovieGenresError(error: Throwable) {
+
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
@@ -88,8 +98,19 @@ class MovieDetailsViewModel(
         updateState {
             it.copy(
                 isLoadingCast = false,
-                cast = cast,
-                crew = crew,
+                cast = cast.map { person->
+                    CastMember(
+                        actorName = person.name,
+                        character = person.role,
+                        image = person.imageUrl
+                    )
+                },
+                crew = crew.map { person->
+                    StaffMember(
+                        name = person.name,
+                        role = person.role
+                    )
+                },
             )
         }
     }

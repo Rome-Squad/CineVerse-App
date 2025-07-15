@@ -1,20 +1,20 @@
 package com.giraffe.details.screens.moviedetails
 
+import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.details.components.CastMember
+import com.giraffe.details.components.StaffMember
 import com.giraffe.details.screens.moviedetails.model.MovieUi
-import com.giraffe.movies.entity.Movie
-import com.giraffe.movies.entity.MovieGenre
 import com.giraffe.movies.entity.MovieReview
-import com.giraffe.person.entity.Person
 
 data class MovieDetailsScreenState(
 
     //movie details
     val movie: MovieUi = MovieUi(),
-    val movieGenres: List<MovieGenre> = emptyList(),
-    val cast: List<Person> = emptyList(),
-    val crew: List<Person> = emptyList(),
+    val movieGenres: List<String> = emptyList(),
+    val cast: List<CastMember> = emptyList(),
+    val crew: List<StaffMember> = emptyList(),
 
-    val recommendedMovies: List<Movie> = emptyList(),
+    val recommendedMovies: List<Poster> = emptyList(),
 
     val movieReviews: List<MovieReview> = emptyList(),
 
