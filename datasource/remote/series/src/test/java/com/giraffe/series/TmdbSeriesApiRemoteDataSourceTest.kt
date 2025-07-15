@@ -1,11 +1,12 @@
-package com.giraffe.series
+package com.giraffe.media.series
 
-import com.giraffe.series.api.BaseRequest
-import com.giraffe.series.api.RequestBuilder
-import com.giraffe.series.model.GenreDto
-import com.giraffe.series.model.SeriesDto
-import com.giraffe.series.model_dto.GenresResponse
-import com.giraffe.series.model_dto.SeriesResponse
+import com.giraffe.media.series.api.BaseRequest
+import com.giraffe.media.series.api.RequestBuilder
+import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.model.SeriesDto
+import com.giraffe.media.series.model_dto.GenresResponse
+import com.giraffe.media.series.model_dto.SeriesResponse
+import com.google.common.truth.Truth.assertThat
 import io.ktor.client.call.body
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -13,7 +14,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 
 class TmdbSeriesApiRemoteDataSourceTest {
@@ -50,7 +50,7 @@ class TmdbSeriesApiRemoteDataSourceTest {
         val result = dataSource.getSeriesByName(name = "Batman", page = 1)
 
         // Then
-        assertEquals(expectedSeries, result)
+        assertThat(result).isEqualTo(expectedSeries)
         coVerify(exactly = 1) { requestBuilder.request(any()) }
     }
 
@@ -74,7 +74,7 @@ class TmdbSeriesApiRemoteDataSourceTest {
         val result = dataSource.getSeriesByGenreId(genreId = 18)
 
         // Then
-        assertEquals(expectedSeries, result)
+        assertThat(result).isEqualTo(expectedSeries)
         coVerify(exactly = 1) { requestBuilder.request(any()) }
     }
 
@@ -89,8 +89,31 @@ class TmdbSeriesApiRemoteDataSourceTest {
         val result = dataSource.getGenres()
 
         // Then
-        assertEquals(expectedGenres, result)
+        assertThat(result).isEqualTo(expectedGenres)
         coVerify(exactly = 1) { requestBuilder.request(any()) }
+    }
+
+    @Test
+    fun `getSeriesRecommendations returns list of series`() = runTest {
+        // Given
+        val seriesId = 1L
+        val page = 1
+        val expectedSeries = listOf(
+            createSeriesDto(
+                id = 1,
+                name = "Batman",
+                overview = "Overview batman",
+                posterPath = "/poster.jpg"
+            )
+        )
+        val mockResponse = createSeriesResponse(seriesList = expectedSeries)
+        coEvery { requestBuilder.request(any()).body<SeriesResponse>() } returns mockResponse
+
+        // When
+        val result = dataSource.getSeriesRecommendations(seriesId, page)
+
+        // Then
+        assertThat(result).isEqualTo(expectedSeries)
     }
 
     private fun createSeriesDto(

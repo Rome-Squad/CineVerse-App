@@ -1,13 +1,13 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.details.screen.MovieDetails
+import com.giraffe.details.screens.castDetails.CastDetailsViewModel
+import com.giraffe.media.explore.ExploreViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
-import com.giraffe.explore.screen.SearchViewModel
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModelOf(::SearchViewModel)
+    viewModelOf(::ExploreViewModel)
+    viewModelOf(::CastDetailsViewModel)
     viewModelOf(::MovieDetailsViewModel)
 }

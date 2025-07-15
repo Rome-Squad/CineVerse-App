@@ -2,12 +2,17 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.HttpClientFactory
-import com.giraffe.explore.RemoteExploreDataSourceImpl
-import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
-import com.giraffe.movie.MoviesRemoteDataSourceImpl
-import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.person.PersonRemoteDataSourceImp
-import com.giraffe.person.remote.PersonRemoteDataSource
+import com.giraffe.media.explore.RemoteExploreDataSourceImp
+import com.giraffe.media.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.media.movie.MoviesRemoteDataSourceImp
+import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
+import com.giraffe.media.person.PersonRemoteDataSourceImp
+import com.giraffe.media.person.remote.PersonRemoteDataSource
+import com.giraffe.media.series.SeriesRemoteDataSourceImp
+import com.giraffe.media.series.api.BaseRequest
+import com.giraffe.media.series.api.DefaultRequestBuilder
+import com.giraffe.media.series.api.RequestBuilder
+import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.repository.SessionManagerImpl
 import com.giraffe.repository.datasource.UserRemoteDataSource
 import com.giraffe.user.SessionManager
@@ -37,7 +42,7 @@ val networkModule = module {
     }
 
     single<RemoteExploreDataSource> {
-        RemoteExploreDataSourceImpl(
+        RemoteExploreDataSourceImp(
             httpClient = get(),
             baseUrl = get(named("BASE_URL")),
             accessToken = get(named("ACCESS_TOKEN"))
@@ -51,19 +56,34 @@ val networkModule = module {
         )
     }
 
-    single<MoviesRemoteDataSource>{
-        MoviesRemoteDataSourceImpl(
+    single<MoviesRemoteDataSource> {
+        MoviesRemoteDataSourceImp(
             client = get(),
             baseUrl = get(named("BASE_URL")),
             accessToken = get(named("ACCESS_TOKEN"))
         )
     }
 
-    single<UserRemoteDataSource>{
+    single<UserRemoteDataSource> {
         UserRemoteDataSourceImpl(
             client = get(),
             baseUrl = get(named("BASE_URL")),
             accessToken = get(named("ACCESS_TOKEN"))
         )
+    }
+
+    single {
+        BaseRequest(
+            baseURL = get(named("BASE_URL")),
+            accessToken = get(named("ACCESS_TOKEN"))
+        )
+    }
+
+    single<RequestBuilder> {
+        DefaultRequestBuilder(get())
+    }
+
+    single<SeriesRemoteDataSource> {
+        SeriesRemoteDataSourceImp(get(), get())
     }
 }

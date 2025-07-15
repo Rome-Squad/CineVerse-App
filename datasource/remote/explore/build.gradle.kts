@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.explore"
+    namespace = "com.giraffe.media.explore"
     compileSdk = 36
 
     defaultConfig {
@@ -34,8 +34,8 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":repository:explore"))
+    implementation(project(":repository:user"))
+    implementation(project(":repository:media"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -58,4 +58,5 @@ dependencies {
     //koin
     implementation(libs.koin.androidx.compose)
 
+    testImplementation(libs.bundles.test)
 }

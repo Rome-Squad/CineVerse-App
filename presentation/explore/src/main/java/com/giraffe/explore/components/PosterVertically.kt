@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.media.explore.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -36,8 +36,8 @@ fun PosterVertically(
     onClick: () -> Unit = {}
 ) {
 
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            with(sharedTransitionScope) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        with(sharedTransitionScope) {
 
             Box(
                 modifier = modifier
@@ -53,7 +53,7 @@ fun PosterVertically(
                     modifier = Modifier
                         .fillMaxSize()
                         .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = poster.imageUri),
+                            sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                 )
@@ -64,7 +64,7 @@ fun PosterVertically(
                         .align(Alignment.TopEnd)
                         .padding(end = 8.dp, top = 8.dp)
                         .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = poster.id),
+                            sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
                             animatedVisibilityScope = animatedVisibilityScope
                         )
 
@@ -79,7 +79,7 @@ fun PosterVertically(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.sharedElement(
-                    sharedContentState = rememberSharedContentState(key = poster.name),
+                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
                     animatedVisibilityScope = animatedVisibilityScope
                 )
             )

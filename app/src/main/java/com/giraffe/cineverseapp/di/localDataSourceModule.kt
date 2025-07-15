@@ -2,17 +2,17 @@ package com.giraffe.cineverseapp.di
 
 import MovieDao
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
-import com.giraffe.explore.LocalExploreDataSourceImpl
-import com.giraffe.explore.dao.ExploreSearchKeywordDao
-import com.giraffe.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.movie.MovieLocalDataSourceImp
-import com.giraffe.movie.dao.MoviesSearchHistoryDao
-import com.giraffe.movie.datasource.local.MoviesLocalDataSource
-import com.giraffe.person.PersonLocalDataSourceImp
-import com.giraffe.person.dao.PersonDao
-import com.giraffe.person.local.PersonLocalDataSource
-import com.giraffe.series.SeriesRoomLocalDateSource
-import com.giraffe.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.explore.LocalExploreDataSourceImpl
+import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
+import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.person.PersonLocalDataSourceImp
+import com.giraffe.media.person.dao.PersonDao
+import com.giraffe.media.person.local.PersonLocalDataSource
+import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import  com.giraffe.media.movie.MovieLocalDataSourceImp
+import  com.giraffe.media.movie.dao.MoviesSearchHistoryDao
+import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
+import com.giraffe.media.series.SeriesRoomLocalDateSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {

@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen
+package com.giraffe.media.explore.screen
 
 import android.Manifest
 import android.util.Log
@@ -29,39 +29,64 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.VoiceSearchHelper
-import com.giraffe.explore.components.ExploreHeader
-import com.giraffe.explore.components.HistoryAndRecentItems
-import com.giraffe.explore.components.NoResult
-import com.giraffe.explore.components.ResultsActors
-import com.giraffe.explore.components.TransitionLazyColumnToGrid
+import com.giraffe.media.explore.ExploreInteractionListener
+import com.giraffe.media.explore.ExploreScreenState
+import com.giraffe.media.explore.ExploreViewModel
+import com.giraffe.media.explore.GenreUi
+import com.giraffe.media.explore.SearchTab
+import com.giraffe.media.explore.components.ExploreHeader
+import com.giraffe.media.explore.components.NoResult
+import com.giraffe.media.explore.components.ResultsActors
+import com.giraffe.media.explore.components.TransitionLazyColumnToGrid
+import com.giraffe.media.explore.entity.SearchKeyword
+import com.giraffe.media.explore.util.VoiceSearchHelper
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = koinViewModel(),
+    viewModel: ExploreViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
-    SearchContent(modifier = modifier, state = state, onIntent = viewModel::onIntent)
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is SearchScreenEffect.ShowError -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+
+                SearchScreenEffect.RefreshCompleted -> {
+                    Toast.makeText(context, "Refreshed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    SearchContent(
+        modifier = modifier,
+        state = state,
+        listener = viewModel
+    )
 }
 
 @Composable
 fun SearchContent(
     modifier: Modifier = Modifier,
-    state: SearchScreenState,
-    onIntent: (SearchIntent) -> Unit
+    state: ExploreScreenState,
+    listener: ExploreInteractionListener
 ) {
     val context = LocalContext.current
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
-        onIntent(SearchIntent.OnPermissionResult(granted))
+        listener.onPermissionResult(granted)
         val message = if (granted) {
-            context.getString(com.giraffe.explore.R.string.voice_permission_granted)
+            context.getString(com.giraffe.media.explore.R.string.voice_permission_granted)
         } else {
-            context.getString(com.giraffe.explore.R.string.voice_permission_denied)
+            context.getString(com.giraffe.media.explore.R.string.voice_permission_denied)
         }
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
@@ -71,21 +96,20 @@ fun SearchContent(
             context = context,
             onResult = { result ->
                 if (result.isNotBlank()) {
-                    onIntent(SearchIntent.OnSearchQueryChange(result))
+                    listener.onSearchQueryChange(result)
                     Toast.makeText(context, "You said: $result", Toast.LENGTH_SHORT).show()
                 }
-                onIntent(SearchIntent.OnVoiceSearchFinished)
+                listener.onVoiceSearchFinished()
             },
             onError = { error ->
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                onIntent(SearchIntent.OnVoiceSearchFinished)
+                listener.onVoiceSearchFinished()
             }
         )
     }
 
     LaunchedEffect(state.isVoiceRecording) {
         if (state.isVoiceRecording) {
-            // Always ask for permission first; startListening() will happen after state update
             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
@@ -96,6 +120,7 @@ fun SearchContent(
             voiceSearchHelper.startListening()
         }
     }
+
     DisposableEffect(Unit) {
         onDispose { voiceSearchHelper.destroy() }
     }
@@ -108,11 +133,9 @@ fun SearchContent(
     ) {
         Column {
             ExploreHeader(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 showBackButton = true,
                 endIcon = painterResource(Theme.icons.outline.microphone),
-                viewTaps = state.isSearchResultsVisible,
                 tabsTitles = listOf(
                     stringResource(R.string.movies),
                     stringResource(R.string.series),
@@ -126,11 +149,15 @@ fun SearchContent(
                         2 -> SearchTab.ACTORS
                         else -> SearchTab.MOVIES
                     }
-                    onIntent(SearchIntent.OnSelectedTabChanged(selectedTab))
+                    listener.onTabSelected(selectedTab.ordinal)
                 },
-                onValueChange = { query -> onIntent(SearchIntent.OnSearchQueryChange(query)) },
+                onValueChange = { query ->
+                    listener.onSearchQueryChange(query)
+                },
                 value = state.searchQuery,
-                onEndIconClick = { onIntent(SearchIntent.OnVoiceSearchClick) }
+                onEndIconClick = {
+                    listener.onVoiceSearchClick()
+                }
             )
 
             Column(
@@ -141,41 +168,19 @@ fun SearchContent(
                 when {
                     state.isLoading -> Progress()
 
-                    !state.isSearchResultsVisible -> HistoryAndRecentItems(
-                        state = state,
-                        onClickClearAll = {
-                            onIntent(SearchIntent.OnClearHistory)
-                        },
-                        onClickItem = {
-                            onIntent(SearchIntent.OnClickItem(it))
-                        },
-                        onClickIcon = {
-                            if (it.isFromSearchHistory) onIntent(SearchIntent.OnDeleteItemHistory(it))
-                            else
-                                onIntent(SearchIntent.OnSearchQueryChange(it.keyword))
-                        },
-                    )
 
                     else -> when (state.selectedTab) {
-                        SearchTab.MOVIES -> {
-                            if (state.mediaResults.isEmpty()) NoResult()
-                            TransitionLazyColumnToGrid(
-                                poster = state.mediaResults,
-                                isListSelected = !state.isGridSelected
-                            )
-                        }
-
-                        SearchTab.SERIES -> {
-                            if (state.mediaResults.isEmpty()) NoResult()
-                            TransitionLazyColumnToGrid(
-                                poster = state.mediaResults,
+                        SearchTab.MOVIES, SearchTab.SERIES -> {
+                            if (state.movieResults.isEmpty()) NoResult()
+                            else TransitionLazyColumnToGrid(
+                                poster = state.movieResults,
                                 isListSelected = !state.isGridSelected
                             )
                         }
 
                         SearchTab.ACTORS -> {
-                            if (state.mediaResults.isEmpty()) NoResult()
-                            else ResultsActors(state.mediaResults)
+                            if (state.actorResults.isEmpty()) NoResult()
+                            else ResultsActors(state.actorResults)
                         }
                     }
                 }
@@ -190,20 +195,34 @@ fun SearchContent(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 16.dp),
                 isListSelected = !state.isGridSelected,
-                onViewToggle = { onIntent(SearchIntent.onClickToggleView) },
+                onGridSelected = {},
             )
         }
     }
 }
-
 
 @Preview()
 @Composable
 private fun ExploreScreenPreview() {
     CineVerseTheme {
         SearchContent(
-            state = SearchScreenState(),
-            onIntent = {}
+            state = ExploreScreenState(),
+            listener = object : ExploreInteractionListener {
+                override fun onTextChange(text: String) {}
+                override fun onSearchQueryChange(query: String) {}
+                override fun onClearSearchQuery() {}
+                override fun onDeleteItemFromHistory(item: SearchKeyword) {}
+                override fun onClearHistory() {}
+                override fun onVoiceSearchClick() {}
+                override fun onClearRecentViewed() {}
+                override fun onSuggestionClick(suggestion: SearchKeyword) {}
+                override fun onTabSelected(tabIndex: Int) {}
+                override fun onViewChanged(isGrid: Boolean) {}
+                override fun onPermissionResult(granted: Boolean) {}
+                override fun onVoiceSearchFinished() {}
+                override fun onGenreSelected(genre: GenreUi) {}
+                override fun onFocusChanged(isFocused: Boolean) {}
+            }
         )
     }
 }

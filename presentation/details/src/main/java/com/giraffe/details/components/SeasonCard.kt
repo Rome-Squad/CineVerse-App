@@ -1,7 +1,5 @@
 package com.giraffe.details.components
 
-import android.R.attr.onClick
-import android.R.attr.rating
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

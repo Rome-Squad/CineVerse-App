@@ -33,6 +33,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":repository:user"))
+    implementation(project(":repository:media"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -40,4 +42,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.bundles.test)
 }

@@ -1,9 +1,9 @@
-package com.giraffe.explore
+package com.giraffe.media.explore
 
-import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
-import com.giraffe.explore.model.SearchKeywordDto
-import com.giraffe.explore.model.SearchKeywordResponse
-import com.giraffe.explore.utils.handleRequest
+import com.giraffe.media.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.media.explore.model.SearchKeywordDto
+import com.giraffe.media.explore.model.SearchKeywordResponse
+import com.giraffe.media.explore.utils.handleRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers

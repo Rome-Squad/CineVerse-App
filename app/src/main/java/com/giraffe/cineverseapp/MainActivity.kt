@@ -5,22 +5,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.ui.Modifier
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.screen.SearchScreen
+import com.giraffe.media.explore.ExploreScreen
+
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-                SearchScreen(
+                ExploreScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .systemBarsPadding()
                 )
             }
         }
