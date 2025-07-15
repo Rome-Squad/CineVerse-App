@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,6 +26,7 @@ import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -41,6 +41,8 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
+import kotlin.collections.take
+
 
 @Composable
 fun MovieDetails(
@@ -165,7 +167,7 @@ private fun MovieDetailsContent(
             }
         }
 
-        itemsIndexed(state.movieReviews.take(3)) { index, review ->
+        itemsIndexed(state.movieReviews.take(3)) { index,review->
             val padding = when (index) {
                 0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
                 1 -> Modifier.padding(horizontal = 16.dp)
