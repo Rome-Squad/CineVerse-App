@@ -21,7 +21,6 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.formatAsMonthDayYear
 import com.giraffe.details.utils.getCurrentLocalDate
-import com.giraffe.details.utils.imageSourceToPainter
 import kotlinx.datetime.LocalDate
 
 

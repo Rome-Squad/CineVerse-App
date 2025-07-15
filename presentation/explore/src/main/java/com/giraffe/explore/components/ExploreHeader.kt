@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.media.explore.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,11 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.DefaultTextField
+import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.R
+import com.giraffe.media.explore.R
 
 @Composable
 fun ExploreHeader(

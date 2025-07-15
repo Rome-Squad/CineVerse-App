@@ -1,4 +1,4 @@
-package com.giraffe.explore.util
+package com.giraffe.media.explore.util
 
 import kotlinx.coroutines.delay
 

@@ -2,14 +2,14 @@ package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.screens.moviedetails.model.MovieUi
-import com.giraffe.movies.entity.Movie
-import com.giraffe.movies.entity.MovieGenre
-import com.giraffe.movies.entity.MovieReview
-import com.giraffe.movies.usecase.GetMovieDetailsUseCase
-import com.giraffe.movies.usecase.GetMovieGenresUseCase
-import com.giraffe.movies.usecase.GetMovieReviewsUseCase
-import com.giraffe.person.entity.Person
-import com.giraffe.person.usecase.GetPeopleByMovieIdUseCase
+import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.movies.entity.MovieReview
+import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
+import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.person.entity.Person
+import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 
 class MovieDetailsViewModel(
     val getMovieDetails: GetMovieDetailsUseCase,

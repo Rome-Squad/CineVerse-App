@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.explore"
+    namespace = "com.giraffe.media.explore"
     compileSdk = 36
 
     defaultConfig {
@@ -39,10 +39,7 @@ android {
 dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
-    implementation(project(":domain:movies"))
-    implementation(project(":domain:series"))
-    implementation(project(":domain:person"))
-    implementation(project(":domain:explore"))
+    implementation(project(":domain:media"))
 
     implementation(libs.koin.androidx.compose)
 

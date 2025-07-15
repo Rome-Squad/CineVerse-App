@@ -46,8 +46,8 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
-import com.giraffe.details.utils.imageSourceToPainter
 import com.giraffe.details.utils.getCurrentLocalDate
+import com.giraffe.details.utils.imageSourceToPainter
 
 
 @Composable

@@ -1,4 +1,4 @@
-package com.giraffe.explore.util
+package com.giraffe.media.explore.util
 
 import android.content.Context
 import android.content.Intent

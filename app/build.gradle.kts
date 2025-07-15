@@ -1,5 +1,4 @@
 import java.util.Properties
-import java.io.File
 
 
 plugins {
@@ -90,32 +89,16 @@ dependencies {
     implementation(project(":imageviewer"))
 
     implementation(project(":domain:user"))
-    implementation(project(":domain:movies"))
-    implementation(project(":domain:series"))
-    implementation(project(":domain:review"))
-    implementation(project(":domain:person"))
-    implementation(project(":domain:explore"))
+    implementation(project(":domain:media"))
 
     implementation(project(":repository:user"))
-    implementation(project(":repository:movie"))
-    implementation(project(":repository:series"))
-    implementation(project(":repository:person"))
-    implementation(project(":repository:review"))
-    implementation(project(":repository:explore"))
+    implementation(project(":repository:media"))
 
     implementation(project(":datasource:remote:user"))
-    implementation(project(":datasource:remote:movie"))
-    implementation(project(":datasource:remote:series"))
-    implementation(project(":datasource:remote:person"))
-    implementation(project(":datasource:remote:review"))
-    implementation(project(":datasource:remote:explore"))
+    implementation(project(":datasource:remote:media"))
 
     implementation(project(":datasource:local:user"))
-    implementation(project(":datasource:local:movie"))
-    implementation(project(":datasource:local:series"))
-    implementation(project(":datasource:local:person"))
-    implementation(project(":datasource:local:review"))
-    implementation(project(":datasource:local:explore"))
+    implementation(project(":datasource:local:media"))
 
 
     implementation(libs.androidx.core.ktx)

@@ -1,12 +1,12 @@
-package com.giraffe.explore
+package com.giraffe.media.explore
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,23 +28,29 @@ import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.components.ExploreHeader
-import com.giraffe.explore.components.HistoryAndRecentItems
-import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.explore.entity.SearchKeyword
-import com.giraffe.explore.util.toTitle
+import com.giraffe.media.explore.components.ExploreHeader
+import com.giraffe.media.explore.components.HistoryAndRecentItems
+import com.giraffe.media.explore.components.TransitionLazyColumnToGrid
+import com.giraffe.media.explore.util.toTitle
+import com.giraffe.media.explore.entity.SearchKeyword
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ExploreScreen(
+    modifier: Modifier = Modifier,
     viewModel: ExploreViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    ExploreContent(state, viewModel)
+    ExploreContent(
+        modifier = modifier,
+        interactions = viewModel,
+        state = state
+    )
 }
 
 @Composable
 fun ExploreContent(
+    modifier: Modifier = Modifier,
     state: ExploreScreenState,
     interactions: ExploreInteractionListener
 ) {
@@ -52,8 +58,7 @@ fun ExploreContent(
     val focusManager = LocalFocusManager.current
     Box {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = modifier
                 .background(Theme.color.background.screen)
                 .statusBarsPadding()
                 .padding(top = 16.dp),
@@ -120,6 +125,7 @@ fun ExploreContent(
         if (!state.isSearchFieldFocused) ViewToggle(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
                 .padding(bottom = 16.dp, end = 16.dp),
             isListSelected = !state.isGridSelected,
             onGridSelected = interactions::onViewChanged,

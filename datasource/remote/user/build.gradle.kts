@@ -35,6 +35,7 @@ android {
 
 dependencies {
     implementation(project(":repository:user"))
+    implementation(project(":repository:media"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -43,10 +44,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-
     implementation(libs.kotlinx.datetime)
-
-
+    
     //serialization
     implementation(libs.gson)
     implementation(libs.kotlinx.serialization.json)
