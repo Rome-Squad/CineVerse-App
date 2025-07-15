@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.person"
+    namespace = "com.giraffe.media.person"
     compileSdk = 36
 
     defaultConfig {
@@ -34,7 +34,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:person"))
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     annotationProcessor(libs.room.compiler)

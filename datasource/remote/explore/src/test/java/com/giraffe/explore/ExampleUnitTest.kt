@@ -1,4 +1,4 @@
-package com.giraffe.explore
+package com.giraffe.media.explore
 
 import org.junit.Test
 

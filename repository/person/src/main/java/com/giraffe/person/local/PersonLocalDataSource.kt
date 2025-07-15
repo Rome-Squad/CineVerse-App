@@ -1,6 +1,6 @@
-package com.giraffe.person.local
+package com.giraffe.media.person.local
 
-import com.giraffe.person.local.dto.PersonDto
+import com.giraffe.media.person.local.dto.PersonDto
 
 interface PersonLocalDataSource {
     suspend fun storePerson(person: PersonDto)

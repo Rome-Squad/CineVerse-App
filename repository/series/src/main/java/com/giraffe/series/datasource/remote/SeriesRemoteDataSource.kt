@@ -1,9 +1,9 @@
-package com.giraffe.series.datasource.remote
+package com.giraffe.media.series.datasource.remote
 
-import com.giraffe.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
-import com.giraffe.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
-import com.giraffe.series.model.GenreDto
-import com.giraffe.series.model.SeriesDto
+import com.giraffe.media.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
+import com.giraffe.media.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
+import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.model.SeriesDto
 
 interface SeriesRemoteDataSource {
     suspend fun getSeriesByName(name: String, page: Int = 1): List<SeriesDto>

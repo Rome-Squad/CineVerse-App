@@ -1,4 +1,4 @@
-package com.giraffe.series.utils
+package com.giraffe.media.series.utils
 
 object DatabaseConstants {
     const val SERIES_TABLE = "cached_series"

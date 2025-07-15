@@ -1,4 +1,4 @@
-package com.giraffe.series
+package com.giraffe.media.series
 
 import org.junit.Test
 

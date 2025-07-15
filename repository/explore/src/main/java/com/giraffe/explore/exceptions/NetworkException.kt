@@ -1,4 +1,4 @@
-package com.giraffe.explore.exceptions
+package com.giraffe.media.explore.exceptions
 
 open class NetworkException: Exception()
 

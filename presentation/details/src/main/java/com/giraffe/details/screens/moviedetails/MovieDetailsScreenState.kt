@@ -1,10 +1,10 @@
 package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.details.screens.moviedetails.model.MovieUi
-import com.giraffe.movies.entity.Movie
-import com.giraffe.movies.entity.MovieGenre
-import com.giraffe.movies.entity.MovieReview
-import com.giraffe.person.entity.Person
+import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.movies.entity.MovieReview
+import com.giraffe.media.person.entity.Person
 
 data class MovieDetailsScreenState(
 

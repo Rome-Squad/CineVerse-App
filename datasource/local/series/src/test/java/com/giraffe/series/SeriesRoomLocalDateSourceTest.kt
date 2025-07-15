@@ -1,7 +1,7 @@
-package com.giraffe.series
+package com.giraffe.media.series
 
-import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.model.*
+import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.model.*
 import com.google.common.truth.Truth.assertThat
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

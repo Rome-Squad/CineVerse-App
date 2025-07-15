@@ -1,12 +1,12 @@
-package com.giraffe.person.remote
+package com.giraffe.media.person.remote
 
-import com.giraffe.person.remote.response.SearchPersonResponse
-import com.giraffe.person.remote.response.CreditsResponse
-import com.giraffe.person.remote.response.PersonDetailsResponse
-import com.giraffe.person.remote.response.PersonMovieCastItemResponse
-import com.giraffe.person.remote.response.PersonMovieCreditsResponse
-import com.giraffe.person.remote.response.PersonProfileImageResponse
-import com.giraffe.person.remote.response.PersonTvCastItemResponse
+import com.giraffe.media.person.remote.response.SearchPersonResponse
+import com.giraffe.media.person.remote.response.CreditsResponse
+import com.giraffe.media.person.remote.response.PersonDetailsResponse
+import com.giraffe.media.person.remote.response.PersonMovieCastItemResponse
+import com.giraffe.media.person.remote.response.PersonMovieCreditsResponse
+import com.giraffe.media.person.remote.response.PersonProfileImageResponse
+import com.giraffe.media.person.remote.response.PersonTvCastItemResponse
 
 interface PersonRemoteDataSource {
     suspend fun searchByName(personName: String): SearchPersonResponse

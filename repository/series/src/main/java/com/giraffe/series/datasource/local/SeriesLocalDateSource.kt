@@ -1,8 +1,8 @@
-package com.giraffe.series.datasource.local
+package com.giraffe.media.series.datasource.local
 
-import com.giraffe.series.model.CachedSeasonDto
-import com.giraffe.series.model.CachedSeriesDto
-import com.giraffe.series.model.CachedSeriesGenreDto
+import com.giraffe.media.series.model.CachedSeasonDto
+import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.CachedSeriesGenreDto
 
 interface SeriesLocalDateSource {
 

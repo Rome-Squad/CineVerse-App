@@ -5,12 +5,12 @@ import com.giraffe.movie.exceptions.NoInternetNetworkException
 import com.giraffe.movie.exceptions.RequestTimeoutNetworkException
 import com.giraffe.movie.exceptions.ServerNetworkException
 import com.giraffe.movie.exceptions.TooManyRequestsNetworkException
-import com.giraffe.movies.exception.InvalidApiKey
-import com.giraffe.movies.exception.MoviesException
-import com.giraffe.movies.exception.NetworkError
-import com.giraffe.movies.exception.NotFoundError
-import com.giraffe.movies.exception.ServerError
-import com.giraffe.movies.exception.UnknownError
+import com.giraffe.media.movies.exception.InvalidApiKey
+import com.giraffe.media.movies.exception.MoviesException
+import com.giraffe.media.movies.exception.NetworkError
+import com.giraffe.media.movies.exception.NotFoundError
+import com.giraffe.media.movies.exception.ServerError
+import com.giraffe.media.movies.exception.UnknownError
 import io.ktor.util.network.UnresolvedAddressException
 
 

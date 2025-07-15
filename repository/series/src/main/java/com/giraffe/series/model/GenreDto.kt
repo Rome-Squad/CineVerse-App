@@ -1,4 +1,4 @@
-package com.giraffe.series.model
+package com.giraffe.media.series.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

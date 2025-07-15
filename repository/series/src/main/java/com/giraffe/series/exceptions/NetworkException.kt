@@ -1,4 +1,4 @@
-package com.giraffe.series.exceptions
+package com.giraffe.media.series.exceptions
 
 open class NetworkExceptios: Exception()
 

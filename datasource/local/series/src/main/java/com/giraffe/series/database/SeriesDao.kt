@@ -1,10 +1,10 @@
-package com.giraffe.series.database
+package com.giraffe.media.series.database
 
 import androidx.room.*
-import com.giraffe.series.model.*
-import com.giraffe.series.utils.DatabaseConstants.GENRE_TABLE
-import com.giraffe.series.utils.DatabaseConstants.SEASON_TABLE
-import com.giraffe.series.utils.DatabaseConstants.SERIES_TABLE
+import com.giraffe.media.series.model.*
+import com.giraffe.media.series.utils.DatabaseConstants.GENRE_TABLE
+import com.giraffe.media.series.utils.DatabaseConstants.SEASON_TABLE
+import com.giraffe.media.series.utils.DatabaseConstants.SERIES_TABLE
 
 import kotlinx.coroutines.flow.Flow
 

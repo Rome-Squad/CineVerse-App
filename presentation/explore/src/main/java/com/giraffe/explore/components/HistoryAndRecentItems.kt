@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.media.explore.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -19,8 +19,8 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.R
-import com.giraffe.explore.entity.SearchKeyword
+import com.giraffe.media.explore.R
+import com.giraffe.media.explore.entity.SearchKeyword
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime

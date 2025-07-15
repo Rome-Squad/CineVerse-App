@@ -1,4 +1,4 @@
-package com.giraffe.person
+package com.giraffe.media.person
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.giraffe.person.test", appContext.packageName)
+        assertEquals("com.giraffe.media.person.test", appContext.packageName)
     }
 }

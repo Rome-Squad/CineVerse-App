@@ -1,11 +1,11 @@
-package com.giraffe.series
+package com.giraffe.media.series
 
-import com.giraffe.series.api.BaseRequest
-import com.giraffe.series.api.RequestBuilder
-import com.giraffe.series.model.GenreDto
-import com.giraffe.series.model.SeriesDto
-import com.giraffe.series.model_dto.GenresResponse
-import com.giraffe.series.model_dto.SeriesResponse
+import com.giraffe.media.series.api.BaseRequest
+import com.giraffe.media.series.api.RequestBuilder
+import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.model.SeriesDto
+import com.giraffe.media.series.model_dto.GenresResponse
+import com.giraffe.media.series.model_dto.SeriesResponse
 import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import io.ktor.client.call.body

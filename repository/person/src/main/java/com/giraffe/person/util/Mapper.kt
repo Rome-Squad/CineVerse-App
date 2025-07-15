@@ -1,15 +1,15 @@
-package com.giraffe.person.util
+package com.giraffe.media.person.util
 
-import com.giraffe.person.entity.Person
-import com.giraffe.person.entity.PersonCredit
-import com.giraffe.person.entity.PersonType
-import com.giraffe.person.local.dto.PersonDto
-import com.giraffe.person.remote.response.CastResponse
-import com.giraffe.person.remote.response.CrewResponse
-import com.giraffe.person.remote.response.PersonMovieCastItemResponse
-import com.giraffe.person.remote.response.PersonProfileImageResponse
-import com.giraffe.person.remote.response.PersonResponse
-import com.giraffe.person.remote.response.PersonTvCastItem
+import com.giraffe.media.person.entity.Person
+import com.giraffe.media.person.entity.PersonCredit
+import com.giraffe.media.person.entity.PersonType
+import com.giraffe.media.person.local.dto.PersonDto
+import com.giraffe.media.person.remote.response.CastResponse
+import com.giraffe.media.person.remote.response.CrewResponse
+import com.giraffe.media.person.remote.response.PersonMovieCastItemResponse
+import com.giraffe.media.person.remote.response.PersonProfileImageResponse
+import com.giraffe.media.person.remote.response.PersonResponse
+import com.giraffe.media.person.remote.response.PersonTvCastItem
 
 fun Person.toDto(movieId: Int = -1, seriesId: Int = -1) = PersonDto(
     id = id,

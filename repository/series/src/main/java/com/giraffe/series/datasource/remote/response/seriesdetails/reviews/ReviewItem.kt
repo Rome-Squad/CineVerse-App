@@ -1,4 +1,4 @@
-package com.giraffe.series.datasource.remote.response.seriesdetails.reviews
+package com.giraffe.media.series.datasource.remote.response.seriesdetails.reviews
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

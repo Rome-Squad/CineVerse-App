@@ -1,4 +1,4 @@
-package com.giraffe.person.remote.response
+package com.giraffe.media.person.remote.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

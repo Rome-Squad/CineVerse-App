@@ -1,4 +1,4 @@
-package com.giraffe.person.local.dto
+package com.giraffe.media.person.local.dto
 
 import androidx.room.Entity
 

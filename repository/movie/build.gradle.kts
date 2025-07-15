@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:movies"))
     implementation(project(":domain:user"))
 
     implementation(libs.androidx.core.ktx)

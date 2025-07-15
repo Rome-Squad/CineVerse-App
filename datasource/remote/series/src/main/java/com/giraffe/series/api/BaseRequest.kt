@@ -1,4 +1,4 @@
-package com.giraffe.series.api
+package com.giraffe.media.series.api
 
 import io.ktor.http.HttpMethod
 import java.net.URLEncoder

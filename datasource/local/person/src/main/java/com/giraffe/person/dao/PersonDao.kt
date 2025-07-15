@@ -1,10 +1,10 @@
-package com.giraffe.person.dao
+package com.giraffe.media.person.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.giraffe.person.local.dto.PersonDto
+import com.giraffe.media.person.local.dto.PersonDto
 
 @Dao
 interface PersonDao {

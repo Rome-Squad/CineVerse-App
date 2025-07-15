@@ -1,4 +1,4 @@
-package com.giraffe.explore
+package com.giraffe.media.explore
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.giraffe.explore.test", appContext.packageName)
+        assertEquals("com.giraffe.media.explore.test", appContext.packageName)
     }
 }

@@ -1,4 +1,4 @@
-package com.giraffe.person
+package com.giraffe.media.person
 
 import org.junit.Test
 

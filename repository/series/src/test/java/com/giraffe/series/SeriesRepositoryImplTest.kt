@@ -1,10 +1,10 @@
-package com.giraffe.series
+package com.giraffe.media.series
 
-import com.giraffe.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
-import com.giraffe.series.entity.Series
-import com.giraffe.series.model.*
-import com.giraffe.series.repository.SeriesRepository
+import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.model.*
+import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify

@@ -1,8 +1,8 @@
-package com.giraffe.person
+package com.giraffe.media.person
 
-import com.giraffe.person.dao.PersonDao
-import com.giraffe.person.local.PersonLocalDataSource
-import com.giraffe.person.local.dto.PersonDto
+import com.giraffe.media.person.dao.PersonDao
+import com.giraffe.media.person.local.PersonLocalDataSource
+import com.giraffe.media.person.local.dto.PersonDto
 
 class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSource {
     override suspend fun storePerson(person: PersonDto) = dao.storePerson(person)

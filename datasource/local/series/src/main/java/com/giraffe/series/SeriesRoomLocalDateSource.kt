@@ -1,8 +1,8 @@
-package com.giraffe.series
+package com.giraffe.media.series
 
-import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.series.model.*
+import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext

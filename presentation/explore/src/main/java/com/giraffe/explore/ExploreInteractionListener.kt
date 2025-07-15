@@ -1,6 +1,6 @@
-package com.giraffe.explore
+package com.giraffe.media.explore
 
-import com.giraffe.explore.entity.SearchKeyword
+import com.giraffe.media.explore.entity.SearchKeyword
 
 interface ExploreInteractionListener {
     fun onTextChange(text: String)

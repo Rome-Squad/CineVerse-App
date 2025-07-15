@@ -1,28 +1,28 @@
-package com.giraffe.series.utils
+package com.giraffe.media.series.utils
 
 
-import com.giraffe.series.exception.ClientErrorException
-import com.giraffe.series.exception.CorruptDatabaseException
-import com.giraffe.series.exception.DiskAccessException
-import com.giraffe.series.exception.NoInternetException
-import com.giraffe.series.exception.NotFoundElementException
-import com.giraffe.series.exception.RedirectedException
-import com.giraffe.series.exception.SerializationException
-import com.giraffe.series.exception.SeriesException
-import com.giraffe.series.exception.ServerException
-import com.giraffe.series.exception.TimeoutException
-import com.giraffe.series.exception.UnknownException
-import com.giraffe.series.exception.ValidationExceptions
-import com.giraffe.series.exceptions.ClientException
-import com.giraffe.series.exceptions.InvalidRequestException
-import com.giraffe.series.exceptions.InvalidRequestMethodException
-import com.giraffe.series.exceptions.NoInternetNetworkException
-import com.giraffe.series.exceptions.RedirectException
-import com.giraffe.series.exceptions.RequestTimeoutNetworkException
-import com.giraffe.series.exceptions.SerializationNetworkException
-import com.giraffe.series.exceptions.ServerNetworkException
-import com.giraffe.series.exceptions.TooManyRequestsNetworkException
-import com.giraffe.series.exceptions.UnknownNetworkException
+import com.giraffe.media.series.exception.ClientErrorException
+import com.giraffe.media.series.exception.CorruptDatabaseException
+import com.giraffe.media.series.exception.DiskAccessException
+import com.giraffe.media.series.exception.NoInternetException
+import com.giraffe.media.series.exception.NotFoundElementException
+import com.giraffe.media.series.exception.RedirectedException
+import com.giraffe.media.series.exception.SerializationException
+import com.giraffe.media.series.exception.SeriesException
+import com.giraffe.media.series.exception.ServerException
+import com.giraffe.media.series.exception.TimeoutException
+import com.giraffe.media.series.exception.UnknownException
+import com.giraffe.media.series.exception.ValidationExceptions
+import com.giraffe.media.series.exceptions.ClientException
+import com.giraffe.media.series.exceptions.InvalidRequestException
+import com.giraffe.media.series.exceptions.InvalidRequestMethodException
+import com.giraffe.media.series.exceptions.NoInternetNetworkException
+import com.giraffe.media.series.exceptions.RedirectException
+import com.giraffe.media.series.exceptions.RequestTimeoutNetworkException
+import com.giraffe.media.series.exceptions.SerializationNetworkException
+import com.giraffe.media.series.exceptions.ServerNetworkException
+import com.giraffe.media.series.exceptions.TooManyRequestsNetworkException
+import com.giraffe.media.series.exceptions.UnknownNetworkException
 
 suspend inline fun <reified T> safeCall(
     block: suspend () -> T

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.series"
+    namespace = "com.giraffe.media.series"
     compileSdk = 36
 
     defaultConfig {
