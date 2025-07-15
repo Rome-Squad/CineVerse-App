@@ -4,7 +4,7 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.components.CastMember
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.screens.moviedetails.model.MovieUi
-import com.giraffe.movies.entity.MovieReview
+import com.giraffe.media.movies.entity.MovieReview
 
 data class MovieDetailsScreenState(
 
