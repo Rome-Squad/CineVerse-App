@@ -23,8 +23,11 @@ class MoviesRemoteDataSourceImp(
         requestBuilder.get<GenreResponse>(endpoint = GENRES_URL).genres
 
 
-    override suspend fun getMoviesByGenre(genreId: Int) =
-        requestBuilder.get<MoviesListResponse>(endpoint = MOVIES_BY_GENRE_URL).results
+    override suspend fun getMoviesByGenres(genreIds: List<Int>) =
+        requestBuilder.get<MoviesListResponse>(
+            endpoint = MOVIES_BY_GENRE_URL,
+            params = mapOf(WITH_GENRES to genreIds.joinToString(","))
+        ).results
 
 
     override suspend fun getMovieReviews(movieId: Int) =
@@ -63,5 +66,6 @@ class MoviesRemoteDataSourceImp(
         private const val MOVIES_BY_NAME_URL = "search/movie"
         private const val GENRES_URL = "genre/movie/list"
         private const val MOVIES_BY_GENRE_URL = "discover/movie"
+        private const val WITH_GENRES = "with_genres"
     }
 }

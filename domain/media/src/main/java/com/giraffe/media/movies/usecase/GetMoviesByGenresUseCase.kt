@@ -3,10 +3,10 @@ package com.giraffe.media.movies.usecase
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 
-class GetMoviesByGenreUseCase(
+class GetMoviesByGenresUseCase(
     private val repository: MoviesRepository
 ) {
-    suspend operator fun invoke(genreId: Int): List<Movie> {
-        return repository.getMoviesByGenre(genreId)
+    suspend operator fun invoke(genreIds: List<Int>): List<Movie> {
+        return repository.getMoviesByGenres(genreIds)
     }
 }

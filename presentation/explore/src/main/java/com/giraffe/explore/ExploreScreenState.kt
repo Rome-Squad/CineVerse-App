@@ -1,4 +1,4 @@
-package com.giraffe.media.explore
+package com.giraffe.explore
 
 import androidx.annotation.StringRes
 import com.giraffe.designsystem.uimodel.Poster
@@ -19,7 +19,8 @@ data class ExploreScreenState(
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
     val selectedGenre: GenreUi? = null,
-    val genres: List<GenreUi> = listOf(),
+    val moviesGenres: List<GenreUi> = listOf(),
+    val seriesGenres: List<GenreUi> = listOf(),
     val isSearchFieldFocused: Boolean = false,
     // Tab , View Mode
     val selectedTab: SearchTab = SearchTab.MOVIES,
@@ -48,7 +49,7 @@ enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
 
-fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
+fun Movie.toPoster(allGenres: List<GenreUi>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genresID }
         .joinToString(", ") { it.title }
@@ -65,7 +66,7 @@ fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
     )
 }
 
-fun Series.toPosterMovie(allGenres: List<SeriesGenre>): Poster {
+fun Series.toPoster(allGenres: List<SeriesGenre>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genreIDs }
         .joinToString(", ") { it.name }
