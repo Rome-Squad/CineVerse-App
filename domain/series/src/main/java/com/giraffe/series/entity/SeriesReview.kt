@@ -2,12 +2,12 @@ package com.giraffe.series.entity
 
 import kotlinx.datetime.LocalDate
 
-data class Review(
+data class SeriesReview(
     val id: String,
     val userImageUrl: String,
     val name: String,
     val userName: String,
     val review: String,
-    val rating: Int,
+    val rating: Float,
     val releaseYear: LocalDate?
 )

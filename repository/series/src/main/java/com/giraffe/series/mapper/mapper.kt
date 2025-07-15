@@ -2,10 +2,10 @@ package com.giraffe.series.mapper
 
 import com.giraffe.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
 import com.giraffe.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
-import com.giraffe.series.entity.Review
 import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
+import com.giraffe.series.entity.SeriesReview
 import com.giraffe.series.model.CachedSeasonDto
 import com.giraffe.series.model.CachedSeriesDto
 import com.giraffe.series.model.CachedSeriesGenreDto
@@ -18,7 +18,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-fun CachedSeriesDto.toSeriesEntity(
+fun CachedSeriesDto.toEntity(
     seasons: List<Season>,
 ): Series {
     return Series(
@@ -33,7 +33,7 @@ fun CachedSeriesDto.toSeriesEntity(
     )
 }
 
-fun CachedSeasonDto.toSeriesEntity(): Season {
+fun CachedSeasonDto.toEntity(): Season {
     return Season(
         id = id,
         name = name,
@@ -46,7 +46,7 @@ fun CachedSeasonDto.toSeriesEntity(): Season {
     )
 }
 
-fun CachedSeriesGenreDto.toSeriesEntity(): SeriesGenre {
+fun CachedSeriesGenreDto.toEntity(): SeriesGenre {
     return SeriesGenre(
         id = id,
         name = name
@@ -98,7 +98,7 @@ fun SeriesDto.toCachedDto(): CachedSeriesDto {
     )
 }
 
-fun SeriesDto.toSeriesEntity(): Series {
+fun SeriesDto.toEntity(): Series {
     return Series(
         id = id,
         name = name,
@@ -111,7 +111,7 @@ fun SeriesDto.toSeriesEntity(): Series {
     )
 }
 
-fun GenreDto.toSeriesEntity(): SeriesGenre {
+fun GenreDto.toEntity(): SeriesGenre {
     return SeriesGenre(
         id = id,
         name = name
@@ -125,15 +125,15 @@ fun GenreDto.toCachedDto(): CachedSeriesGenreDto {
     )
 }
 
-fun SeasonDto.toSeriesEntity(): Season {
+fun SeasonDto.toEntity(): Season {
     return Season(
         id = id,
         name = name,
         overview = overview,
         rating = voteAverage,
-        posterUrl = posterPath,
+        posterUrl = posterPath.toString(),
         seasonNumber = seasonNumber,
-        releaseYear = airDate,
+        releaseYear = airDate?.toString() ?: "",
         episodeCount = episodeCount
     )
 }
@@ -147,19 +147,19 @@ fun SeriesDetailsResponse.toSeriesEntity(): Series {
         rating = voteAverage.toFloat(),
         releaseYear = firstAirDate,
         overview = overview,
-        seasons = seasons.map { it.toSeriesEntity() }
+        seasons = seasons.map { it.toEntity() }
     )
 }
 
-fun SeriesReviewsResponse.toSeriesReviewsEntity(): List<Review> {
+fun SeriesReviewsResponse.toSeriesReviewsEntity(): List<SeriesReview> {
     return results.map { item ->
-        Review(
+        SeriesReview(
             id = item.id,
             userImageUrl = item.authorDetails.avatarPath,
             name = item.authorDetails.name,
             userName = item.authorDetails.username,
             review = item.content,
-            rating = item.authorDetails.rating,
+            rating = item.authorDetails.rating.toFloat(),
             releaseYear = parseData(item.createdAt)
         )
     }
@@ -180,10 +180,10 @@ fun SeriesDetailsResponse.toSeasonEntity(): List<Season> {
     return seasons.map {
         Season(
             id = it.id,
-            posterUrl = it.posterPath,
+            posterUrl = it.posterPath.toString(),
             name = it.name,
             rating = it.voteAverage,
-            releaseYear = it.airDate,
+            releaseYear = it.airDate?.toString() ?: "",
             overview = it.overview,
             episodeCount = it.episodeCount,
             seasonNumber = it.seasonNumber
