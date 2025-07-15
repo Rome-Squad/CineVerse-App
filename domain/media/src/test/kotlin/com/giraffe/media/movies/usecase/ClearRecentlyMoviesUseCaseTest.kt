@@ -1,10 +1,10 @@
 package com.giraffe.media.movies.usecase
 
 import com.giraffe.media.movies.repository.MoviesRepository
-import io.mockk.mockk
-import org.junit.jupiter.api.BeforeEach
 import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ClearRecentlyMoviesUseCaseTest {
@@ -18,12 +18,12 @@ class ClearRecentlyMoviesUseCaseTest {
 
 
     @Test
-    fun `should call repository clear method`() = runTest{
+    fun `should call repository clear method`() = runTest {
 
         val useCase = ClearRecentlyMoviesUseCase(repository)
 
         useCase()
 
-        coVerify(exactly = 1) {repository.clearRecentlyMovies() }
+        coVerify(exactly = 1) { repository.clearRecentlyMovies() }
     }
 }

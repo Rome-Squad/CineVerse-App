@@ -6,9 +6,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.cineverseapp.di.DATABASE_NAME
-import com.giraffe.movie.cleaner.MovieCacheCleanerImp
 import com.giraffe.media.person.cleaner.PersonCacheCleanerImp
 import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
+import com.giraffe.movie.cleaner.MovieCacheCleanerImp
 
 class CacheCleanupWorker(
     appContext: Context,

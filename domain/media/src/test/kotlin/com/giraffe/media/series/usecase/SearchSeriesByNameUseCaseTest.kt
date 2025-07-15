@@ -1,7 +1,6 @@
 package com.giraffe.media.series.usecase
 
 import com.giraffe.media.series.repository.SeriesRepository
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify

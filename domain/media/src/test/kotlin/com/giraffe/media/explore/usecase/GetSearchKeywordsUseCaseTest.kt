@@ -47,18 +47,19 @@ class GetSearchKeywordsUseCaseTest {
     }
 
     @Test
-    fun `should call repository with trimmed query when query has leading or trailing spaces`() = runTest {
-        // Given
-        val rawQuery = "  horror "
-        val trimmedQuery = "horror"
+    fun `should call repository with trimmed query when query has leading or trailing spaces`() =
+        runTest {
+            // Given
+            val rawQuery = "  horror "
+            val trimmedQuery = "horror"
 
-        coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(emptyList())
+            coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(emptyList())
 
-        // When
-        useCase(rawQuery).first() // Collect the flow to trigger the repository call
+            // When
+            useCase(rawQuery).first() // Collect the flow to trigger the repository call
 
-        // Then
-        coVerify { repository.getSearchKeywords(trimmedQuery) }
-    }
+            // Then
+            coVerify { repository.getSearchKeywords(trimmedQuery) }
+        }
 
 }

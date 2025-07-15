@@ -1,4 +1,5 @@
 package com.giraffe.media.movies.usecase
+
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat

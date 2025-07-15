@@ -34,7 +34,6 @@ class GetRecentPeopleUseCaseTest {
     }
 
 
-
     @Test
     fun `should not proceed when repository throw Exception`() = runTest {
         //given

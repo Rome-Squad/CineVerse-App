@@ -1,9 +1,8 @@
-package com.giraffe.media.explore.model
+package com.giraffe.explore.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.giraffe.media.explore.utils.DatabaseConstants.SEARCH_KEYWORD_TABLE
-import kotlinx.datetime.LocalDateTime
 
 @Entity(tableName = SEARCH_KEYWORD_TABLE)
 data class SearchKeywordCacheDto(

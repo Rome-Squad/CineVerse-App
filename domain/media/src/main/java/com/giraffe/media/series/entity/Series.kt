@@ -1,7 +1,7 @@
 package com.giraffe.media.series.entity
 
 
-data class Series (
+data class Series(
     val id: Int,
     val name: String,
     val overview: String,

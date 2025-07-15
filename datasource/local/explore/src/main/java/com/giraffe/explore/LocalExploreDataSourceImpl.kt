@@ -1,8 +1,8 @@
 package com.giraffe.media.explore
 
+import com.giraffe.explore.model.SearchKeywordCacheDto
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.media.explore.model.SearchKeywordCacheDto
 import kotlinx.coroutines.flow.Flow
 
 class LocalExploreDataSourceImpl(

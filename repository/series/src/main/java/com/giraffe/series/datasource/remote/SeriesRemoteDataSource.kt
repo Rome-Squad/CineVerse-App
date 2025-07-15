@@ -1,7 +1,7 @@
 package com.giraffe.media.series.datasource.remote
 
-import com.giraffe.media.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
 import com.giraffe.media.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
+import com.giraffe.media.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
 import com.giraffe.media.series.model.GenreDto
 import com.giraffe.media.series.model.SeriesDto
 

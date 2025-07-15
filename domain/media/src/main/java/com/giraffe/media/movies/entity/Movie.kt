@@ -3,7 +3,7 @@ package com.giraffe.media.movies.entity
 import kotlinx.datetime.LocalDate
 
 
-data class Movie (
+data class Movie(
     val id: Int,
     val title: String,
     val description: String,

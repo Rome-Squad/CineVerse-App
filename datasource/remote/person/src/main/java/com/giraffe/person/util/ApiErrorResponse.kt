@@ -1,4 +1,4 @@
-package com.giraffe.media.person.util
+package com.giraffe.person.util
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

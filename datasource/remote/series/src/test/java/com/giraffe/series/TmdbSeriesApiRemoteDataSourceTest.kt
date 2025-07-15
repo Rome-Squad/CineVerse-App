@@ -6,7 +6,6 @@ import com.giraffe.media.series.model.GenreDto
 import com.giraffe.media.series.model.SeriesDto
 import com.giraffe.media.series.model_dto.GenresResponse
 import com.giraffe.media.series.model_dto.SeriesResponse
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import io.ktor.client.call.body
 import io.mockk.coEvery
@@ -15,7 +14,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 
 class TmdbSeriesApiRemoteDataSourceTest {

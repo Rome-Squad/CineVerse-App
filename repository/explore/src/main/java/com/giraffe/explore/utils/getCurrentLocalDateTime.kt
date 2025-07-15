@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.utils
+package com.giraffe.explore.utils
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime

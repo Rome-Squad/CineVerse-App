@@ -24,7 +24,6 @@ class SearchByNameUseCaseTest {
     }
 
 
-
     @Test
     fun `should returns list of people when repository returns search result`() = runTest {
         //given

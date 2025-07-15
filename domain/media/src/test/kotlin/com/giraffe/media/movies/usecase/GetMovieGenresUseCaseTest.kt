@@ -1,4 +1,5 @@
 package com.giraffe.media.movies.usecase
+
 import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
@@ -27,13 +28,13 @@ class GetMovieGenresUseCaseTest {
             MovieGenre(id = 1, title = "Action"),
             MovieGenre(id = 2, title = "Comedy")
         )
-        coEvery { repository.getMovieGenres(listOf(1,2)) } returns expectedGenres
+        coEvery { repository.getMovieGenres(listOf(1, 2)) } returns expectedGenres
 
         // When
-        val result = useCase(listOf(1,2))
+        val result = useCase(listOf(1, 2))
 
         // Then
-        coVerify { repository.getMovieGenres(listOf(1,2)) }
+        coVerify { repository.getMovieGenres(listOf(1, 2)) }
         assertThat(result).isEqualTo(expectedGenres)
     }
 }

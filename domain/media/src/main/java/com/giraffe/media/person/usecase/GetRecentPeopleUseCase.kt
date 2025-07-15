@@ -1,6 +1,5 @@
 package com.giraffe.media.person.usecase
 
-import com.giraffe.media.person.exception.RecentPeopleNotFoundException
 import com.giraffe.media.person.repository.PersonRepository
 
 class GetRecentPeopleUseCase(

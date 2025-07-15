@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -32,8 +31,8 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.HistoryAndRecentItems
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.explore.util.toTitle
+import com.giraffe.media.explore.entity.SearchKeyword
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

@@ -1,8 +1,6 @@
 package com.giraffe.repository
 
-import android.util.Log
 import com.giraffe.repository.datasource.UserRemoteDataSource
-import com.giraffe.repository.utils.safeCall
 import com.giraffe.user.SessionManager
 
 class SessionManagerImpl(

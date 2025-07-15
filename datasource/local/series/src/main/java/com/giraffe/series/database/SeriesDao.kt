@@ -1,11 +1,15 @@
 package com.giraffe.media.series.database
 
-import androidx.room.*
-import com.giraffe.media.series.model.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.giraffe.media.series.model.CachedSeasonDto
+import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.utils.DatabaseConstants.GENRE_TABLE
 import com.giraffe.media.series.utils.DatabaseConstants.SEASON_TABLE
 import com.giraffe.media.series.utils.DatabaseConstants.SERIES_TABLE
-
 import kotlinx.coroutines.flow.Flow
 
 

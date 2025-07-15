@@ -1,9 +1,9 @@
 package com.giraffe.media.series.repository
 
-import com.giraffe.media.series.entity.SeriesReview
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
+import com.giraffe.media.series.entity.SeriesReview
 
 
 interface SeriesRepository {

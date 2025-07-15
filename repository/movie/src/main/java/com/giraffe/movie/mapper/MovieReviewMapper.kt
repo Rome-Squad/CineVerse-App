@@ -1,8 +1,8 @@
 package com.giraffe.movie.mapper
 
-import com.giraffe.movie.datasource.remote.dto.MovieReviewDto
 import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.entity.MovieReviewAuthor
+import com.giraffe.movie.datasource.remote.dto.MovieReviewDto
 import kotlinx.datetime.LocalDateTime
 
 fun MovieReviewDto.toEntity(): MovieReview {

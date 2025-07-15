@@ -9,19 +9,19 @@ import org.junit.jupiter.api.Test
 
 class ClearRecentSeriesTest {
 
- private lateinit var repository: SeriesRepository
- private lateinit var clearRecentSeriesUseCase: ClearRecentSeriesUseCase
+    private lateinit var repository: SeriesRepository
+    private lateinit var clearRecentSeriesUseCase: ClearRecentSeriesUseCase
 
- @BeforeEach
- fun setUp() {
-  repository = mockk(relaxed = true)
-  clearRecentSeriesUseCase = ClearRecentSeriesUseCase(repository)
- }
+    @BeforeEach
+    fun setUp() {
+        repository = mockk(relaxed = true)
+        clearRecentSeriesUseCase = ClearRecentSeriesUseCase(repository)
+    }
 
- @Test
- fun `Should call clearRecentSeries once`() = runTest {
-  clearRecentSeriesUseCase()
+    @Test
+    fun `Should call clearRecentSeries once`() = runTest {
+        clearRecentSeriesUseCase()
 
-  coVerify(exactly = 1) { repository.clearRecentSeries() }
- }
+        coVerify(exactly = 1) { repository.clearRecentSeries() }
+    }
 }

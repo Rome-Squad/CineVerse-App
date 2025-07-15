@@ -14,26 +14,27 @@ class SetMovieRecentUseCaseTest {
     private val useCase = SetMovieRecentUseCase(repository)
 
     @Test
-    fun `GIVEN movie and isRecent WHEN invoked THEN repository is called with correct args`() = runTest {
-        // Given
-        val movie = Movie(
-            id = 1,
-            title = "Inception",
-            description = "A mind-bending thriller.",
-            rating = 8.8f,
-            duration = 148,
-            posterUrl = "https://example.com/inception.jpg",
-            genresID = listOf(1, 2, 3),
-            releaseYear = LocalDate(2010, 7, 16)
-        )
-        val isRecent = true
+    fun `GIVEN movie and isRecent WHEN invoked THEN repository is called with correct args`() =
+        runTest {
+            // Given
+            val movie = Movie(
+                id = 1,
+                title = "Inception",
+                description = "A mind-bending thriller.",
+                rating = 8.8f,
+                duration = 148,
+                posterUrl = "https://example.com/inception.jpg",
+                genresID = listOf(1, 2, 3),
+                releaseYear = LocalDate(2010, 7, 16)
+            )
+            val isRecent = true
 
-        // When
-        useCase(movie, isRecent)
+            // When
+            useCase(movie, isRecent)
 
-        // Then
-        coVerify(exactly = 1) {
-            repository.setMovieRecent(movie = movie, isRecent = isRecent)
+            // Then
+            coVerify(exactly = 1) {
+                repository.setMovieRecent(movie = movie, isRecent = isRecent)
+            }
         }
-    }
 }
