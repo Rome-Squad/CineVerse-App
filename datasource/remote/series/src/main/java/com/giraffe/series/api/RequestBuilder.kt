@@ -3,7 +3,7 @@ package com.giraffe.media.series.api
 import com.giraffe.media.series.exceptions.ClientException
 import com.giraffe.media.series.exceptions.InvalidRequestException
 import com.giraffe.media.series.exceptions.InvalidRequestMethodException
-import com.giraffe.media.series.exceptions.NetworkExceptios
+import com.giraffe.media.series.exceptions.NetworkException
 import com.giraffe.media.series.exceptions.NoInternetNetworkException
 import com.giraffe.media.series.exceptions.RedirectException
 import com.giraffe.media.series.exceptions.RequestTimeoutNetworkException
@@ -131,7 +131,7 @@ internal class DefaultRequestBuilder(
         }
     }
 
-    private fun mapToNetworkException(e: Throwable): NetworkExceptios {
+    private fun mapToNetworkException(e: Throwable): NetworkException {
         return when (e) {
             is UnresolvedAddressException -> NoInternetNetworkException()
             is SerializationException -> SerializationNetworkException()

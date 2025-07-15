@@ -1,4 +1,4 @@
-package com.giraffe.movie.cleaner
+package  com.giraffe.media.movie.cleaner
 
 import MovieDao
 

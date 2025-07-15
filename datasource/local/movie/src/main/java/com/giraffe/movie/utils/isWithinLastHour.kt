@@ -1,4 +1,4 @@
-package com.giraffe.movie.utils
+package  com.giraffe.media.movie.utils
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.movie"
+    namespace = "com.giraffe.media.movie"
     compileSdk = 36
 
     defaultConfig {
@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":repository:user"))
+    implementation(project(":repository:media"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

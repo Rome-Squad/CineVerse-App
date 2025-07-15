@@ -1,9 +1,9 @@
-package com.giraffe.explore
+package com.giraffe.media.explore
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.explore.screen.SearchScreenEffect
+import com.giraffe.media.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.usecase.ExploreUseCases
 import com.giraffe.media.explore.util.exceptionHandler

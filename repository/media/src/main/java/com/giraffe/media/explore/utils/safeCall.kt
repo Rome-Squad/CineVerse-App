@@ -14,8 +14,8 @@ import com.giraffe.media.explore.exceptions.TooManyRequestsNetworkException
 import com.giraffe.media.explore.exceptions.UnknownException
 import com.giraffe.media.explore.exceptions.UnrecognizableDataException
 import com.giraffe.media.explore.exceptions.ValidationException
-import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
+import java.nio.channels.UnresolvedAddressException
 
 
 suspend inline fun <reified T> safeCall(

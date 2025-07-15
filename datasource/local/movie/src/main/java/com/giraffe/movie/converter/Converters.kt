@@ -1,4 +1,4 @@
-package com.giraffe.movie.converter
+package  com.giraffe.media.movie.converter
 
 import androidx.room.TypeConverter
 

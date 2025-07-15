@@ -9,9 +9,9 @@ import com.giraffe.media.person.PersonLocalDataSourceImp
 import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.person.local.PersonLocalDataSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.movie.MovieLocalDataSourceImp
-import com.giraffe.movie.dao.MoviesSearchHistoryDao
-import com.giraffe.movie.datasource.local.MoviesLocalDataSource
+import  com.giraffe.media.movie.MovieLocalDataSourceImp
+import  com.giraffe.media.movie.dao.MoviesSearchHistoryDao
+import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.series.SeriesRoomLocalDateSource
 import org.koin.dsl.module
 

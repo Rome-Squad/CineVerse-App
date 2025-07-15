@@ -1,4 +1,4 @@
-package com.giraffe.explore
+package com.giraffe.media.explore
 
 import androidx.annotation.StringRes
 import com.giraffe.designsystem.uimodel.Poster

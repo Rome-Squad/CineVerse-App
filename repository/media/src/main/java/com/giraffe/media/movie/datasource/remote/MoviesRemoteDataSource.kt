@@ -1,10 +1,10 @@
 package com.giraffe.media.movie.datasource.remote
 
-import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
-import com.giraffe.movie.datasource.remote.dto.MovieDto
-import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
-import com.giraffe.movie.datasource.remote.dto.MovieReviewDto
-import com.giraffe.movie.datasource.remote.dto.RatingRequest
+import  com.giraffe.media.movie.datasource.remote.dto.MovieDetailsDto
+import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
+import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
+import  com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
+import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 
 interface MoviesRemoteDataSource {
 

@@ -9,8 +9,8 @@ import com.giraffe.media.person.cleaner.PersonCacheCleaner
 import com.giraffe.media.person.cleaner.PersonCacheCleanerImp
 import com.giraffe.media.series.cleaner.SeriesCacheCleaner
 import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
-import com.giraffe.movie.cleaner.MovieCacheCleaner
-import com.giraffe.movie.cleaner.MovieCacheCleanerImp
+import  com.giraffe.media.movie.cleaner.MovieCacheCleaner
+import  com.giraffe.media.movie.cleaner.MovieCacheCleanerImp
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

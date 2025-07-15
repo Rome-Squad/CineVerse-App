@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.media.explore.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

@@ -2,7 +2,7 @@ package com.giraffe.media.movie.datasource.local.cacheDto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.movie.datasource.local.cacheDto.SearchKeywordCacheDto.Companion.SEARCH_KEYWORD_TABLE
+import  com.giraffe.media.movie.datasource.local.cacheDto.SearchKeywordCacheDto.Companion.SEARCH_KEYWORD_TABLE
 
 @Entity (tableName = SEARCH_KEYWORD_TABLE)
 data class SearchKeywordCacheDto(

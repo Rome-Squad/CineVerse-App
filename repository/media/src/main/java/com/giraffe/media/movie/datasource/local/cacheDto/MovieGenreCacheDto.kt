@@ -2,7 +2,7 @@ package com.giraffe.media.movie.datasource.local.cacheDto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto.Companion.MOVIE_GENRE_TABLE
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto.Companion.MOVIE_GENRE_TABLE
 
 
 @Entity(tableName = MOVIE_GENRE_TABLE)

@@ -39,7 +39,7 @@ android {
 dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
-    ////implementation(project(":domain:media"))
+    implementation(project(":domain:media"))
 
     implementation(libs.koin.androidx.compose)
 

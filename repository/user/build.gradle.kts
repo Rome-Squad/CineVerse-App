@@ -35,21 +35,7 @@ android {
 
 dependencies {
     implementation(project(":domain:user"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    //serialization
+    testImplementation(libs.bundles.test)
     implementation(libs.kotlinx.serialization.json)
-
-    //serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    //ktor
     implementation(libs.bundles.ktor)
-
 }

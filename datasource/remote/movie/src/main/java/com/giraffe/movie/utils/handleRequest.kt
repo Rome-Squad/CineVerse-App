@@ -1,12 +1,12 @@
-package com.giraffe.movie.utils
+package  com.giraffe.media.movie.utils
 
-import com.giraffe.movie.exceptions.NetworkException
-import com.giraffe.movie.exceptions.NoInternetNetworkException
-import com.giraffe.movie.exceptions.RequestTimeoutNetworkException
-import com.giraffe.movie.exceptions.SerializationNetworkException
-import com.giraffe.movie.exceptions.ServerNetworkException
-import com.giraffe.movie.exceptions.TooManyRequestsNetworkException
-import com.giraffe.movie.exceptions.UnknownNetworkException
+import  com.giraffe.media.movie.exceptions.NetworkException
+import  com.giraffe.media.movie.exceptions.NoInternetNetworkException
+import  com.giraffe.media.movie.exceptions.RequestTimeoutNetworkException
+import  com.giraffe.media.movie.exceptions.SerializationNetworkException
+import  com.giraffe.media.movie.exceptions.ServerNetworkException
+import  com.giraffe.media.movie.exceptions.TooManyRequestsNetworkException
+import  com.giraffe.media.movie.exceptions.UnknownNetworkException
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse

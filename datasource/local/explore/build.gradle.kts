@@ -34,7 +34,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":repository:user"))
+    implementation(project(":repository:media"))
 
+    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

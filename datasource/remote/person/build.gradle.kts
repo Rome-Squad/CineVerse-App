@@ -35,16 +35,16 @@ android {
 }
 
 dependencies {
-    implementation(libs.bundles.ktor)
+    implementation(project(":repository:user"))
+    implementation(project(":repository:media"))
 
+    implementation(libs.bundles.ktor)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
     implementation(libs.kotlinx.serialization.json)
-
     testImplementation(libs.bundles.test)
 }
