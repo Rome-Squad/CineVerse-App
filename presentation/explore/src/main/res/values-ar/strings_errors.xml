@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Explore -->
+    <string name="error_explore_no_internet">لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة والمحاولة مرة أخرى.</string>
+    <string name="error_explore_validation">المعلومات التي أدخلتها غير صالحة. يرجى المراجعة والمحاولة مرة أخرى.</string>
+    <string name="error_explore_server">حدث خطأ أثناء محاولة التصفح. يرجى المحاولة لاحقًا.</string>
+    <string name="error_explore_unknown">حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.</string>
+    <string name="error_explore_timeout">استغرق الطلب وقتًا طويلاً للاستجابة. حاول لاحقًا.</string>
+    <string name="error_explore_too_many">ترسل الطلبات بسرعة كبيرة. يرجى التمهل والمحاولة لاحقًا.</string>
+    <string name="error_explore_unrecognized">تعذر فهم البيانات. حاول التحديث لاحقًا.</string>
+    <string name="error_explore_not_found">لم نتمكن من العثور على ما تبحث عنه في الاستكشاف.</string>
+
+    <!-- Series -->
+    <string name="error_series_no_internet">لا يوجد اتصال بالإنترنت. تعذر تحميل المسلسلات.</string>
+    <string name="error_series_timeout">استغرق تحميل المسلسلات وقتًا طويلاً. يرجى المحاولة لاحقًا.</string>
+    <string name="error_series_redirect">حدثت مشكلة أثناء الوصول إلى المسلسلات. حاول مرة أخرى.</string>
+    <string name="error_series_client">حدث خطأ في طلب المسلسلات. يرجى المحاولة مرة أخرى.</string>
+    <string name="error_series_server">خادم المسلسلات غير متاح حاليًا. حاول لاحقًا.</string>
+    <string name="error_series_serialization">تعذر تحميل بيانات المسلسلات بشكل صحيح. حاول التحديث.</string>
+    <string name="error_series_not_found">لم يتم العثور على هذا المسلسل.</string>
+    <string name="error_series_validation">بعض بيانات المسلسلات غير صالحة. حاول مرة أخرى.</string>
+    <string name="error_series_corrupt_db">حدثت مشكلة في بيانات المسلسلات المحلية. أعد تشغيل التطبيق.</string>
+    <string name="error_series_disk">تعذر الوصول إلى ملفات المسلسلات. تحقق من التخزين.</string>
+    <string name="error_series_unknown">حدث خطأ غير متوقع أثناء تحميل المسلسلات.</string>
+
+    <!-- Movies -->
+    <string name="error_movies_network">حدثت مشكلة في الشبكة أثناء تحميل الأفلام. حاول مرة أخرى.</string>
+    <string name="error_movies_invalid_key">تعذر الاتصال بخدمة الأفلام. حاول لاحقًا.</string>
+    <string name="error_movies_not_found">الفيلم الذي تبحث عنه غير متوفر.</string>
+    <string name="error_movies_server">خادم الأفلام غير متاح حاليًا. حاول لاحقًا.</string>
+    <string name="error_movies_unknown">حدث خطأ غير متوقع أثناء تحميل الأفلام.</string>
+
+    <!-- Default -->
+    <string name="error_default">حدث خطأ ما. يرجى المحاولة لاحقًا.</string>
+</resources>

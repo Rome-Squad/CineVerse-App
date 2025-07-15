@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen
+package com.giraffe.explore
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.entity.SearchKeyword
@@ -8,28 +8,46 @@ import com.giraffe.person.entity.Person
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 
+import androidx.annotation.StringRes
+import com.giraffe.explore.util.HasErrorMessage
 
-data class SearchScreenState(
+data class ExploreScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val searchKeyword: SearchKeyword? = null,
-    var errorMessage: String? = null,
+    @StringRes val errorMessage: Int? = null,
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
-    val selectedTab: SearchTab = SearchTab.SERIES,
+    val selectedGenre: GenreUi? = null,
+    val genres: List<GenreUi> = listOf(),
+    val isSearchFieldFocused: Boolean = false,
+    // Tab , View Mode
+    val selectedTab: SearchTab = SearchTab.MOVIES,
+    val isGridSelected: Boolean = true,
+
+    // Media Content
+    //for movie and series
+    val movieResults: List<Poster> = emptyList(),
+    val seriesResults: List<Poster> = emptyList(),
+    val actorResults: List<Poster> = emptyList(),
+    val resultSearchKeyword: List<SearchKeyword> = emptyList(),
+    val recentViews: List<Poster> = emptyList(),
+    val searchTabs: List<SearchTab> = listOf(SearchTab.MOVIES, SearchTab.SERIES),
+
+    // Voice Input
     val isVoiceRecording: Boolean = false,
     val isPermissionGranted: Boolean = false,
     val mediaResults: List<Poster> = emptyList(),
-    val resultSearchKeyword: List<SearchKeyword> = emptyList(),
-    val recentViews: List<Poster> = emptyList(),
-    val isGridSelected: Boolean = true
-)
+) : HasErrorMessage<ExploreScreenState> {
+    override fun withErrorMessage(@StringRes id: Int): ExploreScreenState {
+        return copy(errorMessage = id, isLoading = false)
+    }
+}
 
 enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
-
 
 fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
     val genreTitles = allGenres
@@ -56,17 +74,24 @@ fun Series.toPosterMovie(allGenres: List<SeriesGenre>): Poster {
 
     return Poster(
         id = id,
-        name = this@toPosterMovie.name,
+        name = name,
         imageUri = posterUrl,
         rating = rating,
-        genres = genreTitles,
+        genres = genreTitles
     )
 }
 
-fun Person.toPosterMovie(): Poster =
-    Poster(
-        id = id,
-        name = this@toPosterMovie.name,
-        imageUri = imageUrl.orEmpty(),
-        rating = 0f
-    )
+fun Person.toPoster(): Poster = Poster(
+    id = id,
+    name = name,
+    imageUri = imageUrl.orEmpty(),
+    rating = 0f
+)
+
+data class GenreUi(
+    val id: Int = -1,
+    val title: String
+)
+
+fun MovieGenre.toUi() = GenreUi(id, title)
+fun SeriesGenre.toUi() = GenreUi(id, name)

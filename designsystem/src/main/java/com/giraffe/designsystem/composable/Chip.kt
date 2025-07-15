@@ -28,10 +28,11 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun Chip(
+    modifier: Modifier = Modifier,
     text: String,
     isSelected: Boolean,
-    onCheckedChange: ((Boolean) -> Unit)?,
-    modifier: Modifier = Modifier,
+    onCheckedChange: (String) -> Unit = {},
+    hasCircles: Boolean = false,
 ) {
     Row(
         modifier = modifier
@@ -50,20 +51,17 @@ fun Chip(
                 )
                 else Modifier
             )
-            .height(32.dp)
             .clip(RoundedCornerShape(Theme.radius.full))
             .clickable(
                 enabled = true,
-                onClick = {
-                    onCheckedChange?.invoke(!isSelected)
-                }
+                onClick = { onCheckedChange(text) }
             )
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 10.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
 
-        Box(
+        if (hasCircles) Box(
             modifier = Modifier
                 .size(16.dp)
         ) {
@@ -79,13 +77,14 @@ fun Chip(
         }
 
         Text(
+            modifier = Modifier.padding(horizontal = 2.dp),
             text = text,
             color = if (isSelected) Theme.color.brand.primary else Theme.color.shade.primary,
             style = Theme.textStyle.label.md.medium,
             textAlign = TextAlign.Center,
         )
 
-        Box(
+        if (hasCircles) Box(
             modifier = Modifier
                 .size(16.dp)
         ) {
@@ -101,16 +100,14 @@ fun Chip(
     }
 }
 
-@Preview(showSystemUi = true, backgroundColor = 0xFF121321, showBackground = true)
+@Preview
 @Composable
 private fun ChipPreview() {
     var selectedChip by remember { mutableStateOf(true) }
     CineVerseTheme(isDarkTheme = true) {
         Chip(
-            modifier = Modifier.padding(64.dp),
             text = "Alaa",
             isSelected = selectedChip,
-            onCheckedChange = { selectedChip = !selectedChip },
         )
     }
 }

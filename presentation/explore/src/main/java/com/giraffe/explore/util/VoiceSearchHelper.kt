@@ -1,4 +1,4 @@
-package com.giraffe.explore
+package com.giraffe.explore.util
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
-import java.util.*
+import java.util.Locale
 
 class VoiceSearchHelper(
     private val context: Context,

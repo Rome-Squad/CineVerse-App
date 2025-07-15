@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,9 +24,13 @@ import com.giraffe.details.utils.imageSourceToPainter
 @Composable
 fun GallerySection(
     modifier: Modifier = Modifier,
-    images: List<Pair<Int?, String?>>,
+    images: List<String?>,
+    imageContentDescriptions: List<String?>,
     onShowMoreClick: () -> Unit,
 ) {
+    if (images.isEmpty() || imageContentDescriptions.isEmpty()) {
+        return
+    }
     Column(
         modifier = modifier
             .fillMaxWidth(),
@@ -64,23 +67,23 @@ fun GallerySection(
 
             ) {
                 GalleryItem(
-                    image = images[0].first?.imageSourceToPainter(),
-                    contentDescription = images[0].second,
+                    image = images[0]?.imageSourceToPainter(),
+                    contentDescription = imageContentDescriptions[0],
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
                 )
                 GalleryItem(
-                    image = images[1].first?.imageSourceToPainter(),
-                    contentDescription = images[1].second,
+                    image = images[1]?.imageSourceToPainter(),
+                    contentDescription = imageContentDescriptions[1],
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxSize()
                 )
             }
             GalleryItem(
-                image = images[2].first?.imageSourceToPainter(),
-                contentDescription = images[2].second,
+                image = images[2]?.imageSourceToPainter(),
+                contentDescription = imageContentDescriptions[2],
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -98,11 +101,16 @@ fun GallerySectionPreview() {
         GallerySection(
             modifier = Modifier
                 .height(314.dp)
-                .width(328.dp),
+                .fillMaxWidth(),
             images = listOf(
-                Pair(null, "gallery_image_one"),
-                Pair(null, "gallery_image_two"),
-                Pair(R.drawable.gallery_item3, "gallery_image_three"),
+                null,
+                null,
+                "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
+            ),
+            imageContentDescriptions = listOf(
+                "gallery_image_one",
+                "gallery_image_two",
+                "gallery_image_three"
             ),
             onShowMoreClick = {}
         )
