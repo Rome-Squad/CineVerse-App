@@ -1,5 +1,7 @@
 package com.giraffe.cineverseapp.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.cineverseapp.data.preference.DataStorePreferences
@@ -17,6 +19,11 @@ val databaseModule = module {
     single {
         Room.databaseBuilder(androidContext(), CineVerseDatabase::class.java, DATABASE_NAME).build()
     }
+
+    single<SharedPreferences> {
+        androidContext().getSharedPreferences("CineVerse_Prefs", Context.MODE_PRIVATE)
+    }
+
     single<PersonCacheCleaner> { PersonCacheCleanerImp(get()) }
     single<SeriesCacheCleaner> { SeriesCacheCleanerImp(get()) }
     single<MovieCacheCleaner> { MovieCacheCleanerImp(get()) }

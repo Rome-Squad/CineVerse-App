@@ -40,6 +40,8 @@ dependencies {
 
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
+    implementation(project(":domain:movies"))
+    implementation(project(":domain:person"))
     implementation(project(":domain:series"))
 
     implementation(libs.androidx.core.ktx)

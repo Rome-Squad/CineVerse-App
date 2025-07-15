@@ -4,12 +4,23 @@ import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.movie.datasource.remote.dto.MovieDto
 import com.giraffe.movie.datasource.remote.dto.MovieGenreDto
+import com.giraffe.movie.datasource.remote.dto.MovieReviewDto
+import com.giraffe.movie.datasource.remote.dto.RatedMoviesResponse
+import com.giraffe.movie.datasource.remote.dto.RatingRequest
+import com.giraffe.movie.datasource.remote.dto.ReviewsResponseDto
+import com.giraffe.movie.exceptions.NetworkException
 import com.giraffe.movie.response.GenreResponse
 import com.giraffe.movie.response.MoviesListResponse
 import com.giraffe.movie.utils.handleRequest
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 
 class MoviesRemoteDataSourceImpl(
     val client: HttpClient,
@@ -66,6 +77,58 @@ class MoviesRemoteDataSourceImpl(
             }
         return response.results
     }
+
+    override suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto> {
+        val response = handleRequest<ReviewsResponseDto> {
+            client.get ("$baseUrl/movie/$movieId/reviews"){
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                }
+            }
+        }
+        return response.results
+    }
+
+    override suspend fun addRating(
+        movieId: Int,
+        sessionId: String,
+        request: RatingRequest
+    ) {
+        return handleRequest {
+            client.post("$baseUrl/movie/$movieId/rating") {
+                url {
+                    //TODO ("change to session_id after authentication
+                    parameters.append("guest_session_id", sessionId)
+                }
+                contentType(ContentType.Application.Json)
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                    append("Accept", "application/json")
+                }
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun getUserMovieRating(
+            movieId: Int,
+            guestSessionId: String,
+        ): Float {
+            val response: RatedMoviesResponse = client.get("${baseUrl}guest_session/$guestSessionId/rated/movies") {
+                parameter("language", "en-US")
+                parameter("sort_by", "created_at.asc")
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                    append("accept", "application/json")
+                }
+            }.body()
+
+            return response.results.firstOrNull {
+                it.id == movieId
+            }?.rating?.toFloat() ?: throw NetworkException()
+
+    }
+
 
     companion object {
         private const val MOVIE_BY_ID_URL = "movie"

@@ -148,7 +148,7 @@ fun MainDetails(
                     modifier = Modifier
                         .weight(1f),
                     image = painterResource(Theme.icons.colored.instagram),
-                    name = stringResource(R.string.instagram),
+                    name = stringResource(R.string.instgram),
                     contentDescription = stringResource(R.string.instagram_icon),
                     onClick = onInstagramClick
                 )

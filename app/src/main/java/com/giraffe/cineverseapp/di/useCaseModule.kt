@@ -5,12 +5,16 @@ import com.giraffe.explore.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.explore.usecase.ExploreUseCases
 import com.giraffe.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.explore.usecase.InsertSearchKeywordUseCase
+import com.giraffe.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.movies.usecase.ClearCacheUseCase
 import com.giraffe.movies.usecase.ClearRecentlyMoviesUseCase
+import com.giraffe.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.movies.usecase.GetMoviesByGenreUseCase
 import com.giraffe.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.movies.usecase.GetUserMovieRatingUseCase
 import com.giraffe.movies.usecase.InsertGenresUseCase
 import com.giraffe.movies.usecase.InsertMoviesUseCase
 import com.giraffe.movies.usecase.MoviesUseCases
@@ -66,18 +70,28 @@ val useCaseModule = module {
     singleOf(::ClearRecentlyMoviesUseCase)
     singleOf(::GetMovieGenresUseCase)
 
+    // NEW: Add UseCases for Movie Details and Rating
+    single { GetMovieDetailsUseCase(get()) }
+    single { GetMovieReviewsUseCase(get()) }
+    single { AddMovieRatingUseCase(get()) }
+    single { GetUserMovieRatingUseCase(get()) }
+
     single {
         MoviesUseCases(
-            searchMovieByNameUseCase = get(),
-            getMoviesGenresUseCase = get(),
-            getMoviesByGenreUseCase = get(),
-            insertMoviesUseCase = get(),
-            insertGenresUseCase = get(),
-            clearCacheUseCase = get(),
-            setMovieRecentUseCase = get(),
-            getRecentlyMovies = get(),
-            clearRecentlyMovies = get(),
-            getMovieGenresUseCase = get(),
+            searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
+            getMoviesGenresUseCase = GetMoviesGenresUseCase(get()),
+            getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
+            insertMoviesUseCase = InsertMoviesUseCase(get()),
+            insertGenresUseCase = InsertGenresUseCase(get()),
+            clearCacheUseCase = ClearCacheUseCase(get()),
+            setMovieRecentUseCase = SetMovieRecentUseCase(get()),
+            getRecentlyMovies = GetRecentlyMoviesUseCase(get()),
+            clearRecentlyMovies = ClearRecentlyMoviesUseCase(get()),
+            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
+            getMovieDetailsUseCase = GetMovieDetailsUseCase(get()),
+            getMovieReviewsUseCase = GetMovieReviewsUseCase(get()),
+            addMovieRatingUseCase = AddMovieRatingUseCase(get()),
+            getUserMovieRatingUseCase = GetUserMovieRatingUseCase(get())
         )
     }
 
