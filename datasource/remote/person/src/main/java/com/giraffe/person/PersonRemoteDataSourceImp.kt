@@ -1,12 +1,12 @@
 package com.giraffe.media.person
 
 import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.remote.response.CreditsResponse
-import com.giraffe.media.person.remote.response.PersonDetailsResponse
-import com.giraffe.media.person.remote.response.PersonMovieCreditsResponse
-import com.giraffe.media.person.remote.response.PersonProfileImageResponse
-import com.giraffe.media.person.remote.response.PersonTvCastItemResponse
-import com.giraffe.media.person.remote.response.SearchPersonResponse
+import com.giraffe.media.person.response.CreditsResponse
+import com.giraffe.media.person.response.PersonDetailsResponse
+import com.giraffe.media.person.response.PersonMovieCreditsResponse
+import com.giraffe.media.person.response.PersonProfileImageResponse
+import com.giraffe.media.person.response.PersonTvCastItemResponse
+import com.giraffe.media.person.response.SearchPersonResponse
 import com.giraffe.media.person.util.RequestBuilder
 import io.ktor.client.HttpClient
 
