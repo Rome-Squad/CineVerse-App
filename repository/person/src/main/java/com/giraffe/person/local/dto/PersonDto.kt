@@ -9,7 +9,7 @@ import androidx.room.Entity
 data class PersonDto(
     val id: Int,
     val name: String,
-    val imageUrl: String?,
+    val imageUrl: String? = null,
     val role: String,
     val type: String,
     val movieId: Int = -1,

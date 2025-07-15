@@ -23,6 +23,7 @@ import com.giraffe.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.person.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.person.usecase.GetPeopleBySeriesIdUseCase
+import com.giraffe.person.usecase.GetPersonDetailsUseCase
 import com.giraffe.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.person.usecase.StoreRecentPersonUseCase
@@ -102,4 +103,5 @@ val useCaseModule = module {
     singleOf(::StoreRecentPersonUseCase)
     singleOf(::GetPeopleByMovieIdUseCase)
     singleOf(::GetPeopleBySeriesIdUseCase)
+    singleOf(::GetPersonDetailsUseCase)
 }
