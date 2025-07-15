@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +27,7 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
         onSuccess: (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        completion: () -> Unit = {},
         block: suspend () -> T
     ) {
         coroutineScope.launch(dispatcher) {
@@ -33,6 +35,8 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
                 onSuccess(block())
             } catch (e: Throwable) {
                 onError(e)
+            } finally {
+                completion()
             }
         }
     }
