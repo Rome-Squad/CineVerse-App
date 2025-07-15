@@ -1,10 +1,10 @@
-package com.giraffe.media.explore
+package com.giraffe.explore
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.entity.SearchKeyword
-import com.giraffe.media.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.usecase.ExploreUseCases
 import com.giraffe.media.explore.util.exceptionHandler
 import com.giraffe.media.explore.util.retryIO
@@ -153,6 +153,7 @@ class ExploreViewModel(
             _state.update { it.copy(searchQuery = text) }
         }
     }
+
     override fun onSearchQueryChange(query: String) {
         _state.update { it.copy(searchQuery = query) }
         debounceJob?.cancel()
@@ -167,7 +168,6 @@ class ExploreViewModel(
                 }
         }
     }
-
 
 
     override fun onClearSearchQuery() {
@@ -242,13 +242,13 @@ class ExploreViewModel(
     }
 
     override fun onGenreSelected(genre: GenreUi) {
-        viewModelScope.launch(Dispatchers.IO ) {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(selectedGenre = genre) }
         }
     }
 
     override fun onFocusChanged(isFocused: Boolean) {
-        viewModelScope.launch(Dispatchers.IO ) {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isSearchFieldFocused = isFocused) }
         }
     }

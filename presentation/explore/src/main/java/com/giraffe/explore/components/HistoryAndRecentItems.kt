@@ -1,16 +1,12 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -70,7 +66,8 @@ fun HistoryAndRecentItems(
         if (recentViews.isNotEmpty()) {
             MoviesListSection(
                 modifier = Modifier
-                    .padding(top = 16.dp).weight(1f),
+                    .padding(top = 16.dp)
+                    .weight(1f),
                 endText = stringResource(R.string.clear_all),
                 title = stringResource(R.string.you_recent_viewed),
                 movies = recentViews

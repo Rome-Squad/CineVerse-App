@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.screen
+package com.giraffe.explore.screen
 
 sealed class SearchScreenEffect {
     data class ShowError(val message: String) : SearchScreenEffect()

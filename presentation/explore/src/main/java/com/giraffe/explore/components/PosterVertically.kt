@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -36,8 +36,8 @@ fun PosterVertically(
     onClick: () -> Unit = {}
 ) {
 
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            with(sharedTransitionScope) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        with(sharedTransitionScope) {
 
             Box(
                 modifier = modifier

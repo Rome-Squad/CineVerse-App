@@ -1,15 +1,14 @@
-package com.giraffe.media.explore
+package com.giraffe.explore
 
+import androidx.annotation.StringRes
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.explore.entity.SearchKeyword
+import com.giraffe.media.explore.util.HasErrorMessage
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
-
-import androidx.annotation.StringRes
-import com.giraffe.media.explore.util.HasErrorMessage
 
 data class ExploreScreenState(
     val searchQuery: String = "",

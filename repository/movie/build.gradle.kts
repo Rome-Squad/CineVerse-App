@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain:media"))
     implementation(project(":domain:user"))
 
     implementation(libs.androidx.core.ktx)

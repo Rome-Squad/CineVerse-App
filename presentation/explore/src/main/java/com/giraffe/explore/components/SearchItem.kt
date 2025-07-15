@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

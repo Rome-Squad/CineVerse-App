@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding

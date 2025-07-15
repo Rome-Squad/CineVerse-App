@@ -90,6 +90,7 @@ dependencies {
     implementation(project(":imageviewer"))
 
     implementation(project(":domain:user"))
+    implementation(project(":domain:media"))
 
     implementation(project(":repository:user"))
     implementation(project(":repository:movie"))

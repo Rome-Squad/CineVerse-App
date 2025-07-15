@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain:media"))
+    implementation(project(":domain:user"))
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     annotationProcessor(libs.room.compiler)
