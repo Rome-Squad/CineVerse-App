@@ -25,7 +25,7 @@ val repositoryModule = module {
         MoviesRepositoryImpl(
             cache = get(),
             remote = get(),
-            searchHistory = get()
+            sessionManager = get()
         )
     }
 

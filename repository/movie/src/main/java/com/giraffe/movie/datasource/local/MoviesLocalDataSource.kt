@@ -6,7 +6,7 @@ import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto
 interface MoviesLocalDataSource {
     suspend fun getMovieById(
         movieId: Int
-    ): MovieCacheDto
+    ): MovieCacheDto?
 
     suspend fun insertMovies(movies: List<MovieCacheDto>)
 

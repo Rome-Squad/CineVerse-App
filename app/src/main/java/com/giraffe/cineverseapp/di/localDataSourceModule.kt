@@ -6,15 +6,13 @@ import com.giraffe.explore.LocalExploreDataSourceImpl
 import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.movie.MovieLocalDataSourceImp
-import com.giraffe.movie.MoviesSearchHistoryDataSourceImpl
 import com.giraffe.movie.dao.MoviesSearchHistoryDao
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
-import com.giraffe.movie.datasource.local.MoviesSearchHistoryDataSource
-import com.giraffe.series.SeriesRoomLocalDateSource
-import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.person.PersonLocalDataSourceImp
 import com.giraffe.person.dao.PersonDao
 import com.giraffe.person.local.PersonLocalDataSource
+import com.giraffe.series.SeriesRoomLocalDateSource
+import com.giraffe.series.datasource.local.SeriesLocalDateSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
@@ -24,10 +22,10 @@ val localDataSourceModule = module {
         LocalExploreDataSourceImpl(get())
     }
 
-    single <MovieDao> { get<CineVerseDatabase>().movieDao() }
-    single <MoviesSearchHistoryDao> { get<CineVerseDatabase>().moviesSearchHistoryDao() }
-    single <MoviesSearchHistoryDataSource> { MoviesSearchHistoryDataSourceImpl(get()) }
-    single<MoviesLocalDataSource>{ MovieLocalDataSourceImp(get()) }
+    single<MovieDao> { get<CineVerseDatabase>().movieDao() }
+    single<MoviesSearchHistoryDao> { get<CineVerseDatabase>().moviesSearchHistoryDao() }
+    single<MoviesLocalDataSource> { MovieLocalDataSourceImp(get()) }
+
 
     single<LocalExploreDataSource> {
         LocalExploreDataSourceImpl(get())

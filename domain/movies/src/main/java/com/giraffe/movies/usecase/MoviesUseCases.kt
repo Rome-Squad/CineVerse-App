@@ -10,5 +10,9 @@ data class MoviesUseCases(
     val setMovieRecentUseCase: SetMovieRecentUseCase,
     val getRecentlyMovies: GetRecentlyMoviesUseCase,
     val clearRecentlyMovies: ClearRecentlyMoviesUseCase,
-    val getMovieGenresUseCase: GetMovieGenresUseCase
+    val getMovieGenresUseCase: GetMovieGenresUseCase,
+    val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+    val getMovieReviewsUseCase: GetMovieReviewsUseCase,
+    val getUserMovieRatingUseCase: GetUserMovieRatingUseCase,
+    val addMovieRatingUseCase: AddMovieRatingUseCase
 )

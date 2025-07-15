@@ -14,7 +14,7 @@ class SearchByNameUseCaseTest {
     private lateinit var searchPeopleByNameUseCase: SearchPeopleByNameUseCase
 
     val expectedList = listOf(
-        Person(1, "Tarek", "Acting", "url")
+        Person(1, "Tarek", "Acting")
     )
 
     @BeforeEach

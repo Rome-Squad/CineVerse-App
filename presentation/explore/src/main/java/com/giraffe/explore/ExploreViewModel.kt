@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -152,21 +153,22 @@ class ExploreViewModel(
             _state.update { it.copy(searchQuery = text) }
         }
     }
-
     override fun onSearchQueryChange(query: String) {
         _state.update { it.copy(searchQuery = query) }
         debounceJob?.cancel()
 
         if (query.isBlank()) return onClearSearchQuery()
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             exploreUseCases.getSearchKeywords(query)
-                .collect { result ->
+                .collectLatest { result ->
                     Log.d("messi", "onSearchQueryChange: ${result.map { it.keyword }}")
                     _state.update { it.copy(resultSearchKeyword = result) }
                 }
         }
     }
+
+
 
     override fun onClearSearchQuery() {
         debounceJob?.cancel()
@@ -213,7 +215,7 @@ class ExploreViewModel(
     override fun onSuggestionClick(suggestion: SearchKeyword) {
         loadMoviesResult(suggestion)
         loadSeriesResults(suggestion)
-        loadSeriesResults(suggestion)
+        loadPeopleResults(suggestion)
     }
 
     override fun onTabSelected(tabIndex: Int) {
@@ -240,13 +242,13 @@ class ExploreViewModel(
     }
 
     override fun onGenreSelected(genre: GenreUi) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO ) {
             _state.update { it.copy(selectedGenre = genre) }
         }
     }
 
     override fun onFocusChanged(isFocused: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO ) {
             _state.update { it.copy(isSearchFieldFocused = isFocused) }
         }
     }
@@ -259,7 +261,7 @@ class ExploreViewModel(
             if (keyword != null) {
                 loadMoviesResult(keyword)
                 loadSeriesResults(keyword)
-                loadSeriesResults(keyword)
+                loadPeopleResults(keyword)
                 _uiEvent.emit(SearchScreenEffect.RefreshCompleted)
             }
             _state.update { it.copy(isLoading = false) }

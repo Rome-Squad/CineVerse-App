@@ -25,7 +25,12 @@ class PersonRepositoryImplTest {
     private val remoteDataSource: PersonRemoteDataSource = mockk(relaxed = true)
     private val localDataSource: PersonLocalDataSource = mockk(relaxed = true)
     private val keyword = "Mohannad"
-    private val dummyPersonDto = PersonDto(id = 5, name = "Mohannad", role = "Acting")
+    private val dummyPersonDto = PersonDto(
+        id = 5,
+        name = "Mohannad",
+        role = "Acting",
+        type = "Cast",
+    )
     private val dummyPersonResponse = PersonResponse(
         adult = false,
         gender = 1,
