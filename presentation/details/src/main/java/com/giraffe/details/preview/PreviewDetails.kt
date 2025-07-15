@@ -345,7 +345,6 @@ fun PreviewStaffInfoSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Staff Info",
-            onShowMoreClick = {},
             staffList = listOf(
                 StaffMember(name = "John Doe", role = "Director"),
                 StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
@@ -365,7 +364,6 @@ fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
             title = "Staff Info",
-            onShowMoreClick = {},
             staffList = listOf(
                 StaffMember(name = "John Doe", role = "Director"),
                 StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
