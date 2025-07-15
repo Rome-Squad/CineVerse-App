@@ -32,9 +32,10 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.utils.imageSourceToPainter
 
 data class CastMember(
-    val actorName: String, val character: String, val image: Painter
+    val actorName: String, val character: String, val image: Any?
 )
 
 @Composable
@@ -83,7 +84,7 @@ fun StarCastSection(
                         CastCard(
                             actorName = cast.actorName,
                             character = cast.character,
-                            actorImage = cast.image,
+                            actorImage = cast.image?.imageSourceToPainter()?: painterResource(R.drawable.reviewer),
                         )
                     }
                 }
