@@ -3,11 +3,11 @@ package com.giraffe.series.usecase
 
 import com.giraffe.series.entity.Series
 import com.giraffe.series.repository.SeriesRepository
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -35,7 +35,7 @@ class GetRecentSeriesGenresTest {
   val result = useCase()
 
   // Then
-  assertEquals(expectedSeries, result)
+  assertThat(result).isEqualTo(expectedSeries)
   coVerify(exactly = 1) { repository.getRecentSeries() }
  }
 }

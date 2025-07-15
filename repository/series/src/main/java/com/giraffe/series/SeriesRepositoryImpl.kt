@@ -7,6 +7,7 @@ import com.giraffe.series.entity.Season
 import com.giraffe.series.entity.Series
 import com.giraffe.series.entity.SeriesGenre
 import com.giraffe.series.mapper.toCachedDto
+import com.giraffe.series.model.SeriesDto
 import com.giraffe.series.mapper.toSeasonEntity
 import com.giraffe.series.mapper.toSeriesEntity
 import com.giraffe.series.mapper.toSeriesReviewsEntity
@@ -73,5 +74,12 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesReviews(seriesId: Int): List<Review> = safeCall {
         remote.getSeriesReviews(seriesId).toSeriesReviewsEntity()
+    }
+
+    override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {
+        return safeCall {
+            remote.getSeriesRecommendations(seriesId, page)
+                .map(SeriesDto::toSeriesEntity)
+        }
     }
 }

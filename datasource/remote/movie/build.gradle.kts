@@ -54,4 +54,6 @@ dependencies {
     //ktor
     implementation(libs.bundles.ktor)
 
+    testImplementation(libs.bundles.test)
+
 }
