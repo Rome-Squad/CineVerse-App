@@ -3,22 +3,22 @@ package com.giraffe.explore
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.explore.entity.SearchKeyword
 import com.giraffe.explore.screen.SearchScreenEffect
-import com.giraffe.explore.usecase.ExploreUseCases
-import com.giraffe.explore.util.exceptionHandler
-import com.giraffe.explore.util.retryIO
-import com.giraffe.movies.usecase.ClearCacheUseCase
-import com.giraffe.movies.usecase.GetMovieGenresUseCase
-import com.giraffe.movies.usecase.GetRecentlyMoviesUseCase
-import com.giraffe.movies.usecase.SearchMovieByNameUseCase
-import com.giraffe.person.usecase.ClearRecentPeopleUseCase
-import com.giraffe.person.usecase.GetRecentPeopleUseCase
-import com.giraffe.person.usecase.SearchPeopleByNameUseCase
-import com.giraffe.series.usecase.ClearRecentSeriesUseCase
-import com.giraffe.series.usecase.GetRecentSeriesUseCase
-import com.giraffe.series.usecase.GetSeriesGenresUseCase
-import com.giraffe.series.usecase.SearchSeriesByNameUseCase
+import com.giraffe.media.explore.entity.SearchKeyword
+import com.giraffe.media.explore.usecase.ExploreUseCases
+import com.giraffe.media.explore.util.exceptionHandler
+import com.giraffe.media.explore.util.retryIO
+import com.giraffe.media.movies.usecase.ClearCacheUseCase
+import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
+import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
+import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
+import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
+import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -153,6 +153,7 @@ class ExploreViewModel(
             _state.update { it.copy(searchQuery = text) }
         }
     }
+
     override fun onSearchQueryChange(query: String) {
         _state.update { it.copy(searchQuery = query) }
         debounceJob?.cancel()
@@ -167,7 +168,6 @@ class ExploreViewModel(
                 }
         }
     }
-
 
 
     override fun onClearSearchQuery() {
@@ -242,13 +242,13 @@ class ExploreViewModel(
     }
 
     override fun onGenreSelected(genre: GenreUi) {
-        viewModelScope.launch(Dispatchers.IO ) {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(selectedGenre = genre) }
         }
     }
 
     override fun onFocusChanged(isFocused: Boolean) {
-        viewModelScope.launch(Dispatchers.IO ) {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isSearchFieldFocused = isFocused) }
         }
     }

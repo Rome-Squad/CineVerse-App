@@ -6,11 +6,8 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -54,24 +51,24 @@ fun PosterHorizontal(
         with(sharedTransitionScope) {
 
 
-                IslamicAppropriateImageViewer(
-                    imageUrl = poster.imageUri,
-                    placeHolderResId = Theme.icons.dueTone.image,
-                    modifier = Modifier
-                        .height(88.dp)
-                        .width(64.dp)
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = Theme.radius.lg,
-                                bottomStart = Theme.radius.lg,
-                                topEnd = Theme.radius.lg
-                            )
+            IslamicAppropriateImageViewer(
+                imageUrl = poster.imageUri,
+                placeHolderResId = Theme.icons.dueTone.image,
+                modifier = Modifier
+                    .height(88.dp)
+                    .width(64.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg
                         )
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
-                )
+                    )
+                    .sharedElement(
+                        sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+            )
 
 
             Column(

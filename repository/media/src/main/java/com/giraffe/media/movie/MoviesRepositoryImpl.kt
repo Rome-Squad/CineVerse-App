@@ -1,5 +1,10 @@
 package com.giraffe.media.movie
 
+import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.movies.entity.MovieReview
+import com.giraffe.media.movies.exception.NetworkError
+import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.movie.datasource.remote.dto.RatingRequest
@@ -8,11 +13,6 @@ import com.giraffe.movie.mapper.toMovie
 import com.giraffe.movie.mapper.toMovieCacheDto
 import com.giraffe.movie.mapper.toMovieGenreDto
 import com.giraffe.movie.utils.safeCall
-import com.giraffe.movies.entity.Movie
-import com.giraffe.movies.entity.MovieGenre
-import com.giraffe.movies.entity.MovieReview
-import com.giraffe.movies.exception.NetworkError
-import com.giraffe.movies.repository.MoviesRepository
 import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(

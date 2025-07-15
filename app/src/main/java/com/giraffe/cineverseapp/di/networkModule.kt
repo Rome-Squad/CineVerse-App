@@ -2,12 +2,12 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.HttpClientFactory
-import com.giraffe.explore.RemoteExploreDataSourceImpl
-import com.giraffe.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.media.explore.RemoteExploreDataSourceImpl
+import com.giraffe.media.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.media.person.PersonRemoteDataSourceImp
+import com.giraffe.media.person.remote.PersonRemoteDataSource
 import com.giraffe.movie.MoviesRemoteDataSourceImpl
 import com.giraffe.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.person.PersonRemoteDataSourceImp
-import com.giraffe.person.remote.PersonRemoteDataSource
 import com.giraffe.repository.SessionManagerImpl
 import com.giraffe.repository.datasource.UserRemoteDataSource
 import com.giraffe.user.SessionManager

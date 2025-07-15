@@ -1,7 +1,7 @@
 package com.giraffe.media.series.datasource.remote.response.seriesdetails
 
-import com.giraffe.series.model.GenreDto
-import com.giraffe.series.model.SeasonDto
+import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.model.SeasonDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

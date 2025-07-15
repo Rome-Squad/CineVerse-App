@@ -5,17 +5,17 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.giraffe.cineverseapp.data.database.converter.Converters
-import com.giraffe.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.explore.model.SearchKeywordCacheDto
+import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
+import com.giraffe.media.person.dao.PersonDao
+import com.giraffe.media.person.local.dto.PersonDto
+import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.model.CachedSeasonDto
+import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.movie.dao.MoviesSearchHistoryDao
 import com.giraffe.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.movie.datasource.local.cacheDto.MovieGenreCacheDto
-import com.giraffe.person.dao.PersonDao
-import com.giraffe.person.local.dto.PersonDto
-import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.model.CachedSeasonDto
-import com.giraffe.series.model.CachedSeriesDto
-import com.giraffe.series.model.CachedSeriesGenreDto
 
 @Database(
     entities = [

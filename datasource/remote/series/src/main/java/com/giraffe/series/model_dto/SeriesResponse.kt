@@ -1,6 +1,6 @@
-package com.giraffe.series.model_dto
+package com.giraffe.media.series.model_dto
 
-import com.giraffe.series.model.SeriesDto
+import com.giraffe.media.series.model.SeriesDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

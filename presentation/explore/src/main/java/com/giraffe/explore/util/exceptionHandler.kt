@@ -1,35 +1,34 @@
-package com.giraffe.explore.util
+package com.giraffe.media.explore.util
 
 import androidx.annotation.StringRes
-import com.giraffe.explore.R
-import com.giraffe.series.exception.NoInternetException as NoInternetExceptionSeries
-import com.giraffe.series.exception.TimeoutException as TimeoutExceptionSeries
-import com.giraffe.series.exception.RedirectedException as RedirectedExceptionSeries
-import com.giraffe.series.exception.ClientErrorException as ClientErrorExceptionSeries
-import com.giraffe.series.exception.ServerException as ServerExceptionSeries
-import com.giraffe.series.exception.SerializationException as SerializationExceptionSeries
-import com.giraffe.series.exception.NotFoundElementException as NotFoundElementExceptionSeries
-import com.giraffe.series.exception.ValidationExceptions as ValidationExceptionsSeries
-import com.giraffe.series.exception.CorruptDatabaseException as CorruptDatabaseExceptionSeries
-import com.giraffe.series.exception.DiskAccessException as DiskAccessExceptionSeries
-import com.giraffe.series.exception.UnknownException as UnknownExceptionSeries
-import com.giraffe.explore.exceptions.NotFoundException as NotFoundExceptionExplore
-import com.giraffe.explore.exceptions.UnrecognizableDataException as UnrecognizableDataExceptionExplore
-import com.giraffe.explore.exceptions.NoInternetException as NoInternetExceptionExplore
-import com.giraffe.explore.exceptions.ValidationException as ValidationExceptionsExplore
-import com.giraffe.explore.exceptions.ServerException as ServerExceptionExplore
-import com.giraffe.explore.exceptions.UnknownException as UnknownExceptionExplore
-import com.giraffe.explore.exceptions.RequestTimeoutException as RequestTimeoutExceptionExplore
-import com.giraffe.explore.exceptions.TooManyRequestsException as TooManyRequestsExceptionExplore
-import com.giraffe.movies.exception.NetworkError as NetworkErrorMovies
-import com.giraffe.movies.exception.InvalidApiKey as InvalidApiKeyMovies
-import com.giraffe.movies.exception.NotFoundError as NotFoundErrorMovies
-import com.giraffe.movies.exception.ServerError as ServerErrorMovies
-import com.giraffe.movies.exception.UnknownError as UnknownErrorMovies
-
+import com.giraffe.media.explore.R
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import com.giraffe.media.explore.exceptions.NoInternetException as NoInternetExceptionExplore
+import com.giraffe.media.explore.exceptions.NotFoundException as NotFoundExceptionExplore
+import com.giraffe.media.explore.exceptions.RequestTimeoutException as RequestTimeoutExceptionExplore
+import com.giraffe.media.explore.exceptions.ServerException as ServerExceptionExplore
+import com.giraffe.media.explore.exceptions.TooManyRequestsException as TooManyRequestsExceptionExplore
+import com.giraffe.media.explore.exceptions.UnknownException as UnknownExceptionExplore
+import com.giraffe.media.explore.exceptions.UnrecognizableDataException as UnrecognizableDataExceptionExplore
+import com.giraffe.media.explore.exceptions.ValidationException as ValidationExceptionsExplore
+import com.giraffe.media.movies.exception.InvalidApiKey as InvalidApiKeyMovies
+import com.giraffe.media.movies.exception.NetworkError as NetworkErrorMovies
+import com.giraffe.media.movies.exception.NotFoundError as NotFoundErrorMovies
+import com.giraffe.media.movies.exception.ServerError as ServerErrorMovies
+import com.giraffe.media.movies.exception.UnknownError as UnknownErrorMovies
+import com.giraffe.media.series.exception.ClientErrorException as ClientErrorExceptionSeries
+import com.giraffe.media.series.exception.CorruptDatabaseException as CorruptDatabaseExceptionSeries
+import com.giraffe.media.series.exception.DiskAccessException as DiskAccessExceptionSeries
+import com.giraffe.media.series.exception.NoInternetException as NoInternetExceptionSeries
+import com.giraffe.media.series.exception.NotFoundElementException as NotFoundElementExceptionSeries
+import com.giraffe.media.series.exception.RedirectedException as RedirectedExceptionSeries
+import com.giraffe.media.series.exception.SerializationException as SerializationExceptionSeries
+import com.giraffe.media.series.exception.ServerException as ServerExceptionSeries
+import com.giraffe.media.series.exception.TimeoutException as TimeoutExceptionSeries
+import com.giraffe.media.series.exception.UnknownException as UnknownExceptionSeries
+import com.giraffe.media.series.exception.ValidationExceptions as ValidationExceptionsSeries
 
 
 fun <T> exceptionHandler(

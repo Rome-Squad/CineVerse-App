@@ -1,19 +1,19 @@
 package com.giraffe.media.explore.utils
 
-import com.giraffe.explore.exceptions.ExploreException
-import com.giraffe.explore.exceptions.NoInternetException
-import com.giraffe.explore.exceptions.NoInternetNetworkException
-import com.giraffe.explore.exceptions.NotFoundException
-import com.giraffe.explore.exceptions.RequestTimeoutException
-import com.giraffe.explore.exceptions.RequestTimeoutNetworkException
-import com.giraffe.explore.exceptions.SerializationNetworkException
-import com.giraffe.explore.exceptions.ServerException
-import com.giraffe.explore.exceptions.ServerNetworkException
-import com.giraffe.explore.exceptions.TooManyRequestsException
-import com.giraffe.explore.exceptions.TooManyRequestsNetworkException
-import com.giraffe.explore.exceptions.UnknownException
-import com.giraffe.explore.exceptions.UnrecognizableDataException
-import com.giraffe.explore.exceptions.ValidationException
+import com.giraffe.media.explore.exceptions.ExploreException
+import com.giraffe.media.explore.exceptions.NoInternetException
+import com.giraffe.media.explore.exceptions.NoInternetNetworkException
+import com.giraffe.media.explore.exceptions.NotFoundException
+import com.giraffe.media.explore.exceptions.RequestTimeoutException
+import com.giraffe.media.explore.exceptions.RequestTimeoutNetworkException
+import com.giraffe.media.explore.exceptions.SerializationNetworkException
+import com.giraffe.media.explore.exceptions.ServerException
+import com.giraffe.media.explore.exceptions.ServerNetworkException
+import com.giraffe.media.explore.exceptions.TooManyRequestsException
+import com.giraffe.media.explore.exceptions.TooManyRequestsNetworkException
+import com.giraffe.media.explore.exceptions.UnknownException
+import com.giraffe.media.explore.exceptions.UnrecognizableDataException
+import com.giraffe.media.explore.exceptions.ValidationException
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
 

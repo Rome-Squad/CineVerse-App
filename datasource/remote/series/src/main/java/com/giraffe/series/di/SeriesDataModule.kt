@@ -1,10 +1,10 @@
-package com.giraffe.series.di
+package com.giraffe.media.series.di
 
-import com.giraffe.series.TmdbSeriesApiRemoteDataSource
-import com.giraffe.series.api.BaseRequest
-import com.giraffe.series.api.DefaultRequestBuilder
-import com.giraffe.series.api.RequestBuilder
-import com.giraffe.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.media.series.TmdbSeriesApiRemoteDataSource
+import com.giraffe.media.series.api.BaseRequest
+import com.giraffe.media.series.api.DefaultRequestBuilder
+import com.giraffe.media.series.api.RequestBuilder
+import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

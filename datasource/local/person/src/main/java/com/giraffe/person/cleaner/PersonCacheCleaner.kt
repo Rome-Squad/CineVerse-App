@@ -1,4 +1,4 @@
-package com.giraffe.person.cleaner
+package com.giraffe.media.person.cleaner
 
 interface PersonCacheCleaner {
     suspend fun clearPersonCache()

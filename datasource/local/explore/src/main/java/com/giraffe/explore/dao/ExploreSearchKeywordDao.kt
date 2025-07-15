@@ -1,4 +1,4 @@
-package com.giraffe.explore.dao
+package com.giraffe.media.explore.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

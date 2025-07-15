@@ -1,6 +1,6 @@
 package com.giraffe.details.screens.moviedetails.model
 
-import com.giraffe.movies.entity.Movie
+import com.giraffe.media.movies.entity.Movie
 import kotlinx.datetime.LocalDate
 
 data class MovieUi(

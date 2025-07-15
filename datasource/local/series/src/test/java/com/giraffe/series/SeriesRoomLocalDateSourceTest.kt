@@ -1,11 +1,15 @@
-package com.giraffe.series
+package com.giraffe.media.series
 
-import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.model.*
+import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.model.CachedSeasonDto
+import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.CachedSeriesGenreDto
+import com.giraffe.series.SeriesRoomLocalDateSource
 import com.google.common.truth.Truth.assertThat
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

@@ -1,5 +1,4 @@
 import java.util.Properties
-import java.io.File
 
 
 plugins {
@@ -90,11 +89,7 @@ dependencies {
     implementation(project(":imageviewer"))
 
     implementation(project(":domain:user"))
-    implementation(project(":domain:movies"))
-    implementation(project(":domain:series"))
-    implementation(project(":domain:review"))
-    implementation(project(":domain:person"))
-    implementation(project(":domain:explore"))
+    implementation(project(":domain:media"))
 
     implementation(project(":repository:user"))
 

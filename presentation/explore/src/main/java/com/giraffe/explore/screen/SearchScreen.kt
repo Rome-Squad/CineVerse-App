@@ -30,16 +30,16 @@ import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.ExploreInteractionListener
-import com.giraffe.explore.ExploreViewModel
 import com.giraffe.explore.ExploreScreenState
+import com.giraffe.explore.ExploreViewModel
 import com.giraffe.explore.GenreUi
 import com.giraffe.explore.SearchTab
-import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.NoResult
 import com.giraffe.explore.components.ResultsActors
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.explore.entity.SearchKeyword
+import com.giraffe.media.explore.entity.SearchKeyword
+import com.giraffe.media.explore.util.VoiceSearchHelper
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -84,9 +84,9 @@ fun SearchContent(
     ) { granted ->
         listener.onPermissionResult(granted)
         val message = if (granted) {
-            context.getString(com.giraffe.explore.R.string.voice_permission_granted)
+            context.getString(com.giraffe.media.explore.R.string.voice_permission_granted)
         } else {
-            context.getString(com.giraffe.explore.R.string.voice_permission_denied)
+            context.getString(com.giraffe.media.explore.R.string.voice_permission_denied)
         }
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }

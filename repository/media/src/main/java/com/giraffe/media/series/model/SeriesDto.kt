@@ -2,9 +2,9 @@ package com.giraffe.media.series.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.series.utils.DatabaseConstants.GENRE_TABLE
-import com.giraffe.series.utils.DatabaseConstants.SEASON_TABLE
-import com.giraffe.series.utils.DatabaseConstants.SERIES_TABLE
+import com.giraffe.media.series.utils.DatabaseConstants.GENRE_TABLE
+import com.giraffe.media.series.utils.DatabaseConstants.SEASON_TABLE
+import com.giraffe.media.series.utils.DatabaseConstants.SERIES_TABLE
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

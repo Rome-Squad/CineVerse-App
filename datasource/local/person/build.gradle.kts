@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.person"
+    namespace = "com.giraffe.media.person"
     compileSdk = 36
 
     defaultConfig {

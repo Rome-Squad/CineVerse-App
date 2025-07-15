@@ -36,8 +36,8 @@ fun PosterVertically(
     onClick: () -> Unit = {}
 ) {
 
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            with(sharedTransitionScope) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        with(sharedTransitionScope) {
 
             Box(
                 modifier = modifier

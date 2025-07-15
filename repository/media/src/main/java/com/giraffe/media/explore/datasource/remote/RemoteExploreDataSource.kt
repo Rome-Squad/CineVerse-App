@@ -1,6 +1,6 @@
 package com.giraffe.media.explore.datasource.remote
 
-import com.giraffe.explore.model.SearchKeywordDto
+import com.giraffe.media.explore.model.SearchKeywordDto
 
 interface RemoteExploreDataSource {
 

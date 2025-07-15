@@ -1,10 +1,11 @@
 package com.giraffe.series
 
-import com.giraffe.series.database.SeriesDao
-import com.giraffe.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.series.model.*
+import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.model.CachedSeasonDto
+import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.CachedSeriesGenreDto
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 class SeriesRoomLocalDateSource(

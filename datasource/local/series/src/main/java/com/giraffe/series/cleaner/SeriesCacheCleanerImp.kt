@@ -1,6 +1,6 @@
-package com.giraffe.series.cleaner
+package com.giraffe.media.series.cleaner
 
-import com.giraffe.series.database.SeriesDao
+import com.giraffe.media.series.database.SeriesDao
 
 
 class SeriesCacheCleanerImp(private val dao: SeriesDao) : SeriesCacheCleaner {
