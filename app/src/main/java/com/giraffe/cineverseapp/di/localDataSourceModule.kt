@@ -12,7 +12,7 @@ import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import  com.giraffe.media.movie.MovieLocalDataSourceImp
 import  com.giraffe.media.movie.dao.MoviesSearchHistoryDao
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
-import com.giraffe.series.SeriesRoomLocalDateSource
+import com.giraffe.media.series.SeriesRoomLocalDateSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {

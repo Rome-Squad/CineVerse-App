@@ -12,7 +12,6 @@ import com.giraffe.cineverseapp.di.repositoryModule
 import com.giraffe.cineverseapp.di.useCaseModule
 import com.giraffe.cineverseapp.di.viewModelModule
 import com.giraffe.cineverseapp.worker.CacheCleanupWorker
-import com.giraffe.media.series.di.seriesRemoteDataModule
 import com.giraffe.user.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +38,6 @@ class CineVerseApp : Application() {
                 networkModule,
                 repositoryModule,
                 useCaseModule,
-                seriesRemoteDataModule,
                 viewModelModule
             )
         }
@@ -51,7 +49,6 @@ class CineVerseApp : Application() {
 
     private fun createGuestSessionIfNotExists() {
         applicationScope.launch {
-            //TODO ("store session id when authenticated")
             try {
                 val newGuestSessionId = sessionManager.createGuestSessionId()
                     ?: throw Exception("Failed to create guest session")
