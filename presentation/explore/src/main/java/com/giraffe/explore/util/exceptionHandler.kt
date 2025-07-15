@@ -1,35 +1,12 @@
-package com.giraffe.media.explore.util
+package com.giraffe.explore.util
 
 import androidx.annotation.StringRes
 import com.giraffe.media.explore.R
+import com.giraffe.media.exception.*
+import com.giraffe.media.explore.util.HasErrorMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import com.giraffe.media.explore.exceptions.NoInternetException as NoInternetExceptionExplore
-import com.giraffe.media.explore.exceptions.NotFoundException as NotFoundExceptionExplore
-import com.giraffe.media.explore.exceptions.RequestTimeoutException as RequestTimeoutExceptionExplore
-import com.giraffe.media.explore.exceptions.ServerException as ServerExceptionExplore
-import com.giraffe.media.explore.exceptions.TooManyRequestsException as TooManyRequestsExceptionExplore
-import com.giraffe.media.explore.exceptions.UnknownException as UnknownExceptionExplore
-import com.giraffe.media.explore.exceptions.UnrecognizableDataException as UnrecognizableDataExceptionExplore
-import com.giraffe.media.explore.exceptions.ValidationException as ValidationExceptionsExplore
-import com.giraffe.media.movies.exception.InvalidApiKey as InvalidApiKeyMovies
-import com.giraffe.media.movies.exception.NetworkError as NetworkErrorMovies
-import com.giraffe.media.movies.exception.NotFoundError as NotFoundErrorMovies
-import com.giraffe.media.movies.exception.ServerError as ServerErrorMovies
-import com.giraffe.media.movies.exception.UnknownError as UnknownErrorMovies
-import com.giraffe.media.series.exception.ClientErrorException as ClientErrorExceptionSeries
-import com.giraffe.media.series.exception.CorruptDatabaseException as CorruptDatabaseExceptionSeries
-import com.giraffe.media.series.exception.DiskAccessException as DiskAccessExceptionSeries
-import com.giraffe.media.series.exception.NoInternetException as NoInternetExceptionSeries
-import com.giraffe.media.series.exception.NotFoundElementException as NotFoundElementExceptionSeries
-import com.giraffe.media.series.exception.RedirectedException as RedirectedExceptionSeries
-import com.giraffe.media.series.exception.SerializationException as SerializationExceptionSeries
-import com.giraffe.media.series.exception.ServerException as ServerExceptionSeries
-import com.giraffe.media.series.exception.TimeoutException as TimeoutExceptionSeries
-import com.giraffe.media.series.exception.UnknownException as UnknownExceptionSeries
-import com.giraffe.media.series.exception.ValidationExceptions as ValidationExceptionsSeries
-
 
 fun <T> exceptionHandler(
     state: MutableStateFlow<T>
@@ -40,41 +17,29 @@ fun <T> exceptionHandler(
     }
 }
 
-
 @StringRes
 fun mapExceptionToStringRes(throwable: Throwable): Int {
     return when (throwable) {
-        // Explore
-        is NoInternetExceptionExplore -> R.string.error_explore_no_internet
-        is ValidationExceptionsExplore -> R.string.error_explore_validation
-        is ServerExceptionExplore -> R.string.error_explore_server
-        is UnknownExceptionExplore -> R.string.error_explore_unknown
-        is RequestTimeoutExceptionExplore -> R.string.error_explore_timeout
-        is TooManyRequestsExceptionExplore -> R.string.error_explore_too_many
-        is UnrecognizableDataExceptionExplore -> R.string.error_explore_unrecognized
-        is NotFoundExceptionExplore -> R.string.error_explore_not_found
+        is NetworkDomainException -> R.string.error_network
+        is TimeoutDomainException -> R.string.error_timeout
+        is RedirectedDomainException -> R.string.error_redirect
+        is ClientErrorDomainException -> R.string.error_client_error
 
-        // Series
-        is NoInternetExceptionSeries -> R.string.error_series_no_internet
-        is TimeoutExceptionSeries -> R.string.error_series_timeout
-        is RedirectedExceptionSeries -> R.string.error_series_redirect
-        is ClientErrorExceptionSeries -> R.string.error_series_client
-        is ServerExceptionSeries -> R.string.error_series_server
-        is SerializationExceptionSeries -> R.string.error_series_serialization
-        is NotFoundElementExceptionSeries -> R.string.error_series_not_found
-        is ValidationExceptionsSeries -> R.string.error_series_validation
-        is CorruptDatabaseExceptionSeries -> R.string.error_series_corrupt_db
-        is DiskAccessExceptionSeries -> R.string.error_series_disk
-        is UnknownExceptionSeries -> R.string.error_series_unknown
+        is ServerErrorDomainException -> R.string.error_server
 
-        // Movies
-        is NetworkErrorMovies -> R.string.error_movies_network
-        is InvalidApiKeyMovies -> R.string.error_movies_invalid_key
-        is NotFoundErrorMovies -> R.string.error_movies_not_found
-        is ServerErrorMovies -> R.string.error_movies_server
-        is UnknownErrorMovies -> R.string.error_movies_unknown
 
-        // Default fallback
-        else -> R.string.error_default
-    }
+        is UnauthorizedDomainException -> R.string.error_unauthorized
+        is ForbiddenDomainException -> R.string.error_forbidden
+        is RateLimitedDomainException -> R.string.error_rate_limited
+        is InvalidApiKeyDomainException -> R.string.error_invalid_key
+
+        is ValidationDomainException -> R.string.error_validation
+
+        is NotFoundDomainException -> R.string.error_not_found
+
+        is CorruptDbDomainException -> R.string.error_corrupt_db
+        is DiskErrorDomainException -> R.string.error_disk
+
+        is UnknownDomainException -> R.string.error_unknown
+        else -> R.string.error_unknown    }
 }

@@ -7,7 +7,7 @@ import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toCacheDto
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.ExploreRepository
-import com.giraffe.media.explore.utils.safeCall
+import com.giraffe.media.util.SafeCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -22,7 +22,7 @@ class ExploreRepositoryImpl(
                 it.toEntity()
             }
 
-        return safeCall {
+        return SafeCall {
             val history = cache.getSearchKeywords(query).map {
                 it.toEntity()
             }
@@ -40,7 +40,7 @@ class ExploreRepositoryImpl(
     }
 
     override suspend fun insertSearchKeyword(searchKeyword: String) {
-        safeCall {
+        SafeCall {
             val searchKeyword = SearchKeyword(
                 keyword = searchKeyword,
                 isFromSearchHistory = true,
@@ -52,14 +52,14 @@ class ExploreRepositoryImpl(
     }
 
     override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) {
-        safeCall {
+        SafeCall {
             val cacheDto = searchKeyword.toCacheDto()
             cache.deleteSearchKeyword(cacheDto)
         }
     }
 
     override suspend fun clearSearchHistory() {
-        safeCall {
+        SafeCall {
             cache.clearSearchHistory()
         }
     }

@@ -1,60 +1,55 @@
 package com.giraffe.media.explore.utils
 
-import com.giraffe.media.explore.exceptions.NetworkException
-import com.giraffe.media.explore.exceptions.NoInternetNetworkException
-import com.giraffe.media.explore.exceptions.RequestTimeoutNetworkException
-import com.giraffe.media.explore.exceptions.SerializationNetworkException
-import com.giraffe.media.explore.exceptions.ServerNetworkException
-import com.giraffe.media.explore.exceptions.TooManyRequestsNetworkException
-import com.giraffe.media.explore.exceptions.UnknownNetworkException
+import com.giraffe.media.exception.*
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
-import kotlinx.serialization.SerializationException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
-suspend inline fun <reified  T> handleRequest(
+suspend inline fun <reified T> handleRequest(
     request: suspend () -> HttpResponse
 ): T {
-
     val response = try {
         request()
     } catch (e: Throwable) {
-        throw mapToNetworkException(e)
+        throw mapToMediaException(e)
     }
 
     return when (response.status.value) {
-        in 200 .. 299 -> { //success
+        in 200..299 -> {
             try {
                 response.body<T>()
             } catch (_: NoTransformationFoundException) {
-                throw SerializationNetworkException()
+                throw SerializationException()
             }
         }
 
-        408 -> { //timeout
-            throw RequestTimeoutNetworkException()
-        }
+        408 -> throw RequestTimeoutException()
+        429 -> throw TooManyRequestsException()
+        in 400..499 -> throw ClientErrorException()
+        in 500..599 -> throw ServerException()
 
-        429 -> { //too many requests
-            throw TooManyRequestsNetworkException()
-        }
-
-        in 500 ..599 -> { //server side error
-            throw ServerNetworkException()
-        }
         else -> throw UnknownNetworkException()
     }
 }
 
-
-fun mapToNetworkException(e: Throwable): NetworkException {
+fun mapToMediaException(e: Throwable): MediaException {
     return when (e) {
-        is UnresolvedAddressException -> NoInternetNetworkException()
-        is SerializationException -> SerializationNetworkException()
+        is UnknownHostException,
+        is UnresolvedAddressException -> NoInternetException()
+
+        is SocketTimeoutException -> RequestTimeoutException()
+
+        is SerializationException,
+        is IllegalArgumentException -> SerializationException()
+
+
         else -> UnknownNetworkException()
     }
 }
+
 //400 -> 499 clint side error
 //500 -> 599 server side error
 //200 -> 299 success

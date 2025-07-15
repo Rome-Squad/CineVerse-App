@@ -1,16 +1,6 @@
 package com.giraffe.media.series.api
 
-import com.giraffe.media.series.exceptions.ClientException
-import com.giraffe.media.series.exceptions.InvalidRequestException
-import com.giraffe.media.series.exceptions.InvalidRequestMethodException
-import com.giraffe.media.series.exceptions.NetworkException
-import com.giraffe.media.series.exceptions.NoInternetNetworkException
-import com.giraffe.media.series.exceptions.RedirectException
-import com.giraffe.media.series.exceptions.RequestTimeoutNetworkException
-import com.giraffe.media.series.exceptions.SerializationNetworkException
-import com.giraffe.media.series.exceptions.ServerNetworkException
-import com.giraffe.media.series.exceptions.TooManyRequestsNetworkException
-import com.giraffe.media.series.exceptions.UnknownNetworkException
+import com.giraffe.media.exception.*
 import io.ktor.client.HttpClient
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.request.HttpRequestBuilder
@@ -27,7 +17,6 @@ import io.ktor.http.contentType
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerializationException
 
 interface RequestBuilder {
     suspend fun request(baseRequest: BaseRequest): HttpResponse
@@ -40,7 +29,7 @@ class DefaultRequestBuilder(
     override suspend fun request(baseRequest: BaseRequest): HttpResponse {
         return withContext(Dispatchers.IO) {
             if (!baseRequest.validate()) {
-                throw InvalidRequestException()
+                throw InvalidIdException()
             }
             handleRequest {
                 executeRequest(baseRequest)
@@ -67,7 +56,7 @@ class DefaultRequestBuilder(
                 configureRequest(baseRequest)
             }
 
-            else -> throw InvalidRequestMethodException()
+            else -> throw InvalidIdException()
         }
     }
 
@@ -111,31 +100,25 @@ class DefaultRequestBuilder(
         val response = try {
             request()
         } catch (e: Throwable) {
-            throw mapToNetworkException(e)
+            throw mapToMediaException(e)
         }
 
         return when (response.status.value) {
             in 200..299 -> response
-
-            in 300..399 -> throw RedirectException()
-
-            408 -> throw RequestTimeoutNetworkException()
-
-            429 -> throw TooManyRequestsNetworkException()
-
-            in 400..499 -> throw ClientException()
-
-            in 500..599 -> throw ServerNetworkException()
-
+            in 300..399 -> throw RedirectedException()
+            408 -> throw RequestTimeoutException()
+            429 -> throw RateLimitExceededException()
+            in 400..499 -> throw ClientErrorException()
+            in 500..599 -> throw ServerException()
             else -> throw UnknownNetworkException()
         }
     }
 
-    private fun mapToNetworkException(e: Throwable): NetworkException {
+    private fun mapToMediaException(e: Throwable): MediaException {
         return when (e) {
-            is UnresolvedAddressException -> NoInternetNetworkException()
-            is SerializationException -> SerializationNetworkException()
-            is NoTransformationFoundException -> SerializationNetworkException()
+            is UnresolvedAddressException -> NoInternetException()
+            is SerializationException -> SerializationException()
+            is NoTransformationFoundException -> SerializationException()
             else -> UnknownNetworkException()
         }
     }

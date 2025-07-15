@@ -13,13 +13,13 @@ import com.giraffe.media.series.mapper.toSeriesEntity
 import com.giraffe.media.series.mapper.toSeriesReviewsEntity
 import com.giraffe.media.series.model.SeriesDto
 import com.giraffe.media.series.repository.SeriesRepository
-import com.giraffe.media.series.utils.safeCall
+import com.giraffe.media.util.SafeCall
 
 class SeriesRepositoryImpl(
     private val remote: SeriesRemoteDataSource,
     private val local: SeriesLocalDateSource
 ) : SeriesRepository {
-    override suspend fun searchSeriesByName(seriesName: String) = safeCall {
+    override suspend fun searchSeriesByName(seriesName: String) = SafeCall {
         val cached = local.getCachedSeriesForName(seriesName)
         if (cached.isNotEmpty()) {
             cached.map { dto ->
@@ -38,7 +38,7 @@ class SeriesRepositoryImpl(
         }
     }
 
-    override suspend fun getSeriesGenres(): List<SeriesGenre> = safeCall {
+    override suspend fun getSeriesGenres(): List<SeriesGenre> = SafeCall {
         val cachedGenres = local.getCachedGenres()
         if (cachedGenres.isNotEmpty()) {
             cachedGenres.map { it.toEntity() }
@@ -49,36 +49,36 @@ class SeriesRepositoryImpl(
         }
     }
 
-    override suspend fun getRecentSeries(): List<Series> = safeCall {
+    override suspend fun getRecentSeries(): List<Series> = SafeCall {
         local.getRecentSeries().map { dto ->
             val seasons = local.getSeasonsForSeries(dto.id).map { it.toEntity() }
             dto.toEntity(seasons)
         }
     }
 
-    override suspend fun storeRecentSeries(series: Series) = safeCall {
+    override suspend fun storeRecentSeries(series: Series) = SafeCall {
         local.storeRecentSeries(series.id)
     }
 
-    override suspend fun clearRecentSeries() = safeCall {
+    override suspend fun clearRecentSeries() = SafeCall {
         local.clearRecentSeries()
     }
 
 
-    override suspend fun getSeriesDetails(seriesId: Int): Series = safeCall {
+    override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
         remote.getSeriesDetails(seriesId).toSeriesEntity()
     }
 
-    override suspend fun getSeasonOfSeries(seriesId: Int): List<Season> = safeCall {
+    override suspend fun getSeasonOfSeries(seriesId: Int): List<Season> = SafeCall {
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview> = safeCall {
+    override suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview> = SafeCall {
         remote.getSeriesReviews(seriesId).toSeriesReviewsEntity()
     }
 
     override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {
-        return safeCall {
+        return SafeCall {
             remote.getSeriesRecommendations(seriesId, page)
                 .map(SeriesDto::toEntity)
         }

@@ -1,5 +1,6 @@
 package  com.giraffe.media.movie
 
+import com.giraffe.media.exception.NoInternetException
 import  com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import  com.giraffe.media.movie.datasource.remote.dto.MovieDetailsDto
 import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
@@ -8,7 +9,6 @@ import  com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import  com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
 import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import  com.giraffe.media.movie.datasource.remote.dto.ReviewsResponseDto
-import  com.giraffe.media.movie.exceptions.NetworkException
 import  com.giraffe.media.movie.response.GenreResponse
 import  com.giraffe.media.movie.response.MoviesListResponse
 import  com.giraffe.media.movie.utils.handleRequest
@@ -124,7 +124,7 @@ class MoviesRemoteDataSourceImp(
 
             return response.results.firstOrNull {
                 it.id == movieId
-            }?.rating?.toFloat() ?: throw NetworkException()
+            }?.rating?.toFloat() ?: throw NoInternetException()
 
     }
 
