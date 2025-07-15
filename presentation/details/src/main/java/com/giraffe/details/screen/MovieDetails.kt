@@ -219,7 +219,7 @@ private fun MovieDetailsContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
-                        .weight(1f), text = "Add To Rate", enabled = false, onClick = {})
+                        , text = "Add To Rate", enabled = false, onClick = {})
             }
         },
     )
