@@ -22,24 +22,13 @@ fun mapExceptionToStringRes(throwable: Throwable): Int {
     return when (throwable) {
         is NetworkDomainException -> R.string.error_network
         is TimeoutDomainException -> R.string.error_timeout
-        is RedirectedDomainException -> R.string.error_redirect
-        is ClientErrorDomainException -> R.string.error_client_error
-
         is ServerErrorDomainException -> R.string.error_server
-
-
         is UnauthorizedDomainException -> R.string.error_unauthorized
-        is ForbiddenDomainException -> R.string.error_forbidden
-        is RateLimitedDomainException -> R.string.error_rate_limited
-        is InvalidApiKeyDomainException -> R.string.error_invalid_key
-
+        is AccessDeniedDomainException -> R.string.error_access_denied
         is ValidationDomainException -> R.string.error_validation
-
+        is InvalidRequestMethodDomainException -> R.string.error_invalid_method
         is NotFoundDomainException -> R.string.error_not_found
-
-        is CorruptDbDomainException -> R.string.error_corrupt_db
-        is DiskErrorDomainException -> R.string.error_disk
-
         is UnknownDomainException -> R.string.error_unknown
-        else -> R.string.error_unknown    }
+        else -> R.string.error_unknown
+    }
 }
