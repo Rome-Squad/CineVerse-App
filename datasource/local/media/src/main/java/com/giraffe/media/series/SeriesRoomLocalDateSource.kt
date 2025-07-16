@@ -1,6 +1,6 @@
 package com.giraffe.media.series
 
-import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.CachedSeriesDto

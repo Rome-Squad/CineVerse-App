@@ -1,6 +1,6 @@
 package  com.giraffe.media.movie.response
 
-import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
+import  com.giraffe.media.movie.model.dto.MovieGenreDto
 import kotlinx.serialization.Serializable
 
 @Serializable

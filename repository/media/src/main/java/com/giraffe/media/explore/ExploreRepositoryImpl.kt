@@ -1,6 +1,6 @@
 package com.giraffe.media.explore
 
-import com.giraffe.media.explore.utils.getCurrentLocalDateTime
+import com.giraffe.media.utils.getCurrentLocalDateTime
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.entity.SearchKeyword

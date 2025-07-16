@@ -1,6 +1,6 @@
 package com.giraffe.media.person.response
 
-import com.giraffe.media.person.remote.dto.PersonMovieCastItemDto
+import com.giraffe.media.person.model.dto.PersonMovieCastItemDto
 import kotlinx.serialization.Serializable
 
 @Serializable

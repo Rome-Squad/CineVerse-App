@@ -1,7 +1,7 @@
 package com.giraffe.media.util
 
+import com.giraffe.media.exception.ApiException
 import com.giraffe.media.person.util.ApiErrorResponse
-import com.giraffe.media.person.util.ApiException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

@@ -2,13 +2,13 @@ package com.giraffe.media.person
 
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.exception.PersonException
-import com.giraffe.media.person.local.PersonLocalDataSource
-import com.giraffe.media.person.local.cacheDto.PersonCacheDto
-import com.giraffe.media.person.remote.PersonRemoteDataSource
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.response.PersonResponse
 import com.giraffe.media.person.response.SearchPersonResponse
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.person.util.toMovieCredits
+import com.giraffe.media.person.mapper.toEntity
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -119,7 +119,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(dummyPersonCacheDto) } just Runs
         //when
-        repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits())
+        repository.storeRecentPerson(dummyPersonCacheDto.toEntity())
         //then
         coVerify(exactly = 1) { localDataSource.storePerson(match { it.isRecent }) }
     }
@@ -129,7 +129,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(any()) } throws Exception()
         //when && then
-        assertThrows<PersonException> { repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits()) }
+        assertThrows<PersonException> { repository.storeRecentPerson(dummyPersonCacheDto.toEntity()) }
     }
 
 

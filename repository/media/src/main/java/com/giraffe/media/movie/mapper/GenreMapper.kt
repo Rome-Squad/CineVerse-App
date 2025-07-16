@@ -1,8 +1,8 @@
 package com.giraffe.media.movie.mapper
 
 import com.giraffe.media.movies.entity.MovieGenre
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
+import  com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
+import  com.giraffe.media.movie.model.dto.MovieGenreDto
 
 fun MovieGenreCacheDto.toEntity() = MovieGenre(id, name)
 
