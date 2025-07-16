@@ -10,9 +10,9 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 
-class IslamicImageClassifierImpl(
+class SafeIslamicImageClassifierImpl(
     context: Context
-) : IslamicImageClassifier {
+) : SafeIslamicImageClassifier {
 
     // Interpreter to run the Model
     private val interpreter: Interpreter

@@ -25,7 +25,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.AsyncImagePainter.Companion.DefaultTransform
 import coil.request.ImageRequest
 import com.giraffe.imageviewer.R
-import com.giraffe.imageviewer.mlmodel.IslamicImageClassifierImpl
+import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifierImpl
 import com.giraffe.imageviewer.blur.BlurTransformer
 import com.giraffe.imageviewer.utils.drawableToBitmap
 import java.io.ByteArrayOutputStream
@@ -82,7 +82,7 @@ fun SafeIslamicImage(
                     100, outputStream
                 )
 
-                val classifier = IslamicImageClassifierImpl(context)
+                val classifier = SafeIslamicImageClassifierImpl(context)
                 shouldBlur = classifier.isUnsafe(bitmap)
             }
 
