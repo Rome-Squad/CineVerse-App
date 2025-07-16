@@ -2,7 +2,6 @@ package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.components.CastMember
-import com.giraffe.details.components.StaffMember
 import com.giraffe.details.screens.moviedetails.model.MovieUi
 import com.giraffe.media.movies.entity.MovieReview
 
@@ -12,7 +11,7 @@ data class MovieDetailsScreenState(
     val movie: MovieUi = MovieUi(),
     val movieGenres: List<String> = emptyList(),
     val cast: List<CastMember> = emptyList(),
-    val crew: List<StaffMember> = emptyList(),
+    val crew: Map<String, List<String>> = emptyMap(),
 
     val recommendedMovies: List<Poster> = emptyList(),
 

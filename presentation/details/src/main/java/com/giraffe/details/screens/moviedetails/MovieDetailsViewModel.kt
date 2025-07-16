@@ -95,6 +95,12 @@ class MovieDetailsViewModel(
     private fun loadMoviePeopleSuccess(people: List<Person>) {
         val cast = people.filter { it.role == "Acting" }
         val crew = people.filter { it.role != "Acting" }
+        val mappedCrew = crew.map { person ->
+            StaffMember(
+                name = person.name,
+                role = person.role
+            )
+        }
         updateState {
             it.copy(
                 isLoadingCast = false,
@@ -105,12 +111,7 @@ class MovieDetailsViewModel(
                         image = person.imageUrl
                     )
                 },
-                crew = crew.map { person->
-                    StaffMember(
-                        name = person.name,
-                        role = person.role
-                    )
-                },
+                crew = mappedCrew.groupBy { it.role }.mapValues { crew-> crew.value.map { it.name } }
             )
         }
     }
