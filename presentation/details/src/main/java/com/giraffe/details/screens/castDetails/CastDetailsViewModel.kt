@@ -52,11 +52,11 @@ class CastDetailsViewModel(
         updateState {
             it.copy(
                 isLoading = false,
-                actorImage = person.imageUrl.orEmpty(),
+                actorImageUrl = person.imageUrl.orEmpty(),
                 actorName = person.name,
                 actorBirth = person.birthday.orEmpty(),
                 actorPlace = person.placeOfBirth.orEmpty(),
-                actorGalleryImages = person.images,
+                actorGalleryImageUrls = person.images,
                 biographyInfo = person.biography.orEmpty(),
                 //should be edit this line to use the correct response
                 posters = person.movieCredits.map { person ->

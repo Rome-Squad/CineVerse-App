@@ -17,7 +17,7 @@ import com.giraffe.details.R
 @Composable
 fun GallerySection(
     modifier: Modifier = Modifier,
-    images: List<String?>,
+    imageUrls: List<String?>,
     onShowMoreClick: () -> Unit,
 ) {
     Column(
@@ -31,7 +31,7 @@ fun GallerySection(
             onClickableText = onShowMoreClick,
             modifier = Modifier.fillMaxWidth()
         )
-        GalleryItemLayoutLTR(images = images)
+        GalleryItemLayoutLTR(imageUrls = imageUrls)
     }
 }
 
@@ -43,7 +43,7 @@ fun GallerySectionPreview() {
             modifier = Modifier
                 .height(314.dp)
                 .fillMaxWidth(),
-            images = listOf(
+            imageUrls = listOf(
                 null,
                 null,
                 "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"

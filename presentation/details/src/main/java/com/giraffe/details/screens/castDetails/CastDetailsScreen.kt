@@ -26,7 +26,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
@@ -38,7 +37,6 @@ import com.giraffe.details.R
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
-import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -110,7 +108,7 @@ fun CastDetailsContent(
             Box {
                 MainDetailsAnimatedContent(
                     isScrolled = isScrolled,
-                    actorImage = state.actorImage.imageSourceToPainter(),
+                    actorImageUrl = state.actorImageUrl,
                     actorName = state.actorName,
                     actorBirthday = state.actorBirth,
                     actorPlaceOfBirth = state.actorPlace,
@@ -140,7 +138,7 @@ fun CastDetailsContent(
                     .height(314.dp)
                     .fillMaxWidth()
                     .padding(horizontal = padding16),
-                images = state.actorGalleryImages,
+                imageUrls = state.actorGalleryImageUrls,
                 onShowMoreClick = onShowMoreActorGalleryClick
             )
         }
@@ -159,10 +157,10 @@ fun CastDetailsContent(
 @OptIn(ExperimentalSharedTransitionApi::class)
 private fun MainDetailsAnimatedContent(
     isScrolled: Boolean,
-    actorImage: Painter,
     actorName: String,
     actorBirthday: String,
     actorPlaceOfBirth: String,
+    actorImageUrl: String?,
     onYoutubeClick: () -> Unit,
     onFacebookClick: () -> Unit,
     onInstagramClick: () -> Unit,
@@ -186,7 +184,7 @@ private fun MainDetailsAnimatedContent(
                 true -> {
                     MainDetailsHeader(
                         modifier = Modifier.padding(horizontal = horizontalPadding),
-                        actorImage = actorImage,
+                        actorImageUrl = actorImageUrl,
                         actorName = actorName,
                         animatedVisibilityScope = this@AnimatedContent,
                         sharedTransitionScope = this@SharedTransitionLayout,
@@ -198,7 +196,7 @@ private fun MainDetailsAnimatedContent(
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
                             .padding(top = topPadding),
-                        actorImage = actorImage,
+                        actorImageUrl = actorImageUrl,
                         actorName = actorName,
                         actorBirthday = actorBirthday,
                         actorPlaceOfBirth = actorPlaceOfBirth,

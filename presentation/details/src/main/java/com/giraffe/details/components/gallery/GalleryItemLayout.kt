@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun GalleryItemLayoutLTR(
-    images: List<String?>,
+    imageUrls: List<String?>,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -27,17 +27,17 @@ fun GalleryItemLayoutLTR(
             modifier = Modifier.weight(0.5f)
 
         ) {
-            images.getOrNull(1)?.let {
+            imageUrls.getOrNull(1)?.let {
                 GalleryItem(
-                    image = it,
+                    imageUrl = it,
                     modifier = Modifier
                         .fillMaxHeight(0.5f)
                         .fillMaxWidth()
                 )
             }
-            images.getOrNull(2)?.let {
+            imageUrls.getOrNull(2)?.let {
                 GalleryItem(
-                    image = it,
+                    imageUrl = it,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(0.5f)
@@ -45,9 +45,9 @@ fun GalleryItemLayoutLTR(
                 )
             }
         }
-        images.getOrNull(0)?.let {
+        imageUrls.getOrNull(0)?.let {
             GalleryItem(
-                image = it,
+                imageUrl = it,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize()
@@ -58,7 +58,7 @@ fun GalleryItemLayoutLTR(
 
 @Composable
 fun GalleryItemLayoutRTL(
-    images: List<String?>,
+    imageUrls: List<String?>,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -66,9 +66,9 @@ fun GalleryItemLayoutRTL(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier.fillMaxWidth()
     ) {
-        images.getOrNull(0)?.let {
+        imageUrls.getOrNull(0)?.let {
             GalleryItem(
-                image = it,
+                imageUrl = it,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize()
@@ -80,17 +80,17 @@ fun GalleryItemLayoutRTL(
             modifier = Modifier.weight(0.5f)
 
         ) {
-            images.getOrNull(1)?.let {
+            imageUrls.getOrNull(1)?.let {
                 GalleryItem(
-                    image = it,
+                    imageUrl = it,
                     modifier = Modifier
                         .fillMaxHeight(0.5f)
                         .fillMaxWidth()
                 )
             }
-            images.getOrNull(2)?.let {
+            imageUrls.getOrNull(2)?.let {
                 GalleryItem(
-                    image = it,
+                    imageUrl = it,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(0.5f)

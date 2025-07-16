@@ -11,25 +11,31 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
 import com.giraffe.details.components.gallery.GalleryItemLayoutLTR
 import com.giraffe.details.components.gallery.GalleryItemLayoutRTL
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
-@Preview
 @Composable
 fun GalleryScreen(
-    images: List<String?> = emptyList(),
-    galleryViewModel: GalleryViewModel = koinViewModel(parameters = { parametersOf(images) })
+    actorName: String,
+    imageUrls: List<String?>,
 ) {
-    val state by galleryViewModel.state.collectAsState()
+    val state: GalleryUiState by remember {
+        mutableStateOf(
+            GalleryUiState(
+                actorName = actorName,
+                imageUrls = imageUrls
+            )
+        )
+    }
     GalleryContent(state = state)
 }
 
@@ -43,33 +49,33 @@ fun GalleryContent(
             .systemBarsPadding()
     ) {
         AppBar(
-            title = state.actorName,
+            title = state.actorName + " " + stringResource(R.string.gallery),
             showBackButton = true,
             hasBackground = false,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        ImageGalleryLayout(images = state.images)
+        ImageGalleryLayout(imageUrls = state.imageUrls)
     }
 }
 
 @Composable
-fun ImageGalleryLayout(images: List<String>) {
+fun ImageGalleryLayout(imageUrls: List<String?>) {
     LazyColumn(
         contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
         verticalArrangement = Arrangement.Top,
         modifier = Modifier.fillMaxSize(),
     ) {
-        items(images.chunked(6)) { subImages ->
-            if (subImages.take(3).isNotEmpty()) {
+        items(imageUrls.chunked(6)) { subImageUrls ->
+            if (subImageUrls.take(3).isNotEmpty()) {
                 GalleryItemLayoutLTR(
-                    images = subImages.take(3),
+                    imageUrls = subImageUrls.take(3),
                     modifier = Modifier
                         .height(280.dp)
                         .padding(top = 6.dp, bottom = 6.dp),
                 )
-                if (subImages.size > 3) {
+                if (subImageUrls.size > 3) {
                     GalleryItemLayoutRTL(
-                        images = subImages.subList(3, subImages.size),
+                        imageUrls = subImageUrls.subList(3, subImageUrls.size),
                         modifier = Modifier
                             .height(280.dp)
                             .padding(top = 6.dp, bottom = 6.dp),

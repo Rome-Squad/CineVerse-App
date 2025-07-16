@@ -30,12 +30,12 @@ import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
 
 @Composable
 fun GalleryItem(
-    image: String?,
+    imageUrl: String?,
     modifier: Modifier = Modifier
 ) {
     val model = ImageRequest
         .Builder(LocalContext.current)
-        .data(image)
+        .data(imageUrl)
         .size(Size.ORIGINAL)
         .crossfade(true)
         .build()
@@ -46,7 +46,7 @@ fun GalleryItem(
 
     if (state is AsyncImagePainter.State.Success) {
         IslamicAppropriateImageViewer(
-            imageUrl = image.orEmpty(),
+            imageUrl = imageUrl.orEmpty(),
             placeHolderResId = Theme.icons.dueTone.image,
             modifier = modifier
                 .clip(RoundedCornerShape(Theme.radius.lg))
@@ -73,7 +73,7 @@ fun GalleryItem(
 fun GalleryItemPreview() {
     CineVerseTheme(isDarkTheme = true) {
         GalleryItem(
-            image = null,
+            imageUrl = null,
             modifier = Modifier
                 .height(128.dp)
                 .width(96.dp)

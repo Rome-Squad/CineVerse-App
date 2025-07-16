@@ -85,7 +85,7 @@ fun GallerySectionPreview() {
     CineVerseTheme(isDarkTheme = true) {
         GallerySection(
             modifier = Modifier.height(314.dp),
-            images = listOf(
+            imageUrls = listOf(
                 null,
                 null,
                 "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
@@ -136,7 +136,7 @@ fun MainDetailsPreview() {
                 ) { targetState ->
                     when (targetState) {
                         true -> MainDetailsHeader(
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
@@ -144,7 +144,7 @@ fun MainDetailsPreview() {
 
                         false -> MainDetails(
                             modifier = Modifier.padding(top = 72.dp),
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
