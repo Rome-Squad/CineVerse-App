@@ -5,7 +5,7 @@ import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
@@ -60,7 +60,7 @@ class SeriesRepositoryImplTest {
     )
 
     private val cachedSeries = listOf(
-        CachedSeriesDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
+        SeriesCacheDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
     )
 
     private val cachedSeasons = listOf(

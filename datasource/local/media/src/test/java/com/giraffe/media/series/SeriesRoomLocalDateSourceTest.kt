@@ -1,8 +1,8 @@
 package com.giraffe.media.series
 
-import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -20,7 +20,7 @@ class SeriesRoomLocalDateSourceTest {
  private lateinit var dataSource: SeriesRoomLocalDateSource
 
  private val sampleSeries = listOf(
-  CachedSeriesDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
+  SeriesCacheDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
  )
  private val sampleSeasons = listOf(
   CachedSeasonDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
@@ -146,7 +146,7 @@ class SeriesRoomLocalDateSourceTest {
  }
  @Test
  fun `saveSearchResult sets isRecent to false if series not in DB`() = runTest {
-  val series = listOf(CachedSeriesDto(2, "Loki", "desc", 9.0f,  "poster", listOf(2), "2021", isRecent = true))
+  val series = listOf(SeriesCacheDto(2, "Loki", "desc", 9.0f,  "poster", listOf(2), "2021", isRecent = true))
 
   coEvery { dao.getSeriesByIds(listOf(2)) } returns emptyList()
 
