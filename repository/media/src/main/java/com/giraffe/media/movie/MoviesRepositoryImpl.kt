@@ -27,7 +27,7 @@ class MoviesRepositoryImpl(
             val remoteMovies =
                 remote.getMoviesByName(movieName).map { it.toMovie() }
             insertMovies(remoteMovies)
-            remoteMovies
+            return@SafeCall remoteMovies
         }
         cachedMovies
     }
@@ -44,10 +44,8 @@ class MoviesRepositoryImpl(
         val isCached = cachedMovieGenres.isNotEmpty()
         if (!isCached) {
             val remoteMovieGenres = remote.getMovieGenres().map { it.toEntity() }
-
             insertGenres(remoteMovieGenres)
-
-            remoteMovieGenres
+            return@SafeCall remoteMovieGenres
         }
 
         cachedMovieGenres
