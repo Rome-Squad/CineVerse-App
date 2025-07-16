@@ -7,7 +7,7 @@ import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toCacheDto
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.ExploreRepository
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
