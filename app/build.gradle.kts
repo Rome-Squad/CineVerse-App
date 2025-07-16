@@ -111,7 +111,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
-
     //datastore
     implementation(libs.datastore.preferences)
 
@@ -125,6 +124,7 @@ dependencies {
     //room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.firebase.perf.ktx)
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
 
