@@ -1,4 +1,4 @@
-package com.giraffe.media.explore
+package com.giraffe.explore
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -56,6 +57,11 @@ fun ExploreContent(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+    val genres = rememberSaveable(
+        state.selectedTab,
+        state.moviesGenres,
+        state.seriesGenres
+    ) { if (state.selectedTab == SearchTab.MOVIES) state.moviesGenres else state.seriesGenres }
     Box {
         LazyColumn(
             modifier = modifier
@@ -86,9 +92,10 @@ fun ExploreContent(
             item {
                 if (!state.isSearchFieldFocused) {
                     ExploreItemsSection(
-                        Modifier.fillParentMaxHeight(),
+                        modifier = Modifier.fillParentMaxHeight(),
+                        posters = state.movieResults,
                         selectedGenre = state.selectedGenre ?: GenreUi(title = "All"),
-                        genres = listOf(GenreUi(title = "All")) + state.genres,
+                        genres = listOf(GenreUi(title = "All")) + genres,
                         isGridSelected = state.isGridSelected,
                         onGenreSelected = interactions::onGenreSelected
                     )
@@ -136,6 +143,7 @@ fun ExploreContent(
 @Composable
 private fun ExploreItemsSection(
     modifier: Modifier = Modifier,
+    posters: List<Poster>,
     selectedGenre: GenreUi,
     genres: List<GenreUi>,
     isGridSelected: Boolean,
@@ -146,10 +154,13 @@ private fun ExploreItemsSection(
             .fillMaxWidth()
             .background(Theme.color.background.screen)
     ) {
-        CardsSection(isGridSelected = isGridSelected)
+        CardsSection(
+            posters = posters,
+            isGridSelected = isGridSelected
+        )
         GenresSection(
-            selectedGenre = selectedGenre,
             genres = genres,
+            selectedGenre = selectedGenre,
             onGenreSelected = onGenreSelected
         )
     }
@@ -179,18 +190,10 @@ private fun GenresSection(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun CardsSection(isGridSelected: Boolean) {
-    val poster = Poster(
-        id = 5,
-        name = "spider man",
-        imageUri ="https://image.tmdb.org/t/p/w185/7bcndiaTgu1Kj5a6qyCmsWYdtI.jpg",
-        rating = 6.5f
-    )
+private fun CardsSection(posters: List<Poster>, isGridSelected: Boolean) {
     TransitionLazyColumnToGrid(
+        poster = posters,
         isListSelected = !isGridSelected,
-        poster = List(25) {
-            poster.copy(id = it)
-        },
         contentPadding = PaddingValues(vertical = 60.dp)
     )
 }
