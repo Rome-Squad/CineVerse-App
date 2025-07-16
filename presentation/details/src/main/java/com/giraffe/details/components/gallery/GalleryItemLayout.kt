@@ -25,32 +25,26 @@ fun GalleryItemLayoutLTR(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.weight(0.5f)
         ) {
-            imageUrls.getOrNull(1)?.let {
-                GalleryItem(
-                    imageUrl = imageUrls.getOrNull(1),
-                    modifier = Modifier
-                        .fillMaxHeight(0.475f)
-                        .fillMaxWidth()
-                )
-            }
-            imageUrls.getOrNull(2)?.let {
-                GalleryItem(
-                    imageUrl = it,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(0.5f)
-                        .fillMaxWidth()
-                )
-            }
-        }
-        imageUrls.getOrNull(0)?.let {
             GalleryItem(
-                imageUrl = it,
+                imageUrl = imageUrls.getOrNull(1),
+                modifier = Modifier
+                    .fillMaxHeight(0.475f)
+                    .fillMaxWidth()
+            )
+            GalleryItem(
+                imageUrl = imageUrls.getOrNull(2),
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(0.5f)
+                    .fillMaxWidth()
             )
         }
+        GalleryItem(
+            imageUrl = imageUrls.getOrNull(0),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        )
     }
 }
 
@@ -64,37 +58,31 @@ fun GalleryItemLayoutRTL(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier.fillMaxWidth()
     ) {
-        imageUrls.getOrNull(0)?.let {
-            GalleryItem(
-                imageUrl = it,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            )
-        }
+        GalleryItem(
+            imageUrl = imageUrls.getOrNull(0),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.weight(0.5f)
 
         ) {
-            imageUrls.getOrNull(1)?.let {
-                GalleryItem(
-                    imageUrl = it,
-                    modifier = Modifier
-                        .fillMaxHeight(0.475f)
-                        .fillMaxWidth()
-                )
-            }
-            imageUrls.getOrNull(2)?.let {
-                GalleryItem(
-                    imageUrl = it,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(0.5f)
-                        .fillMaxWidth()
-                )
-            }
+            GalleryItem(
+                imageUrl = imageUrls.getOrNull(1),
+                modifier = Modifier
+                    .fillMaxHeight(0.475f)
+                    .fillMaxWidth()
+            )
+            GalleryItem(
+                imageUrl = imageUrls.getOrNull(2),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(0.5f)
+                    .fillMaxWidth()
+            )
         }
     }
 }

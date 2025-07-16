@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,13 +22,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +49,7 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -80,26 +82,39 @@ fun MainDetails(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 actorImageUrl?.let {
-                    IslamicAppropriateImageViewer(
+                    val shapeImage = RoundedCornerShape(
+                        topStart = Theme.radius.xl,
+                        topEnd = Theme.radius.s,
+                        bottomStart = Theme.radius.s,
+                        bottomEnd = Theme.radius.xl
+                    )
+                    SafeIslamicImage(
                         imageUrl = actorImageUrl,
-                        placeHolderResId = Theme.icons.dueTone.image,
+                        contentDescription = actorName,
                         modifier = Modifier
                             .sharedElement(
                                 sharedContentState = rememberSharedContentState(key = actorImageUrl.toString() + key),
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
-                            .height(80.dp)
-                            .width(64.dp)
-                            .clip(
-                                shape = RoundedCornerShape(
-                                    topStart = Theme.radius.xl,
-                                    topEnd = Theme.radius.s,
-                                    bottomStart = Theme.radius.s,
-                                    bottomEnd = Theme.radius.xl
-                                )
-                            )
+                            .size(height = 80.dp, width = 64.dp)
+                            .clip(shape = shapeImage)
                             .fillMaxHeight(),
-                    )
+                    ) {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.image),
+                            contentDescription = actorName,
+                            tint = Theme.color.brand.secondary,
+                            modifier = Modifier
+                                .size(height = 80.dp, width = 64.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Theme.color.stroke.primary,
+                                    shape = shapeImage
+                                )
+                                .clip(shape = shapeImage)
+                                .wrapContentSize()
+                        )
+                    }
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
@@ -171,6 +186,7 @@ fun SocialMediaComponent(
             .clip(shape = RoundedCornerShape(Theme.radius.full))
             .background(Theme.color.shade.quinary)
             .clickable(onClick = onClick)
+            .wrapContentSize()
             .padding(
                 start = 10.dp,
                 end = 12.dp,
@@ -217,9 +233,9 @@ fun MainDetailsHeader(
                 modifier = modifier.padding(start = 40.dp)
             ) {
                 actorImageUrl?.let {
-                    IslamicAppropriateImageViewer(
+                    SafeIslamicImage(
                         imageUrl = it,
-                        placeHolderResId = Theme.icons.dueTone.image,
+                        contentDescription = actorName,
                         modifier = Modifier
                             .sharedElement(
                                 sharedContentState = rememberSharedContentState(key = actorImageUrl + key),
@@ -227,7 +243,21 @@ fun MainDetailsHeader(
                             )
                             .size(40.dp)
                             .clip(CircleShape)
-                    )
+                    ) {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.image),
+                            contentDescription = actorName,
+                            tint = Theme.color.brand.secondary,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    Theme.color.background.card,
+                                    shape = CircleShape
+                                )
+                                .padding(12.dp)
+                                .wrapContentSize(),
+                        )
+                    }
                 }
                 Text(
                     style = Theme.textStyle.title.md,
