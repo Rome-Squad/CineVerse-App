@@ -20,7 +20,7 @@ class IslamicImageClassifierImpl(
 
     init {
         // Load the TFLite model from assets
-        val modelFile = loadModelFile(context, "mustafa_islamic_safe_image_classifier.tflite")
+        val modelFile = loadModelFile(context)
         interpreter = Interpreter(modelFile)
     }
 
@@ -95,7 +95,7 @@ class IslamicImageClassifierImpl(
         val unsafeScore = result["unsafe"] ?: 1f
 
         val isUnsafe = when {
-            unsafeScore > .4f -> true
+            unsafeScore > .25f -> true
             unsafeScore >= safeScore -> true
             else -> false
         }
