@@ -44,7 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun MovieDetails(
+fun MovieDetailsScreen(
     movieID: Int,
     modifier: Modifier = Modifier,
     viewModel: MovieDetailsViewModel = koinViewModel()
@@ -232,7 +232,7 @@ private fun MovieDetailsPreview() {
     CineVerseTheme(
         isDarkTheme = false
     ) {
-        MovieDetails(
+        MovieDetailsScreen(
             movieID = 286,
         )
     }
