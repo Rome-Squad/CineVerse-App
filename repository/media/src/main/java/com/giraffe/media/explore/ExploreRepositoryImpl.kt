@@ -2,7 +2,7 @@ package com.giraffe.media.explore
 
 import com.giraffe.media.explore.utils.getCurrentLocalDateTime
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.media.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toCacheDto
 import com.giraffe.media.explore.mapper.toEntity
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 
 class ExploreRepositoryImpl(
     private val cache: LocalExploreDataSource,
-    private val remote: RemoteExploreDataSource,
+    private val remote: ExploreRemoteDataSource,
 ): ExploreRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {

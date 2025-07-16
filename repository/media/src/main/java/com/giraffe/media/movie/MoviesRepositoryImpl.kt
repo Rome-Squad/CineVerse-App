@@ -66,23 +66,13 @@ class MoviesRepositoryImpl(
 
     }
 
-    override suspend fun getMoviesByGenre(genreId: Int): List<Movie> {
-        return safeCall {
-
-            val cachedMovies = cache.getMoviesByGenre(genreId).map { it.toMovie() }
-            val isCached = cachedMovies.isNotEmpty()
-
-            if (!isCached) {
-                val remoteMovies = remote.getMoviesByGenre(genreId).map { it.toMovie() }
-
+    override suspend fun getMoviesByGenres(genreIds: List<Int>) = safeCall {
+        cache.getMoviesByGenre(0).map { it.toMovie() }
+            .ifEmpty {
+                val remoteMovies = remote.getMoviesByGenres(genreIds).map { it.toMovie() }
                 insertMovies(remoteMovies)
-
-                return (remoteMovies + cachedMovies).distinct()
+                remoteMovies
             }
-
-            return cachedMovies
-
-        }
     }
 
     override suspend fun insertMovies(movie: List<Movie>) {

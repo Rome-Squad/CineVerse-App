@@ -2,6 +2,7 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
@@ -11,7 +12,6 @@ import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.mapper.toSeriesEntity
 import com.giraffe.media.series.mapper.toSeriesReviewsEntity
-import com.giraffe.media.series.model.SeriesDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.series.utils.safeCall
 

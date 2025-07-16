@@ -11,7 +11,7 @@ import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
-import com.giraffe.media.movies.usecase.GetMoviesByGenreUseCase
+import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetUserMovieRatingUseCase
@@ -64,7 +64,7 @@ val useCaseModule = module {
     // Movie UseCases
     singleOf(::SearchMovieByNameUseCase)
     singleOf(::GetMoviesGenresUseCase)
-    singleOf(::GetMoviesByGenreUseCase)
+    singleOf(::GetMoviesByGenresUseCase)
     singleOf(::InsertMoviesUseCase)
     singleOf(::InsertGenresUseCase)
     singleOf(::ClearCacheUseCase)
@@ -83,7 +83,7 @@ val useCaseModule = module {
         MoviesUseCases(
             searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
             getMoviesGenresUseCase = GetMoviesGenresUseCase(get()),
-            getMoviesByGenreUseCase = GetMoviesByGenreUseCase(get()),
+            getMoviesByGenresUseCase = GetMoviesByGenresUseCase(get()),
             insertMoviesUseCase = InsertMoviesUseCase(get()),
             insertGenresUseCase = InsertGenresUseCase(get()),
             clearCacheUseCase = ClearCacheUseCase(get()),
