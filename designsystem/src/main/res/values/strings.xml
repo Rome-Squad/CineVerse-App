@@ -37,4 +37,5 @@
     <string name="match">Match</string>
     <string name="explore">Explore</string>
     <string name="home">Home</string>
+    <string name="placeholder">Placeholder</string>
 </resources>
