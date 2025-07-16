@@ -43,6 +43,7 @@ data class ExploreScreenState(
         return copy(errorMessage = id, isLoading = false)
     }
 }
+const val TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
 enum class SearchTab {
     MOVIES, SERIES, ACTORS
@@ -57,7 +58,7 @@ fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl.orEmpty(),
+        imageUri = posterUrl?.let { TMDB_IMAGE_BASE_URL + it }.orEmpty(),
         rating = rating,
         genres = genreTitles,
         time = duration.toString(),
