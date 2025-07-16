@@ -110,6 +110,11 @@ fun SafeIslamicImage(
                 .build(),
             contentDescription = contentDescription,
             contentScale = contentScale,
+            alignment = alignment,
+            alpha = alpha,
+            colorFilter = colorFilter,
+            filterQuality = filterQuality,
+            transform = transform,
             modifier = modifier
         )
 
