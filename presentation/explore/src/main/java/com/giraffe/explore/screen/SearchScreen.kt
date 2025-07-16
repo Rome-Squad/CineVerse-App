@@ -217,12 +217,21 @@ private fun ExploreScreenPreview() {
                 override fun onVoiceSearchClick() {}
                 override fun onClearRecentViewed() {}
                 override fun onSuggestionClick(suggestion: SearchKeyword) {}
+                override fun getMoviesByGenres(genresIds: List<Int>) {
+
+                }
+
+                override fun getSeriesByGenres(genresIds: List<Int>) {
+
+                }
+
                 override fun onTabSelected(tabIndex: Int) {}
                 override fun onViewChanged(isGrid: Boolean) {}
                 override fun onPermissionResult(granted: Boolean) {}
                 override fun onVoiceSearchFinished() {}
                 override fun onGenreSelected(genre: GenreUi) {}
                 override fun onFocusChanged(isFocused: Boolean) {}
+                override fun onSearchModeChanged(isSearchMode: Boolean) {}
             }
         )
     }

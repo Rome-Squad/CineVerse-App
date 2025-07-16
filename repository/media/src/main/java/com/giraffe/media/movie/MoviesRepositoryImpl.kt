@@ -23,17 +23,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun searchMovieByName(movieName: String): List<Movie> {
         return SafeCall {
-            val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
-            val isCached = cachedMovies.isNotEmpty()
-
-            if (!isCached) {
-                val remoteMovies =
-                    remote.getMoviesByName(movieName).map { it.toMovie() }
-                insertMovies(remoteMovies)
-                return remoteMovies
-            }
-
-            return cachedMovies
+            remote.getMoviesByName(movieName).map { it.toMovie() }
         }
     }
 

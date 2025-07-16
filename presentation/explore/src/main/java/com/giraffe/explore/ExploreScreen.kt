@@ -1,6 +1,7 @@
 package com.giraffe.explore
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,6 +66,9 @@ fun ExploreContent(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+    LaunchedEffect(state.isSearchFieldFocused) {
+        if (!state.isSearchFieldFocused) focusManager.clearFocus()
+    }
     Box {
         LazyColumn(
             modifier = modifier
@@ -75,14 +80,17 @@ fun ExploreContent(
             stickyHeader {
                 ExploreHeader(
                     modifier = Modifier.padding(bottom = 12.dp),
-                    showBackButton = state.isSearchFieldFocused,
-                    endIcon = if (state.isSearchFieldFocused) painterResource(Theme.icons.outline.close) else painterResource(
+                    showBackButton = state.isSearchMode,
+                    endIcon = if (state.isSearchMode) painterResource(Theme.icons.outline.close) else painterResource(
                         Theme.icons.outline.microphone
                     ),
                     onValueChange = interactions::onSearchQueryChange,
                     value = state.searchQuery,
                     placeholder = stringResource(R.string.search),
-                    onFocusChanged = interactions::onFocusChanged,
+                    onFocusChanged = {
+                        interactions.onFocusChanged(it)
+                        if (it) interactions.onSearchModeChanged(true)
+                    },
                     onEndIconClick = {
                         if (state.isSearchFieldFocused) {
                             interactions.onSearchQueryChange("")
@@ -90,7 +98,12 @@ fun ExploreContent(
                             //search by voice
                         }
                     },
-                    onBackClick = { focusManager.clearFocus() },
+                    onBackClick = {
+                        interactions.onFocusChanged(false)
+                        interactions.onSearchModeChanged(false)
+                        interactions.getMoviesByGenres()
+                        interactions.getSeriesByGenres()
+                    },
                 )
             }
             if (!state.isSearchFieldFocused) stickyHeader {
@@ -110,6 +123,7 @@ fun ExploreContent(
                             ?: GenreUi(title = stringResource(R.string.all)),
                         genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
                         isGridSelected = state.isGridSelected,
+                        isSearchMode = state.isSearchMode,
                         onGenreSelected = interactions::onGenreSelected,
                     )
                 }
@@ -166,6 +180,7 @@ private fun ExploreItemsSection(
     selectedGenre: GenreUi,
     genres: List<GenreUi>,
     isGridSelected: Boolean,
+    isSearchMode: Boolean,
     onGenreSelected: (GenreUi) -> Unit,
 ) {
     Box(
@@ -174,13 +189,14 @@ private fun ExploreItemsSection(
             .background(Theme.color.background.screen)
     ) {
         var isScrollUp by remember { mutableStateOf(true) }
+        val padding = animateDpAsState(if (isSearchMode) 0.dp else 60.dp).value
         TransitionLazyColumnToGrid(
             poster = posters,
             isListSelected = !isGridSelected,
-            contentPadding = PaddingValues(vertical = 60.dp),
+            contentPadding = PaddingValues(vertical = padding),
             onScroll = { isScrollUp = it }
         )
-        GenresSection(
+        if (!isSearchMode) GenresSection(
             genres = genres,
             selectedGenre = selectedGenre,
             onGenreSelected = onGenreSelected
@@ -232,6 +248,12 @@ private fun Preview() {
                 override fun onClearRecentViewed() {}
 
                 override fun onSuggestionClick(suggestion: SearchKeyword) {}
+                override fun getMoviesByGenres(genresIds: List<Int>) {
+
+                }
+
+                override fun getSeriesByGenres(genresIds: List<Int>) {
+                }
 
                 override fun onTabSelected(tabIndex: Int) {}
 
@@ -243,6 +265,7 @@ private fun Preview() {
 
                 override fun onGenreSelected(genre: GenreUi) {}
                 override fun onFocusChanged(isFocused: Boolean) {}
+                override fun onSearchModeChanged(isSearchMode: Boolean) {}
             }
         )
     }

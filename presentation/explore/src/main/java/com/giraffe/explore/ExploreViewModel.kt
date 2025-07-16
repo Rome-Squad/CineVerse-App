@@ -78,21 +78,29 @@ class ExploreViewModel(
         }
     }
 
-    private fun getMoviesByGenres(genresIds: List<Int> = emptyList()) {
+    override fun getMoviesByGenres(genresIds: List<Int>) {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val movies =
                 getMoviesByGenresUseCase(genresIds).map { it.toPoster(_state.value.moviesGenres) }
             _state.update { it.copy(movieResults = movies) }
-            if (_state.value.selectedTab == SearchTab.MOVIES) _state.update { it.copy(selectedPosters = movies) }
+            if (_state.value.selectedTab == SearchTab.MOVIES) _state.update {
+                it.copy(
+                    selectedPosters = movies
+                )
+            }
         }
     }
 
-    private fun getSeriesByGenres(genresIds: List<Int> = emptyList()) {
+    override fun getSeriesByGenres(genresIds: List<Int>) {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val series =
                 getSeriesByGenresUseCase(genresIds).map { it.toPoster(_state.value.seriesGenres) }
             _state.update { it.copy(seriesResults = series) }
-            if (_state.value.selectedTab == SearchTab.SERIES) _state.update { it.copy(selectedPosters = series) }
+            if (_state.value.selectedTab == SearchTab.SERIES) _state.update {
+                it.copy(
+                    selectedPosters = series
+                )
+            }
         }
     }
 
@@ -107,8 +115,10 @@ class ExploreViewModel(
                         _state.value.selectedSeriesGenre,
                     selectedPosters = if (SearchTab.entries[tabIndex] == SearchTab.MOVIES)
                         _state.value.movieResults
+                    else if (SearchTab.entries[tabIndex] == SearchTab.SERIES)
+                        _state.value.seriesResults
                     else
-                        _state.value.seriesResults,
+                        _state.value.actorResults,
                 )
             }
         }
@@ -130,6 +140,67 @@ class ExploreViewModel(
         }
     }
 
+    override fun onSuggestionClick(suggestion: SearchKeyword) {
+        _state.update { it.copy(isSearchFieldFocused = false, searchTabs = SearchTab.entries) }
+        loadMoviesResult(suggestion)
+        loadSeriesResults(suggestion)
+        loadPeopleResults(suggestion)
+    }
+
+    private fun loadMoviesResult(keyword: SearchKeyword) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            val moviesPosters = searchMovieByName(keyword.keyword).map {
+                it.toPoster(_state.value.moviesGenres)
+            }
+            _state.update {
+                it.copy(
+                    movieResults = moviesPosters,
+                    selectedPosters = moviesPosters,
+                    searchKeyword = keyword,
+                )
+            }
+            if (_state.value.selectedTab == SearchTab.MOVIES) _state.update { it.copy(selectedPosters = moviesPosters) }
+        }
+    }
+
+    private fun loadSeriesResults(keyword: SearchKeyword) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            val seriesPosters = searchSeriesByName(keyword.keyword).map {
+                it.toPoster(_state.value.seriesGenres)
+            }
+            _state.update {
+                it.copy(
+                    seriesResults = seriesPosters,
+                    searchKeyword = keyword,
+                )
+            }
+            if (_state.value.selectedTab == SearchTab.SERIES) _state.update { it.copy(selectedPosters = seriesPosters) }
+        }
+    }
+
+    private fun loadPeopleResults(keyword: SearchKeyword) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            val actorsPosters = searchPeopleByName(keyword.keyword).map { it.toPoster() }
+            _state.update {
+                it.copy(
+                    actorResults = actorsPosters,
+                    searchKeyword = keyword,
+                )
+            }
+            if (_state.value.selectedTab == SearchTab.ACTORS) _state.update { it.copy(selectedPosters = actorsPosters) }
+        }
+    }
+
+    override fun onSearchModeChanged(isSearchMode: Boolean) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+             _state.update { it.copy(searchTabs =if (isSearchMode) SearchTab.entries else SearchTab.entries.take(2)) }
+            _state.update { it.copy(isSearchMode = isSearchMode) }
+        }
+    }
+
+
+
+
 
     private fun getRecent() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
@@ -142,67 +213,6 @@ class ExploreViewModel(
         }
     }
 
-    private fun loadMoviesResult(keyword: SearchKeyword) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            _state.update { it.copy(isLoading = true, errorMessage = null) }
-            val results = retryIO {
-                searchMovieByName(keyword.keyword).map {
-                    it.toPoster(_state.value.moviesGenres)
-                }
-            }
-            _state.update {
-                it.copy(
-                    movieResults = results,
-                    searchKeyword = keyword,
-                    isSearchResultsVisible = true,
-                    isSearchSuggestionsVisible = false,
-                    actorResults = emptyList()
-                )
-            }
-        }
-    }
-
-    private fun loadSeriesResults(keyword: SearchKeyword) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            _state.update { it.copy(isLoading = true, errorMessage = null) }
-
-
-            val results = retryIO {
-                searchSeriesByName(keyword.keyword).map {
-                    it.toPoster(_state.value.seriesGenres)
-                }
-            }
-            _state.update {
-                it.copy(
-                    seriesResults = results,
-                    searchKeyword = keyword,
-                    isSearchResultsVisible = true,
-                    isSearchSuggestionsVisible = false,
-                    actorResults = emptyList()
-                )
-            }
-        }
-    }
-
-    private fun loadPeopleResults(keyword: SearchKeyword) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            _state.update { it.copy(isLoading = true, errorMessage = null) }
-
-            val results = retryIO {
-                searchPeopleByName(keyword.keyword).map { it.toPoster() }
-            }
-            _state.update {
-                it.copy(
-                    actorResults = results,
-                    searchKeyword = keyword,
-                    isSearchResultsVisible = true,
-                    isSearchSuggestionsVisible = false,
-                    movieResults = emptyList(),
-                    seriesResults = emptyList(),
-                )
-            }
-        }
-    }
 
     override fun onClearSearchQuery() {
         debounceJob?.cancel()
@@ -267,11 +277,6 @@ class ExploreViewModel(
         }
     }
 
-    override fun onSuggestionClick(suggestion: SearchKeyword) {
-        loadMoviesResult(suggestion)
-        loadSeriesResults(suggestion)
-        loadPeopleResults(suggestion)
-    }
 
     override fun onViewChanged(isGrid: Boolean) {
         _state.update { it.copy(isGridSelected = isGrid) }

@@ -27,6 +27,7 @@ data class ExploreScreenState(
     // Tab , View Mode
     val selectedTab: SearchTab = SearchTab.MOVIES,
     val isGridSelected: Boolean = true,
+    val isSearchMode: Boolean = false,
 
     // Media Content
     //for movie and series
@@ -64,7 +65,7 @@ fun Movie.toPoster(allGenres: List<GenreUi>): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl?.let { TMDB_IMAGE_BASE_URL + it }.orEmpty(),
+        imageUri = TMDB_IMAGE_BASE_URL + posterUrl.orEmpty(),
         rating = rating,
         genres = genreTitles,
         time = duration.toString(),
@@ -81,7 +82,7 @@ fun Series.toPoster(allGenres: List<GenreUi>): Poster {
     return Poster(
         id = id,
         name = name,
-        imageUri = posterUrl.let { TMDB_IMAGE_BASE_URL + it },
+        imageUri = TMDB_IMAGE_BASE_URL + posterUrl,
         rating = rating,
         genres = genreTitles
     )
@@ -90,7 +91,7 @@ fun Series.toPoster(allGenres: List<GenreUi>): Poster {
 fun Person.toPoster(): Poster = Poster(
     id = id,
     name = name,
-    imageUri = imageUrl.orEmpty(),
+    imageUri = TMDB_IMAGE_BASE_URL + imageUrl.orEmpty(),
     rating = 0f
 )
 
