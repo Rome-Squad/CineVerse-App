@@ -37,18 +37,6 @@ fun Movie.toMovieCacheDto(): MovieCacheDto {
     )
 }
 
-fun Movie.toMovieDto(): MovieDto {
-    return MovieDto(
-        id = id,
-        title = title,
-        overview = description,
-        voteAverage = rating,
-        posterPath = posterUrl,
-        genresID = genresID,
-        releaseDate = releaseYear?.toString()
-    )
-}
-
 fun MovieDto.toMovie(): Movie {
     val date = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
     return Movie(

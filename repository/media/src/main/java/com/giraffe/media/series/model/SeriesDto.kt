@@ -8,7 +8,7 @@ import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
 
 
 @Entity(tableName = SERIES_TABLE)
-data class CachedSeriesDto(
+data class SeriesCacheDto(
     @PrimaryKey val id: Int,
     val name: String,
     val overview: String,

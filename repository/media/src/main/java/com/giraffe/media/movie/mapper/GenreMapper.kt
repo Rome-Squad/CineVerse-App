@@ -12,5 +12,3 @@ fun MovieGenreDto.toEntity() = MovieGenre(
     id = id,
     title = name
 )
-
-fun MovieGenre.toDto() = MovieGenreDto(id, title)

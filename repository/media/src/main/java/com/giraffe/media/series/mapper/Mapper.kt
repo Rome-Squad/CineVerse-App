@@ -9,7 +9,7 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
 import com.giraffe.media.series.entity.SeriesReview
 import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
 import kotlinx.datetime.LocalDate
@@ -18,7 +18,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-fun CachedSeriesDto.toEntity(
+fun SeriesCacheDto.toEntity(
     seasons: List<Season>,
 ): Series {
     return Series(
@@ -53,8 +53,8 @@ fun CachedSeriesGenreDto.toEntity(): SeriesGenre {
     )
 }
 
-fun Series.toCachedDto(): CachedSeriesDto {
-    return CachedSeriesDto(
+fun Series.toCachedDto(): SeriesCacheDto {
+    return SeriesCacheDto(
         id = id,
         name = name,
         overview = overview,
@@ -86,8 +86,8 @@ fun SeriesGenre.toCachedDto(): CachedSeriesGenreDto {
     )
 }
 
-fun SeriesDto.toCachedDto(): CachedSeriesDto {
-    return CachedSeriesDto(
+fun SeriesDto.toCachedDto(): SeriesCacheDto {
+    return SeriesCacheDto(
         id = id,
         name = name,
         overview = overview,
@@ -170,7 +170,7 @@ fun parseData(dateString: String): LocalDate? {
     return try {
         val instant = Instant.parse(dateString)
         instant.toLocalDateTime(TimeZone.UTC).date
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         null
     }
 }
@@ -183,7 +183,7 @@ fun SeriesDetailsDto.toSeasonEntity(): List<Season> {
             posterUrl = it.posterPath.toString(),
             name = it.name,
             rating = it.voteAverage,
-            releaseYear = it.airDate?.toString() ?: "",
+            releaseYear = it.airDate ?: "",
             overview = it.overview,
             episodeCount = it.episodeCount,
             seasonNumber = it.seasonNumber

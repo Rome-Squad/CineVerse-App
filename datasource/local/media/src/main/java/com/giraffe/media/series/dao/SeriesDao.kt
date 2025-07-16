@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SEASON_TABLE
@@ -17,19 +17,19 @@ import kotlinx.coroutines.flow.Flow
 interface SeriesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSeries(series: List<CachedSeriesDto>)
+    suspend fun insertSeries(series: List<SeriesCacheDto>)
 
     @Query("SELECT * FROM $SERIES_TABLE")
-    fun getAllSeries(): Flow<List<CachedSeriesDto>>
+    fun getAllSeries(): Flow<List<SeriesCacheDto>>
 
     @Query("SELECT * FROM $SERIES_TABLE WHERE id IN (:ids)")
-    suspend fun getSeriesByIds(ids: List<Int>): List<CachedSeriesDto>
+    suspend fun getSeriesByIds(ids: List<Int>): List<SeriesCacheDto>
 
     @Query("DELETE FROM $SERIES_TABLE WHERE isRecent = 0")
     suspend fun clearAllSeries()
 
     @Query("SELECT * FROM $SERIES_TABLE WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
-    suspend fun getSeriesByKeyword(keyword: String): List<CachedSeriesDto>
+    suspend fun getSeriesByKeyword(keyword: String): List<SeriesCacheDto>
 
     @Query("""
         DELETE FROM $SERIES_TABLE 
@@ -63,7 +63,7 @@ interface SeriesDao {
     suspend fun clearRecentSeries()
 
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecent = 1")
-    suspend fun getRecentSeries(): List<CachedSeriesDto>
+    suspend fun getRecentSeries(): List<SeriesCacheDto>
 
     @Query(
         """

@@ -15,7 +15,7 @@ import com.giraffe.media.person.relations.MoviePersonCrossRef
 import com.giraffe.media.person.relations.SeriesPersonCrossRef
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 
 @Database(
@@ -23,7 +23,7 @@ import com.giraffe.media.series.model.CachedSeriesGenreDto
         SearchKeywordCacheDto::class,
         MovieCacheDto::class,
         MovieGenreCacheDto::class,
-        CachedSeriesDto::class,
+        SeriesCacheDto::class,
         CachedSeasonDto::class,
         CachedSeriesGenreDto::class,
         PersonCacheDto::class,

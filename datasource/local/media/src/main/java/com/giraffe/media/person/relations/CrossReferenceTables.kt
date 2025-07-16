@@ -8,7 +8,7 @@ import com.giraffe.media.movie.model.cacheDto.MovieCacheDto
 import com.giraffe.media.person.model.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.CrossReferenceConstants.MOVIE_PERSON_CROSS_REF_TABLE
 import com.giraffe.media.person.relations.CrossReferenceConstants.SERIES_PERSON_CROSS_REF_TABLE
-import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.SeriesCacheDto
 
 @Entity(
     tableName = MOVIE_PERSON_CROSS_REF_TABLE,
@@ -40,7 +40,7 @@ data class MoviePersonCrossRef(
     primaryKeys = ["seriesId", "personId"],
     foreignKeys = [
         ForeignKey(
-            entity = CachedSeriesDto::class,
+            entity = SeriesCacheDto::class,
             parentColumns = ["id"],
             childColumns = ["seriesId"],
             onDelete = ForeignKey.CASCADE
