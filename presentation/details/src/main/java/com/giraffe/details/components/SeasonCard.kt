@@ -2,11 +2,18 @@ package com.giraffe.details.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -21,6 +28,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -31,24 +39,21 @@ import com.giraffe.details.utils.imageSourceToPainter
 
 @Composable
 fun SeasonCard(
-    modifier: Modifier = Modifier,
     poster: Painter,
     title: String,
-    caption: String,
-    rating: Double,
+    overview: String,
+    rating: Float,
     episodes: Int,
     year: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     posterWidth: Dp = 48.dp,
-    posterHeight: Dp = 64.dp,
     ratingIcon: Painter = painterResource(id = Theme.icons.dueTone.star),
     episodesIcon: Painter = painterResource(id = Theme.icons.dueTone.videoLibrary),
     calendarIcon: Painter = painterResource(id = Theme.icons.dueTone.calendar),
-    onClick : () ->Unit
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(12.dp),
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(Theme.color.background.card),
         onClick = onClick
@@ -56,19 +61,21 @@ fun SeasonCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(intrinsicSize = IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                Image(
-                    painter = poster,
-                    contentDescription = null,
+                Box(
                     modifier = Modifier
-                        .padding(end = 12.dp, bottom = 12.dp)
-                        .size(width = posterWidth, height = posterHeight)
+                        .width(posterWidth)
+                        .fillMaxHeight()
+                        .heightIn(min = 64.dp)
                         .clip(
                             RoundedCornerShape(
                                 topStart = Theme.radius.x4l,
@@ -76,26 +83,34 @@ fun SeasonCard(
                                 bottomEnd = Theme.radius.xs,
                                 bottomStart = Theme.radius.xs
                             )
-                        ),
-                    contentScale = ContentScale.Crop
-                )
-
-                Column(
-                    modifier = Modifier.weight(1f)
+                        )
                 ) {
+                    Image(
+                        painter = poster,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                Column {
                     Text(
-                        modifier=Modifier.padding(bottom = 4.dp),
+                        modifier = Modifier.padding(bottom = 4.dp),
                         text = title,
                         style = Theme.textStyle.body.md.medium,
                         color = Theme.color.shade.primary
                     )
                     Text(
-                        text = caption,
+                        text = overview,
                         style = Theme.textStyle.body.sm.regular,
-                        color = Theme.color.shade.secondary
+                        color = Theme.color.shade.secondary,
+                        maxLines = 4,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
+
+
             HorizontalDivider(thickness = 1.dp, color = Theme.color.stroke.primary)
             Row(
                 modifier = Modifier
@@ -152,8 +167,8 @@ fun PreviewSeasonCardDark() {
         SeasonCard(
             poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
-            caption = "Caption",
-            rating = 7.5,
+            overview = "Caption",
+            rating = 7.5f,
             episodes = 20,
             year = 2019,
             onClick = {}
@@ -169,8 +184,8 @@ fun PreviewSeasonCardLight() {
         SeasonCard(
             poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
-            caption = "Caption",
-            rating = 7.5,
+            overview = "Caption",
+            rating = 7.5f,
             episodes = 20,
             year = 2019,
             onClick = {}

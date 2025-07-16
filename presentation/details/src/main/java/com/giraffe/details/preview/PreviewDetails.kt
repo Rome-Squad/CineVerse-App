@@ -36,8 +36,6 @@ import com.giraffe.details.components.CastCard
 import com.giraffe.details.components.GallerySection
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
-import com.giraffe.details.components.MainMovieOrSeriesDetails
-import com.giraffe.details.components.MinimizedInfoRow
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
@@ -165,41 +163,8 @@ fun MainDetailsPreview() {
     }
 }
 
-@Composable
-@Preview
-fun PreviewMainMovieDetails() {
-    CineVerseTheme (
-        isDarkTheme = true
-    ) {
-        MainMovieOrSeriesDetails(
-            modifier = Modifier.width(360.dp),
-            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
-            name = "The Dark Knight",
-            genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
-            rating = 8.5f,
-            duration = "2h 32m",
-            releaseDate = "2008, Jul 18",
-            type = "Movie",
-            onClickAdd = {},
-            onClickPlay = {}
-        )
-    }
-}
 
-@Composable
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF121321
-)
-fun PreviewMinimizedInfoRow() {
-    CineVerseTheme(isDarkTheme = true) {
-        MinimizedInfoRow(
-            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
-            title = "The Dark Knight",
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-    }
-}
+
 
 @Composable
 @Preview
@@ -305,8 +270,8 @@ fun PreviewSeasonCardDark() {
         SeasonCard(
             poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
-            caption = "Caption",
-            rating = 7.5,
+            overview = "Caption",
+            rating = 7.5f,
             episodes = 20,
             year = 2019,
             onClick = {}
@@ -324,8 +289,8 @@ fun PreviewSeasonCardLight() {
         SeasonCard(
         poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
-            caption = "Caption",
-            rating = 7.5,
+            overview = "Caption",
+            rating = 7.5f,
             episodes = 20,
             year = 2019,
             onClick = {}
