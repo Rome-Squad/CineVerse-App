@@ -7,6 +7,18 @@ class SearchMovieByNameUseCase(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(movieName: String): List<Movie> {
-        return repository.searchMovieByName(movieName)
+        val searchResults = repository.searchMovieByName(movieName)
+
+        val userPreferences = repository.getUserGenrePreferences()
+
+        if (userPreferences.isEmpty()) {
+            return searchResults
+        }
+
+        val favoriteGenreId = userPreferences.first().genreId
+
+        return searchResults.sortedByDescending { movie ->
+            movie.genresID.contains(favoriteGenreId)
+        }
     }
 }
