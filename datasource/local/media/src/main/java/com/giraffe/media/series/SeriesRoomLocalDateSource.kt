@@ -1,9 +1,9 @@
 package com.giraffe.media.series
 
-import com.giraffe.media.series.database.SeriesDao
+import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,7 +13,7 @@ class SeriesRoomLocalDateSource(
 ) : SeriesLocalDateSource {
 
     override suspend fun saveSearchResult(
-        seriesList: List<CachedSeriesDto>
+        seriesList: List<SeriesCacheDto>
     ) = withContext(Dispatchers.IO) {
 
         val existingSeries = seriesDao.getSeriesByIds(seriesList.map { it.id })
@@ -31,7 +31,7 @@ class SeriesRoomLocalDateSource(
 
     }
 
-    override suspend fun getCachedSeriesForName(name: String): List<CachedSeriesDto> = withContext(Dispatchers.IO) {
+    override suspend fun getCachedSeriesForName(name: String): List<SeriesCacheDto> = withContext(Dispatchers.IO) {
         seriesDao.getSeriesByKeyword(name)
     }
 
@@ -49,7 +49,7 @@ class SeriesRoomLocalDateSource(
         seriesDao.clearAllGenres()
     }
 
-    override suspend fun getRecentSeries(): List<CachedSeriesDto> = withContext(Dispatchers.IO) {
+    override suspend fun getRecentSeries(): List<SeriesCacheDto> = withContext(Dispatchers.IO) {
         seriesDao.getRecentSeries()
     }
 

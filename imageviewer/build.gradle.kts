@@ -40,11 +40,11 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.appcompat)/*
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.core)*/
 
     // Compose UI
     implementation(libs.ui)
@@ -52,8 +52,6 @@ dependencies {
 
     // Coil for image loading
     implementation(libs.coil.kt.coil.compose)
-
-    implementation(libs.coil.compose)
 
     // TensorFlow Lite
     implementation(libs.tensorflow.lite)

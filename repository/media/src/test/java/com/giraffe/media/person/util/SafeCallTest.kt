@@ -1,13 +1,14 @@
 package com.giraffe.media.person.util
 
-import com.giraffe.media.person.exception.ForbiddenAccessException
-import com.giraffe.media.person.exception.InvalidApiKeyException
-import com.giraffe.media.person.exception.InvalidPersonIdException
-import com.giraffe.media.person.exception.NetworkException
-import com.giraffe.media.person.exception.PersonNotFoundException
-import com.giraffe.media.person.exception.RateLimitExceededException
-import com.giraffe.media.person.exception.ServerErrorException
-import com.giraffe.media.person.exception.UnauthorizedAccessException
+import com.giraffe.media.exception.ApiException
+import com.giraffe.media.exception.UnauthorizedAccessException
+import com.giraffe.media.exception.ForbiddenAccessException
+import com.giraffe.media.exception.InvalidApiKeyException
+import com.giraffe.media.exception.InvalidPersonIdException
+import com.giraffe.media.exception.NetworkException
+import com.giraffe.media.exception.PersonNotFoundException
+import com.giraffe.media.exception.RateLimitExceededException
+import com.giraffe.media.exception.ServerErrorException
 import com.giraffe.media.person.exception.UnknownException
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
