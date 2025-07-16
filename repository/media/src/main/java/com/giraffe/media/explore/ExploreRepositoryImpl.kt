@@ -2,18 +2,18 @@ package com.giraffe.media.explore
 
 import com.giraffe.media.explore.utils.getCurrentLocalDateTime
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.media.explore.datasource.remote.RemoteExploreDataSource
+import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toCacheDto
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.ExploreRepository
-import com.giraffe.media.explore.utils.safeCall
+import com.giraffe.media.util.SafeCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ExploreRepositoryImpl(
     private val cache: LocalExploreDataSource,
-    private val remote: RemoteExploreDataSource,
+    private val remote: ExploreRemoteDataSource,
 ): ExploreRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
@@ -22,7 +22,7 @@ class ExploreRepositoryImpl(
                 it.toEntity()
             }
 
-        return safeCall {
+        return SafeCall {
             val history = cache.getSearchKeywords(query).map {
                 it.toEntity()
             }
@@ -40,7 +40,7 @@ class ExploreRepositoryImpl(
     }
 
     override suspend fun insertSearchKeyword(searchKeyword: String) {
-        safeCall {
+        SafeCall {
             val searchKeyword = SearchKeyword(
                 keyword = searchKeyword,
                 isFromSearchHistory = true,
@@ -52,14 +52,14 @@ class ExploreRepositoryImpl(
     }
 
     override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) {
-        safeCall {
+        SafeCall {
             val cacheDto = searchKeyword.toCacheDto()
             cache.deleteSearchKeyword(cacheDto)
         }
     }
 
     override suspend fun clearSearchHistory() {
-        safeCall {
+        SafeCall {
             cache.clearSearchHistory()
         }
     }

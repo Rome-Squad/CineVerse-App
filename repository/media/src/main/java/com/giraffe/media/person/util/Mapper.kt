@@ -3,16 +3,16 @@ package com.giraffe.media.person.util
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.local.dto.PersonDto
-import com.giraffe.media.person.remote.response.CastResponse
-import com.giraffe.media.person.remote.response.CrewResponse
-import com.giraffe.media.person.remote.response.PersonMovieCastItemResponse
-import com.giraffe.media.person.remote.response.PersonProfileImageResponse
-import com.giraffe.media.person.remote.response.PersonResponse
-import com.giraffe.media.person.remote.response.PersonTvCastItem
+import com.giraffe.media.person.local.cacheDto.PersonCacheDto
+import com.giraffe.media.person.remote.dto.CastDto
+import com.giraffe.media.person.remote.dto.CrewDto
+import com.giraffe.media.person.remote.dto.PersonDto
+import com.giraffe.media.person.remote.dto.PersonMovieCastItemDto
+import com.giraffe.media.person.remote.dto.PersonProfileImageDto
+import com.giraffe.media.person.remote.dto.PersonTvCastDto
 
 private const val BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w500"
-fun Person.toDto(movieId: Int = -1, seriesId: Int = -1) = PersonDto(
+fun Person.toDto(movieId: Int = -1, seriesId: Int = -1) = PersonCacheDto(
     id = id,
     name = name,
     imageUrl = BASE_IMAGE_URL + imageUrl,
@@ -22,23 +22,22 @@ fun Person.toDto(movieId: Int = -1, seriesId: Int = -1) = PersonDto(
     seriesId = seriesId
 )
 
-fun PersonDto.toEntity(): Person = Person(
-    id = id,
-    name = name,
-    imageUrl = BASE_IMAGE_URL + imageUrl,
-    role = role,
-    type = type.let { PersonType.valueOf(it) }
-)
-
-fun PersonResponse.toEntity(type: PersonType = PersonType.CAST) = Person(
+fun PersonDto.toMovieCredits() = Person(
     id = id,
     name = name,
     role = role,
     imageUrl = BASE_IMAGE_URL + profilePath,
+)
+
+fun PersonCacheDto.toMovieCredits(type: PersonType = PersonType.CAST) = Person(
+    id = id,
+    name = name,
+    role = role,
+    imageUrl = BASE_IMAGE_URL + imageUrl,
     type = type
 )
 
-fun CastResponse.toEntity(type: PersonType): Person = Person(
+fun CastDto.toMovieCredits(type: PersonType): Person = Person(
     id = id,
     name = name,
     role = character,
@@ -46,7 +45,7 @@ fun CastResponse.toEntity(type: PersonType): Person = Person(
     type = type,
 )
 
-fun CrewResponse.toEntity(type: PersonType): Person = Person(
+fun CrewDto.toMovieCredits(type: PersonType): Person = Person(
     id = id,
     name = name,
     role = job,
@@ -54,11 +53,11 @@ fun CrewResponse.toEntity(type: PersonType): Person = Person(
     type = type,
 )
 
-fun PersonProfileImageResponse.toImageList(): List<String> {
+fun PersonProfileImageDto.toImageList(): List<String> {
     return profiles.map { it.filePath }
 }
 
-fun List<PersonMovieCastItemResponse>.toPersonMovieCredits(): List<PersonCredit> {
+fun List<PersonMovieCastItemDto>.toMovieCredits(): List<PersonCredit> {
     return map {
         PersonCredit(
             id = it.id,
@@ -69,7 +68,7 @@ fun List<PersonMovieCastItemResponse>.toPersonMovieCredits(): List<PersonCredit>
     }
 }
 
-fun List<PersonTvCastItem>.toPersonTvCredits(): List<PersonCredit> {
+fun List<PersonTvCastDto>.toTvCredits(): List<PersonCredit> {
     return map {
         PersonCredit(
             id = it.id,

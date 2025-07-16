@@ -1,4 +1,4 @@
-package com.giraffe.media.explore
+package com.giraffe.explore
 
 import androidx.annotation.StringRes
 import com.giraffe.designsystem.uimodel.Poster
@@ -19,7 +19,8 @@ data class ExploreScreenState(
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
     val selectedGenre: GenreUi? = null,
-    val genres: List<GenreUi> = listOf(),
+    val moviesGenres: List<GenreUi> = listOf(),
+    val seriesGenres: List<GenreUi> = listOf(),
     val isSearchFieldFocused: Boolean = false,
     // Tab , View Mode
     val selectedTab: SearchTab = SearchTab.MOVIES,
@@ -43,12 +44,13 @@ data class ExploreScreenState(
         return copy(errorMessage = id, isLoading = false)
     }
 }
+const val TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
 enum class SearchTab {
     MOVIES, SERIES, ACTORS
 }
 
-fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
+fun Movie.toPoster(allGenres: List<GenreUi>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genresID }
         .joinToString(", ") { it.title }
@@ -57,7 +59,7 @@ fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl.orEmpty(),
+        imageUri = posterUrl?.let { TMDB_IMAGE_BASE_URL + it }.orEmpty(),
         rating = rating,
         genres = genreTitles,
         time = duration.toString(),
@@ -65,7 +67,7 @@ fun Movie.toPosterMovie(allGenres: List<MovieGenre>): Poster {
     )
 }
 
-fun Series.toPosterMovie(allGenres: List<SeriesGenre>): Poster {
+fun Series.toPoster(allGenres: List<SeriesGenre>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genreIDs }
         .joinToString(", ") { it.name }

@@ -29,11 +29,11 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.media.explore.ExploreInteractionListener
-import com.giraffe.media.explore.ExploreScreenState
-import com.giraffe.media.explore.ExploreViewModel
-import com.giraffe.media.explore.GenreUi
-import com.giraffe.media.explore.SearchTab
+import com.giraffe.explore.ExploreInteractionListener
+import com.giraffe.explore.ExploreScreenState
+import com.giraffe.explore.ExploreViewModel
+import com.giraffe.explore.GenreUi
+import com.giraffe.explore.SearchTab
 import com.giraffe.media.explore.components.ExploreHeader
 import com.giraffe.media.explore.components.NoResult
 import com.giraffe.media.explore.components.ResultsActors

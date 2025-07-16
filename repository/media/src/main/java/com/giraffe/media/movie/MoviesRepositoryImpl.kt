@@ -1,9 +1,9 @@
 package com.giraffe.media.movie
 
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.entity.MovieReview
-import com.giraffe.media.movies.exception.NetworkError
 import com.giraffe.media.movies.repository.MoviesRepository
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import  com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
@@ -12,7 +12,7 @@ import  com.giraffe.media.movie.mapper.toEntity
 import  com.giraffe.media.movie.mapper.toMovie
 import  com.giraffe.media.movie.mapper.toMovieCacheDto
 import  com.giraffe.media.movie.mapper.toMovieGenreDto
-import  com.giraffe.media.movie.utils.safeCall
+import com.giraffe.media.util.SafeCall
 import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(
@@ -22,26 +22,23 @@ class MoviesRepositoryImpl(
 ) : MoviesRepository {
 
     override suspend fun searchMovieByName(movieName: String): List<Movie> {
-        return safeCall {
+        return SafeCall {
+            val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
+            val isCached = cachedMovies.isNotEmpty()
 
-            return safeCall {
-                val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
-                val isCached = cachedMovies.isNotEmpty()
-
-                if (!isCached) {
-                    val remoteMovies =
-                        remote.getMoviesByName(movieName).map { it.toMovie() }
-                    insertMovies(remoteMovies)
-                    return remoteMovies
-                }
-
-                return cachedMovies
+            if (!isCached) {
+                val remoteMovies =
+                    remote.getMoviesByName(movieName).map { it.toMovie() }
+                insertMovies(remoteMovies)
+                return remoteMovies
             }
+
+            return cachedMovies
         }
     }
 
     override suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenre> {
-        return safeCall {
+        return SafeCall {
             cache.getMovieGenres(genreIds).map { it.toEntity() }.ifEmpty {
                 remote.getMovieGenres().map { it.toEntity() }
             }
@@ -50,7 +47,7 @@ class MoviesRepositoryImpl(
 
 
     override suspend fun getMoviesGenres(): List<MovieGenre> {
-        return safeCall {
+        return SafeCall {
             val cachedMovieGenres = cache.getMoviesGenres().map { it.toEntity() }
             val isCached = cachedMovieGenres.isNotEmpty()
             if (!isCached) {
@@ -66,23 +63,13 @@ class MoviesRepositoryImpl(
 
     }
 
-    override suspend fun getMoviesByGenre(genreId: Int): List<Movie> {
-        return safeCall {
-
-            val cachedMovies = cache.getMoviesByGenre(genreId).map { it.toMovie() }
-            val isCached = cachedMovies.isNotEmpty()
-
-            if (!isCached) {
-                val remoteMovies = remote.getMoviesByGenre(genreId).map { it.toMovie() }
-
+    override suspend fun getMoviesByGenres(genreIds: List<Int>) = SafeCall {
+        cache.getMoviesByGenre(0).map { it.toMovie() }
+            .ifEmpty {
+                val remoteMovies = remote.getMoviesByGenres(genreIds).map { it.toMovie() }
                 insertMovies(remoteMovies)
-
-                return (remoteMovies + cachedMovies).distinct()
+                remoteMovies
             }
-
-            return cachedMovies
-
-        }
     }
 
     override suspend fun insertMovies(movie: List<Movie>) {
@@ -115,19 +102,19 @@ class MoviesRepositoryImpl(
     }
 
     override suspend fun getRecentlyMovies(): List<Movie> {
-        return safeCall {
+        return SafeCall {
             cache.getRecentlyMovies().map { it.toMovie() }
         }
     }
 
     override suspend fun clearRecentlyMovies() {
-        safeCall {
+        SafeCall {
             cache.clearRecentlyMovies()
         }
     }
 
     override suspend fun getMovieDetails(movieId: Int): Movie {
-        return safeCall {
+        return SafeCall {
             val cachedMovie = cache.getMovieById(movieId)
             if (cachedMovie != null) {
                 return cachedMovie.toMovie()
@@ -143,7 +130,7 @@ class MoviesRepositoryImpl(
     override suspend fun getMovieReviews(
         movieId: Int
     ): List<MovieReview> {
-        return safeCall {
+        return SafeCall {
             remote.getMovieReviews(movieId).map { it.toEntity() }
         }
     }
@@ -152,7 +139,7 @@ class MoviesRepositoryImpl(
         movieId: Int,
         ratingValue: Float
     ) {
-        return safeCall {
+        return SafeCall {
             val sessionId = getSessionId()
 
             val requestBody = RatingRequest(value = ratingValue)
@@ -162,15 +149,16 @@ class MoviesRepositoryImpl(
 
 
     override suspend fun getUserMovieRating(movieId: Int): Float {
-        return safeCall {
+        return SafeCall {
             val sessionId = getSessionId()
             remote.getUserMovieRating(movieId, sessionId)
         }
     }
 
     private suspend fun getSessionId(): String {
-        return safeCall {
-            sessionManager.createGuestSessionId() ?: throw NetworkError()
+        return SafeCall {
+            sessionManager.createGuestSessionId() ?: throw NoInternetException()
+
         }
     }
 }

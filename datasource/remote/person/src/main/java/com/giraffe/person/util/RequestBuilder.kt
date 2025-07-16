@@ -1,6 +1,6 @@
 package com.giraffe.media.person.util
 
-import com.giraffe.media.person.remote.response.ApiErrorResponse
+import com.giraffe.media.person.response.ApiErrorResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

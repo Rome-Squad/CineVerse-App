@@ -3,12 +3,12 @@ package com.giraffe.media.person
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.exception.PersonException
 import com.giraffe.media.person.local.PersonLocalDataSource
-import com.giraffe.media.person.local.dto.PersonDto
+import com.giraffe.media.person.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.remote.response.PersonResponse
-import com.giraffe.media.person.remote.response.SearchPersonResponse
+import com.giraffe.media.person.response.PersonResponse
+import com.giraffe.media.person.response.SearchPersonResponse
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.person.util.toEntity
+import com.giraffe.media.person.util.toMovieCredits
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -25,7 +25,7 @@ class PersonRepositoryImplTest {
     private val remoteDataSource: PersonRemoteDataSource = mockk(relaxed = true)
     private val localDataSource: PersonLocalDataSource = mockk(relaxed = true)
     private val keyword = "Mohannad"
-    private val dummyPersonDto = PersonDto(
+    private val dummyPersonCacheDto = PersonCacheDto(
         id = 5,
         name = "Mohannad",
         role = "Acting",
@@ -41,7 +41,7 @@ class PersonRepositoryImplTest {
         originalName = "مهند",
         popularity = 100.0,
     )
-    private val dummyPeopleDto = listOf(dummyPersonDto, dummyPersonDto, dummyPersonDto)
+    private val dummyPeopleDto = listOf(dummyPersonCacheDto, dummyPersonCacheDto, dummyPersonCacheDto)
     private val dummyPeopleResponse = listOf(dummyPersonResponse, dummyPersonResponse)
 
     private val dummySearchResponse = SearchPersonResponse(
@@ -117,9 +117,9 @@ class PersonRepositoryImplTest {
     @Test
     fun `should cache person as recent when call storeRecentPerson`() = runTest {
         //given
-        coEvery { localDataSource.storePerson(dummyPersonDto) } just Runs
+        coEvery { localDataSource.storePerson(dummyPersonCacheDto) } just Runs
         //when
-        repository.storeRecentPerson(dummyPersonDto.toEntity())
+        repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits())
         //then
         coVerify(exactly = 1) { localDataSource.storePerson(match { it.isRecent }) }
     }
@@ -129,7 +129,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(any()) } throws Exception()
         //when && then
-        assertThrows<PersonException> { repository.storeRecentPerson(dummyPersonDto.toEntity()) }
+        assertThrows<PersonException> { repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits()) }
     }
 
 

@@ -8,7 +8,7 @@ import com.giraffe.cineverseapp.data.database.converter.Converters
 import com.giraffe.media.explore.model.SearchKeywordCacheDto
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.person.dao.PersonDao
-import com.giraffe.media.person.local.dto.PersonDto
+import com.giraffe.media.person.local.cacheDto.PersonCacheDto
 import com.giraffe.media.series.database.SeriesDao
 import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.CachedSeriesDto
@@ -25,7 +25,7 @@ import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
         CachedSeriesDto::class,
         CachedSeasonDto::class,
         CachedSeriesGenreDto::class,
-        PersonDto::class,
+        PersonCacheDto::class,
     ],
     version = 1
 )
