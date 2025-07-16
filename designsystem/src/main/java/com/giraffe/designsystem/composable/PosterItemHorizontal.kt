@@ -1,6 +1,6 @@
 package com.giraffe.designsystem.composable
 
-import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +29,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
+import com.giraffe.imageviewer.islamicimageviewer.SafeIslamicImage
 
 @Composable
 fun PosterItemHorizontal(
@@ -46,11 +46,9 @@ fun PosterItemHorizontal(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-
-        Log.d("TAG", "PosterItemHorizontal: ${movie.imageUri}")
-        IslamicAppropriateImageViewer(
+        SafeIslamicImage(
             imageUrl = movie.imageUri,
-            placeHolderResId = Theme.icons.dueTone.image,
+            contentDescription = movie.name,
             modifier = Modifier
                 .fillMaxHeight()
                 .width(64.dp)
@@ -61,7 +59,22 @@ fun PosterItemHorizontal(
                         topEnd = Theme.radius.lg
                     )
                 )
-        )
+        ) {
+            Image(
+                painter = painterResource(Theme.icons.dueTone.image),
+                contentDescription = stringResource(R.string.placeholder),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(64.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg
+                        )
+                    )
+            )
+        }
 
         Column(
             modifier = Modifier.padding(vertical = 12.dp),

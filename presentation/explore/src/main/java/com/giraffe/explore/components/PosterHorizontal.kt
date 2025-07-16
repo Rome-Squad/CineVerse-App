@@ -29,7 +29,7 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
+import com.giraffe.imageviewer.islamicimageviewer.SafeIslamicImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -50,10 +50,9 @@ fun PosterHorizontal(
     ) {
         with(sharedTransitionScope) {
 
-
-            IslamicAppropriateImageViewer(
+            SafeIslamicImage(
                 imageUrl = poster.imageUri,
-                placeHolderResId = Theme.icons.dueTone.image,
+                contentDescription = poster.name,
                 modifier = Modifier
                     .height(88.dp)
                     .width(64.dp)
@@ -68,7 +67,16 @@ fun PosterHorizontal(
                         sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                         animatedVisibilityScope = animatedVisibilityScope
                     )
-            )
+            ) {
+
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = stringResource(R.string.loading_image),
+                    modifier = Modifier.size(32.dp),
+                    tint = Theme.color.brand.secondary
+                )
+
+            }
 
 
             Column(

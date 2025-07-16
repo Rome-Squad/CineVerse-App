@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import coil.size.Size
 import coil.transform.Transformation
 
-class BlurTransformation(
+class BlurTransformer(
     private val context: Context,
     private val radius: Float = 25f
 ) : Transformation {
@@ -16,7 +16,7 @@ class BlurTransformation(
 
         return try {
 
-            BlurUtils.blur(
+            Blur.blur(
                 context,
                 input,
                 radius.toInt()

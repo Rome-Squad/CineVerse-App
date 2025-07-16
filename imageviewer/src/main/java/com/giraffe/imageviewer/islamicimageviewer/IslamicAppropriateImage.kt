@@ -2,115 +2,116 @@ package com.giraffe.imageviewer.islamicimageviewer
 
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.util.Base64
-import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.DefaultAlpha
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.drawscope.DrawScope.Companion.DefaultFilterQuality
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.core.graphics.createBitmap
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.AsyncImagePainter.Companion.DefaultTransform
 import coil.request.ImageRequest
 import com.giraffe.imageviewer.R
-import com.giraffe.imageviewer.classifier.IslamicInappropriateImageClassifier
-import com.giraffe.imageviewer.utils.BlurTransformation
+import com.giraffe.imageviewer.classifier.IslamicImageClassifierImpl
+import com.giraffe.imageviewer.utils.BlurTransformer
+import com.giraffe.imageviewer.utils.drawableToBitmap
 import java.io.ByteArrayOutputStream
 
 @Composable
-fun IslamicAppropriateImageViewer(
+fun SafeIslamicImage(
     imageUrl: String,
+    contentDescription: String,
     modifier: Modifier = Modifier,
-    placeHolderResId: Int = R.drawable.placeholder
+    contentScale: ContentScale = ContentScale.FillBounds,
+    transform: (AsyncImagePainter.State) -> AsyncImagePainter.State = DefaultTransform,
+    alignment: Alignment = Alignment.Center,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null,
+    filterQuality: FilterQuality = DefaultFilterQuality,
+    placeHolder: @Composable (modifier: Modifier) -> Unit = { modifier ->
+        Image(
+            painter = painterResource(id = R.drawable.placeholder),
+            contentDescription = stringResource(id = R.string.placeholder),
+            modifier = modifier
+        )
+    }
 ) {
+
     val context = LocalContext.current
+    var isPlaceholder by remember { mutableStateOf(false) }
     var shouldBlur by remember { mutableStateOf(true) }
+
     LaunchedEffect(imageUrl) {
         try {
             val request = ImageRequest.Builder(context)
-
                 .data(imageUrl)
                 .allowHardware(false)
                 .listener(
-                    onStart = { request ->
-                        Log.d("IslamicViewer", "Image load started: ${request.data}")
-                    },
-                    onSuccess = { request, metadata ->
-                        Log.d("IslamicViewer", "Image load success: ${request.data}")
-                    },
                     onError = { request, throwable ->
-                        Log.e(
-                            "IslamicViewer",
-                            "Image load failed: ${request.data}, Exception: ${throwable.throwable.message}"
-                        )
-                    },
-                    onCancel = { request ->
-                        Log.w("IslamicViewer", "Image load cancelled: ${request.data}")
+                        isPlaceholder = true
                     }
                 )
                 .build()
 
             val imageLoader = ImageLoader(context)
             val result = imageLoader.execute(request)
-            Log.d("IslamicViewer", "Image loading result: $result")
 
             val drawable = result.drawable
-            val bitmap = drawable?.let { drawableToBitmap(it) }
+            val bitmap = drawable?.let {
+                drawableToBitmap(it)
+            }
 
             if (bitmap != null) {
-                Log.d("IslamicViewer", "Bitmap loaded successfully")
 
                 val outputStream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                val base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+                bitmap.compress(
+                    Bitmap.CompressFormat.JPEG,
+                    100, outputStream
+                )
 
-                Log.d("IslamicViewer", "Base64: ${base64.take(100)}...")
-
-                val classifier = IslamicInappropriateImageClassifier(context)
+                val classifier = IslamicImageClassifierImpl(context)
                 shouldBlur = classifier.isUnsafe(bitmap)
-            } else {
-                Log.e("IslamicViewer", "Failed to convert drawable to Bitmap.")
             }
 
-        } catch (e: Exception) {
-            Log.e("IslamicViewer", "Exception while decoding image", e)
+        } catch (_: Exception) {
+            isPlaceholder = true
         }
     }
-    AsyncImage(
-        model = ImageRequest.Builder(context)
-            .data(imageUrl)
-            .placeholder(placeHolderResId)
-            .crossfade(true)
-            .apply {
-                if (shouldBlur) {
-                    transformations(BlurTransformation(context, radius = 25f))
+
+    if (isPlaceholder) {
+        placeHolder(
+            modifier
+        )
+    } else {
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data(imageUrl)
+                .crossfade(true)
+                .apply {
+                    if (shouldBlur) {
+                        transformations(
+                            BlurTransformer(context, radius = 35f)
+                        )
+                    }
                 }
-            }
-            .build(),
-        contentDescription = stringResource(R.string.image_viewer),
-        modifier = modifier
-    )
-}
+                .build(),
+            contentDescription = contentDescription,
+            contentScale = contentScale,
+            modifier = modifier
+        )
 
-fun drawableToBitmap(drawable: Drawable): Bitmap {
-    if (drawable is BitmapDrawable) {
-        return drawable.bitmap
     }
-
-    val width = drawable.intrinsicWidth.takeIf { it > 0 } ?: 1
-    val height = drawable.intrinsicHeight.takeIf { it > 0 } ?: 1
-
-    val bitmap = createBitmap(width, height)
-    val canvas = Canvas(bitmap)
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return bitmap
 }

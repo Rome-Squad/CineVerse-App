@@ -10,9 +10,9 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 
-class IslamicInappropriateImageClassifier(
+class IslamicImageClassifierImpl(
     context: Context
-) : InappropriateImageClassifier {
+) : IslamicImageClassifier {
 
     // Interpreter to run the Model
     private val interpreter: Interpreter
@@ -95,7 +95,7 @@ class IslamicInappropriateImageClassifier(
         val unsafeScore = result["unsafe"] ?: 1f
 
         val isUnsafe = when {
-            unsafeScore > .5f -> true
+            unsafeScore > .4f -> true
             unsafeScore >= safeScore -> true
             else -> false
         }

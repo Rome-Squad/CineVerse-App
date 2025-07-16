@@ -8,14 +8,14 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import androidx.core.graphics.scale
 
-object BlurUtils {
+object Blur {
     fun blur(context: Context, bitmap: Bitmap, radius: Int): Bitmap {
         val clampedRadius = radius.coerceIn(1, 25)
 
         // Downscale the image
         // Trick to increase blur effect
 
-        val scaleFactor = 0.5f
+        val scaleFactor = 0.25f
         val scaledBitmap = bitmap.scale(
             (bitmap.width * scaleFactor).toInt(),
             (bitmap.height * scaleFactor).toInt()
