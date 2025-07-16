@@ -39,7 +39,7 @@ fun PrimaryButton(
             containerColor = buttonColor.value,
             contentColor = if (enabled) Theme.color.button.onPrimary else Theme.color.button.onDisabled,
         ),
-        contentPadding = PaddingValues(vertical = 16.dp)
+        contentPadding = PaddingValues(vertical = 14.dp)
     ) {
         AnimatedVisibility(visible = isLoading, enter = fadeIn(), exit = fadeOut()) {
             CircularProgressIndicator(
