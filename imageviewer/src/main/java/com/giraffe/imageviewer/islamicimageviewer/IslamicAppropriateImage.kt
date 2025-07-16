@@ -100,9 +100,6 @@ fun IslamicAppropriateImageViewer(
     )
 }
 
-/**
- * Converts any Drawable to Bitmap safely.
- */
 fun drawableToBitmap(drawable: Drawable): Bitmap {
     if (drawable is BitmapDrawable) {
         return drawable.bitmap
