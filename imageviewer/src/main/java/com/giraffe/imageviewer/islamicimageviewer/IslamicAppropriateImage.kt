@@ -32,7 +32,7 @@ fun IslamicAppropriateImageViewer(
     placeHolderResId: Int = R.drawable.placeholder
 ) {
     val context = LocalContext.current
-    var shouldBlur by remember { mutableStateOf(false) }
+    var shouldBlur by remember { mutableStateOf(true) }
     LaunchedEffect(imageUrl) {
         try {
             val request = ImageRequest.Builder(context)

@@ -1,9 +1,9 @@
 package com.giraffe.media.person
 
-import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.remote.dto.CreditsDto
-import com.giraffe.media.person.remote.dto.PersonDetailsDto
-import com.giraffe.media.person.remote.dto.PersonProfileImageDto
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
+import com.giraffe.media.person.model.dto.CreditsDto
+import com.giraffe.media.person.model.dto.PersonDetailsDto
+import com.giraffe.media.person.model.dto.PersonProfileImageDto
 import com.giraffe.media.person.response.PersonMovieCreditsResponse
 import com.giraffe.media.person.response.PersonTvCastItemResponse
 import com.giraffe.media.person.response.SearchPersonResponse

@@ -7,7 +7,7 @@ import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.repository.MoviesRepository
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import  com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import  com.giraffe.media.movie.model.dto.RatingRequest
 import  com.giraffe.media.movie.mapper.toEntity
 import  com.giraffe.media.movie.mapper.toMovie
 import  com.giraffe.media.movie.mapper.toMovieCacheDto
