@@ -1,12 +1,14 @@
 package com.giraffe.media.person.model.cacheDto
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.giraffe.media.utils.DatabaseConstants.PERSONS_TABLE
 
 @Entity(
     tableName = PERSONS_TABLE,
 )
 data class PersonCacheDto(
+    @PrimaryKey
     val id: Int,
     val name: String,
     val imageUrl: String? = null,
