@@ -6,7 +6,7 @@
     <string name="error_unauthorized">You\'re not authorized. Please login again.</string>
     <string name="error_access_denied">Access denied. You don’t have permission.</string>
     <string name="error_validation">Invalid input. Please check your data.</string>
-    <string name="error_invalid_method">طريقة الطلب غير صالحة. تواصل مع الدعم.</string>
+    <string name="error_invalid_method">Invalid request method. Contact support.</string>
     <string name="error_not_found">Resource not found.</string>
     <string name="error_unknown">Something went wrong. Please try again later.</string>
 </resources>
