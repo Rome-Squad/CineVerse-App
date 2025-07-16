@@ -4,11 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,12 +41,13 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
-import kotlin.collections.take
 
 
 @Composable
 fun MovieDetails(
-    movieID: Int, modifier: Modifier = Modifier, viewModel: MovieDetailsViewModel = koinViewModel()
+    movieID: Int,
+    modifier: Modifier = Modifier,
+    viewModel: MovieDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -76,14 +77,15 @@ private fun MovieDetailsContent(
     onDismissAddToCollectionBottomSheet: () -> Unit,
     onShowMoreMoviesClick: () -> Unit,
     onGiveStarClick: () -> Unit,
-    onDismissAddRatingBottomSheet: () -> Unit
+    onDismissAddRatingBottomSheet: () -> Unit,
 ) {
 
     LazyColumn(
         modifier = modifier
             .background(Theme.color.background.screen)
-            .padding(vertical = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .systemBarsPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(bottom = 40.dp)
     ) {
         item {
             AppBar(
@@ -138,8 +140,8 @@ private fun MovieDetailsContent(
         item {
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-                onArrowButtonClick = onGiveStarClick
-            ) // when click to arrow show bottom sheet or all card ?
+                onCardClick = onGiveStarClick
+            )
         }
 
         item {
@@ -167,7 +169,7 @@ private fun MovieDetailsContent(
             }
         }
 
-        itemsIndexed(state.movieReviews.take(3)) { index,review->
+        itemsIndexed(state.movieReviews.take(3)) { index, review ->
             val padding = when (index) {
                 0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
                 1 -> Modifier.padding(horizontal = 16.dp)
@@ -184,16 +186,12 @@ private fun MovieDetailsContent(
                 reviewerUsername = review.author.username
             )
         }
-
-        item {
-            Spacer(Modifier.height(30.dp))
-        }
     }
 
     BaseBottomSheet(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = onDismissAddToCollectionBottomSheet,
-        title = "Add to Collection",
+        title = stringResource(R.string.add_to_collection),
         content = {
             CollectionItem(
                 text = "My Favorite TV", icon = R.drawable.due_tone_folder
@@ -209,7 +207,7 @@ private fun MovieDetailsContent(
     BaseBottomSheet(
         isVisible = state.isVisibleGiveStarsBottomSheet,
         onDismiss = onDismissAddRatingBottomSheet,
-        title = "Rate the Movie",
+        title = stringResource(R.string.rate_the_movie),
         content = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -218,10 +216,12 @@ private fun MovieDetailsContent(
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
-                        , text = "Add To Rate", enabled = false, onClick = {})
+                        .padding(top = 24.dp),
+                    text = stringResource(R.string.add_to_rate),
+                    enabled = false,
+                    onClick = {})
             }
-        },
+        }
     )
 }
 
