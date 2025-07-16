@@ -24,4 +24,9 @@
     <string name="rating">Rating</string>
     <string name="episodes">Episodes</string>
     <string name="year">Year</string>
+    <string name="poster_image">Poster Image</string>
+    <string name="play_icon">Play Icon</string>
+    <string name="save_Icon">Save Icon</string>
+    <string name="icon">Icon</string>
+    <string name="storyline">Storyline</string>
 </resources>

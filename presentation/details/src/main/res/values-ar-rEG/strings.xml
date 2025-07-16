@@ -24,4 +24,9 @@
     <string name="rating">التقييم</string>
     <string name="episodes">الحلقات</string>
     <string name="year">سنة</string>
+    <string name="poster_image">صورة الملصق</string>
+    <string name="play_icon">أيقونة التشغيل</string>
+    <string name="save_Icon">أيقونة الحفظ</string>
+    <string name="icon">أيقونة</string>
+    <string name="storyline">Storyline</string>
 </resources>
