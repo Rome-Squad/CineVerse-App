@@ -27,7 +27,7 @@ import com.giraffe.designsystem.theme.Theme
 fun RatingSection(
     modifier: Modifier = Modifier,
     rate: Int? = null,
-    onCardClick: () -> Unit = {}
+    onClickCard: () -> Unit = {}
 ) {
     val rated = !(rate == null || rate == 0)
     Column(
@@ -58,7 +58,7 @@ fun RatingSection(
                 .padding(
                     all = 16.dp
                 ).clickable {
-                onCardClick()
+                onClickCard()
             },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
