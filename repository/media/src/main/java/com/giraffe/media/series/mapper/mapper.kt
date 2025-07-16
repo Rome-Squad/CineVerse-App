@@ -1,7 +1,9 @@
 package com.giraffe.media.series.mapper
 
-import com.giraffe.media.series.datasource.remote.response.seriesdetails.SeriesDetailsResponse
-import com.giraffe.media.series.datasource.remote.response.seriesdetails.reviews.SeriesReviewsResponse
+import com.giraffe.media.series.datasource.remote.dto.ReviewDto
+import com.giraffe.media.series.datasource.remote.dto.SeasonDto
+import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
+import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
@@ -10,8 +12,6 @@ import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.CachedSeriesDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
-import com.giraffe.media.series.model.SeasonDto
-import com.giraffe.media.series.model.SeriesDto
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -138,7 +138,7 @@ fun SeasonDto.toEntity(): Season {
     )
 }
 
-fun SeriesDetailsResponse.toSeriesEntity(): Series {
+fun SeriesDetailsDto.toSeriesEntity(): Series {
     return Series(
         id = id,
         posterUrl = posterPath,
@@ -151,8 +151,8 @@ fun SeriesDetailsResponse.toSeriesEntity(): Series {
     )
 }
 
-fun SeriesReviewsResponse.toSeriesReviewsEntity(): List<SeriesReview> {
-    return results.map { item ->
+fun List<ReviewDto>.toSeriesReviewsEntity(): List<SeriesReview> {
+    return map { item ->
         SeriesReview(
             id = item.id,
             userImageUrl = item.authorDetails.avatarPath,
@@ -176,7 +176,7 @@ fun parseData(dateString: String): LocalDate? {
 }
 
 
-fun SeriesDetailsResponse.toSeasonEntity(): List<Season> {
+fun SeriesDetailsDto.toSeasonEntity(): List<Season> {
     return seasons.map {
         Season(
             id = it.id,

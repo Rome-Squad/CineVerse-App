@@ -4,8 +4,8 @@ import com.giraffe.media.series.api.BaseRequest
 import com.giraffe.media.series.api.RequestBuilder
 import com.giraffe.media.series.model.GenreDto
 import com.giraffe.media.series.model.SeriesDto
-import com.giraffe.media.series.model_dto.GenresResponse
-import com.giraffe.media.series.model_dto.SeriesResponse
+import com.giraffe.media.series.response.GenresResponse
+import com.giraffe.media.series.response.SeriesResponse
 import com.google.common.truth.Truth.assertThat
 import io.ktor.client.call.body
 import io.mockk.coEvery

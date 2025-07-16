@@ -2,22 +2,15 @@ package com.giraffe.details.utils
 
 import android.content.Context
 import com.giraffe.details.R
-import com.giraffe.media.movies.exception.InvalidApiKey
-import com.giraffe.media.movies.exception.MoviesException
-import com.giraffe.media.movies.exception.NetworkError
-import com.giraffe.media.movies.exception.NotFoundError
-import com.giraffe.media.movies.exception.ServerError
-import com.giraffe.media.movies.exception.UnknownError
+import com.giraffe.media.exception.*
 
-fun Context.errorToMessage(error: MoviesException): String = when (error) {
-    is NetworkError -> getString(R.string.network_error)
-
-    is InvalidApiKey -> getString(R.string.authentication_error)
-
-    is NotFoundError -> getString(R.string.movie_not_found)
-
-    is ServerError -> getString(R.string.server_error)
-
-    is UnknownError -> getString(R.string.unknown_error)
-    else -> getString(R.string.unknown_error)
+fun Context.errorToMessage(error: MediaDomainException): String {
+    return when (error) {
+        is NetworkDomainException -> getString(R.string.network_error)
+        is InvalidApiKeyDomainException -> getString(R.string.authentication_error)
+        is NotFoundDomainException -> getString(R.string.movie_not_found)
+        is ServerErrorDomainException -> getString(R.string.server_error)
+        is UnknownDomainException -> getString(R.string.unknown_error)
+        else -> getString(R.string.unknown_error)
+    }
 }
