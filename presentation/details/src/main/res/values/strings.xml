@@ -32,4 +32,5 @@
     <string name="rate_the_movie">Rate the Movie</string>
     <string name="add_to_rate">Add Rating</string>
     <string name="add_to_collection">Add to Collection</string>
+    <string name="movie">Movie</string>
 </resources>
