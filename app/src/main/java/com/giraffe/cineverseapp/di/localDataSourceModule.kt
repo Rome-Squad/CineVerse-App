@@ -5,14 +5,13 @@ import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.media.explore.LocalExploreDataSourceImpl
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.movie.MovieLocalDataSourceImp
+import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.person.PersonLocalDataSourceImp
 import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
-import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import  com.giraffe.media.movie.MovieLocalDataSourceImp
-import  com.giraffe.media.movie.dao.MoviesSearchHistoryDao
-import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.series.SeriesRoomLocalDateSource
+import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
@@ -23,7 +22,6 @@ val localDataSourceModule = module {
     }
 
     single<MovieDao> { get<CineVerseDatabase>().movieDao() }
-    single<MoviesSearchHistoryDao> { get<CineVerseDatabase>().moviesSearchHistoryDao() }
     single<MoviesLocalDataSource> { MovieLocalDataSourceImp(get()) }
 
 

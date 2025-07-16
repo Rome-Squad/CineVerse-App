@@ -7,6 +7,6 @@ class GetPeopleBySeriesIdUseCase(
     private val repository: PersonRepository
 ) {
     suspend operator fun invoke(seriesId: Int): List<Person> {
-        return repository.getPeopleByShowId(seriesId)
+        return repository.getPeopleBySeriesId(seriesId)
     }
 }

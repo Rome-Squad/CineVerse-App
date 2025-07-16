@@ -1,37 +1,82 @@
 package com.giraffe.media.person.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.giraffe.media.person.model.cache.PersonCacheDto
+import com.giraffe.media.person.relations.MoviePersonCrossRef
+import com.giraffe.media.person.relations.SeriesPersonCrossRef
+import com.giraffe.media.utils.DatabaseConstants.PERSONS_TABLE
 
 @Dao
 interface PersonDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun storePerson(person: PersonCacheDto)
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPeople(people: List<PersonCacheDto>)
-    @Query("SELECT * FROM persons WHERE seriesId = :seriesId")
-    suspend fun getPeopleBySeriesId(seriesId: Int): List<PersonCacheDto>
-    @Query("SELECT * FROM persons WHERE movieId = :movieId")
+    @Query("""
+        SELECT p.* FROM persons p
+        INNER JOIN MOVIE_PERSON_CROSS_REF_TABLE mp
+        ON p.id = mp.personId
+        WHERE mp.movieId = :movieId
+    """)
     suspend fun getPeopleByMovieId(movieId: Int): List<PersonCacheDto>
 
-    @Query("SELECT * FROM persons WHERE name LIKE '%' || :personName || '%'")
+    @Query("""
+        SELECT p.* FROM persons p
+        INNER JOIN SERIES_PERSON_CROSS_REF_TABLE sp
+        ON p.id = sp.personId
+        WHERE sp.seriesId = :seriesId
+    """)
+    suspend fun getPeopleBySeriesId(seriesId: Int): List<PersonCacheDto>
+
+    @Query("SELECT * FROM $PERSONS_TABLE WHERE name LIKE '%' || :personName || '%'")
     suspend fun searchByName(personName: String): List<PersonCacheDto>
 
-    @Query("SELECT * FROM persons WHERE id = :id")
+    @Query("SELECT * FROM $PERSONS_TABLE WHERE id = :id")
     suspend fun getPersonById(id: Int): PersonCacheDto
 
-    @Query("SELECT * FROM persons WHERE name = :personName LIMIT 1")
+    @Query("SELECT * FROM $PERSONS_TABLE WHERE name = :personName LIMIT 1")
     suspend fun getPersonByName(personName: String): PersonCacheDto
 
-    @Query("SELECT * FROM persons WHERE isRecent = 1")
+    @Query("SELECT * FROM $PERSONS_TABLE WHERE isRecent = 1")
     suspend fun getRecentPeople(): List<PersonCacheDto>
 
-    @Query("DELETE FROM persons WHERE isRecent = 1")
+    @Query("DELETE FROM $PERSONS_TABLE WHERE isRecent = 1")
     suspend fun clearRecentPeople()
 
-    @Query("""DELETE FROM persons WHERE isRecent = 0 AND cachedAt <= :currentTime - 3600000""")
+    @Query("""DELETE FROM $PERSONS_TABLE WHERE isRecent = 0 AND cachedAt <= :currentTime - 3600000""")
     suspend fun clearPersonCache(currentTime: Long)
+
+    @Transaction
+    suspend fun insertPeopleForMovie(people: List<PersonCacheDto>, movieId: Int) {
+        Log.d("FOLLOWERROR", "Hereeeeee 6")
+        insertPeople(people)
+        Log.d("FOLLOWERROR", "Hereeeeee 7")
+        val crossRefs = people.map {
+            Log.d("FOLLOWERROR", "Hereeeeee 8")
+            MoviePersonCrossRef(movieId = movieId, personId = it.id)
+        }
+        Log.d("FOLLOWERROR", "Hereeeeee 9")
+        insertMoviePersonCrossRefs(crossRefs)
+        Log.d("FOLLOWERROR", "Hereeeeee 10")
+    }
+
+    @Transaction
+    suspend fun insertPeopleForSeries(people: List<PersonCacheDto>, seriesId: Int) {
+        insertPeople(people)
+        val crossRefs = people.map {
+            SeriesPersonCrossRef(seriesId = seriesId, personId = it.id)
+        }
+        insertSeriesPersonCrossRefs(crossRefs)
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMoviePersonCrossRefs(refs: List<MoviePersonCrossRef>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSeriesPersonCrossRefs(refs: List<SeriesPersonCrossRef>)
 }

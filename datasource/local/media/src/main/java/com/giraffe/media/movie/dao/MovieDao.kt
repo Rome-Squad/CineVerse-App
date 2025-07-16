@@ -22,7 +22,7 @@ interface MovieDao {
     suspend fun getMovieByName(movieName: String): List<MovieCacheDto>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id =:movieId")
-    suspend fun getMovieById(movieId: Int): MovieCacheDto
+    suspend fun getMovieById(movieId: Int): MovieCacheDto?
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>

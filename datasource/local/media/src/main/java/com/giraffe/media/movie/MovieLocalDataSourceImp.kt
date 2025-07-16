@@ -10,7 +10,7 @@ class MovieLocalDataSourceImp(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
 
-    override suspend fun getMovieById(movieId: Int): MovieCacheDto = movieDao.getMovieById(movieId)
+    override suspend fun getMovieById(movieId: Int): MovieCacheDto? = movieDao.getMovieById(movieId)
 
     override suspend fun insertMovies(movies: List<MovieCacheDto>) = movieDao.insertMovies(movies)
 

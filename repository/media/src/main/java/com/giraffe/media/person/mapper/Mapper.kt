@@ -12,14 +12,12 @@ import com.giraffe.media.person.model.dto.PersonResponse
 import com.giraffe.media.person.model.dto.PersonTvCastItem
 import com.giraffe.media.utils.BASE_IMAGE_URL
 
-fun Person.toDto(movieId: Int = -1, seriesId: Int = -1) = PersonCacheDto(
+fun Person.toCacheDto() = PersonCacheDto(
     id = id,
     name = name,
     imageUrl = BASE_IMAGE_URL + imageUrl,
     role = role,
-    type = type.name,
-    movieId = movieId,
-    seriesId = seriesId
+    type = type.name
 )
 
 fun PersonCacheDto.toEntity(): Person = Person(

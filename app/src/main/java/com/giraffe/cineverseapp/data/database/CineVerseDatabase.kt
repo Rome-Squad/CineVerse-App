@@ -13,9 +13,10 @@ import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.CachedSeriesDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
-import  com.giraffe.media.movie.dao.MoviesSearchHistoryDao
 import  com.giraffe.media.movie.model.cache.MovieCacheDto
 import  com.giraffe.media.movie.model.cache.MovieGenreCacheDto
+import com.giraffe.media.person.relations.MoviePersonCrossRef
+import com.giraffe.media.person.relations.SeriesPersonCrossRef
 
 @Database(
     entities = [
@@ -26,14 +27,14 @@ import  com.giraffe.media.movie.model.cache.MovieGenreCacheDto
         CachedSeasonDto::class,
         CachedSeriesGenreDto::class,
         PersonCacheDto::class,
+        MoviePersonCrossRef::class,
+        SeriesPersonCrossRef::class
     ],
     version = 1
 )
 @TypeConverters(Converters::class)
 abstract class CineVerseDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
-    abstract fun moviesSearchHistoryDao(): MoviesSearchHistoryDao
-
     abstract fun exploreSearchKeywordDao(): ExploreSearchKeywordDao
     abstract fun seriesDao(): SeriesDao
     abstract fun personDao(): PersonDao

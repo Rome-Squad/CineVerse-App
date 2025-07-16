@@ -39,7 +39,7 @@ class GetPeopleBySeriesIdUseCaseTest {
     fun `should return list of people when repository returns people for showId`() = runTest {
         // Given
         val showId = 93405
-        coEvery { repository.getPeopleByShowId(showId) } returns expectedPeople
+        coEvery { repository.getPeopleBySeriesId(showId) } returns expectedPeople
 
         // When
         val result = getPeopleBySeriesIdUseCase(showId)
