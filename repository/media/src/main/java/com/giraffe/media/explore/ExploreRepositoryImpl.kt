@@ -39,8 +39,7 @@ class ExploreRepositoryImpl(
         }
     }
 
-    override suspend fun insertSearchKeyword(searchKeyword: String) {
-        SafeCall {
+    override suspend fun insertSearchKeyword(searchKeyword: String)   = SafeCall {
             val searchKeyword = SearchKeyword(
                 keyword = searchKeyword,
                 isFromSearchHistory = true,
@@ -49,18 +48,13 @@ class ExploreRepositoryImpl(
             val cacheDto = searchKeyword.toCacheDto()
             cache.insertSearchKeyword(cacheDto)
         }
-    }
 
-    override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) {
-        SafeCall {
+    override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) = SafeCall {
             val cacheDto = searchKeyword.toCacheDto()
             cache.deleteSearchKeyword(cacheDto)
         }
-    }
 
-    override suspend fun clearSearchHistory() {
-        SafeCall {
+    override suspend fun clearSearchHistory()  = SafeCall {
             cache.clearSearchHistory()
         }
     }
-}

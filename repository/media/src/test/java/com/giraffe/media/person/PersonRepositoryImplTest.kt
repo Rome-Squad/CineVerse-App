@@ -1,13 +1,13 @@
 package com.giraffe.media.person
 
 import com.giraffe.media.exception.MediaDomainException
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.local.PersonLocalDataSource
-import com.giraffe.media.person.local.cacheDto.PersonCacheDto
-import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.remote.dto.PersonDto
+import com.giraffe.media.person.mapper.toEntity
+import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.person.model.dto.PersonDto
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.person.util.toMovieCredits
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -40,6 +40,7 @@ class PersonRepositoryImplTest {
         originalName = "مهند",
         popularity = 100.0,
     )
+
     private val dummyPeopleDto =
         listOf(dummyPersonCacheDto, dummyPersonCacheDto, dummyPersonCacheDto)
     private val dummyPeopleResponse = listOf(dummyPersonResponse, dummyPersonResponse)
@@ -73,7 +74,11 @@ class PersonRepositoryImplTest {
             //then
             assertThat(result.size).isEqualTo(2)
             assertThat(result.first()).isInstanceOf(Person::class.java)
-            coVerify(exactly = result.size) { localDataSource.storePerson(match { !it.isRecent }) }
+            coVerify(exactly = 1) {
+                localDataSource.storePeople(match { list ->
+                    list.size == result.size && list.all { !it.isRecent }
+                })
+            }
         }
 
     @Test
@@ -101,7 +106,8 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.searchByName(keyword) } returns emptyList()
         coEvery { remoteDataSource.searchByName(keyword) } returns dummyPeopleResponse
-        coEvery { localDataSource.storePerson(any()) } throws Exception()
+        coEvery { localDataSource.storePeople(any()) } throws Exception("Test Exception")
+
         //when && then
         assertThrows<MediaDomainException> { repository.searchByName(keyword) }
     }
@@ -112,7 +118,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(dummyPersonCacheDto) } just Runs
         //when
-        repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits())
+        repository.storeRecentPerson(dummyPersonCacheDto.toEntity())
         //then
         coVerify(exactly = 1) { localDataSource.storePerson(match { it.isRecent }) }
     }
@@ -122,7 +128,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(any()) } throws Exception()
         //when && then
-        assertThrows<MediaDomainException> { repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits()) }
+        assertThrows<MediaDomainException> { repository.storeRecentPerson(dummyPersonCacheDto.toEntity()) }
     }
 
 
