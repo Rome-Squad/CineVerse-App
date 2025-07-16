@@ -7,12 +7,10 @@ import com.giraffe.media.person.remote.PersonRemoteDataSource
 import com.giraffe.media.person.remote.dto.CreditsDto
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.person.util.toDto
-import com.giraffe.media.person.util.toMovieCredits
 import com.giraffe.media.person.util.toImageList
-import com.giraffe.media.person.util.toPersonMovieCredits
-import com.giraffe.media.person.util.toPersonTvCredits
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.person.util.toMovieCredits
 import com.giraffe.media.person.util.toTvCredits
+import com.giraffe.media.util.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
