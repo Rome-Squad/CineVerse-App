@@ -2,7 +2,7 @@ package  com.giraffe.media.movie.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import  com.giraffe.media.movie.datasource.local.cacheDto.SearchKeywordCacheDto
+import  com.giraffe.media.explore.model.SearchKeywordCacheDto
 
 @Dao
 interface MoviesSearchHistoryDao {

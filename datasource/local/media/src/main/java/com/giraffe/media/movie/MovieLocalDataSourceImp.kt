@@ -2,8 +2,8 @@ package  com.giraffe.media.movie
 
 import MovieDao
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import  com.giraffe.media.movie.model.cache.MovieCacheDto
+import  com.giraffe.media.movie.model.cache.MovieGenreCacheDto
 
 
 class MovieLocalDataSourceImp(

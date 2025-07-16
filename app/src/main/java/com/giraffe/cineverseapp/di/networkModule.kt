@@ -7,7 +7,7 @@ import com.giraffe.media.explore.datasource.remote.RemoteExploreDataSource
 import com.giraffe.media.movie.MoviesRemoteDataSourceImp
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.person.PersonRemoteDataSourceImp
-import com.giraffe.media.person.remote.PersonRemoteDataSource
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.series.SeriesRemoteDataSourceImp
 import com.giraffe.media.series.api.BaseRequest
 import com.giraffe.media.series.api.DefaultRequestBuilder

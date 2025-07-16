@@ -2,13 +2,13 @@ package com.giraffe.media.person
 
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.exception.PersonException
-import com.giraffe.media.person.local.PersonLocalDataSource
-import com.giraffe.media.person.local.dto.PersonDto
-import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.remote.response.PersonResponse
-import com.giraffe.media.person.remote.response.SearchPersonResponse
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.model.cache.PersonCacheDto
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
+import com.giraffe.media.person.model.dto.PersonResponse
+import com.giraffe.media.person.model.dto.SearchPersonResponse
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.person.util.toEntity
+import com.giraffe.media.person.mapper.toEntity
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -25,7 +25,7 @@ class PersonRepositoryImplTest {
     private val remoteDataSource: PersonRemoteDataSource = mockk(relaxed = true)
     private val localDataSource: PersonLocalDataSource = mockk(relaxed = true)
     private val keyword = "Mohannad"
-    private val dummyPersonDto = PersonDto(
+    private val dummyPersonDto = PersonCacheDto(
         id = 5,
         name = "Mohannad",
         role = "Acting",

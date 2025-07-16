@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.screen
+package com.giraffe.explore.screen
 
 import android.Manifest
 import android.util.Log
@@ -39,6 +39,7 @@ import com.giraffe.media.explore.components.NoResult
 import com.giraffe.media.explore.components.ResultsActors
 import com.giraffe.media.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.media.explore.entity.SearchKeyword
+import com.giraffe.media.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.util.VoiceSearchHelper
 import org.koin.androidx.compose.koinViewModel
 

@@ -2,9 +2,9 @@ package com.giraffe.media.series.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.media.series.utils.DatabaseConstants.GENRE_TABLE
-import com.giraffe.media.series.utils.DatabaseConstants.SEASON_TABLE
-import com.giraffe.media.series.utils.DatabaseConstants.SERIES_TABLE
+import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
+import com.giraffe.media.utils.DatabaseConstants.SEASON_TABLE
+import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -37,7 +37,7 @@ data class CachedSeasonDto(
 )
 
 
-@Entity(tableName = GENRE_TABLE)
+@Entity(tableName = SERIES_GENRE_TABLE)
 data class CachedSeriesGenreDto(
     @PrimaryKey val id: Int,
     val name: String

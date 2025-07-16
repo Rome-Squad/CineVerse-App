@@ -1,7 +1,7 @@
 package com.giraffe.media.explore.mapper
 
 import com.giraffe.media.explore.model.SearchKeywordCacheDto
-import com.giraffe.media.explore.utils.getCurrentLocalDateTime
+import com.giraffe.media.utils.getCurrentLocalDateTime
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.model.SearchKeywordDto
 import kotlinx.datetime.LocalDateTime

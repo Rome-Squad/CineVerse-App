@@ -2,16 +2,16 @@ package com.giraffe.media.person
 
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.local.PersonLocalDataSource
-import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.remote.response.CreditsResponse
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
+import com.giraffe.media.person.model.dto.CreditsResponse
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.person.util.SafeCall
-import com.giraffe.media.person.util.toDto
-import com.giraffe.media.person.util.toEntity
-import com.giraffe.media.person.util.toImageList
-import com.giraffe.media.person.util.toPersonMovieCredits
-import com.giraffe.media.person.util.toPersonTvCredits
+import com.giraffe.media.person.mapper.toDto
+import com.giraffe.media.person.mapper.toEntity
+import com.giraffe.media.person.mapper.toImageList
+import com.giraffe.media.person.mapper.toPersonMovieCredits
+import com.giraffe.media.person.mapper.toPersonTvCredits
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext

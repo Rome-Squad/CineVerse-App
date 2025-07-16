@@ -1,13 +1,13 @@
 package  com.giraffe.media.movie
 
 import  com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDetailsDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
-import  com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
-import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
-import  com.giraffe.media.movie.datasource.remote.dto.ReviewsResponseDto
+import  com.giraffe.media.movie.model.dto.MovieDetailsDto
+import  com.giraffe.media.movie.model.dto.MovieDto
+import  com.giraffe.media.movie.model.dto.MovieGenreDto
+import  com.giraffe.media.movie.model.dto.MovieReviewDto
+import  com.giraffe.media.movie.model.dto.RatedMoviesResponse
+import  com.giraffe.media.movie.model.dto.RatingRequest
+import  com.giraffe.media.movie.model.dto.ReviewsResponseDto
 import  com.giraffe.media.movie.exceptions.NetworkException
 import  com.giraffe.media.movie.response.GenreResponse
 import  com.giraffe.media.movie.response.MoviesListResponse

@@ -7,12 +7,12 @@ import com.giraffe.media.movies.exception.NetworkError
 import com.giraffe.media.movies.repository.MoviesRepository
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import  com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import  com.giraffe.media.movie.model.dto.RatingRequest
 import  com.giraffe.media.movie.mapper.toEntity
 import  com.giraffe.media.movie.mapper.toMovie
 import  com.giraffe.media.movie.mapper.toMovieCacheDto
 import  com.giraffe.media.movie.mapper.toMovieGenreDto
-import  com.giraffe.media.movie.utils.safeCall
+import  com.giraffe.media.utils.safeCall
 import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(

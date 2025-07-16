@@ -2,11 +2,11 @@ package com.giraffe.media.movie.mapper
 
 
 import com.giraffe.media.movies.entity.Movie
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDetailsDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
-import  com.giraffe.media.movie.utils.BASE_IMAGE_URL
+import  com.giraffe.media.movie.model.cache.MovieCacheDto
+import  com.giraffe.media.movie.model.dto.MovieDetailsDto
+import  com.giraffe.media.movie.model.dto.MovieDto
+import  com.giraffe.media.movie.model.dto.MovieGenreDto
+import  com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDate
 
 fun MovieCacheDto.toMovie(): Movie {

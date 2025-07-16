@@ -7,7 +7,7 @@ import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.person.PersonLocalDataSourceImp
 import com.giraffe.media.person.dao.PersonDao
-import com.giraffe.media.person.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import  com.giraffe.media.movie.MovieLocalDataSourceImp
 import  com.giraffe.media.movie.dao.MoviesSearchHistoryDao

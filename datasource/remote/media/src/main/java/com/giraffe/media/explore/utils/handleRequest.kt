@@ -1,12 +1,12 @@
 package com.giraffe.media.explore.utils
 
-import com.giraffe.media.explore.exceptions.NetworkException
-import com.giraffe.media.explore.exceptions.NoInternetNetworkException
-import com.giraffe.media.explore.exceptions.RequestTimeoutNetworkException
-import com.giraffe.media.explore.exceptions.SerializationNetworkException
-import com.giraffe.media.explore.exceptions.ServerNetworkException
-import com.giraffe.media.explore.exceptions.TooManyRequestsNetworkException
-import com.giraffe.media.explore.exceptions.UnknownNetworkException
+import com.giraffe.media.exception.NetworkException
+import com.giraffe.media.exception.NoInternetNetworkException
+import com.giraffe.media.exception.RequestTimeoutNetworkException
+import com.giraffe.media.exception.SerializationNetworkException
+import com.giraffe.media.exception.ServerNetworkException
+import com.giraffe.media.exception.TooManyRequestsNetworkException
+import com.giraffe.media.exception.UnknownNetworkException
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
