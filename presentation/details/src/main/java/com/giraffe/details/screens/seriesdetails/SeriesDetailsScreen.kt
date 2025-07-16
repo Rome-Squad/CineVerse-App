@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.seriesdetails
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -34,6 +34,7 @@ import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.utils.TypeOfDetailsScreen
 import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
+import kotlin.math.min
 
 @Composable
 fun SeriesDetailsScreen(
@@ -68,8 +69,9 @@ fun SeriesDetailsContent(
                 type = TypeOfDetailsScreen.SERIES.name,
                 name = state.seriesDetails.name,
                 rating = state.seriesDetails.rating,
-                image = (state.seriesDetails.posterUrl?:R.drawable.main_poster_test).imageSourceToPainter(),
-                genres = listOf("Drama", "Action", "Crime", "Thriller"),
+                image = (state.seriesDetails.posterUrl
+                    ?: R.drawable.main_poster_test).imageSourceToPainter(),
+                genres = state.genres,
                 releaseYear = state.seriesDetails.releaseYear,
                 onClickAdd = {},
                 onClickPlay = {},
@@ -85,47 +87,38 @@ fun SeriesDetailsContent(
             InfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(com.giraffe.details.R.string.storyline),
-                description =  state.seriesDetails.overview
-            )
-            SectionTitle(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = "Latest Seasons",
-                clickableText = "Show More",
-                onClickableText = {}
+                description = state.seriesDetails.overview
             )
 
-            Column(
+
+            SectionTitle(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                SeasonCard(
-                    poster = R.drawable.main_poster_test.imageSourceToPainter(),
-                    title = "Season 15",
-                    overview = "The Winchester brothers' epic journey comes to a thrilling and terrifying close in Season 15.",
-                    rating = 7.5f,
-                    episodes = 20,
-                    year = 2019,
-                    onClick = {}
-                )
-                SeasonCard(
-                    poster = R.drawable.main_poster_test.imageSourceToPainter(),
-                    title = "Season 14",
-                    overview = "The season follows Sam and Dean who, along with Jack and Castiel, try to take down the archangel Michael from another world, and learn something bigger is at hand.",
-                    rating = 7.5f,
-                    episodes = 20,
-                    year = 2019,
-                    onClick = {}
-                )
-                SeasonCard(
-                    poster = R.drawable.main_poster_test.imageSourceToPainter(),
-                    title = "Season 13",
-                    overview = "Season 13 begins exactly where we left off, with Sam and Dean left to pick up the pieces after the loss of their mother, the demise of Crowley and the heartbreaking death of Castiel. The birth of Jack leaves the Winchester brothers with differing opinions on how to deal with a Nephilim. After being dragged into the breach, Mary must learn to survive Lucifer and an apocalyptic world.",
-                    rating = 7.5f,
-                    episodes = 20,
-                    year = 2019,
-                    onClick = {}
-                )
+                title = stringResource(com.giraffe.details.R.string.latest_seasons),
+                clickableText = stringResource(com.giraffe.details.R.string.show_more),
+                onClickableText = {}
+            )
+            AnimatedVisibility(state.seasons.isNotEmpty()) {
+
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    for (i in 0..min(2, state.seasons.size - 1)) {
+                        SeasonCard(
+                            poster = (state.seasons[i].posterUrl
+                                ?: R.drawable.main_poster_test).imageSourceToPainter(),
+                            title = "Season ${state.seasons[i].seasonNumber + 1}",
+                            overview = state.seasons[i].overview,
+                            rating = state.seasons[i].rating,
+                            episodes = state.seasons[i].episodeCount,
+                            year = 2008, // state.seasons[i].releaseYear.toInt()
+                            onClick = {}
+                        )
+
+                    }
+                }
             }
+
 
             StarCastSection(
                 title = "Star Cast",

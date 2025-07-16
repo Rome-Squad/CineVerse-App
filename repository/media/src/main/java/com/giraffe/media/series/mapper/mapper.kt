@@ -36,7 +36,6 @@ fun CachedSeriesDto.toEntity(
 fun CachedSeasonDto.toEntity(): Season {
     return Season(
         id = id,
-        name = name,
         overview = overview,
         rating = rate,
         posterUrl = posterUrl,
@@ -69,7 +68,7 @@ fun Season.toCachedDto(seriesId: Int): CachedSeasonDto {
     return CachedSeasonDto(
         id = id,
         seriesId = seriesId,
-        name = name,
+        name = "",
         overview = overview,
         rate = rating,
         posterUrl = posterUrl,
@@ -128,7 +127,6 @@ fun GenreDto.toCachedDto(): CachedSeriesGenreDto {
 fun SeasonDto.toEntity(): Season {
     return Season(
         id = id,
-        name = name,
         overview = overview,
         rating = voteAverage,
         posterUrl = posterPath.toString(),
@@ -181,7 +179,6 @@ fun SeriesDetailsDto.toSeasonEntity(): List<Season> {
         Season(
             id = it.id,
             posterUrl = it.posterPath.toString(),
-            name = it.name,
             rating = it.voteAverage,
             releaseYear = it.airDate?.toString() ?: "",
             overview = it.overview,

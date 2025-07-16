@@ -2,7 +2,6 @@ package com.giraffe.media.series.entity
 
 data class Season(
     val id: Int,
-    val name: String,
     val overview: String,
     val rating: Float,
     val posterUrl: String,
