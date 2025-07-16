@@ -66,7 +66,13 @@ class ExploreViewModel(
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val moviesGenres = getMoviesGenres().map { it.toUi() }
             val seriesGenres = getSeriesGenres().map { it.toUi() }
-            _state.update { it.copy(moviesGenres = moviesGenres, seriesGenres = seriesGenres) }
+            _state.update {
+                it.copy(
+                    selectedGenres = moviesGenres,
+                    moviesGenres = moviesGenres,
+                    seriesGenres = seriesGenres
+                )
+            }
             getMoviesByGenres()
             getSeriesByGenres()
         }
@@ -77,6 +83,7 @@ class ExploreViewModel(
             val movies =
                 getMoviesByGenresUseCase(genresIds).map { it.toPoster(_state.value.moviesGenres) }
             _state.update { it.copy(movieResults = movies) }
+            if (_state.value.selectedTab == SearchTab.MOVIES) _state.update { it.copy(selectedPosters = movies) }
         }
     }
 
@@ -85,12 +92,25 @@ class ExploreViewModel(
             val series =
                 getSeriesByGenresUseCase(genresIds).map { it.toPoster(_state.value.seriesGenres) }
             _state.update { it.copy(seriesResults = series) }
+            if (_state.value.selectedTab == SearchTab.SERIES) _state.update { it.copy(selectedPosters = series) }
         }
     }
 
     override fun onTabSelected(tabIndex: Int) {
         viewModelScope.launch {
-            _state.update { it.copy(selectedTab = SearchTab.entries[tabIndex]) }
+            _state.update {
+                it.copy(
+                    selectedTab = SearchTab.entries[tabIndex],
+                    selectedGenre = if (SearchTab.entries[tabIndex] == SearchTab.MOVIES)
+                        _state.value.selectedMovieGenre
+                    else
+                        _state.value.selectedSeriesGenre,
+                    selectedPosters = if (SearchTab.entries[tabIndex] == SearchTab.MOVIES)
+                        _state.value.movieResults
+                    else
+                        _state.value.seriesResults,
+                )
+            }
         }
     }
 
@@ -111,26 +131,11 @@ class ExploreViewModel(
     }
 
 
-
-
-
-
-
-
-
     private fun getRecent() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val recentSeries = retryIO {
-                getRecentSeries().map { it.toPoster(_state.value.seriesGenres) }
-            }
-            val recentPeople = retryIO {
-                getRecentPeople().map { it.toPoster() }
-            }
-            val recentMovies = retryIO {
-                getRecentlyMovies().map {
-                    it.toPoster(_state.value.moviesGenres)
-                }
-            }
+            val recentSeries = getRecentSeries().map { it.toPoster(_state.value.seriesGenres) }
+            val recentPeople = getRecentPeople().map { it.toPoster() }
+            val recentMovies = getRecentlyMovies().map { it.toPoster(_state.value.moviesGenres) }
             _state.update {
                 it.copy(recentViews = recentMovies + recentSeries + recentPeople)
             }

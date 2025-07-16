@@ -19,9 +19,11 @@ data class ExploreScreenState(
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
     val selectedGenre: GenreUi? = null,
+    val selectedGenres: List<GenreUi> = emptyList(),
     val moviesGenres: List<GenreUi> = listOf(),
     val seriesGenres: List<GenreUi> = listOf(),
     val isSearchFieldFocused: Boolean = false,
+    val selectedPosters: List<Poster> = emptyList(),
     // Tab , View Mode
     val selectedTab: SearchTab = SearchTab.MOVIES,
     val isGridSelected: Boolean = true,
