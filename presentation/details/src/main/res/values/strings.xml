@@ -24,4 +24,6 @@
     <string name="rating">Rating</string>
     <string name="episodes">Episodes</string>
     <string name="year">Year</string>
+    <string name="best_of">Best of</string>
+    <string name="biography">Biography</string>
 </resources>

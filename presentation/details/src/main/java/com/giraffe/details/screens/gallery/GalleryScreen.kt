@@ -61,7 +61,6 @@ fun ImageGalleryLayout(images: List<String>) {
             if (subImages.take(3).isNotEmpty()) {
                 GalleryItemLayoutLTR(
                     images = subImages.take(3),
-                    imageContentDescriptions = emptyList(),
                     modifier = Modifier
                         .height(280.dp)
                         .padding(top = 6.dp, bottom = 6.dp),
@@ -69,7 +68,6 @@ fun ImageGalleryLayout(images: List<String>) {
                 if (subImages.size > 3) {
                     GalleryItemLayoutRTL(
                         images = subImages.subList(3, subImages.size),
-                        imageContentDescriptions = emptyList(),
                         modifier = Modifier
                             .height(280.dp)
                             .padding(top = 6.dp, bottom = 6.dp),

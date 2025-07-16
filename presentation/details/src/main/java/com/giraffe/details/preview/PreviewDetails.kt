@@ -33,7 +33,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.CastCard
-import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.MainMovieOrSeriesDetails
@@ -45,6 +44,7 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.components.sampleCastList
 import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
@@ -85,14 +85,15 @@ fun GallerySectionPreview() {
     CineVerseTheme(isDarkTheme = true) {
         GallerySection(
             modifier = Modifier.height(314.dp),
-            images = listOf(null,null,"https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"),
-            imageContentDescriptions = listOf("gallery_image_one","gallery_image_two","gallery_image_three"),
+            images = listOf(
+                null,
+                null,
+                "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
+            ),
             onShowMoreClick = {}
         )
     }
 }
-
-
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -168,7 +169,7 @@ fun MainDetailsPreview() {
 @Composable
 @Preview
 fun PreviewMainMovieDetails() {
-    CineVerseTheme (
+    CineVerseTheme(
         isDarkTheme = true
     ) {
         MainMovieOrSeriesDetails(
@@ -226,7 +227,6 @@ fun PreviewRatingSectionDark() {
         )
     }
 }
-
 
 
 @Composable
@@ -322,7 +322,7 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-        poster = R.drawable.gallery_item.imageSourceToPainter(),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
@@ -401,6 +401,7 @@ fun PreviewStarCastSectionDark() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview",
@@ -417,6 +418,7 @@ fun PreviewCastCard() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview Dark",

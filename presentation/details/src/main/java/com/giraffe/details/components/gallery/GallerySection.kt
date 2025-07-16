@@ -18,7 +18,6 @@ import com.giraffe.details.R
 fun GallerySection(
     modifier: Modifier = Modifier,
     images: List<String?>,
-    imageContentDescriptions: List<String?>,
     onShowMoreClick: () -> Unit,
 ) {
     Column(
@@ -32,7 +31,7 @@ fun GallerySection(
             onClickableText = onShowMoreClick,
             modifier = Modifier.fillMaxWidth()
         )
-        GalleryItemLayoutLTR(images = images, imageContentDescriptions = imageContentDescriptions)
+        GalleryItemLayoutLTR(images = images)
     }
 }
 
@@ -48,11 +47,6 @@ fun GallerySectionPreview() {
                 null,
                 null,
                 "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
-            ),
-            imageContentDescriptions = listOf(
-                "gallery_image_one",
-                "gallery_image_two",
-                "gallery_image_three"
             ),
             onShowMoreClick = {}
         )

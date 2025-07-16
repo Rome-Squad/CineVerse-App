@@ -24,4 +24,6 @@
     <string name="rating">التقييم</string>
     <string name="episodes">الحلقات</string>
     <string name="year">سنة</string>
+    <string name="best_of">أفضل</string>
+    <string name="biography">سيرة ذاتية</string>
 </resources>

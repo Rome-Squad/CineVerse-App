@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -31,11 +32,12 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
+import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
 
@@ -44,15 +46,36 @@ fun CastDetailsScreen(
     castDetailsViewModel: CastDetailsViewModel = koinViewModel()
 ) {
     val state by castDetailsViewModel.state.collectAsState()
-    CastDetailsContent(
-        state = state,
-        onYoutubeClick = castDetailsViewModel::onActorYoutubeLinkClicked,
-        onFacebookClick = castDetailsViewModel::onActorFacebookLinkClicked,
-        onInstagramClick = castDetailsViewModel::onActorInstagramLinkClicked,
-        onMoviePosterClick = castDetailsViewModel::onMovieClicked,
-        onShowMoreMoviesClick = castDetailsViewModel::navigateToMoviesListScreen,
-        onShowMoreActorGalleryClick = castDetailsViewModel::navigateToActorGalleryScreen,
-    )
+    if (state.isLoading) {
+        LoadingView()
+    } else {
+        CastDetailsContent(
+            state = state,
+            onYoutubeClick = castDetailsViewModel::onActorYoutubeLinkClicked,
+            onFacebookClick = castDetailsViewModel::onActorFacebookLinkClicked,
+            onInstagramClick = castDetailsViewModel::onActorInstagramLinkClicked,
+            onMoviePosterClick = castDetailsViewModel::onMovieClicked,
+            onShowMoreMoviesClick = castDetailsViewModel::navigateToMoviesListScreen,
+            onShowMoreActorGalleryClick = castDetailsViewModel::navigateToActorGalleryScreen,
+        )
+    }
+}
+
+@Composable
+fun LoadingView(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .wrapContentSize()
+    ) {
+        Progress(
+            size = 40.dp,
+            strokeWidth = 4.dp
+        )
+    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -104,7 +127,7 @@ fun CastDetailsContent(
         }
         item {
             MoviesListSection(
-                title = state.titleMoviesSection,
+                title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
                 movies = state.posters,
                 onClickPoster = onMoviePosterClick,
@@ -118,15 +141,14 @@ fun CastDetailsContent(
                     .fillMaxWidth()
                     .padding(horizontal = padding16),
                 images = state.actorGalleryImages,
-                imageContentDescriptions = state.actorGalleryImagesDescriptions,
                 onShowMoreClick = onShowMoreActorGalleryClick
             )
         }
         item {
             InfoSection(
                 modifier = Modifier.padding(horizontal = padding16),
-                title = state.titleInfoSection,
-                description = state.descriptionInfoSection
+                title = stringResource(R.string.biography),
+                description = state.biographyInfo
             )
         }
     }

@@ -10,12 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.giraffe.details.utils.imageSourceToPainter
 
 @Composable
 fun GalleryItemLayoutLTR(
     images: List<String?>,
-    imageContentDescriptions: List<String?>,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -31,8 +29,7 @@ fun GalleryItemLayoutLTR(
         ) {
             images.getOrNull(1)?.let {
                 GalleryItem(
-                    image = it.imageSourceToPainter(),
-                    contentDescription = imageContentDescriptions.getOrNull(1),
+                    image = it,
                     modifier = Modifier
                         .fillMaxHeight(0.5f)
                         .fillMaxWidth()
@@ -40,8 +37,7 @@ fun GalleryItemLayoutLTR(
             }
             images.getOrNull(2)?.let {
                 GalleryItem(
-                    image = it.imageSourceToPainter(),
-                    contentDescription = imageContentDescriptions.getOrNull(2),
+                    image = it,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(0.5f)
@@ -51,8 +47,7 @@ fun GalleryItemLayoutLTR(
         }
         images.getOrNull(0)?.let {
             GalleryItem(
-                image = it.imageSourceToPainter(),
-                contentDescription = imageContentDescriptions.getOrNull(0),
+                image = it,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize()
@@ -64,7 +59,6 @@ fun GalleryItemLayoutLTR(
 @Composable
 fun GalleryItemLayoutRTL(
     images: List<String?>,
-    imageContentDescriptions: List<String?>,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -74,8 +68,7 @@ fun GalleryItemLayoutRTL(
     ) {
         images.getOrNull(0)?.let {
             GalleryItem(
-                image = it.imageSourceToPainter(),
-                contentDescription = imageContentDescriptions.getOrNull(0),
+                image = it,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize()
@@ -89,8 +82,7 @@ fun GalleryItemLayoutRTL(
         ) {
             images.getOrNull(1)?.let {
                 GalleryItem(
-                    image = it.imageSourceToPainter(),
-                    contentDescription = imageContentDescriptions.getOrNull(1),
+                    image = it,
                     modifier = Modifier
                         .fillMaxHeight(0.5f)
                         .fillMaxWidth()
@@ -98,8 +90,7 @@ fun GalleryItemLayoutRTL(
             }
             images.getOrNull(2)?.let {
                 GalleryItem(
-                    image = it.imageSourceToPainter(),
-                    contentDescription = imageContentDescriptions.getOrNull(2),
+                    image = it,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(0.5f)
