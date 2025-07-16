@@ -24,14 +24,12 @@ fun GalleryItemLayoutLTR(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.weight(0.5f)
-
         ) {
             imageUrls.getOrNull(1)?.let {
                 GalleryItem(
-                    imageUrl = it,
+                    imageUrl = imageUrls.getOrNull(1),
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(0.5f)
+                        .fillMaxHeight(0.475f)
                         .fillMaxWidth()
                 )
             }
@@ -84,7 +82,7 @@ fun GalleryItemLayoutRTL(
                 GalleryItem(
                     imageUrl = it,
                     modifier = Modifier
-                        .fillMaxHeight(0.5f)
+                        .fillMaxHeight(0.475f)
                         .fillMaxWidth()
                 )
             }
