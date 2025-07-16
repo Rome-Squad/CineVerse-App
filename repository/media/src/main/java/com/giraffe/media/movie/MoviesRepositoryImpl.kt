@@ -12,6 +12,8 @@ import  com.giraffe.media.movie.mapper.toEntity
 import  com.giraffe.media.movie.mapper.toMovie
 import  com.giraffe.media.movie.mapper.toMovieCacheDto
 import  com.giraffe.media.movie.mapper.toMovieGenreDto
+import com.giraffe.media.movie.mapper.toPreferenceEntity
+import com.giraffe.media.movies.entity.GenrePreference
 import com.giraffe.media.util.SafeCall
 import com.giraffe.user.SessionManager
 
@@ -39,6 +41,11 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenre> {
         return SafeCall {
+
+            if (genreIds.isNotEmpty()) {
+                cache.incrementInteractionCountForGenres(genreIds)
+            }
+
             cache.getMovieGenres(genreIds).map { it.toEntity() }.ifEmpty {
                 remote.getMovieGenres().map { it.toEntity() }
             }
@@ -152,6 +159,12 @@ class MoviesRepositoryImpl(
         return SafeCall {
             val sessionId = getSessionId()
             remote.getUserMovieRating(movieId, sessionId)
+        }
+    }
+
+    override suspend fun getUserGenrePreferences(): List<GenrePreference> {
+        return SafeCall {
+            cache.getGenresSortedByInteraction().map { it.toPreferenceEntity() }
         }
     }
 
