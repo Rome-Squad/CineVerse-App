@@ -1,16 +1,16 @@
 package com.giraffe.media.util
 
-
-import com.giraffe.media.exception.ForbiddenDomainException
-import com.giraffe.media.exception.InvalidApiKeyDomainException
+import com.giraffe.media.exception.AccessDeniedDomainException
+import com.giraffe.media.exception.ApiException
+import com.giraffe.media.exception.InvalidRequestMethodDomainException
 import com.giraffe.media.exception.NetworkDomainException
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundDomainException
-import com.giraffe.media.exception.RateLimitedDomainException
 import com.giraffe.media.exception.ServerErrorDomainException
+import com.giraffe.media.exception.TimeoutDomainException
 import com.giraffe.media.exception.UnauthorizedDomainException
 import com.giraffe.media.exception.UnknownDomainException
 import com.giraffe.media.exception.ValidationDomainException
-import com.giraffe.media.person.util.ApiException
 import com.giraffe.media.utils.SafeCall
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
@@ -19,7 +19,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 class SafeCallTest {
     private lateinit var safeCall: SafeCall
@@ -32,119 +31,113 @@ class SafeCallTest {
     @Test
     fun `should return the value of T when execute function that return T`() =
         runTest {
-            //given
             val execute = suspend { "just dummy string" }
-            //when
             val result = safeCall(execute)
-            //then
             assertThat(result).isInstanceOf(String::class.java)
         }
 
     @Test
     fun `should throw InvalidApiKeyDomainException when execution throw ApiException with error code 7`() =
         runTest {
-            //given
             val execute = suspend { throw ApiException(7) }
-            //when && then
-            assertThrows<InvalidApiKeyDomainException> { safeCall(execute) }
+            assertThrows<UnauthorizedDomainException> { safeCall(execute) }
         }
 
     @Test
     fun `should throw NotFoundDomainException when execution throw ApiException with error code 34`() =
         runTest {
-            //given
             val execute = suspend { throw ApiException(34) }
-            //when && then
             assertThrows<NotFoundDomainException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw UnauthorizedDomainException when execution throw ApiException with error code 401`() =
+    fun `should throw UnauthorizedDomainException when execution throw ApiException with error code 3`() =
         runTest {
-            //given
-            val execute = suspend { throw ApiException(401) }
-            //when && then
+            val execute = suspend { throw ApiException(3) }
             assertThrows<UnauthorizedDomainException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw ForbiddenDomainException when execution throw ApiException with error code 403`() =
+    fun `should throw AccessDeniedDomainException when execution throw ApiException with error code 38`() =
         runTest {
-            //given
-            val execute = suspend { throw ApiException(403) }
-            //when && then
-            assertThrows<ForbiddenDomainException> { safeCall(execute) }
+            val execute = suspend { throw ApiException(38) }
+            assertThrows<AccessDeniedDomainException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw RateLimitedDomainException when execution throw ApiException with error code 429`() =
+    fun `should throw AccessDeniedDomainException when execution throw ApiException with error code 25`() =
         runTest {
-            //given
-            val execute = suspend { throw ApiException(429) }
-            //when && then
-            assertThrows<RateLimitedDomainException> { safeCall(execute) }
+            val execute = suspend { throw ApiException(25) }
+            assertThrows<AccessDeniedDomainException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw ServerErrorDomainException when execution throw ApiException with error code (500 to 599)`() =
+    fun `should throw ServerErrorDomainException when execution throw ApiException with error code 15`() =
         runTest {
-            //given
-            val execute = suspend { throw ApiException(501) }
-            //when && then
+            val execute = suspend { throw ApiException(15) }
             assertThrows<ServerErrorDomainException> { safeCall(execute) }
+        }
+
+    @Test
+    fun `should throw InvalidRequestMethodDomainException when execution throw ApiException with error code 4`() =
+        runTest {
+            val execute = suspend { throw ApiException(4) }
+            assertThrows<InvalidRequestMethodDomainException> { safeCall(execute) }
+        }
+
+    @Test
+    fun `should throw ValidationDomainException when execution throw ApiException with error code 5`() =
+        runTest {
+            val execute = suspend { throw ApiException(5) }
+            assertThrows<ValidationDomainException> { safeCall(execute) }
+        }
+
+    @Test
+    fun `should throw TimeoutDomainException when execution throw ApiException with error code 24`() =
+        runTest {
+            val execute = suspend { throw ApiException(24) }
+            assertThrows<TimeoutDomainException> { safeCall(execute) }
         }
 
     @Test
     fun `should throw UnknownDomainException when execution throw ApiException with unexpected error code`() =
         runTest {
-            //given
-            val execute = suspend { throw ApiException(0) }
-            //when && then
+            val execute = suspend { throw ApiException(999) }
             assertThrows<UnknownDomainException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw NetworkDomainException when execution throw UnknownHostException`() =
+    fun `should throw TimeoutDomainException when execution throw SocketTimeoutException`() =
         runTest {
-            //given
-            val execute = suspend { throw UnknownHostException() }
-            //when && then
-            assertThrows<NetworkDomainException> { safeCall(execute) }
+            val execute = suspend { throw SocketTimeoutException() }
+            assertThrows<TimeoutDomainException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw NetworkDomainException when execution throw SocketTimeoutException`() =
+    fun `should throw NetworkDomainException when execution throw NoInternetException`() =
         runTest {
-            //given
-            val execute = suspend { throw SocketTimeoutException() }
-            //when && then
+            val execute = suspend { throw NoInternetException() }
             assertThrows<NetworkDomainException> { safeCall(execute) }
         }
 
     @Test
     fun `should throw ValidationDomainException when execution throw SerializationException`() =
         runTest {
-            //given
             val execute = suspend { throw SerializationException() }
-            //when && then
             assertThrows<ValidationDomainException> { safeCall(execute) }
         }
 
     @Test
     fun `should throw ValidationDomainException when execution throw IllegalArgumentException`() =
         runTest {
-            //given
             val execute = suspend { throw IllegalArgumentException() }
-            //when && then
             assertThrows<ValidationDomainException> { safeCall(execute) }
         }
 
     @Test
     fun `should throw UnknownDomainException when execution throw unexpected exception`() =
         runTest {
-            //given
             val execute = suspend { throw NullPointerException() }
-            //when && then
             assertThrows<UnknownDomainException> { safeCall(execute) }
         }
 }

@@ -1,15 +1,7 @@
 package com.giraffe.media.utils
 
 import com.giraffe.media.exception.ApiException
-import com.giraffe.media.exception.ClientErrorDomainException
-import com.giraffe.media.exception.ClientErrorException
-import com.giraffe.media.exception.CorruptDatabaseException
-import com.giraffe.media.exception.CorruptDbDomainException
-import com.giraffe.media.exception.DiskAccessException
-import com.giraffe.media.exception.DiskErrorDomainException
 import com.giraffe.media.exception.ForbiddenAccessException
-import com.giraffe.media.exception.ForbiddenDomainException
-import com.giraffe.media.exception.InvalidApiKeyDomainException
 import com.giraffe.media.exception.InvalidApiKeyException
 import com.giraffe.media.exception.InvalidIdException
 import com.giraffe.media.exception.MediaDomainException
@@ -18,19 +10,14 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundDomainException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.RateLimitExceededException
-import com.giraffe.media.exception.RateLimitedDomainException
-import com.giraffe.media.exception.RedirectedDomainException
-import com.giraffe.media.exception.RedirectedException
 import com.giraffe.media.exception.RequestTimeoutException
 import com.giraffe.media.exception.SerializationException
 import com.giraffe.media.exception.ServerErrorDomainException
 import com.giraffe.media.exception.ServerException
 import com.giraffe.media.exception.TimeoutDomainException
-import com.giraffe.media.exception.TooManyRequestsException
 import com.giraffe.media.exception.UnauthorizedAccessException
-import com.giraffe.media.exception.UnauthorizedDomainException
+import com.giraffe.media.exception.*
 import com.giraffe.media.exception.UnknownDomainException
-import com.giraffe.media.exception.UnknownNetworkException
 import com.giraffe.media.exception.ValidationDomainException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -44,52 +31,48 @@ object SafeCall {
         }
     }
 
-    fun mapToDomainException(e: Throwable): MediaDomainException = when (e) {
-        // Remote error codes (ApiException)
+    private fun mapToDomainException(e: Throwable): MediaDomainException = when (e) {
+
         is ApiException -> when (e.code) {
-            7 -> InvalidApiKeyDomainException()
-            34 -> NotFoundDomainException()
-            401 -> UnauthorizedDomainException()
-            403 -> ForbiddenDomainException()
-            429 -> RateLimitedDomainException()
-            in 500..599 -> ServerErrorDomainException()
+            3, 7, 10, 14, 16, 17, 30, 31, 32, 33, 35, 36 -> UnauthorizedDomainException()
+            4, 42 -> InvalidRequestMethodDomainException()
+            8, 38, 39, 45, 25 -> AccessDeniedDomainException()
+            5, 18, 20, 22, 23, 26, 27, 28, 29, 41, 47 -> ValidationDomainException()
+            6, 34, 37 -> NotFoundDomainException()
+            2, 9, 43, 46 -> NetworkDomainException()
+            11, 15, 44 -> ServerErrorDomainException()
+            24 -> TimeoutDomainException()
             else -> UnknownDomainException()
         }
 
-        // Network-related
+
         is NoInternetException,
+        is UnknownNetworkException,
         is UnknownHostException -> NetworkDomainException()
 
         is RequestTimeoutException,
         is SocketTimeoutException -> TimeoutDomainException()
 
-        is TooManyRequestsException -> RateLimitedDomainException()
-        is RedirectedException -> RedirectedDomainException()
-        is ClientErrorException -> ClientErrorDomainException()
-
-        // Server
         is ServerException -> ServerErrorDomainException()
 
-        // Validation / Serialization
-        is SerializationException,
-        is IllegalArgumentException,
-        is InvalidIdException -> ValidationDomainException()
+        is UnauthorizedAccessException,
+        is InvalidApiKeyException -> UnauthorizedDomainException()
 
-        // Local/database
+        is ForbiddenAccessException,
+        is TooManyRequestsException,
+        is RateLimitExceededException -> AccessDeniedDomainException()
+
         is NotFoundException -> NotFoundDomainException()
-        is CorruptDatabaseException -> CorruptDbDomainException()
-        is DiskAccessException -> DiskErrorDomainException()
 
-        // Auth (alternative fallback)
-        is InvalidApiKeyException -> InvalidApiKeyDomainException()
-        is UnauthorizedAccessException -> UnauthorizedDomainException()
-        is ForbiddenAccessException -> ForbiddenDomainException()
-        is RateLimitExceededException -> RateLimitedDomainException()
+        is InvalidIdException,
+        is SerializationException,
+        is IllegalArgumentException -> ValidationDomainException()
 
-        // Unknown
-        is UnknownNetworkException -> UnknownDomainException()
+        is RedirectedException,
+        is ClientErrorException,
+        is CorruptDatabaseException,
+        is DiskAccessException -> UnknownDomainException()
+
         else -> UnknownDomainException()
     }
 }
-
-
