@@ -1,12 +1,12 @@
 package com.giraffe.explore
 
 import android.util.Log
+import com.giraffe.explore.util.exceptionHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.usecase.ExploreUseCases
-import com.giraffe.media.explore.util.exceptionHandler
 import com.giraffe.media.explore.util.retryIO
 import com.giraffe.media.movies.usecase.ClearCacheUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase

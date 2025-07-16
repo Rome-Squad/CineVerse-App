@@ -1,11 +1,11 @@
 package  com.giraffe.media.movie
 
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDetailsDto
 import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.datasource.remote.dto.ReviewsResponseDto
-import com.giraffe.media.movie.exceptions.NetworkException
 import com.giraffe.media.movie.response.GenreResponse
 import com.giraffe.media.movie.response.MoviesListResponse
 import com.giraffe.media.util.RequestBuilder
@@ -37,7 +37,7 @@ class MoviesRemoteDataSourceImp(
     override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) =
         requestBuilder.get<RatedMoviesResponse>(endpoint = "guest_session/$guestSessionId/rated/movies").results.firstOrNull {
             it.id == movieId
-        }?.rating?.toFloat() ?: throw NetworkException()
+        }?.rating?.toFloat() ?: throw NoInternetException()
 
 
     override suspend fun addRating(

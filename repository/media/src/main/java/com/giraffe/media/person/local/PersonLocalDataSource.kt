@@ -2,6 +2,7 @@ package com.giraffe.media.person.local
 
 import com.giraffe.media.person.local.cacheDto.PersonCacheDto
 
+
 interface PersonLocalDataSource {
     suspend fun storePerson(person: PersonCacheDto)
     suspend fun searchByName(personName: String): List<PersonCacheDto>
