@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -24,7 +24,7 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun StaffInfoSection(
     title: String,
-    staffList: List<StaffMember>,
+    staffList: Map<String, List<String>>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,10 +39,9 @@ fun StaffInfoSection(
                 text = title,
                 color = Theme.color.shade.primary,
                 style = Theme.textStyle.title.sm,
+                modifier = Modifier.padding(bottom = 12.dp)
             )
         }
-
-        Spacer(modifier = Modifier.height(12.dp))
 
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -50,10 +49,11 @@ fun StaffInfoSection(
             colors = CardDefaults.cardColors(containerColor = Theme.color.background.card)
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                staffList.forEachIndexed { index, staff ->
-                    StaffItem(name = staff.name, role = staff.role)
+                staffList.entries.toList().forEachIndexed { index, (key, value) ->
+                    val name = value.joinToString(",")
+                    StaffItem(name = name, role = key)
 
-                    if (index != staffList.lastIndex) {
+                    if (index != staffList.entries.size - 1) {
                         HorizontalDivider(
                             thickness = 1.dp,
                             color = Theme.color.stroke.primary,
@@ -85,7 +85,10 @@ fun StaffItem(name: String, role: String) {
         Text(
             text = name,
             style = Theme.textStyle.body.md.medium,
-            color = Theme.color.shade.primary
+            color = Theme.color.shade.primary,
+            maxLines = 2,
+            modifier = Modifier.weight(1f),
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -100,14 +103,10 @@ data class StaffMember(
 )
 @Composable
 fun PreviewStaffInfoSectionDark() {
-    CineVerseTheme(isDarkTheme = true) {
+      CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Behind the Scenes",
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -122,11 +121,24 @@ fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
             title = "Behind the Scenes",
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
+
+val staffList = listOf(
+    StaffMember(name = "John Doe", role = "Director"),
+    StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
+    StaffMember(name = "Mike Johnson", role = "Writer")
+)
+
+val groupedStaff: Map<String, List<String>> = staffList
+    .flatMap { staff ->
+        staff.role.split(", ").map { role ->
+            role to staff.name
+        }
+    }
+    .groupBy(
+        keySelector = { it.first },
+        valueTransform = { it.second }
+    )
