@@ -1,9 +1,10 @@
-package com.giraffe.details.screens.moviedetails.screens
+package com.giraffe.details.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,17 +19,17 @@ import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.entity.MovieReviewAuthor
 
 @Composable
-fun MovieReviewsScreen(
+fun ReviewsScreen(
     movieReviewList : List<MovieReview>
 ){
 
-    MovieReviewsContent(
+    ReviewsContent(
         movieReviewList = movieReviewList
     )
 }
 
 @Composable
-private fun MovieReviewsContent(
+private fun ReviewsContent(
     modifier : Modifier = Modifier,
     movieReviewList : List<MovieReview>
 ){
@@ -36,7 +37,7 @@ private fun MovieReviewsContent(
     LazyColumn (
         modifier = modifier
             .background(Theme.color.background.screen)
-            .padding(vertical = 20.dp)
+            .systemBarsPadding()
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -147,7 +148,7 @@ private fun MovieReviewsPreview(){
         ),
 
     )
-    MovieReviewsContent(
+    ReviewsContent(
         movieReviewList = movieReviews
 
     )
