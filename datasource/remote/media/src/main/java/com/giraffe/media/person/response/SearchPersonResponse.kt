@@ -1,13 +1,14 @@
-package  com.giraffe.media.movie.response
+package com.giraffe.media.person.response
 
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
+import com.giraffe.media.person.remote.dto.PersonDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MoviesListResponse(
+data class SearchPersonResponse(
     val page: Int,
-    val results: List<MovieDto>,
+    @SerialName("results")
+    val people: List<PersonDto>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")

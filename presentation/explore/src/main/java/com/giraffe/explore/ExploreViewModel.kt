@@ -1,15 +1,17 @@
-package com.giraffe.media.explore
+package com.giraffe.explore
 
 import android.util.Log
 import com.giraffe.explore.util.exceptionHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.media.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.entity.SearchKeyword
+import com.giraffe.media.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.usecase.ExploreUseCases
 import com.giraffe.media.explore.util.retryIO
 import com.giraffe.media.movies.usecase.ClearCacheUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
 import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
@@ -32,17 +34,24 @@ import kotlinx.coroutines.launch
 
 class ExploreViewModel(
     private val exploreUseCases: ExploreUseCases,
+
+    private val getMoviesGenres: GetMoviesGenresUseCase,
+    private val getSeriesGenres: GetSeriesGenresUseCase,
+
+    private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
+
+    private val getMovieGenres: GetMovieGenresUseCase,
+
+
     private val clearCache: ClearCacheUseCase,
-    private val searchMovie: SearchMovieByNameUseCase,
-    private val movieGenres: GetMovieGenresUseCase,
-    private val searchSeries: SearchSeriesByNameUseCase,
-    private val seriesGenres: GetSeriesGenresUseCase,
-    private val searchPeople: SearchPeopleByNameUseCase,
-    private val clearSeries: ClearRecentSeriesUseCase,
-    private val clearPeople: ClearRecentPeopleUseCase,
-    private val getRecentPeopleUseCase: GetRecentPeopleUseCase,
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
-    private val getRecentSeriesUseCase: GetRecentSeriesUseCase
+    private val searchMovieByName: SearchMovieByNameUseCase,
+    private val searchSeriesByName: SearchSeriesByNameUseCase,
+    private val searchPeopleByName: SearchPeopleByNameUseCase,
+    private val clearRecentSeries: ClearRecentSeriesUseCase,
+    private val clearRecentPeople: ClearRecentPeopleUseCase,
+    private val getRecentPeople: GetRecentPeopleUseCase,
+    private val getRecentlyMovies: GetRecentlyMoviesUseCase,
+    private val getRecentSeries: GetRecentSeriesUseCase
 ) : ViewModel(), ExploreInteractionListener {
 
     private val _state = MutableStateFlow(ExploreScreenState())
@@ -62,22 +71,24 @@ class ExploreViewModel(
 
     private fun getGenres() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val genres = seriesGenres().map { it.toUi() }
-            _state.update { it.copy(genres = genres) }
+            val moviesGenres = getMoviesGenres().map { it.toUi() }
+            val seriesGenres = getSeriesGenres().map { it.toUi() }
+            _state.update { it.copy(moviesGenres = moviesGenres, seriesGenres = seriesGenres) }
+            getMoviesByGenres()
         }
     }
 
     private fun getRecent() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val recentSeries = retryIO {
-                getRecentSeriesUseCase().map { it.toPosterMovie(seriesGenres()) }
+                getRecentSeries().map { it.toPoster(getSeriesGenres()) }
             }
             val recentPeople = retryIO {
-                getRecentPeopleUseCase().map { it.toPoster() }
+                getRecentPeople().map { it.toPoster() }
             }
             val recentMovies = retryIO {
-                getRecentlyMoviesUseCase().map {
-                    it.toPosterMovie(movieGenres(it.genresID))
+                getRecentlyMovies().map {
+                    it.toPoster(_state.value.moviesGenres)
                 }
             }
             _state.update {
@@ -90,8 +101,8 @@ class ExploreViewModel(
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             val results = retryIO {
-                searchMovie(keyword.keyword).map {
-                    it.toPosterMovie(movieGenres(it.genresID))
+                searchMovieByName(keyword.keyword).map {
+                    it.toPoster(_state.value.moviesGenres)
                 }
             }
             _state.update {
@@ -112,8 +123,8 @@ class ExploreViewModel(
 
 
             val results = retryIO {
-                searchSeries(keyword.keyword).map {
-                    it.toPosterMovie(seriesGenres())
+                searchSeriesByName(keyword.keyword).map {
+                    it.toPoster(getSeriesGenres())
                 }
             }
             _state.update {
@@ -133,7 +144,7 @@ class ExploreViewModel(
             _state.update { it.copy(isLoading = true, errorMessage = null) }
 
             val results = retryIO {
-                searchPeople(keyword.keyword).map { it.toPoster() }
+                searchPeopleByName(keyword.keyword).map { it.toPoster() }
             }
             _state.update {
                 it.copy(
@@ -205,8 +216,8 @@ class ExploreViewModel(
 
     override fun onClearRecentViewed() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            clearSeries()
-            clearPeople()
+            clearRecentSeries()
+            clearRecentPeople()
             clearCache()
             _state.update { it.copy(recentViews = emptyList()) }
         }
@@ -244,6 +255,17 @@ class ExploreViewModel(
     override fun onGenreSelected(genre: GenreUi) {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(selectedGenre = genre) }
+            getMoviesByGenres(
+                if (genre.id == -1) emptyList() else listOf(genre.id)
+            )
+        }
+    }
+
+    private fun getMoviesByGenres(genresIds: List<Int> = emptyList()) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            val movies =
+                getMoviesByGenresUseCase(genresIds).map { it.toPoster(_state.value.moviesGenres) }
+            _state.update { it.copy(movieResults = movies) }
         }
     }
 
