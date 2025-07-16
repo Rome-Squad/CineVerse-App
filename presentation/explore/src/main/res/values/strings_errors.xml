@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Common Domain Errors -->
-    <string name="error_network">Network error. Please check your connection and try again.</string>
-    <string name="error_timeout">The request timed out. Please try again later.</string>
-    <string name="error_redirect">The request was redirected. Please retry.</string>
-    <string name="error_client_error">Something went wrong. Please try again.</string>
+    <string name="error_network">Please check your internet connection.</string>
+    <string name="error_timeout">The request timed out. Please try again.</string>
     <string name="error_server">Server error. Please try again later.</string>
-    <string name="error_invalid_key">Invalid API key. Try again later.</string>
-    <string name="error_unauthorized">You are not authorized. Please login again.</string>
-    <string name="error_forbidden">Access is forbidden. Please try again later.</string>
-    <string name="error_rate_limited">Too many requests. Please slow down and try again.</string>
-    <string name="error_not_found">The requested item was not found.</string>
-    <string name="error_validation">Invalid data provided. Please check and try again.</string>
-    <string name="error_corrupt_db">Corrupt database error. Try restarting the app.</string>
-    <string name="error_disk">Disk access error. Please check your storage.</string>
-    <string name="error_unknown">An unknown error occurred. Please try again.</string>
+    <string name="error_unauthorized">You\'re not authorized. Please login again.</string>
+    <string name="error_access_denied">Access denied. You don’t have permission.</string>
+    <string name="error_validation">Invalid input. Please check your data.</string>
+    <string name="error_invalid_method">طريقة الطلب غير صالحة. تواصل مع الدعم.</string>
+    <string name="error_not_found">Resource not found.</string>
+    <string name="error_unknown">Something went wrong. Please try again later.</string>
 </resources>
