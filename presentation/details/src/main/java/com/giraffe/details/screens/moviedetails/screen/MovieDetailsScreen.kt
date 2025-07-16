@@ -94,7 +94,7 @@ private fun MovieDetailsContent(
         }
         item {
             MainMovieOrSeriesDetails(
-                type = "Movie",
+                type = stringResource(R.string.movie),
                 poster = state.movie.posterUrl?.imageSourceToPainter()
                     ?: painterResource(R.drawable.main_poster_test),
                 name = state.movie.title,
@@ -140,7 +140,7 @@ private fun MovieDetailsContent(
         item {
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-                onCardClick = onGiveStarClick
+                onClickCard = onGiveStarClick
             )
         }
 
@@ -192,6 +192,7 @@ private fun MovieDetailsContent(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
         content = {
             CollectionItem(
                 text = "My Favorite TV", icon = R.drawable.due_tone_folder
@@ -208,6 +209,7 @@ private fun MovieDetailsContent(
         isVisible = state.isVisibleGiveStarsBottomSheet,
         onDismiss = onDismissAddRatingBottomSheet,
         title = stringResource(R.string.rate_the_movie),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
         content = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
