@@ -328,11 +328,7 @@ fun PreviewStaffInfoSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Staff Info",
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -347,11 +343,7 @@ fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
             title = "Staff Info",
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -417,3 +409,20 @@ fun PreviewCastCardDark() {
         )
     }
 }
+
+val staffList = listOf(
+    StaffMember(name = "John Doe", role = "Director"),
+    StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
+    StaffMember(name = "Mike Johnson", role = "Writer")
+)
+
+val groupedStaff: Map<String, List<String>> = staffList
+    .flatMap { staff ->
+        staff.role.split(", ").map { role ->
+            role to staff.name
+        }
+    }
+    .groupBy(
+        keySelector = { it.first },
+        valueTransform = { it.second }
+    )
