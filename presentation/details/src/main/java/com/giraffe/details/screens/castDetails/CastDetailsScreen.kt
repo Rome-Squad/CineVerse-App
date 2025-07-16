@@ -49,12 +49,7 @@ fun CastDetailsScreen(
     } else {
         CastDetailsContent(
             state = state,
-            onYoutubeClick = castDetailsViewModel::onActorYoutubeLinkClicked,
-            onFacebookClick = castDetailsViewModel::onActorFacebookLinkClicked,
-            onInstagramClick = castDetailsViewModel::onActorInstagramLinkClicked,
-            onMoviePosterClick = castDetailsViewModel::onMovieClicked,
-            onShowMoreMoviesClick = castDetailsViewModel::navigateToMoviesListScreen,
-            onShowMoreActorGalleryClick = castDetailsViewModel::navigateToActorGalleryScreen,
+            interaction = castDetailsViewModel,
         )
     }
 }
@@ -80,13 +75,8 @@ fun LoadingView(
 @Composable
 fun CastDetailsContent(
     state: CastDetailsUiState,
+    interaction: CastDetailsInteractionListener,
     modifier: Modifier = Modifier,
-    onYoutubeClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onInstagramClick: () -> Unit,
-    onMoviePosterClick: (movieId: Int) -> Unit,
-    onShowMoreMoviesClick: () -> Unit,
-    onShowMoreActorGalleryClick: () -> Unit,
 ) {
     val scrollState = rememberLazyListState()
     val isScrolled by remember {
@@ -112,9 +102,9 @@ fun CastDetailsContent(
                     actorName = state.actorName,
                     actorBirthday = state.actorBirth,
                     actorPlaceOfBirth = state.actorPlace,
-                    onYoutubeClick = onYoutubeClick,
-                    onFacebookClick = onFacebookClick,
-                    onInstagramClick = onInstagramClick,
+                    onYoutubeClick = interaction::onActorYoutubeLinkClicked,
+                    onFacebookClick = interaction::onActorFacebookLinkClicked,
+                    onInstagramClick = interaction::onActorInstagramLinkClicked,
                 )
                 AppBar(
                     showBackButton = true,
@@ -128,8 +118,8 @@ fun CastDetailsContent(
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
                 movies = state.posters,
-                onClickPoster = onMoviePosterClick,
-                onClickEndText = onShowMoreMoviesClick
+                onClickPoster = interaction::onMovieClicked,
+                onClickEndText = interaction::navigateToMoviesListScreen
             )
         }
         item {
@@ -139,7 +129,7 @@ fun CastDetailsContent(
                     .fillMaxWidth()
                     .padding(horizontal = padding16),
                 imageUrls = state.actorGalleryImageUrls,
-                onShowMoreClick = onShowMoreActorGalleryClick
+                onShowMoreClick = interaction::navigateToActorGalleryScreen
             )
         }
         item {
