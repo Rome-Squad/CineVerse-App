@@ -57,18 +57,18 @@ fun AppBar(
         DisplayImage(
             image = image,
             imageSize = imageSize,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier
         )
         Column(
             modifier = Modifier.weight(1f)
         ) {
             Caption(
                 caption=caption,
-                modifier= Modifier.padding(start = 8.dp)
+                modifier= Modifier
             )
             Title(
                 title = title,
-                modifier= Modifier.padding(start = 8.dp)
+                modifier= Modifier
             )
         }
         EndIcon(painter = endIcon, onEndIconClick = onEndIconClick)
