@@ -26,9 +26,9 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun CollectionItem(
-    modifier: Modifier = Modifier,
     text: String,
     icon: Int,
+    modifier: Modifier = Modifier
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Row(
