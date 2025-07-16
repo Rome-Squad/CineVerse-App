@@ -12,4 +12,5 @@
     <string name="movies">Movies</string>
     <string name="series">Series</string>
     <string name="actors">Actors</string>
+    <string name="all">All</string>
 </resources>

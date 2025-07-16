@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,11 +30,12 @@ import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.explore.R
 import com.giraffe.media.explore.components.ExploreHeader
 import com.giraffe.media.explore.components.HistoryAndRecentItems
 import com.giraffe.media.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.media.explore.util.toTitle
 import com.giraffe.media.explore.entity.SearchKeyword
+import com.giraffe.media.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -62,6 +64,19 @@ fun ExploreContent(
         state.moviesGenres,
         state.seriesGenres
     ) { if (state.selectedTab == SearchTab.MOVIES) state.moviesGenres else state.seriesGenres }
+    val posters = rememberSaveable(
+        state.selectedTab,
+        state.movieResults,
+        state.seriesResults
+    ) { if (state.selectedTab == SearchTab.MOVIES) state.movieResults else state.seriesResults }
+
+    val selectedGenre =
+        remember(state.selectedTab, state.selectedMovieGenre, state.selectedSeriesGenre) {
+            if (state.selectedTab == SearchTab.MOVIES)
+                state.selectedMovieGenre ?: GenreUi(title = context.getString(R.string.all))
+            else
+                state.selectedSeriesGenre ?: GenreUi(title = context.getString(R.string.all))
+        }
     Box {
         LazyColumn(
             modifier = modifier
@@ -93,8 +108,8 @@ fun ExploreContent(
                 if (!state.isSearchFieldFocused) {
                     ExploreItemsSection(
                         modifier = Modifier.fillParentMaxHeight(),
-                        posters = state.movieResults,
-                        selectedGenre = state.selectedGenre ?: GenreUi(title = "All"),
+                        posters = posters,
+                        selectedGenre = selectedGenre,
                         genres = listOf(GenreUi(title = "All")) + genres,
                         isGridSelected = state.isGridSelected,
                         onGenreSelected = interactions::onGenreSelected

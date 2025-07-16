@@ -14,7 +14,7 @@ data class ExploreScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val searchKeyword: SearchKeyword? = null,
-    @StringRes val errorMessage: Int? = null,
+    val errorMessage: Int? = null,
     val isSearchHistoryVisible: Boolean = true,
     val isSearchSuggestionsVisible: Boolean = false,
     val isSearchResultsVisible: Boolean = false,
@@ -39,11 +39,14 @@ data class ExploreScreenState(
     val isVoiceRecording: Boolean = false,
     val isPermissionGranted: Boolean = false,
     val mediaResults: List<Poster> = emptyList(),
+    val selectedMovieGenre: GenreUi? = null,
+    val selectedSeriesGenre: GenreUi? = null,
 ) : HasErrorMessage<ExploreScreenState> {
     override fun withErrorMessage(@StringRes id: Int): ExploreScreenState {
         return copy(errorMessage = id, isLoading = false)
     }
 }
+
 const val TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
 enum class SearchTab {
@@ -67,16 +70,16 @@ fun Movie.toPoster(allGenres: List<GenreUi>): Poster {
     )
 }
 
-fun Series.toPoster(allGenres: List<SeriesGenre>): Poster {
+fun Series.toPoster(allGenres: List<GenreUi>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genreIDs }
-        .joinToString(", ") { it.name }
+        .joinToString(", ") { it.title }
         .ifBlank { null }
 
     return Poster(
         id = id,
         name = name,
-        imageUri = posterUrl,
+        imageUri = posterUrl.let { TMDB_IMAGE_BASE_URL + it },
         rating = rating,
         genres = genreTitles
     )

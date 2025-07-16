@@ -73,6 +73,10 @@ class SeriesRepositoryImpl(
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
+    override suspend fun getSeriesByGenres(genresIds: List<Int>) = SafeCall {
+        remote.getSeriesByGenreIds(genresIds).map { it.toEntity() }
+    }
+
     override suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview> = SafeCall {
         remote.getSeriesReviews(seriesId).toSeriesReviewsEntity()
     }
