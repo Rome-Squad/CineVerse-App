@@ -30,7 +30,7 @@ import com.giraffe.media.series.model.CachedSeriesGenreDto
         MoviePersonCrossRef::class,
         SeriesPersonCrossRef::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class CineVerseDatabase : RoomDatabase() {
