@@ -21,11 +21,13 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.gallery.GalleryItemLayoutLTR
 import com.giraffe.details.components.gallery.GalleryItemLayoutRTL
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Preview
 @Composable
 fun GalleryScreen(
-    galleryViewModel: GalleryViewModel = koinViewModel(),
+    images: List<String?> = emptyList(),
+    galleryViewModel: GalleryViewModel = koinViewModel(parameters = { parametersOf(images) })
 ) {
     val state by galleryViewModel.state.collectAsState()
     GalleryContent(state = state)
