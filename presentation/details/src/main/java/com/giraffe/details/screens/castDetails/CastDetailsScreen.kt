@@ -37,13 +37,24 @@ import com.giraffe.details.R
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
+import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CastDetailsScreen(
-    castDetailsViewModel: CastDetailsViewModel = koinViewModel()
+    personId: Int,
+    modifier: Modifier = Modifier,
+    castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
 ) {
     val state by castDetailsViewModel.state.collectAsState()
+    EventListener(
+        events = castDetailsViewModel.effect,
+    ) {
+        when (it) {
+            is CastDetailsEffect.Error -> TODO()
+        }
+    }
     if (state.isLoading) {
         LoadingView()
     } else {

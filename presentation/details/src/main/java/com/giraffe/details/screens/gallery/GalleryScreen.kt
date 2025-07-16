@@ -27,6 +27,7 @@ import com.giraffe.details.components.gallery.GalleryItemLayoutRTL
 fun GalleryScreen(
     actorName: String,
     imageUrls: List<String?>,
+    modifier: Modifier = Modifier,
 ) {
     val state: GalleryUiState by remember {
         mutableStateOf(

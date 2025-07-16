@@ -1,18 +1,18 @@
 package com.giraffe.details.screens.castDetails
 
-import android.util.Log
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 
 class CastDetailsViewModel(
+    personId: Int,
     val getPersonDetailsUseCase: GetPersonDetailsUseCase
-) : BaseViewModel<CastDetailsUiState, CostDetailsEffect>(CastDetailsUiState()),
+) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
     CastDetailsInteractionListener {
 
     init {
-        getPersonDetails()
+        getPersonDetails(personId)
     }
 
     override fun onActorYoutubeLinkClicked() {
@@ -39,14 +39,15 @@ class CastDetailsViewModel(
         TODO("Not yet implemented")
     }
 
-    private fun getPersonDetails(personId: Int = 1) = safeExecute(
-        block = {
+    private fun getPersonDetails(personId: Int) {
+        safeExecute(
+            onSuccess = ::getPersonDetailsSuccess,
+            onError = ::getPersonDetailsError
+        ) {
             updateState { it.copy(isLoading = true) }
             getPersonDetailsUseCase.invoke(personId)
-        },
-        onSuccess = ::getPersonDetailsSuccess,
-        onError = ::getPersonDetailsError
-    )
+        }
+    }
 
     private fun getPersonDetailsSuccess(person: Person) {
         updateState {
@@ -73,7 +74,7 @@ class CastDetailsViewModel(
 
     private fun getPersonDetailsError(exception: Throwable) {
         updateState { it.copy(isLoading = false) }
-        Log.d("Error", "getPersonDetailsError: ${exception.message}")
+        sendEffect(CastDetailsEffect.Error(exception))
     }
 
 }

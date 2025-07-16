@@ -93,7 +93,7 @@ fun MainDetails(
                         contentDescription = actorName,
                         modifier = Modifier
                             .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = actorImageUrl.toString() + key),
+                                sharedContentState = rememberSharedContentState(key = actorImageUrl + key),
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
                             .size(height = 80.dp, width = 64.dp)
