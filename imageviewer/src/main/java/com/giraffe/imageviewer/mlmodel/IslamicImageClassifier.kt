@@ -1,4 +1,4 @@
-package com.giraffe.imageviewer.classifier
+package com.giraffe.imageviewer.mlmodel
 
 import android.graphics.Bitmap
 

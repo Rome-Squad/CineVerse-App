@@ -1,4 +1,4 @@
-package com.giraffe.imageviewer.utils
+package com.giraffe.imageviewer.blur
 
 import android.content.Context
 import android.graphics.Bitmap

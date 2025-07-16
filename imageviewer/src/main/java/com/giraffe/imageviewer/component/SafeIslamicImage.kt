@@ -1,4 +1,4 @@
-package com.giraffe.imageviewer.islamicimageviewer
+package com.giraffe.imageviewer.component
 
 
 import android.graphics.Bitmap
@@ -25,8 +25,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.AsyncImagePainter.Companion.DefaultTransform
 import coil.request.ImageRequest
 import com.giraffe.imageviewer.R
-import com.giraffe.imageviewer.classifier.IslamicImageClassifierImpl
-import com.giraffe.imageviewer.utils.BlurTransformer
+import com.giraffe.imageviewer.mlmodel.IslamicImageClassifierImpl
+import com.giraffe.imageviewer.blur.BlurTransformer
 import com.giraffe.imageviewer.utils.drawableToBitmap
 import java.io.ByteArrayOutputStream
 
@@ -115,3 +115,5 @@ fun SafeIslamicImage(
 
     }
 }
+
+

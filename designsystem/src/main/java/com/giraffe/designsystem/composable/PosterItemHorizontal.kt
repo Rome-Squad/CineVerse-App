@@ -29,7 +29,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.imageviewer.islamicimageviewer.SafeIslamicImage
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun PosterItemHorizontal(
