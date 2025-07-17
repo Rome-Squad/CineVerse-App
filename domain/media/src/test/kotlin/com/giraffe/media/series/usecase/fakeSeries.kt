@@ -2,7 +2,7 @@ package com.giraffe.media.series.usecase
 
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.entity.SeriesReview
+import com.giraffe.media.entity.Review
 
 fun fakeSeries(id: Int, name: String,genreIDs: List<Int> = emptyList()) = Series(
     id = id,
@@ -26,12 +26,12 @@ fun fakeSeason(id: Int, name: String) = Season(
     episodeCount = 1
 )
 
-fun fakeSeriesReview(id: String, name: String, review: String) = SeriesReview(
+fun fakeSeriesReview(id: String, name: String, review: String) = Review(
     id = id,
-    userImageUrl = "",
-    name = name,
-    userName = "",
-    review = review,
-    rating = 1.0f,
-    releaseYear = null
+    authorImageUrl = "",
+    authorName = name,
+    authorUserName = "",
+    content = review,
+    rating = 1,
+    createdAt = null
 )

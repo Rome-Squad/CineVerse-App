@@ -53,7 +53,7 @@ fun CrewDto.toEntity(type: PersonType): Person = Person(
 )
 
 fun PersonProfileImageDto.toImageList(): List<String> {
-    return profiles.map { it.filePath }
+    return profiles.map { BASE_IMAGE_URL + it.filePath }
 }
 
 fun List<PersonMovieCastItemDto>.toEntity(): List<PersonCredit> {
@@ -61,7 +61,7 @@ fun List<PersonMovieCastItemDto>.toEntity(): List<PersonCredit> {
         PersonCredit(
             id = it.id,
             title = it.title,
-            posterPath = it.posterPath,
+            posterPath = BASE_IMAGE_URL + it.posterPath,
             voteAverage = it.voteAverage
         )
     }
@@ -72,7 +72,7 @@ fun List<PersonTvCastDto>.toTvCredits(): List<PersonCredit> {
         PersonCredit(
             id = it.id,
             title = it.name,
-            posterPath = it.posterPath,
+            posterPath = BASE_IMAGE_URL + it.posterPath,
             voteAverage = it.voteAverage
         )
     }

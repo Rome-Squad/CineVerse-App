@@ -31,9 +31,9 @@ fun MainMovieOrSeriesDetails(
     rating: Float,
     duration: String?,
     releaseDate: String,
-    onClickPlay: () -> Unit,
-    onClickAdd: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onPlayMovieClick : ()-> Unit = {},
+    onAddToCollectionClick: ()-> Unit={}
 ) {
     Column(
         modifier = modifier.background(Theme.color.background.screen),
@@ -57,8 +57,8 @@ fun MainMovieOrSeriesDetails(
             rating = rating,
             duration = duration,
             releaseDate = releaseDate,
-            onClickAdd = onClickAdd,
-            onClickPlay = onClickPlay
+            onClickAdd = onAddToCollectionClick,
+            onClickPlay = onPlayMovieClick
         )
     }
 }
@@ -76,8 +76,8 @@ fun PreviewMainMovieDetails() {
             duration = "2h 32m",
             releaseDate = "2008, Jul 18",
             type = "Movie",
-            onClickAdd = {},
-            onClickPlay = {}
+            onPlayMovieClick = {},
+            onAddToCollectionClick = {}
         )
     }
 }

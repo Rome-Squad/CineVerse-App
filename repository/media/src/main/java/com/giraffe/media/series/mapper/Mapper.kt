@@ -6,13 +6,13 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.entity.Review
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.series.entity.SeriesReview
 import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
@@ -155,29 +155,31 @@ fun SeriesDetailsDto.toEntity(): Series {
     )
 }
 
-fun List<ReviewDto>.toEntity(): List<SeriesReview> {
+fun List<ReviewDto>.toEntity(): List<Review> {
     return map { item ->
-        SeriesReview(
+        Review(
             id = item.id,
-            userImageUrl = item.authorDetails.avatarPath,
-            name = item.authorDetails.name,
-            userName = item.authorDetails.username,
-            review = item.content,
-            rating = item.authorDetails.rating.toFloat(),
-            releaseYear = parseData(item.createdAt)
+            authorImageUrl = item.authorDetails.avatarPath,
+            authorName = item.authorDetails.name,
+            authorUserName = item.authorDetails.username,
+            content = item.content,
+            rating = item.authorDetails.rating.toInt(),
+            createdAt = parseData(item.createdAt)
         )
     }
 }
 
 @OptIn(ExperimentalTime::class)
-fun parseData(dateString: String): LocalDate? {
+fun parseData(dateString: String): LocalDateTime? {
     return try {
         val instant = Instant.parse(dateString)
-        instant.toLocalDateTime(TimeZone.UTC).date
+        instant.toLocalDateTime(TimeZone.UTC)
     } catch (_: Exception) {
         null
     }
 }
+
+
 
 
 fun SeriesDetailsDto.toSeasonEntity(): List<Season> {

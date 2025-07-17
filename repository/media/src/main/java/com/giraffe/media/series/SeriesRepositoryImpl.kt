@@ -6,12 +6,12 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.series.entity.SeriesReview
 import com.giraffe.media.series.mapper.toDto
+import com.giraffe.media.entity.Review
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.utils.SafeCall
 
 class SeriesRepositoryImpl(
     private val remote: SeriesRemoteDataSource,
@@ -72,7 +72,7 @@ class SeriesRepositoryImpl(
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview> = SafeCall {
+    override suspend fun getSeriesReviews(seriesId: Int): List<Review> = SafeCall {
         remote.getSeriesReviews(seriesId).toEntity()
     }
 

@@ -1,22 +1,17 @@
 package com.giraffe.media.movie.mapper
 
-import com.giraffe.media.movies.entity.MovieReview
-import com.giraffe.media.movies.entity.MovieReviewAuthor
+import com.giraffe.media.entity.Review
 import  com.giraffe.media.movie.model.dto.MovieReviewDto
 import kotlinx.datetime.LocalDateTime
 
-fun MovieReviewDto.toEntity(): MovieReview {
-    return MovieReview(
+fun MovieReviewDto.toEntity(): Review {
+    return Review(
         id = this.id,
         content = this.content,
         createdAt = LocalDateTime.parse(this.createdAt),
-        updatedAt = LocalDateTime.parse(this.updatedAt),
-        url = this.url,
-        author = MovieReviewAuthor(
-            name = this.authorDetails.name ?: this.author,
-            username = this.authorDetails.username,
-            avatarImage = this.authorDetails.avatarPath ?: "",
-            rating = this.authorDetails.rating
-        )
+        authorName = this.authorDetails.name ?: this.author,
+        authorImageUrl = this.authorDetails.avatarPath ?: "",
+        authorUserName = this.authorDetails.username,
+        rating = this.authorDetails.rating,
     )
 }
