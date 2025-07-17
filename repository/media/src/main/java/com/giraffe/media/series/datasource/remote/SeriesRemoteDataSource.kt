@@ -11,5 +11,5 @@ interface SeriesRemoteDataSource {
     suspend fun getGenres(): List<GenreDto>
     suspend fun getSeriesDetails(seriesId: Int): SeriesDetailsDto
     suspend fun getSeriesRecommendations(seriesId: Long, page: Int): List<SeriesDto>
-    suspend fun getSeriesReviews(seriesId: Int): List<ReviewDto>
+    suspend fun getSeriesReviews(seriesId: Int, page: Int): List<ReviewDto>
 }

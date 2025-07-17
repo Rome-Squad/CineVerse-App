@@ -14,6 +14,6 @@ interface SeriesRepository {
     suspend fun clearRecentSeries()
     suspend fun getSeriesDetails(seriesId: Int): Series
     suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series>
-    suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview>
+    suspend fun getSeriesReviews(seriesId: Int, page: Int): List<SeriesReview>
     suspend fun getSeasonOfSeries(seriesId: Int): List<Season>
 }

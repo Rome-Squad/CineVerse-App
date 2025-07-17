@@ -73,8 +73,8 @@ class SeriesRepositoryImpl(
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview> = SafeCall {
-        remote.getSeriesReviews(seriesId).toSeriesReviewsEntity()
+    override suspend fun getSeriesReviews(seriesId: Int, page: Int): List<SeriesReview> = SafeCall {
+        remote.getSeriesReviews(seriesId, page).toSeriesReviewsEntity()
     }
 
     override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {

@@ -33,8 +33,12 @@ class SeriesRemoteDataSourceImp(
     override suspend fun getSeriesDetails(seriesId: Int) =
         requestBuilder.get<SeriesDetailsDto>(endpoint = "tv/$seriesId")
 
-    override suspend fun getSeriesReviews(seriesId: Int) =
-        requestBuilder.get<SeriesReviewsResponse>(endpoint = "tv/$seriesId/reviews").results
+    override suspend fun getSeriesReviews(seriesId: Int, page: Int) =
+        requestBuilder
+            .get<SeriesReviewsResponse>(
+                endpoint = "tv/$seriesId/reviews",
+                params = mapOf(PAGE to page.toString())
+            ).results
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
         requestBuilder.get<SeriesResponse>(
