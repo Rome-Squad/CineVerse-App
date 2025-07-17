@@ -13,5 +13,6 @@ class ValidationDomainException : MediaDomainException()
 class InvalidRequestMethodDomainException : MediaDomainException()
 
 class NotFoundDomainException : MediaDomainException()
+class InfrastructureDomainException : MediaDomainException()
 
 class UnknownDomainException : MediaDomainException()
