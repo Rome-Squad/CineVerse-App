@@ -1,13 +1,13 @@
 package com.giraffe.media.explore
 
-import com.giraffe.media.explore.utils.getCurrentLocalDateTime
+import com.giraffe.media.utils.getCurrentLocalDateTime
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toCacheDto
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.ExploreRepository
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -19,12 +19,12 @@ class ExploreRepositoryImpl(
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
         if (query.isBlank())
             return cache.getSearchHistory().map {
-                it.toEntity()
+                it.map { cacheDto-> cacheDto.toEntity() }
             }
 
         return SafeCall {
             val history = cache.getSearchKeywords(query).map {
-                it.toEntity()
+                it.map {cacheDto-> cacheDto.toEntity() }
             }
 
             val remoteResults = remote.getSearchKeywords(query).map {
@@ -39,8 +39,7 @@ class ExploreRepositoryImpl(
         }
     }
 
-    override suspend fun insertSearchKeyword(searchKeyword: String) {
-        SafeCall {
+    override suspend fun insertSearchKeyword(searchKeyword: String)   = SafeCall {
             val searchKeyword = SearchKeyword(
                 keyword = searchKeyword,
                 isFromSearchHistory = true,
@@ -49,18 +48,13 @@ class ExploreRepositoryImpl(
             val cacheDto = searchKeyword.toCacheDto()
             cache.insertSearchKeyword(cacheDto)
         }
-    }
 
-    override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) {
-        SafeCall {
+    override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) = SafeCall {
             val cacheDto = searchKeyword.toCacheDto()
             cache.deleteSearchKeyword(cacheDto)
         }
-    }
 
-    override suspend fun clearSearchHistory() {
-        SafeCall {
+    override suspend fun clearSearchHistory()  = SafeCall {
             cache.clearSearchHistory()
         }
     }
-}

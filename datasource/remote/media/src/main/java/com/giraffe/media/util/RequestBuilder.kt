@@ -1,13 +1,22 @@
 package com.giraffe.media.util
 
+import com.giraffe.media.exception.*
 import com.giraffe.media.person.util.ApiErrorResponse
-import com.giraffe.media.person.util.ApiException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.network.sockets.ConnectTimeoutException
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
+import kotlinx.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import kotlinx.serialization.SerializationException as KxSerializationException
 
 class RequestBuilder(
     val client: HttpClient,
@@ -33,15 +42,44 @@ class RequestBuilder(
     }
 
     suspend inline fun <reified T> safeCall(execute: () -> HttpResponse): T {
-        val response = execute()
-        return when (response.status.value) {
-            in 200..299 -> response.body<T>()
-            else -> {
-                val errorBody = response.body<ApiErrorResponse>()
-                throw ApiException(errorBody.statusCode)
+        return try {
+            val response = execute()
+            when (response.status.value) {
+                in 200..299 -> response.body()
+                else -> {
+                    val errorBody = try {
+                        response.body<ApiErrorResponse>()
+                    } catch (e: Exception) {
+                        ApiErrorResponse(response.status.value, "Unknown error" ,success = false)
+                    }
+                    throw ApiException(errorBody.statusCode)
+                }
             }
+        } catch (e: Throwable) {
+            throw mapToMediaException(e)
         }
     }
+
+    fun mapToMediaException(e: Throwable): MediaException = when (e) {
+        is RedirectResponseException,
+        is ClientRequestException -> ClientErrorException()
+
+        is ServerResponseException -> ServerException()
+
+        is ConnectTimeoutException,
+        is HttpRequestTimeoutException,
+        is SocketTimeoutException -> RequestTimeoutException()
+
+        is UnknownHostException,
+        is IOException -> NoInternetException()
+
+        is KxSerializationException -> SerializationException()
+
+        is IllegalArgumentException -> InvalidIdException()
+
+        else -> UnknownNetworkException()
+    }
+
 
     companion object {
         const val AUTHORIZATION = "Authorization"

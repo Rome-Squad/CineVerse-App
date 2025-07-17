@@ -33,4 +33,6 @@
     <string name="add_to_rate">Add Rating</string>
     <string name="add_to_collection">Add to Collection</string>
     <string name="movie">Movie</string>
+    <string name="best_of">Best of</string>
+    <string name="biography">Biography</string>
 </resources>

@@ -69,13 +69,13 @@ private fun Preview() {
                 movies = listOf(
                     Poster(
                         id = 1,
-                        name = "The Flash",
+                        name = "The FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe Flash",
                         imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                         rating = 7.5f,
                     ),
                     Poster(
                         id = 2,
-                        name = "The Flash",
+                        name = "******The Flash",
                         imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                         rating = 7.5f,
                     ),

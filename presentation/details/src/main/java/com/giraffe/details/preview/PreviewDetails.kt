@@ -34,7 +34,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.CastCard
-import com.giraffe.details.components.GallerySection
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.MainMovieOrSeriesDetails
@@ -46,7 +45,9 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.components.sampleCastList
+import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
 import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.getCurrentLocalDateTime
@@ -123,7 +124,7 @@ fun MainDetailsPreview() {
                 ) { targetState ->
                     when (targetState) {
                         true -> MainDetailsHeader(
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
@@ -131,7 +132,7 @@ fun MainDetailsPreview() {
 
                         false -> MainDetails(
                             modifier = Modifier.padding(top = 72.dp),
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
@@ -156,7 +157,7 @@ fun MainDetailsPreview() {
 @Composable
 @Preview
 fun PreviewMainMovieDetails() {
-    CineVerseTheme (
+    CineVerseTheme(
         isDarkTheme = true
     ) {
         MainMovieOrSeriesDetails(
@@ -167,7 +168,9 @@ fun PreviewMainMovieDetails() {
             rating = 8.5f,
             duration = "2h 32m",
             releaseDate = "2008, Jul 18",
-            type = "Movie"
+            type = "Movie",
+            onClickAdd = {},
+            onClickPlay = {}
         )
     }
 }
@@ -308,7 +311,7 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-        poster = R.drawable.gallery_item.imageSourceToPainter(),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
@@ -377,6 +380,7 @@ fun PreviewStarCastSectionDark() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview",
@@ -393,6 +397,7 @@ fun PreviewCastCard() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview Dark",
