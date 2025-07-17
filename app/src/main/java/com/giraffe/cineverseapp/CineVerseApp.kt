@@ -12,6 +12,7 @@ import com.giraffe.cineverseapp.di.repositoryModule
 import com.giraffe.cineverseapp.di.useCaseModule
 import com.giraffe.cineverseapp.di.viewModelModule
 import com.giraffe.cineverseapp.worker.CacheCleanupWorker
+import com.giraffe.imageviewer.di.imageViewerModule
 import com.giraffe.user.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,8 @@ class CineVerseApp : Application() {
                 networkModule,
                 repositoryModule,
                 useCaseModule,
-                viewModelModule
+                viewModelModule,
+                imageViewerModule
             )
         }
 
