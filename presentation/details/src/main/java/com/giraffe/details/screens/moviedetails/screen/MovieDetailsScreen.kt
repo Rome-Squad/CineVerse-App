@@ -1,5 +1,9 @@
 package com.giraffe.details.screens.moviedetails.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +34,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.CollectionItem
+import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.MainMovieOrSeriesDetails
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
@@ -85,7 +89,7 @@ private fun MovieDetailsContent(
             .background(Theme.color.background.screen)
             .systemBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(bottom = 40.dp)
+        contentPadding = PaddingValues(bottom = 30.dp)
     ) {
         item {
             AppBar(
@@ -145,27 +149,33 @@ private fun MovieDetailsContent(
         }
 
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            AnimatedVisibility(
+                visible = state.movieReviews.take(3).isNotEmpty(),
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut()
             ) {
-                Text(
-                    text = stringResource(R.string.top_reviews),
-                    color = Theme.color.shade.primary,
-                    style = Theme.textStyle.title.sm,
-                )
-
-                Text(
-                    text = stringResource(R.string.show_more),
-                    color = Theme.color.brand.primary,
+                Row(
                     modifier = Modifier
-                        .padding(start = 12.dp)
-                        .clickable { onShowMoreReviewsClick() },
-                    style = Theme.textStyle.body.md.medium,
-                )
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.top_reviews),
+                        color = Theme.color.shade.primary,
+                        style = Theme.textStyle.title.sm,
+                    )
+
+                    Text(
+                        text = stringResource(R.string.show_more),
+                        color = Theme.color.brand.primary,
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .clickable { onShowMoreReviewsClick() },
+                        style = Theme.textStyle.body.md.medium,
+                    )
+                }
             }
         }
 
@@ -178,12 +188,12 @@ private fun MovieDetailsContent(
             }
             ReviewCard(
                 modifier = padding,
-                rate = review.author.rating.toInt(),
+                rate = review.rating.toInt(),
                 reviewText = review.content,
                 reviewDate = review.createdAt,
-                reviewerImageSource = review.author.avatarImage,
-                reviewerName = review.author.name,
-                reviewerUsername = review.author.username
+                reviewerImageSource = review.authorImageUrl,
+                reviewerName = review.authorName,
+                reviewerUsername = review.authorUserName
             )
         }
     }
@@ -194,14 +204,14 @@ private fun MovieDetailsContent(
         title = stringResource(R.string.add_to_collection),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
         content = {
-            CollectionItem(
-                text = "My Favorite TV", icon = R.drawable.due_tone_folder
+            AddToCollectionContent(
+                title = "My Favorite TV", isLoading = false, modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
-            CollectionItem(
-                text = "My WatchList", icon = R.drawable.due_tone_folder
+            AddToCollectionContent(
+                title = "My WatchLis", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
-            CollectionItem(
-                text = "Cristian Bale Movies", icon = R.drawable.due_tone_folder
+            AddToCollectionContent(
+                title = "Cristian Bale Movies", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
         },
     )
