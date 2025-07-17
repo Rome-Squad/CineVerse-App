@@ -38,7 +38,9 @@ fun ExploreHeader(
     onTabClick: (Int) -> Unit = {},
     selectedTabIndex: Int = 0,
     placeholder: String = "",
-    value: String= "",
+    value: String = "",
+    readOnly: Boolean = false,
+    onTextFieldClicked: () -> Unit = {},
     onValueChange: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {}
 ) {
@@ -81,7 +83,9 @@ fun ExploreHeader(
                 placeholder = placeholder,
                 onValueChange = onValueChange,
                 value = value,
-                onFocusChanged = onFocusChanged
+                onFocusChanged = onFocusChanged,
+                readOnly = readOnly,
+                onClicked = onTextFieldClicked
             )
         }
         if (tabsTitles.isNotEmpty()) {

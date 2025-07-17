@@ -1,5 +1,6 @@
 package com.giraffe.explore.screen.discover
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,7 +58,10 @@ fun ExploreContent(
                     modifier = Modifier.padding(bottom = 12.dp),
                     endIcon = painterResource(Theme.icons.outline.microphone),
                     placeholder = stringResource(R.string.search),
-                    onEndIconClick = {},
+                    readOnly = true,
+                    onTextFieldClicked = {
+                        Log.d("messi", "ExploreContent: onTextFieldClicked")
+                    }
                 )
             }
             stickyHeader {
