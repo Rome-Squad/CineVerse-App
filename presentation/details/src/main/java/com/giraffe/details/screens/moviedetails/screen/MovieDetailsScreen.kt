@@ -228,17 +228,17 @@ private fun MovieDetailsContent(
             AddToCollectionContent(
                 title = "My Favorite TV",
                 isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
                 title = "My WatchLis",
                 isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
                 title = "Cristian Bale Movies",
                 isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             )
         },
     )
