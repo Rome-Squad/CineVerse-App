@@ -8,18 +8,23 @@ class BasePagingSource<DATA : Any>(
 ) : PagingSource<Int, DATA>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DATA> {
-        val nextPageIndex = params.key ?: 1
-        return LoadResult.Page(
-            data = getData(nextPageIndex),
-            prevKey = null,
-            nextKey = nextPageIndex
-        )
+        val position = params.key ?: 1
+        return try {
+            val data = getData(position)
+            LoadResult.Page(
+                data = data,
+                prevKey = if (position == 1) null else position,
+                nextKey = if (data.isEmpty()) null else position + 1
+            )
+        } catch (ex: Exception) {
+            LoadResult.Error(ex)
+        }
     }
 
     override fun getRefreshKey(state: PagingState<Int, DATA>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 }
