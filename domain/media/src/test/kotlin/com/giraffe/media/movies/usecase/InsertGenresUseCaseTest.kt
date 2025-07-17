@@ -1,6 +1,6 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.repository.MoviesRepository
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -23,11 +23,11 @@ class InsertGenresUseCaseTest {
     fun `should call repository to insert genres`() = runTest {
         // Given
         val genres = listOf(
-            MovieGenre(
+            Genre(
                 id = 1, title = "Action",
                 rank = 0
             ),
-            MovieGenre(
+            Genre(
                 id = 2, title = "Drama",
                 rank = 0
             )

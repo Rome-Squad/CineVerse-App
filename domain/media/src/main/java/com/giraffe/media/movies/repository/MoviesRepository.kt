@@ -1,22 +1,22 @@
 package com.giraffe.media.movies.repository
 
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.MovieReview
 
 interface MoviesRepository {
 
     suspend fun searchMovieByName(movieName: String): List<Movie>
 
-    suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenre>
+    suspend fun getMovieGenres(genreIds: List<Int>): List<Genre>
 
-    suspend fun getMoviesGenres(): List<MovieGenre>
+    suspend fun getMoviesGenres(): List<Genre>
 
     suspend fun getMoviesByGenres(genreIds: List<Int>): List<Movie>
 
     suspend fun insertMovies(movie: List<Movie>)
 
-    suspend fun insertGenres(genres: List<MovieGenre>)
+    suspend fun insertGenres(genres: List<Genre>)
 
     suspend fun setMovieRecent(
         movie: Movie,

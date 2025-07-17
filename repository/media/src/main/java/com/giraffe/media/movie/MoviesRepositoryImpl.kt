@@ -1,15 +1,13 @@
 package com.giraffe.media.movie
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
+import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
-import com.giraffe.media.movie.mapper.toMovie
-import com.giraffe.media.movie.mapper.toMovieCacheDto
-import com.giraffe.media.movie.mapper.toMovieGenreDto
 import com.giraffe.media.movie.model.dto.RatingRequest
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.util.SafeCall
@@ -23,12 +21,12 @@ class MoviesRepositoryImpl(
 
     override suspend fun searchMovieByName(movieName: String): List<Movie> {
         return SafeCall {
-            val cachedMovies = cache.getMoviesByName(movieName).map { it.toMovie() }
+            val cachedMovies = cache.getMoviesByName(movieName).map { it.toEntity() }
             val isCached = cachedMovies.isNotEmpty()
 
             if (!isCached) {
                 val remoteMovies =
-                    remote.getMoviesByName(movieName).map { it.toMovie() }
+                    remote.getMoviesByName(movieName).map { it.toEntity() }
                 insertMovies(remoteMovies)
                 return remoteMovies
             }
@@ -37,7 +35,7 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenre> {
+    override suspend fun getMovieGenres(genreIds: List<Int>): List<Genre> {
         return SafeCall {
 
             if (genreIds.isNotEmpty()) {
@@ -51,7 +49,7 @@ class MoviesRepositoryImpl(
     }
 
 
-    override suspend fun getMoviesGenres(): List<MovieGenre> {
+    override suspend fun getMoviesGenres(): List<Genre> {
         return SafeCall {
             val cachedMovieGenres = cache.getMoviesGenres().map { it.toEntity() }
             val isCached = cachedMovieGenres.isNotEmpty()
@@ -69,9 +67,9 @@ class MoviesRepositoryImpl(
     }
 
     override suspend fun getMoviesByGenres(genreIds: List<Int>) = SafeCall {
-        cache.getMoviesByGenre(0).map { it.toMovie() }
+        cache.getMoviesByGenre(0).map { it.toEntity() }
             .ifEmpty {
-                val remoteMovies = remote.getMoviesByGenres(genreIds).map { it.toMovie() }
+                val remoteMovies = remote.getMoviesByGenres(genreIds).map { it.toEntity() }
                 insertMovies(remoteMovies)
                 remoteMovies
             }
@@ -80,15 +78,15 @@ class MoviesRepositoryImpl(
     override suspend fun insertMovies(movie: List<Movie>) {
         cache.insertMovies(
             movie.map {
-                it.toMovieCacheDto()
+                it.toDto()
             }
         )
     }
 
-    override suspend fun insertGenres(genres: List<MovieGenre>) {
+    override suspend fun insertGenres(genres: List<Genre>) {
         cache.insertMovieGenres(
             genres.map {
-                it.toMovieGenreDto()
+                it.toDto()
             }
         )
     }
@@ -98,7 +96,7 @@ class MoviesRepositoryImpl(
         isRecent: Boolean
     ) {
         cache.updateMovie(
-            movie = movie.toMovieCacheDto().copy(isRecent = isRecent)
+            movie = movie.toDto().copy(isRecent = isRecent)
         )
     }
 
@@ -108,7 +106,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun getRecentlyMovies(): List<Movie> {
         return SafeCall {
-            cache.getRecentlyMovies().map { it.toMovie() }
+            cache.getRecentlyMovies().map { it.toEntity() }
         }
     }
 
@@ -122,7 +120,7 @@ class MoviesRepositoryImpl(
         return SafeCall {
             val cachedMovie = cache.getMovieById(movieId)
             if (cachedMovie != null) {
-                return cachedMovie.toMovie()
+                return cachedMovie.toEntity()
             } else {
                 val remoteMovieDetails = remote.getMovieById(movieId)
                 val remoteEntity = remoteMovieDetails.toEntity()

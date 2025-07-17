@@ -3,7 +3,7 @@ package com.giraffe.details.screens.moviedetails
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.screens.moviedetails.model.MovieUi
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
@@ -60,7 +60,7 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun loadMovieGenresSuccess(genres: List<MovieGenre>) {
+    private fun loadMovieGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
                 movieGenres = genres,

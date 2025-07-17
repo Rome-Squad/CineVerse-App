@@ -2,7 +2,7 @@ package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.details.screens.moviedetails.model.MovieUi
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.person.entity.Person
 
@@ -10,7 +10,7 @@ data class MovieDetailsScreenState(
 
     //movie details
     val movie: MovieUi = MovieUi(),
-    val movieGenres: List<MovieGenre> = emptyList(),
+    val movieGenres: List<Genre> = emptyList(),
     val cast: List<Person> = emptyList(),
     val crew: List<Person> = emptyList(),
 
