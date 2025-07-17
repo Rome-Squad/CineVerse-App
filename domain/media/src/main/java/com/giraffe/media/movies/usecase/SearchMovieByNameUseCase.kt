@@ -9,13 +9,13 @@ class SearchMovieByNameUseCase(
     suspend operator fun invoke(movieName: String): List<Movie> {
         val searchResults = repository.searchMovieByName(movieName)
 
-        val userPreferences = repository.getUserGenrePreferences()
+        val sortedPreferences = repository.getMoviesGenres()
 
-        if (userPreferences.isEmpty()) {
+        if (sortedPreferences.isEmpty() || sortedPreferences.first().rank == 0) {
             return searchResults
         }
 
-        val favoriteGenreId = userPreferences.first().genreId
+        val favoriteGenreId = sortedPreferences.first().id
 
         return searchResults.sortedByDescending { movie ->
             movie.genresID.contains(favoriteGenreId)

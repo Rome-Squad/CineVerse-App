@@ -3,18 +3,13 @@ package com.giraffe.media.movie.mapper
 import com.giraffe.media.movies.entity.MovieGenre
 import  com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
 import  com.giraffe.media.movie.model.dto.MovieGenreDto
-import com.giraffe.media.movies.entity.GenrePreference
 
-fun MovieGenreCacheDto.toEntity() = MovieGenre(id, name)
+fun MovieGenreCacheDto.toEntity() = MovieGenre(id, name,count)
 
-fun MovieGenre.toMovieGenreDto() = MovieGenreCacheDto(id, title)
+fun MovieGenre.toMovieGenreDto() = MovieGenreCacheDto(id, title,rank)
 
 fun MovieGenreDto.toEntity() = MovieGenre(
     id = id,
-    title = name
-)
-
-fun MovieGenreCacheDto.toPreferenceEntity() = GenrePreference(
-    genreId = this.id,
-    count = this.count,
+    title = name,
+    rank = 0
 )

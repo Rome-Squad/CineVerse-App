@@ -1,19 +1,17 @@
 package com.giraffe.media.movie
 
 import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
+import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
+import com.giraffe.media.movie.mapper.toEntity
+import com.giraffe.media.movie.mapper.toMovie
+import com.giraffe.media.movie.mapper.toMovieCacheDto
+import com.giraffe.media.movie.mapper.toMovieGenreDto
+import com.giraffe.media.movie.model.dto.RatingRequest
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.repository.MoviesRepository
-import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
-import  com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import  com.giraffe.media.movie.model.dto.RatingRequest
-import  com.giraffe.media.movie.mapper.toEntity
-import  com.giraffe.media.movie.mapper.toMovie
-import  com.giraffe.media.movie.mapper.toMovieCacheDto
-import  com.giraffe.media.movie.mapper.toMovieGenreDto
-import com.giraffe.media.movie.mapper.toPreferenceEntity
-import com.giraffe.media.movies.entity.GenrePreference
 import com.giraffe.media.util.SafeCall
 import com.giraffe.user.SessionManager
 
@@ -162,11 +160,6 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override suspend fun getUserGenrePreferences(): List<GenrePreference> {
-        return SafeCall {
-            cache.getGenresSortedByInteraction().map { it.toPreferenceEntity() }
-        }
-    }
 
     private suspend fun getSessionId(): String {
         return SafeCall {

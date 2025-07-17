@@ -1,6 +1,5 @@
 package com.giraffe.media.movies.repository
 
-import com.giraffe.media.movies.entity.GenrePreference
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.entity.MovieReview
@@ -38,6 +37,5 @@ interface MoviesRepository {
 
     suspend fun getUserMovieRating(movieId: Int): Float
 
-    suspend fun getUserGenrePreferences(): List<GenrePreference>
 
 }
