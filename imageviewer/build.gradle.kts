@@ -55,4 +55,7 @@ dependencies {
     // TensorFlow Lite
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.support)
+
+    //koin
+    implementation(libs.koin.androidx.compose)
 }
