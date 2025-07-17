@@ -36,10 +36,13 @@ fun PosterItemVertically(
     modifier: Modifier = Modifier,
     onClickPoster: () -> Unit = {}
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
 
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(Theme.color.background.card)
                 .aspectRatio(0.74f),
