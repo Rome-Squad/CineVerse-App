@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
@@ -40,6 +41,7 @@ fun ExploreHeader(
     placeholder: String = "",
     value: String = "",
     readOnly: Boolean = false,
+    focusRequester: FocusRequester = FocusRequester(),
     onTextFieldClicked: () -> Unit = {},
     onValueChange: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {}
@@ -85,6 +87,7 @@ fun ExploreHeader(
                 value = value,
                 onFocusChanged = onFocusChanged,
                 readOnly = readOnly,
+                focusRequester = focusRequester,
                 onClicked = onTextFieldClicked
             )
         }

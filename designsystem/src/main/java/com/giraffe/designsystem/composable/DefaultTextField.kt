@@ -63,7 +63,8 @@ fun DefaultTextField(
     errorMessage: String? = null,
     readOnly: Boolean = false,
     isPassword: Boolean = false,
-    onClicked:()->Unit = {},
+    focusRequester: FocusRequester = FocusRequester(),
+    onClicked: () -> Unit = {},
     onStartIconClick: ((String) -> Unit)? = null,
     onForgotPasswordClick: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
@@ -71,7 +72,6 @@ fun DefaultTextField(
 
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     LaunchedEffect(isFocused) {
         onFocusChanged(isFocused)
