@@ -31,7 +31,7 @@ object SafeCall {
         }
     }
 
-    private fun mapToDomainException(e: Throwable): MediaDomainException = when (e) {
+     fun mapToDomainException(e: Throwable): MediaDomainException = when (e) {
 
         is ApiException -> when (e.code) {
             3, 7, 10, 14, 16, 17, 30, 31, 32, 33, 35, 36 -> UnauthorizedDomainException()
