@@ -16,9 +16,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-//                val navController = rememberNavController()
-//                DetailsNavGraph(navController = navController)
-
                 ExploreScreen(
                     modifier = Modifier
                         .fillMaxSize()
