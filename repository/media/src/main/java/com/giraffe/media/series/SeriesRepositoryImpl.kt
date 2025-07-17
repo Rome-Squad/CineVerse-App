@@ -13,7 +13,7 @@ import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.mapper.toSeriesEntity
 import com.giraffe.media.series.mapper.toSeriesReviewsEntity
 import com.giraffe.media.series.repository.SeriesRepository
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.utils.SafeCall
 
 class SeriesRepositoryImpl(
     private val remote: SeriesRemoteDataSource,

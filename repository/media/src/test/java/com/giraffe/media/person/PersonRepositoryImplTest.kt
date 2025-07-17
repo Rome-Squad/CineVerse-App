@@ -1,14 +1,13 @@
 package com.giraffe.media.person
 
+import com.giraffe.media.exception.MediaDomainException
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.exception.PersonException
-import com.giraffe.media.person.local.PersonLocalDataSource
-import com.giraffe.media.person.local.cacheDto.PersonCacheDto
-import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.response.PersonResponse
-import com.giraffe.media.person.response.SearchPersonResponse
+import com.giraffe.media.person.mapper.toEntity
+import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.person.model.dto.PersonDto
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.person.util.toMovieCredits
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -31,7 +30,7 @@ class PersonRepositoryImplTest {
         role = "Acting",
         type = "Cast",
     )
-    private val dummyPersonResponse = PersonResponse(
+    private val dummyPersonResponse = PersonDto(
         adult = false,
         gender = 1,
         id = 5,
@@ -41,15 +40,10 @@ class PersonRepositoryImplTest {
         originalName = "مهند",
         popularity = 100.0,
     )
-    private val dummyPeopleDto = listOf(dummyPersonCacheDto, dummyPersonCacheDto, dummyPersonCacheDto)
-    private val dummyPeopleResponse = listOf(dummyPersonResponse, dummyPersonResponse)
 
-    private val dummySearchResponse = SearchPersonResponse(
-        page = 1,
-        people = dummyPeopleResponse,
-        totalPages = 5,
-        totalResults = 20
-    )
+    private val dummyPeopleDto =
+        listOf(dummyPersonCacheDto, dummyPersonCacheDto, dummyPersonCacheDto)
+    private val dummyPeopleResponse = listOf(dummyPersonResponse, dummyPersonResponse)
 
     @Before
     fun setup() {
@@ -74,43 +68,48 @@ class PersonRepositoryImplTest {
         runTest {
             //given
             coEvery { localDataSource.searchByName(keyword) } returns emptyList()
-            coEvery { remoteDataSource.searchByName(keyword) } returns dummySearchResponse
+            coEvery { remoteDataSource.searchByName(keyword) } returns dummyPeopleResponse
             //when
             val result = repository.searchByName(keyword)
             //then
             assertThat(result.size).isEqualTo(2)
             assertThat(result.first()).isInstanceOf(Person::class.java)
-            coVerify(exactly = result.size) { localDataSource.storePerson(match { !it.isRecent }) }
+            coVerify(exactly = 1) {
+                localDataSource.storePeople(match { list ->
+                    list.size == result.size && list.all { !it.isRecent }
+                })
+            }
         }
 
     @Test
-    fun `should throw PersonException when local search throw any exception`() = runTest {
+    fun `should throw MediaDomainException when local search throw any exception`() = runTest {
         //given
         coEvery { localDataSource.searchByName(keyword) } throws Exception()
         //when && then
-        assertThrows<PersonException> { repository.searchByName(keyword) }
+        assertThrows<MediaDomainException> { repository.searchByName(keyword) }
         coVerify(exactly = 0) { remoteDataSource.searchByName(any()) }
         coVerify(exactly = 0) { localDataSource.storePerson(any()) }
     }
 
     @Test
-    fun `should throw PersonException when remote search throw any exception`() = runTest {
+    fun `should throw MediaDomainException when remote search throw any exception`() = runTest {
         //given
         coEvery { localDataSource.searchByName(keyword) } returns emptyList()
         coEvery { remoteDataSource.searchByName(keyword) } throws Exception()
         //when && then
-        assertThrows<PersonException> { repository.searchByName(keyword) }
+        assertThrows<MediaDomainException> { repository.searchByName(keyword) }
         coVerify(exactly = 0) { localDataSource.storePerson(any()) }
     }
 
     @Test
-    fun `should throw PersonException when local store throw any exception`() = runTest {
+    fun `should throw MediaDomainException when local store throw any exception`() = runTest {
         //given
         coEvery { localDataSource.searchByName(keyword) } returns emptyList()
-        coEvery { remoteDataSource.searchByName(keyword).people } returns dummyPeopleResponse
-        coEvery { localDataSource.storePerson(any()) } throws Exception()
+        coEvery { remoteDataSource.searchByName(keyword) } returns dummyPeopleResponse
+        coEvery { localDataSource.storePeople(any()) } throws Exception("Test Exception")
+
         //when && then
-        assertThrows<PersonException> { repository.searchByName(keyword) }
+        assertThrows<MediaDomainException> { repository.searchByName(keyword) }
     }
 
 
@@ -119,17 +118,17 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(dummyPersonCacheDto) } just Runs
         //when
-        repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits())
+        repository.storeRecentPerson(dummyPersonCacheDto.toEntity())
         //then
         coVerify(exactly = 1) { localDataSource.storePerson(match { it.isRecent }) }
     }
 
     @Test
-    fun `should throw PersonException when local data source throw any exception`() = runTest {
+    fun `should throw MediaDomainException when local data source throw any exception`() = runTest {
         //given
         coEvery { localDataSource.storePerson(any()) } throws Exception()
         //when && then
-        assertThrows<PersonException> { repository.storeRecentPerson(dummyPersonCacheDto.toMovieCredits()) }
+        assertThrows<MediaDomainException> { repository.storeRecentPerson(dummyPersonCacheDto.toEntity()) }
     }
 
 
@@ -145,11 +144,11 @@ class PersonRepositoryImplTest {
     }
 
     @Test
-    fun `should throw PersonException when getRecentPeople throw any exception`() = runTest {
+    fun `should throw MediaDomainException when getRecentPeople throw any exception`() = runTest {
         //given
         coEvery { localDataSource.getRecentPeople() } throws Exception()
         //when && then
-        assertThrows<PersonException> { repository.getRecentPeople() }
+        assertThrows<MediaDomainException> { repository.getRecentPeople() }
     }
 
     @Test
@@ -163,10 +162,10 @@ class PersonRepositoryImplTest {
     }
 
     @Test
-    fun `should throw PersonException when clearRecentPeople throw any exception`() = runTest {
+    fun `should throw MediaDomainException when clearRecentPeople throw any exception`() = runTest {
         //given
         coEvery { localDataSource.clearRecentPeople() } throws Exception()
         //when && then
-        assertThrows<PersonException> { repository.clearRecentPeople() }
+        assertThrows<MediaDomainException> { repository.clearRecentPeople() }
     }
 }

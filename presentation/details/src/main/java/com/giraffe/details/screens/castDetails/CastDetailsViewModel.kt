@@ -1,10 +1,20 @@
 package com.giraffe.details.screens.castDetails
 
-import com.giraffe.details.baseViewModel.BaseViewModel
+import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.details.base.BaseViewModel
+import com.giraffe.media.person.entity.Person
+import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 
 class CastDetailsViewModel(
+    personId: Int,
+    val getPersonDetailsUseCase: GetPersonDetailsUseCase
+) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
+    CastDetailsInteractionListener {
 
-) : BaseViewModel<CastDetailsUiState>(CastDetailsUiState()), CastDetailsInteractionListener {
+    init {
+        getPersonDetails(personId)
+    }
+
     override fun onActorYoutubeLinkClicked() {
         TODO("Not yet implemented")
     }
@@ -27,6 +37,44 @@ class CastDetailsViewModel(
 
     override fun navigateToActorGalleryScreen() {
         TODO("Not yet implemented")
+    }
+
+    private fun getPersonDetails(personId: Int) {
+        safeExecute(
+            onSuccess = ::getPersonDetailsSuccess,
+            onError = ::getPersonDetailsError
+        ) {
+            updateState { it.copy(isLoading = true) }
+            getPersonDetailsUseCase.invoke(personId)
+        }
+    }
+
+    private fun getPersonDetailsSuccess(person: Person) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                actorImageUrl = person.imageUrl.orEmpty(),
+                actorName = person.name,
+                actorBirth = person.birthday.orEmpty(),
+                actorPlace = person.placeOfBirth.orEmpty(),
+                actorGalleryImageUrls = person.images,
+                biographyInfo = person.biography.orEmpty(),
+                //should be edit this line to use the correct response
+                posters = person.movieCredits.map { person ->
+                    Poster(
+                        id = person.id,
+                        name = person.title,
+                        imageUri = person.posterPath.orEmpty(),
+                        rating = person.voteAverage.toFloat(),
+                    )
+                }
+            )
+        }
+    }
+
+    private fun getPersonDetailsError(exception: Throwable) {
+        updateState { it.copy(isLoading = false) }
+        sendEffect(CastDetailsEffect.Error(exception))
     }
 
 }
