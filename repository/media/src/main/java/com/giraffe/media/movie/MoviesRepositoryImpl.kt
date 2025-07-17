@@ -3,7 +3,6 @@ package com.giraffe.media.movie
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.entity.MovieGenre
-import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.repository.MoviesRepository
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import  com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
@@ -14,6 +13,8 @@ import  com.giraffe.media.movie.mapper.toMovieCacheDto
 import  com.giraffe.media.movie.mapper.toMovieGenreDto
 import com.giraffe.media.util.SafeCall
 import com.giraffe.user.SessionManager
+import com.giraffe.media.entity.Review
+
 
 class MoviesRepositoryImpl(
     private val cache: MoviesLocalDataSource,
@@ -129,7 +130,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieReviews(
         movieId: Int
-    ): List<MovieReview> {
+    ): List<Review> {
         return SafeCall {
             remote.getMovieReviews(movieId).map { it.toEntity() }
         }
