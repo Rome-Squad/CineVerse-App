@@ -3,7 +3,6 @@ package com.giraffe.details.components
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -19,18 +20,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MinimizedInfoRow(
-    poster: Painter,
+    posterUrl: String?,
     name: String,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
@@ -48,18 +51,34 @@ fun MinimizedInfoRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = poster,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = poster.toString() + key),
-                            animatedVisibilityScope = animatedVisibilityScope
+                posterUrl?.let {
+                    SafeIslamicImage(
+                        imageUrl = it,
+                        contentDescription = stringResource(R.string.poster_image),
+                        modifier = Modifier
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = posterUrl.toString() + key),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(Theme.radius.full)),
+                        contentScale = ContentScale.FillBounds
+                    ) {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.image),
+                            contentDescription = "",
+                            tint = Theme.color.brand.secondary,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    Theme.color.background.card,
+                                    shape = CircleShape
+                                )
+                                .padding(12.dp)
+                                .wrapContentSize(),
                         )
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(Theme.radius.full)),
-                    contentScale = ContentScale.Crop
-                )
+                    }
+                }
                 Text(
                     name,
                     style = Theme.textStyle.title.sm,

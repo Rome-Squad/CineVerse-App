@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +13,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,13 +34,14 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainMovieOrSeriesDetails(
     type: String,
-    poster: Painter,
+    posterUrl: String?,
     name: String,
     genres: List<String>,
     rating: Float,
@@ -58,18 +60,34 @@ fun MainMovieOrSeriesDetails(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Image(
-                painter = poster,
-                contentDescription = stringResource(R.string.poster_image),
-                modifier = Modifier
-                    .sharedElement(
-                        sharedContentState = rememberSharedContentState(key = poster.toString() + key),
-                        animatedVisibilityScope = animatedVisibilityScope
+            posterUrl?.let {
+                SafeIslamicImage(
+                    imageUrl = it,
+                    contentDescription = stringResource(R.string.poster_image),
+                    modifier = Modifier
+                        .sharedElement(
+                            sharedContentState = rememberSharedContentState(key = posterUrl.toString() + key),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                        .size(width = 216.dp, height = 289.dp)
+                        .clip(RoundedCornerShape(Theme.radius.xl)),
+                    contentScale = ContentScale.Crop
+                ) {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = "",
+                        tint = Theme.color.brand.secondary,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(
+                                Theme.color.background.card,
+                                shape = CircleShape
+                            )
+                            .padding(12.dp)
+                            .wrapContentSize(),
                     )
-                    .size(width = 216.dp, height = 289.dp)
-                    .clip(RoundedCornerShape(Theme.radius.xl)),
-                contentScale = ContentScale.Crop
-            )
+                }
+            }
 
 
             Box(

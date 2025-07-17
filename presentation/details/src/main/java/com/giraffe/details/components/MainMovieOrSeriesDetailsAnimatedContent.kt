@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 fun MainMovieOrSeriesDetailsAnimatedContent(
     type: String,
     name: String,
-    image: Painter,
+    image: String?,
     rating: Float,
     genres: List<String>,
     releaseYear: String,
@@ -48,7 +47,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
                 false -> {
                     MainMovieOrSeriesDetails(
                         type = type,
-                        poster = image,
+                        posterUrl = image,
                         name = name,
                         genres = genres,
                         rating = rating,
@@ -64,7 +63,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
 
                 true -> {
                     MinimizedInfoRow(
-                        poster = image,
+                        posterUrl = image,
                         name = name,
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,
