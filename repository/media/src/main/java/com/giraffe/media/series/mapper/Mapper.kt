@@ -7,11 +7,12 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
-import com.giraffe.media.series.entity.SeriesReview
+import com.giraffe.media.entity.Review
 import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
+import kotlinx.datetime.LocalDateTime
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -165,14 +166,16 @@ fun List<ReviewDto>.toSeriesReviewsEntity(): List<SeriesReview> {
 }
 
 @OptIn(ExperimentalTime::class)
-fun parseData(dateString: String): LocalDate? {
+fun parseData(dateString: String): LocalDateTime? {
     return try {
         val instant = Instant.parse(dateString)
-        instant.toLocalDateTime(TimeZone.UTC).date
+        instant.toLocalDateTime(TimeZone.UTC)
     } catch (_: Exception) {
         null
     }
 }
+
+
 
 
 fun SeriesDetailsDto.toSeasonEntity(): List<Season> {

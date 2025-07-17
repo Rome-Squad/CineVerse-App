@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -42,10 +43,11 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
-import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.components.sampleCastList
 import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.details.utils.getCurrentLocalDate
+import com.giraffe.details.utils.getCurrentLocalDateTime
 
 
 @Composable
@@ -77,21 +79,6 @@ fun PreviewAddToCollectionContentDark() {
 }
 
 
-@Preview
-@Composable
-fun GallerySectionPreview() {
-    CineVerseTheme(isDarkTheme = true) {
-        GallerySection(
-            modifier = Modifier.height(314.dp),
-            imageUrls = listOf(
-                null,
-                null,
-                "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
-            ),
-            onShowMoreClick = {}
-        )
-    }
-}
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -166,6 +153,41 @@ fun MainDetailsPreview() {
 
 
 
+@Composable
+@Preview
+fun PreviewMainMovieDetails() {
+    CineVerseTheme(
+        isDarkTheme = true
+    ) {
+        MainMovieOrSeriesDetails(
+            modifier = Modifier.width(360.dp),
+            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
+            name = "The Dark Knight",
+            genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
+            rating = 8.5f,
+            duration = "2h 32m",
+            releaseDate = "2008, Jul 18",
+            type = "Movie",
+            onPlayMovieClick = {},
+            onAddToCollectionClick = {}
+        )
+    }
+}
+
+@Composable
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFF121321
+)
+fun PreviewMinimizedInfoRow() {
+    CineVerseTheme(isDarkTheme = true) {
+        MinimizedInfoRow(
+            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
+            title = "The Dark Knight",
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
+    }
+}
 
 @Composable
 @Preview
@@ -192,6 +214,7 @@ fun PreviewRatingSectionDark() {
         )
     }
 }
+
 
 
 @Composable
@@ -234,7 +257,7 @@ fun PreviewReviewCard() {
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
             reviewerUsername = "bilal_azzam",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = ""
         )
     }
@@ -253,7 +276,7 @@ fun PreviewReviewCardDark() {
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
             reviewerUsername = "bilal_azzam",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = ""
         )
     }
@@ -307,12 +330,7 @@ fun PreviewStaffInfoSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Staff Info",
-            onShowMoreClick = {},
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -327,12 +345,7 @@ fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
             title = "Staff Info",
-            onShowMoreClick = {},
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -400,3 +413,20 @@ fun PreviewCastCardDark() {
         )
     }
 }
+
+val staffList = listOf(
+    StaffMember(name = "John Doe", role = "Director"),
+    StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
+    StaffMember(name = "Mike Johnson", role = "Writer")
+)
+
+val groupedStaff: Map<String, List<String>> = staffList
+    .flatMap { staff ->
+        staff.role.split(", ").map { role ->
+            role to staff.name
+        }
+    }
+    .groupBy(
+        keySelector = { it.first },
+        valueTransform = { it.second }
+    )

@@ -2,9 +2,13 @@ package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.screens.moviedetails.model.MovieUi
+import com.giraffe.details.screens.moviedetails.model.groupByRole
+import com.giraffe.details.screens.moviedetails.model.toCastUi
+import com.giraffe.details.screens.moviedetails.model.toCrewUi
+import com.giraffe.details.screens.moviedetails.model.toReviewUI
+import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.entity.MovieGenre
-import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
@@ -24,16 +28,17 @@ class MovieDetailsViewModel(
     fun loadMovieDetails(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
-            onError = ::loadMovieDetailsError
+            onError =   ::loadMovieDetailsError
         ) {
             getMovieDetails(movieId)
         }
+
     }
 
     private fun loadMovieDetailsSuccess(movie: Movie) {
         updateState {
             it.copy(
-                movie = MovieUi.fromEntity(movie),
+                movie = movie.MovieUi(),
                 isLoadingMovieDetails = false
             )
         }
@@ -63,13 +68,14 @@ class MovieDetailsViewModel(
     private fun loadMovieGenresSuccess(genres: List<MovieGenre>) {
         updateState {
             it.copy(
-                movieGenres = genres,
+                movieGenres = genres.map { genre-> genre.title },
                 isLoadingMovieGenres = false
             )
         }
     }
 
     private fun loadMovieGenresError(error: Throwable) {
+
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
@@ -85,11 +91,12 @@ class MovieDetailsViewModel(
     private fun loadMoviePeopleSuccess(people: List<Person>) {
         val cast = people.filter { it.role == "Acting" }
         val crew = people.filter { it.role != "Acting" }
+        val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
                 isLoadingCast = false,
-                cast = cast,
-                crew = crew,
+                cast = cast.map { it.toCastUi() },
+                crew = mappedCrew.groupByRole()
             )
         }
     }
@@ -117,11 +124,11 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun loadMovieReviewsSuccess(reviews: List<MovieReview>) {
+    private fun loadMovieReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
                 isLoadingReviews = false,
-                movieReviews = reviews
+                movieReviews = reviews.map{ it.toReviewUI() }
             )
         }
     }
