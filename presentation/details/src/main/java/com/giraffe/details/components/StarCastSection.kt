@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.screens.moviedetails.model.CastUi
+import com.giraffe.details.models.CastUi
 import com.giraffe.details.utils.imageSourceToPainter
 
 
@@ -82,7 +82,7 @@ fun StarCastSection(
                         CastCard(
                             actorName = cast.name,
                             character = cast.role,
-                            actorImage = cast.urlImage?.imageSourceToPainter()?: painterResource(R.drawable.reviewer),
+                            actorImage = cast.imageUrl?.imageSourceToPainter()?: painterResource(R.drawable.reviewer),
                         )
                     }
                 }
@@ -124,15 +124,18 @@ fun CastCard(
                     text = actorName,
                     color = Theme.color.shade.primary,
                     style = Theme.textStyle.body.md.medium,
-                    maxLines = 1,
                     minLines = 1,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     modifier = Modifier.padding(top = 4.dp),
                     text = character,
                     color = Theme.color.shade.secondary,
-                    style = Theme.textStyle.body.sm.regular
+                    style = Theme.textStyle.body.sm.regular,
+                    minLines = 1,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

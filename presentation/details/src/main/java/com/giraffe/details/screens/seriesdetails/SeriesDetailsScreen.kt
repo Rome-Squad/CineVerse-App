@@ -22,17 +22,12 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.details.components.CastMember
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
-import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
-import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.utils.TypeOfDetailsScreen
 import com.giraffe.details.utils.imageSourceToPainter
@@ -85,7 +80,8 @@ fun SeriesDetailsContent(
                 releaseYear = state.seriesDetails.releaseYear,
                 onClickAdd = {},
                 onClickPlay = {},
-                isScrolled = scrollState.value > 0
+                isScrolled = scrollState.value > 0,
+                durationAnimation = 2000
             )
         }
 
@@ -130,124 +126,19 @@ fun SeriesDetailsContent(
                 }
             }
 
-
             StarCastSection(
-                title = "Star Cast",
+                title = stringResource(com.giraffe.details.R.string.star_cast),
                 onShowMoreClick = {},
-                castList = listOf(
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-                    CastMember(
-                        actorName = "Cristian Bale",
-                        character = "Bruce Wayne",
-                        image = R.drawable.main_poster_test.imageSourceToPainter(),
-                    ),
-
-                    ),
+                castList = state.cast
             )
 
             StaffInfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = "Behind the Scenes",
-                staffList = listOf(
-                    StaffMember(
-                        name = "Bob Kane",
-                        role = "Characters"
-                    ),
-                    StaffMember(
-                        name = "Christopher Nolan",
-                        role = "Director, Screenplay, Story"
-                    ),
-                    StaffMember(
-                        name = "Jonathan Nolan",
-                        role = "Screenplay"
-                    ),
-                    StaffMember(
-                        name = "David S. Goyer",
-                        role = "Story"
-                    )
-                ),
-                onShowMoreClick = {}
+                title = stringResource(com.giraffe.details.R.string.behind_the_scenes),
+                staffList = state.crew
             )
 
-            MoviesListSection(
-                title = "You Might Also Like",
-                endText = stringResource(R.string.show_more),
-                movies = listOf(
-                    Poster(
-                        id = 1,
-                        name = "The Flash",
-                        imageUri = R.drawable.main_poster_test.toString(),
-                        rating = 7.5f,
-                    ),
-                    Poster(
-                        id = 2,
-                        name = "The Flash",
-                        imageUri = R.drawable.main_poster_test.toString(),
-                        rating = 7.5f,
-                    ),
-                    Poster(
-                        id = 3,
-                        name = "The Flash",
-                        imageUri = R.drawable.main_poster_test.toString(),
-                        rating = 7.5f,
-                    ),
-                    Poster(
-                        id = 4,
-                        name = "The Flash",
-                        imageUri = R.drawable.main_poster_test.toString(),
-                        rating = 7.5f,
-                    ),
 
-                    ),
-                onClickEndText = {},
-                onClickPoster = {}
-            )
-
-            RatingSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onArrowButtonClick = {}
-            )
-
-            SectionTitle(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = "Top Reviews",
-                clickableText = "Show More",
-                onClickableText = {}
-            )
             Box(
                 Modifier
                     .fillMaxWidth()

@@ -21,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +34,7 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
-import com.giraffe.details.components.MainMovieOrSeriesDetails
+import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
@@ -43,7 +42,7 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
-import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.details.utils.TypeOfDetailsScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -97,17 +96,17 @@ private fun MovieDetailsContent(
             )
         }
         item {
-            MainMovieOrSeriesDetails(
-                type = stringResource(R.string.movie),
-                poster = state.movie.posterUrl?.imageSourceToPainter()
-                    ?: painterResource(R.drawable.main_poster_test),
+            MainMovieOrSeriesDetailsAnimatedContent(
+                type = TypeOfDetailsScreen.MOVIE.name,
                 name = state.movie.title,
-                genres = state.movieGenres,
                 rating = state.movie.rating,
+                image = state.movie.posterUrl,
+                genres = state.movieGenres,
+                releaseYear = state.movie.releaseYear,
                 duration = state.movie.duration.toString(),
-                releaseDate = state.movie.releaseYear,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                onAddToCollectionClick = onAddToCollectionClick
+                onClickAdd = onAddToCollectionClick,
+                onClickPlay = {},
+                isScrolled = false
             )
         }
         item {
@@ -205,13 +204,19 @@ private fun MovieDetailsContent(
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
         content = {
             AddToCollectionContent(
-                title = "My Favorite TV", isLoading = false, modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My Favorite TV",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
             AddToCollectionContent(
-                title = "My WatchLis", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My WatchLis",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
             AddToCollectionContent(
-                title = "Cristian Bale Movies", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "Cristian Bale Movies",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
         },
     )

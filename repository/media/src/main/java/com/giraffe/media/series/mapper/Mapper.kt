@@ -1,5 +1,6 @@
 package com.giraffe.media.series.mapper
 
+import com.giraffe.media.entity.Review
 import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeasonDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
@@ -7,14 +8,12 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
-import com.giraffe.media.entity.Review
 import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
-import kotlinx.datetime.LocalDateTime
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.utils.BASE_IMAGE_URL
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
@@ -151,16 +150,16 @@ fun SeriesDetailsDto.toSeriesEntity(): Series {
     )
 }
 
-fun List<ReviewDto>.toSeriesReviewsEntity(): List<SeriesReview> {
+fun List<ReviewDto>.toSeriesReviewsEntity(): List<Review> {
     return map { item ->
-        SeriesReview(
+        Review(
             id = item.id,
-            userImageUrl = item.authorDetails.avatarPath,
-            name = item.authorDetails.name,
-            userName = item.authorDetails.username,
-            review = item.content,
-            rating = item.authorDetails.rating.toFloat(),
-            releaseYear = parseData(item.createdAt)
+            authorImageUrl = item.authorDetails.avatarPath,
+            authorName = item.authorDetails.name,
+            authorUserName = item.authorDetails.username,
+            content = item.content,
+            rating = item.authorDetails.rating,
+            createdAt = parseData(item.createdAt)
         )
     }
 }
@@ -174,8 +173,6 @@ fun parseData(dateString: String): LocalDateTime? {
         null
     }
 }
-
-
 
 
 fun SeriesDetailsDto.toSeasonEntity(): List<Season> {

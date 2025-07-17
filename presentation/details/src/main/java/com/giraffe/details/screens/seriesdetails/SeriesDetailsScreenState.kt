@@ -2,12 +2,18 @@ package com.giraffe.details.screens.seriesdetails
 
 import com.giraffe.details.models.SeasonUi
 import com.giraffe.details.models.SeriesUi
+import com.giraffe.details.models.CastUi
 
 data class SeriesDetailsScreenState(
     val seriesDetails: SeriesUi = SeriesUi(),
     val genres: List<String> = emptyList(),
     val seasons: List<SeasonUi> = emptyList(),
+    val cast: List<CastUi> = emptyList(),
+    val crew: Map<String, List<String>> = emptyMap(),
+
     val isLoadingSeries: Boolean = true,
     val isLoadingSeason: Boolean = true,
     val isLoadingGenres: Boolean = true,
-)
+    val isLoadingPeople: Boolean = true,
+
+    )

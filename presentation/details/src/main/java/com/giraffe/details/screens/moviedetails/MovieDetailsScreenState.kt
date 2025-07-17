@@ -1,7 +1,7 @@
 package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.details.screens.moviedetails.model.CastUi
+import com.giraffe.details.models.CastUi
 import com.giraffe.details.screens.moviedetails.model.MovieUi
 import com.giraffe.details.screens.moviedetails.model.ReviewUI
 

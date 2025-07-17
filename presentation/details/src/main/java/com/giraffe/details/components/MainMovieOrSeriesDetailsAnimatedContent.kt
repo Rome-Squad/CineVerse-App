@@ -27,7 +27,8 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
     isScrolled: Boolean = false,
-    duration: Int = 400
+    duration: String? = null,
+    durationAnimation: Int = 400
 ) {
 
     val topPadding by animateDpAsState(
@@ -38,8 +39,8 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
             targetState = isScrolled,
             transitionSpec = {
                 fadeIn(
-                    animationSpec = tween(duration)
-                ) togetherWith fadeOut(animationSpec = tween(duration))
+                    animationSpec = tween(durationAnimation)
+                ) togetherWith fadeOut(animationSpec = tween(durationAnimation))
             },
             label = "Animated Content"
         ) { targetState ->
@@ -51,7 +52,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
                         name = name,
                         genres = genres,
                         rating = rating,
-                        duration = null,
+                        duration = duration,
                         releaseDate = releaseYear,
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,

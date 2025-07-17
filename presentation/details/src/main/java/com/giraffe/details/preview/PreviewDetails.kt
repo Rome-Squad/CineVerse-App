@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -44,10 +43,8 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
-import com.giraffe.details.utils.getCurrentLocalDate
-import com.giraffe.details.utils.imageSourceToPainter
-import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.getCurrentLocalDateTime
+import com.giraffe.details.utils.imageSourceToPainter
 
 
 @Composable
@@ -77,8 +74,6 @@ fun PreviewAddToCollectionContentDark() {
         )
     }
 }
-
-
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -152,43 +147,6 @@ fun MainDetailsPreview() {
 }
 
 
-
-@Composable
-@Preview
-fun PreviewMainMovieDetails() {
-    CineVerseTheme(
-        isDarkTheme = true
-    ) {
-        MainMovieOrSeriesDetails(
-            modifier = Modifier.width(360.dp),
-            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
-            name = "The Dark Knight",
-            genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
-            rating = 8.5f,
-            duration = "2h 32m",
-            releaseDate = "2008, Jul 18",
-            type = "Movie",
-            onPlayMovieClick = {},
-            onAddToCollectionClick = {}
-        )
-    }
-}
-
-@Composable
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF121321
-)
-fun PreviewMinimizedInfoRow() {
-    CineVerseTheme(isDarkTheme = true) {
-        MinimizedInfoRow(
-            poster = com.giraffe.designsystem.R.drawable.main_poster_test.imageSourceToPainter(),
-            title = "The Dark Knight",
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-    }
-}
-
 @Composable
 @Preview
 fun PreviewRatingSection() {
@@ -214,7 +172,6 @@ fun PreviewRatingSectionDark() {
         )
     }
 }
-
 
 
 @Composable
