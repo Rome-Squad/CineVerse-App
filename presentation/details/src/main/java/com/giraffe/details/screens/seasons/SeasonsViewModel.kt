@@ -13,12 +13,8 @@ class SeasonsViewModel(
 
     fun loadSeason(seriesId: Int) {
         safeExecute(
-            onSuccess = {
-                loadSeasonsSuccess(it)
-            },
-            onError = {
-                loadSeasonsError(it)
-            }
+            onSuccess = ::loadSeasonsSuccess,
+            onError = ::loadSeasonsError
         ) {
             getSeasons(seriesId)
         }
@@ -39,5 +35,6 @@ class SeasonsViewModel(
                 isLoadingSeason = false,
             )
         }
+        sendEffect(SeasonsEffect.Error(error))
     }
 }

@@ -1,4 +1,7 @@
 package com.giraffe.details.screens.seriesdetails
 
-interface SeriesDetailsEffect {
+
+sealed interface SeriesDetailsEffect {
+    data class Error(val error: Throwable) : SeriesDetailsEffect
+
 }

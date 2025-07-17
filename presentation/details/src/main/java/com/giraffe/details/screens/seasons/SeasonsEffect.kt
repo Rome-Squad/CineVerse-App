@@ -1,4 +1,5 @@
 package com.giraffe.details.screens.seasons
 
-interface SeasonsEffect {
+sealed interface SeasonsEffect {
+    data class Error(val error: Throwable) : SeasonsEffect
 }

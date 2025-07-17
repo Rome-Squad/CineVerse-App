@@ -31,12 +31,8 @@ class SeriesDetailsViewModel(
 
     fun loadSeries(seriesId: Int) {
         safeExecute(
-            onSuccess = {
-                loadSeriesDetailsSuccess(it)
-            },
-            onError = {
-                loadSeriesDetailsError(it)
-            }
+            onSuccess = ::loadSeriesDetailsSuccess,
+            onError = ::loadSeriesDetailsError
         ) {
             getSeriesDetails(seriesId)
         }
@@ -57,17 +53,14 @@ class SeriesDetailsViewModel(
                 isLoadingSeries = false,
             )
         }
+        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
 
     fun loadSeason(seriesId: Int) {
         safeExecute(
-            onSuccess = {
-                loadLastSeasonsSuccess(it)
-            },
-            onError = {
-                loadLastSeasonsError(it)
-            }
+            onSuccess = ::loadLastSeasonsSuccess,
+            onError = ::loadLastSeasonsError
         ) {
             getLastSeasons(seriesId)
         }
@@ -88,17 +81,14 @@ class SeriesDetailsViewModel(
                 isLoadingSeason = false,
             )
         }
+        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
 
     fun loadGenres() {
         safeExecute(
-            onSuccess = {
-                loadGenresSuccess(it)
-            },
-            onError = {
-                loadGenresError(it)
-            }
+            onSuccess = ::loadGenresSuccess,
+            onError = ::loadGenresError
         ) {
             getSeriesGenres()
         }
@@ -119,6 +109,7 @@ class SeriesDetailsViewModel(
                 isLoadingGenres = false,
             )
         }
+        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
 
