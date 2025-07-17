@@ -4,13 +4,13 @@ import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesReview
 
-fun fakeSeries(id: Int, name: String) = Series(
+fun fakeSeries(id: Int, name: String,genreIDs: List<Int> = emptyList()) = Series(
     id = id,
     name = name,
     overview = "",
     rating = 0f,
     posterUrl = "",
-    genreIDs = emptyList(),
+    genreIDs = genreIDs,
     releaseYear = "",
 )
 

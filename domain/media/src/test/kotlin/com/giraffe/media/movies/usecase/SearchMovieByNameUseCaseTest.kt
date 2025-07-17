@@ -1,7 +1,7 @@
 package com.giraffe.media.movies.usecase
 
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -67,7 +67,7 @@ class SearchMovieByNameUseCaseTest {
     fun `when top genre rank is zero should return unsorted search results`() = runTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
-        val genreWithZeroRank = MovieGenre(id = 878, title = "Sci-Fi", rank = 0)
+        val genreWithZeroRank = Genre(id = 878, title = "Sci-Fi", rank = 0)
         coEvery { repository.searchMovieByName(any()) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns listOf(genreWithZeroRank)
 
@@ -83,7 +83,7 @@ class SearchMovieByNameUseCaseTest {
     fun `when genres exist with rank should return movies sorted by top genre`() = runTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
-        val favoriteGenre = MovieGenre(id = 878, title = "Sci-Fi", rank = 1)
+        val favoriteGenre = Genre(id = 878, title = "Sci-Fi", rank = 1)
         coEvery { repository.searchMovieByName(any()) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns listOf(favoriteGenre)
 
