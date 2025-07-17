@@ -29,7 +29,7 @@ fun ReviewCard(
     modifier: Modifier = Modifier,
     rate: Int,
     reviewText: String,
-    reviewDate: LocalDateTime = getCurrentLocalDateTime(),
+    reviewDate: LocalDateTime? = getCurrentLocalDateTime(),
     reviewerImageSource: Any?,
     reviewerName: String,
     reviewerUsername: String
@@ -90,7 +90,7 @@ fun ReviewCard(
             )
 
             Text(
-                text = reviewDate.formatAsMonthDayYear(),
+                text = reviewDate?.formatAsMonthDayYear() ?: "",
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.shade.secondary
             )

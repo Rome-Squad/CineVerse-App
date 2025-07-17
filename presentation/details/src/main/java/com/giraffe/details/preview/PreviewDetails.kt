@@ -45,7 +45,6 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
-import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.components.sampleCastList
 import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
@@ -169,8 +168,8 @@ fun PreviewMainMovieDetails() {
             duration = "2h 32m",
             releaseDate = "2008, Jul 18",
             type = "Movie",
-            onClickAdd = {},
-            onClickPlay = {}
+            onPlayMovieClick = {},
+            onAddToCollectionClick = {}
         )
     }
 }

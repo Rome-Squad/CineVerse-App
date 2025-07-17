@@ -32,17 +32,15 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.screens.moviedetails.model.CastUi
 import com.giraffe.details.utils.imageSourceToPainter
 
-data class CastMember(
-    val actorName: String, val character: String, val image: Any?
-)
 
 @Composable
 fun StarCastSection(
     title: String,
     onShowMoreClick: () -> Unit,
-    castList: List<CastMember>,
+    castList: List<CastUi>,
     modifier: Modifier = Modifier
 ) {
     val chunkedList = castList.chunked(2)
@@ -82,9 +80,9 @@ fun StarCastSection(
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     pair.forEach { cast ->
                         CastCard(
-                            actorName = cast.actorName,
-                            character = cast.character,
-                            actorImage = cast.image?.imageSourceToPainter()?: painterResource(R.drawable.reviewer),
+                            actorName = cast.name,
+                            character = cast.role,
+                            actorImage = cast.urlImage?.imageSourceToPainter()?: painterResource(R.drawable.reviewer),
                         )
                     }
                 }
@@ -167,15 +165,15 @@ fun PreviewStarCastSectionDark() {
 }
 
 @Composable
-fun sampleCastList(): List<CastMember> {
+fun sampleCastList(): List<CastUi> {
     val image = painterResource(
         id = R.drawable.reviewer
     )
     return listOf(
-        CastMember("Robert Downey Jr.", "Iron Man", image),
-        CastMember("Chris Evans", "Captain America", image),
-        CastMember("Scarlett Johansson", "Black Widow", image),
-        CastMember("Mark Ruffalo", "Hulk", image)
+        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
+        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
+        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
+        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
     )
 }
 
