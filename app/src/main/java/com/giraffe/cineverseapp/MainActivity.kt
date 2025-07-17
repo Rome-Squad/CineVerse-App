@@ -4,11 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Modifier
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.screen.discover.DiscoverScreen
-import com.giraffe.explore.screen.search.SearchScreen
+import com.giraffe.explore.nav.ExploreNavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +13,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-                SearchScreen()
+                ExploreNavGraph()
+                //SearchScreen()
                 //DiscoverScreen()
             }
         }

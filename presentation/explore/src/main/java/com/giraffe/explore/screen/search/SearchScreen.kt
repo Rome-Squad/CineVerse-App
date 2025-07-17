@@ -16,26 +16,30 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.SearchItem
+import com.giraffe.explore.nav.route.navigateToSearchResult
 import com.giraffe.media.explore.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = koinViewModel()
+    viewModel: SearchViewModel = koinViewModel(),
+    navController: NavController
 ) {
     val state by viewModel.state.collectAsState()
-    SearchContent(state, viewModel)
+    SearchContent(state, viewModel, navController::navigateToSearchResult)
 }
 
 @Composable
 fun SearchContent(
     state: SearchScreenState,
-    interactions: SearchInteractionListener
+    interactions: SearchInteractionListener,
+    navigateToSearchResult: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     LaunchedEffect(state.isSearchFieldFocused) {
@@ -66,7 +70,10 @@ fun SearchContent(
                 onClearClick = interactions::clearAllKeywords,
                 onKeywordArrowClick = interactions::onQueryChange,
                 onKeywordClearClick = interactions::deleteKeyword,
-                onKeywordsClick = interactions::onKeywordClick
+                onKeywordsClick = {
+                    interactions.onKeywordClick(it)
+                    navigateToSearchResult(it)
+                }
             )
         }
 

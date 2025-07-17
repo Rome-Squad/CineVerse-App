@@ -1,6 +1,5 @@
 package com.giraffe.explore.screen.discover
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.Chip
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
@@ -28,22 +28,25 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
+import com.giraffe.explore.nav.route.navigateToSearch
 import com.giraffe.media.explore.R
 import com.giraffe.media.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DiscoverScreen(
-    viewModel: DiscoverViewModel = koinViewModel()
+    navController: NavController,
+    viewModel: DiscoverViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
-    ExploreContent(state, viewModel)
+    ExploreContent(state, viewModel, navController::navigateToSearch)
 }
 
 @Composable
 fun ExploreContent(
     state: DiscoverScreenState,
-    interactions: DiscoverInteractionListener
+    interactions: DiscoverInteractionListener,
+    navigateToSearch: () -> Unit
 ) {
     val context = LocalContext.current
     Box {
@@ -59,9 +62,7 @@ fun ExploreContent(
                     endIcon = painterResource(Theme.icons.outline.microphone),
                     placeholder = stringResource(R.string.search),
                     readOnly = true,
-                    onTextFieldClicked = {
-                        Log.d("messi", "ExploreContent: onTextFieldClicked")
-                    }
+                    onTextFieldClicked = navigateToSearch
                 )
             }
             stickyHeader {
