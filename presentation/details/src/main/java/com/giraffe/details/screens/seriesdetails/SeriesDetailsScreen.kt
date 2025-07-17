@@ -33,6 +33,7 @@ import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.utils.TypeOfDetailsScreen
 import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.imageviewer.component.SafeIslamicImage
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.min
 
