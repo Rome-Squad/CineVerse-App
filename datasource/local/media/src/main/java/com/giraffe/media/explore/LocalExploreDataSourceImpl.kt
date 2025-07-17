@@ -11,17 +11,15 @@ class LocalExploreDataSourceImpl(
     private val dao: ExploreSearchKeywordDao
 ): LocalExploreDataSource {
 
-    override fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>> {
-        return safeFlow {
+    override fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>> = safeFlow {
             dao.getSearchHistory()
         }
-    }
 
-    override fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>> {
-        return safeFlow {
+
+    override fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>> = safeFlow {
             dao.getSearchKeywords(query)
         }
-    }
+
 
     override suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto) = safeCall {
         dao.insertSearchKeyword(searchKeyword)
