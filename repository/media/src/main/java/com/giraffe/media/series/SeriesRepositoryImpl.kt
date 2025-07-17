@@ -6,7 +6,7 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.entity.SeriesGenre
-import com.giraffe.media.series.entity.SeriesReview
+import com.giraffe.media.entity.Review
 import com.giraffe.media.series.mapper.toCachedDto
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
@@ -73,7 +73,7 @@ class SeriesRepositoryImpl(
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview> = SafeCall {
+    override suspend fun getSeriesReviews(seriesId: Int): List<Review> = SafeCall {
         remote.getSeriesReviews(seriesId).toSeriesReviewsEntity()
     }
 
