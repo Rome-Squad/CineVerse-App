@@ -8,7 +8,7 @@ import com.giraffe.details.screens.moviedetails.model.toCrewUi
 import com.giraffe.details.screens.moviedetails.model.toReviewUI
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
@@ -65,7 +65,7 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun loadMovieGenresSuccess(genres: List<MovieGenre>) {
+    private fun loadMovieGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
                 movieGenres = genres.map { genre-> genre.title },

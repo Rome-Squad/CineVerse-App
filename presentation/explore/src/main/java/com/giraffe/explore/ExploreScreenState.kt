@@ -5,10 +5,9 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.util.HasErrorMessage
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.entity.SeriesGenre
 
 data class ExploreScreenState(
     val searchQuery: String = "",
@@ -67,10 +66,10 @@ fun Movie.toPoster(allGenres: List<GenreUi>): Poster {
     )
 }
 
-fun Series.toPoster(allGenres: List<SeriesGenre>): Poster {
+fun Series.toPoster(allGenres: List<Genre>): Poster {
     val genreTitles = allGenres
         .filter { it.id in genreIDs }
-        .joinToString(", ") { it.name }
+        .joinToString(", ") { it.title }
         .ifBlank { null }
 
     return Poster(
@@ -94,5 +93,4 @@ data class GenreUi(
     val title: String
 )
 
-fun MovieGenre.toUi() = GenreUi(id, title)
-fun SeriesGenre.toUi() = GenreUi(id, name)
+fun Genre.toUi() = GenreUi(id, title)

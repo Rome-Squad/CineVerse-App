@@ -49,10 +49,13 @@ class SeriesRoomLocalDateSource(
             seriesDao.clearAllGenres()
         }
 
+    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) {
+        seriesDao.incrementInteractionCountForGenres(genreIds)
+    }
 
     override suspend fun getRecentSeries(): List<SeriesCacheDto> = safeCall {
-            seriesDao.getRecentSeries()
-        }
+        seriesDao.getRecentSeries()
+    }
 
 
     override suspend fun storeRecentSeries(seriesId: Int) = safeCall {

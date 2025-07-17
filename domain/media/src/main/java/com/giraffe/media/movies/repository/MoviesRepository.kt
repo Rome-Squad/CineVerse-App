@@ -2,21 +2,21 @@ package com.giraffe.media.movies.repository
 
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 
 interface MoviesRepository {
 
     suspend fun searchMovieByName(movieName: String): List<Movie>
 
-    suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenre>
+    suspend fun getMovieGenres(genreIds: List<Int>): List<Genre>
 
-    suspend fun getMoviesGenres(): List<MovieGenre>
+    suspend fun getMoviesGenres(): List<Genre>
 
     suspend fun getMoviesByGenres(genreIds: List<Int>): List<Movie>
 
     suspend fun insertMovies(movie: List<Movie>)
 
-    suspend fun insertGenres(genres: List<MovieGenre>)
+    suspend fun insertGenres(genres: List<Genre>)
 
     suspend fun setMovieRecent(
         movie: Movie,
@@ -36,5 +36,6 @@ interface MoviesRepository {
     suspend fun addRating(movieId: Int, ratingValue: Float)
 
     suspend fun getUserMovieRating(movieId: Int): Float
+
 
 }

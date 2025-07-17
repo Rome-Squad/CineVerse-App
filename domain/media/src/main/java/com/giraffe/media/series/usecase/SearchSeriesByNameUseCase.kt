@@ -7,6 +7,19 @@ class SearchSeriesByNameUseCase(
     private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(seriesName: String): List<Series> {
-        return seriesRepository.searchSeriesByName(seriesName)
+
+        val searchResults = seriesRepository.searchSeriesByName(seriesName)
+
+        val sortedPreferences = seriesRepository.getSeriesGenres()
+
+        if (sortedPreferences.isEmpty() || sortedPreferences.first().rank == 0) {
+            return searchResults
+        }
+
+        val favoriteGenreId = sortedPreferences.first().id
+
+        return searchResults.sortedByDescending { series ->
+           series.genreIDs.contains(favoriteGenreId)
+        }
     }
 }

@@ -2,14 +2,14 @@ package com.giraffe.media.series.repository
 
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.entity.SeriesGenre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.entity.Genre
 
 
 interface SeriesRepository {
     suspend fun searchSeriesByName(seriesName: String): List<Series>
     suspend fun storeRecentSeries(series: Series)
-    suspend fun getSeriesGenres(): List<SeriesGenre>
+    suspend fun getSeriesGenres(): List<Genre>
     suspend fun getRecentSeries(): List<Series>
     suspend fun clearRecentSeries()
     suspend fun getSeriesDetails(seriesId: Int): Series
