@@ -9,8 +9,9 @@ import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageList
 import com.giraffe.media.person.mapper.toTvCredits
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType
+import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -89,7 +90,11 @@ class PersonRepositoryImpl(
             Person(
                 id = personId,
                 name = details.await().name,
+                imageUrl = BASE_IMAGE_URL + details.await().profilePath,
                 role = details.await().knownForDepartment,
+                birthday = details.await().birthday,
+                placeOfBirth = details.await().placeOfBirth,
+                biography = details.await().biography,
                 images = images.await().toImageList(),
                 movieCredits = movies.await().toEntity(),
                 tvCredits = shows.await().toTvCredits()

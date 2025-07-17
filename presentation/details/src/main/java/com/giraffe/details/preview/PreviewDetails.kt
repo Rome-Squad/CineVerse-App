@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -33,7 +34,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.CastCard
-import com.giraffe.details.components.GallerySection
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.MainMovieOrSeriesDetails
@@ -48,6 +48,8 @@ import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
 import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.details.utils.getCurrentLocalDate
+import com.giraffe.details.utils.getCurrentLocalDateTime
 
 
 @Composable
@@ -74,20 +76,6 @@ fun PreviewAddToCollectionContentDark() {
             modifier = Modifier
                 .width(304.dp)
                 .height(48.dp)
-        )
-    }
-}
-
-
-@Preview
-@Composable
-fun GallerySectionPreview() {
-    CineVerseTheme(isDarkTheme = true) {
-        GallerySection(
-            modifier = Modifier.height(314.dp),
-            images = listOf(null,null,"https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"),
-            imageContentDescriptions = listOf("gallery_image_one","gallery_image_two","gallery_image_three"),
-            onShowMoreClick = {}
         )
     }
 }
@@ -135,7 +123,7 @@ fun MainDetailsPreview() {
                 ) { targetState ->
                     when (targetState) {
                         true -> MainDetailsHeader(
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
@@ -143,7 +131,7 @@ fun MainDetailsPreview() {
 
                         false -> MainDetails(
                             modifier = Modifier.padding(top = 72.dp),
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
@@ -168,7 +156,7 @@ fun MainDetailsPreview() {
 @Composable
 @Preview
 fun PreviewMainMovieDetails() {
-    CineVerseTheme (
+    CineVerseTheme(
         isDarkTheme = true
     ) {
         MainMovieOrSeriesDetails(
@@ -180,8 +168,8 @@ fun PreviewMainMovieDetails() {
             duration = "2h 32m",
             releaseDate = "2008, Jul 18",
             type = "Movie",
-            onClickAdd = {},
-            onClickPlay = {}
+            onPlayMovieClick = {},
+            onAddToCollectionClick = {}
         )
     }
 }
@@ -269,7 +257,7 @@ fun PreviewReviewCard() {
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
             reviewerUsername = "bilal_azzam",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = ""
         )
     }
@@ -288,7 +276,7 @@ fun PreviewReviewCardDark() {
                     "watch the following videos from compose playlist on YouTube",
             reviewerName = "Bilal Azzam",
             reviewerUsername = "bilal_azzam",
-            reviewDate = getCurrentLocalDate(),
+            reviewDate = getCurrentLocalDateTime(),
             reviewerImageSource = ""
         )
     }
@@ -322,7 +310,7 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-        poster = R.drawable.gallery_item.imageSourceToPainter(),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             caption = "Caption",
             rating = 7.5,
@@ -342,12 +330,7 @@ fun PreviewStaffInfoSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Staff Info",
-            onShowMoreClick = {},
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -362,12 +345,7 @@ fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
             title = "Staff Info",
-            onShowMoreClick = {},
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -401,6 +379,7 @@ fun PreviewStarCastSectionDark() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview",
@@ -417,6 +396,7 @@ fun PreviewCastCard() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview Dark",
@@ -433,3 +413,20 @@ fun PreviewCastCardDark() {
         )
     }
 }
+
+val staffList = listOf(
+    StaffMember(name = "John Doe", role = "Director"),
+    StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
+    StaffMember(name = "Mike Johnson", role = "Writer")
+)
+
+val groupedStaff: Map<String, List<String>> = staffList
+    .flatMap { staff ->
+        staff.role.split(", ").map { role ->
+            role to staff.name
+        }
+    }
+    .groupBy(
+        keySelector = { it.first },
+        valueTransform = { it.second }
+    )

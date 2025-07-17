@@ -1,6 +1,6 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -25,8 +25,14 @@ class GetMovieGenresUseCaseTest {
     fun `should return list of movie genres from repository`() = runTest {
         // Given
         val expectedGenres = listOf(
-            MovieGenre(id = 1, title = "Action"),
-            MovieGenre(id = 2, title = "Comedy")
+            Genre(
+                id = 1, title = "Action",
+                rank = 0
+            ),
+            Genre(
+                id = 2, title = "Comedy",
+                rank = 0
+            )
         )
         coEvery { repository.getMovieGenres(listOf(1, 2)) } returns expectedGenres
 
