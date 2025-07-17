@@ -1,38 +1,65 @@
 package com.giraffe.explore.screen.search
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.giraffe.designsystem.R
-import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.util.exceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import com.giraffe.explore.base.BaseViewModel
+import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
+import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
+import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
+import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 
-class SearchViewModel : ViewModel(), SearchInteractionListener {
-    private val _state = MutableStateFlow(SearchScreenState())
-    val state = _state.asStateFlow()
-    private val exceptionHandler = exceptionHandler(_state)
-
-    override fun onQueryChange(query: String) = safeExecute {
-        _state.update {
-            it.copy(
-                query = query,
-                postfixIconRes = if (query.isBlank()) R.drawable.outline_microphone else R.drawable.outline_close
-            )
-        }
-
+class SearchViewModel(
+    private val getSearchKeywords: GetSearchKeywordsUseCase,
+    private val insertSearchKeyword: InsertSearchKeywordUseCase,
+    private val deleteKeywordUseCase: DeleteKeywordUseCase,
+    private val clearSearchHistory: ClearSearchHistoryUseCase
+) : BaseViewModel<SearchScreenState>(SearchScreenState()),
+    SearchInteractionListener {
+    init {
+        onQueryChange()
     }
 
-
-    fun safeExecute(bloc: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            bloc()
+    private var searchJob: Job? = null
+    override fun onQueryChange(query: String) {
+        searchJob?.cancel()
+        searchJob = safeExecute {
+            updateState { it.copy(query) }
+            delay(500)
+            getSearchKeywords(query).collectLatest { keywords ->
+                val recentKeywords = keywords.filter { keyword -> keyword.isFromSearchHistory }
+                updateState {
+                    it.copy(
+                        keywords = (keywords - recentKeywords).map { searchKeyword -> searchKeyword.keyword },
+                        recentKeywords = recentKeywords.map { searchKeyword -> searchKeyword.keyword }
+                    )
+                }
+            }
         }
     }
 
+    override fun onKeywordClick(keyword: String) {
+        safeExecute {
+            onQueryChange(keyword)
+            insertSearchKeyword(keyword)
+        }
+    }
+
+    override fun deleteKeyword(keyword: String) {
+        safeExecute { deleteKeywordUseCase(keyword) }
+    }
+
+    override fun clearAllKeywords() {
+        safeExecute { clearSearchHistory() }
+    }
+
+    override fun onPostfixIconClick() {
+        safeExecute {
+            if (state.value.query.isNotBlank()) {
+                onQueryChange()
+            }
+        }
+    }
 }
 
 /*
@@ -40,7 +67,7 @@ class SearchViewModel : ViewModel(), SearchInteractionListener {
 
 
 
-    private val exploreUseCases: ExploreUseCases,
+
     private val clearCache: ClearCacheUseCase,
     private val searchMovieByName: SearchMovieByNameUseCase,
     private val searchSeriesByName: SearchSeriesByNameUseCase,

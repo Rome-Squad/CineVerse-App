@@ -1,7 +1,11 @@
 package com.giraffe.explore.screen.search
 
 interface SearchInteractionListener {
-    fun onQueryChange(query: String)
+    fun onQueryChange(query: String = "")
+    fun onKeywordClick(keyword: String)
+    fun deleteKeyword(keyword: String)
+    fun clearAllKeywords()
+    fun onPostfixIconClick()
 }
 /*fun onClearSearchQuery()
     fun onDeleteItemFromHistory(item: SearchKeyword)

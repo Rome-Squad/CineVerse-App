@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.explore.screen.discover.DiscoverScreen
+import com.giraffe.explore.screen.search.SearchScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-                DiscoverScreen()
+                SearchScreen()
+                //DiscoverScreen()
             }
         }
     }

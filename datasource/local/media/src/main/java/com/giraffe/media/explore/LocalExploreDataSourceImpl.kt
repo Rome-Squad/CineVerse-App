@@ -9,24 +9,24 @@ import kotlinx.coroutines.flow.Flow
 
 class LocalExploreDataSourceImpl(
     private val dao: ExploreSearchKeywordDao
-): LocalExploreDataSource {
+) : LocalExploreDataSource {
 
     override fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>> = safeFlow {
-            dao.getSearchHistory()
-        }
+        dao.getSearchHistory()
+    }
 
 
     override fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>> = safeFlow {
-            dao.getSearchKeywords(query)
-        }
+        dao.getSearchKeywords(query)
+    }
 
 
     override suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto) = safeCall {
         dao.insertSearchKeyword(searchKeyword)
     }
 
-    override suspend fun deleteSearchKeyword(searchKeyword: SearchKeywordCacheDto) = safeCall {
-        dao.deleteSearchKeyword(searchKeyword)
+    override suspend fun deleteKeyword(keyword: String) = safeCall {
+        dao.deleteKeyword(keyword)
     }
 
     override suspend fun clearSearchHistory() = safeCall {

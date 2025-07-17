@@ -35,9 +35,9 @@ fun TransitionLazyColumnToGrid(
     poster: List<Poster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
-    onScroll:(isScrollingUp:Boolean)-> Unit = {}
+    onScroll: (isScrollingUp: Boolean) -> Unit = {}
 ) {
-    val  listState = rememberLazyListState()
+    val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
     LaunchedEffect(listState) {
         var previousIndex = listState.firstVisibleItemIndex
@@ -89,7 +89,7 @@ fun TransitionLazyColumnToGrid(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster) { poster ->
+                    items(items = poster, key = { poster -> poster.id }) { poster ->
                         PosterHorizontal(
                             poster = poster,
                             animatedVisibilityScope = this@AnimatedContent,
@@ -105,7 +105,7 @@ fun TransitionLazyColumnToGrid(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster) { poster ->
+                    items(items = poster, key = { poster -> poster.id }) { poster ->
                         PosterVertically(
                             poster = poster,
                             animatedVisibilityScope = this@AnimatedContent,
