@@ -7,7 +7,9 @@ import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.mapper.toDto
 import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageList
+import com.giraffe.media.person.model.cacheDto.PersonCacheDto
 import com.giraffe.media.person.model.dto.PersonCreditDto
+import com.giraffe.media.person.model.dto.PersonDto
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType
@@ -22,9 +24,9 @@ class PersonRepositoryImpl(
 ) : PersonRepository {
 
     override suspend fun searchByName(personName: String) = SafeCall {
-        localDataSource.searchByName(personName).map { it.toEntity() }.ifEmpty {
-            val people = remoteDataSource.searchByName(personName).map { it.toEntity() }
-            localDataSource.storePeople(people.map { it.toDto() })
+        localDataSource.searchByName(personName).map(PersonCacheDto::toEntity).ifEmpty {
+            val people = remoteDataSource.searchByName(personName).map(PersonDto::toEntity)
+            localDataSource.storePeople(people.map(Person::toDto))
             people
         }
     }
@@ -33,7 +35,7 @@ class PersonRepositoryImpl(
         SafeCall { localDataSource.storePerson(person.toDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {
-        localDataSource.getRecentPeople().map { it.toEntity() }
+        localDataSource.getRecentPeople().map(PersonCacheDto::toEntity)
     }
 
     override suspend fun clearRecentPeople() = SafeCall {
@@ -77,7 +79,7 @@ class PersonRepositoryImpl(
             is ContentType.Movie -> localDataSource.getPeopleByMovieId(content.id)
             is ContentType.Series -> localDataSource.getPeopleBySeriesId(content.id)
         }
-        return cachedDtos.map { it.toEntity() }
+        return cachedDtos.map(PersonCacheDto::toEntity)
     }
 
     override suspend fun getPersonDetails(personId: Int) = SafeCall {
