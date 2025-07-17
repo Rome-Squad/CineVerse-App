@@ -6,31 +6,19 @@ import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.model.SearchKeywordDto
 import kotlinx.datetime.LocalDateTime
 
-fun SearchKeywordDto.toEntity(): SearchKeyword {
-    return SearchKeyword(
-        keyword = this.name,
-        isFromSearchHistory = false,
-        lastSearchedTime = getCurrentLocalDateTime() // remote doesn’t send time
-    )
-}
+fun SearchKeywordDto.toEntity() = SearchKeyword(
+    keyword = name,
+    isFromSearchHistory = false,
+    lastSearchedTime = getCurrentLocalDateTime()
+)
 
-fun SearchKeywordCacheDto.toEntity(): SearchKeyword {
-    return SearchKeyword(
-        keyword = this.keyword,
-        isFromSearchHistory = true,
-        lastSearchedTime = LocalDateTime.parse(this.lastSearchedTime)
-    )
-}
+fun SearchKeywordCacheDto.toEntity() = SearchKeyword(
+    keyword = keyword,
+    isFromSearchHistory = true,
+    lastSearchedTime = LocalDateTime.parse(lastSearchedTime)
+)
 
-fun SearchKeyword.toCacheDto(): SearchKeywordCacheDto {
-    return SearchKeywordCacheDto(
-        keyword = this.keyword,
-        lastSearchedTime = this.lastSearchedTime.toString()
-    )
-}
-
-fun  List<SearchKeywordCacheDto>.toEntity(): List<SearchKeyword> {
-    return this.map {
-        it.toEntity()
-    }
-}
+fun SearchKeyword.toCacheDto() = SearchKeywordCacheDto(
+    keyword = keyword,
+    lastSearchedTime = lastSearchedTime.toString()
+)
