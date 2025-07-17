@@ -81,7 +81,9 @@ fun SeriesDetailsContent(
 
         // Scrolling Body
         Column(
-            modifier = Modifier.verticalScroll(scrollState),
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             InfoSection(
@@ -111,10 +113,9 @@ fun SeriesDetailsContent(
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
-                            year = 2008, // state.seasons[i].releaseYear.toInt()
+                            year = state.seasons[i].releaseYear.split("-").first().toInt(),
                             onClick = {}
                         )
-
                     }
                 }
             }

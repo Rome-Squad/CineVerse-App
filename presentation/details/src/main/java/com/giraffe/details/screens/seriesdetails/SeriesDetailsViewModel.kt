@@ -1,6 +1,8 @@
 package com.giraffe.details.screens.seriesdetails
 
 import com.giraffe.details.base.BaseViewModel
+import com.giraffe.details.models.SeasonUi
+import com.giraffe.details.models.SeriesUi
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
