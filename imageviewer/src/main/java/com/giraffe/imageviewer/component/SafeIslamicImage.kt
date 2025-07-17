@@ -62,10 +62,10 @@ fun SafeIslamicImage(
     // Cache for unsafe images to avoid redundant network requests
     val unsafeCache = remember { mutableStateMapOf<String, Boolean>() }
 
-    var isPlaceholder by remember { mutableStateOf(false) }
+    var isPlaceholder by remember { mutableStateOf(true) }
     var shouldBlur by remember { mutableStateOf(true) }
-
     LaunchedEffect(imageUrl) {
+        isPlaceholder = true
         val cachedResult = unsafeCache[imageUrl]
         if (cachedResult != null) {
             shouldBlur = cachedResult
@@ -85,6 +85,7 @@ fun SafeIslamicImage(
 
                 shouldBlur = bitmap?.let { classifier.isUnsafe(it) } ?: false
                 unsafeCache[imageUrl] = shouldBlur
+                isPlaceholder = false
             } catch (_: Exception) {
                 isPlaceholder = true
             }
