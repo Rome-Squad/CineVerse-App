@@ -1,6 +1,7 @@
 package com.giraffe.details.screens.castDetails
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.EaseIn
@@ -55,9 +56,18 @@ fun CastDetailsScreen(
             is CastDetailsEffect.Error -> TODO()
         }
     }
-    if (state.isLoading) {
+    AnimatedVisibility(
+        state.isLoading,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
         LoadingView()
-    } else {
+    }
+    AnimatedVisibility(
+        !state.isLoading,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
         CastDetailsContent(
             state = state,
             interaction = castDetailsViewModel,
