@@ -104,7 +104,7 @@ fun MainMovieOrSeriesDetails(
                             text = genres.joinToString(", "),
                             style = Theme.textStyle.body.sm.medium,
                             color = Theme.color.shade.secondary,
-                            maxLines = 1,
+                            maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
                     }

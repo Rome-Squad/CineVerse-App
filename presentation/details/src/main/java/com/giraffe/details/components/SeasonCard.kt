@@ -1,5 +1,6 @@
 package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -100,13 +101,15 @@ fun SeasonCard(
                         style = Theme.textStyle.body.md.medium,
                         color = Theme.color.shade.primary
                     )
-                    Text(
-                        text = overview,
-                        style = Theme.textStyle.body.sm.regular,
-                        color = Theme.color.shade.secondary,
-                        maxLines = 4,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    AnimatedVisibility(overview.isNotBlank()) {
+                        Text(
+                            text = overview,
+                            style = Theme.textStyle.body.sm.regular,
+                            color = Theme.color.shade.secondary,
+                            maxLines = 4,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
 

@@ -1,6 +1,7 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
+import com.giraffe.details.screens.seasons.SeasonsViewModel
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.explore.ExploreViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -10,4 +11,5 @@ val viewModelModule = module {
     viewModelOf(::ExploreViewModel)
     viewModelOf(::CastDetailsViewModel)
     viewModelOf(::SeriesDetailsViewModel)
+    viewModelOf(::SeasonsViewModel)
 }
