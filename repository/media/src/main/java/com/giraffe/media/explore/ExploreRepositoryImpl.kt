@@ -8,9 +8,7 @@ import com.giraffe.media.explore.mapper.toCacheDto
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.ExploreRepository
 import com.giraffe.media.utils.SafeCall
-import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class ExploreRepositoryImpl(
@@ -21,21 +19,24 @@ class ExploreRepositoryImpl(
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
         if (query.isBlank())
             return cache.getSearchHistory().map {
-                it.toEntity()
-            }.catch {throw mapToDomainException(it)}
+                it.map { cacheDto-> cacheDto.toEntity() }
+            }
+
+        return SafeCall {
             val history = cache.getSearchKeywords(query).map {
-                it.toEntity()
+                it.map {cacheDto-> cacheDto.toEntity() }
             }
 
             val remoteResults = remote.getSearchKeywords(query).map {
                 it.toEntity()
             }
 
-          return  history.map { historyList ->
+            history.map { historyList ->
                 (historyList + remoteResults)
                     .distinctBy { it.keyword }
                     .sortedByDescending { it.lastSearchedTime }
-            }.catch {throw mapToDomainException(it)}
+            }
+        }
     }
 
     override suspend fun insertSearchKeyword(searchKeyword: String)   = SafeCall {
