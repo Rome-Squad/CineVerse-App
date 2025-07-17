@@ -12,6 +12,8 @@ import com.giraffe.media.person.cleaner.PersonCacheCleanerImp
 import com.giraffe.media.series.cleaner.SeriesCacheCleaner
 import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -24,9 +26,9 @@ val databaseModule = module {
         androidContext().getSharedPreferences("CineVerse_Prefs", Context.MODE_PRIVATE)
     }
 
-    single<PersonCacheCleaner> { PersonCacheCleanerImp(get()) }
-    single<SeriesCacheCleaner> { SeriesCacheCleanerImp(get()) }
-    single<MovieCacheCleaner> { MovieCacheCleanerImp(get()) }
+    singleOf(::PersonCacheCleanerImp) bind PersonCacheCleaner::class
+    singleOf(::SeriesCacheCleanerImp) bind SeriesCacheCleaner::class
+    singleOf(::MovieCacheCleanerImp) bind MovieCacheCleaner::class
 }
 
 const val DATABASE_NAME = "CineVerseDataBase"

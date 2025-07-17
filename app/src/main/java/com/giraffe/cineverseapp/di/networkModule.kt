@@ -15,45 +15,45 @@ import com.giraffe.repository.SessionManagerImpl
 import com.giraffe.repository.datasource.UserRemoteDataSource
 import com.giraffe.user.SessionManager
 import com.giraffe.user.UserRemoteDataSourceImpl
+import io.ktor.client.HttpClient
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 
 val networkModule = module {
-    single {
+
+    single<HttpClient> {
         HttpClientFactory.create()
     }
-    single<String>(named("BASE_URL")) {
+    single<String>(named(BASE_URL)) {
         BuildConfig.BASE_URL
     }
-    single<String>(named("API_KEY")) {
+    single<String>(named(API_KEY)) {
         BuildConfig.API_KEY
     }
-    single<String>(named("ACCESS_TOKEN")) {
+    single<String>(named(ACCESS_TOKEN)) {
         BuildConfig.ACCESS_TOKEN
     }
     single {
         RequestBuilder(
             client = get(),
-            baseUrl = get(named("BASE_URL")),
-            accessToken = get(named("ACCESS_TOKEN"))
+            baseUrl = get(named(BASE_URL)),
+            accessToken = get(named(ACCESS_TOKEN))
         )
     }
 
-
-    single<MoviesRemoteDataSource> { MoviesRemoteDataSourceImp(get()) }
-    single<SeriesRemoteDataSource> { SeriesRemoteDataSourceImp(get()) }
-    single<PersonRemoteDataSource> { PersonRemoteDataSourceImp(get()) }
-    single<ExploreRemoteDataSource> { ExploreRemoteDataSourceImp(get()) }
-
+    singleOf(::ExploreRemoteDataSourceImp) bind ExploreRemoteDataSource::class
+    singleOf(::MoviesRemoteDataSourceImp) bind MoviesRemoteDataSource::class
+    singleOf(::SeriesRemoteDataSourceImp) bind SeriesRemoteDataSource::class
+    singleOf(::PersonRemoteDataSourceImp) bind PersonRemoteDataSource::class
 
 
-    single<UserRemoteDataSource> {
-        UserRemoteDataSourceImpl(
-            client = get(),
-            baseUrl = get(named("BASE_URL")),
-            accessToken = get(named("ACCESS_TOKEN"))
-        )
-    }
-    single<SessionManager> { SessionManagerImpl(get()) }
+    singleOf(::UserRemoteDataSourceImpl) bind UserRemoteDataSource::class
+    singleOf(::SessionManagerImpl) bind SessionManager::class
 }
+
+const val BASE_URL = "BASE_URL"
+const val API_KEY = "API_KEY"
+const val ACCESS_TOKEN = "ACCESS_TOKEN"
