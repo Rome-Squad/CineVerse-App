@@ -1,6 +1,7 @@
 package  com.giraffe.media.movie
 
 import MovieDao
+import android.util.Log
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import  com.giraffe.media.movie.model.cacheDto.MovieCacheDto
 import  com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
@@ -11,6 +12,7 @@ class MovieLocalDataSourceImp(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
     override suspend fun getMovieById(movieId: Int): MovieCacheDto = safeCall {
+        Log.e("Local","${movieDao.getMovieById(movieId)}")
         movieDao.getMovieById(movieId)
     }
 

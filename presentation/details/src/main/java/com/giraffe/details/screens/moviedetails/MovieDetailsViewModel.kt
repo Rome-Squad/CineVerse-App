@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.moviedetails
 
+import android.util.Log
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.screens.moviedetails.model.MovieUi
 import com.giraffe.details.screens.moviedetails.model.groupByRole
@@ -30,12 +31,16 @@ class MovieDetailsViewModel(
             onSuccess = ::loadMovieDetailsSuccess,
             onError =   ::loadMovieDetailsError
         ) {
+
+            Log.d("MovieDetailsViewModel", "loadMovieDetails: ${getMovieDetails(movieId)}")
             getMovieDetails(movieId)
         }
 
     }
 
     private fun loadMovieDetailsSuccess(movie: Movie) {
+        Log.d("MovieDetailsViewModel", "Success: ${movie.title}")
+
         updateState {
             it.copy(
                 movie = movie.MovieUi(),
@@ -48,6 +53,8 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMovieDetailsError(error: Throwable) {
+        Log.e("Error",error.toString())
+        error.printStackTrace()
         updateState {
             it.copy(
                 isLoadingMovieDetails = false,

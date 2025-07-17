@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.moviedetails.screen
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -58,6 +59,10 @@ fun MovieDetailsScreen(
     LaunchedEffect(movieID) {
         viewModel.loadMovieDetails(movieID)
     }
+
+    Log.e("Screen", state.movie.title)
+    Log.e("Screen2", movieID.toString())
+
 
     MovieDetailsContent(
         modifier = modifier,
