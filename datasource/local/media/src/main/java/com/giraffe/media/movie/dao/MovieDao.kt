@@ -30,7 +30,7 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE ID =:id")
     suspend fun getMovieGenreById(id: Int): MovieGenreCacheDto
 
-    @Query("SELECT * FROM $MOVIE_GENRE_TABLE")
+    @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY count DESC")
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:genreIds)")
@@ -62,4 +62,8 @@ interface MovieDao {
 """
     )
     suspend fun clearMovieCache(currentTime: Long)
+
+    @Query("UPDATE movie_genre_table SET count = count + 1 WHERE id IN (:genreIds)")
+    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
+
 }

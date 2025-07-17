@@ -1,7 +1,6 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.movies.entity.MovieReview
-import com.giraffe.media.movies.entity.MovieReviewAuthor
+import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -39,18 +38,14 @@ class GetMovieReviewsUseCaseTest {
     fun `invoke should return list of reviews from repository`() = runTest {
         // given
         val expectedReviews = listOf(
-            MovieReview(
+            Review(
                 id = "1",
                 content = "Great movie! One of the best I've seen this year. The cinematography was stunning.",
                 createdAt = LocalDateTime(2025, 7, 10, 20, 30, 0),
-                updatedAt = LocalDateTime(2025, 7, 10, 20, 35, 0),
-                url = "https://www.themoviedb.org/review/1",
-                author = MovieReviewAuthor(
-                    name = "John Doe",
-                    username = "user1",
-                    avatarImage = "https://example.com/avatars/user1.jpg",
-                    rating = 9
-                )
+                authorName = "John Doe",
+                authorUserName = "user1",
+                rating = 9,
+                authorImageUrl = "https://example.com/avatars/user1.jpg"
             )
         )
         coEvery { repository.getMovieReviews(1) } returns expectedReviews

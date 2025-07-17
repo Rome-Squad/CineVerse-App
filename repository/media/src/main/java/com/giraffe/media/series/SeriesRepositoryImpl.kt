@@ -12,8 +12,6 @@ import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.mapper.toSeriesEntity
 import com.giraffe.media.series.mapper.toSeriesReviewsEntity
-import com.giraffe.media.series.model.CachedSeriesGenreDto
-import com.giraffe.media.series.model.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 
@@ -30,7 +28,7 @@ class SeriesRepositoryImpl(
             }
         } else {
             val remoteSeries = remote.getSeriesByName(seriesName)
-            val cachedSeries = remoteSeries.map { it.toCachedDto() }
+            val cachedSeries = remoteSeries.map { it.toDto() }
 
             local.saveSearchResult(
                 seriesList = cachedSeries
@@ -46,7 +44,7 @@ class SeriesRepositoryImpl(
             .ifEmpty {
                 remote.getGenres()
                     .map(GenreDto::toEntity)
-                    .also { local.saveGenres(it.map(SeriesGenre::toCachedDto)) }
+                    .also { local.saveGenres(it.map(SeriesGenre::toDto)) }
             }
     }
 
@@ -67,7 +65,7 @@ class SeriesRepositoryImpl(
 
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
-        remote.getSeriesDetails(seriesId).toSeriesEntity()
+        remote.getSeriesDetails(seriesId).toEntity()
     }
 
     override suspend fun getSeasonOfSeries(seriesId: Int): List<Season> = SafeCall {
@@ -78,8 +76,8 @@ class SeriesRepositoryImpl(
         remote.getSeriesByGenre(genreId).map { it.toEntity() }
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int): List<SeriesReview> = SafeCall {
-        remote.getSeriesReviews(seriesId).toSeriesReviewsEntity()
+    override suspend fun getSeriesReviews(seriesId: Int) = SafeCall {
+        remote.getSeriesReviews(seriesId).toEntity()
     }
 
     override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {

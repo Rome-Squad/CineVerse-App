@@ -17,7 +17,7 @@ fun getCurrentLocalDate(): LocalDate {
 }
 
 
-fun LocalDate.formatAsMonthDayYear(): String {
+fun LocalDateTime.formatAsMonthDayYear(): String {
     val monthName = this.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)
     return "$monthName $day, ${this.year}"
 }

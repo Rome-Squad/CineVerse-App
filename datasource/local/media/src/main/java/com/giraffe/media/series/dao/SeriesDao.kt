@@ -50,7 +50,7 @@ interface SeriesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenres(genres: List<CachedSeriesGenreDto>)
 
-    @Query("SELECT * FROM $SERIES_GENRE_TABLE")
+    @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
     fun getAllGenres(): List<CachedSeriesGenreDto>
 
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
@@ -73,4 +73,7 @@ interface SeriesDao {
 """
     )
     suspend fun clearSeriesCache(currentTime: Long)
+
+    @Query("UPDATE cached_series_genres SET count = count + 1 WHERE id IN (:genreIds)")
+    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 }

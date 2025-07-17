@@ -1,12 +1,10 @@
 package com.giraffe.media.movie
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.mapper.toEntity
-import com.giraffe.media.movie.mapper.toMovie
-import com.giraffe.media.movie.mapper.toMovieCacheDto
-import com.giraffe.media.movie.mapper.toMovieGenreDto
 import com.giraffe.media.movie.model.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.model.dto.MovieDto
@@ -14,9 +12,9 @@ import com.giraffe.media.movie.model.dto.MovieGenreDto
 import com.giraffe.media.movie.model.dto.MovieReviewDto
 import com.giraffe.media.movie.model.dto.RatingRequest
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(
@@ -27,9 +25,9 @@ class MoviesRepositoryImpl(
 
     override suspend fun searchMovieByName(movieName: String) = SafeCall {
         cache.getMoviesByName(movieName)
-            .map(MovieCacheDto::toMovie)
+            .map(MovieCacheDto::toEntity)
             .ifEmpty {
-                val remoteMovies = remote.getMoviesByName(movieName).map(MovieDto::toMovie)
+                val remoteMovies = remote.getMoviesByName(movieName).map(MovieDto::toEntity)
                 insertMovies(remoteMovies)
                 remoteMovies
             }
@@ -55,24 +53,24 @@ class MoviesRepositoryImpl(
 
 
     override suspend fun getMoviesByGenre(genreId: Int) = SafeCall {
-        cache.getMoviesByGenre(genreId).map(MovieCacheDto::toMovie)
+        cache.getMoviesByGenre(genreId).map(MovieCacheDto::toEntity)
             .ifEmpty {
                 remote.getMoviesByGenre(genreId)
-                    .map(MovieDto::toMovie)
+                    .map(MovieDto::toEntity)
                     .also { insertMovies(it) }
             }
     }
 
     override suspend fun insertMovies(movie: List<Movie>) = SafeCall {
-        cache.insertMovies(movie.map(Movie::toMovieCacheDto))
+        cache.insertMovies(movie.map (Movie::toDto))
     }
 
-    override suspend fun insertGenres(genres: List<MovieGenre>) = SafeCall {
-        cache.insertMovieGenres(genres.map(MovieGenre::toMovieGenreDto))
+    override suspend fun insertGenres(genres: List<Genre>) = SafeCall {
+        cache.insertMovieGenres(genres.map (Genre::toDto))
     }
 
     override suspend fun setMovieRecent(movie: Movie, isRecent: Boolean) = SafeCall {
-        cache.updateMovie(movie.toMovieCacheDto().copy(isRecent = isRecent))
+        cache.updateMovie(movie.toDto().copy(isRecent = isRecent))
     }
 
     override suspend fun clearCache() = SafeCall {
@@ -80,12 +78,12 @@ class MoviesRepositoryImpl(
     }
 
     override suspend fun getRecentlyMovies() =
-        SafeCall { cache.getRecentlyMovies().map(MovieCacheDto::toMovie) }
+        SafeCall { cache.getRecentlyMovies().map(MovieCacheDto::toEntity) }
 
     override suspend fun clearRecentlyMovies() = SafeCall { cache.clearRecentlyMovies() }
 
     override suspend fun getMovieDetails(movieId: Int) = SafeCall {
-        cache.getMovieById(movieId)?.toMovie() ?: remote.getMovieById(movieId)
+        cache.getMovieById(movieId)?.toEntity() ?: remote.getMovieById(movieId)
             .toEntity()
             .also { insertMovies(listOf(it)) }
     }

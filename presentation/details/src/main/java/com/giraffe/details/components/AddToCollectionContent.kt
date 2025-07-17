@@ -34,17 +34,18 @@ fun AddToCollectionContent(
     isLoading: Boolean = false
 ) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.bottomSheetCard)
             .padding(start = 16.dp, end = 12.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
+            modifier = modifier
                 .align(Alignment.CenterStart)
                 .fillMaxWidth()
-                .padding(end = 24.dp)
+                .padding(start = 16.dp, end = 12.dp)
+
         ) {
             Icon(
                 painter = painterResource(id = Theme.icons.dueTone.folder),
@@ -93,9 +94,8 @@ fun PreviewAddToCollectionContentDark() {
         AddToCollectionContent(
             title = "My Folder",
             isLoading = true,
-            modifier = Modifier
-                .width(304.dp)
-                .height(48.dp)
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+
         )
     }
 }
