@@ -59,13 +59,12 @@ class CastDetailsViewModel(
                 actorPlace = person.placeOfBirth.orEmpty(),
                 actorGalleryImageUrls = person.images,
                 biographyInfo = person.biography.orEmpty(),
-                //should be edit this line to use the correct response
-                posters = person.movieCredits.map { person ->
+                posters = person.personCredits.map { personCredit ->
                     Poster(
-                        id = person.id,
-                        name = person.title,
-                        imageUri = person.posterPath.orEmpty(),
-                        rating = person.voteAverage.toFloat(),
+                        id = personCredit.id,
+                        name = personCredit.title,
+                        imageUri = personCredit.posterPath.orEmpty(),
+                        rating = personCredit.voteAverage.toFloat(),
                     )
                 }
             )

@@ -7,7 +7,7 @@ import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.mapper.toDto
 import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageList
-import com.giraffe.media.person.mapper.toTvCredits
+import com.giraffe.media.person.model.dto.PersonCreditDto
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType
@@ -80,13 +80,11 @@ class PersonRepositoryImpl(
         return cachedDtos.map { it.toEntity() }
     }
 
-
     override suspend fun getPersonDetails(personId: Int) = SafeCall {
         withContext(Dispatchers.IO) {
             val details = async { remoteDataSource.getPersonDetails(personId) }
             val images = async { remoteDataSource.getPersonImages(personId) }
-            val movies = async { remoteDataSource.getPersonMovieCredits(personId) }
-            val shows = async { remoteDataSource.getPersonTvCredits(personId) }
+            val media = async { remoteDataSource.getPersonMediaCredits(personId) }
             Person(
                 id = personId,
                 name = details.await().name,
@@ -96,8 +94,7 @@ class PersonRepositoryImpl(
                 placeOfBirth = details.await().placeOfBirth,
                 biography = details.await().biography,
                 images = images.await().toImageList(),
-                movieCredits = movies.await().toEntity(),
-                tvCredits = shows.await().toTvCredits()
+                personCredits = media.await().map(PersonCreditDto::toEntity),
             )
         }
     }

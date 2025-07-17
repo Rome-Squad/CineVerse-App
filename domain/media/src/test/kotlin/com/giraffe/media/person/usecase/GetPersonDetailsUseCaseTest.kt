@@ -27,15 +27,13 @@ class GetPersonDetailsUseCaseTest {
             "/bVZRMlpjTAO2pJK6v90buFgVbSW.jpg",
             "/r3U4n9Ti6UrY5m84wzJVTKeBgeC.jpg"
         ),
-        movieCredits = listOf(
+        personCredits = listOf(
             PersonCredit(
                 id = 155,
                 title = "The Dark Knight",
                 posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
                 voteAverage = 8.5
-            )
-        ),
-        tvCredits = listOf(
+            ),
             PersonCredit(
                 id = 217,
                 title = "Inside the Actors Studio",

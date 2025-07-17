@@ -10,8 +10,7 @@ data class Person(
     val birthday: String? = null,
     val placeOfBirth: String? = null,
     val images: List<String> = emptyList(),
-    val movieCredits: List<PersonCredit> = emptyList(),
-    val tvCredits: List<PersonCredit> = emptyList(),
+    val personCredits: List<PersonCredit> = emptyList(),
 )
 
 data class PersonCredit(
