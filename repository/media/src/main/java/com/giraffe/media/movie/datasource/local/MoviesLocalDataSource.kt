@@ -36,5 +36,4 @@ interface MoviesLocalDataSource {
 
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
-    suspend fun getGenresSortedByInteraction(): List<MovieGenreCacheDto>
 }

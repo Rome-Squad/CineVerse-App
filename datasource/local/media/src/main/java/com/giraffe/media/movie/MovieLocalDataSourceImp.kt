@@ -50,8 +50,5 @@ class MovieLocalDataSourceImp(
         movieDao.incrementInteractionCountForGenres(genreIds)
     }
 
-    override suspend fun getGenresSortedByInteraction(): List<MovieGenreCacheDto> {
-        return movieDao.getGenresSortedByInteraction()
-    }
 }
 
