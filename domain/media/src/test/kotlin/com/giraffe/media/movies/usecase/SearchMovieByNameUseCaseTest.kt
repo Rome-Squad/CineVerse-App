@@ -1,5 +1,6 @@
 package com.giraffe.media.movies.usecase
 
+import com.giraffe.media.movies.entity.GenrePreference
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
@@ -16,6 +17,17 @@ class SearchMovieByNameUseCaseTest {
     private lateinit var repository: MoviesRepository
     private lateinit var useCase: SearchMovieByNameUseCase
 
+    private val movieAction = Movie(
+        id = 1, title = "Action Movie", description = "", rating = 7.0f,
+        duration = 120, posterUrl = "", genresID = listOf(28),
+        releaseYear = LocalDate(2022, 1, 1)
+    )
+    private val movieSciFi = Movie(
+        id = 2, title = "Sci-Fi Movie", description = "", rating = 8.0f,
+        duration = 130, posterUrl = "", genresID = listOf(878),
+        releaseYear = LocalDate(2023, 1, 1)
+    )
+
     @BeforeEach
     fun setUp() {
         repository = mockk()
@@ -23,29 +35,50 @@ class SearchMovieByNameUseCaseTest {
     }
 
     @Test
-    fun `should return list of movies matching the name from repository`() = runTest {
+    fun `invoke should call search and preferences on repository`() = runTest {
         // Given
-        val movieName = "Inception"
-        val expectedMovies = listOf(
-            Movie(
-                id = 1,
-                title = "Inception",
-                description = "A mind-bending thriller",
-                rating = 8.8f,
-                duration = 148,
-                posterUrl = "https://example.com/inception.jpg",
-                genresID = listOf(878, 28),
-                releaseYear = LocalDate(2010, 7, 16)
-            )
-        )
-
-        coEvery { repository.searchMovieByName(movieName) } returns expectedMovies
+        coEvery { repository.searchMovieByName(any()) } returns emptyList()
+        coEvery { repository.getUserGenrePreferences() } returns emptyList()
 
         // When
-        val result = useCase(movieName)
+        useCase("test")
 
         // Then
-        coVerify { repository.searchMovieByName(movieName) }
-        assertThat(result).isEqualTo(expectedMovies)
+        coVerify(exactly = 1) { repository.searchMovieByName("test") }
+        coVerify(exactly = 1) { repository.getUserGenrePreferences() }
+    }
+
+    @Test
+    fun `when no genre preferences should return unsorted search results`() = runTest {
+        // Given
+        val searchResults = listOf(movieAction, movieSciFi)
+        coEvery { repository.searchMovieByName(any()) } returns searchResults
+        coEvery { repository.getUserGenrePreferences() } returns emptyList()
+
+        // When
+        val result = useCase("test")
+
+        // Then
+        assertThat(result).isEqualTo(searchResults)
+        assertThat(result).containsExactly(movieAction, movieSciFi).inOrder()
+    }
+
+    @Test
+    fun `when genre preferences exist should return movies sorted by top preference`() = runTest {
+        // Given
+        val searchResults = listOf(movieAction, movieSciFi)
+        val userPreference = GenrePreference(
+            genreId = 878,
+            count = 3
+        )
+        coEvery { repository.searchMovieByName(any()) } returns searchResults
+        coEvery { repository.getUserGenrePreferences() } returns listOf(userPreference)
+
+        // When
+        val result = useCase("test")
+
+        // Then
+        assertThat(result).hasSize(2)
+        assertThat(result).containsExactly(movieSciFi, movieAction).inOrder()
     }
 }
