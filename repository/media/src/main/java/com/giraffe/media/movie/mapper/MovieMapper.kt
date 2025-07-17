@@ -9,7 +9,7 @@ import  com.giraffe.media.movie.model.dto.MovieGenreDto
 import  com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDate
 
-fun MovieCacheDto.toMovie(): Movie {
+fun MovieCacheDto.toEntity(): Movie {
     val date = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
     return Movie(
         id = id,
@@ -23,7 +23,7 @@ fun MovieCacheDto.toMovie(): Movie {
     )
 }
 
-fun Movie.toMovieCacheDto(): MovieCacheDto {
+fun Movie.toDto(): MovieCacheDto {
     return MovieCacheDto(
         id = id,
         title = title,
@@ -37,7 +37,7 @@ fun Movie.toMovieCacheDto(): MovieCacheDto {
     )
 }
 
-fun MovieDto.toMovie(): Movie {
+fun MovieDto.toEntity(): Movie {
     val date = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
     return Movie(
         id = id,
