@@ -2,7 +2,7 @@
 <resources>
     <string name="watch">Watch</string>
     <string name="galley_image">galley image</string>
-    <string name="gallery">gallery</string>
+    <string name="gallery">Gallery</string>
     <string name="show_more">show more</string>
     <string name="actor_image">actor image</string>
     <string name="birthday_cake_icon">birthday cake icon</string>
@@ -24,4 +24,6 @@
     <string name="rating">Rating</string>
     <string name="episodes">Episodes</string>
     <string name="year">Year</string>
+    <string name="best_of">Best of</string>
+    <string name="biography">Biography</string>
 </resources>
