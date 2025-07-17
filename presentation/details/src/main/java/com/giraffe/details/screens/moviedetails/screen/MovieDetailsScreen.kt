@@ -23,15 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.custom.Text
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
@@ -41,8 +40,10 @@ import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.moviedetails.model.ReviewUI
 import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,6 +51,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MovieDetailsScreen(
     movieID: Int,
+    navController: NavController,
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MovieDetailsViewModel = koinViewModel()
 ) {
@@ -57,6 +60,24 @@ fun MovieDetailsScreen(
 
     LaunchedEffect(movieID) {
         viewModel.loadMovieDetails(movieID)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                MovieDetailsEffect.NavigateToMovies -> {
+                    navController.navigateToMovieDetails(movieID)
+                }
+
+                is MovieDetailsEffect.NavigateToReviews -> {
+                    navigateToReviews(effect.reviews)
+                }
+
+                is MovieDetailsEffect.Error -> {}
+                MovieDetailsEffect.NavigateToCollection -> {}
+                MovieDetailsEffect.NavigateToLogin -> {}
+            }
+        }
     }
 
     MovieDetailsContent(
@@ -205,13 +226,19 @@ private fun MovieDetailsContent(
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
         content = {
             AddToCollectionContent(
-                title = "My Favorite TV", isLoading = false, modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My Favorite TV",
+                isLoading = false,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
-                title = "My WatchLis", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My WatchLis",
+                isLoading = false,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
-                title = "Cristian Bale Movies", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "Cristian Bale Movies",
+                isLoading = false,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
         },
     )
@@ -233,19 +260,5 @@ private fun MovieDetailsContent(
                     enabled = false,
                     onClick = {})
             }
-        }
-    )
-}
-
-
-@Preview
-@Composable
-private fun MovieDetailsPreview() {
-    CineVerseTheme(
-        isDarkTheme = false
-    ) {
-        MovieDetailsScreen(
-            movieID = 286,
-        )
-    }
+        })
 }
