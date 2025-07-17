@@ -2,10 +2,10 @@ package  com.giraffe.media.movie
 
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.media.movie.datasource.remote.dto.MovieDetailsDto
-import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
-import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
-import com.giraffe.media.movie.datasource.remote.dto.ReviewsResponseDto
+import com.giraffe.media.movie.model.dto.MovieDetailsDto
+import com.giraffe.media.movie.model.dto.RatedMoviesResponse
+import com.giraffe.media.movie.model.dto.RatingRequest
+import com.giraffe.media.movie.model.dto.ReviewsResponseDto
 import com.giraffe.media.movie.response.GenreResponse
 import com.giraffe.media.movie.response.MoviesListResponse
 import com.giraffe.media.util.RequestBuilder

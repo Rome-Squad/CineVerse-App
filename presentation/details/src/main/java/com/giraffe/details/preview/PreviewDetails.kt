@@ -33,7 +33,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.CastCard
-import com.giraffe.details.components.GallerySection
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.RatingSection
@@ -43,6 +42,7 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.components.sampleCastList
 import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
@@ -83,14 +83,15 @@ fun GallerySectionPreview() {
     CineVerseTheme(isDarkTheme = true) {
         GallerySection(
             modifier = Modifier.height(314.dp),
-            images = listOf(null,null,"https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"),
-            imageContentDescriptions = listOf("gallery_image_one","gallery_image_two","gallery_image_three"),
+            imageUrls = listOf(
+                null,
+                null,
+                "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
+            ),
             onShowMoreClick = {}
         )
     }
 }
-
-
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -133,7 +134,7 @@ fun MainDetailsPreview() {
                 ) { targetState ->
                     when (targetState) {
                         true -> MainDetailsHeader(
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
@@ -141,7 +142,7 @@ fun MainDetailsPreview() {
 
                         false -> MainDetails(
                             modifier = Modifier.padding(top = 72.dp),
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
@@ -191,7 +192,6 @@ fun PreviewRatingSectionDark() {
         )
     }
 }
-
 
 
 @Composable
@@ -287,7 +287,7 @@ fun PreviewSeasonCardDark() {
 fun PreviewSeasonCardLight() {
     CineVerseTheme(isDarkTheme = false) {
         SeasonCard(
-        poster = R.drawable.gallery_item.imageSourceToPainter(),
+            poster = R.drawable.gallery_item.imageSourceToPainter(),
             title = "Season",
             overview = "Caption",
             rating = 7.5f,
@@ -366,6 +366,7 @@ fun PreviewStarCastSectionDark() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview",
@@ -382,6 +383,7 @@ fun PreviewCastCard() {
         )
     }
 }
+
 @Composable
 @Preview(
     name = "CastCard Preview Dark",

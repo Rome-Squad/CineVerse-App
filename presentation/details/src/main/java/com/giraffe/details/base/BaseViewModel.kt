@@ -26,6 +26,7 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
         onSuccess: (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        onCompletion: () -> Unit = {},
         block: suspend () -> T
     ) {
         coroutineScope.launch(dispatcher) {
@@ -33,6 +34,8 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
                 onSuccess(block())
             } catch (e: Throwable) {
                 onError(e)
+            } finally {
+                onCompletion()
             }
         }
     }

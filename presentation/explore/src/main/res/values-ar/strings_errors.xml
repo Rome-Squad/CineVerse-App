@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Common Domain Errors -->
-    <string name="error_network">حدثت مشكلة في الشبكة. يرجى التحقق من الاتصال والمحاولة مرة أخرى.</string>
-    <string name="error_timeout">انتهت مهلة الطلب. يرجى المحاولة لاحقًا.</string>
-    <string name="error_redirect">تم إعادة توجيه الطلب. حاول مرة أخرى.</string>
-    <string name="error_client_error">حدث خطأ ما. حاول مرة أخرى.</string>
+    <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
+    <string name="error_timeout">انتهت مهلة الاتصال. حاول مرة أخرى.</string>
     <string name="error_server">حدث خطأ في الخادم. حاول لاحقًا.</string>
-    <string name="error_invalid_key">مفتاح API غير صالح. حاول لاحقًا.</string>
-    <string name="error_unauthorized">غير مصرح لك. يرجى تسجيل الدخول مرة أخرى.</string>
-    <string name="error_forbidden">الوصول مرفوض. حاول لاحقًا.</string>
-    <string name="error_rate_limited">ترسل طلبات كثيرة. حاول لاحقًا.</string>
+    <string name="error_unauthorized">أنت غير مصرح لك. يرجى تسجيل الدخول مرة أخرى.</string>
+    <string name="error_access_denied">تم رفض الوصول. ليس لديك صلاحية.</string>
+    <string name="error_validation">مدخلات غير صحيحة. تحقق من البيانات.</string>
+    <string name="error_invalid_method">طريقة الطلب غير صالحة. تواصل مع الدعم.</string>
     <string name="error_not_found">العنصر المطلوب غير موجود.</string>
-    <string name="error_validation">البيانات المدخلة غير صالحة. تحقق وحاول مرة أخرى.</string>
-    <string name="error_corrupt_db">بيانات التطبيق تالفة. حاول إعادة تشغيل التطبيق.</string>
-    <string name="error_disk">تعذر الوصول إلى التخزين. تحقق من مساحة جهازك.</string>
-    <string name="error_unknown">حدث خطأ غير معروف. حاول مرة أخرى.</string>
+    <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
+    <string name="error_infrastructure">.حدث خطأ داخلي في النظام. يُرجى المحاولة مرة أخرى لاحقًا</string>
+
 </resources>
