@@ -25,8 +25,14 @@ class GetMovieGenresUseCaseTest {
     fun `should return list of movie genres from repository`() = runTest {
         // Given
         val expectedGenres = listOf(
-            MovieGenre(id = 1, title = "Action"),
-            MovieGenre(id = 2, title = "Comedy")
+            MovieGenre(
+                id = 1, title = "Action",
+                rank = 0
+            ),
+            MovieGenre(
+                id = 2, title = "Comedy",
+                rank = 0
+            )
         )
         coEvery { repository.getMovieGenres(listOf(1, 2)) } returns expectedGenres
 

@@ -36,7 +36,7 @@ class GetMoviesGenresUseCaseTest {
     @Test
     fun `invoke should return list of genres from repository`() = runTest {
         // given
-        val expectedGenres = listOf(MovieGenre(1, "Action"), MovieGenre(2, "Comedy"))
+        val expectedGenres = listOf(MovieGenre(1, "Action",0), MovieGenre(2, "Comedy",0))
         coEvery { repository.getMoviesGenres() } returns expectedGenres
 
         // when

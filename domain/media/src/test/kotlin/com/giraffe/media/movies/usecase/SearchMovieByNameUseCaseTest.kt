@@ -1,6 +1,7 @@
 package com.giraffe.media.movies.usecase
 
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -34,25 +35,25 @@ class SearchMovieByNameUseCaseTest {
     }
 
     @Test
-    fun `invoke should call search and preferences on repository`() = runTest {
+    fun `invoke() should call search and genres methods on repository`() = runTest {
         // Given
         coEvery { repository.searchMovieByName(any()) } returns emptyList()
-        coEvery { repository.getUserGenrePreferences() } returns emptyList()
+        coEvery { repository.getMoviesGenres() } returns emptyList()
 
         // When
         useCase("test")
 
         // Then
         coVerify(exactly = 1) { repository.searchMovieByName("test") }
-        coVerify(exactly = 1) { repository.getUserGenrePreferences() }
+        coVerify(exactly = 1) { repository.getMoviesGenres() }
     }
 
     @Test
-    fun `when no genre preferences should return unsorted search results`() = runTest {
+    fun `when genres list is empty should return unsorted search results`() = runTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         coEvery { repository.searchMovieByName(any()) } returns searchResults
-        coEvery { repository.getUserGenrePreferences() } returns emptyList()
+        coEvery { repository.getMoviesGenres() } returns emptyList()
 
         // When
         val result = useCase("test")
@@ -63,21 +64,33 @@ class SearchMovieByNameUseCaseTest {
     }
 
     @Test
-    fun `when genre preferences exist should return movies sorted by top preference`() = runTest {
+    fun `when top genre rank is zero should return unsorted search results`() = runTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
-        val userPreference = GenrePreference(
-            genreId = 878,
-            count = 3
-        )
+        val genreWithZeroRank = MovieGenre(id = 878, title = "Sci-Fi", rank = 0)
         coEvery { repository.searchMovieByName(any()) } returns searchResults
-        coEvery { repository.getUserGenrePreferences() } returns listOf(userPreference)
+        coEvery { repository.getMoviesGenres() } returns listOf(genreWithZeroRank)
 
         // When
         val result = useCase("test")
 
         // Then
-        assertThat(result).hasSize(2)
+        assertThat(result).isEqualTo(searchResults)
+        assertThat(result).containsExactly(movieAction, movieSciFi).inOrder()
+    }
+
+    @Test
+    fun `when genres exist with rank should return movies sorted by top genre`() = runTest {
+        // Given
+        val searchResults = listOf(movieAction, movieSciFi)
+        val favoriteGenre = MovieGenre(id = 878, title = "Sci-Fi", rank = 1)
+        coEvery { repository.searchMovieByName(any()) } returns searchResults
+        coEvery { repository.getMoviesGenres() } returns listOf(favoriteGenre)
+
+        // When
+        val result = useCase("test")
+
+        // Then
         assertThat(result).containsExactly(movieSciFi, movieAction).inOrder()
     }
 }

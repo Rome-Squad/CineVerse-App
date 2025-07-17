@@ -23,8 +23,14 @@ class InsertGenresUseCaseTest {
     fun `should call repository to insert genres`() = runTest {
         // Given
         val genres = listOf(
-            MovieGenre(id = 1, title = "Action"),
-            MovieGenre(id = 2, title = "Drama")
+            MovieGenre(
+                id = 1, title = "Action",
+                rank = 0
+            ),
+            MovieGenre(
+                id = 2, title = "Drama",
+                rank = 0
+            )
         )
 
         // When
