@@ -19,12 +19,12 @@ class ExploreRepositoryImpl(
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
         if (query.isBlank())
             return cache.getSearchHistory().map {
-                it.toEntity()
+                it.map { cacheDto-> cacheDto.toEntity() }
             }
 
         return SafeCall {
             val history = cache.getSearchKeywords(query).map {
-                it.toEntity()
+                it.map {cacheDto-> cacheDto.toEntity() }
             }
 
             val remoteResults = remote.getSearchKeywords(query).map {
