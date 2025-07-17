@@ -24,6 +24,7 @@ fun mapExceptionToStringRes(throwable: Throwable): Int {
         is TimeoutDomainException -> R.string.error_timeout
         is ServerErrorDomainException -> R.string.error_server
         is UnauthorizedDomainException -> R.string.error_unauthorized
+        is InfrastructureDomainException -> R.string.error_infrastructure
         is AccessDeniedDomainException -> R.string.error_access_denied
         is ValidationDomainException -> R.string.error_validation
         is InvalidRequestMethodDomainException -> R.string.error_invalid_method

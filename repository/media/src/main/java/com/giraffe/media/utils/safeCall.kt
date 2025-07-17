@@ -71,7 +71,8 @@ object SafeCall {
         is RedirectedException,
         is ClientErrorException,
         is CorruptDatabaseException,
-        is DiskAccessException -> UnknownDomainException()
+        is DiskAccessException -> InfrastructureDomainException()
+
 
         else -> UnknownDomainException()
     }

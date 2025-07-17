@@ -9,4 +9,6 @@
     <string name="error_invalid_method">طريقة الطلب غير صالحة. تواصل مع الدعم.</string>
     <string name="error_not_found">العنصر المطلوب غير موجود.</string>
     <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
+    <string name="error_infrastructure">.حدث خطأ داخلي في النظام. يُرجى المحاولة مرة أخرى لاحقًا</string>
+
 </resources>
