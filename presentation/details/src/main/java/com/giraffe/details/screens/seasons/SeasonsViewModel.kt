@@ -11,6 +11,10 @@ class SeasonsViewModel(
     SeasonsScreenState()
 ) {
 
+    init {
+        loadSeason(2288)
+    }
+
     fun loadSeason(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeasonsSuccess,

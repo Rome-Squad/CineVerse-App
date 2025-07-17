@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +24,7 @@ import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
@@ -31,6 +35,7 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.screens.seasons.SeasonsContent
 import com.giraffe.details.utils.TypeOfDetailsScreen
 import com.giraffe.details.utils.imageSourceToPainter
 import com.giraffe.imageviewer.component.SafeIslamicImage
@@ -43,13 +48,21 @@ fun SeriesDetailsScreen(
     viewModel: SeriesDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
-    SeriesDetailsContent(
-        state = state,
+
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
-            .systemBarsPadding()
-    )
+            .systemBarsPadding(),
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedVisibility(state.isLoadingSeason) {
+            Progress(modifier = Modifier.size(40.dp))
+        }
+        AnimatedVisibility(!state.isLoadingSeason) {
+            SeriesDetailsContent(state = state)
+        }
+    }
 }
 
 @Composable

@@ -69,7 +69,8 @@ fun SeasonCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(intrinsicSize = IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
 
                 Box(
