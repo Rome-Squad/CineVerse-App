@@ -38,5 +38,6 @@ data class CachedSeasonDto(
 @Entity(tableName = SERIES_GENRE_TABLE)
 data class CachedSeriesGenreDto(
     @PrimaryKey val id: Int,
-    val name: String
+    val name: String,
+    val count: Int
 )
