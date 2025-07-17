@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -89,8 +90,9 @@ fun MainDetails(
                         bottomEnd = Theme.radius.xl
                     )
                     SafeIslamicImage(
-                        imageUrl = actorImageUrl,
+                        imageUrl = it,
                         contentDescription = actorName,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .sharedElement(
                                 sharedContentState = rememberSharedContentState(key = actorImageUrl + key),
@@ -236,6 +238,7 @@ fun MainDetailsHeader(
                     SafeIslamicImage(
                         imageUrl = it,
                         contentDescription = actorName,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .sharedElement(
                                 sharedContentState = rememberSharedContentState(key = actorImageUrl + key),
