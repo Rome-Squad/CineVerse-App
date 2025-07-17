@@ -18,8 +18,6 @@ import com.giraffe.media.movies.entity.MovieGenre
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
 import com.giraffe.user.SessionManager
-import com.giraffe.media.entity.Review
-
 
 class MoviesRepositoryImpl(
     private val cache: MoviesLocalDataSource,
@@ -55,7 +53,6 @@ class MoviesRepositoryImpl(
             }
     }
 
-    }
 
     override suspend fun getMoviesByGenres(genreIds: List<Int>) = SafeCall {
         cache.getMoviesByGenre(0).map (MovieCacheDto::toMovie)
@@ -93,28 +90,10 @@ class MoviesRepositoryImpl(
             .also { insertMovies(listOf(it)) }
     }
 
-    override suspend fun getMovieDetails(movieId: Int): Movie {
-        return SafeCall {
-            val cachedMovie = cache.getMovieById(movieId)
-            if (cachedMovie != null) {
-                return cachedMovie.toMovie()
-            } else {
-                val remoteMovieDetails = remote.getMovieById(movieId)
-                val remoteEntity = remoteMovieDetails.toEntity()
-                insertMovies(listOf(remoteEntity))
-                return remoteEntity
-            }
-        }
-    }
 
     override suspend fun getMovieReviews(
         movieId: Int
     ) = SafeCall { remote.getMovieReviews(movieId).map (MovieReviewDto::toEntity) }
-    ): List<Review> {
-        return SafeCall {
-            remote.getMovieReviews(movieId).map { it.toEntity() }
-        }
-    }
 
     override suspend fun addRating(
         movieId: Int,
