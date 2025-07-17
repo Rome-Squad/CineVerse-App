@@ -1,11 +1,11 @@
 package com.giraffe.imageviewer.component
 
 
-import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -19,16 +19,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.AsyncImagePainter.Companion.DefaultTransform
+import coil.imageLoader
 import coil.request.ImageRequest
 import com.giraffe.imageviewer.R
-import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifierImpl
 import com.giraffe.imageviewer.blur.BlurTransformer
+import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifier
 import com.giraffe.imageviewer.utils.drawableToBitmap
-import java.io.ByteArrayOutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun SafeIslamicImage(
@@ -49,52 +51,48 @@ fun SafeIslamicImage(
         )
     }
 ) {
-
     val context = LocalContext.current
+
+    // Preserve classifier over recomposition and config changes
+    val classifier: SafeIslamicImageClassifier by inject(SafeIslamicImageClassifier::class.java)
+
+    // Use app-level Coil ImageLoader
+    val imageLoader = LocalContext.current.imageLoader
+
+    // Cache for unsafe images to avoid redundant network requests
+    val unsafeCache = remember { mutableStateMapOf<String, Boolean>() }
+
     var isPlaceholder by remember { mutableStateOf(false) }
     var shouldBlur by remember { mutableStateOf(true) }
 
     LaunchedEffect(imageUrl) {
-        try {
-            val request = ImageRequest.Builder(context)
-                .data(imageUrl)
-                .allowHardware(false)
-                .listener(
-                    onError = { request, throwable ->
-                        isPlaceholder = true
-                    }
-                )
-                .build()
+        val cachedResult = unsafeCache[imageUrl]
+        if (cachedResult != null) {
+            shouldBlur = cachedResult
+            return@LaunchedEffect
+        }
 
-            val imageLoader = ImageLoader(context)
-            val result = imageLoader.execute(request)
+        withContext(Dispatchers.Default) {
+            try {
+                val request = ImageRequest.Builder(context)
+                    .data(imageUrl)
+                    .allowHardware(false)
+                    .build()
 
-            val drawable = result.drawable
-            val bitmap = drawable?.let {
-                drawableToBitmap(it)
+                val result = imageLoader.execute(request)
+                val drawable = result.drawable
+                val bitmap = drawable?.let { drawableToBitmap(it) }
+
+                shouldBlur = bitmap?.let { classifier.isUnsafe(it) } ?: false
+                unsafeCache[imageUrl] = shouldBlur
+            } catch (_: Exception) {
+                isPlaceholder = true
             }
-
-            if (bitmap != null) {
-
-                val outputStream = ByteArrayOutputStream()
-                bitmap.compress(
-                    Bitmap.CompressFormat.JPEG,
-                    100, outputStream
-                )
-
-                val classifier = SafeIslamicImageClassifierImpl(context)
-                shouldBlur = classifier.isUnsafe(bitmap)
-            }
-
-        } catch (_: Exception) {
-            isPlaceholder = true
         }
     }
 
     if (isPlaceholder) {
-        placeHolder(
-            modifier
-        )
+        placeHolder(modifier)
     } else {
         AsyncImage(
             model = ImageRequest.Builder(context)
@@ -102,9 +100,7 @@ fun SafeIslamicImage(
                 .crossfade(true)
                 .apply {
                     if (shouldBlur) {
-                        transformations(
-                            BlurTransformer(context, radius = 35f)
-                        )
+                        transformations(BlurTransformer(context, radius = 35f))
                     }
                 }
                 .build(),
@@ -117,8 +113,5 @@ fun SafeIslamicImage(
             transform = transform,
             modifier = modifier
         )
-
     }
 }
-
-
