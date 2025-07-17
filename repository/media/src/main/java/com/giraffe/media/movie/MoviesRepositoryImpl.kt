@@ -38,37 +38,37 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieGenres(genreIds: List<Int>) = SafeCall {
         cache.getMovieGenres(genreIds).map { it.toEntity() }.ifEmpty {
-            remote.getMovieGenres().map (MovieGenreDto::toEntity)
+            remote.getMovieGenres().map(MovieGenreDto::toEntity)
         }
     }
 
 
     override suspend fun getMoviesGenres() = SafeCall {
         cache.getMoviesGenres()
-            .map (MovieGenreCacheDto::toEntity)
+            .map(MovieGenreCacheDto::toEntity)
             .ifEmpty {
                 remote.getMovieGenres()
-                    .map (MovieGenreDto::toEntity)
+                    .map(MovieGenreDto::toEntity)
                     .also { insertGenres(it) }
             }
     }
 
 
-    override suspend fun getMoviesByGenres(genreIds: List<Int>) = SafeCall {
-        cache.getMoviesByGenre(0).map (MovieCacheDto::toMovie)
+    override suspend fun getMoviesByGenre(genreId: Int) = SafeCall {
+        cache.getMoviesByGenre(genreId).map(MovieCacheDto::toMovie)
             .ifEmpty {
-                val remoteMovies = remote.getMoviesByGenres(genreIds).map ( MovieDto::toMovie)
-                insertMovies(remoteMovies)
-                remoteMovies
+                remote.getMoviesByGenre(genreId)
+                    .map(MovieDto::toMovie)
+                    .also { insertMovies(it) }
             }
     }
 
     override suspend fun insertMovies(movie: List<Movie>) = SafeCall {
-        cache.insertMovies(movie.map (Movie::toMovieCacheDto))
+        cache.insertMovies(movie.map(Movie::toMovieCacheDto))
     }
 
     override suspend fun insertGenres(genres: List<MovieGenre>) = SafeCall {
-        cache.insertMovieGenres(genres.map (MovieGenre::toMovieGenreDto))
+        cache.insertMovieGenres(genres.map(MovieGenre::toMovieGenreDto))
     }
 
     override suspend fun setMovieRecent(movie: Movie, isRecent: Boolean) = SafeCall {
@@ -93,7 +93,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieReviews(
         movieId: Int
-    ) = SafeCall { remote.getMovieReviews(movieId).map (MovieReviewDto::toEntity) }
+    ) = SafeCall { remote.getMovieReviews(movieId).map(MovieReviewDto::toEntity) }
 
     override suspend fun addRating(
         movieId: Int,

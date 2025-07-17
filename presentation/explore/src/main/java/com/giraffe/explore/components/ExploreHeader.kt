@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,8 +38,8 @@ fun ExploreHeader(
     onTabClick: (Int) -> Unit = {},
     selectedTabIndex: Int = 0,
     placeholder: String = "",
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: String= "",
+    onValueChange: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {}
 ) {
     Column(

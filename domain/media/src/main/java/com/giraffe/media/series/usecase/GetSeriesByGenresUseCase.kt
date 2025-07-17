@@ -5,5 +5,5 @@ import com.giraffe.media.series.repository.SeriesRepository
 class GetSeriesByGenresUseCase(
     private val repository: SeriesRepository
 ) {
-    suspend operator fun invoke(genresIds: List<Int>) = repository.getSeriesByGenres(genresIds)
+    suspend operator fun invoke(genresId: Int) = repository.getSeriesByGenre(genresId)
 }

@@ -18,11 +18,11 @@ class SeriesRemoteDataSourceImp(
             )
         ).results
 
-    override suspend fun getSeriesByGenreIds(genresIds: List<Int>, page: Int) =
+    override suspend fun getSeriesByGenre(genreId: Int, page: Int) =
         requestBuilder.get<SeriesResponse>(
             endpoint = DISCOVER_TV,
             params = mapOf(
-                WITH_GENRES_KEY to genresIds.joinToString(",")
+                WITH_GENRES_KEY to (if (genreId == -1) "" else genreId.toString())
             )
         ).results
 

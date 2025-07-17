@@ -26,7 +26,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @Composable
-fun HistoryAndRecentItems(
+fun SuggestionAndRecentSection(
     modifier: Modifier = Modifier,
     resultSearchKeyword: List<SearchKeyword>,
     recentViews: List<Poster>,
@@ -111,7 +111,7 @@ private fun HistoryAndRecentItemsPreview() {
     }
 
     CineVerseTheme {
-        HistoryAndRecentItems(
+        SuggestionAndRecentSection(
             onClickClearAll = {},
             onClickItem = {},
             onClickIcon = {},

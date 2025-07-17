@@ -1,42 +1,43 @@
-package com.giraffe.explore
+package com.giraffe.explore.screen.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.designsystem.R
+import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.util.exceptionHandler
-import com.giraffe.media.explore.entity.SearchKeyword
-import com.giraffe.media.explore.screen.SearchScreenEffect
-import com.giraffe.media.explore.usecase.ExploreUseCases
-import com.giraffe.media.explore.util.retryIO
-import com.giraffe.media.movies.usecase.ClearCacheUseCase
-import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
-import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
-import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
-import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
-import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
-import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
-import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
-import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ExploreViewModel(
-    private val getMoviesGenres: GetMoviesGenresUseCase,
-    private val getSeriesGenres: GetSeriesGenresUseCase,
-    private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
-    private val getSeriesByGenresUseCase: GetSeriesByGenresUseCase,
+class SearchViewModel : ViewModel(), SearchInteractionListener {
+    private val _state = MutableStateFlow(SearchScreenState())
+    val state = _state.asStateFlow()
+    private val exceptionHandler = exceptionHandler(_state)
+
+    override fun onQueryChange(query: String) = safeExecute {
+        _state.update {
+            it.copy(
+                query = query,
+                postfixIconRes = if (query.isBlank()) R.drawable.outline_microphone else R.drawable.outline_close
+            )
+        }
+
+    }
+
+
+    fun safeExecute(bloc: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            bloc()
+        }
+    }
+
+}
+
+/*
+
+
 
 
     private val exploreUseCases: ExploreUseCases,
@@ -49,104 +50,15 @@ class ExploreViewModel(
     private val getRecentPeople: GetRecentPeopleUseCase,
     private val getRecentlyMovies: GetRecentlyMoviesUseCase,
     private val getRecentSeries: GetRecentSeriesUseCase
-) : ViewModel(), ExploreInteractionListener {
-    private val _state = MutableStateFlow(ExploreScreenState())
-    val state: StateFlow<ExploreScreenState> = _state.asStateFlow()
-    private val _uiEvent = MutableSharedFlow<SearchScreenEffect>()
-    val uiEvent: SharedFlow<SearchScreenEffect> = _uiEvent
-    private val exceptionHandler = exceptionHandler(_state)
-    private var debounceJob: Job? = null
 
-    init {
-        getGenres()
-        getRecent()
-    }
 
-    private fun getGenres() {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val moviesGenres = getMoviesGenres().map { it.toUi() }
-            val seriesGenres = getSeriesGenres().map { it.toUi() }
-            _state.update {
-                it.copy(
-                    selectedGenres = moviesGenres,
-                    moviesGenres = moviesGenres,
-                    seriesGenres = seriesGenres
-                )
-            }
-            getMoviesByGenres()
-            getSeriesByGenres()
-        }
-    }
 
-    override fun getMoviesByGenres(genresIds: List<Int>) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val movies =
-                getMoviesByGenresUseCase(genresIds).map { it.toPoster(_state.value.moviesGenres) }
-            _state.update { it.copy(movieResults = movies) }
-            if (_state.value.selectedTab == SearchTab.MOVIES) _state.update {
-                it.copy(
-                    selectedPosters = movies
-                )
-            }
-        }
-    }
-
-    override fun getSeriesByGenres(genresIds: List<Int>) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val series =
-                getSeriesByGenresUseCase(genresIds).map { it.toPoster(_state.value.seriesGenres) }
-            _state.update { it.copy(seriesResults = series) }
-            if (_state.value.selectedTab == SearchTab.SERIES) _state.update {
-                it.copy(
-                    selectedPosters = series
-                )
-            }
-        }
-    }
-
-    override fun onTabSelected(tabIndex: Int) {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    selectedTab = SearchTab.entries[tabIndex],
-                    selectedGenre = if (SearchTab.entries[tabIndex] == SearchTab.MOVIES)
-                        _state.value.selectedMovieGenre
-                    else
-                        _state.value.selectedSeriesGenre,
-                    selectedPosters = if (SearchTab.entries[tabIndex] == SearchTab.MOVIES)
-                        _state.value.movieResults
-                    else if (SearchTab.entries[tabIndex] == SearchTab.SERIES)
-                        _state.value.seriesResults
-                    else
-                        _state.value.actorResults,
-                )
-            }
-        }
-    }
-
-    override fun onGenreSelected(genre: GenreUi) {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (_state.value.selectedTab == SearchTab.MOVIES) {
-                _state.update { it.copy(selectedGenre = genre, selectedMovieGenre = genre) }
-                getMoviesByGenres(
-                    if (genre.id == -1) emptyList() else listOf(genre.id)
-                )
-            } else {
-                _state.update { it.copy(selectedGenre = genre, selectedSeriesGenre = genre) }
-                getSeriesByGenres(
-                    if (genre.id == -1) emptyList() else listOf(genre.id)
-                )
-            }
-        }
-    }
-
-    override fun onSuggestionClick(suggestion: SearchKeyword) {
+override fun onSuggestionClick(suggestion: SearchKeyword) {
         _state.update { it.copy(isSearchFieldFocused = false, searchTabs = SearchTab.entries) }
         loadMoviesResult(suggestion)
         loadSeriesResults(suggestion)
         loadPeopleResults(suggestion)
     }
-
     private fun loadMoviesResult(keyword: SearchKeyword) {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val moviesPosters = searchMovieByName(keyword.keyword).map {
@@ -190,18 +102,6 @@ class ExploreViewModel(
             if (_state.value.selectedTab == SearchTab.ACTORS) _state.update { it.copy(selectedPosters = actorsPosters) }
         }
     }
-
-    override fun onSearchModeChanged(isSearchMode: Boolean) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-             _state.update { it.copy(searchTabs =if (isSearchMode) SearchTab.entries else SearchTab.entries.take(2)) }
-            _state.update { it.copy(isSearchMode = isSearchMode) }
-        }
-    }
-
-
-
-
-
     private fun getRecent() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val recentSeries = getRecentSeries().map { it.toPoster(_state.value.seriesGenres) }
@@ -294,5 +194,4 @@ class ExploreViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _state.update { it.copy(isSearchFieldFocused = isFocused) }
         }
-    }
-}
+    }*/

@@ -7,8 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.ExploreScreen
-
+import com.giraffe.explore.screen.discover.DiscoverScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,10 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-                ExploreScreen(
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
+                DiscoverScreen()
             }
         }
     }

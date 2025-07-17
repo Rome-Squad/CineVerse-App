@@ -26,10 +26,10 @@ class MoviesRemoteDataSourceImp(
         requestBuilder.get<GenreResponse>(endpoint = GENRES_URL).genres
 
 
-    override suspend fun getMoviesByGenres(genreIds: List<Int>) =
+    override suspend fun getMoviesByGenre(genreId: Int) =
         requestBuilder.get<MoviesListResponse>(
             endpoint = MOVIES_BY_GENRE_URL,
-            params = mapOf(WITH_GENRES to genreIds.joinToString(","))
+            params = mapOf(WITH_GENRES to (if (genreId == -1) "" else genreId.toString()))
         ).results
 
 

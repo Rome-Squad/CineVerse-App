@@ -7,7 +7,7 @@ import com.giraffe.media.series.model.GenreDto
 
 interface SeriesRemoteDataSource {
     suspend fun getSeriesByName(name: String, page: Int = 1): List<SeriesDto>
-    suspend fun getSeriesByGenreIds(genresIds: List<Int>, page: Int = 1): List<SeriesDto>
+    suspend fun getSeriesByGenre(genreId: Int, page: Int = 1): List<SeriesDto>
     suspend fun getGenres(): List<GenreDto>
     suspend fun getSeriesDetails(seriesId: Int): SeriesDetailsDto
     suspend fun getSeriesRecommendations(seriesId: Long, page: Int): List<SeriesDto>
