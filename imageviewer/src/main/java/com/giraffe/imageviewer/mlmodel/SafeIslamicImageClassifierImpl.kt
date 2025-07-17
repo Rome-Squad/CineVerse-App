@@ -1,4 +1,4 @@
-package com.giraffe.imageviewer.classifier
+package com.giraffe.imageviewer.mlmodel
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -10,9 +10,9 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 
-class IslamicInappropriateImageClassifier(
+class SafeIslamicImageClassifierImpl(
     context: Context
-) : InappropriateImageClassifier {
+) : SafeIslamicImageClassifier {
 
     // Interpreter to run the Model
     private val interpreter: Interpreter
@@ -20,7 +20,7 @@ class IslamicInappropriateImageClassifier(
 
     init {
         // Load the TFLite model from assets
-        val modelFile = loadModelFile(context, "mustafa_islamic_safe_image_classifier.tflite")
+        val modelFile = loadModelFile(context)
         interpreter = Interpreter(modelFile)
     }
 
@@ -95,7 +95,7 @@ class IslamicInappropriateImageClassifier(
         val unsafeScore = result["unsafe"] ?: 1f
 
         val isUnsafe = when {
-            unsafeScore > .5f -> true
+            unsafeScore > .25f -> true
             unsafeScore >= safeScore -> true
             else -> false
         }
