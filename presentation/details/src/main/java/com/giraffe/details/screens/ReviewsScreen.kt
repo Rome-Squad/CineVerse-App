@@ -14,24 +14,23 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.ReviewCard
+import com.giraffe.details.screens.moviedetails.model.ReviewUI
 import com.giraffe.details.utils.getCurrentLocalDateTime
-import com.giraffe.media.movies.entity.MovieReview
-import com.giraffe.media.movies.entity.MovieReviewAuthor
+
 
 @Composable
 fun ReviewsScreen(
-    movieReviewList : List<MovieReview>
+    reviewsList : List<ReviewUI>
 ){
-
     ReviewsContent(
-        movieReviewList = movieReviewList
+        reviewsList = reviewsList
     )
 }
 
 @Composable
 private fun ReviewsContent(
     modifier : Modifier = Modifier,
-    movieReviewList : List<MovieReview>
+    reviewsList : List<ReviewUI>
 ){
 
     LazyColumn (
@@ -49,15 +48,15 @@ private fun ReviewsContent(
                 modifier = Modifier.padding(16.dp)
             )
         }
-        items(movieReviewList.size){ index->
+        items(reviewsList.size){ index->
             ReviewCard(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                rate = movieReviewList[index].author.rating,
-                reviewText = movieReviewList[index].content,
-                reviewDate = movieReviewList[index].createdAt,
-                reviewerImageSource = movieReviewList[index].author.avatarImage,
-                reviewerName = movieReviewList[index].author.name,
-                reviewerUsername = movieReviewList[index].author.username
+                rate = reviewsList[index].rating,
+                reviewText = reviewsList[index].content,
+                reviewDate = reviewsList[index].createdAt,
+                reviewerImageSource = reviewsList[index].authorImageUrl,
+                reviewerName = reviewsList[index].authorName,
+                reviewerUsername = reviewsList[index].authorUserName
             )
         }
     }
@@ -67,89 +66,54 @@ private fun ReviewsContent(
 @Composable
 private fun MovieReviewsPreview(){
 
-    val movieReviews = listOf(
-        MovieReview(
+    val reviews = listOf(
+        ReviewUI(
             id = "2",
             content = "Good acting and soundtrack, but the plot was a bit predictable.",
             createdAt = getCurrentLocalDateTime(),
-            updatedAt = getCurrentLocalDateTime(),
-            url = "https://example.com/review/2",
-            author = MovieReviewAuthor(
-                name = "Mark Brown",
-                username = "mbrown",
-                avatarImage = "https://example.com/avatars/linaahmed.png",
+                authorName = "Mark Brown",
+                authorUserName = "mbrown",
+                authorImageUrl = "https://example.com/avatars/linaahmed.png",
                 rating = 3,
-            )
         ),
-        MovieReview(
+        ReviewUI(
             id = "2",
             content = "Good acting and soundtrack, but the plot was a bit predictable.",
             createdAt = getCurrentLocalDateTime(),
-            updatedAt = getCurrentLocalDateTime(),
-            url = "https://example.com/review/2",
-            author = MovieReviewAuthor(
-                name = "Mark Brown",
-                username = "mbrown",
-                avatarImage = "https://example.com/avatars/linaahmed.png",
-                rating = 5,
-            )
+            authorName = "Mark Brown",
+            authorUserName = "mbrown",
+            authorImageUrl = "https://example.com/avatars/linaahmed.png",
+            rating = 3,
         ),
-        MovieReview(
-            id = "3",
-            content = "One of the best thrillers this year. Highly recommended!",
+        ReviewUI(
+            id = "2",
+            content = "Good acting and soundtrack, but the plot was a bit predictable.",
             createdAt = getCurrentLocalDateTime(),
-            updatedAt = getCurrentLocalDateTime(),
-            url = "https://example.com/review/3",
-            author = MovieReviewAuthor(
-                name = "Lina Ahmed",
-                username = "linaahmed",
-                avatarImage = "https://example.com/avatars/linaahmed.png",
-                rating = 5
-            )
+            authorName = "Mark Brown",
+            authorUserName = "mbrown",
+            authorImageUrl = "https://example.com/avatars/linaahmed.png",
+            rating = 3,
         ),
-        MovieReview(
-            id = "4",
-            content = "One of the best thrillers this year. Highly recommended!",
+        ReviewUI(
+            id = "2",
+            content = "Good acting and soundtrack, but the plot was a bit predictable.",
             createdAt = getCurrentLocalDateTime(),
-            updatedAt = getCurrentLocalDateTime(),
-            url = "https://example.com/review/3",
-            author = MovieReviewAuthor(
-                name = "Lina Ahmed",
-                username = "linaahmed",
-                avatarImage = "https://example.com/avatars/linaahmed.png",
-                rating = 5
-            )
+            authorName = "Mark Brown",
+            authorUserName = "mbrown",
+            authorImageUrl = "https://example.com/avatars/linaahmed.png",
+            rating = 3,
         ),
-        MovieReview(
-            id = "5",
-            content = "One of the best thrillers this year. Highly recommended!",
+        ReviewUI(
+            id = "2",
+            content = "Good acting and soundtrack, but the plot was a bit predictable.",
             createdAt = getCurrentLocalDateTime(),
-            updatedAt = getCurrentLocalDateTime(),
-            url = "https://example.com/review/3",
-            author = MovieReviewAuthor(
-                name = "Lina Ahmed",
-                username = "linaahmed",
-                avatarImage = "https://example.com/avatars/linaahmed.png",
-                rating = 5
-            )
+            authorName = "Mark Brown",
+            authorUserName = "mbrown",
+            authorImageUrl = "https://example.com/avatars/linaahmed.png",
+            rating = 3,
         ),
-        MovieReview(
-            id = "3",
-            content = "One of the best thrillers this year. Highly recommended!",
-            createdAt = getCurrentLocalDateTime(),
-            updatedAt = getCurrentLocalDateTime(),
-            url = "https://example.com/review/3",
-            author = MovieReviewAuthor(
-                name = "Lina Ahmed",
-                username = "linaahmed",
-                avatarImage = "https://example.com/avatars/linaahmed.png",
-                rating = 5
-            )
-        ),
-
     )
     ReviewsContent(
-        movieReviewList = movieReviews
-
+        reviewsList = reviews
     )
 }
