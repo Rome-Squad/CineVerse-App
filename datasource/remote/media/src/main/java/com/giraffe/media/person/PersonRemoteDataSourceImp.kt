@@ -4,6 +4,7 @@ import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.model.dto.CreditsDto
 import com.giraffe.media.person.model.dto.PersonDetailsDto
 import com.giraffe.media.person.model.dto.PersonProfileImageDto
+import com.giraffe.media.person.model.dto.PersonSocialMediaDto
 import com.giraffe.media.person.response.PersonCreditsResponse
 import com.giraffe.media.person.response.SearchPersonResponse
 import com.giraffe.media.util.RequestBuilder
@@ -11,6 +12,8 @@ import com.giraffe.media.util.RequestBuilder
 class PersonRemoteDataSourceImp(
     private val requestBuilder: RequestBuilder
 ) : PersonRemoteDataSource {
+    private val defaultLanguageParams = mapOf(LANGUAGE to "en-US")
+
     override suspend fun searchByName(personName: String) =
         requestBuilder.get<SearchPersonResponse>(
             endpoint = SEARCH_PERSON_END_POINT,
@@ -25,33 +28,41 @@ class PersonRemoteDataSourceImp(
     override suspend fun getPersonMediaCredits(personId: Int) =
         requestBuilder.get<PersonCreditsResponse>(
             endpoint = "$PERSON_END_POINT/$personId/$COMBINED_CREDITS_END_POINT",
-            params = mapOf(LANGUAGE to "en-US")
+            params = defaultLanguageParams
         ).cast
+
+
+    override suspend fun getPersonSocialMedia(personId: Int) =
+        requestBuilder.get<PersonSocialMediaDto>(
+            endpoint = "/$PERSON_END_POINT/$personId/$EXTERNAL_IDS_END_POINT",
+            params = defaultLanguageParams
+        )
 
     override suspend fun getPersonDetails(personId: Int) =
         requestBuilder.get<PersonDetailsDto>(
             endpoint = "$PERSON_END_POINT/$personId",
-            params = mapOf(LANGUAGE to "en-US")
+            params = defaultLanguageParams
         )
 
     override suspend fun getPersonImages(personId: Int) =
         requestBuilder.get<PersonProfileImageDto>(
-            endpoint = "$PERSON_END_POINT/$personId/$PERSON_IMAGES_END_POINT"
+            endpoint = "$PERSON_END_POINT/$personId/$PERSON_IMAGES_END_POINT",
         )
 
     override suspend fun getCreditsBySeriesId(seriesId: Int) =
         requestBuilder.get<CreditsDto>(
             endpoint = "$CREDITS_SHOW_END_POINT/$seriesId/$CREDITS",
-            params = mapOf(LANGUAGE to "en-US")
+            params = defaultLanguageParams
         )
 
     override suspend fun getCreditsByMovieId(movieId: Int) =
         requestBuilder.get<CreditsDto>(
             endpoint = "$CREDITS_MOVIE_END_POINT/$movieId/$CREDITS",
-            params = mapOf(LANGUAGE to "en-US")
+            params = defaultLanguageParams
         )
 
     companion object {
+        private const val EXTERNAL_IDS_END_POINT = "external_ids"
         private const val PERSON_IMAGES_END_POINT = "images"
         private const val COMBINED_CREDITS_END_POINT = "combined_credits"
         private const val CREDITS_MOVIE_END_POINT = "movie"

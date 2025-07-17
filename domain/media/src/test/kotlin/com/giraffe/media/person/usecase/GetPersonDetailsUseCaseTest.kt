@@ -3,6 +3,7 @@ package com.giraffe.media.person.usecase
 
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
+import com.giraffe.media.person.entity.PersonSocialMediaLinks
 import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -40,6 +41,11 @@ class GetPersonDetailsUseCaseTest {
                 posterPath = "/a6O7gKJQe5HWaMujYvdMYaj9PnO.jpg",
                 voteAverage = 7.5
             )
+        ),
+        socialMedia = PersonSocialMediaLinks(
+            facebookLink = "michaelcaine",
+            instagramLink = "michaelcaine_official",
+            youtubeLink = "UCV1n8z2d3a5b6c7d8e9f0g1h"
         ),
         role = "Actor"
     )

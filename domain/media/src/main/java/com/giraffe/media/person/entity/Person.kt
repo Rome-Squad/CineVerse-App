@@ -11,6 +11,13 @@ data class Person(
     val placeOfBirth: String? = null,
     val images: List<String> = emptyList(),
     val personCredits: List<PersonCredit> = emptyList(),
+    val socialMedia: PersonSocialMediaLinks? = null
+)
+
+data class PersonSocialMediaLinks(
+    val facebookLink: String? = null,
+    val instagramLink: String? = null,
+    val youtubeLink: String? = null
 )
 
 data class PersonCredit(

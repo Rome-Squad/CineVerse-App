@@ -85,6 +85,7 @@ class PersonRepositoryImpl(
             val details = async { remoteDataSource.getPersonDetails(personId) }
             val images = async { remoteDataSource.getPersonImages(personId) }
             val media = async { remoteDataSource.getPersonMediaCredits(personId) }
+            val socialMedia = async { remoteDataSource.getPersonSocialMedia(personId) }
             Person(
                 id = personId,
                 name = details.await().name,
@@ -95,6 +96,7 @@ class PersonRepositoryImpl(
                 biography = details.await().biography,
                 images = images.await().toImageList(),
                 personCredits = media.await().map(PersonCreditDto::toEntity),
+                socialMedia = socialMedia.await().toEntity()
             )
         }
     }

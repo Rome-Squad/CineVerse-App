@@ -16,15 +16,15 @@ class CastDetailsViewModel(
     }
 
     override fun onActorYoutubeLinkClicked() {
-        TODO("Not yet implemented")
+        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorYouTubeLink))
     }
 
     override fun onActorFacebookLinkClicked() {
-        TODO("Not yet implemented")
+        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorFacebookLink))
     }
 
     override fun onActorInstagramLinkClicked() {
-        TODO("Not yet implemented")
+        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorInstagramLink))
     }
 
     override fun onMovieClicked(movieId: Int) {
@@ -59,6 +59,9 @@ class CastDetailsViewModel(
                 actorPlace = person.placeOfBirth.orEmpty(),
                 actorGalleryImageUrls = person.images,
                 biographyInfo = person.biography.orEmpty(),
+                actorFacebookLink = person.socialMedia?.facebookLink.orEmpty(),
+                actorInstagramLink = person.socialMedia?.instagramLink.orEmpty(),
+                actorYouTubeLink = person.socialMedia?.youtubeLink.orEmpty(),
                 posters = person.personCredits.map { personCredit ->
                     Poster(
                         id = personCredit.id,
