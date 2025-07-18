@@ -40,6 +40,8 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
     implementation(project(":domain:media"))
+    implementation(project(":api:details"))
+    implementation(project(":api:explore"))
 
     implementation(libs.koin.androidx.compose)
 
