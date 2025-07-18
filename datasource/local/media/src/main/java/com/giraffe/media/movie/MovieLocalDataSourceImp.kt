@@ -1,17 +1,18 @@
 package  com.giraffe.media.movie
 
-import MovieDao
-import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
-import  com.giraffe.media.movie.model.cacheDto.MovieCacheDto
-import  com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.dao.MovieDao
+import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
+import com.giraffe.media.movie.model.cacheDto.MovieCacheDto
+import com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.util.safeCall
 
 
 class MovieLocalDataSourceImp(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
-    override suspend fun getMovieById(movieId: Int): MovieCacheDto = safeCall {
-        movieDao.getMovieById(movieId)
+    override suspend fun getMovieById(movieId: Int): MovieCacheDto? = safeCall {
+        val movie = movieDao.getMovieById(movieId)
+        movie
     }
 
     override suspend fun insertMovies(movies: List<MovieCacheDto>) = safeCall {
