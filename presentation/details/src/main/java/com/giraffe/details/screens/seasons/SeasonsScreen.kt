@@ -23,7 +23,6 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.SeasonCard
-import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -74,8 +73,7 @@ fun SeasonsContent(
                 count = state.seasons.size
             ) { index ->
                 SeasonCard(
-                    poster = (state.seasons[index].posterUrl
-                        ?: com.giraffe.designsystem.R.drawable.main_poster_test).imageSourceToPainter(),
+                    poster = state.seasons[index].posterUrl,
                     title = "Season ${state.seasons[index].seasonNumber + 1}",
                     overview = state.seasons[index].overview,
                     rating = state.seasons[index].rating,

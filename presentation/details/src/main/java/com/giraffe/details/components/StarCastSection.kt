@@ -19,20 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.composable.custom.Text
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.screens.moviedetails.model.CastUi
-import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.details.models.CastUi
-import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 
 @Composable

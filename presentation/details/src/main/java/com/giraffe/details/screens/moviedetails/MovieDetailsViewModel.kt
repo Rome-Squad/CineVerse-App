@@ -2,11 +2,11 @@ package com.giraffe.details.screens.moviedetails
 
 import android.util.Log
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.details.screens.moviedetails.model.MovieUi
-import com.giraffe.details.screens.moviedetails.model.groupByRole
-import com.giraffe.details.screens.moviedetails.model.toCastUi
-import com.giraffe.details.screens.moviedetails.model.toCrewUi
-import com.giraffe.details.screens.moviedetails.model.toReviewUI
+import com.giraffe.details.models.MovieUi
+import com.giraffe.details.models.groupByRole
+import com.giraffe.details.models.toCastUi
+import com.giraffe.details.models.toCrewUi
+import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
@@ -16,7 +16,6 @@ import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
-import androidx.lifecycle.SavedStateHandle
 
 
 class MovieDetailsViewModel(
@@ -30,7 +29,7 @@ class MovieDetailsViewModel(
 
 
     //loading movie data
-    fun loadMovieDetails(movieId: Int){
+    fun loadMovieDetails(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::loadMovieDetailsError

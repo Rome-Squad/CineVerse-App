@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,26 +24,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.AppBar
-import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
-import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
-import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.utils.TypeOfDetailsScreen
-import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.min
 
@@ -87,7 +80,6 @@ fun SeriesDetailsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
@@ -148,8 +140,7 @@ fun SeriesDetailsContent(
                 ) {
                     for (i in 0..min(2, state.seasons.size - 1)) {
                         SeasonCard(
-                            poster = (state.seasons[i].posterUrl
-                                ?: R.drawable.main_poster_test).imageSourceToPainter(),
+                            poster = state.seasons[i].posterUrl,
                             title = "Season ${state.seasons[i].seasonNumber + 1}",
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,
@@ -216,7 +207,7 @@ fun SeriesDetailsContent(
                             rate = review.rating.toInt(),
                             reviewText = review.content,
                             reviewDate = review.createdAt,
-                            reviewerImageSource = review.authorImageUrl,
+                            reviewerImageUrl = review.authorImageUrl,
                             reviewerName = review.authorName,
                             reviewerUsername = review.authorUserName
                         )
@@ -232,47 +223,47 @@ fun SeriesDetailsContent(
         }
     }
 
-    BaseBottomSheet(
-        isVisible = state.isVisibleAddToCollectionBottomSheet,
-        onDismiss = onDismissAddToCollectionBottomSheet,
-        title = stringResource(com.giraffe.details.R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
-        content = {
-            AddToCollectionContent(
-                title = "My Favorite TV",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "My WatchLis",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "Cristian Bale Movies",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
-        }
-    )
-    BaseBottomSheet(
-        isVisible = state.isVisibleGiveStarsBottomSheet,
-        onDismiss = onDismissAddRatingBottomSheet,
-        title = stringResource(com.giraffe.details.R.string.rate_the_movie),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
-        content = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                RatingSelector()
-                PrimaryButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp),
-                    text = stringResource(com.giraffe.details.R.string.add_to_rate),
-                    enabled = false,
-                    onClick = {})
-            }
-        }
-    )
+//    BaseBottomSheet(
+//        isVisible = state.isVisibleAddToCollectionBottomSheet,
+//        onDismiss = onDismissAddToCollectionBottomSheet,
+//        title = stringResource(com.giraffe.details.R.string.add_to_collection),
+//        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+//        content = {
+//            AddToCollectionContent(
+//                title = "My Favorite TV",
+//                isLoading = false,
+//                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+//            )
+//            AddToCollectionContent(
+//                title = "My WatchLis",
+//                isLoading = false,
+//                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+//            )
+//            AddToCollectionContent(
+//                title = "Cristian Bale Movies",
+//                isLoading = false,
+//                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+//            )
+//        }
+//    )
+//    BaseBottomSheet(
+//        isVisible = state.isVisibleGiveStarsBottomSheet,
+//        onDismiss = onDismissAddRatingBottomSheet,
+//        title = stringResource(com.giraffe.details.R.string.rate_the_movie),
+//        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+//        content = {
+//            Column(
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                RatingSelector()
+//                PrimaryButton(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 24.dp),
+//                    text = stringResource(com.giraffe.details.R.string.add_to_rate),
+//                    enabled = false,
+//                    onClick = {})
+//            }
+//        }
+//    )
 }
