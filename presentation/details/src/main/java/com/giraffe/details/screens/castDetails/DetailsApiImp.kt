@@ -1,127 +1,183 @@
 package com.giraffe.details.screens.castDetails
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.giraffe.details.DetailsApi
+import kotlinx.serialization.Serializable
 
-const val MovieDetailsRoute = "movie_details"
-const val MovieReviewsRoute = "movie_reviews"
-const val SeriesDetailsRoute = "series_details"
-const val SeriesReviewsRoute = "series_reviews"
+@Serializable
+private data class CastDetailsRoute(val personId: Int)
+
+@Serializable
+private data class GallerRoute(val personId: Int)
+
+@Serializable
+private data class CreditsRoute(val personId: Int)
+
+@Serializable
+private data class MovieDetailsRoute(val movieId: Int)
+
+@Serializable
+private data class MoviesRecommendedRoute(val movieId: Int)
+
+@Serializable
+private data class MovieCastsRoute(val movieId: Int)
+
+@Serializable
+private data class MovieReviewsRoute(val movieId: Int)
+
+@Serializable
+private data class SeriesDetailsRoute(val seriesId: Int)
+
+@Serializable
+private data class RecommendedSeriesRoute(val seriesId: Int)
+
+@Serializable
+private data class SeriesCastsRoute(val seriesId: Int)
+
+@Serializable
+private data class SeriesReviewsRoute(val seriesId: Int)
+
+@Serializable
+private data class SeasonsRoute(val seriesId: Int)
 
 
 class DetailsApiImp : DetailsApi {
 
     @Composable
     override fun GetCastDetailsContainer(personId: Int) {
-        TODO("Not yet implemented")
-    }
-
-    @Composable
-    override fun GetSeriesDetailsContainer(seriesId: Int) {
-        val navController = rememberNavController()
-        NavHost(
-            navController = navController,
-            startDestination = SeriesDetailsRoute,
-            modifier = Modifier.fillMaxSize()
+        DetailsNavHost(
+            route = CastDetailsRoute(personId)
         ) {
-            composable(SeriesDetailsRoute) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Series with id $seriesId",
-                        modifier = Modifier.clickable {
-                            navController.navigate(SeriesReviewsRoute)
-                        }
-                    )
-                }
-            }
-
-            composable(SeriesReviewsRoute) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(text = "Reviews for series $seriesId")
-                        Button(onClick = { navController.popBackStack() }) {
-                            Text("Back to Series Details")
-                        }
-                        Button(onClick = { /* handle movie nav */ }) {
-                            Text("Go to Movie Details")
-                        }
-                    }
-                }
-            }
+            createCastDetailsScreen(it)
+            createGalleryScreen(it)
+            createCreditsScreen(it)
         }
     }
 
     @Composable
     override fun GetMovieDetailsContainer(movieId: Int) {
+        DetailsNavHost(
+            route = MovieDetailsRoute(movieId)
+        ) {
+            createMovieDetailsScreen(it)
+            createRecommendationMoviesScreen(it)
+            createMovieCastsScreen(it)
+            createMovieReviewsScreen(it)
+        }
+    }
+
+    @Composable
+    override fun GetSeriesDetailsContainer(seriesId: Int) {
+        DetailsNavHost(
+            route = SeriesDetailsRoute(seriesId)
+        ) {
+            createSeriesDetailsScreen(it)
+            createRecommendationSeriesScreen(it)
+            createSeriesCastsScreen(it)
+            createSeriesReviewsScreen(it)
+            createSeasonScreen(it)
+
+        }
+    }
+
+    @Composable
+    private fun DetailsNavHost(route: Any, builder: NavGraphBuilder.(NavHostController) -> Unit) {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = MovieDetailsRoute,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            composable(MovieDetailsRoute) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Movie with id $movieId",
-                        modifier = Modifier.clickable {
-                            navController.navigate(MovieReviewsRoute)
-                        }
-                    )
-                }
-            }
-            composable(MovieReviewsRoute) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(text = "Reviews for movie $movieId")
+            startDestination = route,
+            builder = { builder(navController) },
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
 
-                        Button(
-                            onClick = { navController.popBackStack() }
-                        ) {
-                            Text("Back to Movie Details")
-                        }
+    private fun NavGraphBuilder.createCastDetailsScreen(navController: NavHostController) {
+        composable<CastDetailsRoute> {
+            val personId = it.toRoute<CastDetailsRoute>().personId
+        }
+    }
 
-                        // Avoid circular navigation
-                        Button(
-                            onClick = {
-                                // Handle series navigation at a higher level
-                            }
-                        ) {
-                            Text("Go to Series Details")
-                        }
-                    }
-                }
-            }
+    private fun NavGraphBuilder.createGalleryScreen(navController: NavHostController) {
+        composable<GallerRoute> {
+            val personId = it.toRoute<GallerRoute>().personId
+        }
+    }
+
+    private fun NavGraphBuilder.createCreditsScreen(navController: NavHostController) {
+        composable<CreditsRoute> {
+            val personId = it.toRoute<CreditsRoute>().personId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createMovieDetailsScreen(navController: NavHostController) {
+        composable<MovieDetailsRoute> {
+            val movieId = it.toRoute<MovieDetailsRoute>().movieId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createRecommendationMoviesScreen(navController: NavHostController) {
+        composable<MoviesRecommendedRoute> {
+            val movieId = it.toRoute<MoviesRecommendedRoute>().movieId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createMovieCastsScreen(navController: NavHostController) {
+        composable<MovieCastsRoute> {
+            val movieId = it.toRoute<MovieCastsRoute>().movieId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createMovieReviewsScreen(navController: NavHostController) {
+        composable<MovieReviewsRoute> {
+            val movieId = it.toRoute<MovieReviewsRoute>().movieId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createSeriesDetailsScreen(navController: NavHostController) {
+        composable<SeriesDetailsRoute> {
+            val seriesId = it.toRoute<SeriesDetailsRoute>().seriesId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createRecommendationSeriesScreen(navController: NavHostController) {
+        composable<RecommendedSeriesRoute> {
+            val seriesId = it.toRoute<RecommendedSeriesRoute>().seriesId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createSeriesCastsScreen(navController: NavHostController) {
+        composable<SeriesCastsRoute> {
+            val seriesId = it.toRoute<SeriesCastsRoute>().seriesId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createSeriesReviewsScreen(navController: NavHostController) {
+        composable<SeriesReviewsRoute> {
+            val seriesId = it.toRoute<SeriesReviewsRoute>().seriesId
+
+        }
+    }
+
+    private fun NavGraphBuilder.createSeasonScreen(navController: NavHostController) {
+        composable<SeasonsRoute> {
+            val seriesId = it.toRoute<SeasonsRoute>().seriesId
+
         }
     }
 }

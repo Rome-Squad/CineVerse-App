@@ -8,8 +8,8 @@ interface DetailsApi {
     fun GetCastDetailsContainer(personId: Int)
 
     @Composable
-    fun GetSeriesDetailsContainer(seriesId: Int)
+    fun GetMovieDetailsContainer(movieId: Int)
 
     @Composable
-    fun GetMovieDetailsContainer(movieId: Int)
+    fun GetSeriesDetailsContainer(seriesId: Int)
 }
