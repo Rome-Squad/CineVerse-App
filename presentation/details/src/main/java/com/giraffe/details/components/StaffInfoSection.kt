@@ -8,16 +8,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
+import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -43,10 +42,9 @@ fun StaffInfoSection(
             )
         }
 
-        Card(
+        CustomCard (
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(Theme.radius.lg),
-            colors = CardDefaults.cardColors(containerColor = Theme.color.background.card)
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
                 staffList.entries.toList().forEachIndexed { index, (key, value) ->
@@ -99,7 +97,7 @@ data class StaffMember(
 @Preview(
     name = "StaffInfoSection Preview - Dark",
     showBackground = false,
-    apiLevel = 34
+   // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionDark() {
@@ -114,7 +112,7 @@ fun PreviewStaffInfoSectionDark() {
 @Preview(
     name = "StaffInfoSection Preview - Light",
     showBackground = true,
-    apiLevel = 34
+   // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionLight() {
