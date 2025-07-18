@@ -29,8 +29,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
+    navController: NavController,
     viewModel: SearchViewModel = koinViewModel(),
-    navController: NavController
 ) {
     val state by viewModel.state.collectAsState()
     SearchContent(

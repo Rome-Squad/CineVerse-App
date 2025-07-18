@@ -1,6 +1,8 @@
 package com.giraffe.explore.screen.searchresult
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -81,10 +83,18 @@ fun SearchResultContent(
                     modifier = Modifier
                         .fillParentMaxHeight(),
                 ) {
-                    if (state.selectedTab == SearchTab.ACTORS && state.actors.isNotEmpty()) {
-                        ActorsSection(
-                            actors = state.actors
-                        )
+                    if (state.selectedTab == SearchTab.ACTORS) {
+                        if (state.actors.isNotEmpty()) {
+                            ActorsSection(
+                                actors = state.actors
+                            )
+                        } else {
+                            NothingFound(
+                                modifier = Modifier
+                                    .padding(horizontal = 60.dp)
+                                    .padding(top = 195.dp)
+                            )
+                        }
                     } else if (state.selectedPosters.isNotEmpty()) {
                         TransitionLazyColumnToGrid(
                             poster = state.selectedPosters,
@@ -106,7 +116,9 @@ fun SearchResultContent(
                 .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
                 .padding(bottom = 16.dp, end = 16.dp),
-            visible = state.selectedTab != SearchTab.ACTORS
+            visible = state.selectedTab != SearchTab.ACTORS,
+            enter = slideInHorizontally { it * 2 },
+            exit = slideOutHorizontally { it * 2 }
         ) {
             ViewToggle(
                 isListSelected = !state.isGridSelected,
