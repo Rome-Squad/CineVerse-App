@@ -1,4 +1,4 @@
-package com.giraffe.media.person.model.cacheDto
+package com.giraffe.media.person.datasource.local.cacheDto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

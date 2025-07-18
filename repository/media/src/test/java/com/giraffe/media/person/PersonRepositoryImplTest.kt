@@ -5,8 +5,8 @@ import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.mapper.toEntity
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
-import com.giraffe.media.person.model.dto.PersonDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs

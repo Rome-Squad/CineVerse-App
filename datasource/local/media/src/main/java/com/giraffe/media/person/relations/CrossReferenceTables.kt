@@ -4,11 +4,11 @@ package com.giraffe.media.person.relations
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import com.giraffe.media.movie.model.cacheDto.MovieCacheDto
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.CrossReferenceConstants.MOVIE_PERSON_CROSS_REF_TABLE
 import com.giraffe.media.person.relations.CrossReferenceConstants.SERIES_PERSON_CROSS_REF_TABLE
-import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 
 @Entity(
     tableName = MOVIE_PERSON_CROSS_REF_TABLE,

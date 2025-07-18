@@ -1,4 +1,4 @@
-package com.giraffe.media.person.model.dto
+package com.giraffe.media.person.datasource.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

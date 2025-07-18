@@ -3,8 +3,8 @@ package com.giraffe.media.utils
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.mapper.toDto
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
-import com.giraffe.media.person.model.dto.CreditsDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.remote.dto.CreditsDto
 
 sealed class ContentType {
     abstract val id: Int

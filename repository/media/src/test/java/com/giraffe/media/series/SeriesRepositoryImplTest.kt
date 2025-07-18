@@ -4,10 +4,10 @@ import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.model.dto.SeasonCacheDto
-import com.giraffe.media.series.model.dto.SeriesCacheDto
-import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
-import com.giraffe.media.series.model.dto.GenreDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -20,11 +20,9 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SeriesRepositoryImplTest {
-
     private lateinit var local: SeriesLocalDateSource
     private lateinit var remote: SeriesRemoteDataSource
     private lateinit var repository: SeriesRepository
-
     private val remoteSeriesDto = listOf(
         SeriesDto(
             id = 1,
@@ -68,7 +66,7 @@ class SeriesRepositoryImplTest {
     )
 
     private val cachedGenres = listOf(
-        SeriesGenreCacheDto(1, "Action",0)
+        SeriesGenreCacheDto(1, "Action", 0)
     )
 
     @Before
@@ -156,6 +154,6 @@ class SeriesRepositoryImplTest {
     @Test
     fun `SeriesRepository should return Series`() = runTest {
         repository.getRecommendedSeries(1, 1)
-        coVerify { remote.getSeriesRecommendations(1,1) }
+        coVerify { remote.getSeriesRecommendations(1, 1) }
     }
 }

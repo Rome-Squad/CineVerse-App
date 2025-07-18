@@ -1,7 +1,7 @@
 package com.giraffe.media.movie.datasource.local
 
-import  com.giraffe.media.movie.model.cacheDto.MovieCacheDto
-import  com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
+import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
+import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 
 interface MoviesLocalDataSource {
     suspend fun getMovieById(
@@ -35,5 +35,4 @@ interface MoviesLocalDataSource {
     suspend fun clearMovieGenreCache()
 
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
-
 }

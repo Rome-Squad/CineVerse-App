@@ -1,11 +1,11 @@
 package com.giraffe.media.person.datasource.remote
 
-import com.giraffe.media.person.model.dto.CreditsDto
-import com.giraffe.media.person.model.dto.PersonCreditDto
-import com.giraffe.media.person.model.dto.PersonDetailsDto
-import com.giraffe.media.person.model.dto.PersonDto
-import com.giraffe.media.person.model.dto.PersonProfileImageDto
-import com.giraffe.media.person.model.dto.PersonSocialMediaDto
+import com.giraffe.media.person.datasource.remote.dto.CreditsDto
+import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDto
+import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
+import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
 
 interface PersonRemoteDataSource {
     suspend fun searchByName(personName: String): List<PersonDto>

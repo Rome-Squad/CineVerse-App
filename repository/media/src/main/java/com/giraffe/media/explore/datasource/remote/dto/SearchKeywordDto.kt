@@ -1,5 +1,4 @@
-package com.giraffe.media.explore.model
-
+package com.giraffe.media.explore.datasource.remote.dto
 
 import kotlinx.serialization.Serializable
 

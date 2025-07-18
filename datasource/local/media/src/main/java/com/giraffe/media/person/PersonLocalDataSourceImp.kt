@@ -2,7 +2,7 @@ package com.giraffe.media.person
 
 import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.util.safeCall
 
 class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSource {
@@ -30,7 +30,7 @@ class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSour
         dao.clearRecentPeople()
     }
 
-    override suspend fun getPeopleByMovieId(movieId: Int): List<PersonCacheDto> = safeCall {
+    override suspend fun getPeopleByMovieId(movieId: Int) = safeCall {
         dao.getPeopleByMovieId(movieId)
     }
 
@@ -38,7 +38,7 @@ class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSour
         dao.insertPeople(people)
     }
 
-    override suspend fun getPeopleBySeriesId(seriesId: Int): List<PersonCacheDto> = safeCall {
+    override suspend fun getPeopleBySeriesId(seriesId: Int) = safeCall {
         dao.getPeopleBySeriesId(seriesId)
     }
 }

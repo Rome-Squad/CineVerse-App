@@ -9,8 +9,8 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toDto
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
-import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
-import com.giraffe.media.series.model.dto.GenreDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 
@@ -61,7 +61,6 @@ class SeriesRepositoryImpl(
     override suspend fun clearRecentSeries() = SafeCall {
         local.clearRecentSeries()
     }
-
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
         remote.getSeriesDetails(seriesId).toEntity()

@@ -4,18 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.giraffe.media.series.model.dto.SeasonCacheDto
-import com.giraffe.media.series.model.dto.SeriesCacheDto
-import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SEASON_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface SeriesDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSeries(series: List<SeriesCacheDto>)
 
@@ -31,11 +29,13 @@ interface SeriesDao {
     @Query("SELECT * FROM $SERIES_TABLE WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
     suspend fun getSeriesByKeyword(keyword: String): List<SeriesCacheDto>
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM $SERIES_TABLE 
         WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%' 
         AND isRecent = 0
-    """)
+    """
+    )
     suspend fun deleteSeriesByKeyword(keyword: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

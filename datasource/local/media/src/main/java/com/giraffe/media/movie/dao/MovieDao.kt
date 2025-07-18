@@ -5,9 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import  com.giraffe.media.movie.model.cacheDto.MovieCacheDto
+import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import  com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
-import  com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
+import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import  com.giraffe.media.utils.DatabaseConstants.MOVIE_GENRE_TABLE
 
 

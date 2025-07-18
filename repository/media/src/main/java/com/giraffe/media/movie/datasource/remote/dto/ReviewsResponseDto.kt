@@ -1,4 +1,4 @@
-package com.giraffe.media.movie.model.dto
+package com.giraffe.media.movie.datasource.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

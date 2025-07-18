@@ -1,9 +1,9 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.media.series.model.dto.SeasonCacheDto
-import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
-import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
