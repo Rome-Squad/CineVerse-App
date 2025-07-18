@@ -1,5 +1,6 @@
 package com.giraffe.media.utils
 
+import android.util.Log
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.ApiDataException
 import com.giraffe.media.exception.ClientErrorDataException
@@ -34,6 +35,7 @@ import java.net.UnknownHostException
 object SafeCall {
     suspend operator fun <T> invoke(execute: suspend () -> T): T {
         return try {
+            Log.d("genresExecute", "loadExecute: ${execute.invoke()}")
             execute()
         } catch (e: Exception) {
             throw mapToDomainException(e)

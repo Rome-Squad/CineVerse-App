@@ -2,16 +2,16 @@ package com.giraffe.media.series
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.media.series.datasource.remote.dto.GenreDto
+import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toCacheDto
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
-import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
-import com.giraffe.media.series.datasource.remote.dto.GenreDto
-import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 
@@ -73,6 +73,12 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesByGenre(genreId: Int) = SafeCall {
         remote.getSeriesByGenre(genreId).map { it.toEntity() }
+    }
+
+    override suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre> = SafeCall {
+        local.getCachedGenresByIds(genreIDs).map { it.toEntity() }.ifEmpty {
+            remote.getGenres().filter { it.id in genreIDs }.map(GenreDto::toEntity)
+        }
     }
 
     override suspend fun getSeriesReviews(seriesId: Int) = SafeCall {

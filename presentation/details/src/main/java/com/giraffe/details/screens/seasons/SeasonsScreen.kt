@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,7 +72,7 @@ fun SeasonsContent(
                 count = state.seasons.size
             ) { index ->
                 SeasonCard(
-                    poster = state.seasons[index].posterUrl,
+                    posterUrl = state.seasons[index].posterUrl,
                     title = "Season ${state.seasons[index].seasonNumber + 1}",
                     overview = state.seasons[index].overview,
                     rating = state.seasons[index].rating,

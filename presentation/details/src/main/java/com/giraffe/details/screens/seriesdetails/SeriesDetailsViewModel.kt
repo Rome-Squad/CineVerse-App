@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.seriesdetails
 
+import android.util.Log
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.SeasonUi
@@ -8,6 +9,7 @@ import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toReviewUI
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
@@ -17,14 +19,14 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 
 class SeriesDetailsViewModel(
     private val getSeriesDetails: GetSeriesDetailsUseCase,
     private val getLastSeasons: GetLastSeasonsUseCase,
-    private val getSeriesGenres: GetSeriesGenresUseCase,
-    private val getCastOfSeries: GetPeopleBySeriesIdUseCase,
+    private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
+    private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
 ) :
@@ -32,15 +34,9 @@ class SeriesDetailsViewModel(
         SeriesDetailsScreenState()
     ), SeriesDetailsInteractionListener {
 
-//    init {
-//        loadSeries(2288)
-//        loadSeason(2288)
-//        loadSeriesPeople(2288)
-//        loadRecommendedSeries(2288, 5)
-//        loadSeriesReviews(2288)
-//    }
 
-    fun loadSeries(seriesId: Int) {
+
+    fun loadSeriesDetails(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesDetailsSuccess,
             onError = ::loadSeriesDetailsError
@@ -48,7 +44,6 @@ class SeriesDetailsViewModel(
             getSeriesDetails(seriesId)
         }
     }
-
     fun loadSeriesDetailsSuccess(series: Series) {
         updateState {
             it.copy(
@@ -57,11 +52,37 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadSeriesDetailsError(error: Throwable) {
         updateState {
             it.copy(
                 isLoadingSeries = false,
+            )
+        }
+        sendEffect(SeriesDetailsEffect.Error(error))
+    }
+
+
+    fun loadSeriesGenres(genreIDs: List<Int>) {
+        safeExecute(
+            onSuccess = ::loadSeriesGenresSuccess,
+            onError = ::loadSeriesGenresError
+        ) {
+            getSeriesGenres(genreIDs)
+        }
+    }
+    fun loadSeriesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                genres = genres.map { it.title },
+                isLoadingGenres = false
+            )
+        }
+        Log.d("genresLog", "loadSeriesGenresSuccess: $genres")
+    }
+    fun loadSeriesGenresError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoadingGenres = false,
             )
         }
         sendEffect(SeriesDetailsEffect.Error(error))
@@ -76,7 +97,6 @@ class SeriesDetailsViewModel(
             getLastSeasons(seriesId)
         }
     }
-
     fun loadLastSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
@@ -85,7 +105,6 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadLastSeasonsError(error: Throwable) {
         updateState {
             it.copy(
@@ -96,18 +115,17 @@ class SeriesDetailsViewModel(
     }
 
 
-    private fun loadSeriesPeople(seriesId: Int) {
+     fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
-            onSuccess = ::loadMoviePeopleSuccess,
-            onError = ::loadMoviePeopleError
+            onSuccess = ::loadSeriesPeopleSuccess,
+            onError = ::loadSeriesPeopleError
         ) {
-            getCastOfSeries(seriesId)
+            getCastAndCrewOfSeries(seriesId)
         }
     }
-
-    private fun loadMoviePeopleSuccess(people: List<Person>) {
+     fun loadSeriesPeopleSuccess(people: List<Person>) {
         val cast = people.filter { it.type == PersonType.CAST }.take(10)
-        val crew = people.filter { it.type == PersonType.CREW }
+        val crew = people.filter { it.type == PersonType.CREW }.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
@@ -117,8 +135,7 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
-    private fun loadMoviePeopleError(error: Throwable) {
+     fun loadSeriesPeopleError(error: Throwable) {
         updateState {
             it.copy(
                 isLoadingPeople = false,
@@ -126,6 +143,8 @@ class SeriesDetailsViewModel(
         }
         sendEffect(SeriesDetailsEffect.Error(error))
     }
+
+
 
     fun loadRecommendedSeries(seriesId: Int, page: Int) {
         safeExecute(
@@ -135,7 +154,6 @@ class SeriesDetailsViewModel(
             getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
         }
     }
-
     fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
         updateState {
             it.copy(
@@ -151,7 +169,6 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadRecommendedSeriesError(error: Throwable) {
         updateState {
             it.copy(
@@ -170,7 +187,6 @@ class SeriesDetailsViewModel(
             getSeriesReviews(seriesId)
         }
     }
-
     fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
@@ -179,7 +195,6 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadSeriesReviewsError(error: Throwable) {
         updateState {
             it.copy(
@@ -189,20 +204,16 @@ class SeriesDetailsViewModel(
         sendEffect(SeriesDetailsEffect.Error(error))
     }
 
+
+
     override fun showMoreSeason() {
-        TODO("Not yet implemented")
     }
 
     override fun showMoreCast() {
-        TODO("Not yet implemented")
     }
 
-    override fun showMoreCrew() {
-        TODO("Not yet implemented")
-    }
 
     override fun showMoreRecommendedSeries() {
-        TODO("Not yet implemented")
     }
 
     override fun onClickGiveStars() {
@@ -214,11 +225,9 @@ class SeriesDetailsViewModel(
     }
 
     override fun showMoreReviews() {
-        TODO("Not yet implemented")
     }
 
     override fun onClickMovie(movieId: Int) {
-        TODO("Not yet implemented")
     }
 
     override fun onClickAddToCollection() {
@@ -230,7 +239,6 @@ class SeriesDetailsViewModel(
     }
 
     override fun onClickCreateCollection() {
-        TODO("Not yet implemented")
     }
 
     override fun onDismissAddToCollectionBottomSheet() {
@@ -242,7 +250,6 @@ class SeriesDetailsViewModel(
     }
 
     override fun onDismissLoginBottomSheet() {
-        TODO("Not yet implemented")
     }
 
     override fun onDismissGiveStarsBottomSheet() {
