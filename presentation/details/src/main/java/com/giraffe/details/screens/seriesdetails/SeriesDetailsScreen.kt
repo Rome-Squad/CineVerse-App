@@ -57,7 +57,6 @@ fun SeriesDetailsScreen(
 
     LaunchedEffect(seriesID) {
         viewModel.loadSeriesDetails(seriesID)
-        viewModel.loadSeriesGenres(state.seriesDetails.genreIDs)
         viewModel.loadSeason(seriesID)
         viewModel.loadRecommendedSeries(seriesID, 1)
         viewModel.loadSeriesReviews(seriesID)

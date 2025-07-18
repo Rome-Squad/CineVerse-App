@@ -51,6 +51,7 @@ class SeriesDetailsViewModel(
                 isLoadingSeries = false
             )
         }
+        loadSeriesGenres(series.genreIDs)
     }
     fun loadSeriesDetailsError(error: Throwable) {
         updateState {
@@ -63,6 +64,7 @@ class SeriesDetailsViewModel(
 
 
     fun loadSeriesGenres(genreIDs: List<Int>) {
+
         safeExecute(
             onSuccess = ::loadSeriesGenresSuccess,
             onError = ::loadSeriesGenresError
@@ -77,7 +79,6 @@ class SeriesDetailsViewModel(
                 isLoadingGenres = false
             )
         }
-        Log.d("genresLog", "loadSeriesGenresSuccess: $genres")
     }
     fun loadSeriesGenresError(error: Throwable) {
         updateState {
