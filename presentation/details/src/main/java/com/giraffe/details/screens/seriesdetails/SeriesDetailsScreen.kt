@@ -17,11 +17,13 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
@@ -35,6 +37,7 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.utils.TypeOfDetailsScreen
 import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
@@ -42,10 +45,20 @@ import kotlin.math.min
 
 @Composable
 fun SeriesDetailsScreen(
+    seriesID : Int,
+    navController: NavController,
     modifier: Modifier = Modifier,
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
     viewModel: SeriesDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
+
+    LaunchedEffect(seriesID) {
+        viewModel.loadSeries(seriesID)
+        viewModel.loadSeason(seriesID)
+        viewModel.loadRecommendedSeries(seriesID, 5)
+        viewModel.loadSeriesReviews(seriesID)
+    }
 
     Box(
         modifier = modifier
@@ -66,7 +79,8 @@ fun SeriesDetailsScreen(
 @Composable
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+
 ) {
     val scrollState = rememberScrollState()
     Column(modifier = modifier) {

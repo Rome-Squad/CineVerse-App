@@ -32,13 +32,13 @@ class SeriesDetailsViewModel(
         SeriesDetailsScreenState()
     ) {
 
-    init {
-        loadSeries(2288)
-        loadSeason(2288)
-        loadSeriesPeople(2288)
-        loadRecommendedSeries(2288, 5)
-        loadSeriesReviews(2288)
-    }
+//    init {
+//        loadSeries(2288)
+//        loadSeason(2288)
+//        loadSeriesPeople(2288)
+//        loadRecommendedSeries(2288, 5)
+//        loadSeriesReviews(2288)
+//    }
 
     fun loadSeries(seriesId: Int) {
         safeExecute(
