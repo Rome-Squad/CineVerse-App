@@ -32,11 +32,16 @@ class CastDetailsViewModel(
     }
 
     override fun navigateToMoviesListScreen() {
-        TODO("Not yet implemented")
+        sendEffect(CastDetailsEffect.NavigateToMovies)
     }
 
     override fun navigateToActorGalleryScreen() {
-        TODO("Not yet implemented")
+        sendEffect(
+            CastDetailsEffect.NavigateToGallery(
+                actorName = state.value.actorName,
+                imageUrls = state.value.actorGalleryImageUrls
+            )
+        )
     }
 
     private fun getPersonDetails(personId: Int) {
