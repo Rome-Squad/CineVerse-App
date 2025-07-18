@@ -99,7 +99,6 @@ fun CastCard(
             SafeIslamicImage(
                 imageUrl = actorImage,
                 contentDescription = "$actorName image",
-                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(64.dp)
                     .clip(
@@ -109,7 +108,8 @@ fun CastCard(
                             bottomStart = Theme.radius.lg,
                             bottomEnd = 0.dp
                         )
-                    )
+                    ),
+                contentScale = ContentScale.Crop
             )
 
             Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.5.dp)) {

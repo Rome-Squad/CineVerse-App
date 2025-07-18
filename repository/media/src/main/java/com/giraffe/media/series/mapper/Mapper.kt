@@ -127,7 +127,7 @@ fun parseData(dateString: String): LocalDateTime? {
 fun SeriesDetailsDto.toSeasonEntity() = seasons.map {
     Season(
         id = it.id,
-        posterUrl = it.posterPath.toString(),
+        posterUrl = BASE_IMAGE_URL + it.posterPath,
         rating = it.voteAverage,
         releaseYear = it.airDate ?: "",
         overview = it.overview,

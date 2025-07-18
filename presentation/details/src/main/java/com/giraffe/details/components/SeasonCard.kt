@@ -1,7 +1,6 @@
 package com.giraffe.details.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,13 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,10 +33,11 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun SeasonCard(
-    poster: String?,
+    posterUrl: String?,
     title: String,
     overview: String,
     rating: Float,
@@ -73,7 +74,6 @@ fun SeasonCard(
                 Box(
                     modifier = Modifier
                         .width(posterWidth)
-                        .fillMaxHeight()
                         .height(64.dp)
                         .clip(
                             RoundedCornerShape(
@@ -84,12 +84,28 @@ fun SeasonCard(
                             )
                         )
                 ) {
-//                    Image(
-//                        painter = painterResource(poster.toString().toInt()),
-//                        contentDescription = null,
-//                        contentScale = ContentScale.Crop,
-//                        modifier = Modifier.fillMaxSize()
-//                    )
+                    posterUrl?.let {
+                        SafeIslamicImage(
+                            imageUrl = it,
+                            contentDescription = stringResource(R.string.season_image),
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        ) {
+                            Icon(
+                                painter = painterResource(Theme.icons.dueTone.image),
+                                contentDescription = null,
+                                tint = Theme.color.brand.secondary,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .background(
+                                        Theme.color.background.card,
+                                        shape = CircleShape
+                                    )
+                                    .padding(12.dp)
+                                    .wrapContentSize(),
+                            )
+                        }
+                    }
                 }
 
                 Column {
@@ -105,15 +121,19 @@ fun SeasonCard(
                             style = Theme.textStyle.body.sm.regular,
                             color = Theme.color.shade.secondary,
                             maxLines = 4,
+                            minLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
             }
 
-            Box(modifier = Modifier
-                .background(Theme.color.stroke.primary)
-                .height(1.dp))
+            Box(
+                modifier = Modifier
+                    .background(Theme.color.stroke.primary)
+                    .height(1.dp)
+                    .fillMaxWidth()
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

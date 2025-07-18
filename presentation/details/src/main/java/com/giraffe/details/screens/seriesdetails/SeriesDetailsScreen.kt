@@ -59,8 +59,9 @@ fun SeriesDetailsScreen(
         viewModel.loadSeriesDetails(seriesID)
         viewModel.loadSeriesGenres(state.seriesDetails.genreIDs)
         viewModel.loadSeason(seriesID)
-        viewModel.loadRecommendedSeries(seriesID, 5)
+        viewModel.loadRecommendedSeries(seriesID, 1)
         viewModel.loadSeriesReviews(seriesID)
+        viewModel.loadSeriesPeople(seriesID)
     }
 
     Box(
@@ -145,7 +146,7 @@ fun SeriesDetailsContent(
                 ) {
                     for (i in 0..min(2, state.seasons.size - 1)) {
                         SeasonCard(
-                            poster = state.seasons[i].posterUrl,
+                            posterUrl = state.seasons[i].posterUrl,
                             title = "Season ${state.seasons[i].seasonNumber + 1}",
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,

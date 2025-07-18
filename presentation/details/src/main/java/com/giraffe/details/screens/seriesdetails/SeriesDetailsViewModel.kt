@@ -26,7 +26,7 @@ class SeriesDetailsViewModel(
     private val getSeriesDetails: GetSeriesDetailsUseCase,
     private val getLastSeasons: GetLastSeasonsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
-    private val getCastOfSeries: GetPeopleBySeriesIdUseCase,
+    private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
 ) :
@@ -34,13 +34,7 @@ class SeriesDetailsViewModel(
         SeriesDetailsScreenState()
     ), SeriesDetailsInteractionListener {
 
-//    init {
-//        loadSeries(2288)
-//        loadSeason(2288)
-//        loadSeriesPeople(2288)
-//        loadRecommendedSeries(2288, 5)
-//        loadSeriesReviews(2288)
-//    }
+
 
     fun loadSeriesDetails(seriesId: Int) {
         safeExecute(
@@ -50,7 +44,6 @@ class SeriesDetailsViewModel(
             getSeriesDetails(seriesId)
         }
     }
-
     fun loadSeriesDetailsSuccess(series: Series) {
         updateState {
             it.copy(
@@ -59,7 +52,6 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadSeriesDetailsError(error: Throwable) {
         updateState {
             it.copy(
@@ -78,7 +70,6 @@ class SeriesDetailsViewModel(
             getSeriesGenres(genreIDs)
         }
     }
-
     fun loadSeriesGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
@@ -88,7 +79,6 @@ class SeriesDetailsViewModel(
         }
         Log.d("genresLog", "loadSeriesGenresSuccess: $genres")
     }
-
     fun loadSeriesGenresError(error: Throwable) {
         updateState {
             it.copy(
@@ -107,7 +97,6 @@ class SeriesDetailsViewModel(
             getLastSeasons(seriesId)
         }
     }
-
     fun loadLastSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
@@ -116,7 +105,6 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadLastSeasonsError(error: Throwable) {
         updateState {
             it.copy(
@@ -127,18 +115,17 @@ class SeriesDetailsViewModel(
     }
 
 
-    private fun loadSeriesPeople(seriesId: Int) {
+     fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
-            onSuccess = ::loadMoviePeopleSuccess,
-            onError = ::loadMoviePeopleError
+            onSuccess = ::loadSeriesPeopleSuccess,
+            onError = ::loadSeriesPeopleError
         ) {
-            getCastOfSeries(seriesId)
+            getCastAndCrewOfSeries(seriesId)
         }
     }
-
-    private fun loadMoviePeopleSuccess(people: List<Person>) {
+     fun loadSeriesPeopleSuccess(people: List<Person>) {
         val cast = people.filter { it.type == PersonType.CAST }.take(10)
-        val crew = people.filter { it.type == PersonType.CREW }
+        val crew = people.filter { it.type == PersonType.CREW }.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
@@ -148,8 +135,7 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
-    private fun loadMoviePeopleError(error: Throwable) {
+     fun loadSeriesPeopleError(error: Throwable) {
         updateState {
             it.copy(
                 isLoadingPeople = false,
@@ -157,6 +143,8 @@ class SeriesDetailsViewModel(
         }
         sendEffect(SeriesDetailsEffect.Error(error))
     }
+
+
 
     fun loadRecommendedSeries(seriesId: Int, page: Int) {
         safeExecute(
@@ -166,7 +154,6 @@ class SeriesDetailsViewModel(
             getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
         }
     }
-
     fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
         updateState {
             it.copy(
@@ -182,7 +169,6 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadRecommendedSeriesError(error: Throwable) {
         updateState {
             it.copy(
@@ -201,7 +187,6 @@ class SeriesDetailsViewModel(
             getSeriesReviews(seriesId)
         }
     }
-
     fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
@@ -210,7 +195,6 @@ class SeriesDetailsViewModel(
             )
         }
     }
-
     fun loadSeriesReviewsError(error: Throwable) {
         updateState {
             it.copy(
@@ -220,14 +204,14 @@ class SeriesDetailsViewModel(
         sendEffect(SeriesDetailsEffect.Error(error))
     }
 
+
+
     override fun showMoreSeason() {
     }
 
     override fun showMoreCast() {
     }
 
-    override fun showMoreCrew() {
-    }
 
     override fun showMoreRecommendedSeries() {
     }
