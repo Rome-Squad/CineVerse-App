@@ -1,18 +1,15 @@
 package com.giraffe.explore.screen.search
 
-import androidx.annotation.StringRes
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.screen.discover.DiscoverScreenState
-import com.giraffe.media.explore.util.HasErrorMessage
 
 data class SearchScreenState(
     val query: String = "",
-    val isSearchFieldFocused: Boolean = false,
     val errorMessageRes: Int = 0,
     val keywords: List<String> = emptyList(),
     val recentKeywords: List<String> = emptyList(),
-    val recentPosters: List<Poster> = dummyRecentPosters
+    val recentPosters: List<Poster> = dummyRecentPosters,
+    val isVoiceRecording: Boolean = false,
+    val isPermissionGranted: Boolean = false,
 )
 
 val dummyRecentPosters = List(5) {

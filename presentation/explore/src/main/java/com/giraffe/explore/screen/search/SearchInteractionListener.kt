@@ -6,17 +6,6 @@ interface SearchInteractionListener {
     fun deleteKeyword(keyword: String)
     fun clearAllKeywords()
     fun onPostfixIconClick()
-}
-/*fun onClearSearchQuery()
-    fun onDeleteItemFromHistory(item: SearchKeyword)
-    fun onClearHistory()
-    fun onVoiceSearchClick()
-    fun onClearRecentViewed()
-    fun onSuggestionClick(suggestion: SearchKeyword)
-
-    fun onPermissionResult(granted: Boolean)
+    fun onPermissionResult(isGranted: Boolean)
     fun onVoiceSearchFinished()
-
-
-    fun onFocusChanged(isFocused: Boolean)
-    fun onSearchModeChanged(isSearchMode: Boolean)*/
+}
