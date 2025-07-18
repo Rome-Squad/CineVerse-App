@@ -26,11 +26,12 @@ import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
+import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
@@ -56,6 +57,7 @@ val useCaseModule = module {
     singleOf(::GetLastSeasonsUseCase)
     singleOf(::GetSeriesReviewsUseCase)
     singleOf(::GetSeriesByGenresUseCase)
+    singleOf(::GetSeriesGenresByIdsUseCase)
 
     // Movie UseCases
     singleOf(::SearchMovieByNameUseCase)

@@ -1,9 +1,9 @@
 package com.giraffe.media.series.repository
 
+import com.giraffe.media.entity.Genre
+import com.giraffe.media.entity.Review
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.entity.Review
-import com.giraffe.media.entity.Genre
 
 
 interface SeriesRepository {
@@ -17,4 +17,5 @@ interface SeriesRepository {
     suspend fun getSeriesReviews(seriesId: Int): List<Review>
     suspend fun getSeasonOfSeries(seriesId: Int): List<Season>
     suspend fun getSeriesByGenre(genreId: Int): List<Series>
+    suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre>
 }
