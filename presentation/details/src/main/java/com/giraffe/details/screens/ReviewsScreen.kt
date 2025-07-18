@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.ReviewCard
-import com.giraffe.details.screens.moviedetails.model.ReviewUI
+import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.utils.getCurrentLocalDateTime
 
 

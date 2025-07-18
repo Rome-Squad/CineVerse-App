@@ -1,11 +1,11 @@
 package com.giraffe.details.screens.moviedetails
 
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.details.screens.moviedetails.model.MovieUi
+import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
-import com.giraffe.details.screens.moviedetails.model.toReviewUI
+import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.entity.MovieGenre
