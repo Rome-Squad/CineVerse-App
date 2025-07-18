@@ -14,7 +14,6 @@ import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.entity.SeriesGenre
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
@@ -36,7 +35,6 @@ class SeriesDetailsViewModel(
     init {
         loadSeries(2288)
         loadSeason(2288)
-        loadGenres()
         loadSeriesPeople(2288)
         loadRecommendedSeries(2288, 5)
         loadSeriesReviews(2288)
@@ -92,34 +90,6 @@ class SeriesDetailsViewModel(
         updateState {
             it.copy(
                 isLoadingSeason = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
-
-    fun loadGenres() {
-        safeExecute(
-            onSuccess = ::loadGenresSuccess,
-            onError = ::loadGenresError
-        ) {
-            getSeriesGenres()
-        }
-    }
-
-    fun loadGenresSuccess(seriesGenre: List<SeriesGenre>) {
-        updateState {
-            it.copy(
-                //genres = seriesGenre.map { state.value.seriesDetails.genreIDs.contains(it.id) },
-                isLoadingGenres = false
-            )
-        }
-    }
-
-    fun loadGenresError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingGenres = false,
             )
         }
         sendEffect(SeriesDetailsEffect.Error(error))
@@ -190,7 +160,6 @@ class SeriesDetailsViewModel(
         }
         sendEffect(SeriesDetailsEffect.Error(error))
     }
-
 
 
     fun loadSeriesReviews(seriesId: Int) {

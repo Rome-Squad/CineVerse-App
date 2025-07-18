@@ -39,12 +39,11 @@ import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.TypeOfDetailsScreen
-import com.giraffe.details.screens.moviedetails.model.ReviewUI
-import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -229,25 +228,16 @@ private fun MovieDetailsContent(
                 title = "My Favorite TV",
                 isLoading = false,
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-                title = "My Favorite TV",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
                 title = "My WatchLis",
                 isLoading = false,
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-                title = "My WatchLis",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
                 title = "Cristian Bale Movies",
                 isLoading = false,
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-                title = "Cristian Bale Movies",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
             )
         },
     )

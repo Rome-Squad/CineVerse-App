@@ -1,5 +1,6 @@
 package com.giraffe.media.series.mapper
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeasonDto
@@ -7,9 +8,6 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.entity.Review
-import com.giraffe.media.entity.Genre
-import com.giraffe.media.series.entity.SeriesGenre
 import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
