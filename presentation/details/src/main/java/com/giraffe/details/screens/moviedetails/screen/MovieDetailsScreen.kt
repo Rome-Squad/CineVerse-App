@@ -60,6 +60,7 @@ fun MovieDetailsScreen(
 
     LaunchedEffect(movieID) {
         viewModel.loadMovieDetails(movieID)
+        viewModel.loadRecommendedMovie(movieID,1)
     }
 
     LaunchedEffect(Unit) {

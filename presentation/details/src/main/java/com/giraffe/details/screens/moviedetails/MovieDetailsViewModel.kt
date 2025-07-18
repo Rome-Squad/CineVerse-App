@@ -1,27 +1,32 @@
 package com.giraffe.details.screens.moviedetails
 
 import android.util.Log
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toReviewUI
+import com.giraffe.details.screens.seriesdetails.SeriesDetailsEffect
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import com.giraffe.media.series.entity.Series
 
 
 class MovieDetailsViewModel(
     val getMovieDetails: GetMovieDetailsUseCase,
     val getMovieGenres: GetMovieGenresUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
+    val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
@@ -85,6 +90,40 @@ class MovieDetailsViewModel(
 
     private fun loadMovieGenresError(error: Throwable) {
 
+        sendEffect(MovieDetailsEffect.Error(error))
+    }
+
+    fun loadRecommendedMovie(movieId: Int, page: Int) {
+        safeExecute(
+            onSuccess = ::loadRecommendedMovieSuccess,
+            onError = ::loadRecommendedMovieError
+        ) {
+            getRecommendedMovie(movieId = movieId, page = page)
+        }
+    }
+
+    fun loadRecommendedMovieSuccess(recommendedSeries: List<Movie>) {
+        updateState {
+            it.copy(
+                recommendedMovies = recommendedSeries.map {
+                    Poster(
+                        id = it.id,
+                        name = it.title,
+                        imageUri = it.posterUrl.toString(),
+                        rating = it.rating
+                    )
+                },
+                isLoadingRecommendedMovies = false
+            )
+        }
+    }
+
+    fun loadRecommendedMovieError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoadingRecommendedMovies = false,
+            )
+        }
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
