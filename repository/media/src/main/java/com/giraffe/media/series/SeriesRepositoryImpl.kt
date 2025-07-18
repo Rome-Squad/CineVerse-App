@@ -9,8 +9,8 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toDto
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
-import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
 import com.giraffe.media.series.model.dto.GenreDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 
@@ -75,8 +75,8 @@ class SeriesRepositoryImpl(
         remote.getSeriesByGenre(genreId).map { it.toEntity() }
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int) = SafeCall {
-        remote.getSeriesReviews(seriesId).toEntity()
+    override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {
+        remote.getSeriesReviews(seriesId, page).toEntity()
     }
 
     override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {

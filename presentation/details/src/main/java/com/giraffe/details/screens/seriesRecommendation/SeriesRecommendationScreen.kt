@@ -1,15 +1,14 @@
 package com.giraffe.details.screens.seriesRecommendation
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.giraffe.designsystem.composable.Progress
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -29,13 +28,7 @@ fun SeriesRecommendationScreen(
     LazyColumn(modifier.systemBarsPadding()) {
         if (lazyPagingItems.loadState.refresh == LoadState.Loading) {
             item {
-                Text(
-                    text = "Waiting for items to load from the backend",
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally),
-                )
+                Progress(Modifier.size(50.dp))
             }
         }
 

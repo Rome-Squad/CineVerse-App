@@ -167,7 +167,7 @@ class SeriesDetailsViewModel(
             onSuccess = ::loadSeriesReviewsSuccess,
             onError = ::loadSeriesReviewsError
         ) {
-            getSeriesReviews(seriesId)
+            getSeriesReviews(seriesId, 1)
         }
     }
 
