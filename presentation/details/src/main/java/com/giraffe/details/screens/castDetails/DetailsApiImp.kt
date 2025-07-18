@@ -15,11 +15,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
+import kotlinx.serialization.Serializable
 
-const val MovieDetailsRoute = "movie_details"
-const val MovieReviewsRoute = "movie_reviews"
-const val SeriesDetailsRoute = "series_details"
-const val SeriesReviewsRoute = "series_reviews"
+//const val MovieDetailsRoute = "movie_details"
+//const val MovieReviewsRoute = "movie_reviews"
+//const val SeriesDetailsRoute = "series_details"
+//const val SeriesReviewsRoute = "series_reviews"
+
+@Serializable
+data object MovieDetailsRoute
+
+@Serializable
+data object MovieReviewsRoute
+
+@Serializable
+data object SeriesDetailsRoute
+
+@Serializable
+data object SeriesReviewsRoute
 
 
 class DetailsApiImp : DetailsApi {
@@ -37,7 +50,7 @@ class DetailsApiImp : DetailsApi {
             startDestination = SeriesDetailsRoute,
             modifier = Modifier.fillMaxSize()
         ) {
-            composable(SeriesDetailsRoute) {
+            composable<SeriesDetailsRoute> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -51,7 +64,7 @@ class DetailsApiImp : DetailsApi {
                 }
             }
 
-            composable(SeriesReviewsRoute) {
+            composable<SeriesReviewsRoute> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -81,7 +94,7 @@ class DetailsApiImp : DetailsApi {
             startDestination = MovieDetailsRoute,
             modifier = Modifier.fillMaxSize()
         ) {
-            composable(MovieDetailsRoute) {
+            composable<MovieDetailsRoute> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -94,7 +107,8 @@ class DetailsApiImp : DetailsApi {
                     )
                 }
             }
-            composable(MovieReviewsRoute) {
+
+            composable<MovieReviewsRoute> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center

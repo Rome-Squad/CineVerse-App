@@ -1,8 +1,12 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.details.DetailsApi
+import com.giraffe.details.screens.castDetails.DetailsApiImp
+import com.giraffe.explore.ExploreApi
+import com.giraffe.explore.navigation.ExploreApiImp
 import org.koin.dsl.module
 
 val featureApiModule = module {
-//    factoryOf(::DetailsApiImpl) bind DetailsApi::class
-//    factoryOf(::ExploreApiImpl) bind ExploreApi::class
+    single<DetailsApi> { DetailsApiImp() }
+    factory<ExploreApi> { ExploreApiImp(get()) }
 }
