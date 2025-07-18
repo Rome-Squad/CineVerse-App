@@ -14,9 +14,9 @@ import com.giraffe.media.person.model.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.MoviePersonCrossRef
 import com.giraffe.media.person.relations.SeriesPersonCrossRef
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.SeriesCacheDto
-import com.giraffe.media.series.model.CachedSeriesGenreDto
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
 
 @Database(
     entities = [
@@ -24,8 +24,8 @@ import com.giraffe.media.series.model.CachedSeriesGenreDto
         MovieCacheDto::class,
         MovieGenreCacheDto::class,
         SeriesCacheDto::class,
-        CachedSeasonDto::class,
-        CachedSeriesGenreDto::class,
+        SeasonCacheDto::class,
+        SeriesGenreCacheDto::class,
         PersonCacheDto::class,
         MoviePersonCrossRef::class,
         SeriesPersonCrossRef::class

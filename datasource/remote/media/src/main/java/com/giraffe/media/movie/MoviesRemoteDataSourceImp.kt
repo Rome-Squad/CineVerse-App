@@ -2,7 +2,7 @@ package  com.giraffe.media.movie
 
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.media.movie.model.dto.MovieDetailsDto
+import com.giraffe.media.movie.model.dto.MovieDto
 import com.giraffe.media.movie.model.dto.RatedMoviesResponse
 import com.giraffe.media.movie.model.dto.RatingRequest
 import com.giraffe.media.movie.model.dto.ReviewsResponseDto
@@ -14,7 +14,7 @@ class MoviesRemoteDataSourceImp(
     private val requestBuilder: RequestBuilder
 ) : MoviesRemoteDataSource {
     override suspend fun getMovieById(movieId: Int) =
-        requestBuilder.get<MovieDetailsDto>(endpoint = "$MOVIE_END_PINT/$movieId")
+        requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")
 
     override suspend fun getMoviesByName(movieName: String) =
         requestBuilder.get<MoviesListResponse>(

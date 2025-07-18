@@ -8,10 +8,10 @@ import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.entity.Review
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.SeriesCacheDto
-import com.giraffe.media.series.model.CachedSeriesGenreDto
-import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.model.dto.GenreDto
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -34,7 +34,7 @@ fun SeriesCacheDto.toEntity(
     )
 }
 
-fun CachedSeasonDto.toEntity(): Season {
+fun SeasonCacheDto.toEntity(): Season {
     return Season(
         id = id,
         name = name,
@@ -47,7 +47,7 @@ fun CachedSeasonDto.toEntity(): Season {
     )
 }
 
-fun CachedSeriesGenreDto.toEntity(): Genre {
+fun SeriesGenreCacheDto.toEntity(): Genre {
     return Genre(
         id = id,
         title = name,
@@ -67,8 +67,8 @@ fun Series.toCachedDto(): SeriesCacheDto {
     )
 }
 
-fun Season.toCachedDto(seriesId: Int): CachedSeasonDto {
-    return CachedSeasonDto(
+fun Season.toCachedDto(seriesId: Int): SeasonCacheDto {
+    return SeasonCacheDto(
         id = id,
         seriesId = seriesId,
         name = name,
@@ -81,8 +81,8 @@ fun Season.toCachedDto(seriesId: Int): CachedSeasonDto {
     )
 }
 
-fun Genre.toDto(): CachedSeriesGenreDto {
-    return CachedSeriesGenreDto(
+fun Genre.toDto(): SeriesGenreCacheDto {
+    return SeriesGenreCacheDto(
         id = id,
         name = title,
         count = rank
@@ -122,8 +122,8 @@ fun GenreDto.toEntity(): Genre {
     )
 }
 
-fun GenreDto.toCachedDto(): CachedSeriesGenreDto {
-    return CachedSeriesGenreDto(
+fun GenreDto.toCachedDto(): SeriesGenreCacheDto {
+    return SeriesGenreCacheDto(
         id = id,
         name = name,
         count = 0

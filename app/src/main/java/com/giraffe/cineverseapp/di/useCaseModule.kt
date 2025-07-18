@@ -2,7 +2,6 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
-import com.giraffe.media.explore.usecase.ExploreUseCases
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
 import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
@@ -17,7 +16,6 @@ import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetUserMovieRatingUseCase
 import com.giraffe.media.movies.usecase.InsertGenresUseCase
 import com.giraffe.media.movies.usecase.InsertMoviesUseCase
-import com.giraffe.media.movies.usecase.MoviesUseCases
 import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
 import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
@@ -38,14 +36,11 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val useCaseModule = module {
-
     // Explore UseCases
     singleOf(::GetSearchKeywordsUseCase)
     singleOf(::InsertSearchKeywordUseCase)
     singleOf(::DeleteKeywordUseCase)
     singleOf(::ClearSearchHistoryUseCase)
-    singleOf(::ExploreUseCases)
-
 
     // Series UseCases
     singleOf(::ClearRecentSeriesUseCase)
@@ -73,8 +68,6 @@ val useCaseModule = module {
     singleOf(::GetMovieReviewsUseCase)
     singleOf(::AddMovieRatingUseCase)
     singleOf(::GetUserMovieRatingUseCase)
-
-    singleOf(::MoviesUseCases)
 
     // Person UseCases
     singleOf(::ClearRecentPeopleUseCase)

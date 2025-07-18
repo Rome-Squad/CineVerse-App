@@ -1,9 +1,9 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesGenreDto
-import com.giraffe.media.series.model.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -23,10 +23,10 @@ class SeriesRoomLocalDateSourceTest {
         SeriesCacheDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
     )
     private val sampleSeasons = listOf(
-        CachedSeasonDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
+        SeasonCacheDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
     )
     private val sampleGenres = listOf(
-        CachedSeriesGenreDto(id = 1, name = "Action", count = 1)
+        SeriesGenreCacheDto(id = 1, name = "Action", count = 1)
     )
 
     @Before
@@ -87,7 +87,7 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `saveGenres inserts genres`() = runTest {
-        val genres = listOf(CachedSeriesGenreDto(id = 2, name = "Drama", count = 2))
+        val genres = listOf(SeriesGenreCacheDto(id = 2, name = "Drama", count = 2))
 
         dataSource.saveGenres(genres)
 

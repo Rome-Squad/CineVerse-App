@@ -13,14 +13,14 @@ interface ExploreSearchKeywordDao {
     @Query(
         value =
             "SELECT * " +
-            "FROM SEARCH_KEYWORD_TABLE " +
+            "FROM SEARCH_KEYWORD " +
             "ORDER BY lastSearchedTime DESC"
     )
     fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>>
     @Query(
         value =
             "SELECT * " +
-            "FROM SEARCH_KEYWORD_TABLE " +
+            "FROM SEARCH_KEYWORD " +
             "WHERE keyword = :query " +
             "ORDER BY lastSearchedTime DESC"
     )
@@ -32,12 +32,12 @@ interface ExploreSearchKeywordDao {
     @Query(
         value =
             "DELETE " +
-            "FROM SEARCH_KEYWORD_TABLE " +
+            "FROM SEARCH_KEYWORD " +
             "WHERE keyword = :keyword "
     )
     suspend fun deleteKeyword(keyword: String)
 
-    @Query("DELETE FROM SEARCH_KEYWORD_TABLE")
+    @Query("DELETE FROM SEARCH_KEYWORD")
     suspend fun clearSearchHistory()
 
 }

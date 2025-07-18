@@ -63,7 +63,7 @@ interface MovieDao {
     )
     suspend fun clearMovieCache(currentTime: Long)
 
-    @Query("UPDATE movie_genre_table SET count = count + 1 WHERE id IN (:genreIds)")
+    @Query("UPDATE movie_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
 }

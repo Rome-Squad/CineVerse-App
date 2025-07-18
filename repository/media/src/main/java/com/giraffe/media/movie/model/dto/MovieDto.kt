@@ -8,16 +8,14 @@ data class MovieDto(
     val id: Int,
     val title: String,
     val overview: String,
-
-    @SerialName("poster_path")
-    val posterPath : String?,
-
-    @SerialName("vote_average")
-    val voteAverage : Float,
-
     @SerialName("genre_ids")
-    val genresID: List<Int>,
-
+    val genresID: List<Int> = emptyList(),
+    val genres: List<MovieGenreDto> = emptyList(),
+    @SerialName("poster_path")
+    val posterPath : String? = null,
+    @SerialName("vote_average")
+    val voteAverage : Float = 0f,
     @SerialName("release_date")
-    val releaseDate : String?
+    val releaseDate : String? = null,
+    val runtime: Int? = null,
 )
