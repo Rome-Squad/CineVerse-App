@@ -1,5 +1,7 @@
 package com.giraffe.details.screens.moviedetails
 
+import com.giraffe.details.screens.moviedetails.model.ReviewUI
+
 sealed interface MovieDetailsEffect {
 
     object NavigateToCollection : MovieDetailsEffect
@@ -8,7 +10,7 @@ sealed interface MovieDetailsEffect {
 
     object NavigateToMovies : MovieDetailsEffect
 
-    object NavigateToReviews: MovieDetailsEffect
+    data class NavigateToReviews(val reviews:List<ReviewUI>): MovieDetailsEffect
 
     data class Error(val error: Throwable) : MovieDetailsEffect
 
