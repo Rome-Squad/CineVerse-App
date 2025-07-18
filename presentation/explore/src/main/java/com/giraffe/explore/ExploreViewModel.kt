@@ -1,9 +1,8 @@
 package com.giraffe.explore
 
-import android.util.Log
-import com.giraffe.explore.util.exceptionHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.explore.util.exceptionHandler
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.screen.SearchScreenEffect
 import com.giraffe.media.explore.usecase.ExploreUseCases
@@ -174,7 +173,6 @@ class ExploreViewModel(
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             exploreUseCases.getSearchKeywords(query)
                 .collectLatest { result ->
-                    Log.d("messi", "onSearchQueryChange: ${result.map { it.keyword }}")
                     _state.update { it.copy(resultSearchKeyword = result) }
                 }
         }

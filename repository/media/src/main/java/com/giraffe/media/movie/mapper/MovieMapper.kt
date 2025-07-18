@@ -47,7 +47,6 @@ fun MovieDto.toEntity(): Movie {
     }
 
     val date = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
-    Log.d("MovieDto", "toEntity: $date")
 
     return Movie(
         id = id,

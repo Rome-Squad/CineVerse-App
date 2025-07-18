@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.moviedetails.screen
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -42,6 +41,7 @@ import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.imageSourceToPainter
@@ -60,19 +60,10 @@ fun MovieDetailsScreen(
         viewModel.loadMovieDetails(movieID)
     }
 
-    Log.e("Screen", state.movie.title)
-    Log.e("Screen2", movieID.toString())
-
-
     MovieDetailsContent(
         modifier = modifier,
         state = state,
-        onShowMoreReviewsClick = viewModel::onShowMoreReviewsClick,
-        onAddToCollectionClick = viewModel::onAddToCollectionClick,
-        onShowMoreMoviesClick = viewModel::onShowMoreMoviesClick,
-        onGiveStarClick = viewModel::onGiveStarsClick,
-        onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
-        onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
+        interaction = viewModel
     )
 }
 
@@ -81,12 +72,7 @@ fun MovieDetailsScreen(
 private fun MovieDetailsContent(
     modifier: Modifier,
     state: MovieDetailsScreenState,
-    onShowMoreReviewsClick: () -> Unit,
-    onAddToCollectionClick: () -> Unit,
-    onDismissAddToCollectionBottomSheet: () -> Unit,
-    onShowMoreMoviesClick: () -> Unit,
-    onGiveStarClick: () -> Unit,
-    onDismissAddRatingBottomSheet: () -> Unit,
+    interaction: MovieDetailsInteractionListener
 ) {
 
     LazyColumn(
@@ -112,7 +98,7 @@ private fun MovieDetailsContent(
                 duration = state.movie.duration.toString(),
                 releaseDate = state.movie.releaseYear,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                onAddToCollectionClick = onAddToCollectionClick
+                onAddToCollectionClick = interaction::onAddToCollectionClick
             )
         }
         item {
@@ -142,14 +128,14 @@ private fun MovieDetailsContent(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedMovies,
-                onClickEndText = onShowMoreMoviesClick,
+                onClickEndText = interaction::onShowMoreMoviesClick,
                 onClickPoster = {})
         }
 
         item {
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-                onClickCard = onGiveStarClick
+                onClickCard = interaction::onGiveStarsClick
             )
         }
 
@@ -177,7 +163,7 @@ private fun MovieDetailsContent(
                         color = Theme.color.brand.primary,
                         modifier = Modifier
                             .padding(start = 12.dp)
-                            .clickable { onShowMoreReviewsClick() },
+                            .clickable { interaction.onShowMoreReviewsClick() },
                         style = Theme.textStyle.body.md.medium,
                     )
                 }
@@ -193,7 +179,7 @@ private fun MovieDetailsContent(
             }
             ReviewCard(
                 modifier = padding,
-                rate = review.rating.toInt(),
+                rate = review.rating,
                 reviewText = review.content,
                 reviewDate = review.createdAt,
                 reviewerImageSource = review.authorImageUrl,
@@ -205,24 +191,30 @@ private fun MovieDetailsContent(
 
     BaseBottomSheet(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
-        onDismiss = onDismissAddToCollectionBottomSheet,
+        onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
         content = {
             AddToCollectionContent(
-                title = "My Favorite TV", isLoading = false, modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My Favorite TV",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
             AddToCollectionContent(
-                title = "My WatchLis", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My WatchLis",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
             AddToCollectionContent(
-                title = "Cristian Bale Movies", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "Cristian Bale Movies",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
             )
         },
     )
     BaseBottomSheet(
         isVisible = state.isVisibleGiveStarsBottomSheet,
-        onDismiss = onDismissAddRatingBottomSheet,
+        onDismiss = interaction::onDismissGiveStarsBottomSheet,
         title = stringResource(R.string.rate_the_movie),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
         content = {
