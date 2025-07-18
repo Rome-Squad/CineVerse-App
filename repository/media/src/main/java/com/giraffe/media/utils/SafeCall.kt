@@ -1,33 +1,33 @@
 package com.giraffe.media.utils
 
-import com.giraffe.media.exception.AccessDeniedDomainException
-import com.giraffe.media.exception.ApiException
-import com.giraffe.media.exception.ClientErrorException
-import com.giraffe.media.exception.CorruptDatabaseException
-import com.giraffe.media.exception.DiskAccessException
-import com.giraffe.media.exception.ForbiddenAccessException
-import com.giraffe.media.exception.InfrastructureDomainException
-import com.giraffe.media.exception.InvalidApiKeyException
-import com.giraffe.media.exception.InvalidIdException
-import com.giraffe.media.exception.InvalidRequestMethodDomainException
-import com.giraffe.media.exception.MediaDomainException
-import com.giraffe.media.exception.NetworkDomainException
-import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.exception.NotFoundDomainException
+import com.giraffe.media.exception.AccessDeniedException
+import com.giraffe.media.exception.ApiDataException
+import com.giraffe.media.exception.ClientErrorDataException
+import com.giraffe.media.exception.CorruptDatabaseDataException
+import com.giraffe.media.exception.DiskAccessDataException
+import com.giraffe.media.exception.ForbiddenAccessDataException
+import com.giraffe.media.exception.InfrastructureException
+import com.giraffe.media.exception.InvalidApiKeyDataException
+import com.giraffe.media.exception.InvalidIdDataException
+import com.giraffe.media.exception.InvalidRequestMethodException
+import com.giraffe.media.exception.MediaException
+import com.giraffe.media.exception.NetworkException
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.RateLimitExceededException
-import com.giraffe.media.exception.RedirectedException
-import com.giraffe.media.exception.RequestTimeoutException
-import com.giraffe.media.exception.SerializationException
-import com.giraffe.media.exception.ServerErrorDomainException
-import com.giraffe.media.exception.ServerException
-import com.giraffe.media.exception.TimeoutDomainException
-import com.giraffe.media.exception.TooManyRequestsException
-import com.giraffe.media.exception.UnauthorizedAccessException
-import com.giraffe.media.exception.UnauthorizedDomainException
-import com.giraffe.media.exception.UnknownDomainException
-import com.giraffe.media.exception.UnknownNetworkException
-import com.giraffe.media.exception.ValidationDomainException
+import com.giraffe.media.exception.NotFoundDataException
+import com.giraffe.media.exception.RateLimitExceededDataException
+import com.giraffe.media.exception.RedirectedDataException
+import com.giraffe.media.exception.RequestTimeoutDataException
+import com.giraffe.media.exception.SerializationDataException
+import com.giraffe.media.exception.ServerErrorException
+import com.giraffe.media.exception.ServerDataException
+import com.giraffe.media.exception.TimeoutException
+import com.giraffe.media.exception.TooManyRequestsDataException
+import com.giraffe.media.exception.UnauthorizedAccessDataException
+import com.giraffe.media.exception.UnauthorizedException
+import com.giraffe.media.exception.UnknownException
+import com.giraffe.media.exception.UnknownNetworkDataException
+import com.giraffe.media.exception.ValidationException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -40,49 +40,49 @@ object SafeCall {
         }
     }
 
-     fun mapToDomainException(e: Throwable): MediaDomainException = when (e) {
+     fun mapToDomainException(e: Throwable): MediaException = when (e) {
 
-        is ApiException -> when (e.code) {
-            3, 7, 10, 14, 16, 17, 30, 31, 32, 33, 35, 36 -> UnauthorizedDomainException()
-            4, 42 -> InvalidRequestMethodDomainException()
-            8, 38, 39, 45, 25 -> AccessDeniedDomainException()
-            5, 18, 20, 22, 23, 26, 27, 28, 29, 41, 47 -> ValidationDomainException()
-            6, 34, 37 -> NotFoundDomainException()
-            2, 9, 43, 46 -> NetworkDomainException()
-            11, 15, 44 -> ServerErrorDomainException()
-            24 -> TimeoutDomainException()
-            else -> UnknownDomainException()
+        is ApiDataException -> when (e.code) {
+            3, 7, 10, 14, 16, 17, 30, 31, 32, 33, 35, 36 -> UnauthorizedException()
+            4, 42 -> InvalidRequestMethodException()
+            8, 38, 39, 45, 25 -> AccessDeniedException()
+            5, 18, 20, 22, 23, 26, 27, 28, 29, 41, 47 -> ValidationException()
+            6, 34, 37 -> NotFoundException()
+            2, 9, 43, 46 -> NetworkException()
+            11, 15, 44 -> ServerErrorException()
+            24 -> TimeoutException()
+            else -> UnknownException()
         }
 
 
-        is NoInternetException,
-        is UnknownNetworkException,
-        is UnknownHostException -> NetworkDomainException()
+        is NoInternetDataException,
+        is UnknownNetworkDataException,
+        is UnknownHostException -> NetworkException()
 
-        is RequestTimeoutException,
-        is SocketTimeoutException -> TimeoutDomainException()
+        is RequestTimeoutDataException,
+        is SocketTimeoutException -> TimeoutException()
 
-        is ServerException -> ServerErrorDomainException()
+        is ServerDataException -> ServerErrorException()
 
-        is UnauthorizedAccessException,
-        is InvalidApiKeyException -> UnauthorizedDomainException()
+        is UnauthorizedAccessDataException,
+        is InvalidApiKeyDataException -> UnauthorizedException()
 
-        is ForbiddenAccessException,
-        is TooManyRequestsException,
-        is RateLimitExceededException -> AccessDeniedDomainException()
+        is ForbiddenAccessDataException,
+        is TooManyRequestsDataException,
+        is RateLimitExceededDataException -> AccessDeniedException()
 
-        is NotFoundException -> NotFoundDomainException()
+        is NotFoundDataException -> NotFoundException()
 
-        is InvalidIdException,
-        is SerializationException,
-        is IllegalArgumentException -> ValidationDomainException()
+        is InvalidIdDataException,
+        is SerializationDataException,
+        is IllegalArgumentException -> ValidationException()
 
-        is RedirectedException,
-        is ClientErrorException,
-        is CorruptDatabaseException,
-        is DiskAccessException -> InfrastructureDomainException()
+        is RedirectedDataException,
+        is ClientErrorDataException,
+        is CorruptDatabaseDataException,
+        is DiskAccessDataException -> InfrastructureException()
 
 
-        else -> UnknownDomainException()
+        else -> UnknownException()
     }
 }

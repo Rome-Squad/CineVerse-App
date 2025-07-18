@@ -1,6 +1,6 @@
 package com.giraffe.media.person
 
-import com.giraffe.media.exception.MediaDomainException
+import com.giraffe.media.exception.MediaException
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.entity.Person
@@ -86,7 +86,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.searchByName(keyword) } throws Exception()
         //when && then
-        assertThrows<MediaDomainException> { repository.searchByName(keyword) }
+        assertThrows<MediaException> { repository.searchByName(keyword) }
         coVerify(exactly = 0) { remoteDataSource.searchByName(any()) }
         coVerify(exactly = 0) { localDataSource.storePerson(any()) }
     }
@@ -97,7 +97,7 @@ class PersonRepositoryImplTest {
         coEvery { localDataSource.searchByName(keyword) } returns emptyList()
         coEvery { remoteDataSource.searchByName(keyword) } throws Exception()
         //when && then
-        assertThrows<MediaDomainException> { repository.searchByName(keyword) }
+        assertThrows<MediaException> { repository.searchByName(keyword) }
         coVerify(exactly = 0) { localDataSource.storePerson(any()) }
     }
 
@@ -109,7 +109,7 @@ class PersonRepositoryImplTest {
         coEvery { localDataSource.storePeople(any()) } throws Exception("Test Exception")
 
         //when && then
-        assertThrows<MediaDomainException> { repository.searchByName(keyword) }
+        assertThrows<MediaException> { repository.searchByName(keyword) }
     }
 
 
@@ -128,7 +128,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(any()) } throws Exception()
         //when && then
-        assertThrows<MediaDomainException> { repository.storeRecentPerson(dummyPersonCacheDto.toEntity()) }
+        assertThrows<MediaException> { repository.storeRecentPerson(dummyPersonCacheDto.toEntity()) }
     }
 
 
@@ -148,7 +148,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.getRecentPeople() } throws Exception()
         //when && then
-        assertThrows<MediaDomainException> { repository.getRecentPeople() }
+        assertThrows<MediaException> { repository.getRecentPeople() }
     }
 
     @Test
@@ -166,6 +166,6 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.clearRecentPeople() } throws Exception()
         //when && then
-        assertThrows<MediaDomainException> { repository.clearRecentPeople() }
+        assertThrows<MediaException> { repository.clearRecentPeople() }
     }
 }

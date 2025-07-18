@@ -1,7 +1,7 @@
 package com.giraffe.media.movie
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.mapper.toEntity
@@ -108,6 +108,6 @@ class MoviesRepositoryImpl(
     }
 
     private suspend fun getSessionId() = SafeCall {
-        sessionManager.createGuestSessionId() ?: throw NoInternetException()
+        sessionManager.createGuestSessionId() ?: throw NoInternetDataException()
     }
 }
