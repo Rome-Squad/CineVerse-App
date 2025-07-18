@@ -23,7 +23,6 @@ import org.koin.dsl.module
 
 
 val networkModule = module {
-
     single<HttpClient> {
         HttpClientFactory.create()
     }
@@ -43,17 +42,20 @@ val networkModule = module {
             accessToken = get(named(ACCESS_TOKEN))
         )
     }
-
+    single<UserRemoteDataSource> {
+        UserRemoteDataSourceImpl(
+            client = get(),
+            baseUrl = get(named(BASE_URL)),
+            accessToken = get(named(ACCESS_TOKEN))
+        )
+    }
     singleOf(::ExploreRemoteDataSourceImp) bind ExploreRemoteDataSource::class
     singleOf(::MoviesRemoteDataSourceImp) bind MoviesRemoteDataSource::class
     singleOf(::SeriesRemoteDataSourceImp) bind SeriesRemoteDataSource::class
     singleOf(::PersonRemoteDataSourceImp) bind PersonRemoteDataSource::class
-
-
-    singleOf(::UserRemoteDataSourceImpl) bind UserRemoteDataSource::class
     singleOf(::SessionManagerImpl) bind SessionManager::class
 }
 
-const val BASE_URL = "BASE_URL"
-const val API_KEY = "API_KEY"
-const val ACCESS_TOKEN = "ACCESS_TOKEN"
+private const val BASE_URL = "BASE_URL"
+private const val API_KEY = "API_KEY"
+private const val ACCESS_TOKEN = "ACCESS_TOKEN"

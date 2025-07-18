@@ -21,11 +21,6 @@ val databaseModule = module {
     single {
         Room.databaseBuilder(androidContext(), CineVerseDatabase::class.java, DATABASE_NAME).build()
     }
-
-    single<SharedPreferences> {
-        androidContext().getSharedPreferences("CineVerse_Prefs", Context.MODE_PRIVATE)
-    }
-
     singleOf(::PersonCacheCleanerImp) bind PersonCacheCleaner::class
     singleOf(::SeriesCacheCleanerImp) bind SeriesCacheCleaner::class
     singleOf(::MovieCacheCleanerImp) bind MovieCacheCleaner::class
