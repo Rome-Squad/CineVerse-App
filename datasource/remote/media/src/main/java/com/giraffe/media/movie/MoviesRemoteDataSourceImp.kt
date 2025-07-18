@@ -1,11 +1,11 @@
 package  com.giraffe.media.movie
 
-import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.media.movie.model.dto.MovieDetailsDto
-import com.giraffe.media.movie.model.dto.RatedMoviesResponse
-import com.giraffe.media.movie.model.dto.RatingRequest
-import com.giraffe.media.movie.model.dto.ReviewsResponseDto
+import com.giraffe.media.movie.datasource.remote.dto.MovieDto
+import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import com.giraffe.media.movie.datasource.remote.dto.ReviewsResponseDto
 import com.giraffe.media.movie.response.GenreResponse
 import com.giraffe.media.movie.response.MoviesListResponse
 import com.giraffe.media.util.RequestBuilder
@@ -14,7 +14,7 @@ class MoviesRemoteDataSourceImp(
     private val requestBuilder: RequestBuilder
 ) : MoviesRemoteDataSource {
     override suspend fun getMovieById(movieId: Int) =
-        requestBuilder.get<MovieDetailsDto>(endpoint = "$MOVIE_END_PINT/$movieId")
+        requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")
 
     override suspend fun getMoviesByName(movieName: String) =
         requestBuilder.get<MoviesListResponse>(
@@ -40,29 +40,14 @@ class MoviesRemoteDataSourceImp(
     override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) =
         requestBuilder.get<RatedMoviesResponse>(endpoint = "$GESST_SESSION_END_PINT/$guestSessionId/$RATED_END_PINT/$MOVIES_END_PINT").results.firstOrNull {
             it.id == movieId
-        }?.rating?.toFloat() ?: throw NoInternetException()
+        }?.rating?.toFloat() ?: throw NoInternetDataException()
 
 
     override suspend fun addRating(
         movieId: Int,
         sessionId: String,
         request: RatingRequest
-    ) {
-        /*
-        return handleRequest {
-            client.post("$baseUrl/movie/$movieId/rating") {
-                url {
-                    parameters.append("guest_session_id", sessionId)
-                }
-                contentType(ContentType.Application.Json)
-                headers {
-                    append("Authorization", "Bearer $accessToken")
-                    append("Accept", "application/json")
-                }
-                setBody(request)
-            }
-        }*/
-    }
+    ) {}
 
     companion object {
         private const val MOVIE_END_PINT = "movie"

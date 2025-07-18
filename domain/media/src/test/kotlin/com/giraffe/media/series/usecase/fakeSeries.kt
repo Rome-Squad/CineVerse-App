@@ -17,7 +17,6 @@ fun fakeSeries(id: Int, name: String,genreIDs: List<Int> = emptyList()) = Series
 
 fun fakeSeason(id: Int, name: String) = Season(
     id = id,
-    name = name,
     overview = "",
     rating = 0f,
     posterUrl = "",

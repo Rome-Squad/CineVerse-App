@@ -3,11 +3,11 @@ package com.giraffe.media.util
 import android.database.CursorIndexOutOfBoundsException
 import android.database.StaleDataException
 import android.database.sqlite.SQLiteException
-import com.giraffe.media.exception.CorruptDatabaseException
-import com.giraffe.media.exception.DiskAccessException
-import com.giraffe.media.exception.InvalidIdException
-import com.giraffe.media.exception.MediaException
-import com.giraffe.media.exception.UnknownNetworkException
+import com.giraffe.media.exception.CorruptDatabaseDataException
+import com.giraffe.media.exception.DiskAccessDataException
+import com.giraffe.media.exception.InvalidIdDataException
+import com.giraffe.media.exception.MediaDataException
+import com.giraffe.media.exception.UnknownNetworkDataException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
@@ -32,19 +32,19 @@ fun <T> safeFlow(block: () -> Flow<T>): Flow<T> {
 }
 
 
-private fun mapToMediaException(throwable: Throwable): MediaException = when (throwable) {
+private fun mapToMediaException(throwable: Throwable): MediaDataException = when (throwable) {
 
     is SQLiteException,
     is SQLException,
     is CursorIndexOutOfBoundsException,
-    is StaleDataException -> CorruptDatabaseException()
+    is StaleDataException -> CorruptDatabaseDataException()
 
-    is IOException -> DiskAccessException()
+    is IOException -> DiskAccessDataException()
 
     is IllegalArgumentException,
-    is IllegalStateException -> InvalidIdException()
+    is IllegalStateException -> InvalidIdDataException()
 
-    is NullPointerException -> CorruptDatabaseException()
+    is NullPointerException -> CorruptDatabaseDataException()
 
-    else -> UnknownNetworkException()
+    else -> UnknownNetworkDataException()
 }

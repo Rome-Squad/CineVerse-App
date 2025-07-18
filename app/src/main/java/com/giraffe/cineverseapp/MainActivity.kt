@@ -5,20 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.giraffe.details.DetailsApi
-import com.giraffe.details.navigation.DetailsApiImp
 import com.giraffe.explore.ExploreApi
 import org.koin.android.ext.android.inject
 
 
 class MainActivity : ComponentActivity() {
     private val exploreApi: ExploreApi by inject()
-    private val detailsApi: DetailsApi = DetailsApiImp()
+    private val detailsApi: DetailsApi by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-                detailsApi.GetCastDetailsContainer(1)
+            detailsApi.GetCastDetailsContainer(1)
         }
     }
 }

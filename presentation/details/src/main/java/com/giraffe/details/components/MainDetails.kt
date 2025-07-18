@@ -28,7 +28,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
@@ -282,7 +281,12 @@ fun MainDetailsHeader(
                         )
                 )
             }
-            HorizontalDivider(thickness = 1.dp, color = Theme.color.stroke.primary)
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Theme.color.stroke.primary)
+            )
         }
     }
 }

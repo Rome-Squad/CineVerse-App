@@ -60,6 +60,7 @@ fun DefaultTextField(
     endIcon: @Composable (() -> Unit)? = null,
     label: String? = null,
     maxLines: Int = 1,
+    maxCharacters: Int = 25,
     errorMessage: String? = null,
     readOnly: Boolean = false,
     isPassword: Boolean = false,
@@ -136,7 +137,8 @@ fun DefaultTextField(
                 interactionSource = interactionSource,
                 readOnly = readOnly,
                 value = value,
-                onValueChange = onValueChange,
+                maxLines = maxLines,
+                onValueChange = { if (it.length <= maxCharacters) onValueChange(it) },
                 textStyle = Theme.textStyle.body.md.medium,
                 visualTransformation = if (!isPassword)
                     VisualTransformation.None
@@ -151,7 +153,6 @@ fun DefaultTextField(
                         color = Theme.color.shade.tertiary
                     )
                 },
-                maxLines = maxLines,
                 colors = TextFieldColors(
                     unfocusedBorderColor = Color.Transparent,
                     focusedBorderColor = Color.Transparent,

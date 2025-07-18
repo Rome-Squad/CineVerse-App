@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.util
+package com.giraffe.explore.util
 
 import android.content.Context
 import com.giraffe.explore.screen.discover.SearchTab

@@ -1,12 +1,10 @@
 package com.giraffe.media.explore.datasource.remote
 
-import com.giraffe.media.explore.model.SearchKeywordDto
+import com.giraffe.media.explore.datasource.remote.dto.SearchKeywordDto
 
 interface ExploreRemoteDataSource {
-
     suspend fun getSearchKeywords(
         query: String,
         page: Int = 1
     ): List<SearchKeywordDto>
-
 }

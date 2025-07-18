@@ -6,11 +6,12 @@ import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.mapper.toDto
+import com.giraffe.media.series.mapper.toCacheDto
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
-import com.giraffe.media.series.model.CachedSeriesGenreDto
-import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.remote.dto.GenreDto
+import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 
@@ -27,7 +28,7 @@ class SeriesRepositoryImpl(
             }
         } else {
             val remoteSeries = remote.getSeriesByName(seriesName)
-            val cachedSeries = remoteSeries.map { it.toDto() }
+            val cachedSeries = remoteSeries.map { it.toCacheDto() }
 
             local.saveSearchResult(
                 seriesList = cachedSeries
@@ -39,11 +40,11 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesGenres(): List<Genre> = SafeCall {
         local.getCachedGenres()
-            .map(CachedSeriesGenreDto::toEntity)
+            .map(SeriesGenreCacheDto::toEntity)
             .ifEmpty {
                 remote.getGenres()
                     .map(GenreDto::toEntity)
-                    .also { local.saveGenres(it.map(Genre::toDto)) }
+                    .also { local.saveGenres(it.map(Genre::toCacheDto)) }
             }
     }
 
@@ -62,7 +63,6 @@ class SeriesRepositoryImpl(
         local.clearRecentSeries()
     }
 
-
     override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
         remote.getSeriesDetails(seriesId).toEntity()
     }
@@ -76,7 +76,7 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun getSeriesReviews(seriesId: Int) = SafeCall {
-        remote.getSeriesReviews(seriesId).toEntity()
+        remote.getSeriesReviews(seriesId).map(ReviewDto::toEntity)
     }
 
     override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {

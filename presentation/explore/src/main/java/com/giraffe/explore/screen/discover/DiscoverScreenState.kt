@@ -2,7 +2,7 @@ package com.giraffe.explore.screen.discover
 
 import androidx.annotation.StringRes
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.explore.util.HasErrorMessage
+import com.giraffe.explore.util.HasErrorMessage
 
 data class DiscoverScreenState(
     val errorMessageRes: Int? = null,

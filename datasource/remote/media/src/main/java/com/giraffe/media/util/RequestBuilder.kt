@@ -1,14 +1,14 @@
 package com.giraffe.media.util
 
-import com.giraffe.media.exception.ApiException
-import com.giraffe.media.exception.ClientErrorException
-import com.giraffe.media.exception.InvalidIdException
-import com.giraffe.media.exception.MediaException
-import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.exception.RequestTimeoutException
-import com.giraffe.media.exception.SerializationException
-import com.giraffe.media.exception.ServerException
-import com.giraffe.media.exception.UnknownNetworkException
+import com.giraffe.media.exception.ApiDataException
+import com.giraffe.media.exception.ClientErrorDataException
+import com.giraffe.media.exception.InvalidIdDataException
+import com.giraffe.media.exception.MediaDataException
+import com.giraffe.media.exception.NoInternetDataException
+import com.giraffe.media.exception.RequestTimeoutDataException
+import com.giraffe.media.exception.SerializationDataException
+import com.giraffe.media.exception.ServerDataException
+import com.giraffe.media.exception.UnknownNetworkDataException
 import com.giraffe.media.person.util.ApiErrorResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -60,7 +60,7 @@ class RequestBuilder(
                     } catch (_: Exception) {
                         ApiErrorResponse(response.status.value, "Unknown error", success = false)
                     }
-                    throw ApiException(errorBody.statusCode)
+                    throw ApiDataException(errorBody.statusCode)
                 }
             }
         } catch (e: Throwable) {
@@ -68,24 +68,24 @@ class RequestBuilder(
         }
     }
 
-    fun mapToMediaException(e: Throwable): MediaException = when (e) {
+    fun mapToMediaException(e: Throwable): MediaDataException = when (e) {
         is RedirectResponseException,
-        is ClientRequestException -> ClientErrorException()
+        is ClientRequestException -> ClientErrorDataException()
 
-        is ServerResponseException -> ServerException()
+        is ServerResponseException -> ServerDataException()
 
         is ConnectTimeoutException,
         is HttpRequestTimeoutException,
-        is SocketTimeoutException -> RequestTimeoutException()
+        is SocketTimeoutException -> RequestTimeoutDataException()
 
         is UnknownHostException,
-        is IOException -> NoInternetException()
+        is IOException -> NoInternetDataException()
 
-        is KxSerializationException -> SerializationException()
+        is KxSerializationException -> SerializationDataException()
 
-        is IllegalArgumentException -> InvalidIdException()
+        is IllegalArgumentException -> InvalidIdDataException()
 
-        else -> UnknownNetworkException()
+        else -> UnknownNetworkDataException()
     }
 
 

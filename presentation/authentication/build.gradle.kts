@@ -36,12 +36,10 @@ android {
 dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
-    implementation(project(":domain:media"))
     implementation(project(":api:authentication"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
