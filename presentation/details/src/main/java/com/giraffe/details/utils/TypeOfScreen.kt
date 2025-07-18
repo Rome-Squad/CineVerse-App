@@ -1,6 +1,6 @@
 package com.giraffe.details.utils
 
-enum class TypeOfDetailsScreen {
+enum class TypeOfScreen {
     MOVIE,
     SERIES,
     CAST

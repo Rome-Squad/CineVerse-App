@@ -41,7 +41,7 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.utils.TypeOfDetailsScreen
+import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.min
 
@@ -105,7 +105,7 @@ fun SeriesDetailsContent(
                 onBackButtonClick = {}
             )
             MainMovieOrSeriesDetailsAnimatedContent(
-                type = TypeOfDetailsScreen.SERIES.name,
+                type = TypeOfScreen.SERIES.name,
                 name = state.seriesDetails.name,
                 rating = state.seriesDetails.rating,
                 image = state.seriesDetails.posterUrl,
