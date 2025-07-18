@@ -10,5 +10,6 @@ data class MovieGenreCacheDto(
 
     @PrimaryKey(autoGenerate = false)
     val id : Int,
-    val name : String
+    val name : String,
+    val count: Int = 0
 )

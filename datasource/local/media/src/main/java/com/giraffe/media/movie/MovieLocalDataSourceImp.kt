@@ -62,6 +62,10 @@ class MovieLocalDataSourceImp(
         movieDao.getRecentlyMovies()
     }
 
+    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = safeCall {
+        movieDao.incrementInteractionCountForGenres(genreIds)
+    }
+
     override suspend fun clearMovieGenreCache() = safeCall {
         movieDao.clearMovieGenreCache()
     }

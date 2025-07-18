@@ -8,12 +8,14 @@ import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import androidx.lifecycle.SavedStateHandle
+
 
 class MovieDetailsViewModel(
     val getMovieDetails: GetMovieDetailsUseCase,
@@ -24,8 +26,9 @@ class MovieDetailsViewModel(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
 
+
     //loading movie data
-    fun loadMovieDetails(movieId: Int) {
+    fun loadMovieDetails(movieId: Int){
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
             onError =   ::loadMovieDetailsError
@@ -65,7 +68,7 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun loadMovieGenresSuccess(genres: List<MovieGenre>) {
+    private fun loadMovieGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
                 movieGenres = genres.map { genre-> genre.title },
@@ -173,7 +176,7 @@ class MovieDetailsViewModel(
     }
 
     override fun onShowMoreReviewsClick() {
-        sendEffect(MovieDetailsEffect.NavigateToReviews)
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movieReviews))
     }
 
     override fun onMovieClick(movieId: Int) {
