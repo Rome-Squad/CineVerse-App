@@ -5,7 +5,6 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.explore.screen.discover.DiscoverViewModel
 import com.giraffe.explore.screen.search.SearchViewModel
 import com.giraffe.explore.screen.searchresult.SearchResultViewModel
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -15,5 +14,4 @@ val viewModelModule = module {
     viewModelOf(::CastDetailsViewModel)
     viewModelOf(::MovieDetailsViewModel)
     viewModelOf(::SearchResultViewModel)
-    viewModel { (query: String) -> SearchResultViewModel(query, get(), get(), get(), get(), get()) }
 }
