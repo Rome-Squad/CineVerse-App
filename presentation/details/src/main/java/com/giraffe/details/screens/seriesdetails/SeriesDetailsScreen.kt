@@ -42,6 +42,7 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.utils.TypeOfScreen
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.min
 
@@ -56,11 +57,11 @@ fun SeriesDetailsScreen(
     val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(seriesID) {
-        viewModel.loadSeriesDetails(seriesID)
-        viewModel.loadSeason(seriesID)
-        viewModel.loadRecommendedSeries(seriesID, 1)
-        viewModel.loadSeriesReviews(seriesID)
-        viewModel.loadSeriesPeople(seriesID)
+        launch {  viewModel.loadSeriesDetails(seriesID) }
+        launch {  viewModel.loadSeason(seriesID) }
+        launch {  viewModel.loadRecommendedSeries(seriesID, 1) }
+        launch {  viewModel.loadSeriesReviews(seriesID) }
+        launch {  viewModel.loadSeriesPeople(seriesID) }
     }
 
     Box(
