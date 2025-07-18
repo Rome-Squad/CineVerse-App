@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -27,6 +28,7 @@ import com.giraffe.details.components.gallery.GalleryItemLayoutRTL
 fun GalleryScreen(
     actorName: String,
     imageUrls: List<String?>,
+    navController: NavController,
     modifier: Modifier = Modifier,
 ) {
     val state: GalleryUiState by remember {
@@ -37,15 +39,21 @@ fun GalleryScreen(
             )
         )
     }
-    GalleryContent(state = state)
+    GalleryContent(
+        state = state,
+        onBackArrowClick = { navController.navigateUp() },
+        modifier = modifier
+    )
 }
 
 @Composable
 fun GalleryContent(
-    state: GalleryUiState
+    state: GalleryUiState,
+    onBackArrowClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(Theme.color.background.screen)
             .systemBarsPadding()
     ) {
@@ -53,6 +61,7 @@ fun GalleryContent(
             title = state.actorName + " " + stringResource(R.string.gallery),
             showBackButton = true,
             hasBackground = false,
+            onBackButtonClick = onBackArrowClick,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         ImageGalleryLayout(imageUrls = state.imageUrls)
