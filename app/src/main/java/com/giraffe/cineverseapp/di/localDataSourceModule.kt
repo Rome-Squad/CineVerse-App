@@ -1,6 +1,6 @@
 package com.giraffe.cineverseapp.di
 
-import MovieDao
+import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.media.explore.LocalExploreDataSourceImpl
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao

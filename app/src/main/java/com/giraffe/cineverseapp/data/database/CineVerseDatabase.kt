@@ -1,6 +1,6 @@
 package com.giraffe.cineverseapp.data.database
 
-import MovieDao
+import com.giraffe.media.movie.dao.MovieDao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
