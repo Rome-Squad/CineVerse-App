@@ -1,14 +1,16 @@
 package com.giraffe.details.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
@@ -19,14 +21,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.CustomCard
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.utils.imageSourceToPainter
 
 @Composable
 fun SeasonCard(
@@ -42,9 +41,9 @@ fun SeasonCard(
     ratingIcon: Painter = painterResource(id = Theme.icons.dueTone.star),
     episodesIcon: Painter = painterResource(id = Theme.icons.dueTone.videoLibrary),
     calendarIcon: Painter = painterResource(id = Theme.icons.dueTone.calendar),
-    onClick : () ->Unit
+    onClick: () -> Unit
 ) {
-    CustomCard (
+    CustomCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(12.dp),
@@ -82,7 +81,7 @@ fun SeasonCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        modifier=Modifier.padding(bottom = 4.dp),
+                        modifier = Modifier.padding(bottom = 4.dp),
                         text = title,
                         style = Theme.textStyle.body.md.medium,
                         color = Theme.color.shade.primary
@@ -94,7 +93,12 @@ fun SeasonCard(
                     )
                 }
             }
-            HorizontalDivider(thickness = 1.dp, color = Theme.color.stroke.primary)
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Theme.color.stroke.primary)
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,7 +130,6 @@ fun SeasonCard(
                     color = Theme.color.shade.secondary,
                     style = Theme.textStyle.label.md.regular,
                 )
-
                 Icon(
                     painter = calendarIcon,
                     contentDescription = stringResource(R.string.year),
@@ -140,38 +143,5 @@ fun SeasonCard(
                 )
             }
         }
-    }
-}
-
-@Preview(name = "SeasonCard Dark")
-@Composable
-fun PreviewSeasonCardDark() {
-    CineVerseTheme(isDarkTheme = true) {
-        SeasonCard(
-            poster = R.drawable.gallery_item.imageSourceToPainter(),
-            title = "Season",
-            caption = "Caption",
-            rating = 7.5,
-            episodes = 20,
-            year = 2019,
-            onClick = {}
-        )
-    }
-}
-
-
-@Preview(name = "SeasonCard Light")
-@Composable
-fun PreviewSeasonCardLight() {
-    CineVerseTheme(isDarkTheme = false) {
-        SeasonCard(
-            poster = R.drawable.gallery_item.imageSourceToPainter(),
-            title = "Season",
-            caption = "Caption",
-            rating = 7.5,
-            episodes = 20,
-            year = 2019,
-            onClick = {}
-        )
     }
 }

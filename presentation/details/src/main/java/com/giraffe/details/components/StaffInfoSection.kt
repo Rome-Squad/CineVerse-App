@@ -1,14 +1,16 @@
 package com.giraffe.details.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,7 +44,7 @@ fun StaffInfoSection(
             )
         }
 
-        CustomCard (
+        CustomCard(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(Theme.radius.lg),
         ) {
@@ -52,10 +54,11 @@ fun StaffInfoSection(
                     StaffItem(name = name, role = key)
 
                     if (index != staffList.entries.size - 1) {
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = Theme.color.stroke.primary,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Theme.color.stroke.primary)
                         )
                     }
                 }
@@ -90,18 +93,20 @@ fun StaffItem(name: String, role: String) {
         )
     }
 }
+
 data class StaffMember(
     val name: String,
     val role: String
 )
+
 @Preview(
     name = "StaffInfoSection Preview - Dark",
     showBackground = false,
-   // apiLevel = 34
+    // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionDark() {
-      CineVerseTheme(isDarkTheme = true) {
+    CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Behind the Scenes",
             staffList = groupedStaff
@@ -112,7 +117,7 @@ fun PreviewStaffInfoSectionDark() {
 @Preview(
     name = "StaffInfoSection Preview - Light",
     showBackground = true,
-   // apiLevel = 34
+    // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionLight() {

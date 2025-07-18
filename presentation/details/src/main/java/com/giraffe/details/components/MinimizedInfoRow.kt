@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,12 +18,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.R
-import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.utils.imageSourceToPainter
 
 @Composable
 fun MinimizedInfoRow(
@@ -85,22 +81,6 @@ fun MinimizedInfoRow(
                     .padding(10.dp)
                     .clickable(onClick = onClickPlay)
             )
-
         }
-    }
-}
-
-@Composable
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF121321
-)
-fun PreviewMinimizedInfoRow() {
-    CineVerseTheme(isDarkTheme = true) {
-        MinimizedInfoRow(
-            poster = R.drawable.main_poster_test.imageSourceToPainter(),
-            title = "The Dark Knight",
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
     }
 }

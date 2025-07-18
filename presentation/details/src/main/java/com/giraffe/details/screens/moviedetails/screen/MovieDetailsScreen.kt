@@ -15,13 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -44,7 +42,6 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.screens.moviedetails.model.ReviewUI
-import com.giraffe.details.utils.imageSourceToPainter
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -92,7 +89,6 @@ fun MovieDetailsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MovieDetailsContent(
     modifier: Modifier,
@@ -120,8 +116,7 @@ private fun MovieDetailsContent(
         item {
             MainMovieOrSeriesDetails(
                 type = stringResource(R.string.movie),
-                poster = state.movie.posterUrl?.imageSourceToPainter()
-                    ?: painterResource(R.drawable.main_poster_test),
+                posterUrl = state.movie.posterUrl.toString(),
                 name = state.movie.title,
                 genres = state.movieGenres,
                 rating = state.movie.rating,
@@ -209,10 +204,10 @@ private fun MovieDetailsContent(
             }
             ReviewCard(
                 modifier = padding,
-                rate = review.rating.toInt(),
+                rate = review.rating,
                 reviewText = review.content,
                 reviewDate = review.createdAt,
-                reviewerImageSource = review.authorImageUrl,
+                reviewerImageUrl = review.authorImageUrl,
                 reviewerName = review.authorName,
                 reviewerUsername = review.authorUserName
             )
