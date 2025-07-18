@@ -3,7 +3,7 @@ package com.giraffe.media.series.datasource.remote
 import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
-import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.datasource.remote.dto.GenreDto
 
 interface SeriesRemoteDataSource {
     suspend fun getSeriesByName(name: String, page: Int = 1): List<SeriesDto>

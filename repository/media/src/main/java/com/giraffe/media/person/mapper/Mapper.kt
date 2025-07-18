@@ -4,13 +4,13 @@ import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.entity.PersonSocialMediaLinks
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
-import com.giraffe.media.person.model.dto.CastDto
-import com.giraffe.media.person.model.dto.CrewDto
-import com.giraffe.media.person.model.dto.PersonCreditDto
-import com.giraffe.media.person.model.dto.PersonDto
-import com.giraffe.media.person.model.dto.PersonProfileImageDto
-import com.giraffe.media.person.model.dto.PersonSocialMediaDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.remote.dto.CastDto
+import com.giraffe.media.person.datasource.remote.dto.CrewDto
+import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDto
+import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
+import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
 import com.giraffe.media.utils.AT_SYMBOLS_URL
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.FACEBOOK_URL
@@ -41,8 +41,7 @@ fun PersonDto.toEntity() = Person(
     imageUrl = BASE_IMAGE_URL + profilePath,
 )
 
-
-fun CastDto.toEntity(type: PersonType): Person = Person(
+fun CastDto.toEntity(type: PersonType) = Person(
     id = id,
     name = name,
     role = character,
@@ -50,7 +49,7 @@ fun CastDto.toEntity(type: PersonType): Person = Person(
     type = type,
 )
 
-fun CrewDto.toEntity(type: PersonType): Person = Person(
+fun CrewDto.toEntity(type: PersonType) = Person(
     id = id,
     name = name,
     role = job,

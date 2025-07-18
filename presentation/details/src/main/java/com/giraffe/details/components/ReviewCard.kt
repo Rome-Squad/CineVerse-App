@@ -7,20 +7,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
-import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.composable.ReadMoreText
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.formatAsMonthDayYear
 import com.giraffe.details.utils.getCurrentLocalDateTime
+import com.giraffe.imageviewer.component.SafeIslamicImage
 import kotlinx.datetime.LocalDateTime
 
 
@@ -30,7 +32,7 @@ fun ReviewCard(
     rate: Int,
     reviewText: String,
     reviewDate: LocalDateTime? = getCurrentLocalDateTime(),
-    reviewerImageSource: Any?,
+    reviewerImageUrl: String?,
     reviewerName: String,
     reviewerUsername: String
 ) {
@@ -55,10 +57,14 @@ fun ReviewCard(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ImageCard(
-                imageSource = reviewerImageSource, modifier = Modifier.size(40.dp)
+            SafeIslamicImage(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(40.dp),
+                imageUrl = reviewerImageUrl.toString(),
+                contentDescription = reviewerImageUrl.toString(),
+                contentScale = ContentScale.Crop
             )
-
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalAlignment = Alignment.Start
@@ -76,9 +82,7 @@ fun ReviewCard(
             }
         }
 
-        ReadMoreText(
-            text = reviewText
-        )
+        ReadMoreText(text = reviewText)
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -88,57 +92,11 @@ fun ReviewCard(
             RatingStars(
                 rate = rate, onRateClickEnabled = false, starSize = 16.dp, starSpace = 4.dp
             )
-
             Text(
                 text = reviewDate?.formatAsMonthDayYear() ?: "",
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.shade.secondary
             )
-
         }
-
-    }
-}
-
-
-@Preview(
-    showBackground = true,
-)
-@Composable
-fun PreviewReviewCard() {
-
-    CineVerseTheme(
-        isDarkTheme = false
-    ) {
-        ReviewCard(
-            modifier = Modifier,
-            rate = 5,
-            reviewText = "very good",
-            reviewDate = getCurrentLocalDateTime(),
-            reviewerImageSource = R.drawable.reviewer,
-            reviewerName = "Hend",
-            reviewerUsername = "Hend sayed",
-        )
-    }
-}
-
-@Preview(
-    showBackground = true,
-)
-@Composable
-fun PreviewReviewCardDark() {
-
-    CineVerseTheme(
-        isDarkTheme = true
-    ) {
-        ReviewCard(
-            modifier = Modifier,
-            rate = 5,
-            reviewText = "very good",
-            reviewDate = getCurrentLocalDateTime(),
-            reviewerImageSource = R.drawable.reviewer,
-            reviewerName = "Hend",
-            reviewerUsername = "Hend sayed"
-        )
     }
 }

@@ -30,7 +30,7 @@ import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.nav.route.navigateToSearch
 import com.giraffe.media.explore.R
-import com.giraffe.media.explore.util.toTitle
+import com.giraffe.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
