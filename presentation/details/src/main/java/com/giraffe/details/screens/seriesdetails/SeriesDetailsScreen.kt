@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,13 +27,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
+import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
+import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
@@ -45,7 +50,7 @@ import kotlin.math.min
 
 @Composable
 fun SeriesDetailsScreen(
-    seriesID : Int,
+    seriesID: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
@@ -71,16 +76,26 @@ fun SeriesDetailsScreen(
             Progress(modifier = Modifier.size(40.dp))
         }
         AnimatedVisibility(!state.isLoadingSeason) {
-            SeriesDetailsContent(state = state)
+            SeriesDetailsContent(
+                state = state,
+                onAddToCollectionClick = viewModel::onClickAddToCollection,
+                onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
+                onGiveStarClick = viewModel::onClickGiveStars,
+                onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
+            )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
+    onAddToCollectionClick: () -> Unit,
+    onDismissAddToCollectionBottomSheet: () -> Unit,
+    onGiveStarClick: () -> Unit,
+    onDismissAddRatingBottomSheet: () -> Unit,
     modifier: Modifier = Modifier,
-
 ) {
     val scrollState = rememberScrollState()
     Column(modifier = modifier) {
@@ -98,7 +113,7 @@ fun SeriesDetailsContent(
                 image = state.seriesDetails.posterUrl,
                 genres = state.genres,
                 releaseYear = state.seriesDetails.releaseYear,
-                onClickAdd = {},
+                onClickAdd = onAddToCollectionClick,
                 onClickPlay = {},
                 isScrolled = scrollState.value > 0,
                 durationAnimation = 2000
@@ -167,14 +182,14 @@ fun SeriesDetailsContent(
 
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                onClickCard = {}
+                onClickCard = onGiveStarClick
             )
 
             AnimatedVisibility(
                 visible = state.seriesReviews.isNotEmpty(),
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut()
-            ){
+            ) {
                 InfoSection(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     title = stringResource(com.giraffe.details.R.string.top_reviews),
@@ -216,4 +231,48 @@ fun SeriesDetailsContent(
             )
         }
     }
+
+    BaseBottomSheet(
+        isVisible = state.isVisibleAddToCollectionBottomSheet,
+        onDismiss = onDismissAddToCollectionBottomSheet,
+        title = stringResource(com.giraffe.details.R.string.add_to_collection),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        content = {
+            AddToCollectionContent(
+                title = "My Favorite TV",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            )
+            AddToCollectionContent(
+                title = "My WatchLis",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            )
+            AddToCollectionContent(
+                title = "Cristian Bale Movies",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            )
+        }
+    )
+    BaseBottomSheet(
+        isVisible = state.isVisibleGiveStarsBottomSheet,
+        onDismiss = onDismissAddRatingBottomSheet,
+        title = stringResource(com.giraffe.details.R.string.rate_the_movie),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        content = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                RatingSelector()
+                PrimaryButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp),
+                    text = stringResource(com.giraffe.details.R.string.add_to_rate),
+                    enabled = false,
+                    onClick = {})
+            }
+        }
+    )
 }

@@ -30,7 +30,7 @@ class SeriesDetailsViewModel(
 ) :
     BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
         SeriesDetailsScreenState()
-    ) {
+    ), SeriesDetailsInteractionListener {
 
 //    init {
 //        loadSeries(2288)
@@ -187,5 +187,69 @@ class SeriesDetailsViewModel(
             )
         }
         sendEffect(SeriesDetailsEffect.Error(error))
+    }
+
+    override fun showMoreSeason() {
+        TODO("Not yet implemented")
+    }
+
+    override fun showMoreCast() {
+        TODO("Not yet implemented")
+    }
+
+    override fun showMoreCrew() {
+        TODO("Not yet implemented")
+    }
+
+    override fun showMoreRecommendedSeries() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickGiveStars() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = true
+            )
+        }
+    }
+
+    override fun showMoreReviews() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickMovie(movieId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickAddToCollection() {
+        updateState {
+            it.copy(
+                isVisibleAddToCollectionBottomSheet = true
+            )
+        }
+    }
+
+    override fun onClickCreateCollection() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDismissAddToCollectionBottomSheet() {
+        updateState {
+            it.copy(
+                isVisibleAddToCollectionBottomSheet = false
+            )
+        }
+    }
+
+    override fun onDismissLoginBottomSheet() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDismissGiveStarsBottomSheet() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = false
+            )
+        }
     }
 }

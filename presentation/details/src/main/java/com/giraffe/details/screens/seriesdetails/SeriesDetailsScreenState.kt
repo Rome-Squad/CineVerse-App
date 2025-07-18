@@ -23,4 +23,8 @@ data class SeriesDetailsScreenState(
     val isLoadingRecommended: Boolean = true,
     val isLoadingReviews: Boolean = true,
 
+
+    val isVisibleAddToCollectionBottomSheet: Boolean = false,
+    val isVisibleGiveStarsBottomSheet: Boolean = false,
+    val isVisibleLoginBottomSheet: Boolean = false,
     )
