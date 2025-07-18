@@ -33,6 +33,12 @@
     <string name="add_to_rate">اضافة تقييم</string>
     <string name="add_to_collection">اضافة الى مجموعة </string>
     <string name="movie">فيلم</string>
+    <string name="poster_image">صورة الملصق</string>
+    <string name="play_icon">أيقونة التشغيل</string>
+    <string name="save_Icon">أيقونة الحفظ</string>
+    <string name="icon">أيقونة</string>
+    <string name="latest_seasons">أحدث المواسم</string>
+    <string name="seasons">المواسم</string>
     <string name="best_of">أفضل</string>
     <string name="biography">سيرة ذاتية</string>
 </resources>

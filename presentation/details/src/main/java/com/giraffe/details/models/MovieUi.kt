@@ -1,4 +1,4 @@
-package com.giraffe.details.screens.moviedetails.model
+package com.giraffe.details.models
 
 import com.giraffe.media.movies.entity.Movie
 import kotlinx.datetime.LocalDate

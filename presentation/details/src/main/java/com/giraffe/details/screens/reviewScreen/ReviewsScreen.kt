@@ -14,35 +14,35 @@ import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.ReviewCard
-import com.giraffe.details.screens.moviedetails.model.ReviewUI
+import com.giraffe.details.models.ReviewUI
 
 
 @Composable
 fun ReviewsScreen(
-    reviewsList : List<ReviewUI>?,
+    reviewsList: List<ReviewUI>?,
     navController: NavController
-){
+) {
     ReviewsContent(
         reviewsList = reviewsList ?: emptyList(),
-        onBackArrowClick = {navController.navigateUp()}
+        onBackArrowClick = { navController.navigateUp() }
     )
 }
 
 @Composable
 private fun ReviewsContent(
-    reviewsList : List<ReviewUI>,
-    onBackArrowClick : ()-> Unit,
-    modifier : Modifier = Modifier
-){
+    reviewsList: List<ReviewUI>,
+    onBackArrowClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
 
-    LazyColumn (
+    LazyColumn(
         modifier = modifier
             .background(Theme.color.background.screen)
             .systemBarsPadding()
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
-    ){
+    ) {
         item {
             AppBar(
                 showBackButton = true,
@@ -51,7 +51,7 @@ private fun ReviewsContent(
                 onBackButtonClick = onBackArrowClick
             )
         }
-        items(reviewsList.size){ index->
+        items(reviewsList.size) { index ->
             ReviewCard(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 rate = reviewsList[index].rating,

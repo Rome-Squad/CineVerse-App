@@ -19,17 +19,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.composable.custom.Text
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.screens.moviedetails.model.CastUi
+import com.giraffe.details.models.CastUi
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 
@@ -120,55 +117,20 @@ fun CastCard(
                     text = actorName,
                     color = Theme.color.shade.primary,
                     style = Theme.textStyle.body.md.medium,
-                    maxLines = 1,
                     minLines = 1,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     modifier = Modifier.padding(top = 4.dp),
                     text = character,
                     color = Theme.color.shade.secondary,
-                    style = Theme.textStyle.body.sm.regular
+                    style = Theme.textStyle.body.sm.regular,
+                    minLines = 1,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
     }
-}
-
-
-@Composable
-@Preview(
-    name = "StarCastSection Light", showBackground = true,
-)
-fun PreviewStarCastSectionLight() {
-    CineVerseTheme(isDarkTheme = false) {
-        StarCastSection(
-            title = "Star Cast", onShowMoreClick = {}, castList = sampleCastList()
-        )
-    }
-}
-
-@Composable
-@Preview(
-    name = "StarCastSection Dark", showBackground = false,
-)
-fun PreviewStarCastSectionDark() {
-    CineVerseTheme(isDarkTheme = true) {
-        StarCastSection(
-            title = "Star Cast", onShowMoreClick = {}, castList = sampleCastList()
-        )
-    }
-}
-
-@Composable
-fun sampleCastList(): List<CastUi> {
-    val image = painterResource(
-        id = R.drawable.reviewer
-    )
-    return listOf(
-        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
-        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
-        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
-        CastUi("Robert Downey Jr.", "Iron Man", image.toString()),
-    )
 }
