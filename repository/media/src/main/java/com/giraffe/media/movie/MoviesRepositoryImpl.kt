@@ -1,5 +1,6 @@
 package com.giraffe.media.movie
 
+import android.util.Log
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
@@ -83,6 +84,8 @@ class MoviesRepositoryImpl(
     override suspend fun clearRecentlyMovies() = SafeCall { cache.clearRecentlyMovies() }
 
     override suspend fun getMovieDetails(movieId: Int) = SafeCall {
+//        Log.d("TAG", "getMovieDetails: ${cache.getMovieById(movieId)?.toEntity()}")
+//        Log.d("TAG", "getMovieDetails: ${remote.getMovieById(movieId)}")
         cache.getMovieById(movieId)?.toEntity() ?: remote.getMovieById(movieId)
             .toEntity()
             .also { insertMovies(listOf(it)) }
