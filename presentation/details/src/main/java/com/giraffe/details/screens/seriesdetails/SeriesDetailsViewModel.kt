@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.seriesdetails
 
-import android.util.Log
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.SeasonUi
