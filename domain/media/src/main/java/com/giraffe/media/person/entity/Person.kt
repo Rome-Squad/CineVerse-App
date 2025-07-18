@@ -14,19 +14,6 @@ data class Person(
     val socialMedia: PersonSocialMediaLinks? = null
 )
 
-data class PersonSocialMediaLinks(
-    val facebookLink: String? = null,
-    val instagramLink: String? = null,
-    val youtubeLink: String? = null
-)
-
-data class PersonCredit(
-    val id: Int,
-    val title: String,
-    val posterPath: String?,
-    val voteAverage: Double
-)
-
 enum class PersonType {
     CAST,
     CREW
