@@ -2,9 +2,9 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesGenreDto
-import com.giraffe.media.series.model.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
 import com.giraffe.media.util.safeCall
 
 class SeriesRoomLocalDateSource(
@@ -33,12 +33,12 @@ class SeriesRoomLocalDateSource(
         }
 
 
-    override suspend fun getCachedGenres(): List<CachedSeriesGenreDto> = safeCall {
+    override suspend fun getCachedGenres(): List<SeriesGenreCacheDto> = safeCall {
             seriesDao.getAllGenres()
         }
 
 
-    override suspend fun saveGenres(genres: List<CachedSeriesGenreDto>) = safeCall {
+    override suspend fun saveGenres(genres: List<SeriesGenreCacheDto>) = safeCall {
             seriesDao.insertGenres(genres)
         }
 
@@ -67,7 +67,7 @@ class SeriesRoomLocalDateSource(
             seriesDao.clearRecentSeries()
         }
 
-    override suspend fun getSeasonsForSeries(seriesId: Int): List<CachedSeasonDto> = safeCall {
+    override suspend fun getSeasonsForSeries(seriesId: Int): List<SeasonCacheDto> = safeCall {
             seriesDao.getSeasonsForSeries(seriesId)
     }
 }

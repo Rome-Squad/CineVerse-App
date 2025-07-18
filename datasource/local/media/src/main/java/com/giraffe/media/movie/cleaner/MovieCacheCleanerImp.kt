@@ -1,6 +1,6 @@
 package  com.giraffe.media.movie.cleaner
 
-import MovieDao
+import com.giraffe.media.movie.dao.MovieDao
 
 class MovieCacheCleanerImp(private val dao: MovieDao):MovieCacheCleaner {
     override suspend fun clearMovieCache() {

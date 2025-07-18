@@ -1,4 +1,4 @@
-package com.giraffe.media.series.model
+package com.giraffe.media.series.model.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -22,9 +22,9 @@ data class SeriesCacheDto(
 
 
 @Entity(tableName = SEASON_TABLE)
-data class CachedSeasonDto(
+data class SeasonCacheDto(
     @PrimaryKey val id: Int,
-    val seriesId: Int, // foreign key
+    val seriesId: Int,
     val name: String,
     val overview: String,
     val rate: Float,
@@ -36,7 +36,7 @@ data class CachedSeasonDto(
 
 
 @Entity(tableName = SERIES_GENRE_TABLE)
-data class CachedSeriesGenreDto(
+data class SeriesGenreCacheDto(
     @PrimaryKey val id: Int,
     val name: String,
     val count: Int

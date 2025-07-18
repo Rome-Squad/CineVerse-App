@@ -9,8 +9,8 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toDto
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
-import com.giraffe.media.series.model.CachedSeriesGenreDto
-import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.model.dto.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 
@@ -39,7 +39,7 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesGenres(): List<Genre> = SafeCall {
         local.getCachedGenres()
-            .map(CachedSeriesGenreDto::toEntity)
+            .map(SeriesGenreCacheDto::toEntity)
             .ifEmpty {
                 remote.getGenres()
                     .map(GenreDto::toEntity)

@@ -57,7 +57,7 @@ private fun ReviewsContent(
                 rate = reviewsList[index].rating,
                 reviewText = reviewsList[index].content,
                 reviewDate = reviewsList[index].createdAt,
-                reviewerImageSource = reviewsList[index].authorImageUrl,
+                reviewerImageUrl = reviewsList[index].authorImageUrl,
                 reviewerName = reviewsList[index].authorName,
                 reviewerUsername = reviewsList[index].authorUserName
             )

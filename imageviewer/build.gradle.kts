@@ -42,20 +42,11 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
-
-    // Compose UI
     implementation(libs.ui)
     implementation(libs.androidx.foundation)
-
-    // Coil for image loading
     implementation(libs.coil.kt.coil.compose)
-
-    // TensorFlow Lite
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.support)
-
-    //koin
     implementation(libs.koin.androidx.compose)
 }

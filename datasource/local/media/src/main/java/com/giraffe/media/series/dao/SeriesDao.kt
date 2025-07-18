@@ -4,9 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.SeriesCacheDto
-import com.giraffe.media.series.model.CachedSeriesGenreDto
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SEASON_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
@@ -39,19 +39,19 @@ interface SeriesDao {
     suspend fun deleteSeriesByKeyword(keyword: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSeasons(seasons: List<CachedSeasonDto>)
+    suspend fun insertSeasons(seasons: List<SeasonCacheDto>)
 
     @Query("SELECT * FROM $SEASON_TABLE WHERE seriesId = :seriesId")
-    fun getSeasonsForSeries(seriesId: Int): List<CachedSeasonDto>
+    fun getSeasonsForSeries(seriesId: Int): List<SeasonCacheDto>
 
     @Query("DELETE FROM $SEASON_TABLE")
     suspend fun clearAllSeasons()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGenres(genres: List<CachedSeriesGenreDto>)
+    suspend fun insertGenres(genres: List<SeriesGenreCacheDto>)
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
-    fun getAllGenres(): List<CachedSeriesGenreDto>
+    fun getAllGenres(): List<SeriesGenreCacheDto>
 
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
     suspend fun clearAllGenres()
@@ -74,6 +74,6 @@ interface SeriesDao {
     )
     suspend fun clearSeriesCache(currentTime: Long)
 
-    @Query("UPDATE cached_series_genres SET count = count + 1 WHERE id IN (:genreIds)")
+    @Query("UPDATE series_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 }

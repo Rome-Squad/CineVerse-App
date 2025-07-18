@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.details.R
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
@@ -89,6 +90,19 @@ fun MainMovieOrSeriesDetails(
                 }
             }
 
+    Column(
+        modifier = modifier.background(Theme.color.background.screen),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        SafeIslamicImage(
+            imageUrl = posterUrl,
+            contentDescription = posterUrl,
+            modifier = Modifier
+                .size(width = 216.dp, height = 289.dp)
+                .clip(RoundedCornerShape(Theme.radius.xl)),
+            contentScale = ContentScale.Crop
+        )
 
             Box(
                 modifier = Modifier
@@ -190,7 +204,7 @@ fun MainMovieOrSeriesDetails(
 
 
 @Composable
-private fun IconWithText(
+fun IconWithText(
     text: String,
     icon: Painter,
     colorOfIcon: Color,
@@ -215,27 +229,5 @@ private fun IconWithText(
             minLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-    }
-}
-
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-@Preview()
-fun PreviewMainMovieDetails() {
-    CineVerseTheme(isDarkTheme = true) {
-//        MainMovieOrSeriesDetails(
-//            modifier = Modifier.width(360.dp),
-//            poster = R.drawable.main_poster_test.imageSourceToPainter(),
-//            name = "The Dark Knight",
-//            genres = listOf("Drama", "Action", "Crime", "Thriller", "Drama", "Action", "Crime"),
-//            rating = 8.5f,
-//            duration = "2h 32m",
-//            releaseDate = "2008, Jul 18",
-//            type = "Movie",
-//            onClickAdd = {},
-//            onClickPlay = {},
-//
-//        )
     }
 }

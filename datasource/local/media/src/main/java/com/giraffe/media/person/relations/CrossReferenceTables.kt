@@ -8,7 +8,7 @@ import com.giraffe.media.movie.model.cacheDto.MovieCacheDto
 import com.giraffe.media.person.model.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.CrossReferenceConstants.MOVIE_PERSON_CROSS_REF_TABLE
 import com.giraffe.media.person.relations.CrossReferenceConstants.SERIES_PERSON_CROSS_REF_TABLE
-import com.giraffe.media.series.model.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
 
 @Entity(
     tableName = MOVIE_PERSON_CROSS_REF_TABLE,

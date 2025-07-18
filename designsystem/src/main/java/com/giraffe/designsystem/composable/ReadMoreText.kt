@@ -1,4 +1,4 @@
-package com.giraffe.details.components
+package com.giraffe.designsystem.composable
 
 
 import androidx.compose.foundation.clickable

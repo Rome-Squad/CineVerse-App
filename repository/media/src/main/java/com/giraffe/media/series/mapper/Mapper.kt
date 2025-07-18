@@ -8,6 +8,12 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.entity.Review
+import com.giraffe.media.entity.Genre
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.model.dto.GenreDto
 import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
@@ -34,7 +40,7 @@ fun SeriesCacheDto.toEntity(
     )
 }
 
-fun CachedSeasonDto.toEntity(): Season {
+fun SeasonCacheDto.toEntity(): Season {
     return Season(
         id = id,
         overview = overview,
@@ -46,7 +52,7 @@ fun CachedSeasonDto.toEntity(): Season {
     )
 }
 
-fun CachedSeriesGenreDto.toEntity(): Genre {
+fun SeriesGenreCacheDto.toEntity(): Genre {
     return Genre(
         id = id,
         title = name,
@@ -66,8 +72,8 @@ fun Series.toCachedDto(): SeriesCacheDto {
     )
 }
 
-fun Season.toCachedDto(seriesId: Int): CachedSeasonDto {
-    return CachedSeasonDto(
+fun Season.toCachedDto(seriesId: Int): SeasonCacheDto {
+    return SeasonCacheDto(
         id = id,
         seriesId = seriesId,
         name = "",
@@ -80,8 +86,8 @@ fun Season.toCachedDto(seriesId: Int): CachedSeasonDto {
     )
 }
 
-fun Genre.toDto(): CachedSeriesGenreDto {
-    return CachedSeriesGenreDto(
+fun Genre.toDto(): SeriesGenreCacheDto {
+    return SeriesGenreCacheDto(
         id = id,
         name = title,
         count = rank
@@ -121,8 +127,8 @@ fun GenreDto.toEntity(): Genre {
     )
 }
 
-fun GenreDto.toCachedDto(): CachedSeriesGenreDto {
-    return CachedSeriesGenreDto(
+fun GenreDto.toCachedDto(): SeriesGenreCacheDto {
+    return SeriesGenreCacheDto(
         id = id,
         name = name,
         count = 0

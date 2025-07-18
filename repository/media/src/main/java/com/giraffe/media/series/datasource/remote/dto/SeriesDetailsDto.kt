@@ -1,6 +1,6 @@
 package com.giraffe.media.series.datasource.remote.dto
 
-import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.series.model.dto.GenreDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

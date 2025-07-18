@@ -30,7 +30,7 @@ import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.NothingFound
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.screen.discover.SearchTab
-import com.giraffe.media.explore.components.CastItem
+import com.giraffe.explore.components.CastItem
 import com.giraffe.media.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
