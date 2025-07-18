@@ -4,7 +4,6 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movie.model.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
@@ -15,6 +14,7 @@ import com.giraffe.media.movie.model.dto.RatingRequest
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(
@@ -34,16 +34,9 @@ class MoviesRepositoryImpl(
     }
 
 
-    override suspend fun getMovieGenres(genreIds: List<Int>): List<Genre> = SafeCall {
-        SafeCall {
-
-            if (genreIds.isNotEmpty()) {
-                cache.incrementInteractionCountForGenres(genreIds)
-            }
-
-            cache.getMovieGenres(genreIds).map { it.toEntity() }.ifEmpty {
-                remote.getMovieGenres().map { it.toEntity() }
-            }
+    override suspend fun getMovieGenres(genreIds: List<Int>) = SafeCall {
+        cache.getMovieGenres(genreIds).map { it.toEntity() }.ifEmpty {
+            remote.getMovieGenres().map(MovieGenreDto::toEntity)
         }
     }
 
@@ -59,12 +52,12 @@ class MoviesRepositoryImpl(
     }
 
 
-    override suspend fun getMoviesByGenres(genreIds: List<Int>) = SafeCall {
-        cache.getMoviesByGenre(0).map(MovieCacheDto::toEntity)
+    override suspend fun getMoviesByGenre(genreId: Int) = SafeCall {
+        cache.getMoviesByGenre(genreId).map(MovieCacheDto::toEntity)
             .ifEmpty {
-                val remoteMovies = remote.getMoviesByGenres(genreIds).map(MovieDto::toEntity)
-                insertMovies(remoteMovies)
-                remoteMovies
+                remote.getMoviesByGenre(genreId)
+                    .map(MovieDto::toEntity)
+                    .also { insertMovies(it) }
             }
     }
 

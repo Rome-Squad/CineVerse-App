@@ -43,7 +43,7 @@ class RequestBuilder(
                     }
                 }
                 headers {
-                    append(AUTHORIZATION, "Bearer $accessToken")
+                    append(AUTHORIZATION, "$BEARER $accessToken")
                 }
             }
         }
@@ -91,5 +91,6 @@ class RequestBuilder(
 
     companion object {
         const val AUTHORIZATION = "Authorization"
+        const val BEARER = "Bearer"
     }
 }

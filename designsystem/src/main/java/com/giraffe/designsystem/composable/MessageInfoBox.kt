@@ -33,8 +33,9 @@ fun MessageInfoBox(
     icon: Painter,
     iconTint: Color,
     iconBackgroundColor: Color,
-    titlePrimaryButton: String,
-    titleSecondaryButton: String,
+    isButtonsVisible: Boolean = true,
+    titlePrimaryButton: String = "",
+    titleSecondaryButton: String = "",
     modifier: Modifier = Modifier,
     onClickPrimaryButton: () -> Unit = {},
     onClickSecondaryButton: () -> Unit = {}
@@ -70,7 +71,7 @@ fun MessageInfoBox(
             modifier = Modifier.padding(top = 8.dp),
             textAlign = TextAlign.Center
         )
-        Row(
+        if (isButtonsVisible) Row(
             modifier = Modifier.padding(top = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {

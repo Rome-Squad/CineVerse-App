@@ -27,6 +27,7 @@ kotlinxCoroutinesTest = "1.10.2"
 mockk = "1.14.4"
 mockkMockk = "1.13.8"
 mockkVersion = "1.13.9"
+navigationCompose = "2.9.1"
 truth = "1.4.4"
 truthVersion = "1.4.0"
 turbine = "1.2.1"
@@ -59,6 +60,7 @@ firebasePerfKtx = "21.0.5"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }

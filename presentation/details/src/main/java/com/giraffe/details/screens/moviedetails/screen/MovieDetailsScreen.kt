@@ -41,7 +41,6 @@ import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
-import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.imageSourceToPainter
@@ -51,6 +50,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MovieDetailsScreen(
     movieID: Int,
+    navController: NavController,
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MovieDetailsViewModel = koinViewModel()
 ) {
@@ -58,6 +59,24 @@ fun MovieDetailsScreen(
 
     LaunchedEffect(movieID) {
         viewModel.loadMovieDetails(movieID)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                MovieDetailsEffect.NavigateToMovies -> {
+                    navController.navigateToMovieDetails(movieID)
+                }
+
+                is MovieDetailsEffect.NavigateToReviews -> {
+                    navigateToReviews(effect.reviews)
+                }
+
+                is MovieDetailsEffect.Error -> {}
+                MovieDetailsEffect.NavigateToCollection -> {}
+                MovieDetailsEffect.NavigateToLogin -> {}
+            }
+        }
     }
 
     MovieDetailsContent(
@@ -232,17 +251,4 @@ private fun MovieDetailsContent(
             }
         }
     )
-}
-
-
-@Preview
-@Composable
-private fun MovieDetailsPreview() {
-    CineVerseTheme(
-        isDarkTheme = false
-    ) {
-        MovieDetailsScreen(
-            movieID = 286,
-        )
-    }
 }

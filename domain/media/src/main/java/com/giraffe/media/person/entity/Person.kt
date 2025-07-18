@@ -10,15 +10,8 @@ data class Person(
     val birthday: String? = null,
     val placeOfBirth: String? = null,
     val images: List<String> = emptyList(),
-    val movieCredits: List<PersonCredit> = emptyList(),
-    val tvCredits: List<PersonCredit> = emptyList(),
-)
-
-data class PersonCredit(
-    val id: Int,
-    val title: String,
-    val posterPath: String?,
-    val voteAverage: Double
+    val personCredits: List<PersonCredit> = emptyList(),
+    val socialMedia: PersonSocialMediaLinks? = null
 )
 
 enum class PersonType {

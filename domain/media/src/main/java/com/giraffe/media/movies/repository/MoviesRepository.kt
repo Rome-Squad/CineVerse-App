@@ -12,7 +12,7 @@ interface MoviesRepository {
 
     suspend fun getMoviesGenres(): List<Genre>
 
-    suspend fun getMoviesByGenres(genreIds: List<Int>): List<Movie>
+    suspend fun getMoviesByGenre(genreId: Int): List<Movie>
 
     suspend fun insertMovies(movie: List<Movie>)
 

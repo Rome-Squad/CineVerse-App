@@ -16,6 +16,8 @@ import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import androidx.lifecycle.SavedStateHandle
+
 
 class MovieDetailsViewModel(
     val getMovieDetails: GetMovieDetailsUseCase,
@@ -26,8 +28,9 @@ class MovieDetailsViewModel(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
 
+
     //loading movie data
-    fun loadMovieDetails(movieId: Int) {
+    fun loadMovieDetails(movieId: Int){
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::loadMovieDetailsError
@@ -181,7 +184,7 @@ class MovieDetailsViewModel(
     }
 
     override fun onShowMoreReviewsClick() {
-        sendEffect(MovieDetailsEffect.NavigateToReviews)
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movieReviews))
     }
 
     override fun onMovieClick(movieId: Int) {

@@ -1,9 +1,9 @@
 package com.giraffe.media.person.response
 
-import com.giraffe.media.person.model.dto.PersonMovieCastItemDto
+import com.giraffe.media.person.model.dto.PersonCreditDto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PersonMovieCreditsResponse(
-    val cast: List<PersonMovieCastItemDto>
+data class PersonCreditsResponse(
+    val cast: List<PersonCreditDto>
 )

@@ -12,25 +12,16 @@ import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import  com.giraffe.media.movie.MovieLocalDataSourceImp
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.series.SeriesRoomLocalDateSource
+import com.giraffe.media.series.dao.SeriesDao
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
-
     single<ExploreSearchKeywordDao> { get<CineVerseDatabase>().exploreSearchKeywordDao() }
-    single<LocalExploreDataSource> {
-        LocalExploreDataSourceImpl(get())
-    }
-
+    single<LocalExploreDataSource> { LocalExploreDataSourceImpl(get()) }
     single<MovieDao> { get<CineVerseDatabase>().movieDao() }
     single<MoviesLocalDataSource> { MovieLocalDataSourceImp(get()) }
-
-
-    single<LocalExploreDataSource> {
-        LocalExploreDataSourceImpl(get())
-    }
-    single { get<CineVerseDatabase>().seriesDao() }
+    single<SeriesDao> { get<CineVerseDatabase>().seriesDao() }
     single<SeriesLocalDateSource> { SeriesRoomLocalDateSource(get()) }
-    single<LocalExploreDataSource> { LocalExploreDataSourceImpl(get()) }
     single<PersonDao> { get<CineVerseDatabase>().personDao() }
     single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }
 }

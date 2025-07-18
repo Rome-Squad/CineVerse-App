@@ -1,0 +1,81 @@
+package com.giraffe.explore.screen.search
+
+import com.giraffe.explore.base.BaseViewModel
+import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
+import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
+import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
+import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+
+class SearchViewModel(
+    private val getSearchKeywords: GetSearchKeywordsUseCase,
+    private val insertSearchKeyword: InsertSearchKeywordUseCase,
+    private val deleteKeywordUseCase: DeleteKeywordUseCase,
+    private val clearSearchHistory: ClearSearchHistoryUseCase
+) : BaseViewModel<SearchScreenState>(SearchScreenState()),
+    SearchInteractionListener {
+    init {
+        onQueryChange()
+    }
+
+    private var searchJob: Job? = null
+    override fun onQueryChange(query: String) {
+        searchJob?.cancel()
+        searchJob = safeExecute {
+            updateState { it.copy(query) }
+            delay(500)
+            getSearchKeywords(query).collectLatest { keywords ->
+                val recentKeywords = keywords.filter { keyword -> keyword.isFromSearchHistory }
+                updateState {
+                    it.copy(
+                        keywords = (keywords - recentKeywords).map { searchKeyword -> searchKeyword.keyword },
+                        recentKeywords = recentKeywords.map { searchKeyword -> searchKeyword.keyword }
+                    )
+                }
+            }
+        }
+    }
+
+    override fun onKeywordClick(keyword: String) {
+        safeExecute {
+            onQueryChange(keyword)
+            insertSearchKeyword(keyword)
+        }
+    }
+
+    override fun deleteKeyword(keyword: String) {
+        safeExecute { deleteKeywordUseCase(keyword) }
+    }
+
+    override fun clearAllKeywords() {
+        safeExecute { clearSearchHistory() }
+    }
+
+    override fun onPostfixIconClick() {
+        safeExecute {
+            if (state.value.query.isNotBlank()) {
+                onQueryChange()
+            } else {
+                updateState { it.copy(isVoiceRecording = true) }
+            }
+        }
+    }
+
+    override fun onPermissionResult(isGranted: Boolean) {
+        safeExecute {
+            updateState {
+                it.copy(isPermissionGranted = isGranted)
+            }
+        }
+    }
+
+    override fun onVoiceSearchFinished() {
+        safeExecute {
+            updateState {
+                it.copy(isVoiceRecording = false)
+            }
+        }
+    }
+}

@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
+import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.screens.moviedetails.model.CastUi
@@ -95,9 +94,8 @@ fun StarCastSection(
 fun CastCard(
     actorName: String, character: String, actorImage: Painter, modifier: Modifier = Modifier
 ) {
-    Card(
+    CustomCard (
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Theme.color.background.card),
         modifier = modifier.width(200.dp)
     ) {
         Row(
@@ -142,7 +140,8 @@ fun CastCard(
 
 @Composable
 @Preview(
-    name = "StarCastSection Light", showBackground = true, apiLevel = 34
+    name = "StarCastSection Light", showBackground = true,
+    //apiLevel = 34
 )
 fun PreviewStarCastSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
@@ -154,7 +153,8 @@ fun PreviewStarCastSectionLight() {
 
 @Composable
 @Preview(
-    name = "StarCastSection Dark", showBackground = false, apiLevel = 34
+    name = "StarCastSection Dark", showBackground = false,
+    //apiLevel = 34
 )
 fun PreviewStarCastSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
@@ -179,7 +179,8 @@ fun sampleCastList(): List<CastUi> {
 
 @Composable
 @Preview(
-    name = "CastCard Preview", showBackground = false, apiLevel = 34
+    name = "CastCard Preview", showBackground = false,
+    //apiLevel = 34
 )
 fun PreviewCastCard() {
     CineVerseTheme(isDarkTheme = false) {
@@ -193,7 +194,8 @@ fun PreviewCastCard() {
 
 @Composable
 @Preview(
-    name = "CastCard Preview Dark", showBackground = false, apiLevel = 34
+    name = "CastCard Preview Dark", showBackground = false,
+    //apiLevel = 34
 )
 fun PreviewCastCardDark() {
     CineVerseTheme(isDarkTheme = true) {
