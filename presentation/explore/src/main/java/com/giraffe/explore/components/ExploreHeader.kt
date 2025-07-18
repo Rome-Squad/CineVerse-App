@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
@@ -38,8 +39,11 @@ fun ExploreHeader(
     onTabClick: (Int) -> Unit = {},
     selectedTabIndex: Int = 0,
     placeholder: String = "",
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: String = "",
+    readOnly: Boolean = false,
+    focusRequester: FocusRequester = FocusRequester(),
+    onTextFieldClicked: () -> Unit = {},
+    onValueChange: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {}
 ) {
     Column(
@@ -81,7 +85,10 @@ fun ExploreHeader(
                 placeholder = placeholder,
                 onValueChange = onValueChange,
                 value = value,
-                onFocusChanged = onFocusChanged
+                onFocusChanged = onFocusChanged,
+                readOnly = readOnly,
+                focusRequester = focusRequester,
+                onClicked = onTextFieldClicked
             )
         }
         if (tabsTitles.isNotEmpty()) {

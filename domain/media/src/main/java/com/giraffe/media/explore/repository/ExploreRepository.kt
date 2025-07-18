@@ -9,7 +9,7 @@ interface ExploreRepository {
 
     suspend fun insertSearchKeyword(searchKeyword: String)
 
-    suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword)
+    suspend fun deleteKeyword(keyword: String)
 
     suspend fun clearSearchHistory()
 }

@@ -49,13 +49,13 @@ class GetMoviesByGenreUseCaseTest {
             )
         )
 
-        coEvery { repository.getMoviesByGenres(listOf(genreId)) } returns expectedMovies
+        coEvery { repository.getMoviesByGenre(genreId) } returns expectedMovies
 
         // When
-        val result = useCase(listOf(genreId))
+        val result = useCase(genreId)
 
         // Then
-        coVerify { repository.getMoviesByGenres(listOf(genreId)) }
+        coVerify { repository.getMoviesByGenre(genreId) }
         assertThat(result).isEqualTo(expectedMovies)
     }
 }

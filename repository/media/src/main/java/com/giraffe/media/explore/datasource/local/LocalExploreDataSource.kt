@@ -10,7 +10,7 @@ interface LocalExploreDataSource {
 
     suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto)
 
-    suspend fun deleteSearchKeyword(searchKeyword: SearchKeywordCacheDto)
+    suspend fun deleteKeyword(keyword: String)
 
     suspend fun clearSearchHistory()
 }

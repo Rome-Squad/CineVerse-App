@@ -12,6 +12,7 @@ import com.giraffe.media.series.model.CachedSeasonDto
 import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
+import com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -106,7 +107,7 @@ fun SeriesDto.toEntity(): Series {
         name = name,
         overview = overview,
         rating = voteAverage.toFloat(),
-        posterUrl = posterPath.orEmpty(),
+        posterUrl = BASE_IMAGE_URL + posterPath.orEmpty(),
         genreIDs = genreIds,
         releaseYear = firstAirDate,
         seasons = emptyList()
@@ -137,7 +138,7 @@ fun SeasonDto.toEntity(): Season {
         rating = voteAverage,
         posterUrl = posterPath.toString(),
         seasonNumber = seasonNumber,
-        releaseYear = airDate?.toString() ?: "",
+        releaseYear = airDate ?: "",
         episodeCount = episodeCount
     )
 }
@@ -163,7 +164,7 @@ fun List<ReviewDto>.toEntity(): List<Review> {
             authorName = item.authorDetails.name,
             authorUserName = item.authorDetails.username,
             content = item.content,
-            rating = item.authorDetails.rating.toInt(),
+            rating = item.authorDetails.rating,
             createdAt = parseData(item.createdAt)
         )
     }

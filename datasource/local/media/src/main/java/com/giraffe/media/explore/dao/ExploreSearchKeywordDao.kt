@@ -1,7 +1,6 @@
 package com.giraffe.media.explore.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -30,8 +29,13 @@ interface ExploreSearchKeywordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto)
 
-    @Delete
-    suspend fun deleteSearchKeyword(searchKeyword: SearchKeywordCacheDto)
+    @Query(
+        value =
+            "DELETE " +
+            "FROM SEARCH_KEYWORD_TABLE " +
+            "WHERE keyword = :keyword "
+    )
+    suspend fun deleteKeyword(keyword: String)
 
     @Query("DELETE FROM SEARCH_KEYWORD_TABLE")
     suspend fun clearSearchHistory()

@@ -18,12 +18,11 @@ class SeriesRemoteDataSourceImp(
             )
         ).results
 
-    override suspend fun getSeriesByGenreId(genreId: Int, page: Int) =
+    override suspend fun getSeriesByGenre(genreId: Int, page: Int) =
         requestBuilder.get<SeriesResponse>(
             endpoint = DISCOVER_TV,
             params = mapOf(
-                PAGE to page.toString(),
-                WITH_GENRES_KEY to genreId.toString()
+                WITH_GENRES_KEY to (if (genreId == -1) "" else genreId.toString())
             )
         ).results
 
@@ -47,6 +46,6 @@ class SeriesRemoteDataSourceImp(
         private const val DISCOVER_TV = "discover/tv"
         private const val QUERY = "query"
         private const val PAGE = "page"
-        private const val WITH_GENRES_KEY = "withGenresKey"
+        private const val WITH_GENRES_KEY = "with_genres"
     }
 }

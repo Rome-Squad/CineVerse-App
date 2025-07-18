@@ -6,7 +6,7 @@ import com.giraffe.media.movies.repository.MoviesRepository
 class GetMoviesByGenresUseCase(
     private val repository: MoviesRepository
 ) {
-    suspend operator fun invoke(genreIds: List<Int>): List<Movie> {
-        return repository.getMoviesByGenres(genreIds)
+    suspend operator fun invoke(genreId: Int): List<Movie> {
+        return repository.getMoviesByGenre(genreId)
     }
 }
