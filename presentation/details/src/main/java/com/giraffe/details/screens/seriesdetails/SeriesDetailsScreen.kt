@@ -220,12 +220,6 @@ fun SeriesDetailsContent(
                     }
                 }
             }
-
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            )
         }
     }
 
@@ -233,7 +227,7 @@ fun SeriesDetailsContent(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = onDismissAddToCollectionBottomSheet,
         title = stringResource(com.giraffe.details.R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             AddToCollectionContent(
                 title = "My Favorite TV",
@@ -257,7 +251,7 @@ fun SeriesDetailsContent(
         isVisible = state.isVisibleGiveStarsBottomSheet,
         onDismiss = onDismissAddRatingBottomSheet,
         title = stringResource(com.giraffe.details.R.string.rate_the_movie),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally

@@ -8,9 +8,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +27,7 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -78,9 +80,23 @@ fun MovieDetailsScreen(
         }
     }
 
-    MovieDetailsContent(
-        modifier = modifier, state = state, interaction = viewModel
-    )
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .systemBarsPadding(),
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedVisibility(state.isLoadingMovieDetails) {
+            Progress(modifier = Modifier.size(40.dp))
+        }
+        AnimatedVisibility(!state.isLoadingMovieDetails) {
+            MovieDetailsContent(
+                modifier = modifier, state = state, interaction = viewModel
+            )
+        }
+    }
 }
 
 @Composable
@@ -198,12 +214,6 @@ private fun MovieDetailsContent(
                     }
                 }
             }
-
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            )
         }
     }
 
@@ -211,7 +221,7 @@ private fun MovieDetailsContent(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             AddToCollectionContent(
                 title = "My Favorite TV",
@@ -234,7 +244,7 @@ private fun MovieDetailsContent(
         isVisible = state.isVisibleGiveStarsBottomSheet,
         onDismiss = interaction::onDismissGiveStarsBottomSheet,
         title = stringResource(R.string.rate_the_movie),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally

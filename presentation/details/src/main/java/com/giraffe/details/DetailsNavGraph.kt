@@ -16,7 +16,7 @@ const val SERIES_ID = 2288
 
 @Composable
 fun DetailsNavGraph(navController: NavHostController) {
-NavHost(navController = navController, startDestination = "$MOVIES_ROUTE/${MOVIE_ID}") {
+NavHost(navController = navController, startDestination = "$SERIES_ROUTE/${SERIES_ID}") {
         movieDetailsRoute(navController, navigateToReviews = { reviews ->
             navController.currentBackStackEntry?.savedStateHandle?.set(REVIEW_LIST_ARG, reviews)
             navController.navigate(Review_ROUTE)
