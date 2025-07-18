@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -7,7 +7,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,7 +31,7 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -42,6 +44,7 @@ fun PosterHorizontal(
 ) {
     Row(
         modifier = modifier
+            .height(IntrinsicSize.Min)
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.card)
             .clickable(onClick = onClick),
@@ -50,12 +53,11 @@ fun PosterHorizontal(
     ) {
         with(sharedTransitionScope) {
 
-
-            IslamicAppropriateImageViewer(
+            SafeIslamicImage(
                 imageUrl = poster.imageUri,
-                placeHolderResId = Theme.icons.dueTone.image,
+                contentDescription = poster.name,
                 modifier = Modifier
-                    .height(88.dp)
+                    .fillMaxHeight()
                     .width(64.dp)
                     .clip(
                         RoundedCornerShape(
@@ -68,7 +70,16 @@ fun PosterHorizontal(
                         sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                         animatedVisibilityScope = animatedVisibilityScope
                     )
-            )
+            ) {
+
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = stringResource(R.string.loading_image),
+                    modifier = Modifier.size(32.dp),
+                    tint = Theme.color.brand.secondary
+                )
+
+            }
 
 
             Column(

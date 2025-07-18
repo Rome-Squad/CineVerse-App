@@ -1,15 +1,22 @@
 package com.giraffe.details.screens.moviedetails
 
+import android.util.Log
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.details.screens.moviedetails.model.MovieUi
+import com.giraffe.details.models.MovieUi
+import com.giraffe.details.models.groupByRole
+import com.giraffe.details.models.toCastUi
+import com.giraffe.details.models.toCrewUi
+import com.giraffe.details.models.toReviewUI
+import com.giraffe.media.entity.Genre
+import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.entity.MovieGenre
-import com.giraffe.media.movies.entity.MovieReview
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.person.entity.Person
+import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+
 
 class MovieDetailsViewModel(
     val getMovieDetails: GetMovieDetailsUseCase,
@@ -20,20 +27,25 @@ class MovieDetailsViewModel(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
 
+
     //loading movie data
     fun loadMovieDetails(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::loadMovieDetailsError
         ) {
-            getMovieDetails(movieId)
+
+            val movie = getMovieDetails(movieId)
+            movie
         }
+
     }
 
     private fun loadMovieDetailsSuccess(movie: Movie) {
+
         updateState {
             it.copy(
-                movie = MovieUi.fromEntity(movie),
+                movie = movie.MovieUi(),
                 isLoadingMovieDetails = false
             )
         }
@@ -43,6 +55,7 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMovieDetailsError(error: Throwable) {
+        error.printStackTrace()
         updateState {
             it.copy(
                 isLoadingMovieDetails = false,
@@ -60,16 +73,17 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun loadMovieGenresSuccess(genres: List<MovieGenre>) {
+    private fun loadMovieGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
-                movieGenres = genres,
+                movieGenres = genres.map { genre -> genre.title },
                 isLoadingMovieGenres = false
             )
         }
     }
 
     private fun loadMovieGenresError(error: Throwable) {
+
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
@@ -83,13 +97,14 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMoviePeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.role == "Acting" }
-        val crew = people.filter { it.role != "Acting" }
+        val cast = people.filter { it.type == PersonType.CAST }
+        val crew = people.filter { it.type == PersonType.CREW }
+        val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
                 isLoadingCast = false,
-                cast = cast,
-                crew = crew,
+                cast = cast.map { cast -> cast.toCastUi() },
+                crew = mappedCrew.groupByRole()
             )
         }
     }
@@ -117,16 +132,18 @@ class MovieDetailsViewModel(
         }
     }
 
-    private fun loadMovieReviewsSuccess(reviews: List<MovieReview>) {
+    private fun loadMovieReviewsSuccess(reviews: List<Review>) {
+        Log.d("TAG", "loadMovieReviewsSuccess: $reviews")
         updateState {
             it.copy(
                 isLoadingReviews = false,
-                movieReviews = reviews
+                movieReviews = reviews.map { review -> review.toReviewUI() }
             )
         }
     }
 
     private fun loadMovieReviewsError(error: Throwable) {
+        Log.d("TAG", "loadMovieReviewsFailure: $error")
         updateState {
             it.copy(
                 isLoadingReviews = false,
@@ -166,7 +183,7 @@ class MovieDetailsViewModel(
     }
 
     override fun onShowMoreReviewsClick() {
-        sendEffect(MovieDetailsEffect.NavigateToReviews)
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movieReviews))
     }
 
     override fun onMovieClick(movieId: Int) {

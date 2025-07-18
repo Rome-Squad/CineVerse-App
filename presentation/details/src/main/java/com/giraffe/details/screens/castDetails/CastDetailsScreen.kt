@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.castDetails
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -25,47 +27,76 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.GallerySection
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
-import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.details.components.gallery.GallerySection
+import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CastDetailsScreen(
-    castDetailsViewModel: CastDetailsViewModel = koinViewModel()
+    personId: Int,
+    modifier: Modifier = Modifier,
+    castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
 ) {
     val state by castDetailsViewModel.state.collectAsState()
-    CastDetailsContent(
-        state = state,
-        onYoutubeClick = castDetailsViewModel::onActorYoutubeLinkClicked,
-        onFacebookClick = castDetailsViewModel::onActorFacebookLinkClicked,
-        onInstagramClick = castDetailsViewModel::onActorInstagramLinkClicked,
-        onMoviePosterClick = castDetailsViewModel::onMovieClicked,
-        onShowMoreMoviesClick = castDetailsViewModel::navigateToMoviesListScreen,
-        onShowMoreActorGalleryClick = castDetailsViewModel::navigateToActorGalleryScreen,
-    )
+    val context = LocalContext.current
+    EventListener(
+        events = castDetailsViewModel.effect,
+    ) {
+        when (it) {
+            is CastDetailsEffect.Error -> TODO()
+            is CastDetailsEffect.OpenUrl -> {
+                val intent = Intent(Intent.ACTION_VIEW, it.url.toUri())
+                context.startActivity(intent)
+            }
+        }
+    }
+    if (state.isLoading) {
+        LoadingView()
+    } else {
+        CastDetailsContent(
+            state = state,
+            interaction = castDetailsViewModel,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+fun LoadingView(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .wrapContentSize()
+    ) {
+        Progress(
+            size = 40.dp,
+            strokeWidth = 4.dp
+        )
+    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CastDetailsContent(
     state: CastDetailsUiState,
+    interaction: CastDetailsInteractionListener,
     modifier: Modifier = Modifier,
-    onYoutubeClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onInstagramClick: () -> Unit,
-    onMoviePosterClick: (movieId: Int) -> Unit,
-    onShowMoreMoviesClick: () -> Unit,
-    onShowMoreActorGalleryClick: () -> Unit,
 ) {
     val scrollState = rememberLazyListState()
     val isScrolled by remember {
@@ -87,13 +118,16 @@ fun CastDetailsContent(
             Box {
                 MainDetailsAnimatedContent(
                     isScrolled = isScrolled,
-                    actorImage = state.actorImage.imageSourceToPainter(),
+                    actorImageUrl = state.actorImageUrl,
                     actorName = state.actorName,
                     actorBirthday = state.actorBirth,
                     actorPlaceOfBirth = state.actorPlace,
-                    onYoutubeClick = onYoutubeClick,
-                    onFacebookClick = onFacebookClick,
-                    onInstagramClick = onInstagramClick,
+                    onYoutubeClick = interaction::onActorYoutubeLinkClicked,
+                    onFacebookClick = interaction::onActorFacebookLinkClicked,
+                    onInstagramClick = interaction::onActorInstagramLinkClicked,
+                    hasYoutube = state.actorYouTubeLink.isNotBlank(),
+                    hasFacebook = state.actorFacebookLink.isNotBlank(),
+                    hasInstagram = state.actorInstagramLink.isNotBlank()
                 )
                 AppBar(
                     showBackButton = true,
@@ -104,11 +138,11 @@ fun CastDetailsContent(
         }
         item {
             MoviesListSection(
-                title = state.titleMoviesSection,
+                title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
                 movies = state.posters,
-                onClickPoster = onMoviePosterClick,
-                onClickEndText = onShowMoreMoviesClick
+                onClickPoster = interaction::onMovieClicked,
+                onClickEndText = interaction::navigateToMoviesListScreen
             )
         }
         item {
@@ -117,16 +151,15 @@ fun CastDetailsContent(
                     .height(314.dp)
                     .fillMaxWidth()
                     .padding(horizontal = padding16),
-                images = state.actorGalleryImages,
-                imageContentDescriptions = state.actorGalleryImagesDescriptions,
-                onShowMoreClick = onShowMoreActorGalleryClick
+                imageUrls = state.actorGalleryImageUrls,
+                onShowMoreClick = interaction::navigateToActorGalleryScreen
             )
         }
         item {
             InfoSection(
                 modifier = Modifier.padding(horizontal = padding16),
-                title = state.titleInfoSection,
-                description = state.descriptionInfoSection
+                title = stringResource(R.string.biography),
+                description = state.biographyInfo
             )
         }
     }
@@ -137,13 +170,16 @@ fun CastDetailsContent(
 @OptIn(ExperimentalSharedTransitionApi::class)
 private fun MainDetailsAnimatedContent(
     isScrolled: Boolean,
-    actorImage: Painter,
     actorName: String,
     actorBirthday: String,
     actorPlaceOfBirth: String,
+    actorImageUrl: String?,
     onYoutubeClick: () -> Unit,
     onFacebookClick: () -> Unit,
     onInstagramClick: () -> Unit,
+    hasYoutube: Boolean = false,
+    hasFacebook: Boolean = false,
+    hasInstagram: Boolean = false,
 ) {
     val horizontalPadding = 16.dp
     val duration = 400
@@ -164,7 +200,7 @@ private fun MainDetailsAnimatedContent(
                 true -> {
                     MainDetailsHeader(
                         modifier = Modifier.padding(horizontal = horizontalPadding),
-                        actorImage = actorImage,
+                        actorImageUrl = actorImageUrl,
                         actorName = actorName,
                         animatedVisibilityScope = this@AnimatedContent,
                         sharedTransitionScope = this@SharedTransitionLayout,
@@ -173,18 +209,21 @@ private fun MainDetailsAnimatedContent(
 
                 false -> {
                     MainDetails(
-                        modifier = Modifier
-                            .padding(horizontal = horizontalPadding)
-                            .padding(top = topPadding),
-                        actorImage = actorImage,
                         actorName = actorName,
                         actorBirthday = actorBirthday,
                         actorPlaceOfBirth = actorPlaceOfBirth,
-                        animatedVisibilityScope = this@AnimatedContent,
                         sharedTransitionScope = this@SharedTransitionLayout,
+                        animatedVisibilityScope = this@AnimatedContent,
                         onYoutubeClick = onYoutubeClick,
                         onFacebookClick = onFacebookClick,
-                        onInstagramClick = onInstagramClick
+                        onInstagramClick = onInstagramClick,
+                        actorImageUrl = actorImageUrl,
+                        modifier = Modifier
+                            .padding(horizontal = horizontalPadding)
+                            .padding(top = topPadding),
+                        hasYoutube = hasYoutube,
+                        hasFacebook = hasFacebook,
+                        hasInstagram = hasInstagram
                     )
                 }
             }

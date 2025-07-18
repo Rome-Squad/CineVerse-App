@@ -1,25 +1,27 @@
 package com.giraffe.media.series.datasource.local
 
-import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
-import com.giraffe.media.series.model.CachedSeriesGenreDto
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
 
 interface SeriesLocalDateSource {
 
-    suspend fun getCachedSeriesForName(name: String): List<CachedSeriesDto>
+    suspend fun getCachedSeriesForName(name: String): List<SeriesCacheDto>
 
     suspend fun saveSearchResult(
-        seriesList: List<CachedSeriesDto>
+        seriesList: List<SeriesCacheDto>
     )
 
-    suspend fun getCachedGenres(): List<CachedSeriesGenreDto>
-    suspend fun saveGenres(genres: List<CachedSeriesGenreDto>)
+    suspend fun getCachedGenres(): List<SeriesGenreCacheDto>
+    suspend fun saveGenres(genres: List<SeriesGenreCacheDto>)
 
-    suspend fun getRecentSeries(): List<CachedSeriesDto>
+    suspend fun getRecentSeries(): List<SeriesCacheDto>
     suspend fun storeRecentSeries(seriesId: Int)
     suspend fun clearRecentSeries()
 
-    suspend fun getSeasonsForSeries(seriesId: Int): List<CachedSeasonDto>
+    suspend fun getSeasonsForSeries(seriesId: Int): List<SeasonCacheDto>
 
     suspend fun clearAllData()
+
+    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 }

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 fun MainMovieOrSeriesDetailsAnimatedContent(
     type: String,
     name: String,
-    image: Painter,
+    image: String?,
     rating: Float,
     genres: List<String>,
     releaseYear: String,
@@ -28,7 +27,8 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
     isScrolled: Boolean = false,
-    duration: Int = 400
+    duration: String? = null,
+    durationAnimation: Int = 400
 ) {
 
     val topPadding by animateDpAsState(
@@ -39,8 +39,8 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
             targetState = isScrolled,
             transitionSpec = {
                 fadeIn(
-                    animationSpec = tween(duration)
-                ) togetherWith fadeOut(animationSpec = tween(duration))
+                    animationSpec = tween(durationAnimation)
+                ) togetherWith fadeOut(animationSpec = tween(durationAnimation))
             },
             label = "Animated Content"
         ) { targetState ->
@@ -48,11 +48,11 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
                 false -> {
                     MainMovieOrSeriesDetails(
                         type = type,
-                        poster = image,
+                        posterUrl = image,
                         name = name,
                         genres = genres,
                         rating = rating,
-                        duration = null,
+                        duration = duration,
                         releaseDate = releaseYear,
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,
@@ -64,7 +64,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
 
                 true -> {
                     MinimizedInfoRow(
-                        poster = image,
+                        posterUrl = image,
                         name = name,
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,

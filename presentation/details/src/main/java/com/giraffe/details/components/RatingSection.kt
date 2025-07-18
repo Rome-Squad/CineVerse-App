@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +27,7 @@ import com.giraffe.designsystem.theme.Theme
 fun RatingSection(
     modifier: Modifier = Modifier,
     rate: Int? = null,
-    onArrowButtonClick: () -> Unit = {}
+    onClickCard: () -> Unit = {}
 ) {
     val rated = !(rate == null || rate == 0)
     Column(
@@ -57,7 +57,9 @@ fun RatingSection(
                 )
                 .padding(
                     all = 16.dp
-                ),
+                ).clickable {
+                onClickCard()
+            },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -147,10 +149,6 @@ fun RatingSection(
                     id = R.string.right_arrow
                 ),
                 tint = Theme.color.shade.tertiary,
-                modifier = Modifier
-                    .clickable {
-                        onArrowButtonClick()
-                    }
             )
         }
 

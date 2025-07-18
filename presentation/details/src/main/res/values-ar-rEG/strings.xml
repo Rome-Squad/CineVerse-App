@@ -13,7 +13,7 @@
     <string name="youtube_icon">أيقونة يوتيوب</string>
     <string name="facebook">فيسبوك</string>
     <string name="facebook_icon">أيقونة فيسبوك</string>
-    <string name="instgram">إنستغرام</string>
+    <string name="instagram">إنستغرام</string>
     <string name="instagram_icon">أيقونة إنستغرام</string>
     <string name="folder_icon">أيقونة المجلد</string>
     <string name="authentication_error">خطأ في المصادقة!</string>
@@ -24,11 +24,21 @@
     <string name="rating">التقييم</string>
     <string name="episodes">الحلقات</string>
     <string name="year">سنة</string>
+    <string name="top_reviews">الاعلى تقييم</string>
+    <string name="storyline">القصه</string>
+    <string name="behind_the_scenes">خلف الاحداث</string>
+    <string name="you_might_also_like">ربما يعجبك هذا ايضا</string>
+    <string name="star_cast">طاقم العمل</string>
+    <string name="rate_the_movie">قم بتقييم الفيلم</string>
+    <string name="add_to_rate">اضافة تقييم</string>
+    <string name="add_to_collection">اضافة الى مجموعة </string>
+    <string name="movie">فيلم</string>
     <string name="poster_image">صورة الملصق</string>
     <string name="play_icon">أيقونة التشغيل</string>
     <string name="save_Icon">أيقونة الحفظ</string>
     <string name="icon">أيقونة</string>
-    <string name="storyline">Storyline</string>
-    <string name="latest_seasons">Latest Seasons</string>
-    <string name="seasons">Seasons</string>
+    <string name="latest_seasons">أحدث المواسم</string>
+    <string name="seasons">المواسم</string>
+    <string name="best_of">أفضل</string>
+    <string name="biography">سيرة ذاتية</string>
 </resources>

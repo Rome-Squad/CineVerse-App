@@ -13,29 +13,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImagePainter
-import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import coil3.size.Size
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.imageviewer.islamicimageviewer.IslamicAppropriateImageViewer
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -44,34 +36,25 @@ fun PosterItemVertically(
     modifier: Modifier = Modifier,
     onClickPoster: () -> Unit = {}
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
 
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(Theme.color.background.card)
                 .aspectRatio(0.74f),
             contentAlignment = Alignment.Center
         ) {
-
-            val model = ImageRequest
-                .Builder(LocalContext.current)
-                .data(movie.imageUri)
-                .size(Size.ORIGINAL)
-                .crossfade(true)
-                .build()
-
-            val painter = rememberAsyncImagePainter(model = model)
-            val state by painter.state.collectAsState()
-
-
-            if (state is AsyncImagePainter.State.Success) {
-                IslamicAppropriateImageViewer(
-                    imageUrl = movie.imageUri,
-                    modifier = Modifier.fillMaxSize()
-                        .clickable(onClick = onClickPoster)
-                )
-            } else {
+            SafeIslamicImage(
+                imageUrl = movie.imageUri,
+                contentDescription = movie.name,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(onClick = onClickPoster)
+            ) {
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.image),
                     contentDescription = stringResource(R.string.loading_image),

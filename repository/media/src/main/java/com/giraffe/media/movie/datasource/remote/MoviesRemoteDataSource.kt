@@ -1,22 +1,21 @@
 package com.giraffe.media.movie.datasource.remote
 
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDetailsDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
-import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import  com.giraffe.media.movie.model.dto.MovieDto
+import  com.giraffe.media.movie.model.dto.MovieGenreDto
+import  com.giraffe.media.movie.model.dto.MovieReviewDto
+import  com.giraffe.media.movie.model.dto.RatingRequest
 
 interface MoviesRemoteDataSource {
 
     suspend fun getMovieById(
         movieId: Int
-    ): MovieDetailsDto
+    ): MovieDto
 
     suspend fun getMoviesByName(movieName: String): List<MovieDto>
 
     suspend fun getMovieGenres(): List<MovieGenreDto>
 
-    suspend fun getMoviesByGenres(genreIds: List<Int>): List<MovieDto>
+    suspend fun getMoviesByGenre(genreId: Int): List<MovieDto>
 
     suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto>
 

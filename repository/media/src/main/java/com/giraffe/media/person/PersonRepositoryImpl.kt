@@ -1,16 +1,19 @@
 package com.giraffe.media.person
 
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.local.PersonLocalDataSource
-import com.giraffe.media.person.remote.PersonRemoteDataSource
-import com.giraffe.media.person.remote.dto.CreditsDto
+import com.giraffe.media.person.mapper.toDto
+import com.giraffe.media.person.mapper.toEntity
+import com.giraffe.media.person.mapper.toImageList
+import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.person.model.dto.PersonCreditDto
+import com.giraffe.media.person.model.dto.PersonDto
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.person.util.toDto
-import com.giraffe.media.person.util.toImageList
-import com.giraffe.media.person.util.toMovieCredits
-import com.giraffe.media.person.util.toTvCredits
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.utils.BASE_IMAGE_URL
+import com.giraffe.media.utils.ContentType
+import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -21,9 +24,9 @@ class PersonRepositoryImpl(
 ) : PersonRepository {
 
     override suspend fun searchByName(personName: String) = SafeCall {
-        localDataSource.searchByName(personName).map { it.toMovieCredits() }.ifEmpty {
-            val people = remoteDataSource.searchByName(personName).map { it.toMovieCredits() }
-            localDataSource.storePeople(people.map { it.toDto() })
+        localDataSource.searchByName(personName).map(PersonCacheDto::toEntity).ifEmpty {
+            val people = remoteDataSource.searchByName(personName).map(PersonDto::toEntity)
+            localDataSource.storePeople(people.map(Person::toDto))
             people
         }
     }
@@ -32,73 +35,70 @@ class PersonRepositoryImpl(
         SafeCall { localDataSource.storePerson(person.toDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {
-        localDataSource.getRecentPeople().map { it.toMovieCredits() }
+        localDataSource.getRecentPeople().map(PersonCacheDto::toEntity)
     }
 
     override suspend fun clearRecentPeople() = SafeCall {
         localDataSource.clearRecentPeople()
     }
 
-    private suspend fun handle(
-        id: Int,
-        isMovie: Boolean,
-        getPeople: suspend () -> List<Person>,
-        exe: suspend () -> CreditsDto
-    ): List<Person> {
-        return getPeople().ifEmpty {
-            val response = exe()
-            val cast = response.cast.map { it.toMovieCredits(PersonType.CAST) }
-            val crew = response.crew.map { it.toMovieCredits(PersonType.CREW) }
-            val people = cast + crew
-            val peopleDto = people.map {
-                if (isMovie) it.toDto(movieId = id) else it.toDto(seriesId = id)
-            }
-            localDataSource.storePeople(peopleDto)
-            people
-        }
-    }
 
     override suspend fun getPeopleByMovieId(movieId: Int) = SafeCall {
-        handle(
-            id = movieId,
-            isMovie = true,
-            getPeople = { localDataSource.getPeopleByMovieId(movieId).map { it.toMovieCredits() } },
-            exe = { remoteDataSource.getCreditsByMovieId(movieId) }
-        )
+        val content = ContentType.Movie(movieId, remoteDataSource)
+        getPeopleForContent(content)
     }
 
     override suspend fun getPeopleByShowId(seriesId: Int) = SafeCall {
-        val localPeople = localDataSource.getPeopleBySeriesId(seriesId).map { it.toMovieCredits() }
+        val content = ContentType.Series(seriesId, remoteDataSource)
+        getPeopleForContent(content)
+    }
 
-        localPeople.ifEmpty {
-            val response = remoteDataSource.getCreditsBySeriesId(seriesId)
+    private suspend fun getPeopleForContent(content: ContentType): List<Person> {
+        val cachedPeople = loadPeopleFromCache(content)
+        return cachedPeople.ifEmpty { fetchAndCachePeople(content) }
+    }
 
-            val cast = response.cast.map { it.toMovieCredits(PersonType.CAST) }
-            val crew = response.crew.map { it.toMovieCredits(PersonType.CREW) }
+    private suspend fun fetchAndCachePeople(content: ContentType): List<Person> {
+        val credits = content.fetchCredits()
 
-            val people = cast + crew
+        val cast = credits.cast.map { it.toEntity(PersonType.CAST) }
+        val crew = credits.crew.map { it.toEntity(PersonType.CREW) }
+        val people = cast + crew
 
-            val peopleDto = people.map { it.toDto(seriesId = seriesId) }
+        val dtos = people.map { content.toDto(it) }
 
-            localDataSource.storePeople(peopleDto)
+        localDataSource.storePeople(dtos)
 
-            people
+        return people
+    }
+
+    private suspend fun loadPeopleFromCache(
+        content: ContentType
+    ): List<Person> {
+        val cachedDtos = when (content) {
+            is ContentType.Movie -> localDataSource.getPeopleByMovieId(content.id)
+            is ContentType.Series -> localDataSource.getPeopleBySeriesId(content.id)
         }
+        return cachedDtos.map(PersonCacheDto::toEntity)
     }
 
     override suspend fun getPersonDetails(personId: Int) = SafeCall {
         withContext(Dispatchers.IO) {
             val details = async { remoteDataSource.getPersonDetails(personId) }
             val images = async { remoteDataSource.getPersonImages(personId) }
-            val movies = async { remoteDataSource.getPersonMovieCredits(personId) }
-            val shows = async { remoteDataSource.getPersonTvCredits(personId) }
+            val media = async { remoteDataSource.getPersonMediaCredits(personId) }
+            val socialMedia = async { remoteDataSource.getPersonSocialMedia(personId) }
             Person(
                 id = personId,
                 name = details.await().name,
+                imageUrl = BASE_IMAGE_URL + details.await().profilePath,
                 role = details.await().knownForDepartment,
+                birthday = details.await().birthday,
+                placeOfBirth = details.await().placeOfBirth,
+                biography = details.await().biography,
                 images = images.await().toImageList(),
-                movieCredits = movies.await().toMovieCredits(),
-                tvCredits = shows.await().toTvCredits()
+                personCredits = media.await().map(PersonCreditDto::toEntity),
+                socialMedia = socialMedia.await().toEntity()
             )
         }
     }

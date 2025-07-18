@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -59,22 +60,27 @@ fun DefaultTextField(
     endIcon: @Composable (() -> Unit)? = null,
     label: String? = null,
     maxLines: Int = 1,
+    maxCharacters: Int = 25,
     errorMessage: String? = null,
+    readOnly: Boolean = false,
     isPassword: Boolean = false,
+    focusRequester: FocusRequester = FocusRequester(),
+    onClicked: () -> Unit = {},
     onStartIconClick: ((String) -> Unit)? = null,
     onForgotPasswordClick: () -> Unit = {},
-    onFocusChanged: (Boolean) -> Unit = {}
+    onFocusChanged: (Boolean) -> Unit = {},
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
-    val focusRequester = remember { FocusRequester() }
-    //val focusManager = LocalFocusManager.current
-
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(isFocused) {
         onFocusChanged(isFocused)
+        if (isFocused && readOnly) {
+            onClicked()
+            focusManager.clearFocus()
+        }
     }
-
 
     val hasError = errorMessage != null
     var showPassword by remember { mutableStateOf(false) }
@@ -129,8 +135,10 @@ fun DefaultTextField(
                     .fillMaxHeight()
                     .focusRequester(focusRequester),
                 interactionSource = interactionSource,
+                readOnly = readOnly,
                 value = value,
-                onValueChange = onValueChange,
+                maxLines = maxLines,
+                onValueChange = { if (it.length <= maxCharacters) onValueChange(it) },
                 textStyle = Theme.textStyle.body.md.medium,
                 visualTransformation = if (!isPassword)
                     VisualTransformation.None
@@ -145,7 +153,6 @@ fun DefaultTextField(
                         color = Theme.color.shade.tertiary
                     )
                 },
-                maxLines = maxLines,
                 colors = TextFieldColors(
                     unfocusedBorderColor = Color.Transparent,
                     focusedBorderColor = Color.Transparent,

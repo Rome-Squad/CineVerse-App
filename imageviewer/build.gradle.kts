@@ -35,27 +35,18 @@ android {
     buildFeatures {
         compose = true
     }
+
+    lint {
+        disable.add("MutableCollectionMutableState")
+    }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    // Compose UI
     implementation(libs.ui)
     implementation(libs.androidx.foundation)
-
-    // Coil for image loading
     implementation(libs.coil.kt.coil.compose)
-
-    implementation(libs.coil.compose)
-
-    // TensorFlow Lite
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.support)
+    implementation(libs.koin.androidx.compose)
 }

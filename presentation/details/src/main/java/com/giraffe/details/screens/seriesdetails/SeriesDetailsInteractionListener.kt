@@ -10,4 +10,10 @@ interface SeriesDetailsInteractionListener {
     fun onClickMovie(movieId: Int)
     fun onClickAddToCollection()
     fun onClickCreateCollection()
+
+    fun onDismissAddToCollectionBottomSheet()
+
+    fun onDismissLoginBottomSheet()
+
+    fun onDismissGiveStarsBottomSheet()
 }

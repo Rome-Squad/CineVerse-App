@@ -1,19 +1,18 @@
 package com.giraffe.media.series
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.entity.SeriesGenre
-import com.giraffe.media.series.entity.SeriesReview
-import com.giraffe.media.series.mapper.toCachedDto
+import com.giraffe.media.series.mapper.toDto
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
-import com.giraffe.media.series.mapper.toSeriesEntity
-import com.giraffe.media.series.mapper.toSeriesReviewsEntity
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.model.dto.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
-import com.giraffe.media.util.SafeCall
+import com.giraffe.media.utils.SafeCall
 
 class SeriesRepositoryImpl(
     private val remote: SeriesRemoteDataSource,
@@ -28,7 +27,7 @@ class SeriesRepositoryImpl(
             }
         } else {
             val remoteSeries = remote.getSeriesByName(seriesName)
-            val cachedSeries = remoteSeries.map { it.toCachedDto() }
+            val cachedSeries = remoteSeries.map { it.toDto() }
 
             local.saveSearchResult(
                 seriesList = cachedSeries
@@ -38,15 +37,14 @@ class SeriesRepositoryImpl(
         }
     }
 
-    override suspend fun getSeriesGenres(): List<SeriesGenre> = SafeCall {
-        val cachedGenres = local.getCachedGenres()
-        if (cachedGenres.isNotEmpty()) {
-            cachedGenres.map { it.toEntity() }
-        } else {
-            val remoteGenres = remote.getGenres().map { it.toEntity() }
-            local.saveGenres(remoteGenres.map { it.toCachedDto() })
-            remoteGenres
-        }
+    override suspend fun getSeriesGenres(): List<Genre> = SafeCall {
+        local.getCachedGenres()
+            .map(SeriesGenreCacheDto::toEntity)
+            .ifEmpty {
+                remote.getGenres()
+                    .map(GenreDto::toEntity)
+                    .also { local.saveGenres(it.map(Genre::toDto)) }
+            }
     }
 
     override suspend fun getRecentSeries(): List<Series> = SafeCall {
@@ -66,15 +64,19 @@ class SeriesRepositoryImpl(
 
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
-        remote.getSeriesDetails(seriesId).toSeriesEntity()
+        remote.getSeriesDetails(seriesId).toEntity()
     }
 
     override suspend fun getSeasonOfSeries(seriesId: Int): List<Season> = SafeCall {
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int, page: Int): List<SeriesReview> = SafeCall {
-        remote.getSeriesReviews(seriesId, page).toSeriesReviewsEntity()
+    override suspend fun getSeriesByGenre(genreId: Int) = SafeCall {
+        remote.getSeriesByGenre(genreId).map { it.toEntity() }
+    }
+
+    override suspend fun getSeriesReviews(seriesId: Int) = SafeCall {
+        remote.getSeriesReviews(seriesId).toEntity()
     }
 
     override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {

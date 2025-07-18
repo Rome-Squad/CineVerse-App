@@ -1,7 +1,8 @@
 package com.giraffe.details.components
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,25 +11,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
+import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.R
 
 @Composable
 fun StaffInfoSection(
     title: String,
-    onShowMoreClick: () -> Unit,
-    staffList: List<StaffMember>,
+    staffList: Map<String, List<String>>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -43,34 +40,25 @@ fun StaffInfoSection(
                 text = title,
                 color = Theme.color.shade.primary,
                 style = Theme.textStyle.title.sm,
-            )
-
-            Text(
-                text = stringResource(R.string.show_more),
-                color = Theme.color.brand.primary,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .clickable { onShowMoreClick() },
-                style = Theme.textStyle.body.md.medium
+                modifier = Modifier.padding(bottom = 12.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Card(
+        CustomCard(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(Theme.radius.lg),
-            colors = CardDefaults.cardColors(containerColor = Theme.color.background.card)
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                staffList.forEachIndexed { index, staff ->
-                    StaffItem(name = staff.name, role = staff.role)
+                staffList.entries.toList().forEachIndexed { index, (key, value) ->
+                    val name = value.joinToString(",")
+                    StaffItem(name = name, role = key)
 
-                    if (index != staffList.lastIndex) {
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = Theme.color.stroke.primary,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                    if (index != staffList.entries.size - 1) {
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Theme.color.stroke.primary)
                         )
                     }
                 }
@@ -98,30 +86,30 @@ fun StaffItem(name: String, role: String) {
         Text(
             text = name,
             style = Theme.textStyle.body.md.medium,
-            color = Theme.color.shade.primary
+            color = Theme.color.shade.primary,
+            maxLines = 2,
+            modifier = Modifier.weight(1f),
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
+
 data class StaffMember(
     val name: String,
     val role: String
 )
+
 @Preview(
     name = "StaffInfoSection Preview - Dark",
     showBackground = false,
-    apiLevel = 34
+    // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionDark() {
     CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Behind the Scenes",
-            onShowMoreClick = {},
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
@@ -129,19 +117,31 @@ fun PreviewStaffInfoSectionDark() {
 @Preview(
     name = "StaffInfoSection Preview - Light",
     showBackground = true,
-    apiLevel = 34
+    // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionLight() {
     CineVerseTheme(isDarkTheme = false) {
         StaffInfoSection(
             title = "Behind the Scenes",
-            onShowMoreClick = {},
-            staffList = listOf(
-                StaffMember(name = "John Doe", role = "Director"),
-                StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
-                StaffMember(name = "Mike Johnson", role = "Writer")
-            )
+            staffList = groupedStaff
         )
     }
 }
+
+val staffList = listOf(
+    StaffMember(name = "John Doe", role = "Director"),
+    StaffMember(name = "Christopher Nolan", role = "Director, Screenplay, Story"),
+    StaffMember(name = "Mike Johnson", role = "Writer")
+)
+
+val groupedStaff: Map<String, List<String>> = staffList
+    .flatMap { staff ->
+        staff.role.split(", ").map { role ->
+            role to staff.name
+        }
+    }
+    .groupBy(
+        keySelector = { it.first },
+        valueTransform = { it.second }
+    )

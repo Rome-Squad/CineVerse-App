@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,17 +34,18 @@ fun AddToCollectionContent(
     isLoading: Boolean = false
 ) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.bottomSheetCard)
             .padding(start = 16.dp, end = 12.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
+            modifier = modifier
                 .align(Alignment.CenterStart)
                 .fillMaxWidth()
-                .padding(end = 24.dp)
+                .padding(start = 16.dp, end = 12.dp)
+
         ) {
             Icon(
                 painter = painterResource(id = Theme.icons.dueTone.folder),
@@ -93,9 +94,8 @@ fun PreviewAddToCollectionContentDark() {
         AddToCollectionContent(
             title = "My Folder",
             isLoading = true,
-            modifier = Modifier
-                .width(304.dp)
-                .height(48.dp)
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+
         )
     }
 }

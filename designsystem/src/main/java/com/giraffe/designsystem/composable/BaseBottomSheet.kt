@@ -43,7 +43,8 @@ fun BaseBottomSheet(
             sheetState = sheetState,
             modifier = modifier,
             shape = RoundedCornerShape(Theme.radius.xl),
-            contentColor = Theme.color.background.bottomSheet
+            contentColor = Theme.color.background.bottomSheet,
+            containerColor = Theme.color.background.bottomSheet
         ) {
             Column(
                 modifier = Modifier

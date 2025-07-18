@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,14 +22,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,23 +49,25 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainDetails(
-    actorImage: Painter,
     actorName: String,
     actorBirthday: String,
     actorPlaceOfBirth: String,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    modifier: Modifier = Modifier,
     onYoutubeClick: () -> Unit,
     onFacebookClick: () -> Unit,
     onInstagramClick: () -> Unit,
-
-    ) {
+    actorImageUrl: String?,
+    modifier: Modifier = Modifier,
+    hasYoutube: Boolean = false,
+    hasFacebook: Boolean = false,
+    hasInstagram: Boolean = false,
+) {
     val singleSpace = " "
     val key = "_KEY"
     with(sharedTransitionScope) {
@@ -81,26 +84,42 @@ fun MainDetails(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    modifier = Modifier
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = actorImage.toString() + key),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
-                        .height(80.dp)
-                        .width(64.dp)
-                        .clip(
-                            shape = RoundedCornerShape(
-                                topStart = Theme.radius.xl,
-                                topEnd = Theme.radius.s,
-                                bottomStart = Theme.radius.s,
-                                bottomEnd = Theme.radius.xl
+                actorImageUrl?.let {
+                    val shapeImage = RoundedCornerShape(
+                        topStart = Theme.radius.xl,
+                        topEnd = Theme.radius.s,
+                        bottomStart = Theme.radius.s,
+                        bottomEnd = Theme.radius.xl
+                    )
+                    SafeIslamicImage(
+                        imageUrl = it,
+                        contentDescription = actorName,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = actorImageUrl + key),
+                                animatedVisibilityScope = animatedVisibilityScope
                             )
+                            .size(height = 80.dp, width = 64.dp)
+                            .clip(shape = shapeImage)
+                            .fillMaxHeight(),
+                    ) {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.image),
+                            contentDescription = actorName,
+                            tint = Theme.color.brand.secondary,
+                            modifier = Modifier
+                                .size(height = 80.dp, width = 64.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Theme.color.stroke.primary,
+                                    shape = shapeImage
+                                )
+                                .clip(shape = shapeImage)
+                                .wrapContentSize()
                         )
-                        .fillMaxHeight(),
-                    painter = actorImage,
-                    contentDescription = stringResource(R.string.actor_image)
-                )
+                    }
+                }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         style = Theme.textStyle.title.md,
@@ -128,30 +147,36 @@ fun MainDetails(
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                SocialMediaComponent(
-                    modifier = Modifier
-                        .weight(1f),
-                    image = painterResource(Theme.icons.colored.youtube),
-                    name = stringResource(R.string.youtube),
-                    contentDescription = stringResource(R.string.youtube_icon),
-                    onClick = onYoutubeClick
-                )
-                SocialMediaComponent(
-                    modifier = Modifier
-                        .weight(1f),
-                    image = painterResource(Theme.icons.colored.facebook),
-                    name = stringResource(R.string.facebook),
-                    contentDescription = stringResource(R.string.facebook_icon),
-                    onClick = onFacebookClick
-                )
-                SocialMediaComponent(
-                    modifier = Modifier
-                        .weight(1f),
-                    image = painterResource(Theme.icons.colored.instagram),
-                    name = stringResource(R.string.instgram),
-                    contentDescription = stringResource(R.string.instagram_icon),
-                    onClick = onInstagramClick
-                )
+                if (hasYoutube) {
+                    SocialMediaComponent(
+                        modifier = Modifier
+                            .weight(1f),
+                        image = painterResource(Theme.icons.colored.youtube),
+                        name = stringResource(R.string.youtube),
+                        contentDescription = stringResource(R.string.youtube_icon),
+                        onClick = onYoutubeClick
+                    )
+                }
+                if (hasFacebook) {
+                    SocialMediaComponent(
+                        modifier = Modifier
+                            .weight(1f),
+                        image = painterResource(Theme.icons.colored.facebook),
+                        name = stringResource(R.string.facebook),
+                        contentDescription = stringResource(R.string.facebook_icon),
+                        onClick = onFacebookClick
+                    )
+                }
+                if (hasInstagram) {
+                    SocialMediaComponent(
+                        modifier = Modifier
+                            .weight(1f),
+                        image = painterResource(Theme.icons.colored.instagram),
+                        name = stringResource(R.string.instagram),
+                        contentDescription = stringResource(R.string.instagram_icon),
+                        onClick = onInstagramClick
+                    )
+                }
             }
         }
     }
@@ -171,6 +196,7 @@ fun SocialMediaComponent(
             .clip(shape = RoundedCornerShape(Theme.radius.full))
             .background(Theme.color.shade.quinary)
             .clickable(onClick = onClick)
+            .wrapContentSize()
             .padding(
                 start = 10.dp,
                 end = 12.dp,
@@ -196,10 +222,10 @@ fun SocialMediaComponent(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainDetailsHeader(
-    actorImage: Painter,
     actorName: String,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    actorImageUrl: String?,
     modifier: Modifier = Modifier,
 ) {
     val key = "_KEY"
@@ -216,18 +242,34 @@ fun MainDetailsHeader(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = modifier.padding(start = 40.dp)
             ) {
-                Image(
-                    painter = actorImage,
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = actorImage.toString() + key),
-                            animatedVisibilityScope = animatedVisibilityScope
+                actorImageUrl?.let {
+                    SafeIslamicImage(
+                        imageUrl = it,
+                        contentDescription = actorName,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = actorImageUrl + key),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    ) {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.image),
+                            contentDescription = actorName,
+                            tint = Theme.color.brand.secondary,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    Theme.color.background.card,
+                                    shape = CircleShape
+                                )
+                                .padding(12.dp)
+                                .wrapContentSize(),
                         )
-                        .size(40.dp)
-                        .clip(CircleShape)
-                )
+                    }
+                }
                 Text(
                     style = Theme.textStyle.title.md,
                     color = Theme.color.shade.primary,
@@ -239,7 +281,12 @@ fun MainDetailsHeader(
                         )
                 )
             }
-            HorizontalDivider(thickness = 1.dp, color = Theme.color.stroke.primary)
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Theme.color.stroke.primary)
+            )
         }
     }
 }
@@ -284,23 +331,26 @@ fun MainDetailsPreview() {
                 ) { targetState ->
                     when (targetState) {
                         true -> MainDetailsHeader(
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
                         )
 
                         false -> MainDetails(
-                            modifier = Modifier.padding(top = 72.dp),
-                            actorImage = R.drawable.gallery_item2.imageSourceToPainter(),
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
-                            animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
+                            animatedVisibilityScope = this@AnimatedContent,
                             onYoutubeClick = {},
                             onFacebookClick = {},
-                            onInstagramClick = {}
+                            onInstagramClick = {},
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
+                            modifier = Modifier.padding(top = 72.dp),
+                            hasYoutube = true,
+                            hasFacebook = true,
+                            hasInstagram = true
                         )
                     }
                 }

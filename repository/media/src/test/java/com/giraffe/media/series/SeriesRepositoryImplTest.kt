@@ -2,12 +2,12 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.model.CachedSeasonDto
-import com.giraffe.media.series.model.CachedSeriesDto
-import com.giraffe.media.series.model.CachedSeriesGenreDto
-import com.giraffe.media.series.model.GenreDto
-import com.giraffe.media.series.model.SeriesDto
+import com.giraffe.media.series.model.dto.SeasonCacheDto
+import com.giraffe.media.series.model.dto.SeriesCacheDto
+import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
+import com.giraffe.media.series.model.dto.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -60,15 +60,15 @@ class SeriesRepositoryImplTest {
     )
 
     private val cachedSeries = listOf(
-        CachedSeriesDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
+        SeriesCacheDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
     )
 
     private val cachedSeasons = listOf(
-        CachedSeasonDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
+        SeasonCacheDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
     )
 
     private val cachedGenres = listOf(
-        CachedSeriesGenreDto(1, "Action")
+        SeriesGenreCacheDto(1, "Action",0)
     )
 
     @Before
@@ -113,7 +113,7 @@ class SeriesRepositoryImplTest {
         val result = repository.getSeriesGenres()
 
         assertThat(result).hasSize(1)
-        assertThat(result.first().name).isEqualTo("Action")
+        assertThat(result.first().title).isEqualTo("Action")
         coVerify(exactly = 0) { remote.getGenres() }
     }
 
@@ -125,7 +125,7 @@ class SeriesRepositoryImplTest {
         val result = repository.getSeriesGenres()
 
         assertThat(result).hasSize(1)
-        assertThat(result.first().name).isEqualTo("Action")
+        assertThat(result.first().title).isEqualTo("Action")
         coVerify { local.saveGenres(match { it.first().id == 1 }) }
     }
 
