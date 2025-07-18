@@ -76,7 +76,9 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre> = SafeCall {
-        local.getCachedGenresByIds(genreIDs).map { it.toEntity() }
+        local.getCachedGenresByIds(genreIDs).map { it.toEntity() }.ifEmpty {
+            remote.getGenres().filter { it.id in genreIDs }.map(GenreDto::toEntity)
+        }
     }
 
     override suspend fun getSeriesReviews(seriesId: Int) = SafeCall {
