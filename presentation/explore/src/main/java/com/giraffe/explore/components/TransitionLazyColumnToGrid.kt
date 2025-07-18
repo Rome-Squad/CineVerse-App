@@ -26,7 +26,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.explore.components.PosterHorizontal
 import com.giraffe.media.explore.components.PosterVertically
 
 @OptIn(ExperimentalSharedTransitionApi::class)
