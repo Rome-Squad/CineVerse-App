@@ -49,7 +49,7 @@ class SeriesRemoteDataSourceImp(
         private const val GENRES_TV = "genre/tv/list"
         private const val QUERY = "query"
         private const val PAGE = "page"
-        private const val WITH_GENRES_KEY = "withGenresKey"
+        private const val WITH_GENRES_KEY = "with_genres"
         private const val RECOMMENDATIONS = "recommendations"
     }
 }
