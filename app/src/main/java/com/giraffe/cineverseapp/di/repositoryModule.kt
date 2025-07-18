@@ -8,26 +8,13 @@ import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
 import  com.giraffe.media.movie.MoviesRepositoryImpl
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<ExploreRepository> { ExploreRepositoryImpl(get(), get()) }
-    single<SeriesRepository> { SeriesRepositoryImpl(get(), get()) }
-
-    single<ExploreRepository> {
-        ExploreRepositoryImpl(
-            cache = get(),
-            remote = get()
-        )
-    }
-
-    single<MoviesRepository> {
-        MoviesRepositoryImpl(
-            cache = get(),
-            remote = get(),
-            sessionManager = get()
-        )
-    }
-
-    single<PersonRepository> { PersonRepositoryImpl(get(), get()) }
+    singleOf(::ExploreRepositoryImpl) bind ExploreRepository::class
+    singleOf(::SeriesRepositoryImpl) bind SeriesRepository::class
+    singleOf(::MoviesRepositoryImpl) bind MoviesRepository::class
+    singleOf(::PersonRepositoryImpl) bind PersonRepository::class
 }

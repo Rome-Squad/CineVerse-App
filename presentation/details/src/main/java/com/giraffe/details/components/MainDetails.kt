@@ -65,6 +65,9 @@ fun MainDetails(
     onInstagramClick: () -> Unit,
     actorImageUrl: String?,
     modifier: Modifier = Modifier,
+    hasYoutube: Boolean = false,
+    hasFacebook: Boolean = false,
+    hasInstagram: Boolean = false,
 ) {
     val singleSpace = " "
     val key = "_KEY"
@@ -145,30 +148,36 @@ fun MainDetails(
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                SocialMediaComponent(
-                    modifier = Modifier
-                        .weight(1f),
-                    image = painterResource(Theme.icons.colored.youtube),
-                    name = stringResource(R.string.youtube),
-                    contentDescription = stringResource(R.string.youtube_icon),
-                    onClick = onYoutubeClick
-                )
-                SocialMediaComponent(
-                    modifier = Modifier
-                        .weight(1f),
-                    image = painterResource(Theme.icons.colored.facebook),
-                    name = stringResource(R.string.facebook),
-                    contentDescription = stringResource(R.string.facebook_icon),
-                    onClick = onFacebookClick
-                )
-                SocialMediaComponent(
-                    modifier = Modifier
-                        .weight(1f),
-                    image = painterResource(Theme.icons.colored.instagram),
-                    name = stringResource(R.string.instagram),
-                    contentDescription = stringResource(R.string.instagram_icon),
-                    onClick = onInstagramClick
-                )
+                if (hasYoutube) {
+                    SocialMediaComponent(
+                        modifier = Modifier
+                            .weight(1f),
+                        image = painterResource(Theme.icons.colored.youtube),
+                        name = stringResource(R.string.youtube),
+                        contentDescription = stringResource(R.string.youtube_icon),
+                        onClick = onYoutubeClick
+                    )
+                }
+                if (hasFacebook) {
+                    SocialMediaComponent(
+                        modifier = Modifier
+                            .weight(1f),
+                        image = painterResource(Theme.icons.colored.facebook),
+                        name = stringResource(R.string.facebook),
+                        contentDescription = stringResource(R.string.facebook_icon),
+                        onClick = onFacebookClick
+                    )
+                }
+                if (hasInstagram) {
+                    SocialMediaComponent(
+                        modifier = Modifier
+                            .weight(1f),
+                        image = painterResource(Theme.icons.colored.instagram),
+                        name = stringResource(R.string.instagram),
+                        contentDescription = stringResource(R.string.instagram_icon),
+                        onClick = onInstagramClick
+                    )
+                }
             }
         }
     }
@@ -325,16 +334,19 @@ fun MainDetailsPreview() {
                         )
 
                         false -> MainDetails(
-                            modifier = Modifier.padding(top = 72.dp),
-                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
-                            animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
+                            animatedVisibilityScope = this@AnimatedContent,
                             onYoutubeClick = {},
                             onFacebookClick = {},
-                            onInstagramClick = {}
+                            onInstagramClick = {},
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
+                            modifier = Modifier.padding(top = 72.dp),
+                            hasYoutube = true,
+                            hasFacebook = true,
+                            hasInstagram = true
                         )
                     }
                 }

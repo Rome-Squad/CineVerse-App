@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -46,9 +45,7 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StaffMember
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.components.sampleCastList
-import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.imageSourceToPainter
-import com.giraffe.details.utils.getCurrentLocalDate
 import com.giraffe.details.utils.getCurrentLocalDateTime
 
 
@@ -130,16 +127,19 @@ fun MainDetailsPreview() {
                         )
 
                         false -> MainDetails(
-                            modifier = Modifier.padding(top = 72.dp),
-                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
-                            animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
+                            animatedVisibilityScope = this@AnimatedContent,
                             onYoutubeClick = {},
                             onFacebookClick = {},
-                            onInstagramClick = {}
+                            onInstagramClick = {},
+                            actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
+                            modifier = Modifier.padding(top = 72.dp),
+                            hasYoutube = true,
+                            hasFacebook = true,
+                            hasInstagram = true
                         )
                     }
                 }

@@ -44,15 +44,8 @@ val useCaseModule = module {
     singleOf(::InsertSearchKeywordUseCase)
     singleOf(::DeleteKeywordUseCase)
     singleOf(::ClearSearchHistoryUseCase)
+    singleOf(::ExploreUseCases)
 
-    single {
-        ExploreUseCases(
-            getSearchKeywords = get(),
-            insertSearchKeyword = get(),
-            deleteSearchKeyword = get(),
-            clearSearchHistory = get()
-        )
-    }
 
     // Series UseCases
     singleOf(::ClearRecentSeriesUseCase)
@@ -76,29 +69,12 @@ val useCaseModule = module {
     singleOf(::GetMovieGenresUseCase)
 
     // NEW: Add UseCases for Movie Details and Rating
-    single { GetMovieDetailsUseCase(get()) }
-    single { GetMovieReviewsUseCase(get()) }
-    single { AddMovieRatingUseCase(get()) }
-    single { GetUserMovieRatingUseCase(get()) }
+    singleOf(::GetMovieDetailsUseCase)
+    singleOf(::GetMovieReviewsUseCase)
+    singleOf(::AddMovieRatingUseCase)
+    singleOf(::GetUserMovieRatingUseCase)
 
-    single {
-        MoviesUseCases(
-            searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
-            getMoviesGenresUseCase = GetMoviesGenresUseCase(get()),
-            getMoviesByGenresUseCase = GetMoviesByGenresUseCase(get()),
-            insertMoviesUseCase = InsertMoviesUseCase(get()),
-            insertGenresUseCase = InsertGenresUseCase(get()),
-            clearCacheUseCase = ClearCacheUseCase(get()),
-            setMovieRecentUseCase = SetMovieRecentUseCase(get()),
-            getRecentlyMovies = GetRecentlyMoviesUseCase(get()),
-            clearRecentlyMovies = ClearRecentlyMoviesUseCase(get()),
-            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
-            getMovieDetailsUseCase = GetMovieDetailsUseCase(get()),
-            getMovieReviewsUseCase = GetMovieReviewsUseCase(get()),
-            addMovieRatingUseCase = AddMovieRatingUseCase(get()),
-            getUserMovieRatingUseCase = GetUserMovieRatingUseCase(get())
-        )
-    }
+    singleOf(::MoviesUseCases)
 
     // Person UseCases
     singleOf(::ClearRecentPeopleUseCase)
