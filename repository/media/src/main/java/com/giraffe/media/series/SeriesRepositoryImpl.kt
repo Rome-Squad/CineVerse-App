@@ -1,15 +1,16 @@
 package com.giraffe.media.series
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.mapper.toDto
-import com.giraffe.media.entity.Review
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
+import com.giraffe.media.series.model.CachedSeriesGenreDto
+import com.giraffe.media.series.model.GenreDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 
@@ -37,15 +38,13 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun getSeriesGenres(): List<Genre> = SafeCall {
-
-        val cachedGenres = local.getCachedGenres()
-        if (cachedGenres.isNotEmpty()) {
-            cachedGenres.map { it.toEntity() }
-        } else {
-            val remoteGenres = remote.getGenres().map { it.toEntity() }
-            local.saveGenres(remoteGenres.map { it.toDto() })
-            remoteGenres
-        }
+        local.getCachedGenres()
+            .map(CachedSeriesGenreDto::toEntity)
+            .ifEmpty {
+                remote.getGenres()
+                    .map(GenreDto::toEntity)
+                    .also { local.saveGenres(it.map(Genre::toDto)) }
+            }
     }
 
     override suspend fun getRecentSeries(): List<Series> = SafeCall {
@@ -72,7 +71,11 @@ class SeriesRepositoryImpl(
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getSeriesReviews(seriesId: Int): List<Review> = SafeCall {
+    override suspend fun getSeriesByGenre(genreId: Int) = SafeCall {
+        remote.getSeriesByGenre(genreId).map { it.toEntity() }
+    }
+
+    override suspend fun getSeriesReviews(seriesId: Int) = SafeCall {
         remote.getSeriesReviews(seriesId).toEntity()
     }
 

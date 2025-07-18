@@ -1,6 +1,7 @@
 package com.giraffe.media.util
 
 import android.database.CursorIndexOutOfBoundsException
+import android.database.StaleDataException
 import android.database.sqlite.SQLiteException
 import com.giraffe.media.exception.CorruptDatabaseException
 import com.giraffe.media.exception.DiskAccessException
@@ -37,7 +38,7 @@ private fun mapToMediaException(throwable: Throwable): MediaException = when (th
     is SQLiteException,
     is SQLException,
     is CursorIndexOutOfBoundsException,
-    is android.database.StaleDataException -> CorruptDatabaseException()
+    is StaleDataException -> CorruptDatabaseException()
 
     is IOException -> DiskAccessException()
 

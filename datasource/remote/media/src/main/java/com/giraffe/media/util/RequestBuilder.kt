@@ -1,6 +1,14 @@
 package com.giraffe.media.util
 
-import com.giraffe.media.exception.*
+import com.giraffe.media.exception.ApiException
+import com.giraffe.media.exception.ClientErrorException
+import com.giraffe.media.exception.InvalidIdException
+import com.giraffe.media.exception.MediaException
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.exception.RequestTimeoutException
+import com.giraffe.media.exception.SerializationException
+import com.giraffe.media.exception.ServerException
+import com.giraffe.media.exception.UnknownNetworkException
 import com.giraffe.media.person.util.ApiErrorResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -35,7 +43,7 @@ class RequestBuilder(
                     }
                 }
                 headers {
-                    append(AUTHORIZATION, "Bearer $accessToken")
+                    append(AUTHORIZATION, "$BEARER $accessToken")
                 }
             }
         }
@@ -49,8 +57,8 @@ class RequestBuilder(
                 else -> {
                     val errorBody = try {
                         response.body<ApiErrorResponse>()
-                    } catch (e: Exception) {
-                        ApiErrorResponse(response.status.value, "Unknown error" ,success = false)
+                    } catch (_: Exception) {
+                        ApiErrorResponse(response.status.value, "Unknown error", success = false)
                     }
                     throw ApiException(errorBody.statusCode)
                 }
@@ -83,5 +91,6 @@ class RequestBuilder(
 
     companion object {
         const val AUTHORIZATION = "Authorization"
+        const val BEARER = "Bearer"
     }
 }

@@ -2,15 +2,20 @@ package com.giraffe.media.person.mapper
 
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
+import com.giraffe.media.person.entity.PersonSocialMediaLinks
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.model.cacheDto.PersonCacheDto
 import com.giraffe.media.person.model.dto.CastDto
 import com.giraffe.media.person.model.dto.CrewDto
+import com.giraffe.media.person.model.dto.PersonCreditDto
 import com.giraffe.media.person.model.dto.PersonDto
-import com.giraffe.media.person.model.dto.PersonMovieCastItemDto
 import com.giraffe.media.person.model.dto.PersonProfileImageDto
-import com.giraffe.media.person.model.dto.PersonTvCastDto
+import com.giraffe.media.person.model.dto.PersonSocialMediaDto
+import com.giraffe.media.utils.AT_SYMBOLS_URL
 import com.giraffe.media.utils.BASE_IMAGE_URL
+import com.giraffe.media.utils.FACEBOOK_URL
+import com.giraffe.media.utils.INSTAGRAM_URL
+import com.giraffe.media.utils.YOUTUBE_URL
 
 
 fun PersonCacheDto.toEntity(type: PersonType = PersonType.CAST) = Person(
@@ -20,6 +25,7 @@ fun PersonCacheDto.toEntity(type: PersonType = PersonType.CAST) = Person(
     imageUrl = BASE_IMAGE_URL + imageUrl,
     type = type
 )
+
 fun Person.toDto() = PersonCacheDto(
     id = id,
     name = name,
@@ -52,28 +58,21 @@ fun CrewDto.toEntity(type: PersonType): Person = Person(
     type = type,
 )
 
-fun PersonProfileImageDto.toImageList(): List<String> {
-    return profiles.map { BASE_IMAGE_URL + it.filePath }
-}
+fun PersonCreditDto.toEntity(): PersonCredit = PersonCredit(
+    id = id,
+    title = title.orEmpty(),
+    posterPath = BASE_IMAGE_URL + posterPath,
+    voteAverage = voteAverage
+)
 
-fun List<PersonMovieCastItemDto>.toEntity(): List<PersonCredit> {
-    return map {
-        PersonCredit(
-            id = it.id,
-            title = it.title,
-            posterPath = BASE_IMAGE_URL + it.posterPath,
-            voteAverage = it.voteAverage
-        )
-    }
-}
+fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(
+    facebookLink = facebookId.prependIfNotBlank(FACEBOOK_URL),
+    instagramLink = instagramId.prependIfNotBlank(INSTAGRAM_URL),
+    youtubeLink = youtubeId.prependIfNotBlank(YOUTUBE_URL + AT_SYMBOLS_URL),
+)
 
-fun List<PersonTvCastDto>.toTvCredits(): List<PersonCredit> {
-    return map {
-        PersonCredit(
-            id = it.id,
-            title = it.name,
-            posterPath = BASE_IMAGE_URL + it.posterPath,
-            voteAverage = it.voteAverage
-        )
-    }
-}
+fun PersonProfileImageDto.toImageList(): List<String> =
+    profiles.map { BASE_IMAGE_URL + it.filePath }
+
+fun String?.prependIfNotBlank(prefix: String): String? =
+    this?.takeIf { it.isNotBlank() }?.let { prefix + it }

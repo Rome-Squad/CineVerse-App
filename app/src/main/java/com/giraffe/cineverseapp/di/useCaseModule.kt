@@ -32,6 +32,7 @@ import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
+import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
@@ -44,17 +45,10 @@ val useCaseModule = module {
     // Explore UseCases
     singleOf(::GetSearchKeywordsUseCase)
     singleOf(::InsertSearchKeywordUseCase)
-    singleOf(::DeleteSearchKeywordUseCase)
+    singleOf(::DeleteKeywordUseCase)
     singleOf(::ClearSearchHistoryUseCase)
+    singleOf(::ExploreUseCases)
 
-    single {
-        ExploreUseCases(
-            getSearchKeywords = get(),
-            insertSearchKeyword = get(),
-            deleteSearchKeyword = get(),
-            clearSearchHistory = get()
-        )
-    }
 
     // Series UseCases
     singleOf(::ClearRecentSeriesUseCase)
@@ -66,6 +60,7 @@ val useCaseModule = module {
     singleOf(::GetSeriesDetailsUseCase)
     singleOf(::GetLastSeasonsUseCase)
     singleOf(::GetSeriesReviewsUseCase)
+    singleOf(::GetSeriesByGenresUseCase)
 
     // Movie UseCases
     singleOf(::SearchMovieByNameUseCase)
@@ -80,29 +75,12 @@ val useCaseModule = module {
     singleOf(::GetMovieGenresUseCase)
 
     // NEW: Add UseCases for Movie Details and Rating
-    single { GetMovieDetailsUseCase(get()) }
-    single { GetMovieReviewsUseCase(get()) }
-    single { AddMovieRatingUseCase(get()) }
-    single { GetUserMovieRatingUseCase(get()) }
+    singleOf(::GetMovieDetailsUseCase)
+    singleOf(::GetMovieReviewsUseCase)
+    singleOf(::AddMovieRatingUseCase)
+    singleOf(::GetUserMovieRatingUseCase)
 
-    single {
-        MoviesUseCases(
-            searchMovieByNameUseCase = SearchMovieByNameUseCase(get()),
-            getMoviesGenresUseCase = GetMoviesGenresUseCase(get()),
-            getMoviesByGenresUseCase = GetMoviesByGenresUseCase(get()),
-            insertMoviesUseCase = InsertMoviesUseCase(get()),
-            insertGenresUseCase = InsertGenresUseCase(get()),
-            clearCacheUseCase = ClearCacheUseCase(get()),
-            setMovieRecentUseCase = SetMovieRecentUseCase(get()),
-            getRecentlyMovies = GetRecentlyMoviesUseCase(get()),
-            clearRecentlyMovies = ClearRecentlyMoviesUseCase(get()),
-            getMovieGenresUseCase = GetMovieGenresUseCase(get()),
-            getMovieDetailsUseCase = GetMovieDetailsUseCase(get()),
-            getMovieReviewsUseCase = GetMovieReviewsUseCase(get()),
-            addMovieRatingUseCase = AddMovieRatingUseCase(get()),
-            getUserMovieRatingUseCase = GetUserMovieRatingUseCase(get())
-        )
-    }
+    singleOf(::MoviesUseCases)
 
     // Person UseCases
     singleOf(::ClearRecentPeopleUseCase)

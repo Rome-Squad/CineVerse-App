@@ -26,7 +26,7 @@ class SeriesRoomLocalDateSourceTest {
         CachedSeasonDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
     )
     private val sampleGenres = listOf(
-        CachedSeriesGenreDto(1, "Action")
+        CachedSeriesGenreDto(id = 1, name = "Action", count = 1)
     )
 
     @Before
@@ -87,7 +87,7 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `saveGenres inserts genres`() = runTest {
-        val genres = listOf(CachedSeriesGenreDto(2, "Drama"))
+        val genres = listOf(CachedSeriesGenreDto(id = 2, name = "Drama", count = 2))
 
         dataSource.saveGenres(genres)
 

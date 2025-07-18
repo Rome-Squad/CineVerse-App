@@ -8,7 +8,10 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.entity.Review
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.model.CachedSeasonDto
+import com.giraffe.media.series.model.SeriesCacheDto
 import com.giraffe.media.series.model.CachedSeriesGenreDto
 import com.giraffe.media.series.model.GenreDto
 import com.giraffe.media.series.model.SeriesCacheDto
@@ -106,7 +109,7 @@ fun SeriesDto.toEntity(): Series {
         name = name,
         overview = overview,
         rating = voteAverage.toFloat(),
-        posterUrl = posterPath.orEmpty(),
+        posterUrl = BASE_IMAGE_URL + posterPath.orEmpty(),
         genreIDs = genreIds,
         releaseYear = firstAirDate,
         seasons = emptyList()
@@ -136,7 +139,7 @@ fun SeasonDto.toEntity(): Season {
         rating = voteAverage,
         posterUrl = BASE_IMAGE_URL + posterPath,
         seasonNumber = seasonNumber,
-        releaseYear = airDate?.toString() ?: "",
+        releaseYear = airDate ?: "",
         episodeCount = episodeCount
     )
 }
@@ -177,6 +180,8 @@ fun parseData(dateString: String): LocalDateTime? {
         null
     }
 }
+
+
 
 
 fun SeriesDetailsDto.toSeasonEntity(): List<Season> {
