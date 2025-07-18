@@ -19,7 +19,7 @@ val viewModelModule = module {
     viewModelOf(::CastDetailsViewModel)
     viewModelOf(::SeriesDetailsViewModel)
     viewModelOf(::SeasonsViewModel)
-    viewModel { (seriesId: Int) -> SeriesReviewViewModel(get(), seriesId) }
+    viewModel { (seriesId: Int) -> SeriesReviewViewModel(seriesId, get()) }
     viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::MovieDetailsViewModel)
     viewModelOf(::SearchResultViewModel)
