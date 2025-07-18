@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test
 class DeleteSearchKeywordUseCaseTest {
 
     private lateinit var repository: ExploreRepository
-    private lateinit var useCase: DeleteSearchKeywordUseCase
+    private lateinit var useCase: DeleteKeywordUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
-        useCase = DeleteSearchKeywordUseCase(repository)
+        useCase = DeleteKeywordUseCase(repository)
     }
 
     @Test
@@ -30,9 +30,9 @@ class DeleteSearchKeywordUseCaseTest {
         )
 
         // When
-        useCase(keyword)
+        useCase(keyword.keyword)
 
         // Then
-        coVerify { repository.deleteSearchKeyword(keyword) }
+        coVerify { repository.deleteKeyword(keyword.keyword) }
     }
 }

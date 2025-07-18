@@ -1,7 +1,7 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
-import com.giraffe.media.explore.usecase.DeleteSearchKeywordUseCase
+import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.ExploreUseCases
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
@@ -30,6 +30,7 @@ import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
@@ -41,7 +42,7 @@ val useCaseModule = module {
     // Explore UseCases
     singleOf(::GetSearchKeywordsUseCase)
     singleOf(::InsertSearchKeywordUseCase)
-    singleOf(::DeleteSearchKeywordUseCase)
+    singleOf(::DeleteKeywordUseCase)
     singleOf(::ClearSearchHistoryUseCase)
     singleOf(::ExploreUseCases)
 
@@ -53,6 +54,7 @@ val useCaseModule = module {
     singleOf(::SearchSeriesByNameUseCase)
     singleOf(::StoreRecentSeriesUseCase)
     singleOf(::GetRecommendedSeriesUseCase)
+    singleOf(::GetSeriesByGenresUseCase)
 
     // Movie UseCases
     singleOf(::SearchMovieByNameUseCase)

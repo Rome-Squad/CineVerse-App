@@ -1,8 +1,7 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,26 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-
 
 @Composable
 fun SearchItem(
     modifier: Modifier = Modifier,
     text: String,
-    isFromHistory: Boolean,
+    isRecent: Boolean,
+    postfixIcon: Painter,
     onClickItem: (item: String) -> Unit,
-    onClickIcon: () -> Unit
+    onClickIcon: () -> Unit,
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-
     Row(
         modifier = modifier
             .clickable { onClickItem(text) }
@@ -41,9 +38,8 @@ fun SearchItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = if (isFromHistory) Theme.icons.outline.history else Theme.icons.outline.search),
+            painter = painterResource(id = if (isRecent) Theme.icons.outline.history else Theme.icons.outline.search),
             contentDescription = "Search",
-
             modifier = Modifier.size(20.dp),
             tint = Theme.color.shade.tertiary
         )
@@ -55,10 +51,8 @@ fun SearchItem(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
         )
-
-
         Icon(
-            painter = painterResource(id = if (isFromHistory) Theme.icons.outline.close else Theme.icons.outline.arrowRightUp),
+            painter = postfixIcon,
             contentDescription = "Navigate",
             modifier = Modifier
                 .size(20.dp)
@@ -75,27 +69,4 @@ fun SearchItem(
         color = Theme.color.shade.quaternary,
         modifier = modifier
     )
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF121321)
-@Composable
-fun SearchItemPreview() {
-    CineVerseTheme(isDarkTheme = true) {
-        Column {
-            SearchItem(
-                text = "Batman",
-                isFromHistory = true,
-                modifier = Modifier,
-                onClickItem = {},
-                onClickIcon = {},
-            )
-            SearchItem(
-                text = "The Batman",
-                isFromHistory = false,
-                modifier = Modifier,
-                onClickItem = {},
-                onClickIcon = {},
-            )
-        }
-    }
 }
