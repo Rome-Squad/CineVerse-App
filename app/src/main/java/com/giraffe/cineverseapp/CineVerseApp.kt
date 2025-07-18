@@ -6,6 +6,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.giraffe.cineverseapp.di.databaseModule
+import com.giraffe.cineverseapp.di.featureApiModule
 import com.giraffe.cineverseapp.di.localDataSourceModule
 import com.giraffe.cineverseapp.di.networkModule
 import com.giraffe.cineverseapp.di.repositoryModule
@@ -40,7 +41,8 @@ class CineVerseApp : Application() {
                 repositoryModule,
                 useCaseModule,
                 viewModelModule,
-                imageViewerModule
+                imageViewerModule,
+                featureApiModule
             )
         }
 
