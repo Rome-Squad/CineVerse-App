@@ -59,13 +59,13 @@ fun CastDetailsScreen(
         events = castDetailsViewModel.effect,
     ) {
         when (it) {
-            is CastDetailsEffect.Error -> TODO()
+            is CastDetailsEffect.Error -> {}
             is CastDetailsEffect.OpenUrl -> {
                 val intent = Intent(Intent.ACTION_VIEW, it.url.toUri())
                 context.startActivity(intent)
             }
 
-            is CastDetailsEffect.NavigateToMovies -> TODO()
+            is CastDetailsEffect.NavigateToMovies -> {}
             is CastDetailsEffect.NavigateToGallery -> {
                 navController.navigateToGallery(it.actorName, it.imageUrls)
             }

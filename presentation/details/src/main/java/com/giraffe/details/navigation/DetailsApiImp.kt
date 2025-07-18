@@ -1,4 +1,4 @@
-package com.giraffe.details.screens.castDetails
+package com.giraffe.details.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -10,43 +10,45 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.giraffe.details.DetailsApi
+import com.giraffe.details.screens.castDetails.CastDetailsScreen
+import com.giraffe.details.screens.gallery.GalleryScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-private data class CastDetailsRoute(val personId: Int)
+data class CastDetailsRoute(val personId: Int)
 
 @Serializable
-private data class GallerRoute(val personId: Int)
+data class GallerRoute(val actorName: String, val imageUrls: List<String?>)
 
 @Serializable
-private data class CreditsRoute(val personId: Int)
+data class CreditsRoute(val personId: Int)
 
 @Serializable
-private data class MovieDetailsRoute(val movieId: Int)
+data class MovieDetailsRoute(val movieId: Int)
 
 @Serializable
-private data class MoviesRecommendedRoute(val movieId: Int)
+data class MoviesRecommendedRoute(val movieId: Int)
 
 @Serializable
-private data class MovieCastsRoute(val movieId: Int)
+data class MovieCastsRoute(val movieId: Int)
 
 @Serializable
-private data class MovieReviewsRoute(val movieId: Int)
+data class MovieReviewsRoute(val movieId: Int)
 
 @Serializable
-private data class SeriesDetailsRoute(val seriesId: Int)
+data class SeriesDetailsRoute(val seriesId: Int)
 
 @Serializable
-private data class RecommendedSeriesRoute(val seriesId: Int)
+data class RecommendedSeriesRoute(val seriesId: Int)
 
 @Serializable
-private data class SeriesCastsRoute(val seriesId: Int)
+data class SeriesCastsRoute(val seriesId: Int)
 
 @Serializable
-private data class SeriesReviewsRoute(val seriesId: Int)
+data class SeriesReviewsRoute(val seriesId: Int)
 
 @Serializable
-private data class SeasonsRoute(val seriesId: Int)
+data class SeasonsRoute(val seriesId: Int)
 
 
 class DetailsApiImp : DetailsApi {
@@ -102,12 +104,18 @@ class DetailsApiImp : DetailsApi {
     private fun NavGraphBuilder.createCastDetailsScreen(navController: NavHostController) {
         composable<CastDetailsRoute> {
             val personId = it.toRoute<CastDetailsRoute>().personId
+            CastDetailsScreen(personId, navController)
         }
     }
 
     private fun NavGraphBuilder.createGalleryScreen(navController: NavHostController) {
         composable<GallerRoute> {
-            val personId = it.toRoute<GallerRoute>().personId
+            val args = it.toRoute<GallerRoute>()
+            GalleryScreen(
+                actorName = args.actorName,
+                imageUrls = args.imageUrls,
+                navController = navController,
+            )
         }
     }
 
