@@ -1,7 +1,7 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
-import com.giraffe.media.explore.usecase.DeleteSearchKeywordUseCase
+import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.ExploreUseCases
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
