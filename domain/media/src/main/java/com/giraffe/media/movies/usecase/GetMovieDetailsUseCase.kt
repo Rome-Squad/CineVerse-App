@@ -7,7 +7,6 @@ class GetMovieDetailsUseCase(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(movieId: Int): Movie {
-        println("MovieDetails loadMovieDetails: $movieId")
         return repository.getMovieDetails(movieId)
     }
 }

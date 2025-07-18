@@ -36,6 +36,7 @@ class MovieDetailsViewModel(
         ) {
 
             val movie = getMovieDetails(movieId)
+            Log.d("TAG ViewModel", "loadMovieDetails: $movie")
             movie
         }
 

@@ -1,5 +1,6 @@
 package  com.giraffe.media.movie
 
+import android.util.Log
 import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
@@ -13,8 +14,10 @@ import com.giraffe.media.util.RequestBuilder
 class MoviesRemoteDataSourceImp(
     private val requestBuilder: RequestBuilder
 ) : MoviesRemoteDataSource {
-    override suspend fun getMovieById(movieId: Int) =
-        requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")
+    override suspend fun getMovieById(movieId: Int): MovieDto {
+        Log.e("TAGG", "getMovieById: ${requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")}")
+        return requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")
+    }
 
     override suspend fun getMoviesByName(movieName: String) =
         requestBuilder.get<MoviesListResponse>(
