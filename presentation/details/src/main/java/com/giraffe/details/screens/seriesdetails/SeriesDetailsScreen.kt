@@ -42,6 +42,7 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.utils.TypeOfScreen
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.min
 
@@ -56,11 +57,11 @@ fun SeriesDetailsScreen(
     val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(seriesID) {
-        viewModel.loadSeriesDetails(seriesID)
-        viewModel.loadSeason(seriesID)
-        viewModel.loadRecommendedSeries(seriesID, 1)
-        viewModel.loadSeriesReviews(seriesID)
-        viewModel.loadSeriesPeople(seriesID)
+        launch {  viewModel.loadSeriesDetails(seriesID) }
+        launch {  viewModel.loadSeason(seriesID) }
+        launch {  viewModel.loadRecommendedSeries(seriesID, 1) }
+        launch {  viewModel.loadSeriesReviews(seriesID) }
+        launch {  viewModel.loadSeriesPeople(seriesID) }
     }
 
     Box(
@@ -219,12 +220,6 @@ fun SeriesDetailsContent(
                     }
                 }
             }
-
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            )
         }
     }
 
@@ -232,7 +227,7 @@ fun SeriesDetailsContent(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = onDismissAddToCollectionBottomSheet,
         title = stringResource(com.giraffe.details.R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             AddToCollectionContent(
                 title = "My Favorite TV",
@@ -256,7 +251,7 @@ fun SeriesDetailsContent(
         isVisible = state.isVisibleGiveStarsBottomSheet,
         onDismiss = onDismissAddRatingBottomSheet,
         title = stringResource(com.giraffe.details.R.string.rate_the_movie),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally

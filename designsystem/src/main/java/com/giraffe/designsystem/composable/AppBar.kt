@@ -16,11 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -78,6 +81,8 @@ fun AppBar(
 @Composable
 private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
     if (showBackButton) {
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        val rotationAngle = if (isRtl) 180f else 0f
         Icon(
             painter = painterResource(Theme.icons.outline.arrowLeft),
             contentDescription = "",
@@ -86,7 +91,7 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
                 .size(24.dp)
                 .clickable(
                     onClick = onBackButtonClick
-                ),
+                ).graphicsLayer(rotationZ = rotationAngle)
         )
     }
 }
@@ -135,6 +140,8 @@ private fun Title(title: String?,modifier: Modifier) {
 @Composable
 private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit,modifier: Modifier = Modifier) {
     painter?.let {
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        val rotationAngle = if (isRtl) 180f else 0f
         Icon(
             painter = it,
             contentDescription = "",
@@ -145,7 +152,7 @@ private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit,modifier: Modi
                 .clickable(
                     enabled = true,
                     onClick = onEndIconClick
-                ),
+                ).graphicsLayer(rotationZ = rotationAngle)
         )
     }
 }

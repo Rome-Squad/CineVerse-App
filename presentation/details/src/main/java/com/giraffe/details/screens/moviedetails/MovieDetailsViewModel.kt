@@ -36,6 +36,7 @@ class MovieDetailsViewModel(
         ) {
 
             val movie = getMovieDetails(movieId)
+            Log.d("TAG ViewModel", "loadMovieDetails: $movie")
             movie
         }
 
@@ -97,8 +98,8 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMoviePeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST }
-        val crew = people.filter { it.type == PersonType.CREW }
+        val cast = people.filter { it.type == PersonType.CAST } . take(10)
+        val crew = people.filter { it.type == PersonType.CREW } . take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(

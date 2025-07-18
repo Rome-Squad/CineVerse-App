@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.details.DetailsNavGraph
+import com.giraffe.explore.nav.ExploreNavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,10 +15,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-                //ExploreNavGraph()
-
                 val navController = rememberNavController()
                 DetailsNavGraph(navController = navController)
+
+               // ExploreNavGraph()
             }
         }
     }
