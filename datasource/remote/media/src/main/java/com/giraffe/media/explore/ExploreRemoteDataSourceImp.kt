@@ -1,7 +1,7 @@
 package com.giraffe.media.explore
 
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
-import com.giraffe.media.explore.model.SearchKeywordResponse
+import com.giraffe.media.explore.response.SearchKeywordResponse
 import com.giraffe.media.util.RequestBuilder
 
 class ExploreRemoteDataSourceImp(

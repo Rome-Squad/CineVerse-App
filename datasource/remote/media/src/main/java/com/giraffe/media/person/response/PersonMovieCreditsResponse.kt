@@ -1,6 +1,6 @@
 package com.giraffe.media.person.response
 
-import com.giraffe.media.person.model.dto.PersonCreditDto
+import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import kotlinx.serialization.Serializable
 
 @Serializable

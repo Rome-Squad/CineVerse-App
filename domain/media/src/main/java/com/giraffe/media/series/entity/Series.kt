@@ -7,7 +7,7 @@ data class Series(
     val overview: String,
     val rating: Float,
     val posterUrl: String,
-    val genreIDs: List<Int>,
+    val genreIDs: List<Int> = emptyList(),
     val releaseYear: String,
     val seasons: List<Season> = emptyList(),
 )

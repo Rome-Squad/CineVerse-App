@@ -1,16 +1,16 @@
 package com.giraffe.media.movie
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.mapper.toEntity
-import com.giraffe.media.movie.model.cacheDto.MovieCacheDto
-import com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
-import com.giraffe.media.movie.model.dto.MovieDto
-import com.giraffe.media.movie.model.dto.MovieGenreDto
-import com.giraffe.media.movie.model.dto.MovieReviewDto
-import com.giraffe.media.movie.model.dto.RatingRequest
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.datasource.remote.dto.MovieDto
+import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
+import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
@@ -108,6 +108,6 @@ class MoviesRepositoryImpl(
     }
 
     private suspend fun getSessionId() = SafeCall {
-        sessionManager.createGuestSessionId() ?: throw NoInternetException()
+        sessionManager.createGuestSessionId() ?: throw NoInternetDataException()
     }
 }

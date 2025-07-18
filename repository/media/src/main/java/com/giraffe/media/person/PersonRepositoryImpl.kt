@@ -7,9 +7,9 @@ import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.mapper.toDto
 import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageList
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
-import com.giraffe.media.person.model.dto.PersonCreditDto
-import com.giraffe.media.person.model.dto.PersonDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType

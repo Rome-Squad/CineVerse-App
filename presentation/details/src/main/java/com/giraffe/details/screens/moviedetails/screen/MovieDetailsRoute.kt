@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.giraffe.details.screens.moviedetails.model.ReviewUI
+import com.giraffe.details.models.ReviewUI
 
 const val MOVIES_ROUTE = "movieDetails"
 private const val MOVIE_ID_ARG = "movieID"
@@ -21,9 +21,10 @@ fun NavGraphBuilder.movieDetailsRoute(
 ) {
     composable(
         "$MOVIES_ROUTE/{${MOVIE_ID_ARG}}", arguments = listOf(
-        navArgument(MOVIE_ID_ARG) {
-            type = NavType.IntType
-        })) { backStackEntry ->
+            navArgument(MOVIE_ID_ARG) {
+                type = NavType.IntType
+            })
+    ) { backStackEntry ->
         val movieID = backStackEntry.arguments?.getInt(MOVIE_ID_ARG) ?: 268
         MovieDetailsScreen(
             navController = navController, movieID = movieID,

@@ -1,5 +1,6 @@
-package com.giraffe.media.explore.model
+package com.giraffe.media.explore.response
 
+import com.giraffe.media.explore.datasource.remote.dto.SearchKeywordDto
 import kotlinx.serialization.Serializable
 
 @Serializable
