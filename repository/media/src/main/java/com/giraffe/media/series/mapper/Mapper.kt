@@ -2,16 +2,16 @@ package com.giraffe.media.series.mapper
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeasonDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.model.dto.GenreDto
-import com.giraffe.media.series.model.dto.SeasonCacheDto
-import com.giraffe.media.series.model.dto.SeriesCacheDto
-import com.giraffe.media.series.model.dto.SeriesGenreCacheDto
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -48,46 +48,14 @@ fun SeriesGenreCacheDto.toEntity() = Genre(
     rank = count
 )
 
-fun Series.toCachedDto(): SeriesCacheDto {
-    return SeriesCacheDto(
-        id = id,
-        name = name,
-        overview = overview,
-        rate = rating,
-        posterUrl = posterUrl,
-        genresID = genreIDs,
-        releaseYear = releaseYear,
-    )
-}
 
-fun Season.toCachedDto(seriesId: Int): SeasonCacheDto {
-    return SeasonCacheDto(
-        id = id,
-        seriesId = seriesId,
-        name = "",
-        overview = overview,
-        rate = rating,
-        posterUrl = posterUrl,
-        seasonNumber = seasonNumber,
-        releaseYear = releaseYear,
-        numberOfEpisodes = episodeCount
-    )
-}
-
-fun Genre.toDto(): SeriesGenreCacheDto {
-    return SeriesGenreCacheDto(
-        id = id,
-        name = title,
-        count = rank
-    )
-}
-fun Genre.toDto() = SeriesGenreCacheDto(
+fun Genre.toCacheDto() = SeriesGenreCacheDto(
     id = id,
     name = title,
     count = rank
 )
 
-fun SeriesDto.toDto() = SeriesCacheDto(
+fun SeriesDto.toCacheDto() = SeriesCacheDto(
     id = id,
     name = name,
     overview = overview,
@@ -116,35 +84,17 @@ fun GenreDto.toEntity() = Genre(
 
 fun SeasonDto.toEntity() = Season(
     id = id,
-    name = name,
     overview = overview,
     rating = voteAverage,
-    posterUrl = posterPath.toString(),
+    posterUrl = BASE_IMAGE_URL + posterPath,
     seasonNumber = seasonNumber,
     releaseYear = airDate ?: "",
     episodeCount = episodeCount
 )
-fun GenreDto.toCachedDto(): SeriesGenreCacheDto {
-    return SeriesGenreCacheDto(
-        id = id,
-        name = name,
-        count = 0
-    )
-}
-
-fun SeasonDto.toEntity() = Season(
-        id = id,
-        overview = overview,
-        rating = voteAverage,
-        posterUrl = BASE_IMAGE_URL + posterPath,
-        seasonNumber = seasonNumber,
-        releaseYear = airDate ?: "",
-        episodeCount = episodeCount
-    )
 
 fun SeriesDetailsDto.toEntity() = Series(
     id = id,
-    posterUrl = posterPath,
+    posterUrl = BASE_IMAGE_URL + posterPath,
     name = name,
     genreIDs = genres.map { it.id },
     rating = voteAverage.toFloat(),
@@ -152,28 +102,16 @@ fun SeriesDetailsDto.toEntity() = Series(
     overview = overview,
     seasons = seasons.map { it.toEntity() }
 )
-fun SeriesDetailsDto.toEntity() = Series(
-        id = id,
-        posterUrl = BASE_IMAGE_URL + posterPath,
-        name = name,
-        genreIDs = genres.map { it.id },
-        rating = voteAverage.toFloat(),
-        releaseYear = firstAirDate,
-        overview = overview,
-        seasons = seasons.map { it.toEntity() }
-    )
 
-fun List<ReviewDto>.toEntity() = map { item ->
-    Review(
-        id = item.id,
-        authorImageUrl = item.authorDetails.avatarPath,
-        authorName = item.authorDetails.name,
-        authorUserName = item.authorDetails.username,
-        content = item.content,
-        rating = item.authorDetails.rating,
-        createdAt = parseData(item.createdAt)
-    )
-}
+fun ReviewDto.toEntity() = Review(
+    id = id,
+    authorImageUrl = authorDetails.avatarPath,
+    authorName = authorDetails.name,
+    authorUserName = authorDetails.username,
+    content = content,
+    rating = authorDetails.rating,
+    createdAt = parseData(createdAt)
+)
 
 @OptIn(ExperimentalTime::class)
 fun parseData(dateString: String): LocalDateTime? {
@@ -186,12 +124,10 @@ fun parseData(dateString: String): LocalDateTime? {
 }
 
 
-
 fun SeriesDetailsDto.toSeasonEntity() = seasons.map {
     Season(
         id = it.id,
         posterUrl = it.posterPath.toString(),
-        name = it.name,
         rating = it.voteAverage,
         releaseYear = it.airDate ?: "",
         overview = it.overview,
