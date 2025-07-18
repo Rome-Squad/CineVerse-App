@@ -44,8 +44,8 @@ import org.koin.androidx.compose.koinViewModel
 fun MovieDetailsScreen(
     movieID: Int,
     navController: NavController,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
     modifier: Modifier = Modifier,
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     viewModel: MovieDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -58,7 +58,7 @@ fun MovieDetailsScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 MovieDetailsEffect.NavigateToMovies -> {
-                    navController.navigateToMovieDetails(movieID)
+                    //navController.navigateToMovieDetails(movieID)
                 }
 
                 is MovieDetailsEffect.NavigateToReviews -> {

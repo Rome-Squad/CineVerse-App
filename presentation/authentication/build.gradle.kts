@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -34,6 +35,9 @@ android {
 
 dependencies {
     implementation(project(":designsystem"))
+    implementation(project(":imageviewer"))
+    implementation(project(":api:authentication"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
