@@ -1,6 +1,7 @@
 package com.giraffe.media.movie.mapper
 
 
+import android.util.Log
 import com.giraffe.media.movies.entity.Movie
 import  com.giraffe.media.movie.model.cacheDto.MovieCacheDto
 import  com.giraffe.media.movie.model.dto.MovieDetailsDto
@@ -38,7 +39,15 @@ fun Movie.toDto(): MovieCacheDto {
 }
 
 fun MovieDto.toEntity(): Movie {
+    val fakeDate = "00-00-0000"
+    try {
+        LocalDate.parse(fakeDate)
+    } catch (e: Exception) {
+        Log.e("Test", "Expected error!", e)
+    }
+
     val date = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
+
     return Movie(
         id = id,
         title = title,
@@ -51,7 +60,15 @@ fun MovieDto.toEntity(): Movie {
     )
 }
 
+
 fun MovieDetailsDto.toEntity(): Movie {
+    val fakeDate = "00-00-0000"
+    try {
+        LocalDate.parse(fakeDate)
+    } catch (e: Exception) {
+        Log.e("Test", "Expected error!", e)
+    }
+
     return Movie(
         id = id,
         title = title,
@@ -60,7 +77,12 @@ fun MovieDetailsDto.toEntity(): Movie {
         duration = runtime,
         posterUrl = posterPath,
         genresID = genres.toMovieGenreId(),
-        releaseYear = LocalDate.parse(releaseDate)
+        releaseYear = try {
+            LocalDate.parse(releaseDate)
+        } catch (e: Exception) {
+            Log.e("MovieMapper", "Invalid date: $releaseDate", e)
+            null
+        }
     )
 }
 

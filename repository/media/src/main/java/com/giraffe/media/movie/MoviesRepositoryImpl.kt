@@ -62,11 +62,11 @@ class MoviesRepositoryImpl(
     }
 
     override suspend fun insertMovies(movie: List<Movie>) = SafeCall {
-        cache.insertMovies(movie.map (Movie::toDto))
+        cache.insertMovies(movie.map(Movie::toDto))
     }
 
     override suspend fun insertGenres(genres: List<Genre>) = SafeCall {
-        cache.insertMovieGenres(genres.map (Genre::toDto))
+        cache.insertMovieGenres(genres.map(Genre::toDto))
     }
 
     override suspend fun setMovieRecent(movie: Movie, isRecent: Boolean) = SafeCall {
