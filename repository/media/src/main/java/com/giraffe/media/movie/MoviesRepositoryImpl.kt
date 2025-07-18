@@ -1,21 +1,20 @@
 package com.giraffe.media.movie
 
-import android.util.Log
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
-import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import com.giraffe.media.movie.mapper.toDto
+import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
-import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.user.SessionManager
 
 class MoviesRepositoryImpl(
@@ -36,8 +35,11 @@ class MoviesRepositoryImpl(
 
 
     override suspend fun getMovieGenres(genreIds: List<Int>) = SafeCall {
-        cache.getMovieGenres(genreIds).map { it.toEntity() }.ifEmpty {
-            remote.getMovieGenres().map(MovieGenreDto::toEntity)
+        if (genreIds.isNotEmpty()) {
+            cache.incrementInteractionCountForGenres(genreIds)
+        }
+        cache.getMovieGenres(genreIds).filter { it.id in genreIds }.map { it.toEntity() }.ifEmpty {
+            remote.getMovieGenres().filter { it.id in genreIds }.map(MovieGenreDto::toEntity)
         }
     }
 
