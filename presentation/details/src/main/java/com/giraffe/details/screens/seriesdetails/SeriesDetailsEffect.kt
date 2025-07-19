@@ -9,4 +9,7 @@ sealed interface SeriesDetailsEffect {
 
     data class NavigateToSeasons(val seriesId: Int) :
         SeriesDetailsEffect
+
+    data class NavigateToSeriesDetails(val seriesId: Int) :
+        SeriesDetailsEffect
 }

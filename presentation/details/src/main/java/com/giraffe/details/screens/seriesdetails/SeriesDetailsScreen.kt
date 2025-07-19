@@ -41,11 +41,10 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.navigation.RecommendedSeriesRoute
 import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.seasons.navigateToSeasons
 import com.giraffe.details.utils.EventListener
-import com.giraffe.details.navigation.RecommendedSeriesRoute
-import com.giraffe.details.navigation.SeriesDetailsRoute
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -74,6 +73,10 @@ fun SeriesDetailsScreen(
             is SeriesDetailsEffect.NavigateToSeasons -> navController.navigateToSeasons(
                 seriesId = it.seriesId
             )
+
+            is SeriesDetailsEffect.NavigateToSeriesDetails -> navController.navigateToSeriesDetails(
+                seriesId = it.seriesId
+            )
         }
     }
     Box(
@@ -89,10 +92,6 @@ fun SeriesDetailsScreen(
         AnimatedVisibility(!state.isLoadingSeason) {
             SeriesDetailsContent(
                 state = state,
-                onAddToCollectionClick = viewModel::onClickAddToCollection,
-                onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
-                onGiveStarClick = viewModel::onClickGiveStars,
-                onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
                 interaction = viewModel,
                 navController = navController,
                 onBackButtonClick = onBackButtonClick
@@ -105,10 +104,6 @@ fun SeriesDetailsScreen(
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
     navController: NavController,
-    onAddToCollectionClick: () -> Unit,
-    onDismissAddToCollectionBottomSheet: () -> Unit,
-    onGiveStarClick: () -> Unit,
-    onDismissAddRatingBottomSheet: () -> Unit,
     interaction: SeriesDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -129,7 +124,7 @@ fun SeriesDetailsContent(
                 image = state.seriesDetails.posterUrl,
                 genres = state.genres,
                 releaseYear = state.seriesDetails.releaseYear,
-                onClickAdd = onAddToCollectionClick,
+                onClickAdd = interaction::onClickAddToCollection,
                 onClickPlay = {},
                 isScrolled = scrollState.value > 0,
                 durationAnimation = 2000
@@ -154,7 +149,7 @@ fun SeriesDetailsContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.latest_seasons),
                 clickableText = stringResource(R.string.show_more),
-                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id)}
+                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
 
             )
             AnimatedVisibility(state.seasons.isNotEmpty()) {
@@ -175,32 +170,43 @@ fun SeriesDetailsContent(
                     }
                 }
             }
+            AnimatedVisibility(state.cast.isNotEmpty()) {
+                StarCastSection(
+                    title = stringResource(R.string.star_cast),
+                    onShowMoreClick = {},
+                    castList = state.cast,
+                    onCastClick = { interaction.navigateToCastDetailsScreen(it) }
+                )
+            }
 
-            StarCastSection(
-                title = stringResource(R.string.star_cast),
-                onShowMoreClick = {},
-                castList = state.cast,
-                onCastClick = { interaction.navigateToCastDetailsScreen(it) }
-            )
+            AnimatedVisibility(state.crew.isNotEmpty()) {
+                StaffInfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.behind_the_scenes),
+                    staffList = state.crew
+                )
+            }
 
-            StaffInfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.behind_the_scenes),
-                staffList = state.crew
-            )
-
-            MoviesListSection(
-                title = stringResource(R.string.you_might_also_like),
-                endText = stringResource(R.string.show_more),
-                movies = state.recommendedSeries,
-                onClickEndText = {    navController.navigate(RecommendedSeriesRoute(state.seriesDetails.id, state.seriesDetails.name))
-                },
-                onClickPoster = {navController.navigateToSeriesDetails(state.seriesDetails.id)}
-            )
+            AnimatedVisibility(state.recommendedSeries.isNotEmpty()) {
+                MoviesListSection(
+                    title = stringResource(R.string.you_might_also_like),
+                    endText = stringResource(R.string.show_more),
+                    movies = state.recommendedSeries,
+                    onClickEndText = {
+                        navController.navigate(
+                            RecommendedSeriesRoute(
+                                state.seriesDetails.id,
+                                state.seriesDetails.name
+                            )
+                        )
+                    },
+                    onClickPoster = { interaction.navigateToSeriesDetailsScreen(it) }
+                )
+            }
 
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                onClickCard = onGiveStarClick
+                onClickCard = interaction::onClickGiveStars
             )
 
             AnimatedVisibility(
@@ -246,7 +252,7 @@ fun SeriesDetailsContent(
 
     BaseBottomSheet(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
-        onDismiss = onDismissAddToCollectionBottomSheet,
+        onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
@@ -270,7 +276,7 @@ fun SeriesDetailsContent(
 
     BaseBottomSheet(
         isVisible = state.isVisibleGiveStarsBottomSheet,
-        onDismiss = onDismissAddRatingBottomSheet,
+        onDismiss = interaction::onDismissGiveStarsBottomSheet,
         title = stringResource(R.string.rate_the_movie),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {

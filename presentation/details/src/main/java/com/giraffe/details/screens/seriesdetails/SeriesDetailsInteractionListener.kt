@@ -18,5 +18,6 @@ interface SeriesDetailsInteractionListener {
 
 
     fun navigateToCastDetailsScreen(personId: Int)
-    fun navigateToSeasonsScreen(personId: Int)
+    fun navigateToSeasonsScreen(seriesId: Int)
+    fun navigateToSeriesDetailsScreen(seriesId: Int)
 }

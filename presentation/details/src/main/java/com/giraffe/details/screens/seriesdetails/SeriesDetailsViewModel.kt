@@ -294,4 +294,12 @@ class SeriesDetailsViewModel(
             )
         )
     }
+
+    override fun navigateToSeriesDetailsScreen(seriesId: Int) {
+        sendEffect(
+            SeriesDetailsEffect.NavigateToSeriesDetails(
+                seriesId = seriesId
+            )
+        )
+    }
 }

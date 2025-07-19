@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.details.navigation.DetailsApiImp
 import com.giraffe.explore.navigation.ExploreApiImp
 
@@ -14,10 +15,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppNavigation(
-                exploreApi = ExploreApiImp(),
-                detailsApi = DetailsApiImp()
-            )
+            CineVerseTheme {
+                AppNavigation(
+                    exploreApi = ExploreApiImp(),
+                    detailsApi = DetailsApiImp()
+                )
+            }
         }
     }
 }
