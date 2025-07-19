@@ -8,13 +8,14 @@ interface DetailsApi {
 
     fun navigateToMovieDetails(movieId: Int)
 
-    fun navigateToSeriesDetails(seriesId: Int)
+    //fun navigateToSeriesDetails(seriesId: Int)
 
-    fun navigateToPersonDetails(personId: Int)
+    //fun navigateToPersonDetails(personId: Int)
 
     @Composable
-    fun detailsContainer(
-        modifier: Modifier = Modifier
+    fun DetailsContainer(
+        modifier: Modifier = Modifier,
+        startDestination: DetailsStartDestination
     )
 
 }

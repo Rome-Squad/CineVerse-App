@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
-import com.giraffe.details.DetailsNavGraph
+import com.giraffe.details.DetailsStartDestination
 import com.giraffe.details.MOVIE_ID
 import com.giraffe.details.screens.moviedetails.screen.MOVIES_ROUTE
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
@@ -27,26 +27,26 @@ class DetailsApiImp : DetailsApi {
 
     }
 
-    override fun navigateToSeriesDetails(seriesId: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun navigateToPersonDetails(personId: Int) {
-        TODO("Not yet implemented")
-    }
-
     @Composable
-    override fun detailsContainer(
-        modifier: Modifier
+    override fun DetailsContainer(
+        modifier: Modifier,
+        startDestination: DetailsStartDestination
     ) {
         val navController: NavHostController = rememberNavController()
 
         LaunchedEffect(Unit) {
             detailsNavController = navController
         }
+
+        val startDestinationRoute = when (startDestination) {
+            is DetailsStartDestination.Movie -> "$MOVIES_ROUTE/${startDestination.movieId}"
+            is DetailsStartDestination.Series -> "SERIES_ROUTE/${startDestination.seriesId}"
+            is DetailsStartDestination.Cast -> "CAST_ROUTE/${startDestination.castId}"
+        }
+
         NavHost(
             navController = navController,
-            startDestination = "$MOVIES_ROUTE/${MOVIE_ID}",
+            startDestination = startDestinationRoute,
             modifier = modifier
         ){
             movieDetailsRoute(navController, navigateToReviews = {reviews->
@@ -57,4 +57,12 @@ class DetailsApiImp : DetailsApi {
         }
     }
 
+    /*
+        override fun navigateToSeriesDetails(seriesId: Int) {
+
+        }
+
+        override fun navigateToPersonDetails(personId: Int) {
+
+        }*/
 }
