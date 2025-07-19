@@ -18,4 +18,6 @@ sealed interface MovieDetailsEffect {
     data class NavigateToCastDetails(val personId: Int) :
         MovieDetailsEffect
 
+    data class NavigateToMovieDetails(val movieId: Int) :
+        MovieDetailsEffect
 }

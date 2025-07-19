@@ -274,6 +274,14 @@ class MovieDetailsViewModel(
         )
     }
 
+    override fun navigateToMovieDetailsScreen(movieId: Int) {
+        sendEffect(
+            MovieDetailsEffect.NavigateToMovieDetails(
+                movieId = movieId
+            )
+        )
+    }
+
     override fun onCollectionClick() {
     }
 

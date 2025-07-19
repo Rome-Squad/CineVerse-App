@@ -218,25 +218,24 @@ fun SeriesDetailsContent(
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut()
             ) {
-                InfoSection(
+                SectionTitle(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.top_reviews),
-                    description = state.seriesDetails.overview
+                    title = stringResource(com.giraffe.details.R.string.top_reviews),
+                    clickableText = stringResource(com.giraffe.designsystem.R.string.show_more)
                 )
             }
 
             AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
 
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     for (index in 0..min(2, state.seriesReviews.size - 1)) {
                         val review = state.seriesReviews[index]
                         val padding = when (index) {
                             0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                            1 -> Modifier.padding(horizontal = 16.dp)
-                            2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                            1 -> Modifier.padding(horizontal = 16.dp).padding(bottom = 26.dp)
+                            2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 26.dp)
                             else -> Modifier
                         }
                         ReviewCard(

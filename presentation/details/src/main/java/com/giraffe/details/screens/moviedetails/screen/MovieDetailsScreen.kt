@@ -28,6 +28,7 @@ import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.Progress
+import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -45,6 +46,7 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.seriesdetails.navigateToSeriesDetails
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -79,6 +81,10 @@ fun MovieDetailsScreen(
                 MovieDetailsEffect.NavigateToLogin -> {}
                 is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToPersonDetails(
                     personID = effect.personId
+                )
+
+                is MovieDetailsEffect.NavigateToMovieDetails -> navController.navigateToMovieDetails(
+                    movieId = effect.movieId
                 )
             }
         }
@@ -158,13 +164,13 @@ private fun MovieDetailsContent(
                 .verticalScroll(scrollState)
                 .background(Theme.color.background.screen),
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             InfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.storyline),
                 description = state.movie.description
             )
+            AnimatedVisibility(state.cast.isNotEmpty()) {
 
             StarCastSection(
                 title = stringResource(R.string.star_cast),
@@ -172,21 +178,35 @@ private fun MovieDetailsContent(
                 onCastClick = { interaction.navigateToCastDetailsScreen(it) },
                 castList = state.cast
             )
+            }
 
-            StaffInfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.behind_the_scenes),
-                staffList = state.crew
-            )
+            AnimatedVisibility(state.crew.isNotEmpty()) {
 
-            MoviesListSection(
-                title = stringResource(R.string.you_might_also_like),
-                endText = stringResource(R.string.show_more),
-                movies = state.recommendedMovies,
+                StaffInfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.behind_the_scenes),
+                    staffList = state.crew
+                )
+            }
 
-                onClickEndText = {   navController.navigate(MoviesRecommendedRoute(state.movie.id, state.movie.title))
-                },
-                onClickPoster = {})
+            AnimatedVisibility(state.recommendedMovies.isNotEmpty()) {
+
+                MoviesListSection(
+                    title = stringResource(R.string.you_might_also_like),
+                    endText = stringResource(R.string.show_more),
+                    movies = state.recommendedMovies,
+
+                    onClickEndText = {
+                        navController.navigate(
+                            MoviesRecommendedRoute(
+                                state.movie.id,
+                                state.movie.title
+                            )
+                        )
+                    },
+                    onClickPoster = {interaction.navigateToMovieDetailsScreen(it)}
+                )
+            }
 
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -198,10 +218,10 @@ private fun MovieDetailsContent(
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut()
             ) {
-                InfoSection(
+                SectionTitle(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.top_reviews),
-                    description = state.movie.description
+                    title = stringResource(com.giraffe.details.R.string.top_reviews),
+                    clickableText = stringResource(com.giraffe.designsystem.R.string.show_more)
                 )
             }
 
@@ -215,8 +235,16 @@ private fun MovieDetailsContent(
                         val review = state.movieReviews[index]
                         val padding = when (index) {
                             0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                            1 -> Modifier.padding(horizontal = 16.dp)
-                            2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                            1 -> Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 26.dp)
+                            2 -> Modifier.padding(
+                                top = 12.dp,
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 26.dp
+                            )
+
                             else -> Modifier
                         }
                         ReviewCard(

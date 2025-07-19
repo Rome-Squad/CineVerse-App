@@ -119,15 +119,6 @@ fun ReviewDto.toEntity() = Review(
     },
 )
 
-@OptIn(ExperimentalTime::class)
-fun parseData(dateString: String): LocalDateTime? {
-    return try {
-        val instant = Instant.parse(dateString)
-        instant.toLocalDateTime(TimeZone.UTC)
-    } catch (_: Exception) {
-        null
-    }
-}
 
 
 fun SeriesDetailsDto.toSeasonEntity() = seasons.map {
