@@ -31,6 +31,8 @@ interface MoviesRepository {
 
     suspend fun getMovieDetails(movieId: Int): Movie
 
+    suspend fun getRecommendedMovie(movieId: Int, page: Int): List<Movie>
+
     suspend fun getMovieReviews(movieId: Int): List<Review>
 
     suspend fun addRating(movieId: Int, ratingValue: Float)

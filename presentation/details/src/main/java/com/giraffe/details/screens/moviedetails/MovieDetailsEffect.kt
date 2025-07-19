@@ -15,4 +15,7 @@ sealed interface MovieDetailsEffect {
 
     data class Error(val error: Throwable) : MovieDetailsEffect
 
+    data class NavigateToCastDetails(val personId: Int) :
+        MovieDetailsEffect
+
 }
