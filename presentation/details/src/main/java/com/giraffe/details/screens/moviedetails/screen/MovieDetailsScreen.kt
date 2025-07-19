@@ -46,7 +46,6 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
-import com.giraffe.details.screens.seriesdetails.navigateToSeriesDetails
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -172,12 +171,12 @@ private fun MovieDetailsContent(
             )
             AnimatedVisibility(state.cast.isNotEmpty()) {
 
-            StarCastSection(
-                title = stringResource(R.string.star_cast),
-                onShowMoreClick = {},
-                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
-                castList = state.cast
-            )
+                StarCastSection(
+                    title = stringResource(R.string.star_cast),
+                    onShowMoreClick = {},
+                    onCastClick = { interaction.navigateToCastDetailsScreen(it) },
+                    castList = state.cast
+                )
             }
 
             AnimatedVisibility(state.crew.isNotEmpty()) {
@@ -204,7 +203,7 @@ private fun MovieDetailsContent(
                             )
                         )
                     },
-                    onClickPoster = {interaction.navigateToMovieDetailsScreen(it)}
+                    onClickPoster = { interaction.navigateToMovieDetailsScreen(it) }
                 )
             }
 
@@ -238,6 +237,7 @@ private fun MovieDetailsContent(
                             1 -> Modifier
                                 .padding(horizontal = 16.dp)
                                 .padding(bottom = 26.dp)
+
                             2 -> Modifier.padding(
                                 top = 12.dp,
                                 start = 16.dp,
