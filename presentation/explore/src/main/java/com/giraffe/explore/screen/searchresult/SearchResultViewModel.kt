@@ -1,5 +1,9 @@
 package com.giraffe.explore.screen.searchresult
 
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.toPoster
@@ -87,10 +91,12 @@ class SearchResultViewModel(
     }
 
     private fun getActors() {
-        safeExecute {
-            searchPeopleByName(personName = query).let { actors ->
-                updateState { it.copy(actors = actors.map { actor -> actor.toUi() }) }
-            }
-        }
+        val pagingFlow = Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { SearchPeoplePagingSource(query, searchPeopleByName) }
+        ).flow.cachedIn(viewModelScope)
+
+        updateState { it.copy(actors = pagingFlow) }
     }
+
 }
