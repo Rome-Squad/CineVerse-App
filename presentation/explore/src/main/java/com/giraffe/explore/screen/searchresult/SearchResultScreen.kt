@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
@@ -52,6 +53,8 @@ fun SearchResultContent(
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
+    val lazyActors = state.actors?.collectAsLazyPagingItems()
+
     Box {
         LazyColumn(
             modifier = Modifier
@@ -83,30 +86,49 @@ fun SearchResultContent(
                     modifier = Modifier
                         .fillParentMaxHeight(),
                 ) {
-                    if (state.selectedTab == SearchTab.ACTORS) {
-                        if (state.actors.isNotEmpty()) {
-                            ActorsSection(
-                                actors = state.actors
-                            )
-                        } else {
-                            NothingFound(
-                                modifier = Modifier
-                                    .padding(horizontal = 60.dp)
-                                    .padding(top = 195.dp)
-                            )
+                    when (state.selectedTab) {
+                        SearchTab.ACTORS -> {
+                            if (lazyActors != null && lazyActors.itemCount > 0) {
+                                LazyVerticalGrid(
+                                    modifier = Modifier,
+                                    columns = GridCells.Fixed(3),
+                                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                    contentPadding = PaddingValues(16.dp)
+                                ) {
+                                    items(lazyActors.itemCount) { index ->
+                                        lazyActors[index]?.let { actor ->
+                                            CastItem(
+                                                name = actor.name,
+                                                imageUrl = actor.imageUrl
+                                            )
+                                        }
+                                    }
+                                }
+                            } else {
+                                NothingFound(
+                                    modifier = Modifier
+                                        .padding(horizontal = 60.dp)
+                                        .padding(top = 195.dp)
+                                )
+                            }
                         }
-                    } else if (state.selectedPosters.isNotEmpty()) {
-                        TransitionLazyColumnToGrid(
-                            poster = state.selectedPosters,
-                            isListSelected = !state.isGridSelected,
-                            contentPadding = PaddingValues(vertical = 16.dp),
-                        )
-                    } else {
-                        NothingFound(
-                            modifier = Modifier
-                                .padding(horizontal = 60.dp)
-                                .padding(top = 195.dp)
-                        )
+
+                        else -> {
+                            if (state.selectedPosters.isNotEmpty()) {
+                                TransitionLazyColumnToGrid(
+                                    poster = state.selectedPosters,
+                                    isListSelected = !state.isGridSelected,
+                                    contentPadding = PaddingValues(vertical = 16.dp),
+                                )
+                            } else {
+                                NothingFound(
+                                    modifier = Modifier
+                                        .padding(horizontal = 60.dp)
+                                        .padding(top = 195.dp)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -127,6 +149,7 @@ fun SearchResultContent(
         }
     }
 }
+
 
 @Composable
 fun ActorsSection(modifier: Modifier = Modifier, actors: List<ActorUi>) {
