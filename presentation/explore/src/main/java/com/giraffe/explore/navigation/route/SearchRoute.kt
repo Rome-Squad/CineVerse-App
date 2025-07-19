@@ -1,19 +1,25 @@
 package com.giraffe.explore.navigation.route
 
 import androidx.navigation.NavController
-import com.giraffe.explore.navigation.SearchRoute
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.giraffe.explore.screen.search.SearchScreen
 
-//const val SEARCH_ROUTE = "SEARCH_ROUTE"
+const val SEARCH_ROUTE = "SEARCH_ROUTE"
 
 
 fun NavController.navigateToSearch() {
-    navigate(SearchRoute)
+    navigate(SEARCH_ROUTE)
 }
 
-//fun NavGraphBuilder.searchRoute(navController: NavController) {
-//    composable(
-//        SEARCH_ROUTE,
-//    ) { backStackEntry ->
-//        SearchScreen(navController = navController)
-//    }
-//}
+fun NavGraphBuilder.searchRoute(navController: NavController) {
+    composable(
+        SEARCH_ROUTE,
+    ) { backStackEntry ->
+        SearchScreen(
+            navigateToSearchResult = {
+                navController.navigateToSearchResult(it)
+            }
+        )
+    }
+}

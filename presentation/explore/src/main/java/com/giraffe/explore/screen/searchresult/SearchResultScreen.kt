@@ -26,12 +26,12 @@ import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.NothingFound
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.screen.discover.SearchTab
-import com.giraffe.media.explore.components.CastItem
-import com.giraffe.media.explore.util.toTitle
+import com.giraffe.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -99,7 +99,8 @@ fun SearchResultContent(
                     if (state.selectedTab == SearchTab.ACTORS) {
                         if (state.actors.isNotEmpty()) {
                             ActorsSection(
-                                actors = state.actors
+                                actors = state.actors,
+                                navigateToCastDetails = navigateToCastDetails
                             )
                         } else {
                             NothingFound(
@@ -148,7 +149,11 @@ fun SearchResultContent(
 }
 
 @Composable
-fun ActorsSection(modifier: Modifier = Modifier, actors: List<ActorUi>) {
+fun ActorsSection(
+    modifier: Modifier = Modifier,
+    actors: List<ActorUi>,
+    navigateToCastDetails: (Int) -> Unit
+) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(3),
@@ -160,6 +165,9 @@ fun ActorsSection(modifier: Modifier = Modifier, actors: List<ActorUi>) {
             CastItem(
                 name = actor.name,
                 imageUrl = actor.imageUrl,
+                onClick = {
+                    navigateToCastDetails(actor.id)
+                }
             )
         }
     }

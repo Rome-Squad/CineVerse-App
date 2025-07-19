@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.giraffe.explore.navigation.route.DISCOVER_ROUTE
+/*
 
 private const val SCREEN_TRANSITION_MILLIS = 200
 
@@ -16,7 +18,7 @@ private const val SCREEN_TRANSITION_MILLIS = 200
 fun ExploreNavGraph(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
-        startDestination = DiscoverRoute,
+        startDestination = DISCOVER_ROUTE,
         enterTransition = { fadeIn(animationSpec = tween(SCREEN_TRANSITION_MILLIS)) },
         exitTransition = { fadeOut(animationSpec = tween(SCREEN_TRANSITION_MILLIS)) },
         popEnterTransition = { fadeIn(animationSpec = tween(SCREEN_TRANSITION_MILLIS)) },
@@ -28,4 +30,4 @@ fun ExploreNavGraph(navController: NavHostController = rememberNavController()) 
 //            createSearchResultScreen(navController)
 //        }
     }
-}
+}*/

@@ -12,3 +12,22 @@ import com.giraffe.explore.screen.discover.DiscoverScreen
 //        DiscoverScreen(navController = navController)
 //    }
 //}
+
+const val DISCOVER_ROUTE = "DISCOVER_ROUTE"
+
+fun NavController.navigateToDiscover() {
+    navigate(DISCOVER_ROUTE)
+}
+fun NavGraphBuilder.discoverRoute(
+    navController: NavController,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit
+) {
+    composable(DISCOVER_ROUTE) { backStackEntry ->
+        DiscoverScreen(
+            navController = navController,
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails
+        )
+    }
+}

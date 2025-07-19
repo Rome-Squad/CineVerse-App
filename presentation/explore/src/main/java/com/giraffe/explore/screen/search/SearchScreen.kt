@@ -35,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SearchScreen(
     navigateToSearchResult: (String) -> Unit,
-    onBackClick: () -> Unit,
+    onBackClick: () -> Unit = {},
     viewModel: SearchViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()

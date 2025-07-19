@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.giraffe.explore.nav.route.DISCOVER_ROUTE
-import com.giraffe.explore.nav.route.discoverRoute
-import com.giraffe.explore.nav.route.navigateToSearch
-import com.giraffe.explore.nav.route.navigateToSearchResult
-import com.giraffe.explore.nav.route.searchResultRoute
-import com.giraffe.explore.nav.route.searchRoute
+import com.giraffe.explore.navigation.route.DISCOVER_ROUTE
+import com.giraffe.explore.navigation.route.discoverRoute
+import com.giraffe.explore.navigation.route.navigateToSearch
+import com.giraffe.explore.navigation.route.navigateToSearchResult
+import com.giraffe.explore.navigation.route.searchResultRoute
+import com.giraffe.explore.navigation.route.searchRoute
 
-class ExploreApiImp: ExploreApi {
+class ExploreApiImp : ExploreApi {
     private var exploreNavController by mutableStateOf<NavHostController?>(null)
 
     override fun navigateToSearch() {
@@ -60,9 +60,11 @@ class ExploreApiImp: ExploreApi {
                 navigateToMovieDetails = navigateToMovieDetails,
                 navigateToSeriesDetails = navigateToSeriesDetails
             )
+
             searchRoute(
                 navController = navController
             )
+
             searchResultRoute(
                 navController = navController,
                 navigateToMovieDetails = navigateToMovieDetails,
