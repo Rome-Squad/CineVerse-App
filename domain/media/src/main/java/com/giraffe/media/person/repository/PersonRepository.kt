@@ -3,7 +3,7 @@ package com.giraffe.media.person.repository
 import com.giraffe.media.person.entity.Person
 
 interface PersonRepository {
-    suspend fun searchByName(personName: String): List<Person>
+    suspend fun searchByName(personName: String, page: Int): List<Person>
     suspend fun storeRecentPerson(person: Person)
     suspend fun getRecentPeople(): List<Person>
     suspend fun clearRecentPeople()

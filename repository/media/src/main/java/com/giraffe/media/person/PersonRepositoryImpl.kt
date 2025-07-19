@@ -23,9 +23,9 @@ class PersonRepositoryImpl(
     private val localDataSource: PersonLocalDataSource,
 ) : PersonRepository {
 
-    override suspend fun searchByName(personName: String) = SafeCall {
+    override suspend fun searchByName(personName: String,page:Int) = SafeCall {
         localDataSource.searchByName(personName).map(PersonCacheDto::toEntity).ifEmpty {
-            val people = remoteDataSource.searchByName(personName).map(PersonDto::toEntity)
+            val people = remoteDataSource.searchByName(personName,page).map(PersonDto::toEntity)
             localDataSource.storePeople(people.map(Person::toDto))
             people
         }
