@@ -1,5 +1,6 @@
 package com.giraffe.details.models
 
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.movies.entity.Movie
 import kotlinx.datetime.LocalDate
 
@@ -12,7 +13,21 @@ data class MovieUi(
     val genresID: List<Int> = emptyList(),
     val posterUrl: String? = null,
     val releaseYear: String = ""
-)
+) {
+    companion object {
+        fun fromEntity(movie: Movie): MovieUi = MovieUi(
+            id = movie.id,
+            title = movie.title,
+            description = movie.description,
+            rating = movie.rating,
+            duration = movie.duration,
+            posterUrl = movie.posterUrl,
+            genresID = movie.genresID,
+            releaseYear = movie.releaseYear.toString()
+        )
+    }
+}
+
 
 
 fun MovieUi.toMovieEntity() = Movie(
@@ -36,3 +51,15 @@ fun Movie.MovieUi()= MovieUi(
     genresID = genresID,
     releaseYear = releaseYear.toString()
 )
+
+fun MovieUi.toPoster(): Poster {
+    return Poster(
+        id = id,
+        name = title,
+        imageUri = posterUrl ?: "",
+        rating = rating,
+        genres = null,
+        time = duration?.let { "$it min" },
+        date = releaseYear
+    )
+}

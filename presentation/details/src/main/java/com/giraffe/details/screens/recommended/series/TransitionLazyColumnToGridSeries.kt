@@ -31,7 +31,7 @@ import com.giraffe.details.models.toPoster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun TransitionLazyColumnToGrid(
+fun TransitionLazyColumnToGridSeries(
     lazyPagingItems: LazyPagingItems<SeriesUi>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),

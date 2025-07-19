@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.details.components.recommended
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -16,29 +16,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.explore.components.PosterVertically
+import androidx.paging.compose.LazyPagingItems
+import com.giraffe.details.components.recomended.PosterHorizontal
+import com.giraffe.details.components.recomended.PosterVertically
+import com.giraffe.details.models.MovieUi
+import com.giraffe.details.models.toPoster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun TransitionLazyColumnToGrid(
-    poster: List<Poster>,
+fun TransitionLazyColumnToGridMovie(
+    lazyPagingItems: LazyPagingItems<MovieUi>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
-    onScroll: (isScrollingUp: Boolean) -> Unit = {},
-    onClick: (Int) -> Unit
+    onScroll: (isScrollingUp: Boolean) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
+
     LaunchedEffect(listState) {
         var previousIndex = listState.firstVisibleItemIndex
         var previousScrollOffset = listState.firstVisibleItemScrollOffset
@@ -46,14 +47,14 @@ fun TransitionLazyColumnToGrid(
             .collect { (index, offset) ->
                 if (index > previousIndex || (index == previousIndex && offset > previousScrollOffset)) {
                     onScroll(false)
-                } else if (index < previousIndex || (offset < previousScrollOffset)) {
+                } else if (index < previousIndex || offset < previousScrollOffset) {
                     onScroll(true)
                 }
-
                 previousIndex = index
                 previousScrollOffset = offset
             }
     }
+
     LaunchedEffect(gridState) {
         var previousIndex = gridState.firstVisibleItemIndex
         var previousScrollOffset = gridState.firstVisibleItemScrollOffset
@@ -61,14 +62,14 @@ fun TransitionLazyColumnToGrid(
             .collect { (index, offset) ->
                 if (index > previousIndex || (index == previousIndex && offset > previousScrollOffset)) {
                     onScroll(false)
-                } else if (index < previousIndex || (offset < previousScrollOffset)) {
+                } else if (index < previousIndex || offset < previousScrollOffset) {
                     onScroll(true)
                 }
-
                 previousIndex = index
                 previousScrollOffset = offset
             }
     }
+
     SharedTransitionLayout {
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -78,24 +79,25 @@ fun TransitionLazyColumnToGrid(
                 (fadeIn(animationSpec = tween(220, delayMillis = 90, easing = EaseIn)) +
                         scaleIn(
                             initialScale = 0.92f,
-                            animationSpec = tween(220, delayMillis = 90, EaseIn)
+                            animationSpec = tween(220, delayMillis = 90, easing = EaseIn)
                         ))
                     .togetherWith(fadeOut(animationSpec = tween(90, easing = EaseOut)))
             }
-        ) {
-            if (it) {
+        ) { isList ->
+            if (isList) {
                 LazyColumn(
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
-                        PosterHorizontal(
-                            poster = poster,
-                            onClick = { onClick(poster.id) },
-                            animatedVisibilityScope = this@AnimatedContent,
-                            sharedTransitionScope = this@SharedTransitionLayout,
-                        )
+                    items(lazyPagingItems.itemCount) { index ->
+                        lazyPagingItems[index]?.let { poster ->
+                            PosterHorizontal(
+                                poster = poster.toPoster(),
+                                animatedVisibilityScope = this@AnimatedContent,
+                                sharedTransitionScope = this@SharedTransitionLayout,
+                            )
+                        }
                     }
                 }
             } else {
@@ -106,13 +108,14 @@ fun TransitionLazyColumnToGrid(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
-                        PosterVertically(
-                            poster = poster,
-                            onClick = { onClick(poster.id) },
-                            animatedVisibilityScope = this@AnimatedContent,
-                            sharedTransitionScope = this@SharedTransitionLayout,
-                        )
+                    items(lazyPagingItems.itemCount) { index ->
+                        lazyPagingItems[index]?.let { poster ->
+                            PosterVertically(
+                                poster = poster.toPoster(),
+                                animatedVisibilityScope = this@AnimatedContent,
+                                sharedTransitionScope = this@SharedTransitionLayout,
+                            )
+                        }
                     }
                 }
             }

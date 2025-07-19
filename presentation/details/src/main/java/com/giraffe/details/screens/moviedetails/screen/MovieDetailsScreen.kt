@@ -39,6 +39,7 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.navigation.MoviesRecommendedRoute
 import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
@@ -56,6 +57,7 @@ fun MovieDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    onBackButtonClick: () -> Unit,
     viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -95,7 +97,11 @@ fun MovieDetailsScreen(
         }
         AnimatedVisibility(!state.isLoadingMovieDetails) {
             MovieDetailsContent(
-                modifier = modifier, state = state, interaction = viewModel
+                modifier = modifier,
+                state = state,
+                navController = navController,
+                interaction = viewModel,
+                onBackButtonClick = onBackButtonClick
             )
         }
     }
@@ -103,9 +109,11 @@ fun MovieDetailsScreen(
 
 @Composable
 private fun MovieDetailsContent(
+    navController: NavController,
+    interaction: MovieDetailsInteractionListener,
     modifier: Modifier,
     state: MovieDetailsScreenState,
-    interaction: MovieDetailsInteractionListener
+    onBackButtonClick: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -126,7 +134,9 @@ private fun MovieDetailsContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AppBar(
-                showBackButton = true, onBackButtonClick = {})
+                showBackButton = true,
+                onBackButtonClick = onBackButtonClick
+            )
             MainMovieOrSeriesDetailsAnimatedContent(
                 type = TypeOfScreen.MOVIE.toString(),
                 name = state.movie.title,
@@ -159,7 +169,7 @@ private fun MovieDetailsContent(
             StarCastSection(
                 title = stringResource(R.string.star_cast),
                 onShowMoreClick = {},
-                onCastClick =  { interaction.navigateToCastDetailsScreen(it) },
+                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
                 castList = state.cast
             )
 
@@ -173,7 +183,9 @@ private fun MovieDetailsContent(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedMovies,
-                onClickEndText = {},
+
+                onClickEndText = {   navController.navigate(MoviesRecommendedRoute(state.movie.id, state.movie.title))
+                },
                 onClickPoster = {})
 
             RatingSection(

@@ -28,5 +28,7 @@ fun SeriesUi.toPoster(): Poster = Poster(
     id = id,
     name = name,
     imageUri = posterUrl ?: "",
-    rating = rating
+    rating = rating,
+    genres = null,
+    date = releaseYear
 )

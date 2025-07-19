@@ -1,4 +1,4 @@
-package com.giraffe.explore.nav
+package com.giraffe.explore.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.tween
@@ -8,10 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.giraffe.explore.nav.route.DISCOVER_ROUTE
-import com.giraffe.explore.nav.route.discoverRoute
-import com.giraffe.explore.nav.route.searchResultRoute
-import com.giraffe.explore.nav.route.searchRoute
 
 private const val SCREEN_TRANSITION_MILLIS = 200
 
@@ -20,14 +16,16 @@ private const val SCREEN_TRANSITION_MILLIS = 200
 fun ExploreNavGraph(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
-        startDestination = DISCOVER_ROUTE,
+        startDestination = DiscoverRoute,
         enterTransition = { fadeIn(animationSpec = tween(SCREEN_TRANSITION_MILLIS)) },
         exitTransition = { fadeOut(animationSpec = tween(SCREEN_TRANSITION_MILLIS)) },
         popEnterTransition = { fadeIn(animationSpec = tween(SCREEN_TRANSITION_MILLIS)) },
         popExitTransition = { fadeOut(animationSpec = tween(SCREEN_TRANSITION_MILLIS)) }
     ) {
-        discoverRoute(navController)
-        searchRoute(navController)
-        searchResultRoute(navController)
+//        ExploreApiImp().apply {
+//            createDiscoverScreen(navController)
+//            createSearchScreen(navController)
+//            createSearchResultScreen(navController)
+//        }
     }
 }
