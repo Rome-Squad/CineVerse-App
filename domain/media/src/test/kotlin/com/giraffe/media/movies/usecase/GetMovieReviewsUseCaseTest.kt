@@ -25,13 +25,13 @@ class GetMovieReviewsUseCaseTest {
     @Test
     fun `invoke should call getMovieReviews on repository`() = runTest {
         // given
-        coEvery { repository.getMovieReviews(any()) } returns emptyList()
+        coEvery { repository.getMovieReviews(any(),any()) } returns emptyList()
 
         // when
-        getMovieReviewsUseCase(1, 1, 20)
+        getMovieReviewsUseCase(1, 1)
 
         // then
-        coVerify(exactly = 1) { repository.getMovieReviews(1) }
+        coVerify(exactly = 1) { repository.getMovieReviews(1,1) }
     }
 
     @Test
@@ -48,10 +48,10 @@ class GetMovieReviewsUseCaseTest {
                 authorImageUrl = "https://example.com/avatars/user1.jpg"
             )
         )
-        coEvery { repository.getMovieReviews(1) } returns expectedReviews
+        coEvery { repository.getMovieReviews(1,1) } returns expectedReviews
 
         // when
-        val result = getMovieReviewsUseCase(1, 1, 20)
+        val result = getMovieReviewsUseCase(1, 1)
 
         // then
         assertThat(result).isEqualTo(expectedReviews)
