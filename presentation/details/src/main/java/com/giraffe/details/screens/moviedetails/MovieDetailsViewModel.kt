@@ -23,6 +23,7 @@ import com.giraffe.media.series.entity.Series
 
 
 class MovieDetailsViewModel(
+    movieID: Int,
     val getMovieDetails: GetMovieDetailsUseCase,
     val getMovieGenres: GetMovieGenresUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
@@ -32,6 +33,10 @@ class MovieDetailsViewModel(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
 
+    init {
+        loadMovieDetails(movieID)
+        loadRecommendedMovie(movieID,1)
+    }
 
     //loading movie data
     fun loadMovieDetails(movieId: Int) {

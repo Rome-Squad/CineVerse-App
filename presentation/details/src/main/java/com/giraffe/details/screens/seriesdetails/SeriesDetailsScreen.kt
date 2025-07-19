@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -32,6 +31,7 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
@@ -44,25 +44,18 @@ import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.utils.TypeOfScreen
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.min
 
 @Composable
 fun SeriesDetailsScreen(
-    seriesID: Int,
+    seriesId: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
-    viewModel: SeriesDetailsViewModel = koinViewModel()
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
-
-    LaunchedEffect(seriesID) {
-        launch {  viewModel.loadSeriesDetails(seriesID) }
-        launch {  viewModel.loadSeason(seriesID) }
-        launch {  viewModel.loadRecommendedSeries(seriesID, 1) }
-        launch {  viewModel.loadSeriesReviews(seriesID) }
-        launch {  viewModel.loadSeriesPeople(seriesID) }
-    }
 
     Box(
         modifier = modifier
@@ -250,7 +243,7 @@ fun SeriesDetailsContent(
     BaseBottomSheet(
         isVisible = state.isVisibleGiveStarsBottomSheet,
         onDismiss = onDismissAddRatingBottomSheet,
-        title = stringResource(com.giraffe.details.R.string.rate_the_movie),
+        title = stringResource(R.string.rate_the_movie),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             Column(

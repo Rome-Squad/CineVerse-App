@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            detailsApi.GetCastDetailsContainer(1)
+            detailsApi.GetMovieDetailsContainer(268)
         }
     }
 }

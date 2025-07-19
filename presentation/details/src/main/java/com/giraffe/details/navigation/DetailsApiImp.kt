@@ -12,6 +12,8 @@ import androidx.navigation.toRoute
 import com.giraffe.details.DetailsApi
 import com.giraffe.details.screens.castDetails.CastDetailsScreen
 import com.giraffe.details.screens.gallery.GalleryScreen
+import com.giraffe.details.screens.moviedetails.screen.MovieDetailsScreen
+import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -129,7 +131,7 @@ class DetailsApiImp : DetailsApi {
     private fun NavGraphBuilder.createMovieDetailsScreen(navController: NavHostController) {
         composable<MovieDetailsRoute> {
             val movieId = it.toRoute<MovieDetailsRoute>().movieId
-
+            MovieDetailsScreen(movieId, navController)
         }
     }
 
@@ -157,9 +159,10 @@ class DetailsApiImp : DetailsApi {
     private fun NavGraphBuilder.createSeriesDetailsScreen(navController: NavHostController) {
         composable<SeriesDetailsRoute> {
             val seriesId = it.toRoute<SeriesDetailsRoute>().seriesId
-
+            SeriesDetailsScreen(seriesId, navController)
         }
     }
+
 
     private fun NavGraphBuilder.createRecommendationSeriesScreen(navController: NavHostController) {
         composable<RecommendedSeriesRoute> {

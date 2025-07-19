@@ -45,6 +45,7 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.min
 
 
@@ -54,14 +55,10 @@ fun MovieDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
-    viewModel: MovieDetailsViewModel = koinViewModel()
+    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
 ) {
     val state = viewModel.state.collectAsState().value
 
-    LaunchedEffect(movieID) {
-        viewModel.loadMovieDetails(movieID)
-        viewModel.loadRecommendedMovie(movieID,1)
-    }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->

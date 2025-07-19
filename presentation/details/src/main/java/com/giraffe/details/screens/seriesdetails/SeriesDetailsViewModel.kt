@@ -22,6 +22,7 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 
 class SeriesDetailsViewModel(
+    seriesID: Int,
     private val getSeriesDetails: GetSeriesDetailsUseCase,
     private val getLastSeasons: GetLastSeasonsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
@@ -34,6 +35,13 @@ class SeriesDetailsViewModel(
     ), SeriesDetailsInteractionListener {
 
 
+    init {
+        loadSeriesDetails(seriesID)
+        loadSeason(seriesID)
+        loadRecommendedSeries(seriesID, 1)
+        loadSeriesReviews(seriesID)
+        loadSeriesPeople(seriesID)
+    }
 
     fun loadSeriesDetails(seriesId: Int) {
         safeExecute(
@@ -43,6 +51,7 @@ class SeriesDetailsViewModel(
             getSeriesDetails(seriesId)
         }
     }
+
     fun loadSeriesDetailsSuccess(series: Series) {
         updateState {
             it.copy(
@@ -52,6 +61,7 @@ class SeriesDetailsViewModel(
         }
         loadSeriesGenres(series.genreIDs)
     }
+
     fun loadSeriesDetailsError(error: Throwable) {
         updateState {
             it.copy(
@@ -71,6 +81,7 @@ class SeriesDetailsViewModel(
             getSeriesGenres(genreIDs)
         }
     }
+
     fun loadSeriesGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
@@ -79,6 +90,7 @@ class SeriesDetailsViewModel(
             )
         }
     }
+
     fun loadSeriesGenresError(error: Throwable) {
         updateState {
             it.copy(
@@ -97,6 +109,7 @@ class SeriesDetailsViewModel(
             getLastSeasons(seriesId)
         }
     }
+
     fun loadLastSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
@@ -105,6 +118,7 @@ class SeriesDetailsViewModel(
             )
         }
     }
+
     fun loadLastSeasonsError(error: Throwable) {
         updateState {
             it.copy(
@@ -115,7 +129,7 @@ class SeriesDetailsViewModel(
     }
 
 
-     fun loadSeriesPeople(seriesId: Int) {
+    fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesPeopleSuccess,
             onError = ::loadSeriesPeopleError
@@ -123,7 +137,8 @@ class SeriesDetailsViewModel(
             getCastAndCrewOfSeries(seriesId)
         }
     }
-     fun loadSeriesPeopleSuccess(people: List<Person>) {
+
+    fun loadSeriesPeopleSuccess(people: List<Person>) {
         val cast = people.filter { it.type == PersonType.CAST }.take(10)
         val crew = people.filter { it.type == PersonType.CREW }.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
@@ -135,7 +150,8 @@ class SeriesDetailsViewModel(
             )
         }
     }
-     fun loadSeriesPeopleError(error: Throwable) {
+
+    fun loadSeriesPeopleError(error: Throwable) {
         updateState {
             it.copy(
                 isLoadingPeople = false,
@@ -143,7 +159,6 @@ class SeriesDetailsViewModel(
         }
         sendEffect(SeriesDetailsEffect.Error(error))
     }
-
 
 
     fun loadRecommendedSeries(seriesId: Int, page: Int) {
@@ -154,6 +169,7 @@ class SeriesDetailsViewModel(
             getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
         }
     }
+
     fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
         updateState {
             it.copy(
@@ -169,6 +185,7 @@ class SeriesDetailsViewModel(
             )
         }
     }
+
     fun loadRecommendedSeriesError(error: Throwable) {
         updateState {
             it.copy(
@@ -187,6 +204,7 @@ class SeriesDetailsViewModel(
             getSeriesReviews(seriesId)
         }
     }
+
     fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
@@ -195,6 +213,7 @@ class SeriesDetailsViewModel(
             )
         }
     }
+
     fun loadSeriesReviewsError(error: Throwable) {
         updateState {
             it.copy(
@@ -203,7 +222,6 @@ class SeriesDetailsViewModel(
         }
         sendEffect(SeriesDetailsEffect.Error(error))
     }
-
 
 
     override fun showMoreSeason() {
