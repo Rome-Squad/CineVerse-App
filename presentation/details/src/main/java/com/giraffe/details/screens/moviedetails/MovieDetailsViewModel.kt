@@ -44,7 +44,7 @@ class MovieDetailsViewModel(
         ) {
 
             val movie = getMovieDetails(movieId)
-            Log.d("TAG ViewModel", "loadMovieDetails: $movie")
+            //Log.d("TAG ViewModel", "loadMovieDetails: $movie")
             movie
         }
 
@@ -161,7 +161,7 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-    private fun loadMovieReviews(movieId: Int) {
+    fun loadMovieReviews(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieReviewsSuccess,
             onError = ::loadMovieReviewsError
@@ -169,8 +169,7 @@ class MovieDetailsViewModel(
             //TODO("Implement pagination instead of fixed page")
             getMovieReviewsUseCase(
                 movieId = movieId,
-                pageNumber = 1,
-                pageSize = 20
+                pageNumber = 1
             )
         }
     }
@@ -186,7 +185,6 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMovieReviewsError(error: Throwable) {
-        Log.d("TAG", "loadMovieReviewsFailure: $error")
         updateState {
             it.copy(
                 isLoadingReviews = false,

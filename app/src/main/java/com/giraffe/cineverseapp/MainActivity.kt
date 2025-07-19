@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CineVerseTheme {
-                detailsApi.GetSeriesDetailsContainer(2288)
+                detailsApi.GetSeriesDetailsContainer(1396)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.giraffe.media.series
 
+import com.giraffe.media.movie.MoviesRemoteDataSourceImp
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.response.GenresResponse
@@ -33,7 +34,10 @@ class SeriesRemoteDataSourceImp(
         requestBuilder.get<SeriesDetailsDto>(endpoint = "$TV/$seriesId")
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) =
-        requestBuilder.get<SeriesReviewsResponse>(endpoint = "$TV/$seriesId/$REVIEWS").results
+        requestBuilder.get<SeriesReviewsResponse>(
+            endpoint = "$TV/$seriesId/$REVIEWS",
+            params = mapOf(PAGE to page.toString())
+        ).results
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
         requestBuilder.get<SeriesResponse>(

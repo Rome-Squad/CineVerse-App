@@ -15,7 +15,10 @@ class MoviesRemoteDataSourceImp(
     private val requestBuilder: RequestBuilder
 ) : MoviesRemoteDataSource {
     override suspend fun getMovieById(movieId: Int): MovieDto {
-        Log.e("TAGG", "getMovieById: ${requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")}")
+        Log.e(
+            "TAGG",
+            "getMovieById: ${requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")}"
+        )
         return requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")
     }
 
@@ -36,8 +39,11 @@ class MoviesRemoteDataSourceImp(
         ).results
 
 
-    override suspend fun getMovieReviews(movieId: Int) =
-        requestBuilder.get<ReviewsResponseDto>(endpoint = "$MOVIE_END_PINT/$movieId/$REVIEWS_END_PINT").results
+    override suspend fun getMovieReviews(movieId: Int, page: Int) =
+        requestBuilder.get<ReviewsResponseDto>(
+            endpoint = "$MOVIE_END_PINT/$movieId/$REVIEWS_END_PINT",
+            params = mapOf(PAGE to page.toString())
+        ).results
 
     override suspend fun getMovieRecommendations(
         movieId: Int,
@@ -59,7 +65,8 @@ class MoviesRemoteDataSourceImp(
         movieId: Int,
         sessionId: String,
         request: RatingRequest
-    ) {}
+    ) {
+    }
 
     companion object {
         private const val MOVIE_END_PINT = "movie"

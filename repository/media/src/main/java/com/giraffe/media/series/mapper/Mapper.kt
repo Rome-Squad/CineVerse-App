@@ -103,14 +103,20 @@ fun SeriesDetailsDto.toEntity() = Series(
     seasons = seasons.map { it.toEntity() }
 )
 
+@OptIn(ExperimentalTime::class)
 fun ReviewDto.toEntity() = Review(
-    id = id,
-    authorImageUrl = authorDetails.avatarPath,
-    authorName = authorDetails.name,
-    authorUserName = authorDetails.username,
-    content = content,
-    rating = authorDetails.rating,
-    createdAt = parseData(createdAt)
+    id = this.id,
+    authorImageUrl = BASE_IMAGE_URL+this.authorDetails.avatarPath.toString(),
+    authorName = this.authorDetails.name?.takeIf { it.isNotBlank() } ?: this.author,
+    authorUserName = this.authorDetails.username,
+    content = this.content,
+    rating = (this.authorDetails.rating ?: 0f).toInt(),
+    createdAt = try {
+        val instant = Instant.parse(this.createdAt)
+        instant.toLocalDateTime(TimeZone.UTC)
+    } catch (e: Exception) {
+        null
+    },
 )
 
 @OptIn(ExperimentalTime::class)

@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.seriesdetails
 
+import android.util.Log
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.SeasonUi
@@ -216,6 +217,10 @@ class SeriesDetailsViewModel(
     }
 
     fun loadSeriesReviewsError(error: Throwable) {
+        Log.e("ReviewError", "An error occurred while loading reviews", error)
+
+        // هذا السطر يقوم بطباعة المكدس الكامل في Logcat
+        error.printStackTrace()
         updateState {
             it.copy(
                 isLoadingSeries = false,

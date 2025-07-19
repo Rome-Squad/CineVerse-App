@@ -196,7 +196,7 @@ private fun MovieDetailsContent(
             AnimatedVisibility(state.movieReviews.isNotEmpty()) {
 
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     for (index in 0..min(2, state.movieReviews.size - 1)) {

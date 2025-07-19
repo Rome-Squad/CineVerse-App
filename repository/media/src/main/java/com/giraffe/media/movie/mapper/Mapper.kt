@@ -11,7 +11,11 @@ import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.collections.ifEmpty
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 fun MovieGenreCacheDto.toEntity() = Genre(id, name, count)
 
@@ -57,12 +61,21 @@ fun MovieDto.toEntity() = Movie(
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
 )
 
-fun MovieReviewDto.toEntity() = Review(
-    id = this.id,
-    content = this.content,
-    createdAt = LocalDateTime.parse(this.createdAt),
-    authorName = this.authorDetails.name ?: this.author,
-    authorImageUrl = this.authorDetails.avatarPath ?: "",
-    authorUserName = this.authorDetails.username,
-    rating = this.authorDetails.rating,
-)
+@OptIn(ExperimentalTime::class)
+fun MovieReviewDto.toEntity(): Review {
+    return Review(
+        id = this.id,
+        content = this.content,
+        createdAt = try {
+            val instant = Instant.parse(this.createdAt)
+            instant.toLocalDateTime(TimeZone.UTC)
+        } catch (e: Exception) {
+            null
+        },
+
+        authorName = (this.authorDetails.name?.takeIf { it.isNotBlank() } ?: this.author).toString(),
+        authorUserName = this.authorDetails.username,
+        authorImageUrl = BASE_IMAGE_URL+this.authorDetails.avatarPath,
+        rating = (this.authorDetails.rating ?: 0f).toInt()
+    )
+}

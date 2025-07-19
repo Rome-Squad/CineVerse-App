@@ -103,7 +103,8 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieReviews(
         movieId: Int
-    ) = SafeCall { remote.getMovieReviews(movieId).map(MovieReviewDto::toEntity) }
+        , page: Int
+    ) = SafeCall { remote.getMovieReviews(movieId,page).map(MovieReviewDto::toEntity) }
 
     override suspend fun addRating(
         movieId: Int,
