@@ -45,6 +45,7 @@ import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.seasons.navigateToSeasons
 import com.giraffe.details.utils.EventListener
 import com.giraffe.details.navigation.RecommendedSeriesRoute
+import com.giraffe.details.navigation.SeriesDetailsRoute
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -191,7 +192,8 @@ fun SeriesDetailsContent(
                 movies = state.recommendedSeries,
                 onClickEndText = {    navController.navigate(RecommendedSeriesRoute(state.seriesDetails.id, state.seriesDetails.name))
                 },
-                onClickPoster = {})
+                onClickPoster = {navController.navigateToSeriesDetails(state.seriesDetails.id)}
+            )
 
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),

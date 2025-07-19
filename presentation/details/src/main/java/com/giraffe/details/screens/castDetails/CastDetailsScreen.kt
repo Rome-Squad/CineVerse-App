@@ -152,8 +152,8 @@ fun CastDetailsContent(
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
                 movies = state.posters,
-                onClickPoster = interaction::onMovieClicked,
-                onClickEndText = interaction::navigateToMoviesListScreen
+                onClickPoster = {},
+                onClickEndText = { }
             )
         }
         item {

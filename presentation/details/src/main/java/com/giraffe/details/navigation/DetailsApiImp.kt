@@ -65,6 +65,9 @@ class DetailsApiImp : DetailsApi {
             createCastDetailsScreen(it)
             createGalleryScreen(it)
             createCreditsScreen(it)
+            createMovieDetailsScreen(it)
+            createSeriesDetailsScreen(it)
+
         }
     }
 
