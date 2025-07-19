@@ -4,14 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
-import com.giraffe.designsystem.composable.custom.Button
+import com.giraffe.cineverseapp.nav.CineVerseAppContainer
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.details.DetailsApi
+import com.giraffe.explore.ExploreApi
 import org.koin.android.ext.android.inject
 
 
@@ -21,20 +17,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val detailsApi: DetailsApi by inject()
-            CineVerseTheme {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
+            val exploreApi: ExploreApi by inject()
 
-                    Button(
-                        onClick = {
-                            detailsApi.navigateToMovieDetails(268)
-                        },
-                    ) {
-                        Text(text = "Navigate to movie details")
-                    }
-                }
+            CineVerseTheme {
+                CineVerseAppContainer(
+                    exploreApi = exploreApi,
+                    detailsApi = detailsApi
+                )
             }
         }
     }
