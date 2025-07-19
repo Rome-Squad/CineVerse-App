@@ -11,7 +11,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
 import com.giraffe.details.DetailsStartDestination
-import com.giraffe.details.MOVIE_ID
 import com.giraffe.details.screens.moviedetails.screen.MOVIES_ROUTE
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
