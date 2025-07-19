@@ -1,5 +1,6 @@
 package com.giraffe.explore.screen.searchresult
 
+import android.R.attr.onClick
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -22,15 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.NothingFound
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.screen.discover.SearchTab
-import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -38,17 +38,30 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun SearchResultScreen(
     query: String,
+    onActorClick:  (Int) -> Unit,
+    onMovieClick:  (Int) -> Unit,
+    onSeriesClick:  (Int) -> Unit,
+    onBackClick: () -> Unit,
     viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
-    navController: NavController
 ) {
     val state by viewModel.state.collectAsState()
-    SearchResultContent(state, viewModel, navController::popBackStack)
+    SearchResultContent(
+        state = state,
+        interactions = viewModel,
+        onBackClick = onBackClick,
+        onActorClick = onActorClick,
+        onMovieClick = onMovieClick,
+        onSeriesClick = onSeriesClick
+    )
 }
 
 @Composable
 fun SearchResultContent(
     state: SearchResultScreenState,
     interactions: SearchResultInteractionListener,
+    onActorClick: (Int) -> Unit,
+    onMovieClick:  (Int) -> Unit,
+    onSeriesClick:  (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -86,7 +99,8 @@ fun SearchResultContent(
                     if (state.selectedTab == SearchTab.ACTORS) {
                         if (state.actors.isNotEmpty()) {
                             ActorsSection(
-                                actors = state.actors
+                                actors = state.actors,
+                                onActorClick = onActorClick
                             )
                         } else {
                             NothingFound(
@@ -99,7 +113,13 @@ fun SearchResultContent(
                         TransitionLazyColumnToGrid(
                             poster = state.selectedPosters,
                             isListSelected = !state.isGridSelected,
-                            contentPadding = PaddingValues(vertical = 16.dp),
+                            onClick = {
+                                when (state.selectedTab) {
+                                    SearchTab.MOVIES -> onMovieClick(it)
+                                    SearchTab.SERIES -> onSeriesClick(it)
+                                    SearchTab.ACTORS -> {}
+                                }
+                            },
                         )
                     } else {
                         NothingFound(
@@ -129,7 +149,11 @@ fun SearchResultContent(
 }
 
 @Composable
-fun ActorsSection(modifier: Modifier = Modifier, actors: List<ActorUi>) {
+fun ActorsSection(
+    modifier: Modifier = Modifier,
+    actors: List<ActorUi>,
+    onActorClick: (Int) -> Unit,
+) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(3),
@@ -141,6 +165,9 @@ fun ActorsSection(modifier: Modifier = Modifier, actors: List<ActorUi>) {
             CastItem(
                 name = actor.name,
                 imageUrl = actor.imageUrl,
+                onClick = {
+                    onActorClick(actor.id)
+                }
             )
         }
     }

@@ -56,6 +56,7 @@ fun MovieDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    onBackButtonClick: () -> Unit,
     viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -95,7 +96,10 @@ fun MovieDetailsScreen(
         }
         AnimatedVisibility(!state.isLoadingMovieDetails) {
             MovieDetailsContent(
-                modifier = modifier, state = state, interaction = viewModel
+                modifier = modifier,
+                state = state,
+                interaction = viewModel,
+                onBackButtonClick = onBackButtonClick
             )
         }
     }
@@ -105,7 +109,8 @@ fun MovieDetailsScreen(
 private fun MovieDetailsContent(
     modifier: Modifier,
     state: MovieDetailsScreenState,
-    interaction: MovieDetailsInteractionListener
+    interaction: MovieDetailsInteractionListener,
+    onBackButtonClick: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -126,7 +131,9 @@ private fun MovieDetailsContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AppBar(
-                showBackButton = true, onBackButtonClick = {})
+                showBackButton = true,
+                onBackButtonClick = onBackButtonClick
+            )
             MainMovieOrSeriesDetailsAnimatedContent(
                 type = TypeOfScreen.MOVIE.toString(),
                 name = state.movie.title,
@@ -159,7 +166,7 @@ private fun MovieDetailsContent(
             StarCastSection(
                 title = stringResource(R.string.star_cast),
                 onShowMoreClick = {},
-                onCastClick =  { interaction.navigateToCastDetailsScreen(it) },
+                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
                 castList = state.cast
             )
 

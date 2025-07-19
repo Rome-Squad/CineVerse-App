@@ -28,25 +28,35 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.explore.nav.route.navigateToSearch
-import com.giraffe.media.explore.R
+import com.giraffe.explore.navigation.route.navigateToSearch
 import com.giraffe.explore.util.toTitle
+import com.giraffe.media.explore.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DiscoverScreen(
     navController: NavController,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     viewModel: DiscoverViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
-    ExploreContent(state, viewModel, navController::navigateToSearch)
+    ExploreContent(
+        state,
+        interactions = viewModel,
+        navigateToSearch = navController::navigateToSearch,
+        navigateToMovieDetails = navigateToMovieDetails,
+        navigateToSeriesDetails = navigateToSeriesDetails
+    )
 }
 
 @Composable
 fun ExploreContent(
     state: DiscoverScreenState,
     interactions: DiscoverInteractionListener,
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
 ) {
     val context = LocalContext.current
     Box {
@@ -82,6 +92,13 @@ fun ExploreContent(
                     genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
                     isGridSelected = state.isGridSelected,
                     onGenreSelected = interactions::onGenreSelected,
+                    onClick = { posterId ->
+                        when (state.selectedTab) {
+                            SearchTab.MOVIES -> navigateToMovieDetails(posterId)
+                            SearchTab.SERIES -> navigateToSeriesDetails(posterId)
+                            SearchTab.ACTORS -> {}
+                        }
+                    }
                 )
             }
         }
@@ -104,6 +121,7 @@ private fun GenresAndCardsSection(
     genres: List<GenreUi>,
     isGridSelected: Boolean,
     onGenreSelected: (GenreUi) -> Unit,
+    onClick: (Int) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -114,6 +132,7 @@ private fun GenresAndCardsSection(
             poster = posters,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 60.dp),
+            onClick = onClick
         )
         GenresSection(
             modifier = Modifier.padding(top = 12.dp, bottom = 16.dp),

@@ -4,24 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.details.DetailsApi
-import com.giraffe.explore.ExploreApi
-import org.koin.android.ext.android.inject
+import com.giraffe.details.navigation.DetailsApiImp
+import com.giraffe.explore.navigation.ExploreApiImp
 
 
 class MainActivity : ComponentActivity() {
-    private val exploreApi: ExploreApi by inject()
-    private val detailsApi: DetailsApi by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CineVerseTheme {
-                detailsApi.GetSeriesDetailsContainer(2288)
-            }
+            AppNavigation(
+                exploreApi = ExploreApiImp(),
+                detailsApi = DetailsApiImp()
+            )
         }
     }
 }
-

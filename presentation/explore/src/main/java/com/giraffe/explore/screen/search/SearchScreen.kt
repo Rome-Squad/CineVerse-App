@@ -23,28 +23,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.SearchItem
-import com.giraffe.explore.nav.route.navigateToSearchResult
 import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.media.explore.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
-    navController: NavController,
+    navigateToSearchResult: (String) -> Unit,
+    onBackClick: () -> Unit,
     viewModel: SearchViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     SearchContent(
         state,
         viewModel,
-        navController::navigateToSearchResult,
-        navController::popBackStack
+        navigateToSearchResult,
+        onBackClick
     )
 }
 

@@ -57,6 +57,7 @@ fun SeriesDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    onBackButtonClick: () -> Unit,
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -94,7 +95,8 @@ fun SeriesDetailsScreen(
                 onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
                 interaction = viewModel,
                 navController = navController,
-                )
+                onBackButtonClick = onBackButtonClick
+            )
         }
     }
 }
@@ -108,6 +110,7 @@ fun SeriesDetailsContent(
     onGiveStarClick: () -> Unit,
     onDismissAddRatingBottomSheet: () -> Unit,
     interaction: SeriesDetailsInteractionListener,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -117,7 +120,7 @@ fun SeriesDetailsContent(
         Column(Modifier.padding(horizontal = 16.dp)) {
             AppBar(
                 showBackButton = true,
-                onBackButtonClick = {}
+                onBackButtonClick = onBackButtonClick
             )
             MainMovieOrSeriesDetailsAnimatedContent(
                 type = TypeOfScreen.SERIES.name,
