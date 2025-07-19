@@ -15,6 +15,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -74,13 +75,14 @@ fun StaffItem(name: String, role: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 18.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = role,
             modifier = Modifier.weight(1f),
             style = Theme.textStyle.body.md.regular,
-            color = Theme.color.shade.secondary
+            color = Theme.color.shade.secondary,
+            textAlign = TextAlign.Start,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
@@ -89,7 +91,8 @@ fun StaffItem(name: String, role: String) {
             color = Theme.color.shade.primary,
             maxLines = 2,
             modifier = Modifier.weight(1f),
-            overflow = TextOverflow.Ellipsis
+            textAlign = TextAlign.End,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -117,7 +120,6 @@ fun PreviewStaffInfoSectionDark() {
 @Preview(
     name = "StaffInfoSection Preview - Light",
     showBackground = true,
-    // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionLight() {

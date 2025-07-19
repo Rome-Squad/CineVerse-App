@@ -1,6 +1,7 @@
 package com.giraffe.details.screens.moviedetails
 
 import android.util.Log
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.groupByRole
@@ -13,20 +14,27 @@ import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 
 
 class MovieDetailsViewModel(
+    movieID: Int,
     val getMovieDetails: GetMovieDetailsUseCase,
     val getMovieGenres: GetMovieGenresUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
+    val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
 
+    init {
+        loadMovieDetails(movieID)
+        loadRecommendedMovie(movieID, 1)
+    }
 
     //loading movie data
     fun loadMovieDetails(movieId: Int) {
@@ -36,6 +44,7 @@ class MovieDetailsViewModel(
         ) {
 
             val movie = getMovieDetails(movieId)
+            Log.d("TAG ViewModel", "loadMovieDetails: $movie")
             movie
         }
 
@@ -87,6 +96,40 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
+    fun loadRecommendedMovie(movieId: Int, page: Int) {
+        safeExecute(
+            onSuccess = ::loadRecommendedMovieSuccess,
+            onError = ::loadRecommendedMovieError
+        ) {
+            getRecommendedMovie(movieId = movieId, page = page)
+        }
+    }
+
+    fun loadRecommendedMovieSuccess(recommendedSeries: List<Movie>) {
+        updateState {
+            it.copy(
+                recommendedMovies = recommendedSeries.map {
+                    Poster(
+                        id = it.id,
+                        name = it.title,
+                        imageUri = it.posterUrl.toString(),
+                        rating = it.rating
+                    )
+                },
+                isLoadingRecommendedMovies = false
+            )
+        }
+    }
+
+    fun loadRecommendedMovieError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoadingRecommendedMovies = false,
+            )
+        }
+        sendEffect(MovieDetailsEffect.Error(error))
+    }
+
     private fun loadMoviePeople(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMoviePeopleSuccess,
@@ -97,8 +140,8 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMoviePeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST }
-        val crew = people.filter { it.type == PersonType.CREW }
+        val cast = people.filter { it.type == PersonType.CAST }.take(10)
+        val crew = people.filter { it.type == PersonType.CREW }.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
@@ -225,16 +268,21 @@ class MovieDetailsViewModel(
         }
     }
 
+    override fun navigateToCastDetailsScreen(personId: Int) {
+        sendEffect(
+            MovieDetailsEffect.NavigateToCastDetails(
+                personId = personId
+            )
+        )
+    }
+
     override fun onCollectionClick() {
-        TODO("Add movie to a collection is not yet implemented")
     }
 
     override fun onPersonClick(personId: Int) {
-        TODO("PersonScreen is not yet implemented")
     }
 
     override fun onAddRatingClick() {
-        TODO("Authentication not yet implemented")
     }
 
 }

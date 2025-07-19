@@ -27,4 +27,7 @@ interface MovieDetailsInteractionListener {
     fun onDismissLoginBottomSheet()
 
     fun onDismissGiveStarsBottomSheet()
+
+    fun navigateToCastDetailsScreen(personId: Int)
+
 }

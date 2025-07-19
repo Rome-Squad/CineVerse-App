@@ -1,5 +1,6 @@
 package  com.giraffe.media.movie
 
+import android.util.Log
 import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
@@ -13,8 +14,10 @@ import com.giraffe.media.util.RequestBuilder
 class MoviesRemoteDataSourceImp(
     private val requestBuilder: RequestBuilder
 ) : MoviesRemoteDataSource {
-    override suspend fun getMovieById(movieId: Int) =
-        requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")
+    override suspend fun getMovieById(movieId: Int): MovieDto {
+        Log.e("TAGG", "getMovieById: ${requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")}")
+        return requestBuilder.get<MovieDto>(endpoint = "$MOVIE_END_PINT/$movieId")
+    }
 
     override suspend fun getMoviesByName(movieName: String) =
         requestBuilder.get<MoviesListResponse>(
@@ -35,6 +38,15 @@ class MoviesRemoteDataSourceImp(
 
     override suspend fun getMovieReviews(movieId: Int) =
         requestBuilder.get<ReviewsResponseDto>(endpoint = "$MOVIE_END_PINT/$movieId/$REVIEWS_END_PINT").results
+
+    override suspend fun getMovieRecommendations(
+        movieId: Int,
+        page: Int
+    ): List<MovieDto> =
+        requestBuilder.get<MoviesListResponse>(
+            endpoint = "$MOVIE_END_PINT/$movieId/$RECOMMENDATIONS",
+            params = mapOf(PAGE to page.toString())
+        ).results
 
 
     override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) =
@@ -59,6 +71,8 @@ class MoviesRemoteDataSourceImp(
         private const val GENRES_URL = "genre/movie/list"
         private const val MOVIES_BY_GENRE_URL = "discover/movie"
         private const val WITH_GENRES = "with_genres"
+        private const val PAGE = "page"
         private const val QUERY = "query"
+        private const val RECOMMENDATIONS = "recommendations"
     }
 }

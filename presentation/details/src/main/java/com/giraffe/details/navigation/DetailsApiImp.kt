@@ -8,6 +8,8 @@ import com.giraffe.details.DetailsApi
 import com.giraffe.details.screens.castDetails.CastDetailsScreen
 import com.giraffe.details.screens.gallery.GalleryScreen
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsScreen
+import com.giraffe.details.screens.recommended.RecommendedSeriesScreen
+import com.giraffe.details.screens.seasons.SeasonsScreen
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreen
 import kotlinx.serialization.Serializable
 
@@ -36,10 +38,10 @@ data class MovieReviewsRoute(val movieId: Int)
 data class SeriesDetailsRoute(val seriesId: Int)
 
 @Serializable
-data class RecommendedSeriesRoute(val seriesId: Int)
+data class RecommendedSeriesRoute(val seriesId: Int, val title: String)
 
 @Serializable
-data class SeriesCastsRoute(val seriesId: Int)
+data class SeriesCastsRoute(val personId: Int)
 
 @Serializable
 data class SeriesReviewsRoute(val seriesId: Int)
@@ -78,6 +80,7 @@ class DetailsApiImp : DetailsApi {
             val movieId = it.toRoute<MovieDetailsRoute>().movieId
             MovieDetailsScreen(
                 movieID = movieId,
+                navController = navController,
                 onBackButtonClick = {
                     navController.popBackStack()
                 },
@@ -90,18 +93,21 @@ class DetailsApiImp : DetailsApi {
 
     override fun NavGraphBuilder.movieRecommendationGraph(navController: NavHostController) {
         composable<MoviesRecommendedRoute> {
+            val movieId = it.toRoute<MoviesRecommendedRoute>().movieId
 
         }
     }
 
     override fun NavGraphBuilder.movieCastsGraph(navController: NavHostController) {
         composable<MovieCastsRoute> {
+            val movieId = it.toRoute<MovieCastsRoute>().movieId
 
         }
     }
 
     override fun NavGraphBuilder.movieReviewsCastsGraph(navController: NavHostController) {
         composable<MovieReviewsRoute> {
+            val movieId = it.toRoute<MovieReviewsRoute>().movieId
 
         }
     }
@@ -110,7 +116,8 @@ class DetailsApiImp : DetailsApi {
         composable<SeriesDetailsRoute> {
             val seriesId = it.toRoute<SeriesDetailsRoute>().seriesId
             SeriesDetailsScreen(
-                seriesID = seriesId,
+                seriesId = seriesId,
+                navController = navController,
                 navigateToReviews = {},
                 onBackButtonClick = { navController.popBackStack() }
             )
@@ -119,25 +126,37 @@ class DetailsApiImp : DetailsApi {
 
     override fun NavGraphBuilder.seriesRecommendationGraph(navController: NavHostController) {
         composable<RecommendedSeriesRoute> {
+            val seriesId = it.toRoute<RecommendedSeriesRoute>().seriesId
+            val seriesName = it.toRoute<RecommendedSeriesRoute>().title
 
+
+            RecommendedSeriesScreen(
+                title = seriesName,
+                seriesId = seriesId.toLong(),
+                navController = navController,
+            )
         }
     }
 
     override fun NavGraphBuilder.seriesCastsGraph(navController: NavHostController) {
         composable<SeriesCastsRoute> {
 
+            val personId = it.toRoute<SeriesCastsRoute>().personId
+            CastDetailsScreen(personId, navController)
         }
     }
 
     override fun NavGraphBuilder.seriesReviewsGraph(navController: NavHostController) {
         composable<SeriesReviewsRoute> {
+            val seriesId = it.toRoute<SeriesReviewsRoute>().seriesId
 
         }
     }
 
     override fun NavGraphBuilder.seasonGraph(navController: NavHostController) {
         composable<SeasonsRoute> {
-
+            val seriesId = it.toRoute<SeasonsRoute>().seriesId
+            SeasonsScreen(seriesId, navController)
         }
     }
 }

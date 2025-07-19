@@ -41,12 +41,12 @@ class GetSeriesReviewsUseCaseTest {
             )
 
         )
-        coEvery { seriesRepository.getSeriesReviews(seriesId) } returns expectedResult
+        coEvery { seriesRepository.getSeriesReviews(seriesId, 1) } returns expectedResult
 
-        val result = getSeriesReviewsUseCase(seriesId)
+        val result = getSeriesReviewsUseCase(seriesId, 1)
 
         assertThat(expectedResult).isEqualTo(result)
-        coVerify(exactly = 1) { seriesRepository.getSeriesReviews(seriesId) }
+        coVerify(exactly = 1) { seriesRepository.getSeriesReviews(seriesId, 1) }
     }
 
 }

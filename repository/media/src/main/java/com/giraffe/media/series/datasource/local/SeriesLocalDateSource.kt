@@ -15,4 +15,5 @@ interface SeriesLocalDateSource {
     suspend fun getSeasonsForSeries(seriesId: Int): List<SeasonCacheDto>
     suspend fun clearAllData()
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
+    suspend fun getCachedGenresByIds(genreIds: List<Int>): List<SeriesGenreCacheDto>
 }

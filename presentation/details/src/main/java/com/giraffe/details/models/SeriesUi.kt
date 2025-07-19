@@ -1,5 +1,6 @@
 package com.giraffe.details.models
 
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.series.entity.Series
 
 data class SeriesUi(
@@ -23,3 +24,9 @@ data class SeriesUi(
         )
     }
 }
+fun SeriesUi.toPoster(): Poster = Poster(
+    id = id,
+    name = name,
+    imageUri = posterUrl ?: "",
+    rating = rating
+)

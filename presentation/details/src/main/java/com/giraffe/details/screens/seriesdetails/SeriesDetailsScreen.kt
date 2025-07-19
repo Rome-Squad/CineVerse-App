@@ -10,53 +10,72 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
+import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
+import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
+import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.utils.TypeOfDetailsScreen
+import com.giraffe.details.screens.castDetails.navigateToPersonDetails
+import com.giraffe.details.screens.seasons.navigateToSeasons
+import com.giraffe.details.utils.EventListener
+import com.giraffe.details.navigation.RecommendedSeriesRoute
+import com.giraffe.details.navigation.SeriesDetailsRoute
+import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.min
 
 @Composable
 fun SeriesDetailsScreen(
-    seriesID: Int,
+    seriesId: Int,
+    navController: NavController,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit,
-    viewModel: SeriesDetailsViewModel = koinViewModel()
+    viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
+    val context = LocalContext.current
+    EventListener(
+        events = viewModel.effect,
+    ) {
+        when (it) {
+            is SeriesDetailsEffect.Error -> {}
+            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToPersonDetails(
+                personID = it.personId
+            )
 
-    LaunchedEffect(seriesID) {
-        viewModel.loadSeries(seriesID)
-        viewModel.loadSeason(seriesID)
-        viewModel.loadRecommendedSeries(seriesID, 5)
-        viewModel.loadSeriesReviews(seriesID)
+            is SeriesDetailsEffect.NavigateToSeasons -> navController.navigateToSeasons(
+                seriesId = it.seriesId
+            )
+        }
     }
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -74,6 +93,8 @@ fun SeriesDetailsScreen(
                 onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
                 onGiveStarClick = viewModel::onClickGiveStars,
                 onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
+                interaction = viewModel,
+                navController = navController,
                 onBackButtonClick = onBackButtonClick
             )
         }
@@ -83,10 +104,12 @@ fun SeriesDetailsScreen(
 @Composable
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
+    navController: NavController,
     onAddToCollectionClick: () -> Unit,
     onDismissAddToCollectionBottomSheet: () -> Unit,
     onGiveStarClick: () -> Unit,
     onDismissAddRatingBottomSheet: () -> Unit,
+    interaction: SeriesDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -100,7 +123,7 @@ fun SeriesDetailsContent(
                 onBackButtonClick = onBackButtonClick
             )
             MainMovieOrSeriesDetailsAnimatedContent(
-                type = TypeOfDetailsScreen.SERIES.name,
+                type = TypeOfScreen.SERIES.name,
                 name = state.seriesDetails.name,
                 rating = state.seriesDetails.rating,
                 image = state.seriesDetails.posterUrl,
@@ -122,16 +145,17 @@ fun SeriesDetailsContent(
         ) {
             InfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(com.giraffe.details.R.string.storyline),
+                title = stringResource(R.string.storyline),
                 description = state.seriesDetails.overview
             )
 
 
             SectionTitle(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(com.giraffe.details.R.string.latest_seasons),
-                clickableText = stringResource(com.giraffe.details.R.string.show_more),
-                onClickableText = {}
+                title = stringResource(R.string.latest_seasons),
+                clickableText = stringResource(R.string.show_more),
+                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id)}
+
             )
             AnimatedVisibility(state.seasons.isNotEmpty()) {
 
@@ -141,36 +165,38 @@ fun SeriesDetailsContent(
                 ) {
                     for (i in 0..min(2, state.seasons.size - 1)) {
                         SeasonCard(
-                            poster = state.seasons[i].posterUrl,
+                            posterUrl = state.seasons[i].posterUrl,
                             title = "Season ${state.seasons[i].seasonNumber + 1}",
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
                             year = state.seasons[i].releaseYear.split("-").first().toInt(),
-                            onClick = {}
                         )
                     }
                 }
             }
 
             StarCastSection(
-                title = stringResource(com.giraffe.details.R.string.star_cast),
+                title = stringResource(R.string.star_cast),
                 onShowMoreClick = {},
-                castList = state.cast
+                castList = state.cast,
+                onCastClick = { interaction.navigateToCastDetailsScreen(it) }
             )
 
             StaffInfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(com.giraffe.details.R.string.behind_the_scenes),
+                title = stringResource(R.string.behind_the_scenes),
                 staffList = state.crew
             )
 
             MoviesListSection(
-                title = stringResource(com.giraffe.details.R.string.you_might_also_like),
-                endText = stringResource(com.giraffe.details.R.string.show_more),
+                title = stringResource(R.string.you_might_also_like),
+                endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
-                onClickEndText = {},
-                onClickPoster = {})
+                onClickEndText = {    navController.navigate(RecommendedSeriesRoute(state.seriesDetails.id, state.seriesDetails.name))
+                },
+                onClickPoster = {navController.navigateToSeriesDetails(state.seriesDetails.id)}
+            )
 
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -184,7 +210,7 @@ fun SeriesDetailsContent(
             ) {
                 InfoSection(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(com.giraffe.details.R.string.top_reviews),
+                    title = stringResource(R.string.top_reviews),
                     description = state.seriesDetails.overview
                 )
             }
@@ -215,56 +241,51 @@ fun SeriesDetailsContent(
                     }
                 }
             }
-
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            )
         }
     }
 
-//    BaseBottomSheet(
-//        isVisible = state.isVisibleAddToCollectionBottomSheet,
-//        onDismiss = onDismissAddToCollectionBottomSheet,
-//        title = stringResource(com.giraffe.details.R.string.add_to_collection),
-//        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
-//        content = {
-//            AddToCollectionContent(
-//                title = "My Favorite TV",
-//                isLoading = false,
-//                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-//            )
-//            AddToCollectionContent(
-//                title = "My WatchLis",
-//                isLoading = false,
-//                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-//            )
-//            AddToCollectionContent(
-//                title = "Cristian Bale Movies",
-//                isLoading = false,
-//                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-//            )
-//        }
-//    )
-//    BaseBottomSheet(
-//        isVisible = state.isVisibleGiveStarsBottomSheet,
-//        onDismiss = onDismissAddRatingBottomSheet,
-//        title = stringResource(com.giraffe.details.R.string.rate_the_movie),
-//        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
-//        content = {
-//            Column(
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                RatingSelector()
-//                PrimaryButton(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(top = 24.dp),
-//                    text = stringResource(com.giraffe.details.R.string.add_to_rate),
-//                    enabled = false,
-//                    onClick = {})
-//            }
-//        }
-//    )
+    BaseBottomSheet(
+        isVisible = state.isVisibleAddToCollectionBottomSheet,
+        onDismiss = onDismissAddToCollectionBottomSheet,
+        title = stringResource(R.string.add_to_collection),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+        content = {
+            AddToCollectionContent(
+                title = "My Favorite TV",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            )
+            AddToCollectionContent(
+                title = "My WatchLis",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            )
+            AddToCollectionContent(
+                title = "Cristian Bale Movies",
+                isLoading = false,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            )
+        }
+    )
+
+    BaseBottomSheet(
+        isVisible = state.isVisibleGiveStarsBottomSheet,
+        onDismiss = onDismissAddRatingBottomSheet,
+        title = stringResource(R.string.rate_the_movie),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+        content = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                RatingSelector()
+                PrimaryButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp),
+                    text = stringResource(R.string.add_to_rate),
+                    enabled = false,
+                    onClick = {})
+            }
+        }
+    )
 }
