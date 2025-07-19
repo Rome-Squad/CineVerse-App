@@ -13,6 +13,7 @@ import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUserMovieRatingUseCase
 import com.giraffe.media.movies.usecase.InsertGenresUseCase
 import com.giraffe.media.movies.usecase.InsertMoviesUseCase
@@ -65,6 +66,7 @@ val useCaseModule = module {
     singleOf(::GetMoviesByGenresUseCase)
     singleOf(::InsertMoviesUseCase)
     singleOf(::InsertGenresUseCase)
+    singleOf(::GetRecommendedMovieUseCase)
     singleOf(::ClearCacheUseCase)
     singleOf(::SetMovieRecentUseCase)
     singleOf(::GetRecentlyMoviesUseCase)

@@ -93,6 +93,13 @@ class MoviesRepositoryImpl(
             .also { insertMovies(listOf(it)) }
     }
 
+    override suspend fun getRecommendedMovie(
+        movieId: Int,
+        page: Int
+    ): List<Movie> = SafeCall {
+        remote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
+    }
+
 
     override suspend fun getMovieReviews(
         movieId: Int

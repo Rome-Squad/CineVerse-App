@@ -39,6 +39,15 @@ class MoviesRemoteDataSourceImp(
     override suspend fun getMovieReviews(movieId: Int) =
         requestBuilder.get<ReviewsResponseDto>(endpoint = "$MOVIE_END_PINT/$movieId/$REVIEWS_END_PINT").results
 
+    override suspend fun getMovieRecommendations(
+        movieId: Int,
+        page: Int
+    ): List<MovieDto> =
+        requestBuilder.get<MoviesListResponse>(
+            endpoint = "$MOVIE_END_PINT/$movieId/$RECOMMENDATIONS",
+            params = mapOf(PAGE to page.toString())
+        ).results
+
 
     override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) =
         requestBuilder.get<RatedMoviesResponse>(endpoint = "$GESST_SESSION_END_PINT/$guestSessionId/$RATED_END_PINT/$MOVIES_END_PINT").results.firstOrNull {
@@ -62,6 +71,8 @@ class MoviesRemoteDataSourceImp(
         private const val GENRES_URL = "genre/movie/list"
         private const val MOVIES_BY_GENRE_URL = "discover/movie"
         private const val WITH_GENRES = "with_genres"
+        private const val PAGE = "page"
         private const val QUERY = "query"
+        private const val RECOMMENDATIONS = "recommendations"
     }
 }
