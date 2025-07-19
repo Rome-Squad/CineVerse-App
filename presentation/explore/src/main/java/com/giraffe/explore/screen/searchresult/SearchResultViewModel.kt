@@ -37,7 +37,7 @@ class SearchResultViewModel(
             when (state.value.selectedTab) {
                 SearchTab.MOVIES -> updateState { it.copy(selectedPosters = state.value.moviesPosters) }
                 SearchTab.SERIES -> updateState { it.copy(selectedPosters = state.value.seriesPosters) }
-                SearchTab.ACTORS -> {}
+                SearchTab.ACTORS -> { getActors()}
             }
         }
     }
