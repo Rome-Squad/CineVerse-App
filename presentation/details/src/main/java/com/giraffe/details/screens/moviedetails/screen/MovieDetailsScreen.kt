@@ -39,6 +39,7 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.navigation.RecommendedSeriesRoute
 import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
@@ -98,6 +99,7 @@ fun MovieDetailsScreen(
             MovieDetailsContent(
                 modifier = modifier,
                 state = state,
+                navController = navController,
                 interaction = viewModel,
                 onBackButtonClick = onBackButtonClick
             )
@@ -108,6 +110,7 @@ fun MovieDetailsScreen(
 @Composable
 private fun MovieDetailsContent(
     modifier: Modifier,
+    navController: NavController,
     state: MovieDetailsScreenState,
     interaction: MovieDetailsInteractionListener,
     onBackButtonClick: () -> Unit
@@ -180,8 +183,18 @@ private fun MovieDetailsContent(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedMovies,
-                onClickEndText = {},
-                onClickPoster = {})
+                onClickEndText = {
+                    navController.navigate(
+                        RecommendedSeriesRoute(
+                            state.movie.id,
+                            state.movie.title
+                        )
+                    )
+                },
+                onClickPoster = {
+                    navController.navigateToMovieDetails(it)
+                }
+            )
 
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),

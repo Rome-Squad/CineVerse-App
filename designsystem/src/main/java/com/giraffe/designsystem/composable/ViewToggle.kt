@@ -7,12 +7,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,15 +58,12 @@ fun ViewToggle(
 
     Box(
         modifier = modifier
-            .width(80.dp)
-            .height(40.dp)
-            .clip(RoundedCornerShape(Theme.radius.s))
-            .background(Theme.color.background.card)
     ) {
-
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .width(80.dp)
+                .height(40.dp)
+                .background(Theme.color.background.card, RoundedCornerShape(Theme.radius.s))
                 .border(1.dp, Theme.color.stroke.primary, RoundedCornerShape(Theme.radius.s))
         )
 
@@ -73,54 +71,60 @@ fun ViewToggle(
             modifier = Modifier
                 .offset(x = alignment)
                 .size(40.dp)
-                .clip(RoundedCornerShape(Theme.radius.s))
-                .background(Theme.color.brand.tertiary)
+                .background(Theme.color.brand.tertiary, RoundedCornerShape(Theme.radius.s))
                 .border(1.dp, Theme.color.brand.secondary, RoundedCornerShape(Theme.radius.s))
         )
 
-        Crossfade(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(horizontal = 10.dp)
-                .clickable {
-                    onGridSelected(true)
-                },
-            targetState = isListSelected,
-            label = "FavoriteIcon"
-        ) { selected ->
-            Icon(
-                modifier = Modifier
-                    .size(20.dp),
-                painter = if (selected)
-                    painterResource(Theme.icons.outline.grid)
-                else
-                    painterResource(Theme.icons.dueTone.grid),
-                contentDescription = "Grid icon for View Toggle",
-                tint = gridBackgroundColor
-            )
-        }
+        ToggleButtonIcon(
+            onClick = { onGridSelected(true) },
+            isSelected = isListSelected,
+            iconColor = gridBackgroundColor,
+            selectedIconResId = Theme.icons.outline.grid,
+            unselectedIconResId = Theme.icons.dueTone.grid,
+            modifier = Modifier.align(Alignment.CenterStart),
+        )
 
-        Crossfade(
+        ToggleButtonIcon(
+            onClick = { onGridSelected(false) },
+            isSelected = isListSelected,
+            iconColor = listBackgroundColor,
+            selectedIconResId = Theme.icons.dueTone.rowVertical,
+            unselectedIconResId = Theme.icons.outline.rowVertical,
+            modifier = Modifier.align(Alignment.CenterEnd),
+        )
+    }
+}
+
+
+@Composable
+private fun ToggleButtonIcon(
+    isSelected: Boolean,
+    iconColor: Color,
+    selectedIconResId: Int,
+    unselectedIconResId: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Crossfade(
+        modifier = modifier
+            .clip(RoundedCornerShape(Theme.radius.s))
+            .clickable(onClick = onClick)
+            .size(40.dp)
+            .wrapContentSize()
+            .padding(horizontal = 10.dp),
+        targetState = isSelected,
+        label = "FavoriteIcon"
+    ) { selected ->
+        Icon(
             modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(horizontal = 10.dp)
-                .clickable {
-                    onGridSelected(false)
-                },
-            targetState = isListSelected,
-            label = "FavoriteIcon"
-        ) { selected ->
-            Icon(
-                modifier = Modifier
-                    .size(20.dp),
-                painter = if (selected)
-                    painterResource(Theme.icons.dueTone.rowVertical)
-                else
-                    painterResource(Theme.icons.outline.rowVertical),
-                contentDescription = "Grid icon for View Toggle",
-                tint = listBackgroundColor
-            )
-        }
+                .size(20.dp),
+            painter = if (selected)
+                painterResource(selectedIconResId)
+            else
+                painterResource(unselectedIconResId),
+            contentDescription = "Grid icon for View Toggle",
+            tint = iconColor
+        )
     }
 }
 
@@ -131,7 +135,7 @@ private fun ViewTogglePreview() {
     CineVerseTheme(isDarkTheme = true) {
         ViewToggle(
             isListSelected = isListSelected,
-            onGridSelected = {  },
+            onGridSelected = { isListSelected = !isListSelected },
         )
     }
 }
