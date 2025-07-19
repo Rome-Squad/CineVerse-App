@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
@@ -26,6 +27,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SeasonsScreen(
+    seriesId: Int,
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: SeasonsViewModel = koinViewModel()
 ) {

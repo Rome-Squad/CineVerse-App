@@ -15,4 +15,8 @@ interface SeriesDetailsInteractionListener {
     fun onDismissLoginBottomSheet()
 
     fun onDismissGiveStarsBottomSheet()
+
+
+    fun navigateToCastDetailsScreen(personId: Int)
+    fun navigateToSeasonsScreen(personId: Int)
 }

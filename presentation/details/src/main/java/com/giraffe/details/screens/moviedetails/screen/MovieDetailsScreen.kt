@@ -153,6 +153,7 @@ private fun MovieDetailsContent(
             StarCastSection(
                 title = stringResource(R.string.star_cast),
                 onShowMoreClick = {},
+                onCastClick = {},
                 castList = state.cast
             )
 

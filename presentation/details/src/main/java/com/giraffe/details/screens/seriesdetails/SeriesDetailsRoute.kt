@@ -1,6 +1,9 @@
 package com.giraffe.details.screens.seriesdetails
 
+import androidx.navigation.NavController
+import com.giraffe.details.navigation.SeriesDetailsRoute
 
-const val SERIES_ROUTE = "seriesDetails"
-private const val SERIES_ID_ARG = "seriesID"
 
+fun NavController.navigateToSeriesDetails(seriesId: Int) {
+    navigate(SeriesDetailsRoute(seriesId = seriesId))
+}

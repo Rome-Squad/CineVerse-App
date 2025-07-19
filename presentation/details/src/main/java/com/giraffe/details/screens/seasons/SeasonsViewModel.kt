@@ -6,13 +6,14 @@ import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 
 class SeasonsViewModel(
+    seriesID: Int,
     private val getSeasons: GetLastSeasonsUseCase
 ) : BaseViewModel<SeasonsScreenState, SeasonsEffect>(
     SeasonsScreenState()
 ) {
 
     init {
-        loadSeason(2288)
+        loadSeason(seriesID)
     }
 
     fun loadSeason(seriesId: Int) {

@@ -34,6 +34,7 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 fun StarCastSection(
     title: String,
     onShowMoreClick: () -> Unit,
+    onCastClick: (personId: Int) -> Unit,
     castList: List<CastUi>,
     modifier: Modifier = Modifier
 ) {
@@ -77,6 +78,7 @@ fun StarCastSection(
                             actorName = cast.name,
                             character = cast.role,
                             actorImage = cast.urlImage.toString(),
+                            modifier = Modifier.clickable(onClick = { onCastClick(cast.id) })
                         )
                     }
                 }
@@ -87,7 +89,10 @@ fun StarCastSection(
 
 @Composable
 fun CastCard(
-    actorName: String, character: String, actorImage: String, modifier: Modifier = Modifier
+    actorName: String,
+    character: String,
+    actorImage: String,
+    modifier: Modifier = Modifier
 ) {
     CustomCard(
         shape = RoundedCornerShape(12.dp),

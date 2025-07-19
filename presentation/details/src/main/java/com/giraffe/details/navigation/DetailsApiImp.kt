@@ -13,6 +13,7 @@ import com.giraffe.details.DetailsApi
 import com.giraffe.details.screens.castDetails.CastDetailsScreen
 import com.giraffe.details.screens.gallery.GalleryScreen
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsScreen
+import com.giraffe.details.screens.seasons.SeasonsScreen
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreen
 import kotlinx.serialization.Serializable
 
@@ -44,7 +45,7 @@ data class SeriesDetailsRoute(val seriesId: Int)
 data class RecommendedSeriesRoute(val seriesId: Int)
 
 @Serializable
-data class SeriesCastsRoute(val seriesId: Int)
+data class SeriesCastsRoute(val personId: Int)
 
 @Serializable
 data class SeriesReviewsRoute(val seriesId: Int)
@@ -173,8 +174,8 @@ class DetailsApiImp : DetailsApi {
 
     private fun NavGraphBuilder.createSeriesCastsScreen(navController: NavHostController) {
         composable<SeriesCastsRoute> {
-            val seriesId = it.toRoute<SeriesCastsRoute>().seriesId
-
+            val personId = it.toRoute<SeriesCastsRoute>().personId
+            CastDetailsScreen(personId,navController)
         }
     }
 
@@ -188,7 +189,7 @@ class DetailsApiImp : DetailsApi {
     private fun NavGraphBuilder.createSeasonScreen(navController: NavHostController) {
         composable<SeasonsRoute> {
             val seriesId = it.toRoute<SeasonsRoute>().seriesId
-
+            SeasonsScreen(seriesId,navController)
         }
     }
 }

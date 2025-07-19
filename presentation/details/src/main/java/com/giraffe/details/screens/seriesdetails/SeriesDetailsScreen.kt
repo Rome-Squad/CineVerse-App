@@ -16,10 +16,10 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -41,8 +41,10 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.screens.castDetails.navigateToPersonDetails
+import com.giraffe.details.screens.seasons.navigateToSeasons
+import com.giraffe.details.utils.EventListener
 import com.giraffe.details.utils.TypeOfScreen
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.math.min
@@ -56,7 +58,21 @@ fun SeriesDetailsScreen(
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
+    val context = LocalContext.current
+    EventListener(
+        events = viewModel.effect,
+    ) {
+        when (it) {
+            is SeriesDetailsEffect.Error -> {}
+            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToPersonDetails(
+                personID = it.personId
+            )
 
+            is SeriesDetailsEffect.NavigateToSeasons -> navController.navigateToSeasons(
+                seriesId = it.seriesId
+            )
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -74,7 +90,9 @@ fun SeriesDetailsScreen(
                 onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
                 onGiveStarClick = viewModel::onClickGiveStars,
                 onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
-            )
+                interaction = viewModel,
+
+                )
         }
     }
 }
@@ -86,6 +104,7 @@ fun SeriesDetailsContent(
     onDismissAddToCollectionBottomSheet: () -> Unit,
     onGiveStarClick: () -> Unit,
     onDismissAddRatingBottomSheet: () -> Unit,
+    interaction: SeriesDetailsInteractionListener,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -145,7 +164,7 @@ fun SeriesDetailsContent(
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
                             year = state.seasons[i].releaseYear.split("-").first().toInt(),
-                            onClick = {}
+                            onClick = { interaction.navigateToSeasonsScreen(state.seasons[i].id)}
                         )
                     }
                 }
@@ -154,7 +173,8 @@ fun SeriesDetailsContent(
             StarCastSection(
                 title = stringResource(com.giraffe.details.R.string.star_cast),
                 onShowMoreClick = {},
-                castList = state.cast
+                castList = state.cast,
+                onCastClick = { interaction.navigateToCastDetailsScreen(it) }
             )
 
             StaffInfoSection(

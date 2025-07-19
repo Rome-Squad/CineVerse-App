@@ -8,6 +8,7 @@ import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toReviewUI
+import com.giraffe.details.screens.castDetails.CastDetailsEffect
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.person.entity.Person
@@ -276,5 +277,21 @@ class SeriesDetailsViewModel(
                 isVisibleGiveStarsBottomSheet = false
             )
         }
+    }
+
+    override fun navigateToCastDetailsScreen(personId: Int) {
+        sendEffect(
+            SeriesDetailsEffect.NavigateToCastDetails(
+                personId = personId
+            )
+        )
+    }
+
+    override fun navigateToSeasonsScreen(seriesId: Int) {
+        sendEffect(
+            SeriesDetailsEffect.NavigateToSeasons(
+                seriesId = seriesId
+            )
+        )
     }
 }
