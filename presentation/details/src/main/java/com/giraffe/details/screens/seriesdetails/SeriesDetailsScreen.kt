@@ -193,9 +193,15 @@ fun SeriesDetailsContent(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
-                onClickEndText = {    navController.navigate(RecommendedSeriesRoute(state.seriesDetails.id, state.seriesDetails.name))
+                onClickEndText = {
+                    navController.navigate(
+                        RecommendedSeriesRoute(
+                            state.seriesDetails.id,
+                            state.seriesDetails.name
+                        )
+                    )
                 },
-                onClickPoster = {navController.navigateToSeriesDetails(state.seriesDetails.id)}
+                onClickPoster = {navController.navigateToSeriesDetails(it)}
             )
 
             RatingSection(
