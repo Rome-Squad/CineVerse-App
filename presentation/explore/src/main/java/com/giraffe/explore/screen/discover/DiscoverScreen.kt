@@ -36,16 +36,26 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun DiscoverScreen(
     navController: NavController,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     viewModel: DiscoverViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
-    ExploreContent(state, viewModel, navController::navigateToSearch)
+    ExploreContent(
+        state = state,
+        interactions = viewModel, 
+        navigateToMovieDetails = navigateToMovieDetails,
+        navigateToSeriesDetails = navigateToSeriesDetails,
+        navigateToSearch = navController::navigateToSearch
+    )
 }
 
 @Composable
 fun ExploreContent(
     state: DiscoverScreenState,
     interactions: DiscoverInteractionListener,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     navigateToSearch: () -> Unit
 ) {
     val context = LocalContext.current
@@ -76,6 +86,13 @@ fun ExploreContent(
             item {
                 GenresAndCardsSection(
                     modifier = Modifier.fillParentMaxHeight(),
+                    onPosterClicked = { id ->
+                        when (state.selectedTab) {
+                            SearchTab.MOVIES -> navigateToMovieDetails(id)
+                            SearchTab.SERIES -> navigateToSeriesDetails(id)
+                            SearchTab.ACTORS -> {}
+                        }
+                    },
                     posters = state.selectedPosters,
                     selectedGenre = state.selectedGenre
                         ?: GenreUi(title = stringResource(R.string.all)),
@@ -104,6 +121,7 @@ private fun GenresAndCardsSection(
     genres: List<GenreUi>,
     isGridSelected: Boolean,
     onGenreSelected: (GenreUi) -> Unit,
+    onPosterClicked: (Int) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -112,6 +130,7 @@ private fun GenresAndCardsSection(
     ) {
         TransitionLazyColumnToGrid(
             poster = posters,
+            onPosterClicked = onPosterClicked,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 60.dp),
         )

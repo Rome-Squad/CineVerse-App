@@ -16,6 +16,9 @@ fun NavController.navigateToSearchResult(query: String) {
 
 fun NavGraphBuilder.searchResultRoute(
     navController: NavController,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit
 ) {
     composable(
         "$SEARCH_RESULT_ROUTE/{${QUERY}}",
@@ -25,6 +28,9 @@ fun NavGraphBuilder.searchResultRoute(
         SearchResultScreen(
             query = query,
             navController = navController,
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails,
+            navigateToCastDetails = navigateToCastDetails
         )
     }
 }

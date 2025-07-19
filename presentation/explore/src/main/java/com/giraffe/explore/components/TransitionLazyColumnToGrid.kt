@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.media.explore.components.PosterVertically
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -34,7 +36,8 @@ fun TransitionLazyColumnToGrid(
     poster: List<Poster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
-    onScroll: (isScrollingUp: Boolean) -> Unit = {}
+    onScroll: (isScrollingUp: Boolean) -> Unit = {},
+    onPosterClicked: (Int) -> Unit
 ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
@@ -93,6 +96,9 @@ fun TransitionLazyColumnToGrid(
                             poster = poster,
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
+                            modifier = Modifier.clickable {
+                                onPosterClicked(poster.id)
+                            }
                         )
                     }
                 }
@@ -109,6 +115,9 @@ fun TransitionLazyColumnToGrid(
                             poster = poster,
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
+                            modifier = Modifier.clickable {
+                                onPosterClicked(poster.id)
+                            }
                         )
                     }
                 }

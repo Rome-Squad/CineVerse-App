@@ -39,16 +39,29 @@ import org.koin.core.parameter.parametersOf
 fun SearchResultScreen(
     query: String,
     viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit,
     navController: NavController
 ) {
     val state by viewModel.state.collectAsState()
-    SearchResultContent(state, viewModel, navController::popBackStack)
+    SearchResultContent(
+        state = state,
+        interactions = viewModel,
+        navigateToMovieDetails = navigateToMovieDetails,
+        navigateToSeriesDetails = navigateToSeriesDetails,
+        navigateToCastDetails = navigateToCastDetails,
+        onBackClick = navController::popBackStack
+    )
 }
 
 @Composable
 fun SearchResultContent(
     state: SearchResultScreenState,
     interactions: SearchResultInteractionListener,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -99,7 +112,13 @@ fun SearchResultContent(
                         TransitionLazyColumnToGrid(
                             poster = state.selectedPosters,
                             isListSelected = !state.isGridSelected,
-                            contentPadding = PaddingValues(vertical = 16.dp),
+                            onPosterClicked = { id ->
+                                when (state.selectedTab) {
+                                    SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                    SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                    SearchTab.ACTORS -> navigateToCastDetails(id)
+                                }
+                            }
                         )
                     } else {
                         NothingFound(
