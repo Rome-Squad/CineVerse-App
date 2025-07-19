@@ -27,7 +27,7 @@ class SearchByNameUseCaseTest {
     @Test
     fun `should returns list of people when repository returns search result`() = runTest {
         //given
-        coEvery { repository.searchByName("Tarek") } returns expectedList
+        coEvery { repository.searchByName("Tarek",1) } returns expectedList
         //when
         val result = searchPeopleByNameUseCase("Tarek")
         //then
