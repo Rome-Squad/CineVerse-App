@@ -1,6 +1,5 @@
 package com.giraffe.explore.screen.searchresult
 
-import android.R.attr.onClick
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -23,35 +22,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.NothingFound
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.screen.discover.SearchTab
-import com.giraffe.explore.util.toTitle
+import com.giraffe.media.explore.components.CastItem
+import com.giraffe.media.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SearchResultScreen(
     query: String,
-    onActorClick:  (Int) -> Unit,
-    onMovieClick:  (Int) -> Unit,
-    onSeriesClick:  (Int) -> Unit,
-    onBackClick: () -> Unit,
     viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit,
+    navController: NavController
 ) {
     val state by viewModel.state.collectAsState()
     SearchResultContent(
         state = state,
         interactions = viewModel,
-        onBackClick = onBackClick,
-        onActorClick = onActorClick,
-        onMovieClick = onMovieClick,
-        onSeriesClick = onSeriesClick
+        navigateToMovieDetails = navigateToMovieDetails,
+        navigateToSeriesDetails = navigateToSeriesDetails,
+        navigateToCastDetails = navigateToCastDetails,
+        onBackClick = navController::popBackStack
     )
 }
 
@@ -59,9 +59,9 @@ fun SearchResultScreen(
 fun SearchResultContent(
     state: SearchResultScreenState,
     interactions: SearchResultInteractionListener,
-    onActorClick: (Int) -> Unit,
-    onMovieClick:  (Int) -> Unit,
-    onSeriesClick:  (Int) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -99,8 +99,7 @@ fun SearchResultContent(
                     if (state.selectedTab == SearchTab.ACTORS) {
                         if (state.actors.isNotEmpty()) {
                             ActorsSection(
-                                actors = state.actors,
-                                onActorClick = onActorClick
+                                actors = state.actors
                             )
                         } else {
                             NothingFound(
@@ -113,13 +112,13 @@ fun SearchResultContent(
                         TransitionLazyColumnToGrid(
                             poster = state.selectedPosters,
                             isListSelected = !state.isGridSelected,
-                            onClick = {
+                            onPosterClicked = { id ->
                                 when (state.selectedTab) {
-                                    SearchTab.MOVIES -> onMovieClick(it)
-                                    SearchTab.SERIES -> onSeriesClick(it)
-                                    SearchTab.ACTORS -> {}
+                                    SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                    SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                    SearchTab.ACTORS -> navigateToCastDetails(id)
                                 }
-                            },
+                            }
                         )
                     } else {
                         NothingFound(
@@ -149,11 +148,7 @@ fun SearchResultContent(
 }
 
 @Composable
-fun ActorsSection(
-    modifier: Modifier = Modifier,
-    actors: List<ActorUi>,
-    onActorClick: (Int) -> Unit,
-) {
+fun ActorsSection(modifier: Modifier = Modifier, actors: List<ActorUi>) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(3),
@@ -165,9 +160,6 @@ fun ActorsSection(
             CastItem(
                 name = actor.name,
                 imageUrl = actor.imageUrl,
-                onClick = {
-                    onActorClick(actor.id)
-                }
             )
         }
     }

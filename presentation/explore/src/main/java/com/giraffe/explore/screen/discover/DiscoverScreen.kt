@@ -28,9 +28,9 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.explore.navigation.route.navigateToSearch
-import com.giraffe.explore.util.toTitle
+import com.giraffe.explore.nav.route.navigateToSearch
 import com.giraffe.media.explore.R
+import com.giraffe.media.explore.util.toTitle
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -42,11 +42,11 @@ fun DiscoverScreen(
 ) {
     val state by viewModel.state.collectAsState()
     ExploreContent(
-        state,
-        interactions = viewModel,
-        navigateToSearch = navController::navigateToSearch,
+        state = state,
+        interactions = viewModel, 
         navigateToMovieDetails = navigateToMovieDetails,
-        navigateToSeriesDetails = navigateToSeriesDetails
+        navigateToSeriesDetails = navigateToSeriesDetails,
+        navigateToSearch = navController::navigateToSearch
     )
 }
 
@@ -54,9 +54,9 @@ fun DiscoverScreen(
 fun ExploreContent(
     state: DiscoverScreenState,
     interactions: DiscoverInteractionListener,
-    navigateToSearch: () -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     val context = LocalContext.current
     Box {
@@ -86,19 +86,19 @@ fun ExploreContent(
             item {
                 GenresAndCardsSection(
                     modifier = Modifier.fillParentMaxHeight(),
+                    onPosterClicked = { id ->
+                        when (state.selectedTab) {
+                            SearchTab.MOVIES -> navigateToMovieDetails(id)
+                            SearchTab.SERIES -> navigateToSeriesDetails(id)
+                            SearchTab.ACTORS -> {}
+                        }
+                    },
                     posters = state.selectedPosters,
                     selectedGenre = state.selectedGenre
                         ?: GenreUi(title = stringResource(R.string.all)),
                     genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
                     isGridSelected = state.isGridSelected,
                     onGenreSelected = interactions::onGenreSelected,
-                    onClick = { posterId ->
-                        when (state.selectedTab) {
-                            SearchTab.MOVIES -> navigateToMovieDetails(posterId)
-                            SearchTab.SERIES -> navigateToSeriesDetails(posterId)
-                            SearchTab.ACTORS -> {}
-                        }
-                    }
                 )
             }
         }
@@ -121,7 +121,7 @@ private fun GenresAndCardsSection(
     genres: List<GenreUi>,
     isGridSelected: Boolean,
     onGenreSelected: (GenreUi) -> Unit,
-    onClick: (Int) -> Unit,
+    onPosterClicked: (Int) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -130,9 +130,9 @@ private fun GenresAndCardsSection(
     ) {
         TransitionLazyColumnToGrid(
             poster = posters,
+            onPosterClicked = onPosterClicked,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 60.dp),
-            onClick = onClick
         )
         GenresSection(
             modifier = Modifier.padding(top = 12.dp, bottom = 16.dp),

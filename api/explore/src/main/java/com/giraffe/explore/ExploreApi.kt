@@ -1,25 +1,23 @@
 package com.giraffe.explore
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 
 interface ExploreApi {
-    fun NavGraphBuilder.exploreGraph(
-        navController: NavHostController,
-        navigateToMovieDetails: (Int) -> Unit,
-        navigateToSeriesDetails: (Int) -> Unit
-    )
 
-    fun NavGraphBuilder.searchGraph(
-        navController: NavHostController,
-        navigateToDetails: (Int) -> Unit
-    )
+    fun navigateToSearch()
 
-    fun NavGraphBuilder.searchResultGraph(
-        navController: NavHostController,
-        navigateToMovieDetails: (Int) -> Unit,
-        navigateToSeriesDetails: (Int) -> Unit,
-        navigateToCastDetails: (Int) -> Unit
+    fun navigateToSearchResult(query: String)
+
+    fun navigateToDiscover()
+
+
+    @Composable
+    fun ExploreContainer(
+        modifier: Modifier = Modifier,
+        navigateToMovieDetails: (Int) -> Unit = {},
+        navigateToSeriesDetails: (Int) -> Unit = {},
+        navigateToCastDetails: (Int) -> Unit = {}
     )
 }
