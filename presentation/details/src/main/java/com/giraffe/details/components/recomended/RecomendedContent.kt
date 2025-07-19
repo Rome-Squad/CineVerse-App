@@ -10,22 +10,34 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.paging.compose.LazyPagingItems
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.R
+import com.giraffe.details.components.recommended.TransitionLazyColumnToGrid
+import com.giraffe.details.models.SeriesUi
 
 @Composable
 fun RecommendedContent(
-    //  state: RecommendedScreenState,
+    title: String,
+    navController: NavController,
+    lazyPagingItems: LazyPagingItems<SeriesUi>,
     modifier: Modifier = Modifier,
 ) {
+    var isGridSelected by rememberSaveable { mutableStateOf(false) }
+
     Box {
         LazyColumn(
             modifier = modifier
@@ -35,42 +47,45 @@ fun RecommendedContent(
         ) {
             item {
                 AppBar(
-                    title = "The Dark Night",
-                    //state.title,
+                    title = title,
                     caption = stringResource(R.string.because_you_watched),
                     showBackButton = true,
                     modifier = Modifier.padding(16.dp),
-                    onBackButtonClick = {},
+                    onBackButtonClick = {navController.popBackStack()},
                 )
             }
 
             item {
                 CardsSection(
-                    modifier = Modifier.fillParentMaxHeight(), posters = samplePosters,
-                    //state.selectedPosters,
-                    isGridSelected = true
+                    modifier = Modifier.fillParentMaxHeight(),
+                    lazyPagingItems = lazyPagingItems,
+                    isGridSelected = !isGridSelected
                 )
-
             }
         }
+        val layoutDirection = LocalLayoutDirection.current
+        val alignment = if (layoutDirection == LayoutDirection.Rtl)
+            Alignment.BottomEnd
+        else
+            Alignment.BottomStart
 
         ViewToggle(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
+                .align(alignment)
                 .navigationBarsPadding()
-                .padding(bottom = 16.dp, end = 16.dp), isListSelected = false,
-            //!state.isGridSelected,
-            onGridSelected = {}
-            // interactions::onViewChanged,
+                .padding(16.dp),
+            isListSelected = isGridSelected,
+            onGridSelected = { isGridSelected = !it }
         )
     }
 }
 
 
+
 @Composable
 private fun CardsSection(
     modifier: Modifier = Modifier,
-    posters: List<Poster>,
+    lazyPagingItems: LazyPagingItems<SeriesUi>,
     isGridSelected: Boolean,
 ) {
     Box(
@@ -79,56 +94,10 @@ private fun CardsSection(
             .background(Theme.color.background.screen)
     ) {
         TransitionLazyColumnToGrid(
-            poster = posters,
+            lazyPagingItems = lazyPagingItems,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 5.dp),
         )
-
     }
 }
 
-@Preview
-@Composable
-fun RecommendedContentPreview() {
-
-    RecommendedContent(
-        //  state = TODO(),
-        // modifier = TODO()
-    )
-}
-
-val samplePosters = listOf(
-    Poster(
-        id = 1,
-        name = "Inception",
-        imageUri = "https://example.com/inception.jpg",
-        rating = 4.8f,
-        genres = "Action, Sci-Fi",
-        time = "2h 28m",
-        date = "2010"
-    ), Poster(
-        id = 2,
-        name = "The Dark Knight",
-        imageUri = "https://example.com/darkknight.jpg",
-        rating = 4.9f,
-        genres = "Action, Drama",
-        time = "2h 32m",
-        date = "2008"
-    ), Poster(
-        id = 3,
-        name = "Interstellar",
-        imageUri = "https://example.com/interstellar.jpg",
-        rating = 4.7f,
-        genres = "Adventure, Drama, Sci-Fi",
-        time = "2h 49m",
-        date = "2014"
-    ), Poster(
-        id = 4,
-        name = "Tenet",
-        imageUri = "https://example.com/tenet.jpg",
-        rating = 4.3f,
-        genres = "Action, Sci-Fi",
-        time = "2h 30m",
-        date = "2020"
-    )
-)

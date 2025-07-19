@@ -24,13 +24,14 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.SeasonCard
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SeasonsScreen(
     seriesId: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: SeasonsViewModel = koinViewModel()
+    viewModel: SeasonsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
     Box(
@@ -50,6 +51,7 @@ fun SeasonsScreen(
         AnimatedVisibility(!state.isLoadingSeason) {
             SeasonsContent(
                 state = state,
+                navController = navController,
             )
         }
     }
@@ -58,13 +60,14 @@ fun SeasonsScreen(
 @Composable
 fun SeasonsContent(
     state: SeasonsScreenState,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         AppBar(
             title = stringResource(R.string.seasons),
             showBackButton = true,
-            onBackButtonClick = {},
+            onBackButtonClick = {navController.popBackStack()},
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         LazyColumn(

@@ -14,6 +14,7 @@ import com.giraffe.details.screens.castDetails.CastDetailsScreen
 import com.giraffe.details.screens.gallery.GalleryScreen
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsScreen
 import com.giraffe.details.screens.seasons.SeasonsScreen
+import com.giraffe.details.screens.recommended.RecommendedSeriesScreen
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreen
 import kotlinx.serialization.Serializable
 
@@ -42,7 +43,7 @@ data class MovieReviewsRoute(val movieId: Int)
 data class SeriesDetailsRoute(val seriesId: Int)
 
 @Serializable
-data class RecommendedSeriesRoute(val seriesId: Int)
+data class RecommendedSeriesRoute(val seriesId: Int, val title: String )
 
 @Serializable
 data class SeriesCastsRoute(val personId: Int)
@@ -89,6 +90,9 @@ class DetailsApiImp : DetailsApi {
             createSeriesCastsScreen(it)
             createSeriesReviewsScreen(it)
             createSeasonScreen(it)
+            createCastDetailsScreen(it)
+            createGalleryScreen(it)
+            createCreditsScreen(it)
 
         }
     }
@@ -168,7 +172,14 @@ class DetailsApiImp : DetailsApi {
     private fun NavGraphBuilder.createRecommendationSeriesScreen(navController: NavHostController) {
         composable<RecommendedSeriesRoute> {
             val seriesId = it.toRoute<RecommendedSeriesRoute>().seriesId
+            val seriesName = it.toRoute<RecommendedSeriesRoute>().title
 
+
+            RecommendedSeriesScreen(
+                title = seriesName ,
+                seriesId = seriesId.toLong(),
+                navController = navController,
+            )
         }
     }
 

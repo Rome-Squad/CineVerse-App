@@ -44,6 +44,7 @@ import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.seasons.navigateToSeasons
 import com.giraffe.details.utils.EventListener
+import com.giraffe.details.navigation.RecommendedSeriesRoute
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -91,7 +92,7 @@ fun SeriesDetailsScreen(
                 onGiveStarClick = viewModel::onClickGiveStars,
                 onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
                 interaction = viewModel,
-
+                navController = navController,
                 )
         }
     }
@@ -100,6 +101,7 @@ fun SeriesDetailsScreen(
 @Composable
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
+    navController: NavController,
     onAddToCollectionClick: () -> Unit,
     onDismissAddToCollectionBottomSheet: () -> Unit,
     onGiveStarClick: () -> Unit,
@@ -139,16 +141,17 @@ fun SeriesDetailsContent(
         ) {
             InfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(com.giraffe.details.R.string.storyline),
+                title = stringResource(R.string.storyline),
                 description = state.seriesDetails.overview
             )
 
 
             SectionTitle(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(com.giraffe.details.R.string.latest_seasons),
-                clickableText = stringResource(com.giraffe.details.R.string.show_more),
-                onClickableText = {}
+                title = stringResource(R.string.latest_seasons),
+                clickableText = stringResource(R.string.show_more),
+                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id)}
+
             )
             AnimatedVisibility(state.seasons.isNotEmpty()) {
 
@@ -164,14 +167,13 @@ fun SeriesDetailsContent(
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
                             year = state.seasons[i].releaseYear.split("-").first().toInt(),
-                            onClick = { interaction.navigateToSeasonsScreen(state.seasons[i].id)}
                         )
                     }
                 }
             }
 
             StarCastSection(
-                title = stringResource(com.giraffe.details.R.string.star_cast),
+                title = stringResource(R.string.star_cast),
                 onShowMoreClick = {},
                 castList = state.cast,
                 onCastClick = { interaction.navigateToCastDetailsScreen(it) }
@@ -179,15 +181,16 @@ fun SeriesDetailsContent(
 
             StaffInfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(com.giraffe.details.R.string.behind_the_scenes),
+                title = stringResource(R.string.behind_the_scenes),
                 staffList = state.crew
             )
 
             MoviesListSection(
-                title = stringResource(com.giraffe.details.R.string.you_might_also_like),
-                endText = stringResource(com.giraffe.details.R.string.show_more),
+                title = stringResource(R.string.you_might_also_like),
+                endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
-                onClickEndText = {},
+                onClickEndText = {    navController.navigate(RecommendedSeriesRoute(state.seriesDetails.id, state.seriesDetails.name))
+                },
                 onClickPoster = {})
 
             RatingSection(
@@ -202,7 +205,7 @@ fun SeriesDetailsContent(
             ) {
                 InfoSection(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(com.giraffe.details.R.string.top_reviews),
+                    title = stringResource(R.string.top_reviews),
                     description = state.seriesDetails.overview
                 )
             }
@@ -239,7 +242,7 @@ fun SeriesDetailsContent(
     BaseBottomSheet(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = onDismissAddToCollectionBottomSheet,
-        title = stringResource(com.giraffe.details.R.string.add_to_collection),
+        title = stringResource(R.string.add_to_collection),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             AddToCollectionContent(
@@ -274,7 +277,7 @@ fun SeriesDetailsContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
-                    text = stringResource(com.giraffe.details.R.string.add_to_rate),
+                    text = stringResource(R.string.add_to_rate),
                     enabled = false,
                     onClick = {})
             }

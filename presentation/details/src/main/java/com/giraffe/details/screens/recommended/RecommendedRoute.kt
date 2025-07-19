@@ -15,6 +15,13 @@ fun NavGraphBuilder.recommendedRoute(navController: NavController) {
     composable(
         Recommended_Route,
     ) { backStackEntry ->
-        RecommendedScreen(navController = navController)
-    }
+        val seriesId = backStackEntry.arguments?.getString("seriesId")?.toLongOrNull()
+        val title = backStackEntry.arguments?.getString("title")?.let {
+            java.net.URLDecoder.decode(it, "UTF-8")
+        } ?: return@composable
+        RecommendedSeriesScreen(
+            navController = navController,
+            seriesId = seriesId ?: 0L,
+            title = title
+        )    }
 }

@@ -43,7 +43,7 @@ fun SeasonCard(
     rating: Float,
     episodes: Int,
     year: Int,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     posterWidth: Dp = 48.dp,
     ratingIcon: Painter = painterResource(id = Theme.icons.dueTone.star),
