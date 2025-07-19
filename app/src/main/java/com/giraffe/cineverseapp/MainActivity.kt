@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import org.koin.android.ext.android.inject
@@ -17,7 +18,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            detailsApi.GetSeriesDetailsContainer(2288)
+            CineVerseTheme {
+                detailsApi.GetSeriesDetailsContainer(2288)
+            }
         }
     }
 }

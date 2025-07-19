@@ -39,6 +39,7 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
@@ -74,6 +75,9 @@ fun MovieDetailsScreen(
                 is MovieDetailsEffect.Error -> {}
                 MovieDetailsEffect.NavigateToCollection -> {}
                 MovieDetailsEffect.NavigateToLogin -> {}
+                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToPersonDetails(
+                    personID = effect.personId
+                )
             }
         }
     }
@@ -99,7 +103,9 @@ fun MovieDetailsScreen(
 
 @Composable
 private fun MovieDetailsContent(
-    modifier: Modifier, state: MovieDetailsScreenState, interaction: MovieDetailsInteractionListener
+    modifier: Modifier,
+    state: MovieDetailsScreenState,
+    interaction: MovieDetailsInteractionListener
 ) {
 
     val scrollState = rememberScrollState()
@@ -153,7 +159,7 @@ private fun MovieDetailsContent(
             StarCastSection(
                 title = stringResource(R.string.star_cast),
                 onShowMoreClick = {},
-                onCastClick = {},
+                onCastClick =  { interaction.navigateToCastDetailsScreen(it) },
                 castList = state.cast
             )
 

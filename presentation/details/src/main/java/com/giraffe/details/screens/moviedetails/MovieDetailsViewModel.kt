@@ -8,7 +8,6 @@ import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toReviewUI
-import com.giraffe.details.screens.seriesdetails.SeriesDetailsEffect
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
@@ -19,7 +18,6 @@ import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
-import com.giraffe.media.series.entity.Series
 
 
 class MovieDetailsViewModel(
@@ -35,7 +33,7 @@ class MovieDetailsViewModel(
 
     init {
         loadMovieDetails(movieID)
-        loadRecommendedMovie(movieID,1)
+        loadRecommendedMovie(movieID, 1)
     }
 
     //loading movie data
@@ -142,8 +140,8 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMoviePeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST } . take(10)
-        val crew = people.filter { it.type == PersonType.CREW } . take(10)
+        val cast = people.filter { it.type == PersonType.CAST }.take(10)
+        val crew = people.filter { it.type == PersonType.CREW }.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
@@ -270,16 +268,21 @@ class MovieDetailsViewModel(
         }
     }
 
+    override fun navigateToCastDetailsScreen(personId: Int) {
+        sendEffect(
+            MovieDetailsEffect.NavigateToCastDetails(
+                personId = personId
+            )
+        )
+    }
+
     override fun onCollectionClick() {
-        TODO("Add movie to a collection is not yet implemented")
     }
 
     override fun onPersonClick(personId: Int) {
-        TODO("PersonScreen is not yet implemented")
     }
 
     override fun onAddRatingClick() {
-        TODO("Authentication not yet implemented")
     }
 
 }

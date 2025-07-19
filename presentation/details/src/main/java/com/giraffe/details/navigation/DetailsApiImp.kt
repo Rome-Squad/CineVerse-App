@@ -77,6 +77,9 @@ class DetailsApiImp : DetailsApi {
             createRecommendationMoviesScreen(it)
             createMovieCastsScreen(it)
             createMovieReviewsScreen(it)
+            createCastDetailsScreen(it)
+            createGalleryScreen(it)
+            createCreditsScreen(it)
         }
     }
 

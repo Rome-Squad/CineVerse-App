@@ -47,7 +47,6 @@ fun RecommendedSeriesScreen(
                 title = viewModel.title,
                 lazyPagingItems = lazyPagingItems,
                 navController = navController,
-                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
 
