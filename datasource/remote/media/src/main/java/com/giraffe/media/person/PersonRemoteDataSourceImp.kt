@@ -14,14 +14,14 @@ class PersonRemoteDataSourceImp(
 ) : PersonRemoteDataSource {
     private val defaultLanguageParams = mapOf(LANGUAGE to "en-US")
 
-    override suspend fun searchByName(personName: String) =
+    override suspend fun searchByName(personName: String, page: Int) =
         requestBuilder.get<SearchPersonResponse>(
             endpoint = SEARCH_PERSON_END_POINT,
             params = mapOf(
                 QUERY to personName,
                 INCLUDE_ADULT to "false",
                 LANGUAGE to "en-US",
-                PAGE to "1"
+                PAGE to page.toString()
             )
         ).people
 
