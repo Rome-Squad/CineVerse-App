@@ -10,7 +10,6 @@ import com.giraffe.details.screens.moviedetails.model.ReviewUI
 const val MOVIES_ROUTE = "movieDetails"
 private const val MOVIE_ID_ARG = "movieID"
 
-
 fun NavController.navigateToMovieDetails(movieID: Int) {
     navigate("$MOVIES_ROUTE/$movieID")
 }

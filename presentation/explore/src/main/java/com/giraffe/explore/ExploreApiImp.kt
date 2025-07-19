@@ -1,4 +1,4 @@
-package com.giraffe.explore.nav
+package com.giraffe.explore
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.giraffe.explore.ExploreApi
 import com.giraffe.explore.nav.route.DISCOVER_ROUTE
 import com.giraffe.explore.nav.route.discoverRoute
 import com.giraffe.explore.nav.route.navigateToSearch

@@ -1,4 +1,4 @@
-package com.giraffe.details.screens.castDetails
+package com.giraffe.details
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,8 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.giraffe.details.DetailsApi
-import com.giraffe.details.DetailsStartDestination
 import com.giraffe.details.screens.moviedetails.screen.MOVIES_ROUTE
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
@@ -38,7 +36,7 @@ class DetailsApiImp : DetailsApi {
         }
 
         val startDestinationRoute = when (startDestination) {
-            is DetailsStartDestination.Movie -> "$MOVIES_ROUTE/${startDestination.movieId}"
+            is DetailsStartDestination.Movie -> "${MOVIES_ROUTE}/${startDestination.movieId}"
             is DetailsStartDestination.Series -> "SERIES_ROUTE/${startDestination.seriesId}"
             is DetailsStartDestination.Cast -> "CAST_ROUTE/${startDestination.castId}"
         }
@@ -47,8 +45,8 @@ class DetailsApiImp : DetailsApi {
             navController = navController,
             startDestination = startDestinationRoute,
             modifier = modifier
-        ){
-            movieDetailsRoute(navController, navigateToReviews = {reviews->
+        ) {
+            movieDetailsRoute(navController, navigateToReviews = { reviews ->
                 navController.currentBackStackEntry?.savedStateHandle?.set(REVIEW_LIST_ARG, reviews)
                 navController.navigate(Review_ROUTE)
             })
