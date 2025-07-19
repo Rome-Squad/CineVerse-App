@@ -8,7 +8,8 @@ import com.giraffe.details.DetailsApi
 import com.giraffe.details.screens.castDetails.CastDetailsScreen
 import com.giraffe.details.screens.gallery.GalleryScreen
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsScreen
-import com.giraffe.details.screens.recommended.RecommendedSeriesScreen
+import com.giraffe.details.screens.recommended.movies.RecommendedMoviesScreen
+import com.giraffe.details.screens.recommended.series.RecommendedSeriesScreen
 import com.giraffe.details.screens.seasons.SeasonsScreen
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreen
 import kotlinx.serialization.Serializable
@@ -26,7 +27,7 @@ data class CreditsRoute(val personId: Int)
 data class MovieDetailsRoute(val movieId: Int)
 
 @Serializable
-data class MoviesRecommendedRoute(val movieId: Int)
+data class MoviesRecommendedRoute(val movieId: Int, val title: String)
 
 @Serializable
 data class MovieCastsRoute(val movieId: Int)
@@ -71,6 +72,7 @@ class DetailsApiImp : DetailsApi {
 
     override fun NavGraphBuilder.castCreditsGraph(navController: NavHostController) {
         composable<CreditsRoute> {
+            val personId = it.toRoute<CreditsRoute>().personId
 
         }
     }
@@ -93,10 +95,16 @@ class DetailsApiImp : DetailsApi {
 
     override fun NavGraphBuilder.movieRecommendationGraph(navController: NavHostController) {
         composable<MoviesRecommendedRoute> {
-            val movieId = it.toRoute<MoviesRecommendedRoute>().movieId
-
+            val MovieId = it.toRoute<MoviesRecommendedRoute>().movieId
+            val MovieName = it.toRoute<MoviesRecommendedRoute>().title
+            RecommendedMoviesScreen(
+                movieId = MovieId,
+                title = MovieName,
+                navController = navController
+            )
         }
     }
+
 
     override fun NavGraphBuilder.movieCastsGraph(navController: NavHostController) {
         composable<MovieCastsRoute> {

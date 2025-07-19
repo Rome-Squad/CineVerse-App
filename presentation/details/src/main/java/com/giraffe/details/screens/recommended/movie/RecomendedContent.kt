@@ -1,4 +1,4 @@
-package com.giraffe.details.components.recomended
+package com.giraffe.details.screens.recommended.movie
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,14 +26,14 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.recommended.TransitionLazyColumnToGrid
-import com.giraffe.details.models.SeriesUi
+import com.giraffe.details.components.recommended.TransitionLazyColumnToGridMovie
+import com.giraffe.details.models.MovieUi
 
 @Composable
 fun RecommendedContent(
     title: String,
     navController: NavController,
-    lazyPagingItems: LazyPagingItems<SeriesUi>,
+    lazyPagingItems: LazyPagingItems<MovieUi>,
     modifier: Modifier = Modifier,
 ) {
     var isGridSelected by rememberSaveable { mutableStateOf(false) }
@@ -85,7 +85,7 @@ fun RecommendedContent(
 @Composable
 private fun CardsSection(
     modifier: Modifier = Modifier,
-    lazyPagingItems: LazyPagingItems<SeriesUi>,
+    lazyPagingItems: LazyPagingItems<MovieUi>,
     isGridSelected: Boolean,
 ) {
     Box(
@@ -93,7 +93,7 @@ private fun CardsSection(
             .fillMaxWidth()
             .background(Theme.color.background.screen)
     ) {
-        TransitionLazyColumnToGrid(
+        TransitionLazyColumnToGridMovie(
             lazyPagingItems = lazyPagingItems,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 5.dp),
