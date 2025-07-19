@@ -8,6 +8,7 @@ interface DetailsApi {
     fun NavGraphBuilder.castDetailsGraph(navController: NavHostController)
     fun NavGraphBuilder.castGalleryGraph(navController: NavHostController)
     fun NavGraphBuilder.castCreditsGraph(navController: NavHostController)
+    fun NavGraphBuilder.castRecommendationGraph(navController: NavHostController)
 
     fun NavGraphBuilder.movieDetailsGraph(navController: NavHostController)
     fun NavGraphBuilder.movieRecommendationGraph(navController: NavHostController)

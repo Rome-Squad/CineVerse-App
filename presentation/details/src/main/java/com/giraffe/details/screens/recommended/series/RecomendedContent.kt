@@ -63,15 +63,9 @@ fun RecommendedContent(
                 )
             }
         }
-        val layoutDirection = LocalLayoutDirection.current
-        val alignment = if (layoutDirection == LayoutDirection.Rtl)
-            Alignment.BottomEnd
-        else
-            Alignment.BottomStart
-
         ViewToggle(
             modifier = Modifier
-                .align(alignment)
+                .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
                 .padding(16.dp),
             isListSelected = isGridSelected,
