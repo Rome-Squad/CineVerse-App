@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
@@ -44,9 +43,9 @@ import kotlin.math.min
 @Composable
 fun SeriesDetailsScreen(
     seriesID: Int,
-    navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: SeriesDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -75,6 +74,7 @@ fun SeriesDetailsScreen(
                 onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
                 onGiveStarClick = viewModel::onClickGiveStars,
                 onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
+                onBackButtonClick = onBackButtonClick
             )
         }
     }
@@ -87,6 +87,7 @@ fun SeriesDetailsContent(
     onDismissAddToCollectionBottomSheet: () -> Unit,
     onGiveStarClick: () -> Unit,
     onDismissAddRatingBottomSheet: () -> Unit,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -96,7 +97,7 @@ fun SeriesDetailsContent(
         Column(Modifier.padding(horizontal = 16.dp)) {
             AppBar(
                 showBackButton = true,
-                onBackButtonClick = {}
+                onBackButtonClick = onBackButtonClick
             )
             MainMovieOrSeriesDetailsAnimatedContent(
                 type = TypeOfDetailsScreen.SERIES.name,

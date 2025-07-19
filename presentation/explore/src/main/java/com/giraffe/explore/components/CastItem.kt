@@ -1,5 +1,6 @@
 package com.giraffe.explore.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,10 +25,12 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 fun CastItem(
     modifier: Modifier = Modifier,
     imageUrl: String,
-    name: String
+    name: String,
+    onClick: () -> Unit
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -58,7 +61,8 @@ fun CastItemPreview() {
         Box(Modifier.width(80.dp)) {
             CastItem(
                 imageUrl = "",
-                name = "Tom Hardy"
+                name = "Tom Hardy",
+                onClick = {}
             )
         }
 

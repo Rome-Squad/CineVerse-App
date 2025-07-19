@@ -1,15 +1,23 @@
 package com.giraffe.details
 
-import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 
 
 interface DetailsApi {
-    @Composable
-    fun GetCastDetailsContainer(personId: Int)
+    fun NavGraphBuilder.castDetailsGraph(navController: NavHostController)
+    fun NavGraphBuilder.castGalleryGraph(navController: NavHostController)
+    fun NavGraphBuilder.castCreditsGraph(navController: NavHostController)
 
-    @Composable
-    fun GetMovieDetailsContainer(movieId: Int)
+    fun NavGraphBuilder.movieDetailsGraph(navController: NavHostController)
+    fun NavGraphBuilder.movieRecommendationGraph(navController: NavHostController)
 
-    @Composable
-    fun GetSeriesDetailsContainer(seriesId: Int)
+    fun NavGraphBuilder.movieCastsGraph(navController: NavHostController)
+    fun NavGraphBuilder.movieReviewsCastsGraph(navController: NavHostController)
+
+    fun NavGraphBuilder.seriesDetailsGraph(navController: NavHostController)
+    fun NavGraphBuilder.seriesRecommendationGraph(navController: NavHostController)
+    fun NavGraphBuilder.seriesCastsGraph(navController: NavHostController)
+    fun NavGraphBuilder.seriesReviewsGraph(navController: NavHostController)
+    fun NavGraphBuilder.seasonGraph(navController: NavHostController)
 }

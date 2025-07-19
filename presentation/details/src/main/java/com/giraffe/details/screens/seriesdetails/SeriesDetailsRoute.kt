@@ -30,10 +30,9 @@ fun NavGraphBuilder.seriesDetailsRoute(
     ) {
         backStackEntry ->
         val seriesID = backStackEntry.arguments?.getInt(SERIES_ID_ARG) ?: 2288
-        SeriesDetailsScreen(
-            seriesID = seriesID,
-            navController = navController,
-            navigateToReviews = navigateToReviews
-        )
+//        SeriesDetailsScreen(
+//            seriesID = seriesID,
+//            navigateToReviews = navigateToReviews
+//        )
     }
 }

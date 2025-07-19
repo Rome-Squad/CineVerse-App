@@ -26,9 +26,9 @@ fun NavGraphBuilder.movieDetailsRoute(
             })
     ) { backStackEntry ->
         val movieID = backStackEntry.arguments?.getInt(MOVIE_ID_ARG) ?: 268
-        MovieDetailsScreen(
-            navController = navController, movieID = movieID,
-            navigateToReviews = navigateToReviews,
-        )
+//        MovieDetailsScreen(
+//            navController = navController, movieID = movieID,
+//            navigateToReviews = navigateToReviews,
+//        )
     }
 }

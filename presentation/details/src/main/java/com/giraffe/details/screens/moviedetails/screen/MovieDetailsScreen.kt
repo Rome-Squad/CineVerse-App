@@ -43,9 +43,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MovieDetailsScreen(
     movieID: Int,
-    navController: NavController,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
+    onBackButtonClick: () -> Unit,
     viewModel: MovieDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -75,7 +75,8 @@ fun MovieDetailsScreen(
     MovieDetailsContent(
         modifier = modifier,
         state = state,
-        interaction = viewModel
+        interaction = viewModel,
+        onBackButtonClick = onBackButtonClick
     )
 }
 
@@ -83,7 +84,8 @@ fun MovieDetailsScreen(
 private fun MovieDetailsContent(
     modifier: Modifier,
     state: MovieDetailsScreenState,
-    interaction: MovieDetailsInteractionListener
+    interaction: MovieDetailsInteractionListener,
+    onBackButtonClick: () -> Unit
 ) {
 
     LazyColumn(
@@ -95,7 +97,9 @@ private fun MovieDetailsContent(
     ) {
         item {
             AppBar(
-                showBackButton = true, modifier = Modifier.padding(16.dp)
+                showBackButton = true,
+                modifier = Modifier.padding(16.dp),
+                onBackButtonClick = onBackButtonClick
             )
         }
 

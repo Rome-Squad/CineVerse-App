@@ -25,6 +25,7 @@ fun ResultsActors(
             CastItem(
                 imageUrl = media.imageUri,
                 name = media.name,
+                onClick = {}
             )
         }
     }
