@@ -4,36 +4,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.explore.navigation.route.DISCOVER_ROUTE
 import com.giraffe.explore.navigation.route.discoverRoute
-import com.giraffe.explore.navigation.route.navigateToSearch
-import com.giraffe.explore.navigation.route.navigateToSearchResult
 import com.giraffe.explore.navigation.route.searchResultRoute
 import com.giraffe.explore.navigation.route.searchRoute
 
 class ExploreApiImp : ExploreApi {
-    private var exploreNavController by mutableStateOf<NavHostController?>(null)
-
-    override fun navigateToSearch() {
-        exploreNavController?.navigateToSearch()
-    }
-
-    override fun navigateToSearchResult(query: String) {
-        exploreNavController?.navigateToSearchResult(query)
-    }
-
-    override fun navigateToDiscover() {
-        exploreNavController?.navigate(DISCOVER_ROUTE)
-    }
-
     @Composable
     override fun ExploreContainer(
         modifier: Modifier,
@@ -43,9 +23,6 @@ class ExploreApiImp : ExploreApi {
     ) {
         val navController: NavHostController = rememberNavController()
 
-        LaunchedEffect(Unit) {
-            exploreNavController = navController
-        }
 
         NavHost(
             navController = navController,

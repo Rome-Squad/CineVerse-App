@@ -1,5 +1,6 @@
 package com.giraffe.cineverseapp.nav
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -37,6 +38,7 @@ fun CineVerseAppContainer(
                         )
                     },
                     navigateToCastDetails = { castId ->
+                        Log.d("TAG", "CineVerseAppContainer: $castId")
                         navigator.navigateTo(
                             screen = AppScreen.Details(
                                 startDestination = DetailsStartDestination.Cast(castId)
@@ -47,6 +49,7 @@ fun CineVerseAppContainer(
             }
 
             is AppScreen.Details -> {
+                Log.d("TAG", "CineVerseAppContainer: details")
                 detailsApi.DetailsContainer(
                     modifier = Modifier.fillMaxSize(),
                     startDestination = screen.startDestination

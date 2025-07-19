@@ -35,9 +35,10 @@ import java.net.UnknownHostException
 object SafeCall {
     suspend operator fun <T> invoke(execute: suspend () -> T): T {
         return try {
-            Log.d("genresExecute", "loadExecute: ${execute.invoke()}")
+            Log.d("TAG", "invoke: ")
             execute()
         } catch (e: Exception) {
+            Log.d("TAG", "invoke: ${e.message}")
             throw mapToDomainException(e)
         }
     }

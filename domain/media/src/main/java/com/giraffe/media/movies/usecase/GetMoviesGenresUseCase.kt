@@ -7,6 +7,7 @@ class GetMoviesGenresUseCase(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(): List<Genre> {
+        println("GetMoviesGenresUseCase")
         return repository.getMoviesGenres()
     }
 }

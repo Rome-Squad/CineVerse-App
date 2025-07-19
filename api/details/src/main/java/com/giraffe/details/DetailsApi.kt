@@ -5,16 +5,9 @@ import androidx.compose.ui.Modifier
 
 
 interface DetailsApi {
-
-    fun navigateToMovieDetails(movieId: Int)
-
-    //fun navigateToSeriesDetails(seriesId: Int)
-
-    //fun navigateToPersonDetails(personId: Int)
-
     @Composable
     fun DetailsContainer(
-        modifier: Modifier = Modifier,
+        modifier: Modifier,
         startDestination: DetailsStartDestination
     )
 
