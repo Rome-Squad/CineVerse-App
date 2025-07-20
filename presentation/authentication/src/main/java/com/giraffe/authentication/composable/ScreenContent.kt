@@ -9,6 +9,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
+import com.giraffe.authentication.screen.LoginInteractionListener
+import com.giraffe.authentication.screen.LoginState
 import com.giraffe.designsystem.composable.DefaultTextField
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
@@ -16,7 +18,9 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun ScreenContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: LoginState,
+    interaction: LoginInteractionListener
 ){
     Column (
         modifier = modifier
@@ -25,18 +29,21 @@ fun ScreenContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             startIcon = painterResource(Theme.icons.outline.user),
             placeholder = stringResource(R.string.enter_your_email_or_username),
-            value = "",
-            onValueChange = {},
+            value = state.email,
+            onValueChange = { interaction.onEmailChanged(it) },
+            errorMessage = state.emailErrorMessage,
             label = stringResource(R.string.email_or_username),
             maxLines = 1,
             isPassword = false,
         )
+
         DefaultTextField(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
             startIcon = painterResource(Theme.icons.outline.user),
             placeholder = stringResource(R.string.enter_your_password),
-            value = "",
-            onValueChange = {},
+            value = state.password,
+            onValueChange = { interaction.onPasswordChanged(it) },
+            errorMessage = state.passwordErrorMessage,
             label = stringResource(R.string.password),
             maxLines = 1,
             isPassword = true,
@@ -48,9 +55,10 @@ fun ScreenContent(
                 .padding(horizontal = 16.dp, vertical = 20.dp),
             text = stringResource(R.string.login),
             enabled = true,
-            isLoading = false,
-            onClick = {},
+            isLoading = state.isLoading,
+            onClick = interaction::onLoginClick,
         )
+
         SecondaryButton(
             modifier = Modifier
                 .fillMaxWidth()
@@ -58,7 +66,7 @@ fun ScreenContent(
             text = stringResource(R.string.join_as_guest),
             enabled = true,
             isLoading = false,
-            onClick = {},
+            onClick = interaction::onLoginClick,
         )
     }
 }
