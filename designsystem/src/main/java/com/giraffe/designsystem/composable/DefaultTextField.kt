@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -60,6 +61,7 @@ fun DefaultTextField(
     endIcon: @Composable (() -> Unit)? = null,
     label: String? = null,
     maxLines: Int = 1,
+    singleLine: Boolean = false,
     maxCharacters: Int = 25,
     errorMessage: String? = null,
     readOnly: Boolean = false,
@@ -133,11 +135,13 @@ fun DefaultTextField(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .focusRequester(focusRequester),
+                    .focusRequester(focusRequester)
+                    .semantics { },
                 interactionSource = interactionSource,
                 readOnly = readOnly,
                 value = value,
                 maxLines = maxLines,
+                singleLine = singleLine,
                 onValueChange = { if (it.length <= maxCharacters) onValueChange(it) },
                 textStyle = Theme.textStyle.body.md.medium,
                 visualTransformation = if (!isPassword)
@@ -148,7 +152,7 @@ fun DefaultTextField(
                     PasswordVisualTransformation(),
                 placeholder = {
                     Text(
-                        placeholder,
+                        text = placeholder,
                         style = Theme.textStyle.body.md.regular,
                         color = Theme.color.shade.tertiary
                     )
@@ -188,7 +192,7 @@ fun DefaultTextField(
         }
         if (hasError && !isFocused) {
             Text(
-                text = errorMessage,
+                text = errorMessage ?: "",
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.additional.primary.red
             )
@@ -280,12 +284,14 @@ private fun TextField(
 @Preview
 @Composable
 private fun TextFieldPreview() {
+    var text by remember { mutableStateOf("") }
+
     CineVerseTheme(isDarkTheme = true) {
         DefaultTextField(
             placeholder = "Enter your username",
             startIcon = painterResource(Theme.icons.outline.user),
-            value = "",
-            onValueChange = {},
+            value = text,
+            onValueChange = { text = it },
         )
     }
 }

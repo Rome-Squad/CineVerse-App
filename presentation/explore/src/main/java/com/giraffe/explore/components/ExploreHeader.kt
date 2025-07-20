@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -72,6 +74,8 @@ fun ExploreHeader(
             }
             DefaultTextField(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                singleLine = true,
+                maxCharacters = 100,
                 startIcon = painterResource(Theme.icons.outline.search),
                 onStartIconClick = onSearchClick,
                 endIcon = {
@@ -104,11 +108,12 @@ fun ExploreHeader(
 @Preview
 @Composable
 private fun Preview() {
+    val (searchText, onSearchTextChange) = remember { mutableStateOf("") }
     CineVerseTheme(isDarkTheme = true) {
         ExploreHeader(
             endIcon = painterResource(Theme.icons.outline.microphone),
-            onValueChange = {},
-            value = "",
+            value = searchText,
+            onValueChange = onSearchTextChange,
             placeholder = "search"
         )
     }
