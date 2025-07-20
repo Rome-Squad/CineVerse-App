@@ -1,20 +1,17 @@
 package com.giraffe.designsystem.composable.button_type
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -41,12 +38,9 @@ fun PrimaryButton(
         ),
         contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp)
     ) {
-        AnimatedVisibility(visible = isLoading, enter = fadeIn(), exit = fadeOut()) {
-            CircularProgressIndicator(
-                color = Theme.color.button.onPrimary
-            )
-        }
-        AnimatedVisibility(visible = !isLoading, enter = fadeIn(), exit = fadeOut()) {
+        if (isLoading) {
+            Progress()
+        } else {
             Text(
                 text = text,
                 style = Theme.textStyle.body.md.regular,
