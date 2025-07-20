@@ -16,6 +16,7 @@ fun CineVerseAppContainer(
     exploreApi: ExploreApi,
     detailsApi: DetailsApi
 ) {
+
     val navigator = remember { AppNavigator() }
 
     CompositionLocalProvider(LocalAppNavigator provides navigator) {
