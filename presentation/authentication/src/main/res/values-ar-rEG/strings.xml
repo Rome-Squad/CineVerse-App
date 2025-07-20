@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_a_new_account">Create a New Account</string>
+    <string name="enter_your_email_or_username">Enter your email or username</string>
+    <string name="email_or_username">Email or Username</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="join_as_guest">Join as Guest</string>
+</resources>
