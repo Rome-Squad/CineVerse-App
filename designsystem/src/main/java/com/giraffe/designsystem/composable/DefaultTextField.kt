@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -135,8 +134,7 @@ fun DefaultTextField(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .focusRequester(focusRequester)
-                    .semantics { },
+                    .focusRequester(focusRequester),
                 interactionSource = interactionSource,
                 readOnly = readOnly,
                 value = value,
