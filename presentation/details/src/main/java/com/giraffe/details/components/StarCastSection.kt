@@ -121,7 +121,7 @@ fun CastCard(
             ) {
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = null,
+                    contentDescription = "$actorName image",
                     tint = Theme.color.brand.secondary,
                     modifier = it
                         .size(64.dp)
