@@ -16,12 +16,14 @@ class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
     }
 
     private fun validateInputs(): Boolean {
-        val isValidEmail = state.value.email.isNotEmpty() && state.value.email.contains("@")
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$".toRegex()
+        val isValidEmail = emailRegex.matches(state.value.email)
         val isValidPassword = state.value.password.isNotEmpty() && state.value.password.length >= 8
 
         updateState {
             it.copy(
-                isEmailError = !isValidEmail, isPasswordError = !isValidPassword
+                emailErrorMessage = if (isValidEmail) null else "Invalid Email Address",
+                passwordErrorMessage = if (isValidPassword) null else "Invalid Password (Minimum 8 characters)"
             )
         }
 
@@ -29,7 +31,8 @@ class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
     }
 
     private fun performLogin() {
-        safeExecute(onError = {
+        safeExecute(
+            onError = {
             updateState { it.copy(isLoading = false) }
             sendEffect(LoginEffect.Error(it))
         }, onSuccess = {
