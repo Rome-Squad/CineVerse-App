@@ -7,4 +7,8 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="join_as_guest">Join as Guest</string>
+    <string name="join_cineverse">Join CineVerse</string>
+    <string name="caption_for_sign_up">Let’s get you set up! We’ll take you to the website to create your account.</string>
+    <string name="go_to_website">Go to Website</string>
+    <string name="cancel">Cancel</string>
 </resources>
