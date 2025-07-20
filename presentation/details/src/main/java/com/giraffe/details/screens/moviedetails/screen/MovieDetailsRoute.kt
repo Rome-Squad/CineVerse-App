@@ -16,19 +16,22 @@ fun NavController.navigateToMovieDetails(movieID: Int) {
 
 fun NavGraphBuilder.movieDetailsRoute(
     navController: NavController,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit
+    onBackButtonClick: () -> Unit,
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
 ) {
     composable(
         route = "$MOVIES_ROUTE/{$MOVIE_ID_ARG}",
         arguments = listOf(
-        navArgument(MOVIE_ID_ARG) {
-            type = NavType.IntType
-        })) { backStackEntry ->
+            navArgument(MOVIE_ID_ARG) {
+                type = NavType.IntType
+            })
+    ) { backStackEntry ->
         val movieID = backStackEntry.arguments?.getInt(MOVIE_ID_ARG) ?: 268
         MovieDetailsScreen(
             navController = navController,
             movieID = movieID,
             navigateToReviews = navigateToReviews,
+            onBackButtonClick = onBackButtonClick
         )
     }
 }
