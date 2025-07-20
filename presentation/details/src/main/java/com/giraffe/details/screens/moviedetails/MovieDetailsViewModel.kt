@@ -276,6 +276,10 @@ class MovieDetailsViewModel(
         )
     }
 
+    override fun navigateToMovieRecommendation(movieId: Int, title: String) {
+        sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
+    }
+
     override fun onCollectionClick() {
     }
 
