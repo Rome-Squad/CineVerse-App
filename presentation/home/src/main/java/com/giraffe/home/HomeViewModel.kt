@@ -17,7 +17,7 @@ import com.giraffe.media.exception.UnauthorizedException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.home.usecase.*
-import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
@@ -35,7 +35,7 @@ class HomeViewModel(
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
-    private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
+    private val getMoviesGenresByIdsUseCase: GetMovieGenresUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
