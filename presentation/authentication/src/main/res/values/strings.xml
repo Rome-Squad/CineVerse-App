@@ -11,4 +11,8 @@
     <string name="caption_for_sign_up">Let’s get you set up! We’ll take you to the website to create your account.</string>
     <string name="go_to_website">Go to Website</string>
     <string name="cancel">Cancel</string>
+    <string name="invalid_email_address">Invalid Email Address</string>
+    <string name="invalid_password_minimum_8_characters">Invalid Password (Minimum 8 characters)</string>
+    <string name="welcome_back_to_cineverse">Welcome back to CineVerse!</string>
+    <string name="logo">logo</string>
 </resources>
