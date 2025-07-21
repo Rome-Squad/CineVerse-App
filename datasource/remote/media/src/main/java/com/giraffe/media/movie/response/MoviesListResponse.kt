@@ -1,14 +1,13 @@
 package  com.giraffe.media.movie.response
 
 import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
 data class MoviesListResponse(
     val page: Int,
     val results: List<MovieDto>,
-    @SerialName("total_pages")
+    @SerializedName("total_pages")
     val totalPages: Int,
-    @SerialName("total_results")
+    @SerializedName("total_results")
     val totalResults: Int
 )

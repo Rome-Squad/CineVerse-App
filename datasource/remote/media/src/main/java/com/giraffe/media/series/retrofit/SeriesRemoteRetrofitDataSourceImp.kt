@@ -1,4 +1,4 @@
-package com.giraffe.media.series
+package com.giraffe.media.series.retrofit
 
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto

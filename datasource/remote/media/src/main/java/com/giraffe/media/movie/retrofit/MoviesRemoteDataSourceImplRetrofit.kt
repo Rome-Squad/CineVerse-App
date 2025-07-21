@@ -1,6 +1,6 @@
-package com.giraffe.media.movie.datasource.remote
+package com.giraffe.media.movie.retrofit
 
-import com.giraffe.media.movie.MoviesApiServiceRetrofit
+import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
