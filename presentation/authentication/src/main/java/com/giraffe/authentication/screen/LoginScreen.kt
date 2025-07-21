@@ -31,7 +31,7 @@ fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel()
 ){
     val state by viewModel.state.collectAsState()
-    LoginScreenContent(
+    LoginContent(
         modifier = modifier,
         state = state,
         interaction = viewModel
@@ -39,7 +39,7 @@ fun LoginScreen(
 }
 
 @Composable
-private fun LoginScreenContent(
+private fun LoginContent(
     modifier: Modifier,
     state: LoginState,
     interaction : LoginInteractionListener 
