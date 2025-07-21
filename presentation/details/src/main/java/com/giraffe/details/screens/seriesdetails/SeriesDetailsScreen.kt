@@ -169,7 +169,11 @@ fun SeriesDetailsContent(
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
-                            year = state.seasons[i].releaseYear.split("-").first().toInt(),
+                            year = state.seasons[i].releaseYear
+                                .takeIf { it.isNotBlank() && it.contains("-") }
+                                ?.split("-")
+                                ?.firstOrNull()
+                                ?.toIntOrNull()
                         )
                     }
                 }
