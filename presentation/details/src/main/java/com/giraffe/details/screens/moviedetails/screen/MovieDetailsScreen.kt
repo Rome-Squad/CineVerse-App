@@ -39,7 +39,8 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.navigateToCastDetails
+import com.giraffe.details.nav.CastDetailsRoute
+import com.giraffe.details.nav.MovieDetailsRoute
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
@@ -76,8 +77,8 @@ fun MovieDetailsScreen(
                 is MovieDetailsEffect.Error -> {}
                 MovieDetailsEffect.NavigateToCollection -> {}
                 MovieDetailsEffect.NavigateToLogin -> {}
-                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
-                    castID = effect.personId
+                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigate(
+                    CastDetailsRoute(effect.personId)
                 )
             }
         }
@@ -182,12 +183,8 @@ private fun MovieDetailsContent(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedMovies,
-                onClickEndText = {
-
-                },
-                onClickPoster = {
-                    navController.navigateToMovieDetails(it)
-                }
+                onClickEndText = {},
+                onClickPoster = { navController.navigate(MovieDetailsRoute(it)) }
             )
 
             RatingSection(

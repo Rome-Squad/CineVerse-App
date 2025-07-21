@@ -41,7 +41,8 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.navigateToCastDetails
+import com.giraffe.details.nav.CastDetailsRoute
+import com.giraffe.details.nav.SeriesDetailsRoute
 import com.giraffe.details.utils.EventListener
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
@@ -64,8 +65,8 @@ fun SeriesDetailsScreen(
     ) {
         when (it) {
             is SeriesDetailsEffect.Error -> {}
-            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
-                castID = it.personId
+            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigate(
+                CastDetailsRoute(it.personId)
             )
 
             is SeriesDetailsEffect.NavigateToSeasons -> {
@@ -200,7 +201,7 @@ fun SeriesDetailsContent(
                         )
                     )*/
                 },
-                onClickPoster = { navController.navigateToSeriesDetails(it) }
+                onClickPoster = { navController.navigate(SeriesDetailsRoute(it)) }
             )
 
             RatingSection(

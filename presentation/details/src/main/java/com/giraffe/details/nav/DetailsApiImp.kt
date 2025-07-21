@@ -7,9 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
 import com.giraffe.details.DetailsStartDestination
-import com.giraffe.details.screens.castDetails.CAST_ROUTE
-import com.giraffe.details.screens.moviedetails.screen.MOVIES_ROUTE
-import com.giraffe.details.screens.seriesdetails.SERIES_ROUTE
 
 class DetailsApiImp : DetailsApi {
     @Composable
@@ -21,9 +18,9 @@ class DetailsApiImp : DetailsApi {
         val navController: NavHostController = rememberNavController()
 
         val startDestinationRoute = when (startDestination) {
-            is DetailsStartDestination.Movie -> "${MOVIES_ROUTE}/${startDestination.movieId}"
-            is DetailsStartDestination.Series -> "${SERIES_ROUTE}/${startDestination.seriesId}"
-            is DetailsStartDestination.Cast -> "${CAST_ROUTE}/${startDestination.castId}"
+            is DetailsStartDestination.Movie -> MovieDetailsRoute(startDestination.movieId)
+            is DetailsStartDestination.Series -> SeriesDetailsRoute(startDestination.seriesId)
+            is DetailsStartDestination.Cast -> CastDetailsRoute(startDestination.castId)
         }
         Log.d("TAG DetailsContainer:", "$startDestinationRoute")
         DetailsNavGraph(
