@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -140,7 +141,13 @@ fun DefaultTextField(
                 value = value,
                 maxLines = maxLines,
                 singleLine = singleLine,
-                onValueChange = { if (it.length <= maxCharacters) onValueChange(it) },
+                onValueChange = {
+                    Log.i("maxCharacters", it.length.toString())
+                    if (it.length <= maxCharacters) {
+                        if (it.contains("\n")) onValueChange(it.replace("\n", " "))
+                        else onValueChange(it)
+                    }
+                },
                 textStyle = Theme.textStyle.body.md.medium,
                 visualTransformation = if (!isPassword)
                     VisualTransformation.None
@@ -223,7 +230,7 @@ private fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-    placeholder: @Composable (() -> Unit)? = null,
+    placeholder: @Composable() (() -> Unit)? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     singleLine: Boolean = false,
@@ -235,7 +242,7 @@ private fun TextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     colors: TextFieldColors = TextFieldColors(),
     interactionSource: MutableInteractionSource? = null,
-    alignment: Alignment = Alignment.CenterStart
+    alignment: Alignment = Alignment.CenterStart,
 ) {
     val source = interactionSource ?: remember { MutableInteractionSource() }
     val focused = source.collectIsFocusedAsState().value
@@ -243,6 +250,7 @@ private fun TextField(
     val mergedTextStyle = textStyle.merge(
         TextStyle(color = textStyle.color.takeOrElse { colors.textColor })
     )
+
     CompositionLocalProvider(LocalTextSelectionColors provides LocalTextSelectionColors.current) {
         Box(
             modifier = modifier
@@ -251,6 +259,7 @@ private fun TextField(
                 .padding(contentPadding),
 
             ) {
+
             BasicTextField(
                 modifier = Modifier
                     .align(alignment)
@@ -269,9 +278,7 @@ private fun TextField(
                 maxLines = maxLines,
                 minLines = minLines,
                 decorationBox = { innerTextField ->
-                    if (value.isEmpty() && placeholder != null) {
-                        placeholder()
-                    }
+                    if (value.isEmpty() && placeholder != null) placeholder()
                     innerTextField()
                 }
             )
@@ -289,7 +296,9 @@ private fun TextFieldPreview() {
             placeholder = "Enter your username",
             startIcon = painterResource(Theme.icons.outline.user),
             value = text,
+            singleLine = true,
             onValueChange = { text = it },
+            maxCharacters = 300
         )
     }
 }

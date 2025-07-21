@@ -75,7 +75,7 @@ fun ExploreHeader(
             DefaultTextField(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 singleLine = true,
-                maxCharacters = 100,
+                maxCharacters = 400,
                 startIcon = painterResource(Theme.icons.outline.search),
                 onStartIconClick = onSearchClick,
                 endIcon = {
