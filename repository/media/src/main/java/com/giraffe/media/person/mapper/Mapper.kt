@@ -18,40 +18,34 @@ import com.giraffe.media.utils.INSTAGRAM_URL
 import com.giraffe.media.utils.YOUTUBE_URL
 
 
-fun PersonCacheDto.toEntity(type: PersonType = PersonType.CAST): Person {
-    return Person(
-        id = id,
-        name = name,
-        role = role,
-        imageUrl = imageUrl?.let {
-            if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
-        },
-        type = type
-    )
-}
+fun PersonCacheDto.toEntity(type: PersonType = PersonType.CAST) = Person(
+    id = id,
+    name = name,
+    role = role,
+    imageUrl = imageUrl?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    },
+    type = type
+)
 
-fun Person.toDto(): PersonCacheDto {
-    return PersonCacheDto(
-        id = id,
-        name = name,
-        imageUrl = imageUrl?.let {
-            if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
-        },
-        role = role,
-        type = type.name,
-    )
-}
+fun Person.toCacheDto() = PersonCacheDto(
+    id = id,
+    name = name,
+    imageUrl = imageUrl?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    },
+    role = role,
+    type = type.name,
+)
 
-fun PersonDto.toEntity(): Person {
-    return Person(
-        id = id,
-        name = name,
-        role = role,
-        imageUrl = profilePath?.let {
-            if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
-        },
-    )
-}
+fun PersonDto.toEntity() = Person(
+    id = id,
+    name = name,
+    role = role,
+    imageUrl = profilePath?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    },
+)
 
 fun CastDto.toEntity(type: PersonType) = Person(
     id = id,
