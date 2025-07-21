@@ -5,7 +5,7 @@ import com.giraffe.user.repository.AuthRepository
 
 class AuthRepositoryImpl(
     private val remoteDataSource: AuthRemoteDataSource,
-    //private val sessionManager: SessionManager
+    private val sessionIdManager: SessionIdManager
 ) : AuthRepository {
     override suspend fun login(username: String, password: String) {
 
@@ -15,8 +15,6 @@ class AuthRepositoryImpl(
 
         val sessionId = remoteDataSource.createSession(validatedToken)
 
-
-
-        //sessionManager.saveSessionId(sessionId)
+        sessionIdManager.saveSessionId(sessionId)
     }
 }
