@@ -134,6 +134,8 @@ dependencies {
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
 
+    implementation(libs.okhttp)
+
     //ktor
     implementation(libs.bundles.ktor)
 
