@@ -13,6 +13,7 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.utils.BASE_IMAGE_URL
+import com.giraffe.media.utils.toFormattedDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -72,7 +73,7 @@ fun SeriesDto.toEntity() = Series(
     rating = voteAverage.toFloat(),
     posterUrl = BASE_IMAGE_URL + posterPath,
     genreIDs = genreIds,
-    releaseYear = firstAirDate,
+    releaseYear = firstAirDate.toFormattedDate(),
     seasons = emptyList()
 )
 
@@ -98,7 +99,7 @@ fun SeriesDetailsDto.toEntity() = Series(
     name = name,
     genreIDs = genres.map { it.id },
     rating = voteAverage.toFloat(),
-    releaseYear = firstAirDate,
+    releaseYear = firstAirDate.toFormattedDate(),
     overview = overview,
     seasons = seasons.map { it.toEntity() }
 )
