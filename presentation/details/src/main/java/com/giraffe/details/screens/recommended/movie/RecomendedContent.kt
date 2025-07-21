@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
@@ -28,14 +27,14 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.recommended.TransitionLazyColumnToGridMovie
 import com.giraffe.details.models.MovieUi
-import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 
 @Composable
 fun RecommendedContent(
     title: String,
-    navController: NavController,
     lazyPagingItems: LazyPagingItems<MovieUi>,
     modifier: Modifier = Modifier,
+    onItemClick: (MovieUi) -> Unit,
+    onBackClick: () -> Unit
 ) {
     var isGridSelected by rememberSaveable { mutableStateOf(false) }
 
@@ -52,7 +51,7 @@ fun RecommendedContent(
                     caption = stringResource(R.string.because_you_watched),
                     showBackButton = true,
                     modifier = Modifier.padding(16.dp),
-                    onBackButtonClick = {navController.popBackStack()},
+                    onBackButtonClick = onBackClick
                 )
             }
 
@@ -61,12 +60,11 @@ fun RecommendedContent(
                     modifier = Modifier.fillParentMaxHeight(),
                     lazyPagingItems = lazyPagingItems,
                     isGridSelected = !isGridSelected,
-                    onItemClick = { movie ->
-                        navController.navigateToMovieDetails(movie.id)
-                    }
+                    onItemClick = onItemClick
                 )
             }
         }
+
         val layoutDirection = LocalLayoutDirection.current
         val alignment = if (layoutDirection == LayoutDirection.Rtl)
             Alignment.BottomEnd

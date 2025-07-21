@@ -23,6 +23,7 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.custom.Button
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -49,9 +50,15 @@ fun RecommendedMoviesScreen(
             RecommendedContent(
                 title = viewModel.title,
                 lazyPagingItems = lazyPagingItems,
-                navController = navController,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onItemClick = { movie ->
+                    navController.navigateToMovieDetails(movie.id)
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
             )
+
         }
 
         AnimatedVisibility(
@@ -61,7 +68,7 @@ fun RecommendedMoviesScreen(
             Progress(modifier = Modifier.size(48.dp))
         }
 
-        refreshError?.let { error ->
+        refreshError?.let {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
