@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.seriesdetails
 
+import com.giraffe.designsystem.text_style.Title
 
 
 sealed interface SeriesDetailsEffect {
@@ -8,5 +9,8 @@ sealed interface SeriesDetailsEffect {
         SeriesDetailsEffect
 
     data class NavigateToSeasons(val seriesId: Int) :
+        SeriesDetailsEffect
+
+    data class NavigateToRecommendedSeries(val seriesId: Int, val title: String) :
         SeriesDetailsEffect
 }

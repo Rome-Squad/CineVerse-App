@@ -41,11 +41,10 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.navigation.RecommendedSeriesRoute
 import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.seasons.navigateToSeasons
 import com.giraffe.details.utils.EventListener
-import com.giraffe.details.navigation.RecommendedSeriesRoute
-import com.giraffe.details.navigation.SeriesDetailsRoute
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -74,6 +73,15 @@ fun SeriesDetailsScreen(
             is SeriesDetailsEffect.NavigateToSeasons -> navController.navigateToSeasons(
                 seriesId = it.seriesId
             )
+
+            is SeriesDetailsEffect.NavigateToRecommendedSeries -> {
+                navController.navigate(
+                    RecommendedSeriesRoute(
+                        it.seriesId,
+                        it.title
+                    )
+                )
+            }
         }
     }
     Box(
@@ -154,7 +162,7 @@ fun SeriesDetailsContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.latest_seasons),
                 clickableText = stringResource(R.string.show_more),
-                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id)}
+                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
 
             )
             AnimatedVisibility(state.seasons.isNotEmpty()) {
@@ -194,14 +202,12 @@ fun SeriesDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
                 onClickEndText = {
-                    navController.navigate(
-                        RecommendedSeriesRoute(
-                            state.seriesDetails.id,
-                            state.seriesDetails.name
-                        )
+                    interaction.navigateToRecommendedSeriesScreen(
+                        state.seriesDetails.id,
+                        state.seriesDetails.name
                     )
                 },
-                onClickPoster = {navController.navigateToSeriesDetails(it)}
+                onClickPoster = { navController.navigateToSeriesDetails(it) }
             )
 
             RatingSection(
