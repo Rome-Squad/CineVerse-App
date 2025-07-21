@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -47,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.giraffe.designsystem.R
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -161,7 +163,7 @@ fun DefaultTextField(
                     textColor = Theme.color.shade.primary
                 )
             )
-            if (hasError && !isFocused) {
+            if (hasError && !isFocused && !isPassword) {
                 Icon(
                     painter = painterResource(Theme.icons.outline.dangerTriangle),
                     contentDescription = "Danger_Triangle_Icon",
@@ -195,7 +197,7 @@ fun DefaultTextField(
         }
         if (isPassword) {
             Text(
-                text = "Forgot Password?",
+                text = stringResource(R.string.forgot_password),
                 style = Theme.textStyle.body.md.regular,
                 color = Theme.color.shade.secondary,
                 textDecoration = TextDecoration.Underline,
