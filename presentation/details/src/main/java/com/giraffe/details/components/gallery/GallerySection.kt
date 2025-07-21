@@ -20,6 +20,7 @@ fun GallerySection(
     imageUrls: List<String?>,
     onShowMoreClick: () -> Unit,
 ) {
+    if (imageUrls.isEmpty()) return
     Column(
         modifier = modifier
             .fillMaxWidth(),

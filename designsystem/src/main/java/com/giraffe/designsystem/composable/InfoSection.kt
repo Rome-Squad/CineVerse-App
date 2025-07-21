@@ -19,6 +19,7 @@ fun InfoSection(
     descriptionLimits: Int = 100,
     spaceBetween: Int = 8
 ) {
+    if (description.isEmpty()) return
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(spaceBetween.dp)
