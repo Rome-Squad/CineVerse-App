@@ -17,6 +17,7 @@ fun DetailsNavGraph(
     modifier: Modifier,
     navController: NavHostController,
     startDestinationRoute: String,
+    back: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -26,7 +27,10 @@ fun DetailsNavGraph(
         movieDetailsRoute(
             navController = navController,
             onBackButtonClick = {
-                navController.navigateUp()
+                val backed = navController.navigateUp()
+                if (!backed) {
+                    back()
+                }
             },
             navigateToReviews = { reviews ->
                 navController.currentBackStackEntry?.savedStateHandle?.set(

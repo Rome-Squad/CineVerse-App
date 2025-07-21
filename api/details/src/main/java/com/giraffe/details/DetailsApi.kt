@@ -8,7 +8,8 @@ interface DetailsApi {
     @Composable
     fun DetailsContainer(
         modifier: Modifier,
-        startDestination: DetailsStartDestination
+        startDestination: DetailsStartDestination,
+        backPress: () -> Unit
     )
 
 }

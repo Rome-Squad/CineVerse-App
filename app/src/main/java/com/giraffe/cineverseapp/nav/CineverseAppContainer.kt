@@ -1,6 +1,6 @@
 package com.giraffe.cineverseapp.nav
 
-import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -17,10 +17,16 @@ fun CineVerseAppContainer(
     detailsApi: DetailsApi
 ) {
 
-    val navigator = remember { AppNavigator() }
+    val navigator = remember { AppNavigator<AppScreen>(AppScreen.Explore) }
 
     CompositionLocalProvider(LocalAppNavigator provides navigator) {
-        when (val screen = navigator.currentScreen) {
+        val currentScreen = navigator.currentScreen
+
+        BackHandler(enabled = currentScreen !is AppScreen.Explore) {
+            navigator.navigateBack()
+        }
+
+        when (currentScreen) {
             is AppScreen.Explore -> {
                 exploreApi.ExploreContainer(
                     modifier = Modifier.fillMaxSize(),
@@ -39,7 +45,6 @@ fun CineVerseAppContainer(
                         )
                     },
                     navigateToCastDetails = { castId ->
-                        Log.d("TAG", "CineVerseAppContainer: $castId")
                         navigator.navigateTo(
                             screen = AppScreen.Details(
                                 startDestination = DetailsStartDestination.Cast(castId)
@@ -50,10 +55,12 @@ fun CineVerseAppContainer(
             }
 
             is AppScreen.Details -> {
-                Log.d("TAG", "CineVerseAppContainer: details")
                 detailsApi.DetailsContainer(
                     modifier = Modifier.fillMaxSize(),
-                    startDestination = screen.startDestination
+                    startDestination = currentScreen.startDestination,
+                    backPress = {
+                        navigator.navigateBack()
+                    }
                 )
             }
         }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+/*
 
 class AppNavigator {
     var currentScreen by mutableStateOf<AppScreen>(AppScreen.Explore)
@@ -20,23 +21,23 @@ val LocalAppNavigator = staticCompositionLocalOf<AppNavigator> {
     error("AppNavigator not provided")
 }
 
+*/
 
-/*
 
-class AppNavigator(
-    val initialScreen: AppScreen
+class AppNavigator<T>(
+    val initialScreen: T
 ) {
 
     var backStack = NavBackStack(initialScreen)
         private set
-    var currentScreen by mutableStateOf<AppScreen>(initialScreen)
+    var currentScreen by mutableStateOf(initialScreen)
         private set
 
     init {
         currentScreen = backStack.seek()
     }
 
-    fun navigateTo(screen: AppScreen) {
+    fun navigateTo(screen: T) {
         backStack.push(screen)
         updateCurrentScreen()
         Log.d("TAG", "navigateTo: $currentScreen")
@@ -52,48 +53,43 @@ class AppNavigator(
     }
 }
 
-val LocalAppNavigator = staticCompositionLocalOf<AppNavigator> {
+val LocalAppNavigator = staticCompositionLocalOf<AppNavigator<AppScreen>> {
     error("AppNavigator not provided")
 }
 
 
-class NavBackStack(
-    val initialScreen: AppScreen
+class NavBackStack<T>(
+    val initialScreen: T
 ) {
-    private var data by mutableStateOf<List<AppScreen>>(listOf(initialScreen))
+    private var data by mutableStateOf<List<T>>(listOf(initialScreen))
 
-    fun push(entry: AppScreen) {
+    fun push(entry: T) {
         val newData = data.toMutableList()
+
         newData.add(
-            index = size() - 1,
             entry
         )
+
         updateData(
             newData = newData
         )
     }
 
-    fun pop(): AppScreen {
+    fun pop(): T? {
+        if (data.size <= 1) return null
+
         val newData = data.toMutableList()
-        val previousScreen = newData.removeAt(
-            index = size() - 1
-        )
-        updateData(
-            newData = newData
-        )
-        return previousScreen
+        newData.removeAt(size() - 1)
+        data = newData
+
+        return data.last()
     }
 
-    fun seek(): AppScreen{
-        return data[size() - 1]
-    }
+    fun seek() = data.last()
 
-    fun size(): Int {
-        return data.size
-    }
+    fun size() = data.size
 
-    private fun updateData(newData: List<AppScreen>) {
+    private fun updateData(newData: List<T>) {
         data = newData
     }
 }
- */
