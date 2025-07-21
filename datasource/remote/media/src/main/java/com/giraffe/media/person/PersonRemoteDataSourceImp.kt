@@ -5,8 +5,8 @@ import com.giraffe.media.person.datasource.remote.dto.CreditsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
+import com.giraffe.media.person.datasource.remote.dto.SearchPersonDto
 import com.giraffe.media.person.response.PersonCreditsResponse
-import com.giraffe.media.person.response.SearchPersonResponse
 import com.giraffe.media.util.RequestBuilder
 
 class PersonRemoteDataSourceImp(
@@ -14,16 +14,16 @@ class PersonRemoteDataSourceImp(
 ) : PersonRemoteDataSource {
     private val defaultLanguageParams = mapOf(LANGUAGE to "en-US")
 
-    override suspend fun searchByName(personName: String) =
-        requestBuilder.get<SearchPersonResponse>(
+    override suspend fun searchByName(personName: String, page: Int) =
+        requestBuilder.get<SearchPersonDto>(
             endpoint = SEARCH_PERSON_END_POINT,
             params = mapOf(
                 QUERY to personName,
                 INCLUDE_ADULT to "false",
                 LANGUAGE to "en-US",
-                PAGE to "1"
+                PAGE to page.toString()
             )
-        ).people
+        )
 
     override suspend fun getPersonMediaCredits(personId: Int) =
         requestBuilder.get<PersonCreditsResponse>(

@@ -4,7 +4,6 @@ import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
-import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.mapper.toDto
@@ -23,12 +22,8 @@ class PersonRepositoryImpl(
     private val localDataSource: PersonLocalDataSource,
 ) : PersonRepository {
 
-    override suspend fun searchByName(personName: String) = SafeCall {
-        localDataSource.searchByName(personName).map(PersonCacheDto::toEntity).ifEmpty {
-            val people = remoteDataSource.searchByName(personName).map(PersonDto::toEntity)
-            localDataSource.storePeople(people.map(Person::toDto))
-            people
-        }
+    override suspend fun searchByName(personName: String, page: Int) = SafeCall {
+        remoteDataSource.searchByName(personName, page).toEntity()
     }
 
     override suspend fun storeRecentPerson(person: Person) =
