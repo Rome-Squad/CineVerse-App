@@ -4,12 +4,8 @@ import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.HttpClientFactory
 import com.giraffe.media.explore.ExploreRemoteDataSourceImp
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
-import com.giraffe.media.movie.MoviesRemoteDataSourceImp
-import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.person.PersonRemoteDataSourceImp
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
-import com.giraffe.media.series.SeriesRemoteDataSourceImp
-import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.util.RequestBuilder
 import com.giraffe.repository.SessionManagerImpl
 import com.giraffe.repository.datasource.UserRemoteDataSource
@@ -50,8 +46,8 @@ val networkModule = module {
         )
     }
     singleOf(::ExploreRemoteDataSourceImp) bind ExploreRemoteDataSource::class
-    singleOf(::MoviesRemoteDataSourceImp) bind MoviesRemoteDataSource::class
-    singleOf(::SeriesRemoteDataSourceImp) bind SeriesRemoteDataSource::class
+//    singleOf(::MoviesRemoteDataSourceImp) bind MoviesRemoteDataSource::class
+  // singleOf(::SeriesRemoteDataSourceImp) bind SeriesRemoteDataSource::class
     singleOf(::PersonRemoteDataSourceImp) bind PersonRemoteDataSource::class
     singleOf(::SessionManagerImpl) bind SessionManager::class
 }

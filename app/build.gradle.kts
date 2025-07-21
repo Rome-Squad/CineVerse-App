@@ -152,4 +152,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.navigation.compose)
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 }

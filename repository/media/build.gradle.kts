@@ -45,4 +45,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     annotationProcessor(libs.room.compiler)
     testImplementation(libs.bundles.test)
+    implementation(libs.gson)
 }

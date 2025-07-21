@@ -4,7 +4,6 @@ import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class MoviesListResponse(
     val page: Int,
     val results: List<MovieDto>,
