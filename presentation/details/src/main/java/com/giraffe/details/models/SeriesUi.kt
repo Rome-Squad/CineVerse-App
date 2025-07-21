@@ -11,7 +11,8 @@ data class SeriesUi(
     val posterUrl: String? = null,
     val releaseYear: String = "",
     val genreIDs: List<Int> = emptyList(),
-    ) {
+    val genres: List<String> = emptyList()
+) {
     companion object {
         fun fromEntity(series: Series) = SeriesUi(
             id = series.id,
@@ -24,9 +25,12 @@ data class SeriesUi(
         )
     }
 }
+
 fun SeriesUi.toPoster(): Poster = Poster(
     id = id,
     name = name,
     imageUri = posterUrl ?: "",
-    rating = rating
+    rating = rating,
+    genres = genres.joinToString(", "),
+    date = releaseYear
 )
