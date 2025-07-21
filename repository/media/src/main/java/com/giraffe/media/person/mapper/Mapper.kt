@@ -79,7 +79,8 @@ fun PersonCreditDto.toEntity(): PersonCredit = PersonCredit(
     posterPath = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
-    voteAverage = voteAverage
+    voteAverage = voteAverage,
+    mediaType = mediaType
 )
 
 fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(
