@@ -5,6 +5,11 @@ enum class MediaType {
     SERIES
 }
 
+enum class CollectionClickType {
+    YOUR_COLLECTION,
+    FEATURED
+}
+
 data class HomeUiModel(
     val id: Int,
     val title: String,
