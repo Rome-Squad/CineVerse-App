@@ -17,16 +17,15 @@ import com.giraffe.designsystem.composable.button_type.SecondaryButton
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
-fun ScreenContent(
+fun LoginBody(
     modifier: Modifier = Modifier,
     state: LoginState,
     interaction: LoginInteractionListener
 ){
     Column (
-        modifier = modifier
+        modifier = modifier.padding(horizontal = 16.dp)
     ){
         DefaultTextField(
-            modifier = Modifier.padding(horizontal = 16.dp),
             startIcon = painterResource(Theme.icons.outline.user),
             placeholder = stringResource(R.string.enter_your_email_or_username),
             value = state.email,
@@ -38,7 +37,7 @@ fun ScreenContent(
         )
 
         DefaultTextField(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+            modifier = Modifier.padding(top = 16.dp),
             startIcon = painterResource(Theme.icons.outline.user),
             placeholder = stringResource(R.string.enter_your_password),
             value = state.password,
@@ -52,7 +51,7 @@ fun ScreenContent(
         PrimaryButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 20.dp),
+                .padding(vertical = 20.dp),
             text = stringResource(R.string.login),
             enabled = true,
             isLoading = state.isLoading,
@@ -61,8 +60,7 @@ fun ScreenContent(
 
         SecondaryButton(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
             text = stringResource(R.string.join_as_guest),
             enabled = true,
             isLoading = false,
