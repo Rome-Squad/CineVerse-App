@@ -1,9 +1,7 @@
 package com.giraffe.media.series.datasource.remote.dto
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class SeriesDto(
     val id: Int,
     val name: String,
@@ -11,22 +9,22 @@ data class SeriesDto(
     val overview: String,
     val popularity: Double,
     val seasons: List<SeasonDto> = emptyList(),
-    @SerialName("original_name")
+    @SerializedName("original_name")
     val originalName: String,
-    @SerialName("first_air_date")
+    @SerializedName("first_air_date")
     val firstAirDate: String,
-    @SerialName("poster_path")
+    @SerializedName("poster_path")
     val posterPath: String?,
-    @SerialName("backdrop_path")
+    @SerializedName("backdrop_path")
     val backdropPath: String?,
-    @SerialName("vote_average")
+    @SerializedName("vote_average")
     val voteAverage: Double,
-    @SerialName("vote_count")
+    @SerializedName("vote_count")
     val voteCount: Int,
-    @SerialName("genre_ids")
+    @SerializedName("genre_ids")
     val genreIds: List<Int> = emptyList(),
-    @SerialName("origin_country")
+    @SerializedName("origin_country")
     val originCountry: List<String> = emptyList(),
-    @SerialName("original_language")
+    @SerializedName("original_language")
     val originalLanguage: String,
 )

@@ -1,15 +1,14 @@
 package com.giraffe.media.series.response
 
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
+
 data class SeriesResponse(
     val page: Int,
     val results: List<SeriesDto>,
-    @SerialName("total_pages")
+    @SerializedName("total_pages")
     val totalPages: Int,
-    @SerialName("total_results")
+    @SerializedName("total_results")
     val totalResults: Int,
 )

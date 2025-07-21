@@ -1,27 +1,26 @@
 package com.giraffe.media.series.datasource.remote.dto
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
+
+
 data class ReviewDto(
     val id: String,
     val author: String,
-    @SerialName("author_details")
+    @SerializedName("author_details")
     val authorDetails: AuthorDetailsDto,
     val content: String,
-    @SerialName("created_at")
+    @SerializedName("created_at")
     val createdAt: String,
-    @SerialName("updated_at")
+    @SerializedName("updated_at")
     val updatedAt: String,
     val url: String
 )
 
-@Serializable
 data class AuthorDetailsDto(
     val name: String,
     val username: String,
-    @SerialName("avatar_path")
+    @SerializedName("avatar_path")
     val avatarPath: String,
     val rating: Int,
 )

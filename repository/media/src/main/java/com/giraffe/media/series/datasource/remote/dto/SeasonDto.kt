@@ -1,20 +1,19 @@
 package com.giraffe.media.series.datasource.remote.dto
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
+
 data class SeasonDto(
     val id: Int,
     val overview: String,
-    @SerialName("vote_average")
+    @SerializedName("vote_average")
     val voteAverage: Float,
-    @SerialName("poster_path")
+    @SerializedName("poster_path")
     val posterPath: String?,
-    @SerialName("season_number")
+    @SerializedName("season_number")
     val seasonNumber: Int,
-    @SerialName("air_date")
+    @SerializedName("air_date")
     val airDate: String?,
-    @SerialName("episode_count")
+    @SerializedName("episode_count")
     val episodeCount: Int
 )

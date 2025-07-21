@@ -1,32 +1,44 @@
 package com.giraffe.media.movie.datasource.remote.dto
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class ReviewsResponseDto(
+    @SerializedName("id")
     val id: Int,
+    @SerializedName("page")
     val page: Int,
+    @SerializedName("results")
     val results: List<MovieReviewDto>,
-    @SerialName("total_pages") val totalPages: Int,
-    @SerialName("total_results") val totalResults: Int
+    @SerializedName("total_pages")
+    val totalPages: Int,
+    @SerializedName("total_results")
+    val totalResults: Int
 )
 
-@Serializable
 data class MovieReviewDto(
+    @SerializedName("id")
     val id: String,
+    @SerializedName("author")
     val author: String,
-    @SerialName("author_details") val authorDetails: AuthorDetailsDto,
+    @SerializedName("author_details")
+    val authorDetails: AuthorDetailsDto,
+    @SerializedName("content")
     val content: String,
-    @SerialName("created_at") val createdAt: String,
-    @SerialName("updated_at") val updatedAt: String,
+    @SerializedName("created_at")
+    val createdAt: String,
+    @SerializedName("updated_at")
+    val updatedAt: String,
+    @SerializedName("url")
     val url: String
 )
 
-@Serializable
 data class AuthorDetailsDto(
+    @SerializedName("name")
     val name: String?,
+    @SerializedName("username")
     val username: String,
-    @SerialName("avatar_path") val avatarPath: String?,
+    @SerializedName("avatar_path")
+    val avatarPath: String?,
+    @SerializedName("rating")
     val rating: Int
 )
