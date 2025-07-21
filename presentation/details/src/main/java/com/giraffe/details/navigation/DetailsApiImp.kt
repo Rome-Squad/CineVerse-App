@@ -9,7 +9,7 @@ import com.giraffe.details.screens.castDetails.CastDetailsScreen
 import com.giraffe.details.screens.gallery.GalleryScreen
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsScreen
 import com.giraffe.details.screens.recommended.RecommendedSeriesScreen
-import com.giraffe.details.screens.recommended.movies.RecommendedMoviesScreen
+import com.giraffe.details.screens.recommended.movie.RecommendedMoviesScreen
 import com.giraffe.details.screens.seasons.SeasonsScreen
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreen
 import kotlinx.serialization.Serializable
@@ -105,15 +105,12 @@ class DetailsApiImp : DetailsApi {
 
     override fun NavGraphBuilder.movieRecommendationGraph(navController: NavHostController) {
         composable<MoviesRecommendedRoute> {
-            val movieId = it.toRoute<MoviesRecommendedRoute>().movieId
-            val movieName = it.toRoute<MoviesRecommendedRoute>().title
-            RecommendedMoviesScreen(
-                movieId = movieId,
-                title = movieName,
-                navController = navController,
-            )
+            RecommendedMoviesScreen(navController = navController)
         }
     }
+
+
+
 
     override fun NavGraphBuilder.movieCastsGraph(navController: NavHostController) {
         composable<MovieCastsRoute> {

@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.recommended.movies
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -19,13 +20,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class RecommendedMoviesViewModel(
-    val title: String = "",
-    private val movieId: Int,
+    savedStateHandle: SavedStateHandle,
     private val getRecommendedMovies: GetRecommendedMovieUseCase,
     private val getMovieGenres: GetMovieGenresUseCase
 ) : BaseViewModel<RecommendedScreenState, RecommendedEffect>(
     RecommendedScreenState()
 ), RecommendedInteractionListener {
+
+    private val movieId: Int = checkNotNull(savedStateHandle["movieId"])
+    val title: String = savedStateHandle["title"] ?: ""
 
     val recommendationScreenState = Pager(config = PagingConfig(20)) {
         BasePagingSource { page -> getRecommendedMovies(movieId, page) }
