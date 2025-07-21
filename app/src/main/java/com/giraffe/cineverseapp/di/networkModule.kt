@@ -14,20 +14,41 @@ import com.giraffe.media.util.RequestBuilder
 import com.giraffe.repository.SessionManagerImpl
 import com.giraffe.repository.datasource.AuthRemoteDataSource
 import com.giraffe.repository.datasource.UserRemoteDataSource
+import com.giraffe.user.AuthInterceptor
 import com.giraffe.user.AuthRemoteDataSourceImpl
 import com.giraffe.user.SessionManager
 import com.giraffe.user.UserRemoteDataSourceImpl
 import io.ktor.client.HttpClient
+import okhttp3.OkHttpClient
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 
+
 val networkModule = module {
-    single<HttpClient> {
-        HttpClientFactory.create()
+
+    single {
+        AuthInterceptor(
+            sessionProvider = get()
+        )
     }
+
+    single<HttpClient> {
+
+        HttpClientFactory.create()
+
+
+    }
+    single {
+        OkHttpClient.Builder()
+            .addInterceptor(get<AuthInterceptor>())
+            .build()
+    }
+
+
+
     single<String>(named(BASE_URL)) {
         BuildConfig.BASE_URL
     }
@@ -48,9 +69,15 @@ val networkModule = module {
         UserRemoteDataSourceImpl(
             client = get(),
             baseUrl = get(named(BASE_URL)),
-            accessToken = get(named(ACCESS_TOKEN))
+            accessToken = get(named(ACCESS_TOKEN)),
         )
     }
+
+
+
+
+
+
     singleOf(::AuthRemoteDataSourceImpl) bind AuthRemoteDataSource::class
     singleOf(::ExploreRemoteDataSourceImp) bind ExploreRemoteDataSource::class
     singleOf(::MoviesRemoteDataSourceImp) bind MoviesRemoteDataSource::class
