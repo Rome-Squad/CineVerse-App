@@ -5,7 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.giraffe.details.models.ReviewUI
 
 const val CAST_ROUTE = "castDetails"
 private const val CAST_ID_ARG = "personID"
@@ -23,7 +22,7 @@ fun NavGraphBuilder.castDetailsRoute(
             navArgument(CAST_ID_ARG) {
                 type = NavType.IntType
             })) { backStackEntry ->
-        val personId = backStackEntry.arguments?.getInt(CAST_ID_ARG) ?: 268
+        val personId = backStackEntry.arguments?.getInt(CAST_ID_ARG)
         CastDetailsScreen(
             navController = navController,
             personId = personId

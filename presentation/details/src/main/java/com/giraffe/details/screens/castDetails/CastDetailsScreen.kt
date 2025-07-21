@@ -47,7 +47,7 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CastDetailsScreen(
-    personId: Int,
+    personId: Int?,
     navController: NavController,
     modifier: Modifier = Modifier,
     castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
