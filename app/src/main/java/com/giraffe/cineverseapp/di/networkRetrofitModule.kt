@@ -1,12 +1,12 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.cineverseapp.BuildConfig
-import com.giraffe.media.movie.MoviesApiServiceRetrofit
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSourceImplRetrofit
-import com.giraffe.media.series.SeriesApiServiceRetrofit
-import com.giraffe.media.series.SeriesRemoteRetrofitDataSourceImp
+import com.giraffe.media.movie.retrofit.MoviesApiServiceRetrofit
+import com.giraffe.media.movie.retrofit.MoviesRemoteDataSourceImplRetrofit
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
+import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
+import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.AuthInterceptor
 import com.giraffe.media.util.RetrofitRequestBuilder
 import okhttp3.OkHttpClient
