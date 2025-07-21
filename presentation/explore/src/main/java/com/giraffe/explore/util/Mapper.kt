@@ -36,7 +36,8 @@ fun Series.toPoster(allGenres: List<GenreUi>): Poster {
         name = name,
         imageUri = "https://image.tmdb.org/t/p/w500$posterUrl",
         rating = rating,
-        genres = genreTitles
+        genres = genreTitles,
+        date = releaseYear,
     )
 }
 
