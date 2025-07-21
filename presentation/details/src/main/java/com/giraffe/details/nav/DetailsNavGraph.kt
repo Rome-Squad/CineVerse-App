@@ -1,6 +1,5 @@
 package com.giraffe.details.nav
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,6 +16,7 @@ fun DetailsNavGraph(
     modifier: Modifier,
     navController: NavHostController,
     startDestinationRoute: String,
+    back: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -26,7 +26,10 @@ fun DetailsNavGraph(
         movieDetailsRoute(
             navController = navController,
             onBackButtonClick = {
-                navController.navigateUp()
+                val backed = navController.navigateUp()
+                if (!backed) {
+                    back()
+                }
             },
             navigateToReviews = { reviews ->
                 navController.currentBackStackEntry?.savedStateHandle?.set(
