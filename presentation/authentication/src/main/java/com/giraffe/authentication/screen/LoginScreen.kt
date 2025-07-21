@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
 import com.giraffe.authentication.composable.LogoSection
-import com.giraffe.authentication.composable.ScreenContent
+import com.giraffe.authentication.composable.LoginBody
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
@@ -53,7 +53,7 @@ private fun LoginScreenContent(
     ) {
 
         LogoSection(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
-        ScreenContent(
+        LoginBody(
             modifier = Modifier.weight(1f),
             state = state,
             interaction = interaction
@@ -66,13 +66,12 @@ private fun LoginScreenContent(
                 interaction.onCreateNewAccountClick()
             },
         )
-        Box(modifier = Modifier.padding(top = 24.dp, bottom = 6.5.dp)) {
-            Box(
-                modifier = Modifier
-                    .size(width = 120.dp, height = 3.dp)
-                    .background(Theme.color.shade.secondary)
-            )
-        }
+
+        Box(
+            modifier = Modifier.padding(top = 24.dp, bottom = 6.5.dp)
+                .size(width = 120.dp, height = 3.dp)
+                .background(Theme.color.shade.secondary)
+        )
 
         BaseBottomSheet(
             isVisible = state.isVisibleCreateNewAccountBottomSheet,
