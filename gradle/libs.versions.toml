@@ -1,8 +1,11 @@
 [versions]
+accompanistWebviewVersion = "0.32.0"
 agp = "8.10.1"
 coilCompose = "3.2.0"
 coilComposeVersion = "2.4.0"
+converterGson = "3.0.0"
 coreTesting = "2.2.0"
+okhttp = "5.1.0"
 junitJupiter = "5.13.2"
 junitJupiterApi = "5.13.2"
 koinAndroid = "3.5.6"
@@ -68,6 +71,8 @@ androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", v
 coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+google-accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanistWebviewVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -75,6 +80,8 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
@@ -94,6 +101,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-v1138 = { module = "io.mockk:mockk", version.ref = "mockkMockk" }
 mockk-v1139 = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 truth-v140 = { module = "com.google.truth:truth", version.ref = "truthVersion" }

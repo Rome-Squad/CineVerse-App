@@ -12,7 +12,9 @@ import com.giraffe.media.series.SeriesRemoteDataSourceImp
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.util.RequestBuilder
 import com.giraffe.repository.SessionManagerImpl
+import com.giraffe.repository.datasource.AuthRemoteDataSource
 import com.giraffe.repository.datasource.UserRemoteDataSource
+import com.giraffe.user.AuthRemoteDataSourceImpl
 import com.giraffe.user.SessionManager
 import com.giraffe.user.UserRemoteDataSourceImpl
 import io.ktor.client.HttpClient
@@ -49,6 +51,7 @@ val networkModule = module {
             accessToken = get(named(ACCESS_TOKEN))
         )
     }
+    singleOf(::AuthRemoteDataSourceImpl) bind AuthRemoteDataSource::class
     singleOf(::ExploreRemoteDataSourceImp) bind ExploreRemoteDataSource::class
     singleOf(::MoviesRemoteDataSourceImp) bind MoviesRemoteDataSource::class
     singleOf(::SeriesRemoteDataSourceImp) bind SeriesRemoteDataSource::class
