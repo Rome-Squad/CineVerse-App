@@ -38,9 +38,9 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun SearchResultScreen(
     query: String,
-    onActorClick: (Int) -> Unit,
-    onMovieClick: (Int) -> Unit,
-    onSeriesClick: (Int) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
     viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
 ) {
@@ -48,10 +48,10 @@ fun SearchResultScreen(
     SearchResultContent(
         state = state,
         interactions = viewModel,
-        onBackClick = onBackClick,
-        onActorClick = onActorClick,
-        onMovieClick = onMovieClick,
-        onSeriesClick = onSeriesClick
+        navigateToMovieDetails = navigateToMovieDetails,
+        navigateToSeriesDetails = navigateToSeriesDetails,
+        navigateToCastDetails = navigateToCastDetails,
+        onBackClick = onBackClick
     )
 }
 
@@ -59,9 +59,9 @@ fun SearchResultScreen(
 fun SearchResultContent(
     state: SearchResultScreenState,
     interactions: SearchResultInteractionListener,
-    onActorClick: (Int) -> Unit,
-    onMovieClick: (Int) -> Unit,
-    onSeriesClick: (Int) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -100,8 +100,9 @@ fun SearchResultContent(
                     if (state.selectedTab == SearchTab.ACTORS) {
                         if (actors.itemCount != 0) {
                             ActorsSection(
-                                actors = actors,
-                                onActorClick = onActorClick
+               onActorClick = onActorClick
+                                actors = state.actors,
+                                navigateToCastDetails = navigateToCastDetails
                             )
                         } else {
                             NothingFound(
@@ -114,13 +115,13 @@ fun SearchResultContent(
                         TransitionLazyColumnToGrid(
                             poster = state.selectedPosters,
                             isListSelected = !state.isGridSelected,
-                            onClick = {
+                            onPosterClicked = { id ->
                                 when (state.selectedTab) {
-                                    SearchTab.MOVIES -> onMovieClick(it)
-                                    SearchTab.SERIES -> onSeriesClick(it)
-                                    SearchTab.ACTORS -> {}
+                                    SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                    SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                    SearchTab.ACTORS -> navigateToCastDetails(id)
                                 }
-                            },
+                            }
                         )
                     } else {
                         NothingFound(
@@ -152,8 +153,8 @@ fun SearchResultContent(
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
-    actors: LazyPagingItems<ActorUi>,
-    onActorClick: (Int) -> Unit,
+    actors: List<ActorUi>,
+    navigateToCastDetails: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -167,7 +168,7 @@ fun ActorsSection(
                 name = actors[actorIndex]?.name.toString(),
                 imageUrl = actors[actorIndex]?.imageUrl.toString(),
                 onClick = {
-                    onActorClick(actors[actorIndex]?.id ?: 0)
+                    navigateToCastDetails(actor.id)
                 }
             )
         }

@@ -1,6 +1,5 @@
 package com.giraffe.media.utils
 
-import android.util.Log
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.ApiDataException
 import com.giraffe.media.exception.ClientErrorDataException
@@ -14,14 +13,14 @@ import com.giraffe.media.exception.InvalidRequestMethodException
 import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NetworkException
 import com.giraffe.media.exception.NoInternetDataException
-import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.NotFoundDataException
+import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.RateLimitExceededDataException
 import com.giraffe.media.exception.RedirectedDataException
 import com.giraffe.media.exception.RequestTimeoutDataException
 import com.giraffe.media.exception.SerializationDataException
-import com.giraffe.media.exception.ServerErrorException
 import com.giraffe.media.exception.ServerDataException
+import com.giraffe.media.exception.ServerErrorException
 import com.giraffe.media.exception.TimeoutException
 import com.giraffe.media.exception.TooManyRequestsDataException
 import com.giraffe.media.exception.UnauthorizedAccessDataException
@@ -35,14 +34,13 @@ import java.net.UnknownHostException
 object SafeCall {
     suspend operator fun <T> invoke(execute: suspend () -> T): T {
         return try {
-            Log.d("genresExecute", "loadExecute: ${execute.invoke()}")
             execute()
         } catch (e: Exception) {
             throw mapToDomainException(e)
         }
     }
 
-     fun mapToDomainException(e: Throwable): MediaException = when (e) {
+    fun mapToDomainException(e: Throwable): MediaException = when (e) {
 
         is ApiDataException -> when (e.code) {
             3, 7, 10, 14, 16, 17, 30, 31, 32, 33, 35, 36 -> UnauthorizedException()
