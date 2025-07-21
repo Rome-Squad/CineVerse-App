@@ -14,6 +14,7 @@ import com.giraffe.media.util.RequestBuilder
 import com.giraffe.repository.SessionManagerImpl
 import com.giraffe.repository.datasource.AuthRemoteDataSource
 import com.giraffe.repository.datasource.UserRemoteDataSource
+import com.giraffe.user.AuthInterceptor
 import com.giraffe.user.AuthRemoteDataSourceImpl
 import com.giraffe.user.SessionManager
 import com.giraffe.user.UserRemoteDataSourceImpl
@@ -51,6 +52,13 @@ val networkModule = module {
             accessToken = get(named(ACCESS_TOKEN))
         )
     }
+
+    single {
+        AuthInterceptor(
+            sessionProvider = get()
+        )
+    }
+
     singleOf(::AuthRemoteDataSourceImpl) bind AuthRemoteDataSource::class
     singleOf(::ExploreRemoteDataSourceImp) bind ExploreRemoteDataSource::class
     singleOf(::MoviesRemoteDataSourceImp) bind MoviesRemoteDataSource::class
