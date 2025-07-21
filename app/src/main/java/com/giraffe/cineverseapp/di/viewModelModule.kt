@@ -2,7 +2,7 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
-import com.giraffe.details.screens.recommended.RecommendedSeriesViewModel
+import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
 import com.giraffe.details.screens.seasons.SeasonsViewModel
 import com.giraffe.details.screens.seriesRecommendation.SeriesRecommendationViewModel
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
