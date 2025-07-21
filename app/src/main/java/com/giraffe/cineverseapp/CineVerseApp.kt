@@ -45,9 +45,6 @@ class CineVerseApp : Application() {
                 featureApiModule
             )
         }
-
-        createGuestSessionIfNotExists()
-
         setupCacheCleanupWorker()
     }
 
