@@ -1,11 +1,9 @@
 package com.giraffe.cineverseapp.nav
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import com.giraffe.details.DetailsApi
 import com.giraffe.details.DetailsStartDestination
 import com.giraffe.explore.ExploreApi
@@ -29,7 +27,6 @@ fun CineVerseAppContainer(
         when (currentScreen) {
             is AppScreen.Explore -> {
                 exploreApi.ExploreContainer(
-                    modifier = Modifier.fillMaxSize(),
                     navigateToMovieDetails = { movieId ->
                         navigator.navigateTo(
                             screen = AppScreen.Details(
@@ -56,7 +53,6 @@ fun CineVerseAppContainer(
 
             is AppScreen.Details -> {
                 detailsApi.DetailsContainer(
-                    modifier = Modifier.fillMaxSize(),
                     startDestination = currentScreen.startDestination,
                     backPress = {
                         navigator.navigateBack()

@@ -1,7 +1,6 @@
 package com.giraffe.details.nav
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
@@ -13,7 +12,6 @@ import com.giraffe.details.screens.seriesdetails.SERIES_ROUTE
 class DetailsApiImp : DetailsApi {
     @Composable
     override fun DetailsContainer(
-        modifier: Modifier,
         startDestination: DetailsStartDestination,
         backPress: () -> Unit
     ) {
@@ -26,7 +24,6 @@ class DetailsApiImp : DetailsApi {
             is DetailsStartDestination.Cast -> "${CAST_ROUTE}/${startDestination.castId}"
         }
         DetailsNavGraph(
-            modifier = modifier,
             navController = navController,
             startDestinationRoute = startDestinationRoute,
             back = backPress

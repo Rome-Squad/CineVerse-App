@@ -1,7 +1,6 @@
 package com.giraffe.details.nav
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.details.screens.castDetails.castDetailsRoute
@@ -13,7 +12,6 @@ import com.giraffe.details.screens.seriesdetails.seriesDetailsRoute
 
 @Composable
 fun DetailsNavGraph(
-    modifier: Modifier,
     navController: NavHostController,
     startDestinationRoute: String,
     back: () -> Unit
@@ -21,7 +19,6 @@ fun DetailsNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestinationRoute,
-        modifier = modifier
     ) {
         movieDetailsRoute(
             navController = navController,
