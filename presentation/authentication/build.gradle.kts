@@ -38,6 +38,7 @@ dependencies {
     implementation(project(":imageviewer"))
     implementation(project(":api:authentication"))
 
+    implementation (libs.google.accompanist.webview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
