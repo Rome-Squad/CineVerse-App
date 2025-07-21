@@ -8,7 +8,7 @@ import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.series.entity.Series
 
-fun Movie.toPoster(allGenres: List<GenreUi>): Poster {
+fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
     val genreTitles = allGenres
         .filter { it.id in genresID }
         .joinToString(", ") { it.title }
@@ -25,7 +25,7 @@ fun Movie.toPoster(allGenres: List<GenreUi>): Poster {
     )
 }
 
-fun Series.toPoster(allGenres: List<GenreUi>): Poster {
+fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
     val genreTitles = allGenres
         .filter { it.id in genreIDs }
         .joinToString(", ") { it.title }
@@ -36,9 +36,17 @@ fun Series.toPoster(allGenres: List<GenreUi>): Poster {
         name = name,
         imageUri = "https://image.tmdb.org/t/p/w500$posterUrl",
         rating = rating,
-        genres = genreTitles
+        genres = genreTitles,
+        date = releaseYear
     )
 }
 
-fun Genre.toUi() = GenreUi(id, title)
+fun Person.toPoster() = Poster(
+    id = id,
+    name = name,
+    imageUri = imageUrl.toString(),
+    rating = 0f,
+)
+
 fun Person.toUi() = ActorUi(id, name, imageUrl.toString())
+fun Genre.toUi() = GenreUi(id, title)

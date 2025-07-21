@@ -4,7 +4,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.explore.screen.discover.DiscoverRoute
@@ -16,7 +15,6 @@ import com.giraffe.explore.screen.searchresult.searchResultRoute
 
 @Composable
 fun ExploreNavGraph(
-    modifier: Modifier,
     navController: NavHostController,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
@@ -24,7 +22,6 @@ fun ExploreNavGraph(
 ) {
     val durationMillis = 200
     NavHost(
-        modifier = modifier,
         navController = navController,
         startDestination = DiscoverRoute,
         enterTransition = { fadeIn(animationSpec = tween(durationMillis)) },
