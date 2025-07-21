@@ -17,6 +17,7 @@ fun NavController.navigateToSeriesDetails(seriesId: Int) {
 
 fun NavGraphBuilder.seriesDetailsRoute(
     navController: NavController,
+    onBackButtonClick: () -> Unit,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit
 ) {
     composable(
@@ -29,6 +30,7 @@ fun NavGraphBuilder.seriesDetailsRoute(
         SeriesDetailsScreen(
             navController = navController,
             navigateToReviews = navigateToReviews,
+            onBackButtonClick = onBackButtonClick,
             seriesId = seriesId,
         )
     }

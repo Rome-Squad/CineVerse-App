@@ -26,8 +26,7 @@ fun DetailsNavGraph(
         movieDetailsRoute(
             navController = navController,
             onBackButtonClick = {
-                val istt = navController.popBackStack()
-                Log.d("TAG DetailsContainer:", "$istt")
+                navController.navigateUp()
             },
             navigateToReviews = { reviews ->
                 navController.currentBackStackEntry?.savedStateHandle?.set(
@@ -46,6 +45,9 @@ fun DetailsNavGraph(
                     reviews
                 )
                 navController.navigate(Review_ROUTE)
+            },
+            onBackButtonClick = {
+                navController.navigateUp()
             }
         )
 
