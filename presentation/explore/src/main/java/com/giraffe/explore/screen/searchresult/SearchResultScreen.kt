@@ -100,8 +100,7 @@ fun SearchResultContent(
                     if (state.selectedTab == SearchTab.ACTORS) {
                         if (actors.itemCount != 0) {
                             ActorsSection(
-               onActorClick = onActorClick
-                                actors = state.actors,
+                                actors = actors,
                                 navigateToCastDetails = navigateToCastDetails
                             )
                         } else {
@@ -153,7 +152,7 @@ fun SearchResultContent(
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
-    actors: List<ActorUi>,
+    actors: LazyPagingItems<ActorUi>,
     navigateToCastDetails: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -168,7 +167,7 @@ fun ActorsSection(
                 name = actors[actorIndex]?.name.toString(),
                 imageUrl = actors[actorIndex]?.imageUrl.toString(),
                 onClick = {
-                    navigateToCastDetails(actor.id)
+                    navigateToCastDetails(actors[actorIndex]?.id?:0)
                 }
             )
         }
