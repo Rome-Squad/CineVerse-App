@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.Chip
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
@@ -28,25 +27,24 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.explore.navigation.route.navigateToSearch
 import com.giraffe.explore.util.toTitle
 import com.giraffe.media.explore.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DiscoverScreen(
-    navController: NavController,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
+    navigateToSearch: () -> Unit,
     viewModel: DiscoverViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     ExploreContent(
         state = state,
-        interactions = viewModel, 
+        interactions = viewModel,
         navigateToMovieDetails = navigateToMovieDetails,
         navigateToSeriesDetails = navigateToSeriesDetails,
-        navigateToSearch = navController::navigateToSearch
+        navigateToSearch = navigateToSearch,
     )
 }
 

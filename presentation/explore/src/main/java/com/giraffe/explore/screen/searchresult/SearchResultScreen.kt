@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
@@ -38,11 +37,11 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun SearchResultScreen(
     query: String,
-    viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
-    navController: NavController
+    onBackClick: () -> Unit,
+    viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
 ) {
     val state by viewModel.state.collectAsState()
     SearchResultContent(
@@ -51,7 +50,7 @@ fun SearchResultScreen(
         navigateToMovieDetails = navigateToMovieDetails,
         navigateToSeriesDetails = navigateToSeriesDetails,
         navigateToCastDetails = navigateToCastDetails,
-        onBackClick = navController::popBackStack
+        onBackClick = onBackClick
     )
 }
 
