@@ -1,13 +1,11 @@
 package com.giraffe.authentication.screen
 
-import com.giraffe.authentication.R
 import com.giraffe.authentication.base.BaseViewModel
-import com.giraffe.authentication.utils.StringProvider
+import com.giraffe.authentication.validation.validateEmail
+import com.giraffe.authentication.validation.validatePassword
 
 
-class LoginViewModel(
-    private val stringProvider: StringProvider
-) : BaseViewModel<LoginState, LoginEffect>(LoginState()),
+class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
     LoginInteractionListener {
 
 
@@ -20,18 +18,17 @@ class LoginViewModel(
     }
 
     private fun validateInputs(): Boolean {
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$".toRegex()
-        val isValidEmail = emailRegex.matches(state.value.email)
-        val isValidPassword = state.value.password.isNotEmpty() && state.value.password.length >= 8
+        val emailErrorMessage = validateEmail(state.value.email)
+        val passwordErrorMessage = validatePassword(state.value.password)
 
         updateState {
             it.copy(
-                emailErrorMessage = if (isValidEmail) null else stringProvider.getString(R.string.invalid_email_address),
-                passwordErrorMessage = if (isValidPassword) null else stringProvider.getString(R.string.invalid_password_minimum_8_characters)
+                emailErrorMessage = emailErrorMessage,
+                passwordErrorMessage = passwordErrorMessage
             )
         }
 
-        return isValidEmail && isValidPassword
+        return (emailErrorMessage == null && passwordErrorMessage == null)
     }
 
     private fun performLogin() {
