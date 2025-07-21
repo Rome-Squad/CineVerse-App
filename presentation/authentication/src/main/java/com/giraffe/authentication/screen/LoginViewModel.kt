@@ -1,9 +1,13 @@
 package com.giraffe.authentication.screen
 
+import com.giraffe.authentication.R
 import com.giraffe.authentication.base.BaseViewModel
+import com.giraffe.authentication.utils.StringProvider
 
 
-class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
+class LoginViewModel(
+    private val stringProvider: StringProvider
+) : BaseViewModel<LoginState, LoginEffect>(LoginState()),
     LoginInteractionListener {
 
 
@@ -22,8 +26,8 @@ class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
 
         updateState {
             it.copy(
-                emailErrorMessage = if (isValidEmail) null else "Invalid Email Address",
-                passwordErrorMessage = if (isValidPassword) null else "Invalid Password (Minimum 8 characters)"
+                emailErrorMessage = if (isValidEmail) null else stringProvider.getString(R.string.invalid_email_address),
+                passwordErrorMessage = if (isValidPassword) null else stringProvider.getString(R.string.invalid_password_minimum_8_characters)
             )
         }
 

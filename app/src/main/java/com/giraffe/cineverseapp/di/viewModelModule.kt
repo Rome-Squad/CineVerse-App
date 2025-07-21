@@ -1,6 +1,8 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.authentication.screen.LoginViewModel
+import com.giraffe.authentication.utils.StringProvider
+import com.giraffe.authentication.utils.StringProviderImp
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
@@ -10,6 +12,7 @@ import com.giraffe.explore.screen.discover.DiscoverViewModel
 import com.giraffe.explore.screen.search.SearchViewModel
 import com.giraffe.explore.screen.searchresult.SearchResultViewModel
 import com.giraffe.home.HomeViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -28,4 +31,5 @@ val viewModelModule = module {
     viewModelOf(::RecommendedSeriesViewModel)
     viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::LoginViewModel)
+    single<StringProvider> { StringProviderImp(androidContext()) }
 }
