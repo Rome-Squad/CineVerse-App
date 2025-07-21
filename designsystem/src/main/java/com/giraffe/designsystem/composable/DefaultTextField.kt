@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -62,6 +63,7 @@ fun DefaultTextField(
     endIcon: @Composable (() -> Unit)? = null,
     label: String? = null,
     maxLines: Int = 1,
+    singleLine: Boolean = false,
     maxCharacters: Int = 25,
     errorMessage: String? = null,
     readOnly: Boolean = false,
@@ -140,7 +142,14 @@ fun DefaultTextField(
                 readOnly = readOnly,
                 value = value,
                 maxLines = maxLines,
-                onValueChange = { if (it.length <= maxCharacters) onValueChange(it) },
+                singleLine = singleLine,
+                onValueChange = {
+                    Log.i("maxCharacters", it.length.toString())
+                    if (it.length <= maxCharacters) {
+                        if (it.contains("\n")) onValueChange(it.replace("\n", " "))
+                        else onValueChange(it)
+                    }
+                },
                 textStyle = Theme.textStyle.body.md.medium,
                 visualTransformation = if (!isPassword)
                     VisualTransformation.None
@@ -150,7 +159,7 @@ fun DefaultTextField(
                     PasswordVisualTransformation(),
                 placeholder = {
                     Text(
-                        placeholder,
+                        text = placeholder,
                         style = Theme.textStyle.body.md.regular,
                         color = Theme.color.shade.tertiary
                     )
@@ -190,7 +199,7 @@ fun DefaultTextField(
         }
         if (hasError && !isFocused) {
             Text(
-                text = errorMessage,
+                text = errorMessage ?: "",
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.additional.primary.red
             )
@@ -223,7 +232,7 @@ private fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-    placeholder: @Composable (() -> Unit)? = null,
+    placeholder: @Composable() (() -> Unit)? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     singleLine: Boolean = false,
@@ -235,7 +244,7 @@ private fun TextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     colors: TextFieldColors = TextFieldColors(),
     interactionSource: MutableInteractionSource? = null,
-    alignment: Alignment = Alignment.CenterStart
+    alignment: Alignment = Alignment.CenterStart,
 ) {
     val source = interactionSource ?: remember { MutableInteractionSource() }
     val focused = source.collectIsFocusedAsState().value
@@ -243,6 +252,7 @@ private fun TextField(
     val mergedTextStyle = textStyle.merge(
         TextStyle(color = textStyle.color.takeOrElse { colors.textColor })
     )
+
     CompositionLocalProvider(LocalTextSelectionColors provides LocalTextSelectionColors.current) {
         Box(
             modifier = modifier
@@ -251,6 +261,7 @@ private fun TextField(
                 .padding(contentPadding),
 
             ) {
+
             BasicTextField(
                 modifier = Modifier
                     .align(alignment)
@@ -269,9 +280,7 @@ private fun TextField(
                 maxLines = maxLines,
                 minLines = minLines,
                 decorationBox = { innerTextField ->
-                    if (value.isEmpty() && placeholder != null) {
-                        placeholder()
-                    }
+                    if (value.isEmpty() && placeholder != null) placeholder()
                     innerTextField()
                 }
             )
@@ -282,12 +291,16 @@ private fun TextField(
 @Preview
 @Composable
 private fun TextFieldPreview() {
+    var text by remember { mutableStateOf("") }
+
     CineVerseTheme(isDarkTheme = true) {
         DefaultTextField(
             placeholder = "Enter your username",
             startIcon = painterResource(Theme.icons.outline.user),
-            value = "",
-            onValueChange = {},
+            value = text,
+            singleLine = true,
+            onValueChange = { text = it },
+            maxCharacters = 300
         )
     }
 }

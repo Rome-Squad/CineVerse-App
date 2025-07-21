@@ -7,10 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,12 +20,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import kotlin.math.absoluteValue
 
@@ -125,23 +121,4 @@ private fun animatedCornerShape(
         bottomStart = animatedBottomRadius,
         bottomEnd = animatedBottomRadius
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ImagePagerPreview() {
-    CineVerseTheme {
-        val pagerState = rememberPagerState(initialPage = 0) { 3 }
-        val dummyImages = listOf(
-            R.drawable.onboarding1,
-            R.drawable.onboarding1,
-            R.drawable.onboarding1
-            )
-
-        ImagePager(
-            pagerState = pagerState,
-            images = dummyImages,
-            modifier = Modifier.height(460.dp)
-        )
-    }
 }
