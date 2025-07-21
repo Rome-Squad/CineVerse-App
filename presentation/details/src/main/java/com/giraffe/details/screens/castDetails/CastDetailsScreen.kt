@@ -12,22 +12,28 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -53,6 +59,7 @@ fun CastDetailsScreen(
     modifier: Modifier = Modifier,
     castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
 ) {
+
     val state by castDetailsViewModel.state.collectAsState()
     val context = LocalContext.current
     EventListener(
@@ -108,46 +115,54 @@ fun CastDetailsContent(
     onBackArrowClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollState = rememberLazyListState()
+    val scrollState = rememberScrollState()
+    val windowHeight = LocalWindowInfo.current.containerSize.height
+    var bottomSpacingHeight by remember { mutableIntStateOf(90) }
     val isScrolled by remember {
         derivedStateOf {
-            scrollState.firstVisibleItemIndex > 0 || scrollState.firstVisibleItemScrollOffset > 5
+            scrollState.value > 0
         }
     }
     val padding16 = 16.dp
-    LazyColumn(
-        state = scrollState,
-        contentPadding = PaddingValues(bottom = padding16),
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .systemBarsPadding()
     ) {
-        stickyHeader {
-            Box {
-                MainDetailsAnimatedContent(
-                    isScrolled = isScrolled,
-                    actorImageUrl = state.actorImageUrl,
-                    actorName = state.actorName,
-                    actorBirthday = state.actorBirth,
-                    actorPlaceOfBirth = state.actorPlace,
-                    onYoutubeClick = interaction::onActorYoutubeLinkClicked,
-                    onFacebookClick = interaction::onActorFacebookLinkClicked,
-                    onInstagramClick = interaction::onActorInstagramLinkClicked,
-                    hasYoutube = state.actorYouTubeLink.isNotBlank(),
-                    hasFacebook = state.actorFacebookLink.isNotBlank(),
-                    hasInstagram = state.actorInstagramLink.isNotBlank()
-                )
-                AppBar(
-                    showBackButton = true,
-                    hasBackground = false,
-                    onBackButtonClick = onBackArrowClick,
-                    modifier = Modifier.padding(horizontal = padding16)
-                )
-            }
+        Box {
+            MainDetailsAnimatedContent(
+                isScrolled = isScrolled,
+                actorImageUrl = state.actorImageUrl,
+                actorName = state.actorName,
+                actorBirthday = state.actorBirth,
+                actorPlaceOfBirth = state.actorPlace,
+                onYoutubeClick = interaction::onActorYoutubeLinkClicked,
+                onFacebookClick = interaction::onActorFacebookLinkClicked,
+                onInstagramClick = interaction::onActorInstagramLinkClicked,
+                hasYoutube = state.actorYouTubeLink.isNotBlank(),
+                hasFacebook = state.actorFacebookLink.isNotBlank(),
+                hasInstagram = state.actorInstagramLink.isNotBlank()
+            )
+            AppBar(
+                showBackButton = true,
+                hasBackground = false,
+                onBackButtonClick = onBackArrowClick,
+                modifier = Modifier.padding(horizontal = padding16)
+            )
         }
-        item {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier
+                .verticalScroll(state = scrollState)
+                .onGloballyPositioned { coordinates ->
+                    val contentHeight = coordinates.size.height
+                    bottomSpacingHeight =
+                        if (contentHeight > windowHeight + bottomSpacingHeight) 16 else 90
+                }
+        ) {
             MoviesListSection(
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
@@ -155,8 +170,6 @@ fun CastDetailsContent(
                 onClickPoster = {},
                 onClickEndText = { }
             )
-        }
-        item {
             GallerySection(
                 modifier = Modifier
                     .height(314.dp)
@@ -165,13 +178,12 @@ fun CastDetailsContent(
                 imageUrls = state.actorGalleryImageUrls,
                 onShowMoreClick = interaction::navigateToActorGalleryScreen
             )
-        }
-        item {
             InfoSection(
                 modifier = Modifier.padding(horizontal = padding16),
                 title = stringResource(R.string.biography),
                 description = state.biographyInfo
             )
+            Spacer(Modifier.height(bottomSpacingHeight.dp))
         }
     }
 
