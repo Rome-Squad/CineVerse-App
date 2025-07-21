@@ -1,6 +1,5 @@
 package com.giraffe.explore.screen.discover
 
-import android.util.Log
 import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
@@ -16,18 +15,14 @@ class DiscoverViewModel(
     private val getSeriesByGenresUseCase: GetSeriesByGenresUseCase,
 ) : BaseViewModel<DiscoverScreenState>(DiscoverScreenState()), DiscoverInteractionListener {
 
-    private val TAG = "TAG"
     init {
-        Log.d(TAG, "discover vm: init")
         getGenres()
     }
 
     private fun getGenres() {
         safeExecute {
             val moviesGenres = getMoviesGenres().map { it.toUi() }
-            Log.d(TAG, "getGenres: $moviesGenres")
             val seriesGenres = getSeriesGenres().map { it.toUi() }
-            Log.d(TAG, "getGenres: $seriesGenres")
             updateState {
                 it.copy(
                     selectedGenres = moviesGenres,
