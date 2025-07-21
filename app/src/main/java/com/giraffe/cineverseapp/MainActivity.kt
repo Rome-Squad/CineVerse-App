@@ -12,13 +12,13 @@ import org.koin.android.ext.android.inject
 
 
 class MainActivity : ComponentActivity() {
+    val detailsApi: DetailsApi by inject()
+    val exploreApi: ExploreApi by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
 
-            val detailsApi: DetailsApi by inject()
-            val exploreApi: ExploreApi by inject()
 
             CineVerseTheme {
                 CineVerseAppContainer(
