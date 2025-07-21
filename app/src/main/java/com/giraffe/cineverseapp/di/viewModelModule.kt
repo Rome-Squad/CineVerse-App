@@ -17,7 +17,7 @@ val viewModelModule = module {
     viewModelOf(::SearchViewModel)
     viewModel { (personId: Int) -> CastDetailsViewModel(personId, get()) }
     viewModelOf(::SeriesDetailsViewModel)
-    viewModelOf(::SeasonsViewModel)
+    //viewModelOf(::SeasonsViewModel)
     viewModelOf(::MovieDetailsViewModel)
     viewModelOf(::SearchResultViewModel)
     viewModelOf(::RecommendedSeriesViewModel)

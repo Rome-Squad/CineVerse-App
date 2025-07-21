@@ -41,6 +41,7 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.navigation.RecommendedSeriesRoute
 import com.giraffe.details.screens.castDetails.navigateToPersonDetails
 import com.giraffe.details.screens.seasons.navigateToSeasons
@@ -56,7 +57,7 @@ fun SeriesDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
-    onBackButtonClick: () -> Unit,
+    onBackButtonClick: () -> Unit = {},
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -66,21 +67,14 @@ fun SeriesDetailsScreen(
     ) {
         when (it) {
             is SeriesDetailsEffect.Error -> {}
-            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToPersonDetails(
-                personID = it.personId
+            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
+                castID = it.personId
             )
 
-            is SeriesDetailsEffect.NavigateToSeasons -> navController.navigateToSeasons(
-                seriesId = it.seriesId
-            )
-
-            is SeriesDetailsEffect.NavigateToRecommendedSeries -> {
-                navController.navigate(
-                    RecommendedSeriesRoute(
-                        it.seriesId,
-                        it.title
-                    )
-                )
+            is SeriesDetailsEffect.NavigateToSeasons -> {
+                /*navController.navigateToSeasons(
+                    seriesId = it.seriesId
+                )*/
             }
         }
     }
@@ -206,10 +200,12 @@ fun SeriesDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
                 onClickEndText = {
-                    interaction.navigateToRecommendedSeriesScreen(
-                        state.seriesDetails.id,
-                        state.seriesDetails.name
-                    )
+                    /*navController.navigateT(
+                        RecommendedSeriesRoute(
+                            state.seriesDetails.id,
+                            state.seriesDetails.name
+                        )
+                    )*/
                 },
                 onClickPoster = { navController.navigateToSeriesDetails(it) }
             )
