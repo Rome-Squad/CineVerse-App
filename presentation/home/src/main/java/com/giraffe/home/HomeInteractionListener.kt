@@ -8,7 +8,7 @@ interface HomeInteractionListener {
     fun onSeeAllTopRatedClicked()
     fun onSeeAllUpcomingClicked()
     fun onSeeAllRecentlyViewedClicked()
-    fun onSeeAllCollectionsClicked(type: CollectionClickType)
+    fun onSeeAllYourCollection()
     fun onWhatShouldIWatchClicked()
     fun onNeedMoreToWatchClicked()
 }

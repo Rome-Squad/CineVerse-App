@@ -42,6 +42,7 @@ class HomeViewModel(
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
+
     init {
         loadHomeScreen()
     }
@@ -49,7 +50,7 @@ class HomeViewModel(
     private fun loadHomeScreen() {
         updateState { it.copy(isLoading = true, isError = false) }
 
-        viewModelScope.launch( Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val popularMoviesDeferred = async { getPopularityMoviesUseCase() }
                 val popularSeriesDeferred = async { getPopularitySeriesUseCase() }
@@ -177,11 +178,8 @@ class HomeViewModel(
         sendEffect(HomeEffect.NavigateToRecentlyViewedList)
     }
 
-    override fun onSeeAllCollectionsClicked(type: CollectionClickType) {
-        when (type) {
-            CollectionClickType.YOUR_COLLECTION -> sendEffect(HomeEffect.NavigateToAllYourCollections)
-            CollectionClickType.FEATURED -> sendEffect(HomeEffect.NavigateToAllFeaturedCollections)
-        }
+    override fun onSeeAllYourCollection() {
+        sendEffect(HomeEffect.NavigateToAllYourCollections)
     }
 
     override fun onWhatShouldIWatchClicked() {
