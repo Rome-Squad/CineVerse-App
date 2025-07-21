@@ -29,7 +29,7 @@ class PersonRemoteDataSourceImp(
         requestBuilder.get<PersonCreditsResponse>(
             endpoint = "$PERSON_END_POINT/$personId/$COMBINED_CREDITS_END_POINT",
             params = defaultLanguageParams
-        ).cast
+        ).mediaCredits
 
 
     override suspend fun getPersonSocialMedia(personId: Int) =

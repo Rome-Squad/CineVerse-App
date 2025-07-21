@@ -29,7 +29,6 @@ fun getSecret(key: String): String {
 android {
     namespace = "com.giraffe.cineverseapp"
     compileSdk = 36
-
     defaultConfig {
         applicationId = "com.giraffe.cineverseapp"
         minSdk = 24
@@ -44,7 +43,6 @@ android {
         buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
         buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
     }
-
     buildTypes {
         debug {
             buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
@@ -52,7 +50,8 @@ android {
             buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -73,6 +72,11 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+    }
+    bundle {
+        language {
+            enableSplit = true
+        }
     }
 }
 
