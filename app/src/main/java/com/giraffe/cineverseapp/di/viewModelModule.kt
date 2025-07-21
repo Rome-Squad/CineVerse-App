@@ -4,7 +4,6 @@ import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
 import com.giraffe.details.screens.seasons.SeasonsViewModel
-import com.giraffe.details.screens.seriesRecommendation.SeriesRecommendationViewModel
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.explore.screen.discover.DiscoverViewModel
 import com.giraffe.explore.screen.search.SearchViewModel
@@ -25,4 +24,5 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     //viewModelOf(::RecommendedSeriesViewModel)
     //viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
+    viewModelOf(::RecommendedSeriesViewModel)
 }
