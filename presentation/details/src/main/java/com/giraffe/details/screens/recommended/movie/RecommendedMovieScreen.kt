@@ -2,18 +2,17 @@ package com.giraffe.details.screens.recommended.movie
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -22,6 +21,7 @@ import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.custom.Button
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
 import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -43,13 +43,11 @@ fun RecommendedMoviesScreen(
         modifier = modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
-            .systemBarsPadding()
     ) {
         Column {
             RecommendedContent(
                 title = viewModel.title,
                 lazyPagingItems = lazyPagingItems,
-                modifier = Modifier.padding(horizontal = 16.dp),
                 onItemClick = { movie ->
                     onMovieClick(movie.id)
                 },
@@ -89,7 +87,8 @@ private fun ErrorContent(
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = message,
@@ -97,8 +96,6 @@ private fun ErrorContent(
             color = Theme.color.shade.primary,
             textAlign = TextAlign.Center
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = onRetry,
@@ -110,7 +107,7 @@ private fun ErrorContent(
             )
         ) {
             Text(
-                text = "Retry",
+                text = stringResource(R.string.try_again),
                 style = Theme.textStyle.body.md.medium,
                 color = Theme.color.button.onPrimary
             )

@@ -5,9 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.giraffe.details.screens.recommended.movie.utils.RecommendedMovieArgs
 
-fun NavController.navigateToRecommendedMoviesScreen(movieId: Int, title: String) {
-    navigate("recommended_movies/$movieId/$title")
+fun NavController.navigateToRecommendedMoviesScreen(args: RecommendedMovieArgs) {
+    navigate(args.toRoute())
 }
 
 
@@ -16,10 +17,10 @@ fun NavGraphBuilder.recommendedMoviesRoute(
     onMovieClick: (Int) -> Unit
 ) {
     composable(
-        route = "recommended_movies/{movieId}/{title}",
+        route = RecommendedMovieArgs.fullRoute,
         arguments = listOf(
-            navArgument("movieId") { type = NavType.IntType },
-            navArgument("title") { type = NavType.StringType }
+            navArgument(RecommendedMovieArgs.MOVIE_ID) { type = NavType.IntType },
+            navArgument(RecommendedMovieArgs.TITLE) { type = NavType.StringType }
         )
     ) {
         RecommendedMoviesScreen(
@@ -28,5 +29,6 @@ fun NavGraphBuilder.recommendedMoviesRoute(
         )
     }
 }
+
 
 

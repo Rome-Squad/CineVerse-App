@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -16,9 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.designsystem.composable.AppBar
@@ -42,8 +39,7 @@ fun RecommendedContent(
         LazyColumn(
             modifier = modifier
                 .background(Theme.color.background.screen)
-                .statusBarsPadding()
-                .systemBarsPadding(),
+                .systemBarsPadding()
         ) {
             item {
                 AppBar(
@@ -65,15 +61,10 @@ fun RecommendedContent(
             }
         }
 
-        val layoutDirection = LocalLayoutDirection.current
-        val alignment = if (layoutDirection == LayoutDirection.Rtl)
-            Alignment.BottomEnd
-        else
-            Alignment.BottomStart
 
         ViewToggle(
             modifier = Modifier
-                .align(alignment)
+                .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
                 .padding(16.dp),
             isListSelected = isGridSelected,
