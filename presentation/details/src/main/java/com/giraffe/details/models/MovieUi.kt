@@ -28,7 +28,7 @@ fun MovieUi.toMovieEntity() = Movie(
     releaseYear = LocalDate.parse(releaseYear)
 )
 
-fun Movie.MovieUi()= MovieUi(
+fun Movie.toMovieUi()= MovieUi(
     id = id,
     title = title,
     description = description,

@@ -10,6 +10,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.details.base.BasePagingSource
 import com.giraffe.details.models.MovieUi
+import com.giraffe.details.models.toMovieUi
 import com.giraffe.details.screens.recommended.movie.RecommendedEffectMovie
 import com.giraffe.details.screens.recommended.movie.RecommendedInteractionListener
 import com.giraffe.media.movies.entity.Movie
@@ -43,7 +44,7 @@ class RecommendedMoviesViewModel(
         .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
     private suspend fun mapMovieToMovieUi(movie: Movie): MovieUi {
-        val movieUi = movie.MovieUi()
+        val movieUi = movie.toMovieUi()
         val genres = getMovieGenres(movieUi.genresID).map { it.title }
         return movieUi.copy(genres = genres)
     }
