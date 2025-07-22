@@ -2,17 +2,23 @@ package com.giraffe.details.screens.castDetails
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
+import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 
 class CastDetailsViewModel(
-    personId: Int,
+    personId: Int?,
     val getPersonDetailsUseCase: GetPersonDetailsUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
     CastDetailsInteractionListener {
 
     init {
-        getPersonDetails(personId)
+        if (personId == null) {
+            updateState { it.copy(isLoading = false) }
+            sendEffect(CastDetailsEffect.Error(NotFoundException()))
+        } else {
+            getPersonDetails(personId)
+        }
     }
 
     override fun onActorYoutubeLinkClicked() {

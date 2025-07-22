@@ -27,11 +27,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.match.R
 import com.giraffe.match.utils.calculateCenterItem
 
 @Composable
@@ -109,22 +107,4 @@ private fun CarouselItemContent(imageId: Int, isHero: Boolean) {
             )
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun Preview() {
-
-    val items: List<Int> = listOf(
-        R.drawable.p1,
-        R.drawable.p2,
-        R.drawable.p3,
-        R.drawable.p4,
-        R.drawable.pp1
-    )
-
-    HeroCarousel(
-        items = items, contentPadding = PaddingValues(horizontal = 40.dp)
-    )
 }
