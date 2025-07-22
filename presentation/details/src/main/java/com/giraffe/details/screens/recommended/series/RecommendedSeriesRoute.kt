@@ -1,31 +1,25 @@
 package com.giraffe.details.screens.recommended.series
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 
+@Serializable
+internal data class RecommendedSeriesRoute(val seriesID: Int, val titleSeries: String)
 
-const val RECOMMENDED_SERIES_ROUTE = "recommendedSeries"
-const val SERIES_ID_ARG = "seriesID"
-const val TITLE_SERIES_ARG = "titleSeries"
+internal fun NavController.navigateToRecommendedSeries(seriesId: Int, titleSeries: String) {
+    navigate(RecommendedSeriesRoute(seriesId, titleSeries))
+}
 
-
-fun NavGraphBuilder.recommendedSeriesRoute(
+internal fun NavGraphBuilder.recommendedSeriesRoute(
     navigateToSeriesDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    composable(
-        route = "$RECOMMENDED_SERIES_ROUTE/{$SERIES_ID_ARG}/{$TITLE_SERIES_ARG}",
-        arguments = listOf(
-            navArgument(SERIES_ID_ARG) {
-                type = NavType.IntType
-            },
-            navArgument(TITLE_SERIES_ARG) {
-                type = NavType.StringType
-            }
-        )) { backStackEntry ->
-        val titleSeries = backStackEntry.arguments?.getString(TITLE_SERIES_ARG) ?: ""
+    composable<RecommendedSeriesRoute>
+    { backStackEntry ->
+        val titleSeries = backStackEntry.toRoute<RecommendedSeriesRoute>().titleSeries
         RecommendedSeriesScreen(
             navigateToSeriesDetails = navigateToSeriesDetails,
             onBackClick = onBackClick,
