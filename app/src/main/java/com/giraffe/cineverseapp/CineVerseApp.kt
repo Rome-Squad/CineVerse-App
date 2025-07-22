@@ -47,9 +47,6 @@ class CineVerseApp : Application() {
                 networkRetrofitModule
             )
         }
-
-        createGuestSessionIfNotExists()
-
         setupCacheCleanupWorker()
     }
 

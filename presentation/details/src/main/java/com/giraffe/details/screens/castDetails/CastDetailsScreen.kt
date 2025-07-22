@@ -41,14 +41,13 @@ import com.giraffe.details.R
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
-import com.giraffe.details.screens.gallery.navigateToGallery
 import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CastDetailsScreen(
-    personId: Int,
+    personId: Int?,
     navController: NavController,
     modifier: Modifier = Modifier,
     castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
@@ -67,7 +66,7 @@ fun CastDetailsScreen(
 
             is CastDetailsEffect.NavigateToMovies -> {}
             is CastDetailsEffect.NavigateToGallery -> {
-                navController.navigateToGallery(it.actorName, it.imageUrls)
+                //navController.navigateToGallery(it.actorName, it.imageUrls)
             }
         }
     }
