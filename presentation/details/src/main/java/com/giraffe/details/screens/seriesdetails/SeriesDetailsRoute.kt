@@ -18,18 +18,21 @@ fun NavController.navigateToSeriesDetails(seriesId: Int) {
 fun NavGraphBuilder.seriesDetailsRoute(
     navController: NavController,
     onBackButtonClick: () -> Unit,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
+    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit
 ) {
     composable(
         route = "$SERIES_ROUTE/{$SERIES_ID_ARG}",
         arguments = listOf(
             navArgument(SERIES_ID_ARG) {
                 type = NavType.IntType
-            })) { backStackEntry ->
+            })
+    ) { backStackEntry ->
         val seriesId = backStackEntry.arguments?.getInt(SERIES_ID_ARG) ?: 268
         SeriesDetailsScreen(
             navController = navController,
             navigateToReviews = navigateToReviews,
+            navigateToRecommendedSeries = navigateToRecommendedSeries,
             onBackButtonClick = onBackButtonClick,
             seriesId = seriesId,
         )

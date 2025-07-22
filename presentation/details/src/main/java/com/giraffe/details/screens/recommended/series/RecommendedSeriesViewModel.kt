@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.recommended.series
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -20,23 +21,24 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RecommendedSeriesViewModel(
-    val title: String = "",
-    private val seriesId: Long,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel(), RecommendedInteractionListener {
 
     private val _effect = Channel<RecommendedSeriesEffect>()
     val effect = _effect.receiveAsFlow()
 
+    val seriesId = savedStateHandle.get<Int>("seriesID") ?: 268
+
     val recommendationScreenState = Pager(config = PagingConfig(20)) {
-        BasePagingSource { page -> getRecommendedSeries(seriesId, page) }
+        BasePagingSource { page -> getRecommendedSeries(seriesId.toLong(), page) }
     }
         .flow
         .cachedIn(viewModelScope)
         .map { pagingData ->
             pagingData.map { series ->
-                //val genres = getSeriesGenres(series.genreIDs).map { it.title }
+//                val genres = getSeriesGenres(series.genreIDs).map { genre-> }
                 SeriesUi.fromEntity(series)//.copy(genres = genres)
             }
         }

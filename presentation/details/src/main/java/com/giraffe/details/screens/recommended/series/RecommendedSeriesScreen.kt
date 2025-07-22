@@ -5,47 +5,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.navigation.SeriesDetailsRoute
 import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun RecommendedSeriesScreen(
-    title: String,
-    seriesId: Long,
-    navController: NavController,
-    onBackButtonClick: () -> Unit,
+    titleSeries: String,
+    navigateToSeriesDetails: (Int) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RecommendedSeriesViewModel = koinViewModel(parameters = {
-        parametersOf(
-            title,
-            seriesId
-        )
-    })
+    viewModel: RecommendedSeriesViewModel = koinViewModel()
 ) {
     EventListener(
         events = viewModel.effect,
     ) { effect ->
         when (effect) {
             is RecommendedSeriesEffect.NavigateToSeriesDetails -> {
-                navController.navigate(
-                    SeriesDetailsRoute(
-                        effect.seriesId,
-                    )
-                )
+                navigateToSeriesDetails(effect.seriesId)
             }
         }
     }
 
     val lazyPagingItems = viewModel.recommendationScreenState.collectAsLazyPagingItems()
     RecommendedSeriesContent(
-        title = title,
+        title = titleSeries,
         lazyPagingItems = lazyPagingItems,
-        onBackButtonClick = onBackButtonClick,
+        onBackButtonClick = onBackClick,
         interaction = viewModel,
         modifier = modifier
             .fillMaxSize()
