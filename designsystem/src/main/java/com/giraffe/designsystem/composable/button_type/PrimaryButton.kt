@@ -38,9 +38,8 @@ fun PrimaryButton(
         ),
         contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp)
     ) {
-        if (isLoading) {
-            Progress()
-        } else {
+        if (isLoading) Progress()
+        else {
             Text(
                 text = text,
                 style = Theme.textStyle.body.md.regular,
