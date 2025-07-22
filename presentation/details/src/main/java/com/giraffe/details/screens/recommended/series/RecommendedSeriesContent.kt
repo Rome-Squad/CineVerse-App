@@ -51,7 +51,7 @@ fun RecommendedSeriesContent(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = !isGridSelected,
                 contentPadding = PaddingValues(16.dp),
-                onItemClick = { interaction.navigateToSeriesDetailsScreen(it) }
+                onItemClick =  interaction::navigateToSeriesDetailsScreen
             )
         }
 
