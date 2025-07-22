@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,9 +16,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
 
@@ -91,17 +88,3 @@ data class CollectionItemData(
     val image: Int,
     val collectionType: String
 )
-
-@Preview
-@Composable
-private fun Preview() {
-    CineVerseTheme(isDarkTheme = true) {
-        CollectionItem(
-            modifier = Modifier.width(280.dp),
-            collectionItemData = CollectionItemData(
-                image = R.drawable.collection_image,
-                collectionType = "Text"
-            )
-        )
-    }
-}
