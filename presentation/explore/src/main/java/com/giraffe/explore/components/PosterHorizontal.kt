@@ -122,10 +122,15 @@ fun PosterHorizontal(
                             )
                     )
                 }
-                IconWithText(
-                    icon = painterResource(Theme.icons.dueTone.calendar),
-                    text = poster.date ?: stringResource(R.string.unknown_date)
-                )
+                poster.date?.let {
+                    if (it.isNotEmpty()) {
+                        IconWithText(
+                            icon = painterResource(Theme.icons.dueTone.calendar),
+                            text = poster.date ?: stringResource(R.string.unknown_date)
+                        )
+                    }
+                }
+
             }
         }
     }
