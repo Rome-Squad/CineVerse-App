@@ -5,12 +5,7 @@ import com.giraffe.repository.exceptions.InvalidCredentialsException
 import com.giraffe.repository.exceptions.SessionCreationException
 import com.giraffe.repository.exceptions.TokenCreationException
 import com.giraffe.repository.exceptions.TokenValidationException
-import com.giraffe.user.exception.AuthDomainException
-import com.giraffe.user.exception.GuestSessionCreationDomainException
-import com.giraffe.user.exception.InvalidCredentialsDomainException
-import com.giraffe.user.exception.SessionCreationDomainException
-import com.giraffe.user.exception.TokenCreationDomainException
-import com.giraffe.user.exception.TokenValidationDomainException
+import com.giraffe.user.exception.AuthException
 import com.giraffe.user.exception.UnknownException
 
 suspend inline fun <reified T> safeCall(
@@ -19,15 +14,15 @@ suspend inline fun <reified T> safeCall(
     return try {
         block()
     } catch (e: Throwable) {
-        throw mapToMoviesException(e)
+        throw mapToAuthException(e)
     }
 }
 
-fun mapToMoviesException(e: Throwable):AuthDomainException = when(e){
-    is InvalidCredentialsException->InvalidCredentialsDomainException()
-    is TokenCreationException -> TokenCreationDomainException()
-    is TokenValidationException -> TokenValidationDomainException()
-    is SessionCreationException -> SessionCreationDomainException()
-    is GuestSessionCreationException -> GuestSessionCreationDomainException()
+fun mapToAuthException(e: Throwable):AuthException = when(e){
+    is InvalidCredentialsException-> com.giraffe.user.exception.InvalidCredentialsException()
+    is TokenCreationException -> com.giraffe.user.exception.TokenCreationException()
+    is TokenValidationException -> com.giraffe.user.exception.TokenValidationException()
+    is SessionCreationException -> com.giraffe.user.exception.SessionCreationException()
+    is GuestSessionCreationException -> com.giraffe.user.exception.GuestSessionCreationException()
     else -> UnknownException()
 }
