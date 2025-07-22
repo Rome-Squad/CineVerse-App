@@ -38,4 +38,5 @@
     <string name="explore">Explore</string>
     <string name="home">Home</string>
     <string name="placeholder">Placeholder</string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>
