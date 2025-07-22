@@ -33,13 +33,15 @@ class GetPersonDetailsUseCaseTest {
                 id = 155,
                 title = "The Dark Knight",
                 posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-                voteAverage = 8.5
+                voteAverage = 8.5,
+                mediaType = null
             ),
             PersonCredit(
                 id = 217,
                 title = "Inside the Actors Studio",
                 posterPath = "/a6O7gKJQe5HWaMujYvdMYaj9PnO.jpg",
-                voteAverage = 7.5
+                voteAverage = 7.5,
+                mediaType = null
             )
         ),
         socialMedia = PersonSocialMediaLinks(

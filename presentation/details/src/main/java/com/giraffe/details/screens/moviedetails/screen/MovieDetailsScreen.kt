@@ -40,6 +40,7 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.castDetails.navigateToPersonDetails
+import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
@@ -57,7 +58,7 @@ fun MovieDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
-    onBackButtonClick: () -> Unit,
+    onBackButtonClick: () -> Unit = {},
     viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -77,8 +78,8 @@ fun MovieDetailsScreen(
                 is MovieDetailsEffect.Error -> {}
                 MovieDetailsEffect.NavigateToCollection -> {}
                 MovieDetailsEffect.NavigateToLogin -> {}
-                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToPersonDetails(
-                    personID = effect.personId
+                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
+                    castID = effect.personId
                 )
                 is MovieDetailsEffect.NavigateToMoviesRecommended -> navController.navigateToRecommendedMoviesScreen(
                     movieId = effect.movieId,
@@ -188,6 +189,7 @@ private fun MovieDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedMovies,
                 onClickEndText = {
+
                    interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                 },
                 onClickPoster = {

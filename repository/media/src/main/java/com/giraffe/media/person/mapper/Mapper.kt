@@ -1,9 +1,5 @@
 package com.giraffe.media.person.mapper
 
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.entity.PersonCredit
-import com.giraffe.media.person.entity.PersonSocialMediaLinks
-import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.dto.CastDto
 import com.giraffe.media.person.datasource.remote.dto.CrewDto
@@ -11,6 +7,10 @@ import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
+import com.giraffe.media.person.entity.Person
+import com.giraffe.media.person.entity.PersonCredit
+import com.giraffe.media.person.entity.PersonSocialMediaLinks
+import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.utils.AT_SYMBOLS_URL
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.FACEBOOK_URL
@@ -61,7 +61,8 @@ fun PersonCreditDto.toEntity(): PersonCredit = PersonCredit(
     id = id,
     title = title.orEmpty(),
     posterPath = BASE_IMAGE_URL + posterPath,
-    voteAverage = voteAverage
+    voteAverage = voteAverage,
+    mediaType = mediaType
 )
 
 fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(

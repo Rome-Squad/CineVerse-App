@@ -26,7 +26,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.explore.components.PosterVertically
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -35,7 +34,7 @@ fun TransitionLazyColumnToGrid(
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
-    onClick: (Int) -> Unit
+    onPosterClicked: (Int) -> Unit
 ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
@@ -92,9 +91,11 @@ fun TransitionLazyColumnToGrid(
                     items(items = poster, key = { poster -> poster.id }) { poster ->
                         PosterHorizontal(
                             poster = poster,
-                            onClick = { onClick(poster.id) },
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
+                            onClick = {
+                                onPosterClicked(poster.id)
+                            }
                         )
                     }
                 }
@@ -109,9 +110,11 @@ fun TransitionLazyColumnToGrid(
                     items(items = poster, key = { poster -> poster.id }) { poster ->
                         PosterVertically(
                             poster = poster,
-                            onClick = { onClick(poster.id) },
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
+                            onClick = {
+                                onPosterClicked(poster.id)
+                            }
                         )
                     }
                 }
