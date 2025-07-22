@@ -41,11 +41,8 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.navigateToPersonDetails
-import com.giraffe.details.screens.seasons.navigateToSeasons
+import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.utils.EventListener
-import com.giraffe.details.navigation.RecommendedSeriesRoute
-import com.giraffe.details.navigation.SeriesDetailsRoute
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -57,7 +54,7 @@ fun SeriesDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
-    onBackButtonClick: () -> Unit,
+    onBackButtonClick: () -> Unit = {},
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -67,13 +64,15 @@ fun SeriesDetailsScreen(
     ) {
         when (it) {
             is SeriesDetailsEffect.Error -> {}
-            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToPersonDetails(
-                personID = it.personId
+            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
+                castID = it.personId
             )
 
-            is SeriesDetailsEffect.NavigateToSeasons -> navController.navigateToSeasons(
-                seriesId = it.seriesId
-            )
+            is SeriesDetailsEffect.NavigateToSeasons -> {
+                /*navController.navigateToSeasons(
+                    seriesId = it.seriesId
+                )*/
+            }
         }
     }
     Box(
@@ -154,7 +153,7 @@ fun SeriesDetailsContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.latest_seasons),
                 clickableText = stringResource(R.string.show_more),
-                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id)}
+                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
 
             )
             AnimatedVisibility(state.seasons.isNotEmpty()) {
@@ -194,14 +193,14 @@ fun SeriesDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
                 onClickEndText = {
-                    navController.navigate(
+                    /*navController.navigateT(
                         RecommendedSeriesRoute(
                             state.seriesDetails.id,
                             state.seriesDetails.name
                         )
-                    )
+                    )*/
                 },
-                onClickPoster = {navController.navigateToSeriesDetails(it)}
+                onClickPoster = { navController.navigateToSeriesDetails(it) }
             )
 
             RatingSection(
