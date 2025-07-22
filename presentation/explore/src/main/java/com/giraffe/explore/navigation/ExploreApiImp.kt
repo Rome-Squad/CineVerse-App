@@ -3,21 +3,19 @@ package com.giraffe.explore.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 
-class ExploreApiImp : ExploreApi {
+class ExploreApiImp(
+    private val detailsApi: DetailsApi
+) : ExploreApi {
     @Composable
-    override fun ExploreContainer(
-        navigateToMovieDetails: (Int) -> Unit,
-        navigateToSeriesDetails: (Int) -> Unit,
-        navigateToCastDetails: (Int) -> Unit
-    ) {
+    override fun ExploreContainer() {
         val navController: NavHostController = rememberNavController()
+
         ExploreNavGraph(
             navController = navController,
-            navigateToMovieDetails = navigateToMovieDetails,
-            navigateToSeriesDetails = navigateToSeriesDetails,
-            navigateToCastDetails = navigateToCastDetails
+            detailsApi = detailsApi
         )
     }
 }

@@ -5,14 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.details.screens.castDetails.castDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
+import com.giraffe.details.screens.reviewScreen.navigateToReviews
 import com.giraffe.details.screens.reviewScreen.reviewRoute
 import com.giraffe.details.screens.seriesdetails.seriesDetailsRoute
 
 @Composable
-fun DetailsNavGraph(
+internal fun DetailsNavGraph(
     navController: NavHostController,
-    startDestinationRoute: DetailsRoutes,
-    back: () -> Unit
+    startDestinationRoute: DetailsRoutes
 ) {
     NavHost(
         navController = navController,
@@ -20,19 +20,14 @@ fun DetailsNavGraph(
     ) {
         movieDetailsRoute(
             navController = navController,
-            onBackButtonClick = {
-                val backed = navController.navigateUp()
-                if (!backed) {
-                    back()
-                }
-            },
-            navigateToReviews = { reviews -> navController.navigate(ReviewRoute(reviews)) }
+            onBackButtonClick = navController::navigateUp,
+            navigateToReviews = navController::navigateToReviews
         )
 
         seriesDetailsRoute(
             navController = navController,
             onBackButtonClick = navController::navigateUp,
-            navigateToReviews = { reviews -> navController.navigate(ReviewRoute(reviews)) }
+            navigateToReviews = navController::navigateToReviews
         )
 
         castDetailsRoute(navController)

@@ -6,7 +6,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.giraffe.details.nav.CastDetailsRoute
 
-fun NavGraphBuilder.castDetailsRoute(
+internal fun NavController.navigateToCastDetails(id: Int) {
+    navigate(CastDetailsRoute(id))
+}
+
+internal fun NavGraphBuilder.castDetailsRoute(
     navController: NavController
 ) {
     composable<CastDetailsRoute> { backStackEntry ->

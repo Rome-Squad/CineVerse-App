@@ -7,6 +7,11 @@ import androidx.navigation.toRoute
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.nav.SeriesDetailsRoute
 
+fun NavController.navigateToSeriesDetails(id: Int) {
+    navigate(SeriesDetailsRoute(id))
+}
+
+
 fun NavGraphBuilder.seriesDetailsRoute(
     navController: NavController,
     onBackButtonClick: () -> Unit,

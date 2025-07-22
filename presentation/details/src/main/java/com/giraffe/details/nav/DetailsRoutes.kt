@@ -3,7 +3,7 @@ package com.giraffe.details.nav
 import com.giraffe.details.models.ReviewUI
 import kotlinx.serialization.Serializable
 
-sealed class DetailsRoutes
+internal sealed class DetailsRoutes
 
 @Serializable
 internal data class MovieDetailsRoute(val id: Int) : DetailsRoutes()
