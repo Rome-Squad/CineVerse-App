@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.giraffe.authentication.screen.LoginViewModel
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
+import com.giraffe.details.screens.seasons.SeasonsViewModel
 import com.giraffe.details.screens.recommended.RecommendedSeriesViewModel
 import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import com.giraffe.details.screens.seriesRecommendation.SeriesRecommendationViewModel
@@ -32,4 +34,5 @@ val viewModelModule = module {
         )
     }
     viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
+    viewModelOf(::RecommendedSeriesViewModel)
 }
