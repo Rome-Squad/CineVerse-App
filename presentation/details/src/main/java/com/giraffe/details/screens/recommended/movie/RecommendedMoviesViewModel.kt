@@ -1,6 +1,7 @@
 package com.giraffe.details.screens.recommended.movies
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -8,29 +9,29 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.details.base.BasePagingSource
-import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.MovieUi
-import com.giraffe.details.screens.recommended.RecommendedEffect
-import com.giraffe.details.screens.recommended.RecommendedInteractionListener
-import com.giraffe.details.screens.recommended.RecommendedScreenState
+import com.giraffe.details.screens.recommended.movie.RecommendedEffectMovie
+import com.giraffe.details.screens.recommended.movie.RecommendedInteractionListener
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class RecommendedMoviesViewModel(
     savedStateHandle: SavedStateHandle,
     private val getRecommendedMovies: GetRecommendedMovieUseCase,
     private val getMovieGenres: GetMovieGenresUseCase
-) : BaseViewModel<RecommendedScreenState, RecommendedEffect>(
-    RecommendedScreenState()
-), RecommendedInteractionListener {
+) : ViewModel(), RecommendedInteractionListener {
 
     private val movieId: Int = checkNotNull(savedStateHandle["movieId"])
     val title: String = savedStateHandle["title"] ?: ""
-
+    private val _effect = Channel<RecommendedEffectMovie>()
+    val effect = _effect.receiveAsFlow()
     val recommendationScreenState = Pager(config = PagingConfig(20)) {
         BasePagingSource { page -> getRecommendedMovies(movieId, page) }
     }
@@ -46,4 +47,14 @@ class RecommendedMoviesViewModel(
         val genres = getMovieGenres(movieUi.genresID).map { it.title }
         return movieUi.copy(genres = genres)
     }
+
+
+
+    override fun navigateToMovieDetailsScreen(movieId: Int) {
+        viewModelScope.launch {
+            _effect.send(
+                RecommendedEffectMovie.NavigateToMovieDetails(movieId)
+            )
+        }    }
+
 }

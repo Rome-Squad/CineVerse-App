@@ -30,7 +30,7 @@ fun RecommendedContent(
     title: String,
     lazyPagingItems: LazyPagingItems<MovieUi>,
     modifier: Modifier = Modifier,
-    onItemClick: (MovieUi) -> Unit,
+    interaction: RecommendedInteractionListener,
     onBackClick: () -> Unit
 ) {
     var isGridSelected by rememberSaveable { mutableStateOf(false) }
@@ -56,7 +56,7 @@ fun RecommendedContent(
                     modifier = Modifier.fillParentMaxHeight(),
                     lazyPagingItems = lazyPagingItems,
                     isGridSelected = !isGridSelected,
-                    onItemClick = onItemClick
+                    onItemClick = interaction::navigateToMovieDetailsScreen
                 )
             }
         }
@@ -80,7 +80,7 @@ private fun CardsSection(
     modifier: Modifier = Modifier,
     lazyPagingItems: LazyPagingItems<MovieUi>,
     isGridSelected: Boolean,
-    onItemClick: (MovieUi) -> Unit,
+    onItemClick: (Int) -> Unit,
 
     ) {
     Box(

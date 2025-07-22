@@ -23,17 +23,27 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
+import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecommendedMoviesScreen(
-    onMovieClick: (Int) -> Unit,
     onBackClick: () -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: RecommendedMoviesViewModel = koinViewModel()
 
     val lazyPagingItems = viewModel.recommendationScreenState.collectAsLazyPagingItems()
+    EventListener(
+        events = viewModel.effect,
+    ) { effect ->
+        when (effect) {
+            is RecommendedEffectMovie.NavigateToMovieDetails -> {
+                navigateToSeriesDetails(effect.MovieId)
+            }
+        }
+    }
 
 
     val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
@@ -48,9 +58,7 @@ fun RecommendedMoviesScreen(
             RecommendedContent(
                 title = viewModel.title,
                 lazyPagingItems = lazyPagingItems,
-                onItemClick = { movie ->
-                    onMovieClick(movie.id)
-                },
+                interaction = viewModel,
                 onBackClick = onBackClick
             )
 

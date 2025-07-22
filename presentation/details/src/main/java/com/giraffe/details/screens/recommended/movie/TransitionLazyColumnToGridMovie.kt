@@ -41,8 +41,8 @@ fun TransitionLazyColumnToGridMovie(
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
-    onItemClick: (MovieUi) -> Unit,
-) {
+    onItemClick: (Int) -> Unit,
+    ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
 
@@ -69,7 +69,7 @@ fun TransitionLazyColumnToGridMovie(
                     lazyPagingItems = lazyPagingItems,
                     listState = listState,
                     contentPadding = contentPadding,
-                    onItemClick = onItemClick,
+                    onItemClick = { movie -> onItemClick(movie.id) },
                     animatedContentScope = animatedScope,
                     sharedTransitionScope = this@SharedTransitionLayout
                 )
@@ -78,7 +78,7 @@ fun TransitionLazyColumnToGridMovie(
                     lazyPagingItems = lazyPagingItems,
                     gridState = gridState,
                     contentPadding = contentPadding,
-                    onItemClick = onItemClick,
+                    onItemClick = { movie -> onItemClick(movie.id) },
                     animatedContentScope = animatedScope,
                     sharedTransitionScope = this@SharedTransitionLayout
                 )
