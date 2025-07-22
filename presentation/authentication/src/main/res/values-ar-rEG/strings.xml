@@ -15,5 +15,6 @@
     <string name="invalid_password_minimum_8_characters">كلمة المرور غير صالحة (الحد الأدنى 8 أحرف)</string>
     <string name="welcome_back_to_cineverse">مرحبًا بعودتك إلى CineVerse!</string>
     <string name="logo">الشعار</string>
+    <string name="unknown_error">خطأ غير معروف</string>
 
 </resources>
