@@ -5,26 +5,26 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.util.RetrofitRequestBuilder
 
 class SeriesRemoteRetrofitDataSourceImp(
-    private val builder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>
+    private val RetrofitRequestBuilder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>
 ) : SeriesRemoteDataSource {
 
     override suspend fun getSeriesByName(name: String, page: Int) =
-        builder.get { getSeriesByName(name, page) }.results
+        RetrofitRequestBuilder.get { getSeriesByName(name, page) }.results
 
     override suspend fun getSeriesByGenre(genreId: Int, page: Int) =
-        builder.get {
+        RetrofitRequestBuilder.get {
             getSeriesByGenre(if (genreId == -1) "" else genreId.toString())
         }.results
 
     override suspend fun getGenres() =
-        builder.get { getGenres() }.genres
+        RetrofitRequestBuilder.get { getGenres() }.genres
 
     override suspend fun getSeriesDetails(seriesId: Int): SeriesDetailsDto =
-        builder.get { getSeriesDetails(seriesId) }
+        RetrofitRequestBuilder.get { getSeriesDetails(seriesId) }
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) =
-        builder.get { getSeriesReviews(seriesId, page) }.results
+        RetrofitRequestBuilder.get { getSeriesReviews(seriesId, page) }.results
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
-        builder.get { getSeriesRecommendations(seriesId, page) }.results
+        RetrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results
 }

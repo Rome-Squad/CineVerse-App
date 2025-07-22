@@ -138,8 +138,7 @@ dependencies {
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
 
-    //ktor
-    implementation(libs.bundles.ktor)
+
 
     //worker
     implementation(libs.androidx.work.runtime.ktx)

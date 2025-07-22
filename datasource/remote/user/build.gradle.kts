@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation(project(":repository:user"))
-    implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
     implementation(libs.retrofit)
