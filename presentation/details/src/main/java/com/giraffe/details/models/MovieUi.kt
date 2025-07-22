@@ -14,21 +14,7 @@ data class MovieUi(
     val genres: List<String> = emptyList(),
     val posterUrl: String? = null,
     val releaseYear: String = ""
-) {
-    companion object {
-        fun fromEntity(movie: Movie): MovieUi = MovieUi(
-            id = movie.id,
-            title = movie.title,
-            description = movie.description,
-            rating = movie.rating,
-            duration = movie.duration,
-            posterUrl = movie.posterUrl,
-            genresID = movie.genresID,
-            releaseYear = movie.releaseYear.toString()
-        )
-    }
-}
-
+)
 
 
 fun MovieUi.toMovieEntity() = Movie(

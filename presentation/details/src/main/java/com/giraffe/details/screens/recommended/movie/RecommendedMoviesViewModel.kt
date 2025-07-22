@@ -13,6 +13,7 @@ import com.giraffe.details.models.MovieUi
 import com.giraffe.details.screens.recommended.RecommendedEffect
 import com.giraffe.details.screens.recommended.RecommendedInteractionListener
 import com.giraffe.details.screens.recommended.RecommendedScreenState
+import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import kotlinx.coroutines.flow.SharingStarted
@@ -36,10 +37,13 @@ class RecommendedMoviesViewModel(
         .flow
         .cachedIn(viewModelScope)
         .map { pagingData ->
-            pagingData.map { movie ->
-                val genres = getMovieGenres(movie.genresID).map { it.title }
-                MovieUi.fromEntity(movie).copy(genres = genres)
-            }
+            pagingData.map { movie -> mapMovieToMovieUi(movie) }
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+
+    private suspend fun mapMovieToMovieUi(movie: Movie): MovieUi {
+        val movieUi = movie.MovieUi()
+        val genres = getMovieGenres(movieUi.genresID).map { it.title }
+        return movieUi.copy(genres = genres)
+    }
 }
