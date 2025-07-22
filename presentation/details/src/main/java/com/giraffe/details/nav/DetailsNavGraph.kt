@@ -62,7 +62,7 @@ fun DetailsNavGraph(
                     TITLE_SERIES_ARG,
                     titleSeries
                 )
-                navController.navigate(RECOMMENDED_SERIES_ROUTE)
+                navController.navigate("$RECOMMENDED_SERIES_ROUTE/$seriesID/$titleSeries")
             }
         )
 

@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 
-const val RECOMMENDED_SERIES_ROUTE = "movieDetails"
+const val RECOMMENDED_SERIES_ROUTE = "recommendedSeries"
 const val SERIES_ID_ARG = "seriesID"
 const val TITLE_SERIES_ARG = "titleSeries"
 
@@ -16,7 +16,7 @@ fun NavGraphBuilder.recommendedSeriesRoute(
     onBackClick: () -> Unit,
 ) {
     composable(
-        route = "$RECOMMENDED_SERIES_ROUTE/$SERIES_ID_ARG/$TITLE_SERIES_ARG",
+        route = "$RECOMMENDED_SERIES_ROUTE/{$SERIES_ID_ARG}/{$TITLE_SERIES_ARG}",
         arguments = listOf(
             navArgument(SERIES_ID_ARG) {
                 type = NavType.IntType
@@ -29,7 +29,7 @@ fun NavGraphBuilder.recommendedSeriesRoute(
         RecommendedSeriesScreen(
             navigateToSeriesDetails = navigateToSeriesDetails,
             onBackClick = onBackClick,
-            titleSeries = titleSeries
+            titleSeries = titleSeries,
         )
     }
 
