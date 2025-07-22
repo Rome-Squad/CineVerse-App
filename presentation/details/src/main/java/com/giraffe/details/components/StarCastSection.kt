@@ -124,7 +124,6 @@ fun CastCard(
                     contentDescription = "$actorName image",
                     tint = Theme.color.brand.secondary,
                     modifier = it
-                        .size(64.dp)
                         .size(28.dp)
                         .wrapContentSize()
                 )
