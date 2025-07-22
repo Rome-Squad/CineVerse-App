@@ -67,7 +67,6 @@ fun SafeIslamicImage(
     LaunchedEffect(imageUrl) {
         isPlaceholder = true
         if (imageUrl.isBlank() || imageUrl == "null") {
-            isPlaceholder = true
             return@LaunchedEffect
         }
         val cachedResult = unsafeCache[imageUrl]
