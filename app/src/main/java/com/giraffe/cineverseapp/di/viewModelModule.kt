@@ -21,8 +21,6 @@ val viewModelModule = module {
     //viewModelOf(::SeasonsViewModel)
     viewModelOf(::MovieDetailsViewModel)
     viewModelOf(::SearchResultViewModel)
-    //viewModelOf(::RecommendedSeriesViewModel)
-    //viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::LoginViewModel)
     viewModelOf(::RecommendedSeriesViewModel)
 }
