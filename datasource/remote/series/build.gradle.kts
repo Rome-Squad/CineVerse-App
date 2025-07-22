@@ -40,8 +40,7 @@ dependencies {
     //koin
     implementation(libs.koin.androidx.compose)
 
-    //ktor
-    implementation(libs.bundles.ktor)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
