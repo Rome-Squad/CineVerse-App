@@ -10,7 +10,6 @@ data class SeriesUi(
     val rating: Float = 0.0f,
     val posterUrl: String? = null,
     val releaseYear: String = "",
-    val genreIDs: List<Int> = emptyList(),
     val genres: List<String> = emptyList()
 ) {
     companion object {
@@ -21,7 +20,7 @@ data class SeriesUi(
             rating = series.rating,
             posterUrl = series.posterUrl,
             releaseYear = series.releaseYear,
-            genreIDs = series.genreIDs
+            genres = emptyList()
         )
     }
 }
