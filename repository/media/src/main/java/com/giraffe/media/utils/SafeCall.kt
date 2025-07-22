@@ -43,14 +43,14 @@ object SafeCall {
     fun mapToDomainException(e: Throwable): MediaException = when (e) {
 
         is ApiDataException -> when (e.code) {
-            3, 7, 10, 14, 16, 17, 30, 31, 32, 33, 35, 36 -> UnauthorizedException()
-            4, 42 -> InvalidRequestMethodException()
-            8, 38, 39, 45, 25 -> AccessDeniedException()
-            5, 18, 20, 22, 23, 26, 27, 28, 29, 41, 47 -> ValidationException()
-            6, 34, 37 -> NotFoundException()
-            2, 9, 43, 46 -> NetworkException()
-            11, 15, 44 -> ServerErrorException()
-            24 -> TimeoutException()
+            401  -> UnauthorizedException()
+            405  -> InvalidRequestMethodException()
+            403, 429 -> AccessDeniedException()
+            400,406,422 -> ValidationException()
+            404  -> NotFoundException()
+            502, 503 -> NetworkException()
+            500, 501 -> ServerErrorException()
+            504  -> TimeoutException()
             else -> UnknownException()
         }
 
