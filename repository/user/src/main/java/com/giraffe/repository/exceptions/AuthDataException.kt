@@ -1,6 +1,6 @@
 package com.giraffe.repository.exceptions
 
-sealed class AuthDataException: Exception()
+open class AuthDataException: Exception()
 
 class InvalidCredentialsException : AuthDataException()
 class TokenCreationException : AuthDataException()
