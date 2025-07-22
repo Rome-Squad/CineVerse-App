@@ -42,9 +42,6 @@ import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.castDetails.navigateToCastDetails
-import com.giraffe.details.navigation.RecommendedSeriesRoute
-import com.giraffe.details.screens.castDetails.navigateToPersonDetails
-import com.giraffe.details.screens.seasons.navigateToSeasons
 import com.giraffe.details.utils.EventListener
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
@@ -57,6 +54,7 @@ fun SeriesDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
     onBackButtonClick: () -> Unit = {},
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
@@ -76,6 +74,11 @@ fun SeriesDetailsScreen(
                     seriesId = it.seriesId
                 )*/
             }
+
+            is SeriesDetailsEffect.NavigateToRecommendedSeries -> navigateToRecommendedSeries(
+                it.seriesId,
+                it.title
+            )
         }
     }
     Box(
@@ -200,12 +203,10 @@ fun SeriesDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
                 onClickEndText = {
-                    /*navController.navigateT(
-                        RecommendedSeriesRoute(
-                            state.seriesDetails.id,
-                            state.seriesDetails.name
-                        )
-                    )*/
+                    interaction.navigateToRecommendedSeriesScreen(
+                        seriesId = state.seriesDetails.id,
+                        title = state.seriesDetails.name
+                    )
                 },
                 onClickPoster = { navController.navigateToSeriesDetails(it) }
             )

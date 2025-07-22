@@ -3,6 +3,7 @@ package com.giraffe.details.screens.recommended.series
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -45,8 +46,12 @@ fun RecommendedSeriesContent(
                 onBackButtonClick = onBackButtonClick,
             )
 
-            // Here section not implement yet
-            // Transition between LazyColumn to LazyVerticalGrid Series
+            TransitionBetweenLazyColumnToLazyVerticalGridSeries(
+                lazyPagingItems = lazyPagingItems,
+                isListSelected = !isGridSelected,
+                contentPadding = PaddingValues(16.dp),
+                onItemClick = { interaction.navigateToSeriesDetailsScreen(it) }
+            )
         }
 
         ViewToggle(
