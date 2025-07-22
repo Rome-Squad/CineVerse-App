@@ -1,23 +1,14 @@
 package com.giraffe.authentication.screen
 
 import com.giraffe.authentication.base.BaseViewModel
+import com.giraffe.user.exception.InvalidEmailException
+import com.giraffe.user.exception.InvalidPasswordException
+import com.giraffe.user.usecase.LoginUseCase
 
-class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
-    LoginInteractionListener {
+class LoginViewModel(
+    private val loginUseCase: LoginUseCase
+) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
-
-    private fun onLoginClicked() {
-        safeExecute(
-            onError = {
-            updateState { it.copy(isLoading = false) }
-            sendEffect(LoginEffect.Error(it))
-        }, onSuccess = {
-            updateState { it.copy(isLoading = false) }
-            sendEffect(LoginEffect.NavigateToHomeScreen)
-        }) {
-            //TODO authentication process
-        }
-    }
 
     override fun onEmailChanged(email: String) {
         updateState {
@@ -38,11 +29,39 @@ class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
     }
 
     override fun onLoginClick() {
-        onLoginClicked()
+        updateState { it.copy(isLoading = true) }
+
+        safeExecute(
+            onError = ::onLoginError,
+            onSuccess = {
+                updateState { it.copy(isLoading = false) }
+                sendEffect(LoginEffect.NavigateToHomeScreen)
+            }) {
+            loginUseCase(email = state.value.email, password = state.value.password)
+        }
+    }
+
+    private fun onLoginError(throwable: Throwable) {
+        if (throwable is InvalidEmailException) updateState {
+            it.copy(
+                emailErrorMessage = mapExceptionToStringRes(
+                    throwable
+                )
+            )
+        }
+
+        if (throwable is InvalidPasswordException) updateState {
+            it.copy(
+                passwordErrorMessage = mapExceptionToStringRes(throwable)
+            )
+        }
+
+        updateState { it.copy(isLoading = false) }
+        sendEffect(LoginEffect.Error(throwable))
     }
 
     override fun onGoToWebsiteClick() {
-        TODO("Not yet implemented")
+        // go to web view
     }
 
     override fun onForgotPasswordClick() {

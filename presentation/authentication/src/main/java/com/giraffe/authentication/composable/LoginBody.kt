@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,8 @@ fun LoginBody(
     state: LoginState,
     interaction: LoginInteractionListener
 ){
+    val context = LocalContext.current
+
     Column (
         modifier = modifier.padding(horizontal = 16.dp)
     ){
@@ -30,7 +33,7 @@ fun LoginBody(
             placeholder = stringResource(R.string.enter_your_email_or_username),
             value = state.email,
             onValueChange = interaction::onEmailChanged,
-            errorMessage = state.emailErrorMessage,
+            errorMessage = state.emailErrorMessage?.let { context.getString(it) } ?: "",
             label = stringResource(R.string.email_or_username),
             maxLines = 1,
             isPassword = false,
@@ -42,7 +45,7 @@ fun LoginBody(
             placeholder = stringResource(R.string.enter_your_password),
             value = state.password,
             onValueChange = interaction::onPasswordChanged,
-            errorMessage = state.passwordErrorMessage,
+            errorMessage = state.passwordErrorMessage?.let { context.getString(it) } ?: "",
             label = stringResource(R.string.password),
             maxLines = 1,
             isPassword = true,
@@ -64,7 +67,7 @@ fun LoginBody(
             text = stringResource(R.string.join_as_guest),
             enabled = true,
             isLoading = false,
-            onClick = interaction::onLoginClick,
+            onClick = interaction::onJoinAsGuestClick,
         )
     }
 }

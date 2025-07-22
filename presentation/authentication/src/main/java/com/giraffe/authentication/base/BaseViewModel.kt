@@ -1,7 +1,11 @@
 package com.giraffe.authentication.base
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.authentication.R
+import com.giraffe.user.exception.InvalidEmailException
+import com.giraffe.user.exception.InvalidPasswordException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,4 +56,13 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
         }
     }
 
+
+    @StringRes
+     fun mapExceptionToStringRes(throwable: Throwable): Int {
+        return when (throwable) {
+            is InvalidEmailException -> R.string.invalid_email_address
+            is InvalidPasswordException -> R.string.invalid_password_minimum_8_characters
+            else -> R.string.unknown_error
+        }
+    }
 }
