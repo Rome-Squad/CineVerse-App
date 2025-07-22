@@ -16,20 +16,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.custom.Button
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecommendedMoviesScreen(
-    navController: NavController,
+    onMovieClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: RecommendedMoviesViewModel = koinViewModel()
@@ -52,11 +51,9 @@ fun RecommendedMoviesScreen(
                 lazyPagingItems = lazyPagingItems,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onItemClick = { movie ->
-                    navController.navigateToMovieDetails(movie.id)
+                    onMovieClick(movie.id)
                 },
-                onBackClick = {
-                    navController.popBackStack()
-                }
+                onBackClick = onBackClick
             )
 
         }

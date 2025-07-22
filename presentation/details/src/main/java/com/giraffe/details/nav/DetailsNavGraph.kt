@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.details.screens.castDetails.castDetailsRoute
+import com.giraffe.details.screens.moviedetails.screen.MOVIES_ROUTE
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
+import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.reviewScreen.REVIEW_LIST_ARG
 import com.giraffe.details.screens.reviewScreen.Review_ROUTE
 import com.giraffe.details.screens.reviewScreen.reviewRoute
@@ -54,6 +56,18 @@ fun DetailsNavGraph(
         castDetailsRoute(
             navController = navController
         )
+        recommendedMoviesRoute(
+            onBackClick = {
+                val backed = navController.navigateUp()
+                if (!backed) {
+                    back()
+                }
+            },
+            onMovieClick = { movieId ->
+                navController.navigate("${MOVIES_ROUTE}/$movieId")
+            }
+        )
+
 
         reviewRoute(navController)
     }
