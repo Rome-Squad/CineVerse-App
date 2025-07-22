@@ -4,6 +4,12 @@ import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
+import com.giraffe.media.home.usecase.GetPopularityMoviesUseCase
+import com.giraffe.media.home.usecase.GetPopularitySeriesUseCase
+import com.giraffe.media.home.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.home.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.home.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.media.home.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.ClearCacheUseCase
 import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
@@ -60,6 +66,9 @@ val useCaseModule = module {
     singleOf(::GetSeriesReviewsUseCase)
     singleOf(::GetSeriesByGenresUseCase)
     singleOf(::GetSeriesGenresByIdsUseCase)
+    singleOf(::GetPopularitySeriesUseCase)
+    singleOf(::GetRecentlyReleasedSeriesUseCase)
+    singleOf(::GetTopRatedSeriesUseCase)
 
     // Movie UseCases
     singleOf(::SearchMovieByNameUseCase)
@@ -73,6 +82,10 @@ val useCaseModule = module {
     singleOf(::GetRecentlyMoviesUseCase)
     singleOf(::ClearRecentlyMoviesUseCase)
     singleOf(::GetMovieGenresUseCase)
+    singleOf(::GetRecentlyReleasedMoviesUseCase)
+    singleOf(::GetPopularityMoviesUseCase)
+    singleOf(::GetUpcomingMoviesUseCase)
+
 
     // NEW: Add UseCases for Movie Details and Rating
     singleOf(::GetMovieDetailsUseCase)

@@ -2,6 +2,8 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.media.explore.ExploreRepositoryImpl
 import com.giraffe.media.explore.repository.ExploreRepository
+import com.giraffe.media.home.HomeRepositoryImpl
+import com.giraffe.media.home.repository.HomeRepository
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.person.PersonRepositoryImpl
 import com.giraffe.media.person.repository.PersonRepository
@@ -17,4 +19,5 @@ val repositoryModule = module {
     singleOf(::SeriesRepositoryImpl) bind SeriesRepository::class
     singleOf(::MoviesRepositoryImpl) bind MoviesRepository::class
     singleOf(::PersonRepositoryImpl) bind PersonRepository::class
+    singleOf(::HomeRepositoryImpl) bind HomeRepository::class
 }

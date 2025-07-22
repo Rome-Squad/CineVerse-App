@@ -23,7 +23,7 @@ fun MoviesListSection(
     endText: String? = null,
     paddingHorizontal: Int = 16,
     onClickEndText: () -> Unit = {},
-    onClickPoster: (movieId: Int) -> Unit = {}
+    onClickPoster: (movieId: Int) -> Unit = {},
 ) {
     if (movies.isEmpty()) {
         return
@@ -54,6 +54,7 @@ fun MoviesListSection(
         }
     }
 }
+
 
 @Preview
 @Composable

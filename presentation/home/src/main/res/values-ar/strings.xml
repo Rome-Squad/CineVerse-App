@@ -7,4 +7,16 @@
     <string name="what_should_i_watch">ماذا أشاهد؟</string>
     <string name="let_us_choose_for_you">دعنا نختار لك!</string>
     <string name="we_ll_help_you_skip_the_scroll_and_go_straight_to_the_good_stuff">سنساعدك على تجاوز التصفح والذهاب مباشرة إلى الأفضل.</string>
+    <string name="welcome">مرحباً</string>
+    <string name="image_logo">صورة شعار التطبيق</string>
+    <string name="recently_released">تم إصداره مؤخراً</string>
+    <string name="upcoming_movies">الأفلام القادمة</string>
+    <string name="matches_your_vibe">يتوافق مع ذوقك</string>
+    <string name="top_rated_tv_shows">العروض الأعلى تقييماً</string>
+    <string name="clear_all">مسح الكل</string>
+    <string name="you_recent_viewed">أخر المشاهدات</string>
+    <string name="need_more_to_watch">هل تحتاج المزيد من المشاهدة</string>
+    <string name="browse_everything">تصفح كل شئ</string>
+    <string name="explore_all_movies_and_series">استكشف جميع الأفلام والمسلسلات حسب النوع أو ابحث عن أي شيء تريده.</string>
+    <string name="back">رجوع للنافذة السابقة</string>
 </resources>

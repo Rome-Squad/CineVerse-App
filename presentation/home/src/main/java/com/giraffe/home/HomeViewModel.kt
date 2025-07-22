@@ -1,5 +1,6 @@
 package com.giraffe.home
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.giraffe.home.base.BaseViewModel
@@ -23,6 +24,7 @@ import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -47,10 +49,16 @@ class HomeViewModel(
         loadHomeScreen()
     }
 
+    private fun handler(): CoroutineExceptionHandler {
+        return CoroutineExceptionHandler { _, throwable ->
+            Log.d("Throw", throwable.message.toString())
+        }
+    }
+
     private fun loadHomeScreen() {
         updateState { it.copy(isLoading = true, isError = false) }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + handler()) {
             try {
                 val popularMoviesDeferred = async { getPopularityMoviesUseCase() }
                 val popularSeriesDeferred = async { getPopularitySeriesUseCase() }
@@ -76,8 +84,9 @@ class HomeViewModel(
                 val recentlyViewedMovieUi = recentlyViewedMovies.map { it.toHomeUiModel() }
                 val recentlyViewedSeriesUi = recentlyViewedSeries.map { it.toHomeUiModel() }
 
-                val recentlyViewed = recentlyViewedMovieUi + recentlyViewedSeriesUi
+                val recentlyViewed = recentlyViewedSeriesUi + recentlyViewedMovieUi
                 val pickedForYou = recommendedSeriesUi + recommendedMoviesUi
+
 
                 val topRated = getTopRatedSeriesUseCase()
                 val upcoming = getUpcomingMoviesUseCase()
@@ -114,6 +123,9 @@ class HomeViewModel(
                 val errorResId = mapExceptionToStringRes(e)
                 updateState { it.copy(isLoading = false, isError = true) }
                 sendEffect(HomeEffect.ShowError(errorResId))
+            } catch (e: Exception) {
+                updateState { it.copy(isLoading = false, isError = true) }
+//                sendEffect(HomeEffect.ShowError(e.message))
             }
         }
     }

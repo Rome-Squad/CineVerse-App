@@ -2,7 +2,9 @@ package com.giraffe.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -24,12 +26,14 @@ fun CollectionListSection(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
+            modifier = Modifier.padding(start = 16.dp),
             text = stringResource(R.string.featured_collections),
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary
         )
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(collectionItems.chunked(2)) { rowItems ->
                 Column(
