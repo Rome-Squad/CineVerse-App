@@ -54,6 +54,7 @@ fun SeriesDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
     onBackButtonClick: () -> Unit = {},
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
@@ -73,6 +74,11 @@ fun SeriesDetailsScreen(
                     seriesId = it.seriesId
                 )*/
             }
+
+            is SeriesDetailsEffect.NavigateToRecommendedSeries -> navigateToRecommendedSeries(
+                it.seriesId,
+                it.title
+            )
         }
     }
     Box(
@@ -169,7 +175,11 @@ fun SeriesDetailsContent(
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
-                            year = state.seasons[i].releaseYear.split("-").first().toInt(),
+                            year = state.seasons[i].releaseYear
+                                .takeIf { it.isNotBlank() && it.contains("-") }
+                                ?.split("-")
+                                ?.firstOrNull()
+                                ?.toIntOrNull()
                         )
                     }
                 }
@@ -193,12 +203,10 @@ fun SeriesDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedSeries,
                 onClickEndText = {
-                    /*navController.navigateT(
-                        RecommendedSeriesRoute(
-                            state.seriesDetails.id,
-                            state.seriesDetails.name
-                        )
-                    )*/
+                    interaction.navigateToRecommendedSeriesScreen(
+                        seriesId = state.seriesDetails.id,
+                        title = state.seriesDetails.name
+                    )
                 },
                 onClickPoster = { navController.navigateToSeriesDetails(it) }
             )

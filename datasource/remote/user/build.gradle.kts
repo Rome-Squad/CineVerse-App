@@ -35,13 +35,12 @@ android {
 
 dependencies {
     implementation(project(":repository:user"))
-    // retrofit
-    implementation (libs.retrofit)
-    // GSON
-    implementation (libs.converter.gson)
-    implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
-    implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 }
