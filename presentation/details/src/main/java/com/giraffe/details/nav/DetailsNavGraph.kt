@@ -5,6 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.details.screens.castDetails.castDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
+import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
+import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.REVIEW_LIST_ARG
 import com.giraffe.details.screens.reviewScreen.Review_ROUTE
 import com.giraffe.details.screens.reviewScreen.reviewRoute
@@ -48,8 +50,21 @@ fun DetailsNavGraph(
             },
             onBackButtonClick = {
                 navController.navigateUp()
+            },
+            navigateToRecommendedSeries = navController::navigateToRecommendedSeries
+        )
+
+        recommendedSeriesRoute(
+            navigateToSeriesDetails = { seriesID ->
+                navController.navigate(
+                    "seriesDetails/$seriesID"
+                )
+            },
+            onBackClick = {
+                navController.navigateUp()
             }
         )
+
 
         castDetailsRoute(
             navController = navController
