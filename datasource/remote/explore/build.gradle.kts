@@ -52,8 +52,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.kotlinx.serialization.json)
 
-    //ktor
-    implementation(libs.bundles.ktor)
 
     //koin
     implementation(libs.koin.androidx.compose)
