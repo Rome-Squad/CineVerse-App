@@ -1,5 +1,6 @@
 package com.giraffe.cineverseapp.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.screens.recommended.RecommendedSeriesViewModel
@@ -16,7 +17,12 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModelOf(::DiscoverViewModel)
     viewModelOf(::SearchViewModel)
-    viewModel { (personId: Int) -> CastDetailsViewModel(personId, get()) }
+    viewModel { (savedStateHandle: SavedStateHandle) ->
+        CastDetailsViewModel(
+            savedStateHandle = savedStateHandle,
+            get()
+        )
+    }
     viewModelOf(::SeriesDetailsViewModel)
     viewModelOf(::SeasonsViewModel)
     viewModelOf(::MovieDetailsViewModel)

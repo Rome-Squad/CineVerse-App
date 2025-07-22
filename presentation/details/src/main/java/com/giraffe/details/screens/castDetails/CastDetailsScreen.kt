@@ -50,16 +50,13 @@ import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.screens.gallery.navigateToGallery
 import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CastDetailsScreen(
-    personId: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
-    castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
+    castDetailsViewModel: CastDetailsViewModel = koinViewModel()
 ) {
-
     val state by castDetailsViewModel.state.collectAsState()
     val context = LocalContext.current
     EventListener(
