@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
 import com.giraffe.authentication.screen.LoginInteractionListener
 import com.giraffe.authentication.screen.LoginState
-import com.giraffe.authentication.validation.getMessage
 import com.giraffe.designsystem.composable.DefaultTextField
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
@@ -24,8 +22,6 @@ fun LoginBody(
     state: LoginState,
     interaction: LoginInteractionListener
 ){
-    val context = LocalContext.current
-
     Column (
         modifier = modifier.padding(horizontal = 16.dp)
     ){
@@ -34,7 +30,7 @@ fun LoginBody(
             placeholder = stringResource(R.string.enter_your_email_or_username),
             value = state.email,
             onValueChange = interaction::onEmailChanged,
-            errorMessage = state.emailErrorMessage?.getMessage(context),
+            errorMessage = state.emailErrorMessage,
             label = stringResource(R.string.email_or_username),
             maxLines = 1,
             isPassword = false,
@@ -46,7 +42,7 @@ fun LoginBody(
             placeholder = stringResource(R.string.enter_your_password),
             value = state.password,
             onValueChange = interaction::onPasswordChanged,
-            errorMessage = state.passwordErrorMessage?.getMessage(context),
+            errorMessage = state.passwordErrorMessage,
             label = stringResource(R.string.password),
             maxLines = 1,
             isPassword = true,

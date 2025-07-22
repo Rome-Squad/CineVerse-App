@@ -1,37 +1,12 @@
 package com.giraffe.authentication.screen
 
 import com.giraffe.authentication.base.BaseViewModel
-import com.giraffe.authentication.validation.validateEmail
-import com.giraffe.authentication.validation.validatePassword
-
 
 class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
     LoginInteractionListener {
 
 
     private fun onLoginClicked() {
-        if (!validateInputs()) return
-
-        updateState { it.copy(isLoading = true) }
-
-        performLogin()
-    }
-
-    private fun validateInputs(): Boolean {
-        val emailErrorMessage = validateEmail(state.value.email)
-        val passwordErrorMessage = validatePassword(state.value.password)
-
-        updateState {
-            it.copy(
-                emailErrorMessage = emailErrorMessage,
-                passwordErrorMessage = passwordErrorMessage
-            )
-        }
-
-        return (emailErrorMessage == null && passwordErrorMessage == null)
-    }
-
-    private fun performLogin() {
         safeExecute(
             onError = {
             updateState { it.copy(isLoading = false) }
