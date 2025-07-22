@@ -4,21 +4,26 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.giraffe.details.nav.CastDetailsRoute
+import kotlinx.serialization.Serializable
+
+@Serializable
+internal data class CastDetailsRoute(val id: Int)
 
 internal fun NavController.navigateToCastDetails(id: Int) {
     navigate(CastDetailsRoute(id))
 }
 
 internal fun NavGraphBuilder.castDetailsRoute(
-    navController: NavController
-) {
+    navController: NavController,
+    onBackButtonClick: () -> Unit,
+    ) {
     composable<CastDetailsRoute> { backStackEntry ->
         val personId = backStackEntry.toRoute<CastDetailsRoute>().id
 
         CastDetailsScreen(
             navController = navController,
-            personId = personId
+            personId = personId,
+            onBackButtonClick = onBackButtonClick
         )
     }
 }

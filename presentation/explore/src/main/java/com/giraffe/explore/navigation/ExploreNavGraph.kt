@@ -59,19 +59,25 @@ internal fun ExploreNavGraph(
         composable<CastDetailsRoute> { backStackEntry ->
             val castId = backStackEntry.toRoute<CastDetailsRoute>().castId
 
-            detailsApi.CastDetailsContainer(castId = castId)
+            detailsApi.CastDetailsContainer(castId = castId) {
+                navController.popBackStack()
+            }
         }
 
         composable<SeriesDetailsRoute> { backStackEntry ->
             val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
 
-            detailsApi.SeriesDetailsContainer(seriesId = seriesId)
+            detailsApi.SeriesDetailsContainer(seriesId = seriesId) {
+                navController.popBackStack()
+            }
         }
 
         composable<MovieDetailsRoute> { backStackEntry ->
             val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId
 
-            detailsApi.MovieDetailsContainer(movieId = movieId)
+            detailsApi.MovieDetailsContainer(movieId = movieId) {
+                navController.popBackStack()
+            }
         }
     }
 }

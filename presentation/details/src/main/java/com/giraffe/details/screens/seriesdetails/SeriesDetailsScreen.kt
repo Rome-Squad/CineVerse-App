@@ -41,8 +41,7 @@ import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.nav.CastDetailsRoute
-import com.giraffe.details.nav.SeriesDetailsRoute
+import com.giraffe.details.screens.castDetails.CastDetailsRoute
 import com.giraffe.details.utils.EventListener
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
@@ -55,7 +54,7 @@ fun SeriesDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
-    onBackButtonClick: () -> Unit = {},
+    onBackButtonClick: () -> Unit,
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -170,7 +169,9 @@ fun SeriesDetailsContent(
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
-                            year = state.seasons[i].releaseYear.split("-").first().toInt(),
+                            year = if (state.seasons[i].releaseYear.isBlank()) 0 else state.seasons[i].releaseYear.split(
+                                "-"
+                            ).first().toInt(),
                         )
                     }
                 }

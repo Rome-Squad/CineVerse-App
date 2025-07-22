@@ -4,15 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.details.screens.castDetails.castDetailsRoute
+import com.giraffe.details.screens.gallery.galleryRoute
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
 import com.giraffe.details.screens.reviewScreen.navigateToReviews
-import com.giraffe.details.screens.reviewScreen.reviewRoute
 import com.giraffe.details.screens.seriesdetails.seriesDetailsRoute
 
 @Composable
 internal fun DetailsNavGraph(
     navController: NavHostController,
-    startDestinationRoute: DetailsRoutes
+    startDestinationRoute: Any,
+    onBackClick: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -20,18 +21,23 @@ internal fun DetailsNavGraph(
     ) {
         movieDetailsRoute(
             navController = navController,
-            onBackButtonClick = navController::navigateUp,
-            navigateToReviews = navController::navigateToReviews
+            navigateToReviews = navController::navigateToReviews,
+            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
         )
 
         seriesDetailsRoute(
             navController = navController,
-            onBackButtonClick = navController::navigateUp,
-            navigateToReviews = navController::navigateToReviews
+            navigateToReviews = navController::navigateToReviews,
+            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
         )
 
-        castDetailsRoute(navController)
+        castDetailsRoute(
+            navController = navController,
+            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
+        )
 
-        reviewRoute(navController)
+        galleryRoute(navController)
+
+//        reviewRoute(navController)
     }
 }

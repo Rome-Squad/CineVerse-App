@@ -5,7 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.nav.MovieDetailsRoute
+import kotlinx.serialization.Serializable
+
+@Serializable
+internal data class MovieDetailsRoute(val id: Int)
 
 
 fun NavController.navigateToMovieDetails(id: Int) {

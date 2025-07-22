@@ -5,7 +5,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.nav.ReviewRoute
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+internal data class ReviewRoute(val reviews: List<ReviewUI>?)
 
 fun NavController.navigateToReviews(reviews: List<ReviewUI>) {
     navigate(ReviewRoute(reviews))

@@ -5,12 +5,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.nav.SeriesDetailsRoute
+import kotlinx.serialization.Serializable
 
-fun NavController.navigateToSeriesDetails(id: Int) {
+@Serializable
+internal data class SeriesDetailsRoute(val id: Int)
+
+internal fun NavController.navigateToSeriesDetails(id: Int) {
     navigate(SeriesDetailsRoute(id))
 }
-
 
 fun NavGraphBuilder.seriesDetailsRoute(
     navController: NavController,

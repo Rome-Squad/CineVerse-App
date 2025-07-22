@@ -6,11 +6,11 @@ import androidx.compose.runtime.Stable
 @Stable
 interface DetailsApi {
     @Composable
-    fun MovieDetailsContainer(movieId: Int)
+    fun MovieDetailsContainer(movieId: Int, onBackClick: () -> Unit)
 
     @Composable
-    fun SeriesDetailsContainer(seriesId: Int)
+    fun SeriesDetailsContainer(seriesId: Int, onBackClick: () -> Unit)
 
     @Composable
-    fun CastDetailsContainer(castId: Int)
+    fun CastDetailsContainer(castId: Int, onBackClick: () -> Unit)
 }

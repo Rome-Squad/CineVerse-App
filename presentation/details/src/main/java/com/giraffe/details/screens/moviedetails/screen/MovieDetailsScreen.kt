@@ -39,8 +39,7 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.nav.CastDetailsRoute
-import com.giraffe.details.nav.MovieDetailsRoute
+import com.giraffe.details.screens.castDetails.CastDetailsRoute
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
