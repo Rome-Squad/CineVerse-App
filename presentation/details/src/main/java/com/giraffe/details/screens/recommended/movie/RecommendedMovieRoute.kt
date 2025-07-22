@@ -1,34 +1,26 @@
+// file: com.giraffe.details.screens.recommended.movie.RecommendedMovieRoute.kt
 package com.giraffe.details.screens.recommended.movie
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.giraffe.details.screens.recommended.movie.utils.RecommendedMovieArgs
+import kotlinx.serialization.Serializable
 
-fun NavController.navigateToRecommendedMoviesScreen(args: RecommendedMovieArgs) {
-    navigate(args.toRoute())
+@Serializable
+internal data class RecommendedMovieRoute(val movieId: Int, val title: String)
+
+internal fun NavController.navigateToRecommendedMoviesScreen(movieId: Int, title: String) {
+    navigate(RecommendedMovieRoute(movieId, title))
 }
 
-
-fun NavGraphBuilder.recommendedMoviesRoute(
+internal fun NavGraphBuilder.recommendedMoviesRoute(
     onBackClick: () -> Unit,
     onMovieClick: (Int) -> Unit
 ) {
-    composable(
-        route = RecommendedMovieArgs.fullRoute,
-        arguments = listOf(
-            navArgument(RecommendedMovieArgs.MOVIE_ID) { type = NavType.IntType },
-            navArgument(RecommendedMovieArgs.TITLE) { type = NavType.StringType }
-        )
-    ) {
+    composable<RecommendedMovieRoute> {
         RecommendedMoviesScreen(
             onBackClick = onBackClick,
-            onMovieClick = onMovieClick
+            onMovieClick = onMovieClick,
         )
     }
 }
-
-
-
