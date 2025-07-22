@@ -57,12 +57,7 @@ fun DetailsNavGraph(
             navController = navController
         )
         recommendedMoviesRoute(
-            onBackClick = {
-                val backed = navController.navigateUp()
-                if (!backed) {
-                    back()
-                }
-            },
+            onBackClick = { navController.navigateUp() },
             onMovieClick = { movieId ->
                 navController.navigate("${MOVIES_ROUTE}/$movieId")
             }

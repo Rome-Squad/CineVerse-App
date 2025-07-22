@@ -45,6 +45,7 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMoviesScreen
+import com.giraffe.details.screens.recommended.movie.utils.RecommendedMovieArgs
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -80,10 +81,13 @@ fun MovieDetailsScreen(
                 is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
                     castID = effect.personId
                 )
-                is MovieDetailsEffect.NavigateToMoviesRecommended -> navController.navigateToRecommendedMoviesScreen(
-                    movieId = effect.movieId,
-                    title = effect.title
-                )
+                is MovieDetailsEffect.NavigateToMoviesRecommended -> {
+                    val args = RecommendedMovieArgs(
+                        movieId = effect.movieId,
+                        title = effect.title
+                    )
+                    navController.navigateToRecommendedMoviesScreen(args)
+                }
             }
         }
     }
