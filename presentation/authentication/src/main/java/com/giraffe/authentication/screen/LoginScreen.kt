@@ -62,9 +62,7 @@ private fun LoginContent(
             text = stringResource(R.string.create_a_new_account),
             enabled = true,
             isLoading = false,
-            onClick = {
-                interaction.onCreateNewAccountClick()
-            },
+            onClick = interaction::onCreateNewAccountClick
         )
 
         Box(
