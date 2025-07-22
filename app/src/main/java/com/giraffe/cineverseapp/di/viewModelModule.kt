@@ -26,6 +26,7 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     //viewModelOf(::RecommendedSeriesViewModel)
     //viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
+    viewModelOf(::LoginViewModel)
     viewModelOf(::RecommendedSeriesViewModel)
     viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::LoginViewModel)
