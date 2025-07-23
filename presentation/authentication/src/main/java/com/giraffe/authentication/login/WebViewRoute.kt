@@ -18,6 +18,6 @@ fun NavGraphBuilder.webViewRoute(
     navController: NavController
 ){
     composable<WebViewRoute>{
-        AuthWebViewScreen(navController = navController)
+        AuthWebViewScreen(onBack = {navController.navigateUp()})
     }
 }

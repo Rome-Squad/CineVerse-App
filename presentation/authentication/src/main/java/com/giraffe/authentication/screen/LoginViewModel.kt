@@ -36,6 +36,8 @@ class LoginViewModel(
             onSuccess = {
                 updateState { it.copy(isLoading = false) }
                 sendEffect(LoginEffect.NavigateToHomeScreen)
+            /// TODO how pop back here when go from screen in app to login
+
             }) {
             loginUseCase(email = state.value.email, password = state.value.password)
         }
