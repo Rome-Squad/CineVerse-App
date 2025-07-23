@@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import android.util.Log
 
 class DataStorePreferences(private val context: Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
@@ -41,7 +40,6 @@ class DataStorePreferences(private val context: Context) {
     }
 
     suspend fun saveSessionId(sessionId: String) {
-        Log.d("DataStorePrefs", "Saving session ID to DataStore: $sessionId")
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.TMDB_SESSION_ID] = sessionId
         }
@@ -52,7 +50,6 @@ class DataStorePreferences(private val context: Context) {
             preferences[PreferencesKeys.TMDB_SESSION_ID]
 
         }.first()
-        Log.d("DataStorePrefs1", "Retrieved session ID: $id")
 return id
     }
 
