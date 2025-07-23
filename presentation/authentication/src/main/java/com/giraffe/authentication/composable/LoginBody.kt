@@ -30,11 +30,11 @@ fun LoginBody(
     ){
         DefaultTextField(
             startIcon = painterResource(Theme.icons.outline.user),
-            placeholder = stringResource(R.string.enter_your_email_or_username),
-            value = state.email,
-            onValueChange = interaction::onEmailChanged,
-            errorMessage = state.emailErrorMessage?.let { context.getString(it) } ?: "",
-            label = stringResource(R.string.email_or_username),
+            placeholder = stringResource(R.string.enter_your_username),
+            value = state.username,
+            onValueChange = interaction::onUsernameChanged,
+            errorMessage = state.usernameErrorMessage?.let { context.getString(it) } ,
+            label = stringResource(R.string.username),
             maxLines = 1,
             isPassword = false,
         )
@@ -45,7 +45,7 @@ fun LoginBody(
             placeholder = stringResource(R.string.enter_your_password),
             value = state.password,
             onValueChange = interaction::onPasswordChanged,
-            errorMessage = state.passwordErrorMessage?.let { context.getString(it) } ?: "",
+            errorMessage = state.passwordErrorMessage?.let { context.getString(it) },
             label = stringResource(R.string.password),
             maxLines = 1,
             isPassword = true,

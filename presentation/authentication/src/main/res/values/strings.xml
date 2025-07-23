@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="create_a_new_account">Create a New Account</string>
-    <string name="enter_your_email_or_username">Enter your email or username</string>
-    <string name="email_or_username">Email or Username</string>
+    <string name="enter_your_username">Enter your username</string>
+    <string name="username">Username</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -11,10 +11,10 @@
     <string name="caption_for_sign_up">Let’s get you set up! We’ll take you to the website to create your account.</string>
     <string name="go_to_website">Go to Website</string>
     <string name="cancel">Cancel</string>
-    <string name="invalid_email_address">Invalid Email Address</string>
-    <string name="invalid_password_minimum_8_characters">Invalid Password (Minimum 8 characters)</string>
+    <string name="invalid_password">Invalid Password (Minimum 4 characters)</string>
     <string name="welcome_back_to_cineverse">Welcome back to CineVerse!</string>
     <string name="logo">logo</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="Empty_username">Username can not be empty</string>
     <string name="guest_auth_error">Failed to Enter as guest,Try again later</string>
 </resources>

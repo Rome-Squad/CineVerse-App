@@ -20,8 +20,9 @@ class GuestSessionCreationException :
 class InvalidPasswordException :
     AuthException()
 
-class InvalidEmailException :
-    AuthException()
+
+class EmptyUsernameException :
+        AuthException()
 
 class GuestAuthenticationException(message: String) : AuthException()
 

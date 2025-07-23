@@ -1,7 +1,7 @@
 package com.giraffe.authentication.screen
 
 import com.giraffe.authentication.base.BaseViewModel
-import com.giraffe.user.exception.InvalidEmailException
+import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
 import com.giraffe.user.usecase.JoinAsGuestUseCase
 import com.giraffe.user.usecase.LoginUseCase
@@ -12,21 +12,15 @@ class LoginViewModel(
 ) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
 
-    override fun onEmailChanged(email: String) {
+    override fun onUsernameChanged(username: String) {
         updateState {
-            it.copy(email = email)
+            it.copy(username = username)
         }
     }
 
     override fun onPasswordChanged(password: String) {
         updateState {
             it.copy(password = password)
-        }
-    }
-
-    override fun onTogglePasswordVisibility() {
-        updateState {
-            it.copy(isPasswordVisible = !it.isPasswordVisible)
         }
     }
 
@@ -39,14 +33,14 @@ class LoginViewModel(
                 updateState { it.copy(isLoadingLogin = false) }
                 sendEffect(LoginEffect.NavigateToHomeScreen)
             }) {
-            loginUseCase(email = state.value.email, password = state.value.password)
+            loginUseCase(userInput = state.value.username, password = state.value.password)
         }
     }
 
     private fun onLoginError(throwable: Throwable) {
-        if (throwable is InvalidEmailException) updateState {
+        if (throwable is EmptyUsernameException) updateState {
             it.copy(
-                emailErrorMessage = mapExceptionToStringRes(
+                usernameErrorMessage = mapExceptionToStringRes(
                     throwable
                 )
             )
@@ -98,6 +92,12 @@ class LoginViewModel(
             it.copy(
                 isVisibleCreateNewAccountBottomSheet = false
             )
+        }
+    }
+
+    override fun onTogglePasswordVisibility() {
+        updateState {
+            it.copy(isPasswordVisible = !it.isPasswordVisible)
         }
     }
 

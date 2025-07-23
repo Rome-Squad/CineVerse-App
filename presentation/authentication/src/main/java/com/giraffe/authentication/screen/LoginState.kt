@@ -3,10 +3,10 @@ package com.giraffe.authentication.screen
 
 data class LoginState(
 
-    val email: String = "",
+    val username: String = "",
     val password: String = "",
 
-    val emailErrorMessage: Int? = null,
+    val usernameErrorMessage: Int? = null,
     val passwordErrorMessage: Int? = null,
 
     val isPasswordVisible: Boolean = false,
