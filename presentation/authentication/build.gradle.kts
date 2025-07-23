@@ -43,7 +43,6 @@ dependencies {
     implementation(project(":api:authentication"))
     implementation(project(":domain:user"))
 
-    implementation(libs.accompanist.webview)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -59,16 +58,13 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.koin.androidx.compose)
 
+    implementation(libs.accompanist.webview)
 
 
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.navigation.compose)
-
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

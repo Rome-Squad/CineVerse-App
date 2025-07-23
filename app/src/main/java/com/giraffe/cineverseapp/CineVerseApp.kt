@@ -14,7 +14,6 @@ import com.giraffe.cineverseapp.di.useCaseModule
 import com.giraffe.cineverseapp.di.viewModelModule
 import com.giraffe.cineverseapp.worker.CacheCleanupWorker
 import com.giraffe.imageviewer.di.imageViewerModule
-import com.giraffe.user.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -23,6 +22,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
+import com.giraffe.user.SessionManager
 
 class CineVerseApp : Application() {
 
@@ -51,7 +51,7 @@ class CineVerseApp : Application() {
     private fun createGuestSessionIfNotExists() {
         applicationScope.launch {
             try {
-                val newGuestSessionId = sessionManager.createGuestSessionId()
+                val newGuestSessionId = sessionManager.getSessionId()
                     ?: throw Exception("Failed to create guest session")
 
             } catch (e: Exception) {
