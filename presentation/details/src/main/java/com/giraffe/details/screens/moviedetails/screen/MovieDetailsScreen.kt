@@ -39,11 +39,12 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.navigateToCastDetails
+import com.giraffe.details.screens.castDetails.CastDetailsRoute
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMoviesScreen
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -76,9 +77,12 @@ fun MovieDetailsScreen(
                 is MovieDetailsEffect.Error -> {}
                 MovieDetailsEffect.NavigateToCollection -> {}
                 MovieDetailsEffect.NavigateToLogin -> {}
-                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
-                    castID = effect.personId
+                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigate(
+                    CastDetailsRoute(effect.personId)
                 )
+                is MovieDetailsEffect.NavigateToMoviesRecommended -> {
+                    navController.navigateToRecommendedMoviesScreen(movieId = effect.movieId,title = effect.title)
+                }
             }
         }
     }
@@ -183,7 +187,7 @@ private fun MovieDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedMovies,
                 onClickEndText = {
-
+                   interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                 },
                 onClickPoster = {
                     navController.navigateToMovieDetails(it)

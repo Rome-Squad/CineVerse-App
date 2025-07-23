@@ -30,4 +30,6 @@ interface MovieDetailsInteractionListener {
 
     fun navigateToCastDetailsScreen(personId: Int)
 
+    fun navigateToMovieRecommendation(movieId: Int, title: String)
+
 }
