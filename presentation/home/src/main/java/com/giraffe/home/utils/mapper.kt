@@ -1,6 +1,10 @@
 package com.giraffe.home.utils
 
-import com.giraffe.home.*
+import com.giraffe.home.screen.home.FeaturedCollectionUiModel
+import com.giraffe.home.screen.home.HomeUiModel
+import com.giraffe.home.screen.home.MediaType
+import com.giraffe.home.screen.home.PopularMediaUiModel
+import com.giraffe.home.screen.home.YourCollectionUiModel
 import com.giraffe.media.home.entity.FeaturedCollection
 import com.giraffe.media.home.entity.YourCollection
 import com.giraffe.media.movies.entity.Movie

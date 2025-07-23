@@ -1,30 +1,28 @@
-package com.giraffe.home
+package com.giraffe.home.screen.home
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.InfrastructureException
-import com.giraffe.media.exception.InvalidRequestMethodException
 import com.giraffe.media.exception.MediaException
-import com.giraffe.media.exception.NetworkException
 import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.ServerErrorException
-import com.giraffe.media.exception.TimeoutException
-import com.giraffe.media.exception.UnauthorizedException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
-import com.giraffe.media.home.usecase.*
+import com.giraffe.media.home.usecase.GetPopularityMoviesUseCase
+import com.giraffe.media.home.usecase.GetPopularitySeriesUseCase
+import com.giraffe.media.home.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.home.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.home.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.media.home.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -49,16 +47,16 @@ class HomeViewModel(
         loadHomeScreen()
     }
 
-    private fun handler(): CoroutineExceptionHandler {
-        return CoroutineExceptionHandler { _, throwable ->
-            Log.d("Throw", throwable.message.toString())
-        }
-    }
+//    private fun handler(): CoroutineExceptionHandler {
+//        return CoroutineExceptionHandler { _, throwable ->
+//            Log.d("Throw", throwable.message.toString())
+//        }
+//    }
 
     private fun loadHomeScreen() {
         updateState { it.copy(isLoading = true, isError = false) }
 
-        viewModelScope.launch(Dispatchers.IO + handler()) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val popularMoviesDeferred = async { getPopularityMoviesUseCase() }
                 val popularSeriesDeferred = async { getPopularitySeriesUseCase() }
@@ -133,14 +131,8 @@ class HomeViewModel(
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
-            is NetworkException -> R.string.error_network
-            is TimeoutException -> R.string.error_timeout
-            is ServerErrorException -> R.string.error_server
-            is UnauthorizedException -> R.string.error_unauthorized
-            is InfrastructureException -> R.string.error_infrastructure
             is AccessDeniedException -> R.string.error_access_denied
             is ValidationException -> R.string.error_validation
-            is InvalidRequestMethodException -> R.string.error_invalid_method
             is NotFoundException -> R.string.error_not_found
             is UnknownException -> R.string.error_unknown
             else -> R.string.error_unknown

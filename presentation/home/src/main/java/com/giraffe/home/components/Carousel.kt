@@ -37,8 +37,8 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.home.MediaType
-import com.giraffe.home.PopularMediaUiModel
+import com.giraffe.home.screen.home.MediaType
+import com.giraffe.home.screen.home.PopularMediaUiModel
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable

@@ -1,4 +1,4 @@
-package com.giraffe.home
+package com.giraffe.home.screen.home
 
 interface HomeInteractionListener {
     fun onMediaClicked(mediaId: Int, mediaType: MediaType)

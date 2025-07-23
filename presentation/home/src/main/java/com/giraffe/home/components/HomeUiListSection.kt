@@ -28,8 +28,8 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.home.HomeUiModel
-import com.giraffe.home.MediaType
+import com.giraffe.home.screen.home.HomeUiModel
+import com.giraffe.home.screen.home.MediaType
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable

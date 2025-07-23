@@ -1,4 +1,4 @@
-package com.giraffe.home.screen
+package com.giraffe.home.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.home.CollectionClickType
-import com.giraffe.home.HomeInteractionListener
-import com.giraffe.home.HomeScreenUiState
-import com.giraffe.home.HomeViewModel
-import com.giraffe.home.MediaType
 import com.giraffe.home.R
 import com.giraffe.home.components.AdvertisementSection
 import com.giraffe.home.components.Carousel
@@ -34,18 +29,29 @@ import com.giraffe.home.components.YourCollectionsSections
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = koinViewModel()) {
+fun HomeScreen(
+    viewModel: HomeViewModel = koinViewModel(),
+    navigateToMoviesListScreen: () -> Unit,
+    navigateToMoviesDetailsScreen: (Int) -> Unit,
+    navigateToSeriesDetailsScreen: (Int) -> Unit,
+) {
     val state by viewModel.state.collectAsState()
     HomeContent(
-        state,
-        viewModel
+        state = state,
+        interactionListener = viewModel,
+        navigateToMoviesListScreen = navigateToMoviesListScreen,
+        navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
+        navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen
     )
 }
 
 @Composable
 fun HomeContent(
     state: HomeScreenUiState,
-    interactionListener: HomeInteractionListener
+    interactionListener: HomeInteractionListener,
+    navigateToMoviesListScreen: () -> Unit,
+    navigateToMoviesDetailsScreen: (Int) -> Unit,
+    navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -70,7 +76,8 @@ fun HomeContent(
                 title = stringResource(R.string.recently_released),
                 endText = stringResource(R.string.show_more),
                 uiModels = state.recentlyReleased,
-                onClickItem = interactionListener::onMediaClicked
+                onClickItem = interactionListener::onMediaClicked,
+                onClickEndText = navigateToMoviesListScreen
             )
         }
         item {
@@ -92,7 +99,13 @@ fun HomeContent(
                 title = stringResource(R.string.upcoming_movies),
                 endText = stringResource(R.string.show_more),
                 uiModels = state.upcomingMovies,
-                onClickItem = interactionListener::onMediaClicked
+                onClickItem = { id, mediaType ->
+                    if (mediaType == MediaType.MOVIE) {
+                        navigateToMoviesDetailsScreen(id)
+                    } else {
+                        navigateToSeriesDetailsScreen(id)
+                    }
+                },
             )
         }
         item {
@@ -285,7 +298,10 @@ fun HomeContentPreview() {
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(
             state = HomeScreenUiState(),
-            interactionListener = interactionObject
+            interactionListener = interactionObject,
+            navigateToMoviesListScreen = {},
+            navigateToMoviesDetailsScreen = {},
+            navigateToSeriesDetailsScreen = {},
         )
     }
 }

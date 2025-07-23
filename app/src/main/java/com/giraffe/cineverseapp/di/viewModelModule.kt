@@ -10,8 +10,8 @@ import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.explore.screen.discover.DiscoverViewModel
 import com.giraffe.explore.screen.search.SearchViewModel
 import com.giraffe.explore.screen.searchresult.SearchResultViewModel
-import com.giraffe.home.HomeViewModel
-import org.koin.android.ext.koin.androidContext
+import com.giraffe.home.screen.home.HomeViewModel
+import com.giraffe.home.screen.movies_list.MoviesListViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -38,6 +38,6 @@ val viewModelModule = module {
     //viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::LoginViewModel)
     viewModelOf(::RecommendedSeriesViewModel)
-    viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::LoginViewModel)
+    viewModelOf(::MoviesListViewModel)
 }

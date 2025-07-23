@@ -1,4 +1,4 @@
-package com.giraffe.home
+package com.giraffe.home.screen.home
 
 import androidx.annotation.StringRes
 
