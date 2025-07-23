@@ -15,29 +15,17 @@ internal fun NavController.navigateToCastDetails(id: Int) {
 
 internal fun NavGraphBuilder.castDetailsRoute(
     navController: NavController,
+    navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
     onBackButtonClick: () -> Unit,
-    ) {
+) {
     composable<CastDetailsRoute> { backStackEntry ->
         val personId = backStackEntry.toRoute<CastDetailsRoute>().id
 
-fun NavGraphBuilder.castDetailsRoute(
-    navController: NavController,
-    navigateToCastCredit: (castID: Int, actorName: String) -> Unit
-) {
-    composable(
-        route = "$CAST_ROUTE/{$CAST_ID_ARG}",
-        arguments = listOf(
-            navArgument(CAST_ID_ARG) {
-                type = NavType.IntType
-            })
-    ) { backStackEntry ->
-        val personId = backStackEntry.arguments?.getInt(CAST_ID_ARG)
         CastDetailsScreen(
             navController = navController,
             personId = personId,
-            onBackButtonClick = onBackButtonClick
+            onBackButtonClick = onBackButtonClick,
             navigateToCastCredit = navigateToCastCredit,
-            personId = personId
         )
     }
 }

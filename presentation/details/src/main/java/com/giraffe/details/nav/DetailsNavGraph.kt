@@ -8,14 +8,11 @@ import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
 import com.giraffe.details.screens.gallery.galleryRoute
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
-import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
+import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.navigateToReviews
-import com.giraffe.details.screens.reviewScreen.REVIEW_LIST_ARG
-import com.giraffe.details.screens.reviewScreen.Review_ROUTE
-import com.giraffe.details.screens.reviewScreen.reviewRoute
 import com.giraffe.details.screens.seriesdetails.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.seriesDetailsRoute
 
@@ -64,7 +61,6 @@ internal fun DetailsNavGraph(
         castDetailsRoute(
             navController = navController,
             onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
-            navController = navController,
             navigateToCastCredit = navController::navigateToCastCredit
         )
         recommendedMoviesRoute(
