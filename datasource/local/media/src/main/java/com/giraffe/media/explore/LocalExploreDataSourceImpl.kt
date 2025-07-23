@@ -5,17 +5,20 @@ import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
-import kotlinx.coroutines.flow.Flow
 
 class LocalExploreDataSourceImpl(
     private val dao: ExploreSearchKeywordDao
 ) : LocalExploreDataSource {
-    override fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>> = safeFlow {
+    override fun getSearchHistory() = safeFlow {
         dao.getSearchHistory()
     }
 
-    override fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>> = safeFlow {
+    override fun getSearchKeywords(query: String) = safeFlow {
         dao.getSearchKeywords(query)
+    }
+
+    override suspend fun getSearchKeyword(query: String) = safeCall {
+        dao.getSearchKeyword(query)
     }
 
     override suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto) = safeCall {

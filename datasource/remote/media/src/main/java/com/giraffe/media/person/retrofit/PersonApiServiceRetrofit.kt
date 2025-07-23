@@ -4,8 +4,8 @@ import com.giraffe.media.person.datasource.remote.dto.CreditsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
-import com.giraffe.media.person.datasource.remote.dto.SearchPersonDto
 import com.giraffe.media.person.response.PersonCreditsResponse
+import com.giraffe.media.person.response.SearchPersonResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,7 +19,7 @@ interface PersonApiServiceRetrofit {
         @Query("include_adult") includeAdult: Boolean = false,
         @Query("language") language: String = "en-US",
         @Query("page") page: Int
-    ): Response<SearchPersonDto>
+    ): Response<SearchPersonResponse>
 
     @GET("person/{id}/combined_credits")
     suspend fun getPersonMediaCredits(

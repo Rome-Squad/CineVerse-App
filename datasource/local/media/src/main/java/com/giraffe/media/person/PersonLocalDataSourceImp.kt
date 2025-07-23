@@ -10,8 +10,8 @@ class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSour
         dao.storePerson(person)
     }
 
-    override suspend fun searchByName(personName: String) = safeCall {
-        dao.searchByName(personName)
+    override suspend fun searchByName(personName: String, page: Int) = safeCall {
+        dao.searchByName(personName, page)
     }
 
     override suspend fun getPersonById(id: Int) = safeCall {

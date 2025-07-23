@@ -2,13 +2,13 @@ package com.giraffe.media.explore.usecase
 
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.repository.ExploreRepository
-import com.giraffe.media.explore.utils.getCurrentLocalDateTime
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -29,11 +29,11 @@ class GetSearchKeywordsUseCaseTest {
         // Given
         val rawQuery = "  trending now "
         val trimmedQuery = "trending now"
-        val now = getCurrentLocalDateTime()
+        val now = System.currentTimeMillis()
 
         val expected = listOf(
-            SearchKeyword("trending now", isFromSearchHistory = false, lastSearchedTime = now),
-            SearchKeyword("popular", isFromSearchHistory = true, lastSearchedTime = now)
+            SearchKeyword("trending now", isRecent = false, searchedAt = now),
+            SearchKeyword("popular", isRecent = true, searchedAt = now)
         )
 
         coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(expected)
@@ -43,7 +43,7 @@ class GetSearchKeywordsUseCaseTest {
 
         // Then
         assertThat(result).isEqualTo(expected)
-        coVerify { repository.getSearchKeywords(trimmedQuery) }
+        coVerify { repository.getSearchKeywords(trimmedQuery).single() }
     }
 
     @Test
@@ -59,7 +59,7 @@ class GetSearchKeywordsUseCaseTest {
             useCase(rawQuery).first() // Collect the flow to trigger the repository call
 
             // Then
-            coVerify { repository.getSearchKeywords(trimmedQuery) }
+            coVerify { repository.getSearchKeywords(trimmedQuery).single() }
         }
 
 }

@@ -45,7 +45,7 @@ class SearchViewModel(
             updateState { it.copy(query) }
             delay(500)
             getSearchKeywords(query).collectLatest { keywords ->
-                val recentKeywords = keywords.filter { keyword -> keyword.isFromSearchHistory }
+                val recentKeywords = keywords.filter { keyword -> keyword.isRecent }
                 updateState {
                     it.copy(
                         keywords = (keywords - recentKeywords).map { searchKeyword -> searchKeyword.keyword },
