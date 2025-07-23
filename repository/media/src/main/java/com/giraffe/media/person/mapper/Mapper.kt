@@ -66,7 +66,6 @@ fun PersonCreditDto.toEntity() = PersonCredit(
     mediaType = mediaType,
     genreIds = genreIds,
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
-    duration = null
 )
 
 fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(

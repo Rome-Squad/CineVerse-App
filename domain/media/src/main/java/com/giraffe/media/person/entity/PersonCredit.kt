@@ -10,6 +10,5 @@ data class PersonCredit(
     val mediaType: String?,
     val genreIds: List<Int> = emptyList(),
     val releaseYear: LocalDate?,
-    val duration: Int?,
 
 )
