@@ -2,10 +2,7 @@ package com.giraffe.authentication
 
 import androidx.compose.runtime.Composable
 
-interface AuthApi {
+interface AuthenticationApi {
     @Composable
-    fun WebViewContainer()
-
-    @Composable
-    fun HomeContainer()
+    fun LoginContainer(onBack: () -> Unit)
 }

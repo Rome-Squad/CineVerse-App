@@ -3,33 +3,23 @@ package com.giraffe.authentication.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.giraffe.authentication.AuthApi
-import com.giraffe.authentication.login.WebViewRoute
 import com.giraffe.authentication.login.webViewRoute
-import androidx.navigation.compose.composable
+import com.giraffe.authentication.screen.LoginRoute
+import com.giraffe.authentication.screen.loginRoute
 
 @Composable
-internal fun AuthNavGraph(
+internal fun AuthenticationNavGraph(
     navController: NavHostController,
-    authApi : AuthApi,
     //TODO home api should be passed here
 ){
 
     NavHost(
         navController = navController,
-        startDestination = "",
+        startDestination = LoginRoute,
     ){
         webViewRoute(navController)
-    }
 
+        loginRoute(navController)
 
-//    composable<HomeRoute>{
-//        homeApi.HomeContainer()
-//    }
-
-    composable<WebViewRoute>{
-        authApi.WebViewContainer(
-            onBack = navController.popBackStack()
-        )
     }
 }
