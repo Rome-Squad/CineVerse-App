@@ -73,15 +73,15 @@ fun MainMovieOrSeriesDetails(
                 ) {
                     Icon(
                         painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = "",
+                        contentDescription = null,
                         tint = Theme.color.brand.secondary,
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(width = 216.dp, height = 289.dp)
                             .background(
                                 Theme.color.background.card,
                                 shape = CircleShape
                             )
-                            .padding(12.dp)
+                            .padding(horizontal = 92.dp, vertical = 128.5.dp)
                             .wrapContentSize(),
                     )
                 }
@@ -113,13 +113,15 @@ fun MainMovieOrSeriesDetails(
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
                             )
-                            Text(
-                                text = genres.joinToString(", "),
-                                style = Theme.textStyle.body.sm.medium,
-                                color = Theme.color.shade.secondary,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
+                            AnimatedVisibility(!genres.isNotEmpty()) {
+                                Text(
+                                    text = genres.joinToString(", "),
+                                    style = Theme.textStyle.body.sm.medium,
+                                    color = Theme.color.shade.secondary,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             IconWithText(
@@ -127,18 +129,20 @@ fun MainMovieOrSeriesDetails(
                                 text = "%.1f".format(rating),
                                 colorOfIcon = Theme.color.additional.primary.yellow
                             )
-                            AnimatedVisibility(duration != null) {
+                            AnimatedVisibility(!duration.isNullOrEmpty()) {
                                 IconWithText(
                                     icon = painterResource(Theme.icons.dueTone.clock),
-                                    text = duration!!,
+                                    text = duration.toString(),
                                     colorOfIcon = Theme.color.shade.secondary
                                 )
                             }
-                            IconWithText(
-                                icon = painterResource(Theme.icons.dueTone.calendar),
-                                text = releaseDate,
-                                colorOfIcon = Theme.color.shade.secondary
-                            )
+                            AnimatedVisibility(releaseDate.isNotEmpty()) {
+                                IconWithText(
+                                    icon = painterResource(Theme.icons.dueTone.calendar),
+                                    text = releaseDate,
+                                    colorOfIcon = Theme.color.shade.secondary
+                                )
+                            }
                         }
                     }
 

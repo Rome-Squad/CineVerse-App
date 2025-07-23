@@ -45,4 +45,6 @@
     <string name="because_you_watched">Because You Watched</string>
     <string name="show_mores">Show more</string>
     <string name="try_again">Try Again</string>
+    <string name="animated_content">Animated Content</string>
+    <string name="season">Season %1$s</string>
 </resources>

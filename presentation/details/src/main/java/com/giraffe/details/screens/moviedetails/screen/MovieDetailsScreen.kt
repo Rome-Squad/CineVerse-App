@@ -144,7 +144,7 @@ private fun MovieDetailsContent(
                 type = TypeOfScreen.MOVIE.toString(),
                 name = state.movie.title,
                 rating = state.movie.rating,
-                image = state.movie.posterUrl,
+                imageUrl = state.movie.posterUrl,
                 genres = state.movieGenres,
                 releaseYear = state.movie.releaseYear,
                 onClickAdd = interaction::onAddToCollectionClick,

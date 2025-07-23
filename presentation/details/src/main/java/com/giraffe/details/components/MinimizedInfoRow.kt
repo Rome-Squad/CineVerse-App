@@ -64,7 +64,7 @@ fun MinimizedInfoRow(
                     ) {
                         Icon(
                             painter = painterResource(Theme.icons.dueTone.image),
-                            contentDescription = "",
+                            contentDescription = null,
                             tint = Theme.color.brand.secondary,
                             modifier = Modifier
                                 .size(40.dp)
@@ -104,7 +104,6 @@ fun MinimizedInfoRow(
                         .clip(RoundedCornerShape(Theme.radius.md))
                         .background(Theme.color.button.secondary)
                         .clickable(onClick = onClickAdd)
-                        .padding(10.dp)
                 )
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.play),
@@ -119,9 +118,7 @@ fun MinimizedInfoRow(
                         .clip(RoundedCornerShape(Theme.radius.md))
                         .background(Theme.color.button.primary)
                         .clickable(onClick = onClickPlay)
-                        .padding(10.dp)
                 )
-
             }
         }
     }
