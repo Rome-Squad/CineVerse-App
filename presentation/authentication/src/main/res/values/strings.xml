@@ -12,8 +12,9 @@
     <string name="go_to_website">Go to Website</string>
     <string name="cancel">Cancel</string>
     <string name="invalid_email_address">Invalid Email Address</string>
-    <string name="invalid_password_minimum_8_characters">Invalid Password (Minimum 8 characters)</string>
+    <string name="invalid_password">Invalid Password (Minimum 4 characters)</string>
     <string name="welcome_back_to_cineverse">Welcome back to CineVerse!</string>
     <string name="logo">logo</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="Empty_username">Username can not be empty</string>
 </resources>

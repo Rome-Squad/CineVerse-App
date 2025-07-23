@@ -12,9 +12,12 @@
     <string name="go_to_website">الذهاب إلى الموقع</string>
     <string name="cancel">إلغاء</string>
     <string name="invalid_email_address">عنوان البريد الإلكتروني غير صالح</string>
-    <string name="invalid_password_minimum_8_characters">كلمة المرور غير صالحة (الحد الأدنى 8 أحرف)</string>
+    <string name="invalid_password">كلمة المرور غير صالحة (الحد الأدنى 4 أحرف)</string>
     <string name="welcome_back_to_cineverse">مرحبًا بعودتك إلى CineVerse!</string>
     <string name="logo">الشعار</string>
     <string name="unknown_error">خطأ غير معروف</string>
+    <string name="Empty_username">اسم المستخدم لا يمكن ان يكون فارغ</string>
+
+
 
 </resources>
