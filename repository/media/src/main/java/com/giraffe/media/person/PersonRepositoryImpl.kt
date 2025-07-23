@@ -90,7 +90,9 @@ class PersonRepositoryImpl(
             mapToPerson(
                 personId = personId,
                 details = details.await(),
-                images = images.await(),
+                // The first image is typically the profile image already included in person details.
+                // Dropping it prevents duplication in the image list.
+                images = images.await().profiles.drop(1),
                 media = media.await(),
                 socialMedia = socialMedia.await()
             )
