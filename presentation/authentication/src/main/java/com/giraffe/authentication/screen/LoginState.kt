@@ -3,7 +3,7 @@ package com.giraffe.authentication.screen
 
 data class LoginState(
 
-    val email: String = "",
+    val userInput: String = "",
     val password: String = "",
 
     val emailErrorMessage: Int? = null,

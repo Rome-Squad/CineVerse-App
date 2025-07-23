@@ -10,21 +10,15 @@ class LoginViewModel(
 ) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
 
-    override fun onEmailChanged(email: String) {
+    override fun onEmailOrUsernameChanged(email: String) {
         updateState {
-            it.copy(email = email)
+            it.copy(userInput = email)
         }
     }
 
     override fun onPasswordChanged(password: String) {
         updateState {
             it.copy(password = password)
-        }
-    }
-
-    override fun onTogglePasswordVisibility() {
-        updateState {
-            it.copy(isPasswordVisible = !it.isPasswordVisible)
         }
     }
 
@@ -37,7 +31,7 @@ class LoginViewModel(
                 updateState { it.copy(isLoading = false) }
                 sendEffect(LoginEffect.NavigateToHomeScreen)
             }) {
-            loginUseCase(email = state.value.email, password = state.value.password)
+            loginUseCase(userInput = state.value.userInput, password = state.value.password)
         }
     }
 
@@ -87,6 +81,12 @@ class LoginViewModel(
             it.copy(
                 isVisibleCreateNewAccountBottomSheet = false
             )
+        }
+    }
+
+    override fun onTogglePasswordVisibility() {
+        updateState {
+            it.copy(isPasswordVisible = !it.isPasswordVisible)
         }
     }
 
