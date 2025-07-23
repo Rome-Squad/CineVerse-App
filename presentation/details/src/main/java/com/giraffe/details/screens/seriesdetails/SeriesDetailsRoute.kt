@@ -17,7 +17,8 @@ internal fun NavController.navigateToSeriesDetails(id: Int) {
 fun NavGraphBuilder.seriesDetailsRoute(
     navController: NavController,
     onBackButtonClick: () -> Unit,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
+    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit
 ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().id
@@ -25,6 +26,7 @@ fun NavGraphBuilder.seriesDetailsRoute(
         SeriesDetailsScreen(
             navController = navController,
             navigateToReviews = navigateToReviews,
+            navigateToRecommendedSeries = navigateToRecommendedSeries,
             onBackButtonClick = onBackButtonClick,
             seriesId = seriesId,
         )
