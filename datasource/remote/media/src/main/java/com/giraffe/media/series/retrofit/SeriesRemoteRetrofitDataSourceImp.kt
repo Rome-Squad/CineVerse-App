@@ -1,5 +1,6 @@
 package com.giraffe.media.series.retrofit
 
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.util.RetrofitRequestBuilder
@@ -24,6 +25,22 @@ class SeriesRemoteRetrofitDataSourceImp(
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) =
         RetrofitRequestBuilder.get { getSeriesReviews(seriesId, page) }.results
+
+    override suspend fun addRating(
+        seriesId: Int,
+        sessionId: String,
+        request: RatingRequest
+    ) {
+        RetrofitRequestBuilder.post { rateSeries(seriesId, sessionId, request) }
+    }
+
+    override suspend fun getSeriesRating(
+        seriesId: Int,
+        sessionId: String
+    ): Float {
+        return RetrofitRequestBuilder.get { getSeriesRating(seriesId, sessionId) }
+            .results.firstOrNull { it.id == seriesId }?.rating?.toFloat() ?: 0f
+    }
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
         RetrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results
