@@ -20,8 +20,6 @@ class GuestSessionCreationException :
 class InvalidPasswordException :
     AuthException()
 
-class InvalidEmailException :
-    AuthException()
 
 class EmptyUsernameException :
         AuthException()

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="create_a_new_account">إنشاء حساب جديد</string>
-    <string name="enter_your_email_or_username">أدخل بريدك الإلكتروني أو اسم المستخدم</string>
-    <string name="email_or_username">البريد الإلكتروني أو اسم المستخدم</string>
+    <string name="enter_your_username">أدخل اسم المستخدم</string>
+    <string name="username">اسم المستخدم</string>
     <string name="enter_your_password">أدخل كلمة المرور</string>
     <string name="password">كلمة المرور</string>
     <string name="login">تسجيل الدخول</string>
@@ -11,7 +11,6 @@
     <string name="caption_for_sign_up">دعنا نجهزك! سنأخذك إلى الموقع لإنشاء حسابك.</string>
     <string name="go_to_website">الذهاب إلى الموقع</string>
     <string name="cancel">إلغاء</string>
-    <string name="invalid_email_address">عنوان البريد الإلكتروني غير صالح</string>
     <string name="invalid_password">كلمة المرور غير صالحة (الحد الأدنى 4 أحرف)</string>
     <string name="welcome_back_to_cineverse">مرحبًا بعودتك إلى CineVerse!</string>
     <string name="logo">الشعار</string>

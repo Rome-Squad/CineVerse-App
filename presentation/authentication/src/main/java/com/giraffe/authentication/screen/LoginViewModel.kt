@@ -1,7 +1,7 @@
 package com.giraffe.authentication.screen
 
 import com.giraffe.authentication.base.BaseViewModel
-import com.giraffe.user.exception.InvalidEmailException
+import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
 import com.giraffe.user.usecase.LoginUseCase
 
@@ -10,9 +10,9 @@ class LoginViewModel(
 ) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
 
-    override fun onEmailOrUsernameChanged(email: String) {
+    override fun onUsernameChanged(email: String) {
         updateState {
-            it.copy(userInput = email)
+            it.copy(username = email)
         }
     }
 
@@ -31,14 +31,14 @@ class LoginViewModel(
                 updateState { it.copy(isLoading = false) }
                 sendEffect(LoginEffect.NavigateToHomeScreen)
             }) {
-            loginUseCase(userInput = state.value.userInput, password = state.value.password)
+            loginUseCase(userInput = state.value.username, password = state.value.password)
         }
     }
 
     private fun onLoginError(throwable: Throwable) {
-        if (throwable is InvalidEmailException) updateState {
+        if (throwable is EmptyUsernameException) updateState {
             it.copy(
-                emailErrorMessage = mapExceptionToStringRes(
+                usernameErrorMessage = mapExceptionToStringRes(
                     throwable
                 )
             )
