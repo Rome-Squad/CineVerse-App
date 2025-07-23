@@ -294,4 +294,13 @@ class SeriesDetailsViewModel(
             )
         )
     }
+
+    override fun navigateToRecommendedSeriesScreen(seriesId: Int, title: String) {
+        sendEffect(
+            SeriesDetailsEffect.NavigateToRecommendedSeries(
+                seriesId = seriesId,
+                title = title
+            )
+        )
+    }
 }

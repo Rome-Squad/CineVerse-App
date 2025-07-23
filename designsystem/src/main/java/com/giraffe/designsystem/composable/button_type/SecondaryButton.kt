@@ -1,5 +1,7 @@
 package com.giraffe.designsystem.composable.button_type
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -8,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -28,6 +31,7 @@ fun SecondaryButton(
             containerColor = if (enabled) Theme.color.button.secondary else Theme.color.button.disabled,
             contentColor = if (enabled) Theme.color.button.onSecondary else Theme.color.button.onDisabled,
         ),
+        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp)
     ) {
         if (isLoading)
             CircularProgressIndicator(
