@@ -3,13 +3,17 @@ package com.giraffe.details.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.giraffe.details.screens.castCredit.castCreditRoute
+import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
+import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.REVIEW_LIST_ARG
 import com.giraffe.details.screens.reviewScreen.Review_ROUTE
 import com.giraffe.details.screens.reviewScreen.reviewRoute
+import com.giraffe.details.screens.seriesdetails.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.seriesDetailsRoute
 
 @Composable
@@ -65,9 +69,18 @@ fun DetailsNavGraph(
             }
         )
 
+        castCreditRoute(
+            navigateToSeriesDetails = navController::navigateToSeriesDetails,
+            navigateToMovieDetails = navController::navigateToMovieDetails,
+            onBackClick = {
+                navController.navigateUp()
+            }
+        )
+
 
         castDetailsRoute(
-            navController = navController
+            navController = navController,
+            navigateToCastCredit = navController::navigateToCastCredit
         )
 
         reviewRoute(navController)

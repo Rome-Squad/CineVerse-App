@@ -14,17 +14,20 @@ fun NavController.navigateToCastDetails(castID: Int) {
 }
 
 fun NavGraphBuilder.castDetailsRoute(
-    navController: NavController
+    navController: NavController,
+    navigateToCastCredit: (castID: Int, actorName: String) -> Unit
 ) {
     composable(
         route = "$CAST_ROUTE/{$CAST_ID_ARG}",
         arguments = listOf(
             navArgument(CAST_ID_ARG) {
                 type = NavType.IntType
-            })) { backStackEntry ->
+            })
+    ) { backStackEntry ->
         val personId = backStackEntry.arguments?.getInt(CAST_ID_ARG)
         CastDetailsScreen(
             navController = navController,
+            navigateToCastCredit = navigateToCastCredit,
             personId = personId
         )
     }

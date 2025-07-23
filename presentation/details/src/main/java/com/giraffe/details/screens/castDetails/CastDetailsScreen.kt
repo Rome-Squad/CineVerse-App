@@ -49,6 +49,7 @@ import org.koin.core.parameter.parametersOf
 fun CastDetailsScreen(
     personId: Int?,
     navController: NavController,
+    navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
     modifier: Modifier = Modifier,
     castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
 ) {
@@ -68,6 +69,11 @@ fun CastDetailsScreen(
             is CastDetailsEffect.NavigateToGallery -> {
                 //navController.navigateToGallery(it.actorName, it.imageUrls)
             }
+
+            is CastDetailsEffect.NavigateToCastCredit -> navigateToCastCredit(
+                it.castID,
+                it.actorName
+            )
         }
     }
     if (state.isLoading) {
@@ -152,7 +158,12 @@ fun CastDetailsContent(
                 endText = stringResource(R.string.show_more),
                 movies = state.posters,
                 onClickPoster = {},
-                onClickEndText = { }
+                onClickEndText = {
+                    interaction.navigateToCastCreditScreen(
+                        state.actorId,
+                        state.actorName
+                    )
+                }
             )
         }
         item {
