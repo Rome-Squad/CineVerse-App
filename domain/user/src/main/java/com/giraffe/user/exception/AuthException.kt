@@ -23,6 +23,9 @@ class InvalidPasswordException :
 class InvalidEmailException :
     AuthException()
 
+class EmptyUsernameException :
+        AuthException()
+
 
 class UnknownException() :
     AuthException()
