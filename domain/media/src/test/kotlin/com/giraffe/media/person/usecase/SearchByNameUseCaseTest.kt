@@ -1,5 +1,6 @@
 package com.giraffe.media.person.usecase
 
+import com.giraffe.media.entity.PagingData
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
@@ -13,8 +14,9 @@ class SearchByNameUseCaseTest {
     private lateinit var repository: PersonRepository
     private lateinit var searchPeopleByNameUseCase: SearchPeopleByNameUseCase
 
-    val expectedList = listOf(
-        Person(1, "Tarek", "Acting")
+    val expectedList = PagingData(
+        List(15) { (Person(it, "Tarek", "Acting")) },
+        15
     )
 
     @BeforeEach
@@ -27,9 +29,9 @@ class SearchByNameUseCaseTest {
     @Test
     fun `should returns list of people when repository returns search result`() = runTest {
         //given
-        coEvery { repository.searchByName("Tarek") } returns expectedList
+        coEvery { repository.searchByName("Tarek", 1) } returns expectedList
         //when
-        val result = searchPeopleByNameUseCase("Tarek")
+        val result = searchPeopleByNameUseCase("Tarek", 1)
         //then
         assertThat(result).isEqualTo(expectedList)
     }

@@ -1,7 +1,6 @@
 package com.giraffe.media.person.retrofit
 
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
-import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.util.RetrofitRequestBuilder
 
 class PersonRemoteDataSourceImplRetrofit(
