@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.authentication.R
+import com.giraffe.user.exception.GuestAuthenticationException
 import com.giraffe.user.exception.InvalidEmailException
 import com.giraffe.user.exception.InvalidPasswordException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -62,6 +63,7 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
         return when (throwable) {
             is InvalidEmailException -> R.string.invalid_email_address
             is InvalidPasswordException -> R.string.invalid_password_minimum_8_characters
+            is GuestAuthenticationException -> R.string.guest_authentication_error
             else -> R.string.unknown_error
         }
     }

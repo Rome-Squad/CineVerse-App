@@ -16,4 +16,5 @@
     <string name="welcome_back_to_cineverse">Welcome back to CineVerse!</string>
     <string name="logo">logo</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="guest_auth_error">Failed to Enter as guest,Try again later</string>
 </resources>

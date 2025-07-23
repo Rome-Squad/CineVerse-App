@@ -2,7 +2,7 @@ package com.giraffe.repository
 
 import com.giraffe.repository.datasource.UserRemoteDataSource
 import com.giraffe.user.SessionManager
-import com.giraffe.user.exception.GuestSessionException
+import com.giraffe.user.exception.GuestAuthenticationException
 import com.giraffe.user.repository.AuthRepository
 
 class AuthRepositoryImpl(
@@ -23,7 +23,7 @@ class AuthRepositoryImpl(
 
     override suspend fun joinAsGuest(): String {
         val guestSessionId = remoteDataSource.getGuestSessionId()
-            ?: throw GuestSessionException("Failed to get guest session ID")
+            ?: throw GuestAuthenticationException("Failed to get guest session ID")
         sessionIdManager.saveSessionId(guestSessionId)
         return guestSessionId
     }
