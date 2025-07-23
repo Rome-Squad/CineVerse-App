@@ -2,16 +2,17 @@ package com.giraffe.details.screens.moviedetails.screen
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.giraffe.details.models.ReviewUI
+import kotlinx.serialization.Serializable
 
-const val MOVIES_ROUTE = "movieDetails"
-private const val MOVIE_ID_ARG = "movieID"
+@Serializable
+internal data class MovieDetailsRoute(val id: Int)
 
-fun NavController.navigateToMovieDetails(movieID: Int) {
-    navigate("$MOVIES_ROUTE/$movieID")
+
+fun NavController.navigateToMovieDetails(id: Int) {
+    navigate(MovieDetailsRoute(id))
 }
 
 fun NavGraphBuilder.movieDetailsRoute(
@@ -19,14 +20,9 @@ fun NavGraphBuilder.movieDetailsRoute(
     onBackButtonClick: () -> Unit,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
 ) {
-    composable(
-        route = "$MOVIES_ROUTE/{$MOVIE_ID_ARG}",
-        arguments = listOf(
-            navArgument(MOVIE_ID_ARG) {
-                type = NavType.IntType
-            })
-    ) { backStackEntry ->
-        val movieID = backStackEntry.arguments?.getInt(MOVIE_ID_ARG) ?: 268
+    composable<MovieDetailsRoute> { backStackEntry ->
+        val movieID = backStackEntry.toRoute<MovieDetailsRoute>().id
+
         MovieDetailsScreen(
             navController = navController,
             movieID = movieID,

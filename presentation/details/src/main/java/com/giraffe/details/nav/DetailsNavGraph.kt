@@ -6,11 +6,13 @@ import androidx.navigation.compose.NavHost
 import com.giraffe.details.screens.castCredit.castCreditRoute
 import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
+import com.giraffe.details.screens.gallery.galleryRoute
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
 import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
+import com.giraffe.details.screens.reviewScreen.navigateToReviews
 import com.giraffe.details.screens.reviewScreen.REVIEW_LIST_ARG
 import com.giraffe.details.screens.reviewScreen.Review_ROUTE
 import com.giraffe.details.screens.reviewScreen.reviewRoute
@@ -18,10 +20,10 @@ import com.giraffe.details.screens.seriesdetails.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.seriesDetailsRoute
 
 @Composable
-fun DetailsNavGraph(
+internal fun DetailsNavGraph(
     navController: NavHostController,
-    startDestinationRoute: String,
-    back: () -> Unit
+    startDestinationRoute: Any,
+    onBackClick: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -29,33 +31,14 @@ fun DetailsNavGraph(
     ) {
         movieDetailsRoute(
             navController = navController,
-            onBackButtonClick = {
-                val backed = navController.navigateUp()
-                if (!backed) {
-                    back()
-                }
-            },
-            navigateToReviews = { reviews ->
-                navController.currentBackStackEntry?.savedStateHandle?.set(
-                    REVIEW_LIST_ARG,
-                    reviews
-                )
-                navController.navigate(Review_ROUTE)
-            }
+            navigateToReviews = navController::navigateToReviews,
+            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
         )
 
         seriesDetailsRoute(
             navController = navController,
-            navigateToReviews = { reviews ->
-                navController.currentBackStackEntry?.savedStateHandle?.set(
-                    REVIEW_LIST_ARG,
-                    reviews
-                )
-                navController.navigate(Review_ROUTE)
-            },
-            onBackButtonClick = {
-                navController.navigateUp()
-            },
+            navigateToReviews = navController::navigateToReviews,
+            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
             navigateToRecommendedSeries = navController::navigateToRecommendedSeries
         )
 
@@ -78,8 +61,9 @@ fun DetailsNavGraph(
             }
         )
 
-
         castDetailsRoute(
+            navController = navController,
+            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
             navController = navController,
             navigateToCastCredit = navController::navigateToCastCredit
         )
@@ -93,6 +77,8 @@ fun DetailsNavGraph(
         )
 
 
-        reviewRoute(navController)
+        galleryRoute(navController)
+
+//        reviewRoute(navController)
     }
 }

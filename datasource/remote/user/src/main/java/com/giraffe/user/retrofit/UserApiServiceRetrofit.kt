@@ -6,6 +6,10 @@ import retrofit2.http.GET
 
 interface UserApiServiceRetrofit {
 
-    @GET("authentication/guest_session/new")
+    @GET(ENDPOINT_GUEST_SESSION)
     suspend fun getGuestSession(): Response<GuestSessionResponse>
+
+    companion object {
+        private const val ENDPOINT_GUEST_SESSION = "authentication/guest_session/new"
+    }
 }

@@ -3,7 +3,9 @@ package com.giraffe.details.models
 
 import com.giraffe.media.entity.Review
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ReviewUI(
     val id: String = "",
     val content: String = "",
