@@ -5,6 +5,7 @@ import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
 import com.giraffe.media.person.response.PersonCreditsResponse
+import com.giraffe.media.person.response.SearchPersonResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,7 +19,7 @@ interface PersonApiServiceRetrofit {
         @Query(PARAM_INCLUDE_ADULT) includeAdult: Boolean = false,
         @Query(PARAM_LANGUAGE) language: String = "en-US",
         @Query(PARAM_PAGE) page: Int = 1
-    ): Response<SearchPersonDto>
+    ): Response<SearchPersonResponse>
 
     @GET(ENDPOINT_PERSON_COMBINED_CREDITS)
     suspend fun getPersonMediaCredits(
@@ -72,3 +73,11 @@ interface PersonApiServiceRetrofit {
         private const val PATH_ID = "id"
         private const val PATH_SERIES_ID = "seriesId"
         private const val PATH_MOVIE_ID = "movieId"
+
+        // Query
+        private const val PARAM_LANGUAGE = "language"
+        private const val PARAM_QUERY = "query"
+        private const val PARAM_INCLUDE_ADULT = "include_adult"
+        private const val PARAM_PAGE = "page"
+    }
+}
