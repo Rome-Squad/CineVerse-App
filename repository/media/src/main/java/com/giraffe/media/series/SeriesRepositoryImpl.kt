@@ -1,6 +1,8 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.exception.NoInternetDataException
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
@@ -14,10 +16,12 @@ import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
+import com.giraffe.user.SessionManager
 
 class SeriesRepositoryImpl(
     private val remote: SeriesRemoteDataSource,
-    private val local: SeriesLocalDateSource
+    private val local: SeriesLocalDateSource,
+    private val sessionManager: SessionManager
 ) : SeriesRepository {
     override suspend fun searchSeriesByName(seriesName: String) = SafeCall {
         val cached = local.getCachedSeriesForName(seriesName)
@@ -84,6 +88,17 @@ class SeriesRepositoryImpl(
         }
     }
 
+    override suspend fun addSeriesRating(seriesId: Int, ratingValue: Float) = SafeCall{
+        val sessionId = getSessionId()
+        val requestBody = RatingRequest(value = ratingValue)
+        remote.addRating(seriesId, sessionId, requestBody)
+    }
+
+    override suspend fun getUserSeriesRating(seriesId: Int): Float = SafeCall{
+        val sessionId = getSessionId()
+        remote.getSeriesRating(seriesId, sessionId)
+    }
+
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {
         remote.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
@@ -93,5 +108,9 @@ class SeriesRepositoryImpl(
             remote.getSeriesRecommendations(seriesId, page)
                 .map(SeriesDto::toEntity)
         }
+    }
+
+    private suspend fun getSessionId() = SafeCall {
+        sessionManager.createGuestSessionId() ?: throw NoInternetDataException()
     }
 }

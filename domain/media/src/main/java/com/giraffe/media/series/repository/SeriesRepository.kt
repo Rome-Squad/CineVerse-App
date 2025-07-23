@@ -18,4 +18,6 @@ interface SeriesRepository {
     suspend fun getSeasonOfSeries(seriesId: Int): List<Season>
     suspend fun getSeriesByGenre(genreId: Int): List<Series>
     suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre>
+    suspend fun addSeriesRating(seriesId: Int, ratingValue: Float)
+    suspend fun getUserSeriesRating(seriesId: Int): Float
 }
