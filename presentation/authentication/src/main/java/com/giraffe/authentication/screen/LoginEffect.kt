@@ -9,4 +9,6 @@ sealed class LoginEffect {
     data class NavigateToSeriesDetails(val seriesId: Int) : LoginEffect()
 
     object NavigateToHomeScreen : LoginEffect()
+
+    object NavigateToWebViewScreen : LoginEffect()
 }

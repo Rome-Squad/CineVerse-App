@@ -61,7 +61,7 @@ class LoginViewModel(
     }
 
     override fun onGoToWebsiteClick() {
-        // go to web view
+        sendEffect(LoginEffect.NavigateToWebViewScreen)
     }
 
     override fun onForgotPasswordClick() {
@@ -105,4 +105,5 @@ class LoginViewModel(
             LoginEffect.NavigateToSeriesDetails(seriesID)
         )
     }
+
 }
