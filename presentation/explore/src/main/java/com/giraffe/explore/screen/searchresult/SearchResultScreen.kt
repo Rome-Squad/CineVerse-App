@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
@@ -64,6 +65,7 @@ fun SearchResultContent(
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
+    val actors = state.actors.collectAsLazyPagingItems()
     Box {
         LazyColumn(
             modifier = Modifier
@@ -96,9 +98,9 @@ fun SearchResultContent(
                         .fillParentMaxHeight(),
                 ) {
                     if (state.selectedTab == SearchTab.ACTORS) {
-                        if (state.actors.isNotEmpty()) {
+                        if (actors.itemCount != 0) {
                             ActorsSection(
-                                actors = state.actors,
+                                actors = actors,
                                 navigateToCastDetails = navigateToCastDetails
                             )
                         } else {
@@ -150,7 +152,7 @@ fun SearchResultContent(
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
-    actors: List<ActorUi>,
+    actors: LazyPagingItems<ActorUi>,
     navigateToCastDetails: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -160,12 +162,12 @@ fun ActorsSection(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(16.dp)
     ) {
-        items(items = actors, key = { actor -> actor.id }) { actor ->
+        items(actors.itemCount) { actorIndex ->
             CastItem(
-                name = actor.name,
-                imageUrl = actor.imageUrl,
+                name = actors[actorIndex]?.name.toString(),
+                imageUrl = actors[actorIndex]?.imageUrl.toString(),
                 onClick = {
-                    navigateToCastDetails(actor.id)
+                    navigateToCastDetails(actors[actorIndex]?.id?:0)
                 }
             )
         }
