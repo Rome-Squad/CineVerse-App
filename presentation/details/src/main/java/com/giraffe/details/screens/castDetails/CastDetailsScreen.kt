@@ -121,6 +121,7 @@ fun CastDetailsContent(
             scrollState.value > 0
         }
     }
+    val innerColumnSpacing = 18.dp
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -150,7 +151,7 @@ fun CastDetailsContent(
             )
         }
         Column(
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(innerColumnSpacing),
             modifier = Modifier
                 .verticalScroll(state = scrollState)
                 .onGloballyPositioned { coordinates ->
@@ -160,7 +161,7 @@ fun CastDetailsContent(
                 }
         ) {
             MoviesListSection(
-                modifier = Modifier.padding(top = 24.dp),
+                modifier = Modifier.padding(top = innerColumnSpacing),
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
                 movies = state.posters,

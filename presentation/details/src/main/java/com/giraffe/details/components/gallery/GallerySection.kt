@@ -20,6 +20,8 @@ fun GallerySection(
     imageUrls: List<String?>,
     onShowMoreClick: () -> Unit,
 ) {
+    if (imageUrls.isEmpty()) return
+    val showMoreText = imageUrls.size.takeIf { it > 3 }?.let { stringResource(R.string.show_more) }
     Column(
         modifier = modifier
             .fillMaxWidth(),
@@ -27,7 +29,7 @@ fun GallerySection(
     ) {
         SectionTitle(
             title = stringResource(R.string.gallery),
-            clickableText = stringResource(R.string.show_more),
+            clickableText = showMoreText,
             onClickableText = onShowMoreClick,
             modifier = Modifier.fillMaxWidth()
         )

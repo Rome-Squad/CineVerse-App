@@ -7,11 +7,10 @@ import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
+import com.giraffe.media.person.mapper.mapToPerson
 import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toEntity
-import com.giraffe.media.person.mapper.toImageList
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType
 import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
@@ -88,17 +87,12 @@ class PersonRepositoryImpl(
             val images = async { remoteDataSource.getPersonImages(personId) }
             val media = async { remoteDataSource.getPersonMediaCredits(personId) }
             val socialMedia = async { remoteDataSource.getPersonSocialMedia(personId) }
-            Person(
-                id = personId,
-                name = details.await().name,
-                imageUrl = BASE_IMAGE_URL + details.await().profilePath,
-                role = details.await().knownForDepartment,
-                birthday = details.await().birthday,
-                placeOfBirth = details.await().placeOfBirth,
-                biography = details.await().biography,
-                images = images.await().toImageList(),
-                personCredits = media.await().map(PersonCreditDto::toEntity),
-                socialMedia = socialMedia.await().toEntity()
+            mapToPerson(
+                personId = personId,
+                details = details.await(),
+                images = images.await(),
+                media = media.await(),
+                socialMedia = socialMedia.await()
             )
         }
     }
