@@ -15,15 +15,12 @@ import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.AuthInterceptor
 import com.giraffe.media.util.RetrofitRequestBuilder
-import com.giraffe.repository.SessionManagerImpl
-import com.giraffe.repository.datasource.AuthRemoteDataSource
 import com.giraffe.repository.datasource.UserRemoteDataSource
-import com.giraffe.user.AuthApiService
-import com.giraffe.user.AuthRemoteDataSourceImpl
 import com.giraffe.user.SessionManager
 import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -116,15 +113,8 @@ val networkRetrofitModule = module {
     single<UserRemoteDataSource> {
         UserRemoteDataSourceImplRetrofit(get())
     }
-    singleOf(::SessionManagerImpl) bind SessionManager::class
+    singleOf(::SessionIdManagerImpl) bind SessionManager::class
 
-    single<AuthRemoteDataSource>{
-        AuthRemoteDataSourceImpl(get())
-    }
-
-    single <AuthApiService>{
-        get<Retrofit>().create(AuthApiService::class.java)
-    }
 
 }
 
