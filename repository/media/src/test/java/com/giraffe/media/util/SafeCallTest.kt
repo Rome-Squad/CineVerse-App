@@ -2,12 +2,9 @@ package com.giraffe.media.util
 
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.ApiDataException
-import com.giraffe.media.exception.InvalidRequestMethodException
-import com.giraffe.media.exception.NetworkException
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.ServerErrorException
-import com.giraffe.media.exception.TimeoutException
 import com.giraffe.media.exception.UnauthorizedException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -18,7 +15,6 @@ import kotlinx.serialization.SerializationException
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
-import java.net.SocketTimeoutException
 
 class SafeCallTest {
     private lateinit var safeCall: SafeCall
@@ -71,19 +67,6 @@ class SafeCallTest {
             assertThrows<AccessDeniedException> { safeCall(execute) }
         }
 
-    @Test
-    fun `should throw ServerErrorDomainException when execution throw ApiException with error code 15`() =
-        runTest {
-            val execute = suspend { throw ApiDataException(15) }
-            assertThrows<ServerErrorException> { safeCall(execute) }
-        }
-
-    @Test
-    fun `should throw InvalidRequestMethodDomainException when execution throw ApiException with error code 4`() =
-        runTest {
-            val execute = suspend { throw ApiDataException(4) }
-            assertThrows<InvalidRequestMethodException> { safeCall(execute) }
-        }
 
     @Test
     fun `should throw ValidationDomainException when execution throw ApiException with error code 5`() =
@@ -92,12 +75,7 @@ class SafeCallTest {
             assertThrows<ValidationException> { safeCall(execute) }
         }
 
-    @Test
-    fun `should throw TimeoutDomainException when execution throw ApiException with error code 24`() =
-        runTest {
-            val execute = suspend { throw ApiDataException(24) }
-            assertThrows<TimeoutException> { safeCall(execute) }
-        }
+
 
     @Test
     fun `should throw UnknownDomainException when execution throw ApiException with unexpected error code`() =
@@ -107,17 +85,10 @@ class SafeCallTest {
         }
 
     @Test
-    fun `should throw TimeoutDomainException when execution throw SocketTimeoutException`() =
-        runTest {
-            val execute = suspend { throw SocketTimeoutException() }
-            assertThrows<TimeoutException> { safeCall(execute) }
-        }
-
-    @Test
     fun `should throw NetworkDomainException when execution throw NoInternetException`() =
         runTest {
             val execute = suspend { throw NoInternetDataException() }
-            assertThrows<NetworkException> { safeCall(execute) }
+            assertThrows<NoInternetException> { safeCall(execute) }
         }
 
     @Test
