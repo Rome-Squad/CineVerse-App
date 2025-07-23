@@ -57,7 +57,7 @@ fun LoginBody(
                 .padding(vertical = 20.dp),
             text = stringResource(R.string.login),
             enabled = true,
-            isLoading = state.isLoading,
+            isLoading = state.isLoadingLogin,
             onClick = interaction::onLoginClick,
         )
 

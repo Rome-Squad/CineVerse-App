@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.authentication.R
 import com.giraffe.user.exception.EmptyUsernameException
+
 import com.giraffe.user.exception.InvalidPasswordException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -62,6 +63,7 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
         return when (throwable) {
             is InvalidPasswordException -> R.string.invalid_password
             is EmptyUsernameException -> R.string.Empty_username
+            is GuestAuthenticationException -> R.string.guest_authentication_error
             else -> R.string.unknown_error
         }
     }

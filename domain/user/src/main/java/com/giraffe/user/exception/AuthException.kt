@@ -24,6 +24,8 @@ class InvalidPasswordException :
 class EmptyUsernameException :
         AuthException()
 
+class GuestAuthenticationException(message: String) : AuthException()
+
 
 class UnknownException() :
     AuthException()

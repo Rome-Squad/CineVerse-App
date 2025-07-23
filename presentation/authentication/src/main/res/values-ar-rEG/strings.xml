@@ -16,7 +16,7 @@
     <string name="logo">الشعار</string>
     <string name="unknown_error">خطأ غير معروف</string>
     <string name="Empty_username">اسم المستخدم لا يمكن ان يكون فارغ</string>
-
+    <string name="guest_auth_error">فشل ف الدخول كضيف , حاول مرة اخر لاحقا</string>
 
 
 </resources>
