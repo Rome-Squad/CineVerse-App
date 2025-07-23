@@ -10,9 +10,9 @@ class LoginViewModel(
 ) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
 
-    override fun onUsernameChanged(email: String) {
+    override fun onUsernameChanged(username: String) {
         updateState {
-            it.copy(username = email)
+            it.copy(username = username)
         }
     }
 

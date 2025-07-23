@@ -2,7 +2,7 @@ package com.giraffe.authentication.screen
 
 interface LoginInteractionListener {
 
-    fun onUsernameChanged(email: String)
+    fun onUsernameChanged(username: String)
 
     fun onPasswordChanged(password: String)
 
