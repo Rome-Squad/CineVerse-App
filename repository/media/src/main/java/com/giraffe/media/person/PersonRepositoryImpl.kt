@@ -4,10 +4,9 @@ import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
-import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.mapper.toDto
+import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageList
 import com.giraffe.media.person.repository.PersonRepository
