@@ -7,8 +7,8 @@ class PersonRemoteDataSourceImplRetrofit(
     private val retrofitRequestBuilder: RetrofitRequestBuilder<PersonApiServiceRetrofit>
 ) : PersonRemoteDataSource {
 
-    override suspend fun searchByName(personName: String): List<PersonDto> =
-        retrofitRequestBuilder.get { searchByName(personName) }.people
+    override suspend fun searchByName(personName: String, page: Int) =
+        retrofitRequestBuilder.get { searchByName(name = personName, page = page) }
 
     override suspend fun getPersonMediaCredits(personId: Int) =
         retrofitRequestBuilder.get { getPersonMediaCredits(personId) }.mediaCredits

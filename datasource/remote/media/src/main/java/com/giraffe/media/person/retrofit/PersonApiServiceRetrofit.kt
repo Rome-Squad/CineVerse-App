@@ -19,7 +19,7 @@ interface PersonApiServiceRetrofit {
         @Query(PARAM_INCLUDE_ADULT) includeAdult: Boolean = false,
         @Query(PARAM_LANGUAGE) language: String = "en-US",
         @Query(PARAM_PAGE) page: Int = 1
-    ): Response<SearchPersonResponse>
+    ): Response<SearchPersonDto>
 
     @GET(ENDPOINT_PERSON_COMBINED_CREDITS)
     suspend fun getPersonMediaCredits(
