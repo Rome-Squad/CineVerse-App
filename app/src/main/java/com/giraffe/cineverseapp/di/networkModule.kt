@@ -62,6 +62,7 @@ val networkModule = module {
     single { provideRetrofitService<SeriesApiServiceRetrofit>(get()) }
     single { provideRetrofitService<ExploreApiServiceRetrofit>(get()) }
     single { provideRetrofitService<PersonApiServiceRetrofit>(get()) }
+    single { provideRetrofitService<UserApiServiceRetrofit>(get()) }
 
     single<RetrofitRequestBuilder<MoviesApiServiceRetrofit>>(named(QUALIFIER_MOVIES_BUILDER)) {
         val api = get<Retrofit>().create(MoviesApiServiceRetrofit::class.java)
@@ -93,19 +94,6 @@ val networkModule = module {
     single<SeriesRemoteDataSource> {
         SeriesRemoteRetrofitDataSourceImp(get(named(QUALIFIER_SERIES_BUILDER)))
     }
-
-    single(named("user_retrofit")) {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(get<Json>().asConverterFactory("application/json".toMediaType()))
-            .client(get())
-            .build()
-    }
-
-    single<UserApiServiceRetrofit> {
-        get<Retrofit>(named("user_retrofit")).create(UserApiServiceRetrofit::class.java)
-    }
-
     single<UserRemoteDataSource> {
         UserRemoteDataSourceImplRetrofit(get())
     }
