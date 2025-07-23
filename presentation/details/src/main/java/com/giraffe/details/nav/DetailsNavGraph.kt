@@ -7,6 +7,7 @@ import com.giraffe.details.screens.castCredit.castCreditRoute
 import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
+import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
@@ -82,6 +83,15 @@ fun DetailsNavGraph(
             navController = navController,
             navigateToCastCredit = navController::navigateToCastCredit
         )
+        recommendedMoviesRoute(
+            navigateToMovieDetails = { MovieId ->
+                navController.navigate(
+                    "movieDetails/$MovieId"
+                )
+            },
+            onBackClick = { navController.navigateUp() }
+        )
+
 
         reviewRoute(navController)
     }

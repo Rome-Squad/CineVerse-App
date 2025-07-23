@@ -4,10 +4,9 @@ import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
-import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.mapper.toDto
+import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageList
 import com.giraffe.media.person.repository.PersonRepository
@@ -23,16 +22,12 @@ class PersonRepositoryImpl(
     private val localDataSource: PersonLocalDataSource,
 ) : PersonRepository {
 
-    override suspend fun searchByName(personName: String) = SafeCall {
-        localDataSource.searchByName(personName).map(PersonCacheDto::toEntity).ifEmpty {
-            val people = remoteDataSource.searchByName(personName).map(PersonDto::toEntity)
-            localDataSource.storePeople(people.map(Person::toDto))
-            people
-        }
+    override suspend fun searchByName(personName: String, page: Int) = SafeCall {
+        remoteDataSource.searchByName(personName, page).toEntity()
     }
 
     override suspend fun storeRecentPerson(person: Person) =
-        SafeCall { localDataSource.storePerson(person.toDto().copy(isRecent = true)) }
+        SafeCall { localDataSource.storePerson(person.toCacheDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {
         localDataSource.getRecentPeople().map(PersonCacheDto::toEntity)
@@ -65,7 +60,7 @@ class PersonRepositoryImpl(
         val crew = credits.crew.map { it.toEntity(PersonType.CREW) }
         val people = cast + crew
 
-        val dtos = people.map { content.toDto(it) }
+        val dtos = people.map { content.toCacheDto(it) }
 
         localDataSource.storePeople(dtos)
 

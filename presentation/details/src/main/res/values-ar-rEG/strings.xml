@@ -43,6 +43,7 @@
     <string name="biography">سيرة ذاتية</string>
     <string name="season_image">صورة الموسم</string>
     <string name="because_you_watched">لأنك شاهدت</string>
-    <string name="show_mores">أعرض المزيد</string>
+    <string name="show_mores">عرض المزيد</string>
+    <string name="try_again">حاول مجددا</string>
     <string name="best_of_">أفضل ما في %1$s</string>
 </resources>

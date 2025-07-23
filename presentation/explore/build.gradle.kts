@@ -46,6 +46,8 @@ dependencies {
 
     implementation(libs.koin.androidx.compose)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui)

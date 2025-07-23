@@ -1,9 +1,11 @@
 package com.giraffe.cineverseapp.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.giraffe.authentication.screen.LoginViewModel
 import com.giraffe.details.screens.castCredit.CastCreditViewModel
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.explore.screen.discover.DiscoverViewModel
@@ -22,5 +24,13 @@ val viewModelModule = module {
     viewModelOf(::SearchResultViewModel)
     viewModelOf(::CastCreditViewModel)
     viewModelOf(::LoginViewModel)
+    viewModelOf(::RecommendedSeriesViewModel)
+    viewModel { (savedStateHandle: SavedStateHandle) ->
+        RecommendedMoviesViewModel(
+            savedStateHandle = savedStateHandle,
+            getRecommendedMovies = get(),
+            getMovieGenres = get()
+        )
+    }
     viewModelOf(::RecommendedSeriesViewModel)
 }

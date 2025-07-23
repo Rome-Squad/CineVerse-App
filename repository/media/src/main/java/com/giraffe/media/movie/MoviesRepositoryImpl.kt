@@ -119,6 +119,18 @@ class MoviesRepositoryImpl(
         remote.getUserMovieRating(movieId, sessionId)
     }
 
+    override suspend fun getPopularityMovies(): List<Movie> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRecentlyReleasedMovies(): List<Movie> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getUpcomingMovies(): List<Movie> {
+        TODO("Not yet implemented")
+    }
+
     private suspend fun getSessionId() = SafeCall {
         sessionManager.createGuestSessionId() ?: throw NoInternetDataException()
     }

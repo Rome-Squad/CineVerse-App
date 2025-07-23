@@ -120,7 +120,11 @@ private fun SearchContent(
             placeholder = stringResource(R.string.search),
             focusRequester = focusRequester,
             onEndIconClick = interactions::onPostfixIconClick,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onSearchClick = {
+                interactions.onKeywordClick(it)
+                navigateToSearchResult(it)
+            }
         )
         if ((state.recentKeywords + state.keywords).isNotEmpty()) {
             KeywordsSection(
