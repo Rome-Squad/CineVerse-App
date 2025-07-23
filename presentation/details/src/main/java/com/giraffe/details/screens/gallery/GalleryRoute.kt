@@ -7,21 +7,21 @@ import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class GallerRoute(
+internal data class GalleryRoute(
     val actorName: String,
     val imageUrls: List<String?>
 )
 
 internal fun NavController.navigateToGallery(actorName: String, imageUrls: List<String?>) {
-    navigate(GallerRoute(actorName, imageUrls))
+    navigate(GalleryRoute(actorName, imageUrls))
 }
 
 internal fun NavGraphBuilder.galleryRoute(
     navController: NavController,
 ) {
-    composable<GallerRoute> { backStackEntry ->
-        val actorName = backStackEntry.toRoute<GallerRoute>().actorName
-        val imageUrls = backStackEntry.toRoute<GallerRoute>().imageUrls
+    composable<GalleryRoute> { backStackEntry ->
+        val actorName = backStackEntry.toRoute<GalleryRoute>().actorName
+        val imageUrls = backStackEntry.toRoute<GalleryRoute>().imageUrls
 
         GalleryScreen(
             navController = navController,
