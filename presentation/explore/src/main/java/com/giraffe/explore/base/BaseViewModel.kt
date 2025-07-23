@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.UnauthorizedException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.explore.R
@@ -53,7 +52,6 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
             is NoInternetException -> R.string.error_network
-            is UnauthorizedException -> R.string.error_unauthorized
             is AccessDeniedException -> R.string.error_access_denied
             is ValidationException -> R.string.error_validation
             is NotFoundException -> R.string.error_not_found

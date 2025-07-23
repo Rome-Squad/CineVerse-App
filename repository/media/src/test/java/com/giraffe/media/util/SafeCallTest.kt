@@ -2,10 +2,9 @@ package com.giraffe.media.util
 
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.ApiDataException
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NoInternetDataException
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.UnauthorizedException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.utils.SafeCall
@@ -33,24 +32,10 @@ class SafeCallTest {
         }
 
     @Test
-    fun `should throw InvalidApiKeyDomainException when execution throw ApiException with error code 7`() =
-        runTest {
-            val execute = suspend { throw ApiDataException(7) }
-            assertThrows<UnauthorizedException> { safeCall(execute) }
-        }
-
-    @Test
     fun `should throw NotFoundDomainException when execution throw ApiException with error code 34`() =
         runTest {
             val execute = suspend { throw ApiDataException(34) }
             assertThrows<NotFoundException> { safeCall(execute) }
-        }
-
-    @Test
-    fun `should throw UnauthorizedDomainException when execution throw ApiException with error code 3`() =
-        runTest {
-            val execute = suspend { throw ApiDataException(3) }
-            assertThrows<UnauthorizedException> { safeCall(execute) }
         }
 
     @Test

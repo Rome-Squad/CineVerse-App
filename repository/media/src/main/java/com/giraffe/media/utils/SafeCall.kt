@@ -13,8 +13,6 @@ import com.giraffe.media.exception.RateLimitExceededDataException
 import com.giraffe.media.exception.RequestTimeoutDataException
 import com.giraffe.media.exception.ServerDataException
 import com.giraffe.media.exception.TooManyRequestsDataException
-import com.giraffe.media.exception.UnauthorizedAccessDataException
-import com.giraffe.media.exception.UnauthorizedException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.UnknownNetworkDataException
 import com.giraffe.media.exception.ValidationException
@@ -32,7 +30,6 @@ object SafeCall {
 
     fun mapToDomainException(e: Throwable): MediaException = when (e) {
         is ApiDataException -> when (e.code) {
-            401 -> UnauthorizedException()
             403, 429 -> AccessDeniedException()
             400, 406, 422 -> ValidationException()
             404 -> NotFoundException()
@@ -46,8 +43,6 @@ object SafeCall {
         is RequestTimeoutDataException,
         is SocketTimeoutException,
         is ServerDataException -> NoInternetException()
-
-        is UnauthorizedAccessDataException, -> UnauthorizedException()
 
         is ForbiddenAccessDataException,
         is TooManyRequestsDataException,
