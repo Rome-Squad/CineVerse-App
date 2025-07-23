@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.details.screens.castDetails.castDetailsRoute
+import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
 import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
@@ -11,7 +12,8 @@ import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.REVIEW_LIST_ARG
 import com.giraffe.details.screens.reviewScreen.Review_ROUTE
 import com.giraffe.details.screens.reviewScreen.reviewRoute
-import com.giraffe.details.screens.seriesdetails.seriesDetailsRoute
+import com.giraffe.details.screens.seriesdetails.screen.navigateToSeriesDetails
+import com.giraffe.details.screens.seriesdetails.screen.seriesDetailsRoute
 
 @Composable
 fun DetailsNavGraph(
@@ -41,7 +43,6 @@ fun DetailsNavGraph(
         )
 
         seriesDetailsRoute(
-            navController = navController,
             navigateToReviews = { reviews ->
                 navController.currentBackStackEntry?.savedStateHandle?.set(
                     REVIEW_LIST_ARG,
@@ -52,7 +53,10 @@ fun DetailsNavGraph(
             onBackButtonClick = {
                 navController.navigateUp()
             },
-            navigateToRecommendedSeries = navController::navigateToRecommendedSeries
+            navigateToRecommendedSeries = navController::navigateToRecommendedSeries,
+            navigateToSeriesDetails = navController::navigateToSeriesDetails,
+            navigateToCastDetails = navController::navigateToCastDetails,
+            navigateToSeason = navController::navigateToSeriesDetails               // change this to navigate to season screen
         )
 
         recommendedSeriesRoute(

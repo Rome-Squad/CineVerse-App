@@ -7,7 +7,7 @@ import com.giraffe.details.DetailsApi
 import com.giraffe.details.DetailsStartDestination
 import com.giraffe.details.screens.castDetails.CAST_ROUTE
 import com.giraffe.details.screens.moviedetails.screen.MOVIES_ROUTE
-import com.giraffe.details.screens.seriesdetails.SERIES_ROUTE
+import com.giraffe.details.screens.seriesdetails.screen.SERIES_ROUTE
 
 class DetailsApiImp : DetailsApi {
     @Composable
