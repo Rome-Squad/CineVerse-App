@@ -16,6 +16,7 @@ import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.FACEBOOK_URL
 import com.giraffe.media.utils.INSTAGRAM_URL
 import com.giraffe.media.utils.YOUTUBE_URL
+import com.giraffe.media.utils.toFormattedDate
 import kotlinx.datetime.LocalDate
 
 
@@ -65,7 +66,7 @@ fun PersonCreditDto.toEntity() = PersonCredit(
     voteAverage = voteAverage,
     mediaType = mediaType,
     genreIds = genreIds,
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    releaseYear = if (releaseDate.isNullOrEmpty()) null else releaseDate.toFormattedDate(),
 )
 
 fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(

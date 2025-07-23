@@ -1,6 +1,5 @@
 package com.giraffe.media.person.entity
 
-import kotlinx.datetime.LocalDate
 
 data class PersonCredit(
     val id: Int,
@@ -9,6 +8,5 @@ data class PersonCredit(
     val voteAverage: Double,
     val mediaType: String?,
     val genreIds: List<Int> = emptyList(),
-    val releaseYear: LocalDate?,
-
+    val releaseYear: String? = null,
 )
