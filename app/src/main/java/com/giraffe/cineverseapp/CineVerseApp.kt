@@ -6,8 +6,9 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.giraffe.cineverseapp.di.databaseModule
+import com.giraffe.cineverseapp.di.featureApiModule
 import com.giraffe.cineverseapp.di.localDataSourceModule
-import com.giraffe.cineverseapp.di.networkModule
+import com.giraffe.cineverseapp.di.networkRetrofitModule
 import com.giraffe.cineverseapp.di.repositoryModule
 import com.giraffe.cineverseapp.di.useCaseModule
 import com.giraffe.cineverseapp.di.viewModelModule
@@ -36,16 +37,14 @@ class CineVerseApp : Application() {
             modules(
                 databaseModule,
                 localDataSourceModule,
-                networkModule,
                 repositoryModule,
                 useCaseModule,
                 viewModelModule,
-                imageViewerModule
+                imageViewerModule,
+                featureApiModule,
+                networkRetrofitModule
             )
         }
-
-        createGuestSessionIfNotExists()
-
         setupCacheCleanupWorker()
     }
 

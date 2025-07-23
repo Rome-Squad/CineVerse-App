@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
@@ -38,8 +41,11 @@ fun ExploreHeader(
     onTabClick: (Int) -> Unit = {},
     selectedTabIndex: Int = 0,
     placeholder: String = "",
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: String = "",
+    readOnly: Boolean = false,
+    focusRequester: FocusRequester = FocusRequester(),
+    onTextFieldClicked: () -> Unit = {},
+    onValueChange: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {}
 ) {
     Column(
@@ -68,6 +74,8 @@ fun ExploreHeader(
             }
             DefaultTextField(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                singleLine = true,
+                maxCharacters = 400,
                 startIcon = painterResource(Theme.icons.outline.search),
                 onStartIconClick = onSearchClick,
                 endIcon = {
@@ -81,7 +89,10 @@ fun ExploreHeader(
                 placeholder = placeholder,
                 onValueChange = onValueChange,
                 value = value,
-                onFocusChanged = onFocusChanged
+                onFocusChanged = onFocusChanged,
+                readOnly = readOnly,
+                focusRequester = focusRequester,
+                onClicked = onTextFieldClicked
             )
         }
         if (tabsTitles.isNotEmpty()) {
@@ -97,11 +108,12 @@ fun ExploreHeader(
 @Preview
 @Composable
 private fun Preview() {
+    val (searchText, onSearchTextChange) = remember { mutableStateOf("") }
     CineVerseTheme(isDarkTheme = true) {
         ExploreHeader(
             endIcon = painterResource(Theme.icons.outline.microphone),
-            onValueChange = {},
-            value = "",
+            value = searchText,
+            onValueChange = onSearchTextChange,
             placeholder = "search"
         )
     }

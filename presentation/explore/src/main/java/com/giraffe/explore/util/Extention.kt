@@ -1,7 +1,7 @@
-package com.giraffe.media.explore.util
+package com.giraffe.explore.util
 
 import android.content.Context
-import com.giraffe.explore.SearchTab
+import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.media.explore.R
 
 fun SearchTab.toTitle(context: Context) = when (this) {

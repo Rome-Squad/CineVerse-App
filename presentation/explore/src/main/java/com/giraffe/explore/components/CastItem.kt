@@ -1,45 +1,66 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun CastItem(
     modifier: Modifier = Modifier,
     imageUrl: String,
-    name: String
+    name: String,
+    onClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AsyncImage(
-            model = imageUrl,
+        SafeIslamicImage(
+            imageUrl = imageUrl,
             contentDescription = name,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(Theme.radius.lg))
-        )
+                .clickable(onClick = onClick)
+        ) {
+            Icon(
+                painter = painterResource(Theme.icons.dueTone.image),
+                contentDescription = null,
+                tint = Theme.color.brand.secondary,
+                modifier = it
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .background(
+                        Theme.color.background.card,
+                        shape = RoundedCornerShape(Theme.radius.lg)
+                    )
+                    .wrapContentSize(),
+            )
+        }
 
         Text(
             text = name,
@@ -58,10 +79,10 @@ fun CastItemPreview() {
         Box(Modifier.width(80.dp)) {
             CastItem(
                 imageUrl = "",
-                name = "Tom Hardy"
+                name = "Tom Hardy",
+                onClick = {}
             )
         }
 
     }
 }
-

@@ -16,47 +16,46 @@ import kotlinx.coroutines.flow.map
 class ExploreRepositoryImpl(
     private val cache: LocalExploreDataSource,
     private val remote: ExploreRemoteDataSource,
-): ExploreRepository {
+) : ExploreRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
         if (query.isBlank())
             return cache.getSearchHistory().map {
-                it.map { cacheDto-> cacheDto.toEntity() }
-            }.catch {throw mapToDomainException(it) }
+                it.map { cacheDto -> cacheDto.toEntity() }
+            }.catch { throw mapToDomainException(it) }
 
 
-            val history = cache.getSearchKeywords(query).map {
-                it.map {cacheDto-> cacheDto.toEntity() }
-            }
+        val history = cache.getSearchKeywords(query).map {
+            it.map { cacheDto -> cacheDto.toEntity() }
+        }
 
-            val remoteResults = remote.getSearchKeywords(query).map {
-                it.toEntity()
-            }
+        val remoteResults = remote.getSearchKeywords(query).map {
+            it.toEntity()
+        }
 
         return history.map { historyList ->
-                (historyList + remoteResults)
-                    .distinctBy { it.keyword }
-                    .sortedByDescending { it.lastSearchedTime }
-            }.catch {throw mapToDomainException(it) }
+            (historyList + remoteResults)
+                .distinctBy { it.keyword }
+                .sortedByDescending { it.lastSearchedTime }
+        }.catch { throw mapToDomainException(it) }
 
     }
 
-    override suspend fun insertSearchKeyword(searchKeyword: String)   = SafeCall {
-            val searchKeyword = SearchKeyword(
-                keyword = searchKeyword,
-                isFromSearchHistory = true,
-                lastSearchedTime = getCurrentLocalDateTime()
-            )
-            val cacheDto = searchKeyword.toCacheDto()
-            cache.insertSearchKeyword(cacheDto)
-        }
-
-    override suspend fun deleteSearchKeyword(searchKeyword: SearchKeyword) = SafeCall {
-            val cacheDto = searchKeyword.toCacheDto()
-            cache.deleteSearchKeyword(cacheDto)
-        }
-
-    override suspend fun clearSearchHistory()  = SafeCall {
-            cache.clearSearchHistory()
-        }
+    override suspend fun insertSearchKeyword(searchKeyword: String) = SafeCall {
+        val searchKeyword = SearchKeyword(
+            keyword = searchKeyword,
+            isFromSearchHistory = true,
+            lastSearchedTime = getCurrentLocalDateTime()
+        )
+        val cacheDto = searchKeyword.toCacheDto()
+        cache.insertSearchKeyword(cacheDto)
     }
+
+    override suspend fun deleteKeyword(keyword: String) = SafeCall {
+        cache.deleteKeyword(keyword)
+    }
+
+    override suspend fun clearSearchHistory() = SafeCall {
+        cache.clearSearchHistory()
+    }
+}

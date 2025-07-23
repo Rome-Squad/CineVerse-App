@@ -5,221 +5,265 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
-import com.giraffe.designsystem.composable.custom.Text
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
-import com.giraffe.details.components.MainMovieOrSeriesDetails
+import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.screens.castDetails.navigateToCastDetails
+import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
+import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
-import com.giraffe.details.utils.imageSourceToPainter
+import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
+import kotlin.math.min
 
 
 @Composable
 fun MovieDetailsScreen(
     movieID: Int,
+    navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: MovieDetailsViewModel = koinViewModel()
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    onBackButtonClick: () -> Unit = {},
+    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
 ) {
     val state = viewModel.state.collectAsState().value
 
-    LaunchedEffect(movieID) {
-        viewModel.loadMovieDetails(movieID)
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                MovieDetailsEffect.NavigateToMovies -> {
+                    //navController.navigateToMovieDetails(movieID)
+                }
+
+                is MovieDetailsEffect.NavigateToReviews -> {
+                    navigateToReviews(effect.reviews)
+                }
+
+                is MovieDetailsEffect.Error -> {}
+                MovieDetailsEffect.NavigateToCollection -> {}
+                MovieDetailsEffect.NavigateToLogin -> {}
+                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
+                    castID = effect.personId
+                )
+            }
+        }
     }
 
-    MovieDetailsContent(
-        modifier = modifier,
-        state = state,
-        onShowMoreReviewsClick = viewModel::onShowMoreReviewsClick,
-        onAddToCollectionClick = viewModel::onAddToCollectionClick,
-        onShowMoreMoviesClick = viewModel::onShowMoreMoviesClick,
-        onGiveStarClick = viewModel::onGiveStarsClick,
-        onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
-        onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
-    )
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .systemBarsPadding(),
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedVisibility(state.isLoadingMovieDetails) {
+            Progress(modifier = Modifier.size(40.dp))
+        }
+        AnimatedVisibility(!state.isLoadingMovieDetails) {
+            MovieDetailsContent(
+                modifier = modifier,
+                state = state,
+                navController = navController,
+                interaction = viewModel,
+                onBackButtonClick = onBackButtonClick
+            )
+        }
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MovieDetailsContent(
     modifier: Modifier,
+    navController: NavController,
     state: MovieDetailsScreenState,
-    onShowMoreReviewsClick: () -> Unit,
-    onAddToCollectionClick: () -> Unit,
-    onDismissAddToCollectionBottomSheet: () -> Unit,
-    onShowMoreMoviesClick: () -> Unit,
-    onGiveStarClick: () -> Unit,
-    onDismissAddRatingBottomSheet: () -> Unit,
+    interaction: MovieDetailsInteractionListener,
+    onBackButtonClick: () -> Unit
 ) {
 
-    LazyColumn(
+    val scrollState = rememberScrollState()
+
+    Column(
         modifier = modifier
-            .background(Theme.color.background.screen)
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .background(Theme.color.background.screen),
         horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(bottom = 30.dp)
-    ) {
-        item {
+
+        ) {
+
+        // Header
+        Column(
+            Modifier
+                .padding(horizontal = 16.dp)
+                .background(Theme.color.background.screen),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             AppBar(
-                showBackButton = true, modifier = Modifier.padding(16.dp)
+                showBackButton = true,
+                onBackButtonClick = onBackButtonClick
             )
-        }
-        item {
-            MainMovieOrSeriesDetails(
-                type = stringResource(R.string.movie),
-                poster = state.movie.posterUrl?.imageSourceToPainter()
-                    ?: painterResource(R.drawable.main_poster_test),
+            MainMovieOrSeriesDetailsAnimatedContent(
+                type = TypeOfScreen.MOVIE.toString(),
                 name = state.movie.title,
-                genres = state.movieGenres,
                 rating = state.movie.rating,
-                duration = state.movie.duration.toString(),
-                releaseDate = state.movie.releaseYear,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                onAddToCollectionClick = onAddToCollectionClick
+                image = state.movie.posterUrl,
+                genres = state.movieGenres,
+                releaseYear = state.movie.releaseYear,
+                onClickAdd = interaction::onAddToCollectionClick,
+                onClickPlay = {},
+                isScrolled = scrollState.value > 0,
+                durationAnimation = 2000
             )
         }
-        item {
+
+        // Scrolling Body
+        Column(
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .verticalScroll(scrollState)
+                .background(Theme.color.background.screen),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             InfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.storyline),
                 description = state.movie.description
             )
-        }
-        item {
-            state.cast.map { }
+
             StarCastSection(
                 title = stringResource(R.string.star_cast),
                 onShowMoreClick = {},
+                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
                 castList = state.cast
             )
-        }
-        item {
+
             StaffInfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.behind_the_scenes),
                 staffList = state.crew
             )
-        }
-        item {
+
             MoviesListSection(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
                 movies = state.recommendedMovies,
-                onClickEndText = onShowMoreMoviesClick,
-                onClickPoster = {})
-        }
+                onClickEndText = {
 
-        item {
-            RatingSection(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-                onClickCard = onGiveStarClick
+                },
+                onClickPoster = {
+                    navController.navigateToMovieDetails(it)
+                }
             )
-        }
 
-        item {
+            RatingSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClickCard = interaction::onGiveStarsClick
+            )
+
             AnimatedVisibility(
-                visible = state.movieReviews.take(3).isNotEmpty(),
+                visible = state.movieReviews.isNotEmpty(),
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut()
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(R.string.top_reviews),
-                        color = Theme.color.shade.primary,
-                        style = Theme.textStyle.title.sm,
-                    )
+                InfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.top_reviews),
+                    description = state.movie.description
+                )
+            }
 
-                    Text(
-                        text = stringResource(R.string.show_more),
-                        color = Theme.color.brand.primary,
-                        modifier = Modifier
-                            .padding(start = 12.dp)
-                            .clickable { onShowMoreReviewsClick() },
-                        style = Theme.textStyle.body.md.medium,
-                    )
+            AnimatedVisibility(state.movieReviews.isNotEmpty()) {
+
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    for (index in 0..min(2, state.movieReviews.size - 1)) {
+                        val review = state.movieReviews[index]
+                        val padding = when (index) {
+                            0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                            1 -> Modifier.padding(horizontal = 16.dp)
+                            2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                            else -> Modifier
+                        }
+                        ReviewCard(
+                            modifier = padding,
+                            rate = review.rating.toInt(),
+                            reviewText = review.content,
+                            reviewDate = review.createdAt,
+                            reviewerImageUrl = review.authorImageUrl,
+                            reviewerName = review.authorName,
+                            reviewerUsername = review.authorUserName
+                        )
+                    }
                 }
             }
-        }
-
-        itemsIndexed(state.movieReviews.take(3)) { index, review ->
-            val padding = when (index) {
-                0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                1 -> Modifier.padding(horizontal = 16.dp)
-                2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
-                else -> Modifier
-            }
-            ReviewCard(
-                modifier = padding,
-                rate = review.rating.toInt(),
-                reviewText = review.content,
-                reviewDate = review.createdAt,
-                reviewerImageSource = review.authorImageUrl,
-                reviewerName = review.authorName,
-                reviewerUsername = review.authorUserName
-            )
         }
     }
 
     BaseBottomSheet(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
-        onDismiss = onDismissAddToCollectionBottomSheet,
+        onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             AddToCollectionContent(
-                title = "My Favorite TV", isLoading = false, modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My Favorite TV",
+                isLoading = false,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
-                title = "My WatchLis", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "My WatchLis",
+                isLoading = false,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
             AddToCollectionContent(
-                title = "Cristian Bale Movies", isLoading = false,modifier =  Modifier.padding(top = 16.dp, bottom = 16.dp)
+                title = "Cristian Bale Movies",
+                isLoading = false,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
         },
     )
     BaseBottomSheet(
         isVisible = state.isVisibleGiveStarsBottomSheet,
-        onDismiss = onDismissAddRatingBottomSheet,
+        onDismiss = interaction::onDismissGiveStarsBottomSheet,
         title = stringResource(R.string.rate_the_movie),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -233,19 +277,5 @@ private fun MovieDetailsContent(
                     enabled = false,
                     onClick = {})
             }
-        }
-    )
-}
-
-
-@Preview
-@Composable
-private fun MovieDetailsPreview() {
-    CineVerseTheme(
-        isDarkTheme = false
-    ) {
-        MovieDetailsScreen(
-            movieID = 286,
-        )
-    }
+        })
 }

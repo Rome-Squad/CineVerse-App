@@ -1,4 +1,4 @@
-package com.giraffe.media.explore.components
+package com.giraffe.explore.components
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -7,7 +7,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,6 +44,7 @@ fun PosterHorizontal(
 ) {
     Row(
         modifier = modifier
+            .height(IntrinsicSize.Min)
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.card)
             .clickable(onClick = onClick),
@@ -54,7 +57,7 @@ fun PosterHorizontal(
                 imageUrl = poster.imageUri,
                 contentDescription = poster.name,
                 modifier = Modifier
-                    .height(88.dp)
+                    .fillMaxHeight()
                     .width(64.dp)
                     .clip(
                         RoundedCornerShape(
@@ -119,10 +122,15 @@ fun PosterHorizontal(
                             )
                     )
                 }
-                IconWithText(
-                    icon = painterResource(Theme.icons.dueTone.calendar),
-                    text = poster.date ?: stringResource(R.string.unknown_date)
-                )
+                poster.date?.let {
+                    if (it.isNotEmpty()) {
+                        IconWithText(
+                            icon = painterResource(Theme.icons.dueTone.calendar),
+                            text = poster.date ?: stringResource(R.string.unknown_date)
+                        )
+                    }
+                }
+
             }
         }
     }

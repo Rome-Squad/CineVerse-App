@@ -29,7 +29,6 @@ fun getSecret(key: String): String {
 android {
     namespace = "com.giraffe.cineverseapp"
     compileSdk = 36
-
     defaultConfig {
         applicationId = "com.giraffe.cineverseapp"
         minSdk = 24
@@ -44,7 +43,6 @@ android {
         buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
         buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
     }
-
     buildTypes {
         debug {
             buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
@@ -52,7 +50,8 @@ android {
             buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -73,6 +72,11 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+    }
+    bundle {
+        language {
+            enableSplit = true
+        }
     }
 }
 
@@ -99,6 +103,12 @@ dependencies {
 
     implementation(project(":datasource:local:user"))
     implementation(project(":datasource:local:media"))
+
+
+    implementation(project(":api:details"))
+    implementation(project(":api:explore"))
+    implementation(project(":api:home"))
+    implementation(project(":api:match"))
 
 
     implementation(libs.androidx.core.ktx)
@@ -128,13 +138,13 @@ dependencies {
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
 
-    //ktor
-    implementation(libs.bundles.ktor)
+
 
     //worker
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.koin.androidx.workmanager)
 
+    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -143,4 +153,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 }

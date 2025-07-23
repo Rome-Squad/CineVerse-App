@@ -5,7 +5,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,10 +31,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil3.compose.rememberAsyncImagePainter
 import com.giraffe.designsystem.composable.CinePreview
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun Carousel(
@@ -125,7 +124,7 @@ private fun Cover(
     isSelected: Boolean
 ) {
     Box {
-        Image(
+        SafeIslamicImage(
             modifier = modifier
                 .aspectRatio(312 / 200f)
                 .clip(RoundedCornerShape(Theme.radius.xl))
@@ -134,7 +133,7 @@ private fun Cover(
                     RoundedCornerShape(Theme.radius.xl),
                     ambientColor = Color.Black.copy(.4f)
                 ),
-            painter = rememberAsyncImagePainter(imageUrl),
+            imageUrl = imageUrl,
             contentDescription = "cover",
             contentScale = ContentScale.Crop
         )

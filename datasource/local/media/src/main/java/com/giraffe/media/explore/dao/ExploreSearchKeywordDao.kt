@@ -1,11 +1,10 @@
 package com.giraffe.media.explore.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.giraffe.media.explore.model.SearchKeywordCacheDto
+import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,14 +13,14 @@ interface ExploreSearchKeywordDao {
     @Query(
         value =
             "SELECT * " +
-            "FROM SEARCH_KEYWORD_TABLE " +
+            "FROM SEARCH_KEYWORD " +
             "ORDER BY lastSearchedTime DESC"
     )
     fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>>
     @Query(
         value =
             "SELECT * " +
-            "FROM SEARCH_KEYWORD_TABLE " +
+            "FROM SEARCH_KEYWORD " +
             "WHERE keyword = :query " +
             "ORDER BY lastSearchedTime DESC"
     )
@@ -30,10 +29,15 @@ interface ExploreSearchKeywordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto)
 
-    @Delete
-    suspend fun deleteSearchKeyword(searchKeyword: SearchKeywordCacheDto)
+    @Query(
+        value =
+            "DELETE " +
+            "FROM SEARCH_KEYWORD " +
+            "WHERE keyword = :keyword "
+    )
+    suspend fun deleteKeyword(keyword: String)
 
-    @Query("DELETE FROM SEARCH_KEYWORD_TABLE")
+    @Query("DELETE FROM SEARCH_KEYWORD")
     suspend fun clearSearchHistory()
 
 }

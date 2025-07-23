@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.MoviePersonCrossRef
 import com.giraffe.media.person.relations.SeriesPersonCrossRef
 import com.giraffe.media.utils.DatabaseConstants.PERSONS_TABLE

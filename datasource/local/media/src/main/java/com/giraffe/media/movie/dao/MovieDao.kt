@@ -1,11 +1,13 @@
+package com.giraffe.media.movie.dao
+
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import  com.giraffe.media.movie.model.cacheDto.MovieCacheDto
+import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import  com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
-import  com.giraffe.media.movie.model.cacheDto.MovieGenreCacheDto
+import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import  com.giraffe.media.utils.DatabaseConstants.MOVIE_GENRE_TABLE
 
 
@@ -22,7 +24,7 @@ interface MovieDao {
     suspend fun getMovieByName(movieName: String): List<MovieCacheDto>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id =:movieId")
-    suspend fun getMovieById(movieId: Int): MovieCacheDto
+    suspend fun getMovieById(movieId: Int): MovieCacheDto?
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
@@ -63,7 +65,7 @@ interface MovieDao {
     )
     suspend fun clearMovieCache(currentTime: Long)
 
-    @Query("UPDATE movie_genre_table SET count = count + 1 WHERE id IN (:genreIds)")
+    @Query("UPDATE movie_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
 }

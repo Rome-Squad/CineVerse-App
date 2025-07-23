@@ -35,9 +35,12 @@ android {
 
 dependencies {
     implementation(project(":repository:media"))
-    implementation(libs.bundles.ktor)
-    implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
-    testImplementation(kotlin("test"))
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 }

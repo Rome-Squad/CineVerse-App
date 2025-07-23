@@ -1,18 +1,18 @@
 package com.giraffe.media.exception
 
-open class MediaDomainException : Exception()
+open class MediaException : Exception()
 
-class NetworkDomainException : MediaDomainException()
-class TimeoutDomainException : MediaDomainException()
-class ServerErrorDomainException : MediaDomainException()
+class NetworkException : MediaException()
+class TimeoutException : MediaException()
+class ServerErrorException : MediaException()
 
-class UnauthorizedDomainException : MediaDomainException()
-class AccessDeniedDomainException : MediaDomainException()
+class UnauthorizedException : MediaException()
+class AccessDeniedException : MediaException()
 
-class ValidationDomainException : MediaDomainException()
-class InvalidRequestMethodDomainException : MediaDomainException()
+class ValidationException : MediaException()
+class InvalidRequestMethodException : MediaException()
 
-class NotFoundDomainException : MediaDomainException()
-class InfrastructureDomainException : MediaDomainException()
+class NotFoundException : MediaException()
+class InfrastructureException : MediaException()
 
-class UnknownDomainException : MediaDomainException()
+class UnknownException : MediaException()

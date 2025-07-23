@@ -3,6 +3,7 @@ package com.giraffe.media.person.usecase
 
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
+import com.giraffe.media.person.entity.PersonSocialMediaLinks
 import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -27,21 +28,26 @@ class GetPersonDetailsUseCaseTest {
             "/bVZRMlpjTAO2pJK6v90buFgVbSW.jpg",
             "/r3U4n9Ti6UrY5m84wzJVTKeBgeC.jpg"
         ),
-        movieCredits = listOf(
+        personCredits = listOf(
             PersonCredit(
                 id = 155,
                 title = "The Dark Knight",
                 posterPath = "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-                voteAverage = 8.5
-            )
-        ),
-        tvCredits = listOf(
+                voteAverage = 8.5,
+                mediaType = null
+            ),
             PersonCredit(
                 id = 217,
                 title = "Inside the Actors Studio",
                 posterPath = "/a6O7gKJQe5HWaMujYvdMYaj9PnO.jpg",
-                voteAverage = 7.5
+                voteAverage = 7.5,
+                mediaType = null
             )
+        ),
+        socialMedia = PersonSocialMediaLinks(
+            facebookLink = "michaelcaine",
+            instagramLink = "michaelcaine_official",
+            youtubeLink = "UCV1n8z2d3a5b6c7d8e9f0g1h"
         ),
         role = "Actor"
     )

@@ -1,23 +1,25 @@
 package com.giraffe.details.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
+import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -43,10 +45,9 @@ fun StaffInfoSection(
             )
         }
 
-        Card(
+        CustomCard(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(Theme.radius.lg),
-            colors = CardDefaults.cardColors(containerColor = Theme.color.background.card)
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
                 staffList.entries.toList().forEachIndexed { index, (key, value) ->
@@ -54,10 +55,11 @@ fun StaffInfoSection(
                     StaffItem(name = name, role = key)
 
                     if (index != staffList.entries.size - 1) {
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = Theme.color.stroke.primary,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Theme.color.stroke.primary)
                         )
                     }
                 }
@@ -73,13 +75,14 @@ fun StaffItem(name: String, role: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 18.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = role,
             modifier = Modifier.weight(1f),
             style = Theme.textStyle.body.md.regular,
-            color = Theme.color.shade.secondary
+            color = Theme.color.shade.secondary,
+            textAlign = TextAlign.Start,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
@@ -88,22 +91,25 @@ fun StaffItem(name: String, role: String) {
             color = Theme.color.shade.primary,
             maxLines = 2,
             modifier = Modifier.weight(1f),
-            overflow = TextOverflow.Ellipsis
+            textAlign = TextAlign.End,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
+
 data class StaffMember(
     val name: String,
     val role: String
 )
+
 @Preview(
     name = "StaffInfoSection Preview - Dark",
     showBackground = false,
-    apiLevel = 34
+    // apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionDark() {
-      CineVerseTheme(isDarkTheme = true) {
+    CineVerseTheme(isDarkTheme = true) {
         StaffInfoSection(
             title = "Behind the Scenes",
             staffList = groupedStaff
@@ -114,7 +120,6 @@ fun PreviewStaffInfoSectionDark() {
 @Preview(
     name = "StaffInfoSection Preview - Light",
     showBackground = true,
-    apiLevel = 34
 )
 @Composable
 fun PreviewStaffInfoSectionLight() {

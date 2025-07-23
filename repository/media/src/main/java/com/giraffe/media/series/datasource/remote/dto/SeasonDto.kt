@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SeasonDto(
     val id: Int,
-    val name: String,
     val overview: String,
     @SerialName("vote_average")
     val voteAverage: Float,

@@ -1,6 +1,6 @@
 package com.giraffe.media.person.datasource.local
 
-import com.giraffe.media.person.model.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 
 
 interface PersonLocalDataSource {

@@ -1,13 +1,15 @@
 package com.giraffe.media.person
 
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
+import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.mapper.toDto
+import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageList
-import com.giraffe.media.person.mapper.toTvCredits
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType
@@ -22,18 +24,18 @@ class PersonRepositoryImpl(
 ) : PersonRepository {
 
     override suspend fun searchByName(personName: String) = SafeCall {
-        localDataSource.searchByName(personName).map { it.toEntity() }.ifEmpty {
-            val people = remoteDataSource.searchByName(personName).map { it.toEntity() }
-            localDataSource.storePeople(people.map { it.toDto() })
+        localDataSource.searchByName(personName).map(PersonCacheDto::toEntity).ifEmpty {
+            val people = remoteDataSource.searchByName(personName).map(PersonDto::toEntity)
+            localDataSource.storePeople(people.map(Person::toCacheDto))
             people
         }
     }
 
     override suspend fun storeRecentPerson(person: Person) =
-        SafeCall { localDataSource.storePerson(person.toDto().copy(isRecent = true)) }
+        SafeCall { localDataSource.storePerson(person.toCacheDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {
-        localDataSource.getRecentPeople().map { it.toEntity() }
+        localDataSource.getRecentPeople().map(PersonCacheDto::toEntity)
     }
 
     override suspend fun clearRecentPeople() = SafeCall {
@@ -63,7 +65,7 @@ class PersonRepositoryImpl(
         val crew = credits.crew.map { it.toEntity(PersonType.CREW) }
         val people = cast + crew
 
-        val dtos = people.map { content.toDto(it) }
+        val dtos = people.map { content.toCacheDto(it) }
 
         localDataSource.storePeople(dtos)
 
@@ -77,16 +79,15 @@ class PersonRepositoryImpl(
             is ContentType.Movie -> localDataSource.getPeopleByMovieId(content.id)
             is ContentType.Series -> localDataSource.getPeopleBySeriesId(content.id)
         }
-        return cachedDtos.map { it.toEntity() }
+        return cachedDtos.map(PersonCacheDto::toEntity)
     }
-
 
     override suspend fun getPersonDetails(personId: Int) = SafeCall {
         withContext(Dispatchers.IO) {
             val details = async { remoteDataSource.getPersonDetails(personId) }
             val images = async { remoteDataSource.getPersonImages(personId) }
-            val movies = async { remoteDataSource.getPersonMovieCredits(personId) }
-            val shows = async { remoteDataSource.getPersonTvCredits(personId) }
+            val media = async { remoteDataSource.getPersonMediaCredits(personId) }
+            val socialMedia = async { remoteDataSource.getPersonSocialMedia(personId) }
             Person(
                 id = personId,
                 name = details.await().name,
@@ -96,9 +97,13 @@ class PersonRepositoryImpl(
                 placeOfBirth = details.await().placeOfBirth,
                 biography = details.await().biography,
                 images = images.await().toImageList(),
-                movieCredits = movies.await().toEntity(),
-                tvCredits = shows.await().toTvCredits()
+                personCredits = media.await().map(PersonCreditDto::toEntity),
+                socialMedia = socialMedia.await().toEntity()
             )
         }
+    }
+
+    override suspend fun getPeopleMediaCredits(personId: Int) = SafeCall {
+        remoteDataSource.getPersonMediaCredits(personId).map(PersonCreditDto::toEntity)
     }
 }
