@@ -39,6 +39,8 @@ import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
 import com.giraffe.user.usecase.LoginUseCase
+import com.giraffe.user.usecase.JoinAsGuestUseCase
+
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -93,4 +95,5 @@ val useCaseModule = module {
 
     //Auth useCase
     singleOf(::LoginUseCase)
+    singleOf(::JoinAsGuestUseCase)
 }

@@ -3,10 +3,12 @@ package com.giraffe.authentication.screen
 import com.giraffe.authentication.base.BaseViewModel
 import com.giraffe.user.exception.InvalidEmailException
 import com.giraffe.user.exception.InvalidPasswordException
+import com.giraffe.user.usecase.JoinAsGuestUseCase
 import com.giraffe.user.usecase.LoginUseCase
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val joinAsGuestUseCase: JoinAsGuestUseCase,
 ) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
 
@@ -29,12 +31,12 @@ class LoginViewModel(
     }
 
     override fun onLoginClick() {
-        updateState { it.copy(isLoading = true) }
+        updateState { it.copy(isLoadingLogin = true) }
 
         safeExecute(
             onError = ::onLoginError,
             onSuccess = {
-                updateState { it.copy(isLoading = false) }
+                updateState { it.copy(isLoadingLogin = false) }
                 sendEffect(LoginEffect.NavigateToHomeScreen)
             }) {
             loginUseCase(email = state.value.email, password = state.value.password)
@@ -56,7 +58,7 @@ class LoginViewModel(
             )
         }
 
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoadingLogin = false) }
         sendEffect(LoginEffect.Error(throwable))
     }
 
@@ -69,9 +71,18 @@ class LoginViewModel(
     }
 
     override fun onJoinAsGuestClick() {
-        sendEffect(
-            LoginEffect.NavigateToHomeScreen
-        )
+        safeExecute(
+            onError = ::onJoinAsGuestError,
+            onSuccess = {
+                sendEffect(LoginEffect.NavigateToHomeScreen)
+            }
+        ) {
+             joinAsGuestUseCase()
+        }
+    }
+
+    private fun onJoinAsGuestError(throwable: Throwable) {
+        sendEffect(LoginEffect.Error(throwable))
     }
 
     override fun onCreateNewAccountClick() {

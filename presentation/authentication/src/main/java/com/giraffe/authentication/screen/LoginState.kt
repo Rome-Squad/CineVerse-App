@@ -10,6 +10,6 @@ data class LoginState(
     val passwordErrorMessage: Int? = null,
 
     val isPasswordVisible: Boolean = false,
-    val isLoading: Boolean = false,
+    val isLoadingLogin: Boolean = false,
     val isVisibleCreateNewAccountBottomSheet: Boolean = false,
 )

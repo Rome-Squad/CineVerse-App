@@ -23,6 +23,8 @@ class InvalidPasswordException :
 class InvalidEmailException :
     AuthException()
 
+class GuestAuthenticationException(message: String) : AuthException()
+
 
 class UnknownException() :
     AuthException()
