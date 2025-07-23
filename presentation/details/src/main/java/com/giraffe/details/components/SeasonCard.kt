@@ -42,7 +42,7 @@ fun SeasonCard(
     overview: String,
     rating: Float,
     episodes: Int,
-    year: Int,
+    year: Int?,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     posterWidth: Dp = 48.dp,
@@ -172,11 +172,13 @@ fun SeasonCard(
                     tint = Theme.color.shade.secondary,
                     modifier = Modifier.size(16.dp)
                 )
-                Text(
-                    text = "$year",
-                    color = Theme.color.shade.secondary,
-                    style = Theme.textStyle.label.md.regular,
-                )
+                AnimatedVisibility(year != null) {
+                    Text(
+                        text = "$year",
+                        color = Theme.color.shade.secondary,
+                        style = Theme.textStyle.label.md.regular,
+                    )
+                }
             }
         }
     }

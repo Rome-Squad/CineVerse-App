@@ -88,7 +88,8 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
             contentDescription = "",
             tint = Theme.color.shade.primary,
             modifier = Modifier
-                .size(24.dp)
+                .size(40.dp)
+                .padding(8.dp)
                 .clickable(
                     onClick = onBackButtonClick
                 ).graphicsLayer(rotationZ = rotationAngle)

@@ -1,8 +1,11 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.details.screens.castCredit.CastCreditViewModel
+import com.giraffe.authentication.screen.LoginViewModel
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
+import com.giraffe.details.screens.seasons.SeasonsViewModel
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.explore.screen.discover.DiscoverViewModel
 import com.giraffe.explore.screen.search.SearchViewModel
@@ -22,4 +25,6 @@ val viewModelModule = module {
     //viewModelOf(::RecommendedSeriesViewModel)
     //viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::CastCreditViewModel)
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::RecommendedSeriesViewModel)
 }
