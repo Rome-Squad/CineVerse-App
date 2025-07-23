@@ -84,6 +84,18 @@ class SeriesRepositoryImpl(
         }
     }
 
+    override suspend fun getPopularitySeries(): List<Series> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRecentlyReleasedSeries(): List<Series> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getTopRatedSeries(): List<Series> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {
         remote.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
