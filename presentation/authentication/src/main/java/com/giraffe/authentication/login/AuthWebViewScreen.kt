@@ -11,7 +11,7 @@ import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.rememberWebViewState
 
 @Composable
-fun AuthWebViewScreen(navController: NavController) {
+fun AuthWebViewScreen(onBack: () -> Unit) {
     val signUpUrl = "https://www.themoviedb.org/signup"
     var webViewState = rememberWebViewState(url=signUpUrl)
     WebView(
@@ -21,7 +21,7 @@ fun AuthWebViewScreen(navController: NavController) {
             override fun onPageFinished(view: WebView, url: String?) {
                 super.onPageFinished(view, url)
                 if (url?.contains("themoviedb.org/login") == true) {
-                    navController.popBackStack()
+                    onBack()
                 }
             }
 
@@ -29,7 +29,7 @@ fun AuthWebViewScreen(navController: NavController) {
                 //  URL should be handled by WebView or if we need to navigate manually
                 request?.url?.let {
                     if (it.toString().contains("themoviedb.org/login")) {
-                        navController.popBackStack()
+                        onBack()
                         return true
                     }
                 }
