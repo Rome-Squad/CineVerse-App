@@ -36,7 +36,7 @@ class MoviesRemoteDataSourceImplRetrofit(
     override suspend fun addRating(movieId: Int, sessionId: String, request: RatingRequest) =
         RetrofitRequestBuilder.post { rateMovie(movieId, sessionId, request) }
 
-    override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) = RetrofitRequestBuilder.get { getMovieRating(movieId, guestSessionId) }
+    override suspend fun getUserMovieRating(movieId: Int, sessionId: String) = RetrofitRequestBuilder.get { getMovieRating(movieId, sessionId) }
         .results.firstOrNull { it.id == movieId }?.rating?.toFloat() ?: 0f
 
 }

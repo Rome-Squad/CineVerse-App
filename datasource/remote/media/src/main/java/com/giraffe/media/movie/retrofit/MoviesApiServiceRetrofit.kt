@@ -31,14 +31,14 @@ interface MoviesApiServiceRetrofit {
     @POST("$MOVIE_END_POINT/{$MOVIE_ID}/{$RATING}")
     suspend fun rateMovie(
         @Path(MOVIE_ID) movieId: Int,
-        @Query(GUEST_SESSION_ID) sessionId: String,
+        @Query(SESSION_ID) sessionId: String,
         @Body request: RatingRequest
     ): Response<Unit>
 
     @GET("$MOVIE_END_POINT/{$MOVIE_ID}/{$ACCOUNT_STATES}")
     suspend fun getMovieRating(
         @Path(MOVIE_ID) movieId: Int,
-        @Query(GUEST_SESSION_ID) sessionId: String
+        @Query(SESSION_ID) sessionId: String
     ): Response<RatedMoviesResponse>
 
     companion object {
@@ -55,6 +55,6 @@ interface MoviesApiServiceRetrofit {
         const val ACCOUNT_STATES = "account_states"
         const val ID = "id"
         const val MOVIE_ID = "movie_id"
-        const val GUEST_SESSION_ID = "guest_session_id"
+        const val SESSION_ID = "session_id"
     }
 }

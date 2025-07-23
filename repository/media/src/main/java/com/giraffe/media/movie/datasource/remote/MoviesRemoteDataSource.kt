@@ -25,6 +25,6 @@ interface MoviesRemoteDataSource {
     suspend fun addRating(movieId: Int, sessionId: String, request: RatingRequest)
     suspend fun getUserMovieRating(
         movieId: Int,
-        guestSessionId: String
+        sessionId: String
     ): Float
 }
