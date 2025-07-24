@@ -2,7 +2,7 @@ package com.giraffe.details.screens.castDetails
 
 sealed interface CastDetailsEffect {
     data class OpenUrl(val url: String) : CastDetailsEffect
-    data class NavigateToGallery(val actorName: String, val imageUrls: List<String?>) :
+    data class NavigateToGallery(val actorName: String, val personId: Int) :
         CastDetailsEffect
 
     data class NavigateToCastCredit(val castID: Int, val actorName: String) :

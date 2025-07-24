@@ -7,11 +7,13 @@ import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
+import com.giraffe.media.person.datasource.remote.dto.ProfileDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.mapper.mapToPerson
 import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toEntity
+import com.giraffe.media.person.mapper.toImageUrl
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.utils.ContentType
 import com.giraffe.media.utils.SafeCall
@@ -36,7 +38,7 @@ class PersonRepositoryImpl(
                         localExploreDataSource.insertSearchKeyword(
                             localKeywordData.copy(
                                 actorsPages = localKeywordData.actorsPages + page,
-                                searchedAt =  System.currentTimeMillis()
+                                searchedAt = System.currentTimeMillis()
                             )
                         )
                         localDataSource.storePeople(it.map { person ->
@@ -131,5 +133,9 @@ class PersonRepositoryImpl(
 
     override suspend fun getPeopleMediaCredits(personId: Int) = SafeCall {
         remoteDataSource.getPersonMediaCredits(personId).map(PersonCreditDto::toEntity)
+    }
+
+    override suspend fun getPersonImages(personId: Int): List<String> = SafeCall {
+        remoteDataSource.getPersonImages(personId).profiles.map(ProfileDto::toImageUrl)
     }
 }

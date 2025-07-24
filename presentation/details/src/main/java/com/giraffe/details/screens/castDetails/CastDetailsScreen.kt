@@ -42,10 +42,10 @@ import androidx.core.net.toUri
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
+import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
@@ -55,7 +55,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CastDetailsScreen(
     navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
-    navigateToGallery: (String, List<String?>) -> Unit,
+    navigateToGallery: (String, Int) -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     onBackButtonClick: () -> Unit,
@@ -73,7 +73,7 @@ fun CastDetailsScreen(
                 context.startActivity(intent)
             }
 
-            is CastDetailsEffect.NavigateToGallery -> navigateToGallery(it.actorName, it.imageUrls)
+            is CastDetailsEffect.NavigateToGallery -> navigateToGallery(it.actorName, it.personId)
             is CastDetailsEffect.NavigateToCastCredit -> navigateToCastCredit(
                 it.castID,
                 it.actorName
@@ -116,23 +116,6 @@ fun CastDetailsScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun LoadingView(
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .wrapContentSize()
-    ) {
-        Progress(
-            size = 40.dp,
-            strokeWidth = 4.dp
-        )
     }
 }
 

@@ -35,7 +35,7 @@ class CastDetailsViewModel(
         sendEffect(
             CastDetailsEffect.NavigateToGallery(
                 actorName = state.value.actorName,
-                imageUrls = state.value.actorGalleryImageUrls
+                personId = state.value.actorId
             )
         )
     }

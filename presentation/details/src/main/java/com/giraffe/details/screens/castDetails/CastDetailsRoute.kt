@@ -13,7 +13,7 @@ internal fun NavController.navigateToCastDetails(id: Int) {
 }
 
 internal fun NavGraphBuilder.castDetailsRoute(
-    navigateToGallery: (String, List<String?>) -> Unit,
+    navigateToGallery: (String, Int) -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToCastCredit: (castID: Int, actorName: String) -> Unit,

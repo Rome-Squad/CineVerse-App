@@ -77,7 +77,9 @@ internal fun DetailsNavGraph(
         )
 
 
-        galleryRoute(navController)
+        galleryRoute(
+            onBackClick = { navController.navigateUp() }
+        )
 
 //        reviewRoute(navController)
     }
