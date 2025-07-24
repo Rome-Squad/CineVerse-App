@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,22 +20,23 @@ fun InfoSection(
     descriptionLimits: Int = 100,
     spaceBetween: Int = 8
 ) {
-    if (description.isBlank()) return
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(spaceBetween.dp)
-    ) {
-        Text(
-            text = title,
-            style = Theme.textStyle.title.sm,
-            color = Theme.color.shade.primary
-        )
-        Text(
-            text = description,
-            style = Theme.textStyle.body.sm.medium,
-            maxLines = descriptionLimits,
-            color = Theme.color.shade.secondary,
-        )
+    AnimatedVisibility(description.isNotBlank()) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(spaceBetween.dp)
+        ) {
+            Text(
+                text = title,
+                style = Theme.textStyle.title.sm,
+                color = Theme.color.shade.primary
+            )
+            Text(
+                text = description,
+                style = Theme.textStyle.body.sm.medium,
+                maxLines = descriptionLimits,
+                color = Theme.color.shade.secondary,
+            )
+        }
     }
 }
 

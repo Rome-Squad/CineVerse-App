@@ -1,5 +1,6 @@
 package com.giraffe.details.components.gallery
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,20 +21,22 @@ fun GallerySection(
     imageUrls: List<String?>,
     onShowMoreClick: () -> Unit,
 ) {
-    if (imageUrls.isEmpty()) return
-    val showMoreText = imageUrls.size.takeIf { it > 3 }?.let { stringResource(R.string.show_more) }
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        SectionTitle(
-            title = stringResource(R.string.gallery),
-            clickableText = showMoreText,
-            onClickableText = onShowMoreClick,
-            modifier = Modifier.fillMaxWidth()
-        )
-        GalleryItemLayoutLTR(imageUrls = imageUrls)
+    AnimatedVisibility(imageUrls.isNotEmpty()) {
+        val showMoreText =
+            imageUrls.size.takeIf { it > 3 }?.let { stringResource(R.string.show_more) }
+        Column(
+            modifier = modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            SectionTitle(
+                title = stringResource(R.string.gallery),
+                clickableText = showMoreText,
+                onClickableText = onShowMoreClick,
+                modifier = Modifier.fillMaxWidth()
+            )
+            GalleryItemLayoutLTR(imageUrls = imageUrls)
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,31 +26,30 @@ fun PosterListSection(
     onClickEndText: () -> Unit = {},
     onClickPoster: (movieId: Int) -> Unit = {}
 ) {
-    if (poster.isEmpty()) {
-        return
-    }
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        SectionTitle(
-            modifier = Modifier
-                .padding(horizontal = paddingHorizontal.dp),
-            title = title,
-            clickableText = endText,
-            onClickableText = onClickEndText
-        )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+    AnimatedVisibility(poster.isNotEmpty()) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            items(poster) { movie ->
-                PosterItemVertically(
-                    movie = movie,
-                    modifier = Modifier
-                        .width(136.dp),
-                    onClickPoster = { onClickPoster(movie.id) }
-                )
+            SectionTitle(
+                modifier = Modifier
+                    .padding(horizontal = paddingHorizontal.dp),
+                title = title,
+                clickableText = endText,
+                onClickableText = onClickEndText
+            )
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+            ) {
+                items(poster) { movie ->
+                    PosterItemVertically(
+                        movie = movie,
+                        modifier = Modifier
+                            .width(136.dp),
+                        onClickPoster = { onClickPoster(movie.id) }
+                    )
+                }
             }
         }
     }

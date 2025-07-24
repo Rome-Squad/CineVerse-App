@@ -110,5 +110,6 @@ fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaL
 
 fun ProfileDto.toImageUrl(): String = BASE_IMAGE_URL + filePath
 
-fun String?.prependIfNotBlank(prefix: String): String? =
-    this?.takeIf { it.isNotBlank() }?.let { prefix + it }
+fun String?.prependIfNotBlank(prefix: String): String? = if (!this.isNullOrBlank()) {
+    prefix + this
+} else null
