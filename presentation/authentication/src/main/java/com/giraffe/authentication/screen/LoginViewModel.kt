@@ -1,14 +1,17 @@
 package com.giraffe.authentication.screen
 
+import androidx.lifecycle.SavedStateHandle
 import com.giraffe.authentication.base.BaseViewModel
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
 import com.giraffe.user.usecase.LoginUseCase
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase
-    ) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
+    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
+) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
+
+    private val fromRoute: Boolean = savedStateHandle.get<Boolean>("fromRoute") == true
 
     override fun onUsernameChanged(username: String) {
         updateState {
@@ -26,11 +29,10 @@ class LoginViewModel(
         updateState { it.copy(isLoadingLogin = true) }
 
         safeExecute(
-            onError = ::onLoginError,
-            onSuccess = {
+            onError = ::onLoginError, onSuccess = {
                 updateState { it.copy(isLoadingLogin = false) }
-                sendEffect(LoginEffect.NavigateToHomeScreen)
-            /// TODO how pop back here when go from screen in app to login
+                if (!fromRoute) sendEffect(LoginEffect.NavigateToHomeScreen)
+                else sendEffect(LoginEffect.PopBack)
 
             }) {
             loginUseCase(userInput = state.value.username, password = state.value.password)
@@ -92,18 +94,6 @@ class LoginViewModel(
 
     override fun navigateToHomeScreen() {
         sendEffect(LoginEffect.NavigateToHomeScreen)
-    }
-
-    override fun navigateToMovieDetailsScreen(movieID: Int) {
-        sendEffect(
-            LoginEffect.NavigateToMovieDetails(movieID)
-        )
-    }
-
-    override fun navigateToSeriesDetailsScreen(seriesID: Int) {
-        sendEffect(
-            LoginEffect.NavigateToSeriesDetails(seriesID)
-        )
     }
 
 }

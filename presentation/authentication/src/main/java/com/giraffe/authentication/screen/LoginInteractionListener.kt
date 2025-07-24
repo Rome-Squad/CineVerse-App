@@ -21,8 +21,4 @@ interface LoginInteractionListener {
     fun onGoToWebsiteClick()
 
     fun navigateToHomeScreen()
-
-    fun navigateToMovieDetailsScreen(movieID : Int)
-
-    fun navigateToSeriesDetailsScreen(seriesID : Int)
 }

@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data object LoginRoute
+data class LoginRoute(val fromRoute : Boolean = false)
 
 
-fun NavController.navigateLoginScreen(){
-    navigate(LoginRoute)
+fun NavController.navigateLoginScreen(fromRoute: Boolean = false){
+    navigate(LoginRoute(fromRoute = fromRoute))
 }
 
 fun NavGraphBuilder.loginRoute(
@@ -28,7 +28,12 @@ fun NavGraphBuilder.loginRoute(
             navigateToHomeScreen = {
                 navController.navigateToDiscover()
             },
-            navigateToResetPasswordScreen = { navController.navigateToResetPassword() }
+            navigateToResetPasswordScreen = {
+                navController.navigateToResetPassword()
+            },
+            popBack = {
+                navController.popBackStack()
+            }
         )
     }
 }

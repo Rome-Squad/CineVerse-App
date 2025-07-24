@@ -33,6 +33,7 @@ fun LoginScreen(
     navigateToHomeScreen: () -> Unit = {},
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},
+    popBack: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
     val effectFlow = viewModel.effect
@@ -52,8 +53,11 @@ fun LoginScreen(
                     navigateToResetPasswordScreen()
                 }
 
+                is LoginEffect.PopBack -> {
+                    popBack()
+                }
+
                 is LoginEffect.Error -> {}
-                else -> {}
             }
         }
     }
