@@ -1,5 +1,6 @@
-package com.giraffe.details.components.recomended
+package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -71,11 +72,13 @@ fun PosterHorizontal(
                         animatedVisibilityScope = animatedVisibilityScope
                     )
             ) {
-
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.image),
                     contentDescription = stringResource(R.string.loading_image),
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(64.dp)
+                        .padding(16.dp),
                     tint = Theme.color.brand.secondary
                 )
 
@@ -105,13 +108,15 @@ fun PosterHorizontal(
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
                         )
-                        Text(
-                            text = poster.genres ?: stringResource(R.string.unknown_genre),
-                            style = Theme.textStyle.body.sm.regular,
-                            color = Theme.color.shade.secondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        AnimatedVisibility(!poster.genres.isNullOrBlank()) {
+                            Text(
+                                text = poster.genres.toString(),
+                                style = Theme.textStyle.body.sm.regular,
+                                color = Theme.color.shade.secondary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                     Rating(
                         value = poster.rating,
@@ -122,10 +127,19 @@ fun PosterHorizontal(
                             )
                     )
                 }
-                IconWithText(
-                    icon = painterResource(Theme.icons.dueTone.calendar),
-                    text = poster.date ?: stringResource(R.string.unknown_date)
-                )
+
+                AnimatedVisibility(!poster.time.isNullOrBlank()) {
+                    IconWithText(
+                        icon = painterResource(Theme.icons.dueTone.clock),
+                        text = poster.time.toString()
+                    )
+                }
+                AnimatedVisibility(!poster.date.isNullOrBlank()) {
+                    IconWithText(
+                        icon = painterResource(Theme.icons.dueTone.calendar),
+                        text = poster.date.toString()
+                    )
+                }
             }
         }
     }

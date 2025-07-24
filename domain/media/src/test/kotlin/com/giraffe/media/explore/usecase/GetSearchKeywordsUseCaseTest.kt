@@ -2,7 +2,6 @@ package com.giraffe.media.explore.usecase
 
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.repository.ExploreRepository
-import com.giraffe.media.explore.utils.getCurrentLocalDateTime
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -29,11 +28,11 @@ class GetSearchKeywordsUseCaseTest {
         // Given
         val rawQuery = "  trending now "
         val trimmedQuery = "trending now"
-        val now = getCurrentLocalDateTime()
+        val now = System.currentTimeMillis()
 
         val expected = listOf(
-            SearchKeyword("trending now", isFromSearchHistory = false, lastSearchedTime = now),
-            SearchKeyword("popular", isFromSearchHistory = true, lastSearchedTime = now)
+            SearchKeyword("trending now", isRecent = false, searchedAt = now),
+            SearchKeyword("popular", isRecent = true, searchedAt = now)
         )
 
         coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(expected)

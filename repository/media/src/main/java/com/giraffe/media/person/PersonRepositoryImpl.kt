@@ -1,9 +1,12 @@
 package com.giraffe.media.person
 
+import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.mapper.mapToPerson
@@ -19,10 +22,42 @@ import kotlinx.coroutines.withContext
 class PersonRepositoryImpl(
     private val remoteDataSource: PersonRemoteDataSource,
     private val localDataSource: PersonLocalDataSource,
+    private val localExploreDataSource: LocalExploreDataSource,
 ) : PersonRepository {
 
     override suspend fun searchByName(personName: String, page: Int) = SafeCall {
-        remoteDataSource.searchByName(personName, page).toEntity()
+        withContext(Dispatchers.IO) {
+            val localKeywordData = localExploreDataSource.getSearchKeyword(query = personName)
+            if (localKeywordData != null) {
+                if (page in localKeywordData.actorsPages) {
+                    localDataSource.searchByName(personName, page).map(PersonCacheDto::toEntity)
+                } else {
+                    remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity).also {
+                        localExploreDataSource.insertSearchKeyword(
+                            localKeywordData.copy(
+                                actorsPages = localKeywordData.actorsPages + page,
+                                searchedAt =  System.currentTimeMillis()
+                            )
+                        )
+                        localDataSource.storePeople(it.map { person ->
+                            person.toCacheDto().copy(page = page)
+                        })
+                    }
+                }
+            } else {
+                remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity).also {
+                    localExploreDataSource.insertSearchKeyword(
+                        SearchKeywordCacheDto(
+                            personName,
+                            actorsPages = listOf(page)
+                        )
+                    )
+                    localDataSource.storePeople(it.map { person ->
+                        person.toCacheDto().copy(page = page)
+                    })
+                }
+            }
+        }
     }
 
     override suspend fun storeRecentPerson(person: Person) =

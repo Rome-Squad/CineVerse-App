@@ -1,6 +1,5 @@
 package com.giraffe.media.person.mapper
 
-import com.giraffe.media.entity.PagingData
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.dto.CastDto
 import com.giraffe.media.person.datasource.remote.dto.CrewDto
@@ -9,7 +8,6 @@ import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
 import com.giraffe.media.person.datasource.remote.dto.ProfileDto
-import com.giraffe.media.person.datasource.remote.dto.SearchPersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.entity.PersonSocialMediaLinks
@@ -19,6 +17,7 @@ import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.FACEBOOK_URL
 import com.giraffe.media.utils.INSTAGRAM_URL
 import com.giraffe.media.utils.YOUTUBE_URL
+import com.giraffe.media.utils.toFormattedDate
 
 
 fun mapToPerson(
@@ -71,11 +70,6 @@ fun PersonDto.toEntity() = Person(
     },
 )
 
-fun SearchPersonDto.toEntity() = PagingData(
-    data = people.map(PersonDto::toEntity),
-    totalResults = totalResults
-)
-
 fun CastDto.toEntity(type: PersonType) = Person(
     id = id,
     name = name,
@@ -96,14 +90,16 @@ fun CrewDto.toEntity(type: PersonType) = Person(
     type = type,
 )
 
-fun PersonCreditDto.toEntity(): PersonCredit = PersonCredit(
+fun PersonCreditDto.toEntity() = PersonCredit(
     id = id,
     title = title.orEmpty(),
     posterPath = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
     voteAverage = voteAverage,
-    mediaType = mediaType
+    mediaType = mediaType,
+    genreIds = genreIds,
+    releaseYear = if (releaseDate.isNullOrEmpty()) null else releaseDate.toFormattedDate(),
 )
 
 fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(

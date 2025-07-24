@@ -97,7 +97,6 @@ class SearchResultViewModel(
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                     SearchPeoplePagingSource(
                         query = query,
-                        pageSize = 15,
                         searchPeopleByName = searchPeopleByName
                     )
                 }.flow.cachedIn(viewModelScope)

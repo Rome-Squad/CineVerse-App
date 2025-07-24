@@ -39,7 +39,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -55,6 +55,7 @@ import org.koin.core.parameter.parametersOf
 fun CastDetailsScreen(
     personId: Int?,
     navController: NavController,
+    navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
     modifier: Modifier = Modifier,
     onBackButtonClick: () -> Unit,
     castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
@@ -75,6 +76,11 @@ fun CastDetailsScreen(
             is CastDetailsEffect.NavigateToGallery -> {
                 navController.navigateToGallery(it.actorName, it.imageUrls)
             }
+
+            is CastDetailsEffect.NavigateToCastCredit -> navigateToCastCredit(
+                it.castID,
+                it.actorName
+            )
         }
     }
     if (state.isLoading) {
@@ -162,13 +168,18 @@ fun CastDetailsContent(
                         if (contentHeight > windowHeight + bottomSpacingHeight) 16 else 115
                 }
         ) {
-            MoviesListSection(
+            PosterListSection(
                 modifier = Modifier.padding(top = innerColumnSpacing),
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
-                movies = state.posters,
+                poster = state.posters,
                 onClickPoster = {},
-                onClickEndText = { }
+                onClickEndText = {
+                    interaction.navigateToCastCreditScreen(
+                        state.actorId,
+                        state.actorName
+                    )
+                }
             )
             GallerySection(
                 modifier = Modifier

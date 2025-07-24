@@ -8,7 +8,7 @@ class PersonRemoteDataSourceImplRetrofit(
 ) : PersonRemoteDataSource {
 
     override suspend fun searchByName(personName: String, page: Int) =
-        retrofitRequestBuilder.get { searchByName(name = personName, page = page) }
+        retrofitRequestBuilder.get { searchByName(name = personName, page = page) }.people
 
     override suspend fun getPersonMediaCredits(personId: Int) =
         retrofitRequestBuilder.get { getPersonMediaCredits(personId) }.mediaCredits

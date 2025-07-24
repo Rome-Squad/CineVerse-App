@@ -15,15 +15,17 @@ internal fun NavController.navigateToCastDetails(id: Int) {
 
 internal fun NavGraphBuilder.castDetailsRoute(
     navController: NavController,
+    navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
     onBackButtonClick: () -> Unit,
-    ) {
+) {
     composable<CastDetailsRoute> { backStackEntry ->
         val personId = backStackEntry.toRoute<CastDetailsRoute>().id
 
         CastDetailsScreen(
             navController = navController,
             personId = personId,
-            onBackButtonClick = onBackButtonClick
+            onBackButtonClick = onBackButtonClick,
+            navigateToCastCredit = navigateToCastCredit,
         )
     }
 }

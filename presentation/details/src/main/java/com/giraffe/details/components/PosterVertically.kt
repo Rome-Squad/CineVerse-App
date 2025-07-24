@@ -1,4 +1,4 @@
-package com.giraffe.details.components.recomended
+package com.giraffe.details.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibilityScope
