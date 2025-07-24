@@ -2,30 +2,28 @@ package com.giraffe.details.screens.castDetails
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 
-const val CAST_ROUTE = "castDetails"
-private const val CAST_ID_ARG = "personID"
+@Serializable
+internal data class CastDetailsRoute(val id: Int)
 
-fun NavController.navigateToCastDetails(castID: Int) {
-    navigate("$CAST_ROUTE/$castID")
+internal fun NavController.navigateToCastDetails(id: Int) {
+    navigate(CastDetailsRoute(id))
 }
 
-fun NavGraphBuilder.castDetailsRoute(
-    navController: NavController
-) {
-    composable(
-        route = "$CAST_ROUTE/{$CAST_ID_ARG}",
-        arguments = listOf(
-            navArgument(CAST_ID_ARG) {
-                type = NavType.IntType
-            })) { backStackEntry ->
-        val personId = backStackEntry.arguments?.getInt(CAST_ID_ARG)
+internal fun NavGraphBuilder.castDetailsRoute(
+    navController: NavController,
+    onBackButtonClick: () -> Unit,
+    ) {
+    composable<CastDetailsRoute> { backStackEntry ->
+        val personId = backStackEntry.toRoute<CastDetailsRoute>().id
+
         CastDetailsScreen(
             navController = navController,
-            personId = personId
+            personId = personId,
+            onBackButtonClick = onBackButtonClick
         )
     }
 }

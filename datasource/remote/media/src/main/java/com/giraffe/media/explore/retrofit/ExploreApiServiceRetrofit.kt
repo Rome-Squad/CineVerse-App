@@ -7,9 +7,15 @@ import retrofit2.http.Query
 
 interface ExploreApiServiceRetrofit {
 
-    @GET("search/keyword")
+    @GET(ENDPOINT_SEARCH_KEYWORD)
     suspend fun getSearchKeywords(
-        @Query("query") query: String,
-        @Query("page") page: Int
+        @Query(PARAM_QUERY) query: String,
+        @Query(PARAM_PAGE) page: Int
     ): Response<SearchKeywordResponse>
+
+    companion object {
+        private const val ENDPOINT_SEARCH_KEYWORD = "search/keyword"
+        private const val PARAM_QUERY = "query"
+        private const val PARAM_PAGE = "page"
+    }
 }

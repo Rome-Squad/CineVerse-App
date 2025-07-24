@@ -4,29 +4,42 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
-import com.giraffe.details.DetailsStartDestination
-import com.giraffe.details.screens.castDetails.CAST_ROUTE
-import com.giraffe.details.screens.moviedetails.screen.MOVIES_ROUTE
-import com.giraffe.details.screens.seriesdetails.screen.SERIES_ROUTE
+import com.giraffe.details.screens.castDetails.CastDetailsRoute
+import com.giraffe.details.screens.moviedetails.screen.MovieDetailsRoute
+import com.giraffe.details.screens.seriesdetails.SeriesDetailsRoute
 
 class DetailsApiImp : DetailsApi {
-    @Composable
-    override fun DetailsContainer(
-        startDestination: DetailsStartDestination,
-        backPress: () -> Unit
-    ) {
 
+    @Composable
+    override fun MovieDetailsContainer(movieId: Int, onBackClick: () -> Unit) {
         val navController: NavHostController = rememberNavController()
 
-        val startDestinationRoute = when (startDestination) {
-            is DetailsStartDestination.Movie -> "${MOVIES_ROUTE}/${startDestination.movieId}"
-            is DetailsStartDestination.Series -> "${SERIES_ROUTE}/${startDestination.seriesId}"
-            is DetailsStartDestination.Cast -> "${CAST_ROUTE}/${startDestination.castId}"
-        }
         DetailsNavGraph(
             navController = navController,
-            startDestinationRoute = startDestinationRoute,
-            back = backPress
+            startDestinationRoute = MovieDetailsRoute(movieId),
+            onBackClick = onBackClick
+        )
+    }
+
+    @Composable
+    override fun SeriesDetailsContainer(seriesId: Int, onBackClick: () -> Unit) {
+        val navController: NavHostController = rememberNavController()
+
+        DetailsNavGraph(
+            navController = navController,
+            startDestinationRoute = SeriesDetailsRoute(seriesId),
+            onBackClick = onBackClick
+        )
+    }
+
+    @Composable
+    override fun CastDetailsContainer(castId: Int, onBackClick: () -> Unit) {
+        val navController: NavHostController = rememberNavController()
+
+        DetailsNavGraph(
+            navController = navController,
+            startDestinationRoute = CastDetailsRoute(castId),
+            onBackClick = onBackClick
         )
     }
 }
