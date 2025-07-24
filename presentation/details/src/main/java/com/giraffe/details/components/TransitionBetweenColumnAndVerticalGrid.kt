@@ -20,10 +20,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.details.components.recomended.PosterHorizontal
-import com.giraffe.details.components.recomended.PosterVertically
+import com.giraffe.details.R
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -37,7 +37,7 @@ fun TransitionBetweenColumnAndVerticalGrid(
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             targetState = isListSelected,
-            label = "ViewToggleAnimation",
+            label = stringResource(R.string.viewtoggleanimation),
             transitionSpec = {
                 (fadeIn(animationSpec = tween(220, delayMillis = 90, easing = EaseIn)) +
                         scaleIn(
