@@ -13,7 +13,44 @@ data class HomeScreenUiState(
 
     val topRated: List<HomeUiModel> = emptyList(),
 
-    val upcomingMovies: List<HomeUiModel> = emptyList(),
+    val upcomingMovies: List<HomeUiModel> = listOf(
+        HomeUiModel(
+            id = 1111,
+            title = "Title",
+            posterUrl = "https://image.tmdb.org/t/p/w500/cEQMqB3ahd4mfeUN6VGC0ouVnZZ.jpg",
+            rating = 0f,
+            mediaType = MediaType.MOVIE
+        ),
+        HomeUiModel(
+            id = 2,
+            title = "Title",
+            posterUrl = "https://image.tmdb.org/t/p/w500/cEQMqB3ahd4mfeUN6VGC0ouVnZZ.jpg",
+            rating = 0f,
+            mediaType = MediaType.MOVIE
+        ),
+        HomeUiModel(
+            id = 3,
+            title = "Title",
+            posterUrl = "https://image.tmdb.org/t/p/w500/cEQMqB3ahd4mfeUN6VGC0ouVnZZ.jpg",
+            rating = 0f,
+            mediaType = MediaType.MOVIE
+        ),
+        HomeUiModel(
+            id = 4,
+            title = "Title",
+            posterUrl = "https://image.tmdb.org/t/p/w500/cEQMqB3ahd4mfeUN6VGC0ouVnZZ.jpg",
+            rating = 0f,
+            mediaType = MediaType.MOVIE
+        ),
+        HomeUiModel(
+            id = 5,
+            title = "Title",
+            posterUrl = "https://image.tmdb.org/t/p/w500/cEQMqB3ahd4mfeUN6VGC0ouVnZZ.jpg",
+            rating = 0f,
+            mediaType = MediaType.MOVIE
+        ),
+
+    ),
 
     val recentlyViewed: List<HomeUiModel> = emptyList(),
 

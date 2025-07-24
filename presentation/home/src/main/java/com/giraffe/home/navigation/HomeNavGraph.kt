@@ -22,10 +22,10 @@ fun HomeNavGraph(
         startDestination = HomeRoute
     ) {
         homeRoute(
-            navigateToMoviesScreen = {
+            navigateToMoviesScreen = {sectionType , sectionTitle->
                 navController.navigateToMoviesList(
-                    sectionType =,
-                    sectionTitle =
+                    sectionType =sectionType,
+                    sectionTitle =sectionTitle
                 )
             },
             navigateToMoviesDetailsScreen = { navController.navigateToMovieDetails(it) },

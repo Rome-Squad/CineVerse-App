@@ -106,7 +106,6 @@ class HomeViewModel(
                         popularity = popularMovieUi + popularSeriesUi,
                         recentlyReleased = recentMovieUi + recentSeriesUi,
                         topRated = topRatedUi,
-                        upcomingMovies = upcomingUi,
                         recentlyViewed = recentlyViewed
                     )
                 }

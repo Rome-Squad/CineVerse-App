@@ -95,7 +95,7 @@ fun TransitionLazyColumnToGrid(
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
                             onClick = {
-                                onClickItem(poster.id)
+                                onClickItem(poster.id,MediaType.MOVIE)
                             }
                         )
                     }
@@ -114,7 +114,7 @@ fun TransitionLazyColumnToGrid(
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
                             onClick = {
-                                onClickItem(poster.id)
+                                onClickItem(poster.id,MediaType.MOVIE)
                             }
                         )
                     }
