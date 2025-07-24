@@ -1,6 +1,5 @@
 package com.giraffe.media.person.usecase
 
-import com.giraffe.media.entity.PagingData
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
@@ -14,10 +13,7 @@ class SearchByNameUseCaseTest {
     private lateinit var repository: PersonRepository
     private lateinit var searchPeopleByNameUseCase: SearchPeopleByNameUseCase
 
-    val expectedList = PagingData(
-        List(15) { (Person(it, "Tarek", "Acting")) },
-        15
-    )
+    val expectedList = List(15) { (Person(it, "Tarek", "Acting")) }
 
     @BeforeEach
     fun setup() {
