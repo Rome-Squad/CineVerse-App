@@ -145,7 +145,7 @@ private fun SearchContent(
             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
             endText = stringResource(R.string.clear_all),
             title = stringResource(R.string.you_recent_viewed),
-            poster = state.recentPosters
+            posters = state.recentPosters
         )
     }
 }

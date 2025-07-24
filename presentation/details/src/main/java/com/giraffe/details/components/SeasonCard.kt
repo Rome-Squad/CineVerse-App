@@ -106,6 +106,7 @@ fun SeasonCard(
                             )
                         }
                     }
+
                 }
 
                 Column {
@@ -166,12 +167,15 @@ fun SeasonCard(
                     style = Theme.textStyle.label.md.regular,
                 )
 
-                Icon(
-                    painter = calendarIcon,
-                    contentDescription = stringResource(R.string.year),
-                    tint = Theme.color.shade.secondary,
-                    modifier = Modifier.size(16.dp)
-                )
+
+                AnimatedVisibility(year != null) {
+                    Icon(
+                        painter = calendarIcon,
+                        contentDescription = stringResource(R.string.year),
+                        tint = Theme.color.shade.secondary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
                 AnimatedVisibility(year != null) {
                     Text(
                         text = "$year",

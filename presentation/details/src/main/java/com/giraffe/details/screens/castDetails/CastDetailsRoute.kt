@@ -3,7 +3,6 @@ package com.giraffe.details.screens.castDetails
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,18 +13,19 @@ internal fun NavController.navigateToCastDetails(id: Int) {
 }
 
 internal fun NavGraphBuilder.castDetailsRoute(
-    navController: NavController,
+    navigateToGallery: (String, Int) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
     onBackButtonClick: () -> Unit,
 ) {
-    composable<CastDetailsRoute> { backStackEntry ->
-        val personId = backStackEntry.toRoute<CastDetailsRoute>().id
-
+    composable<CastDetailsRoute> {
         CastDetailsScreen(
-            navController = navController,
-            personId = personId,
             onBackButtonClick = onBackButtonClick,
             navigateToCastCredit = navigateToCastCredit,
+            navigateToGallery = navigateToGallery,
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails,
         )
     }
 }

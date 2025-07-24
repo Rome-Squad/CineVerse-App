@@ -24,6 +24,7 @@ import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
+import com.giraffe.media.person.usecase.GetPersonImagesUseCase
 import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
@@ -89,4 +90,5 @@ val useCaseModule = module {
     singleOf(::GetPeopleBySeriesIdUseCase)
     singleOf(::GetPersonDetailsUseCase)
     singleOf(::GetPeopleMediaCreditsUseCase)
+    singleOf(::GetPersonImagesUseCase)
 }

@@ -2,6 +2,7 @@ package com.giraffe.details.screens.castDetails
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.animateDpAsState
@@ -12,48 +13,54 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
-import com.giraffe.designsystem.composable.Progress
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
+import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
-import com.giraffe.details.screens.gallery.navigateToGallery
 import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CastDetailsScreen(
-    personId: Int?,
-    navController: NavController,
     navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
-    modifier: Modifier = Modifier,
+    navigateToGallery: (String, Int) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     onBackButtonClick: () -> Unit,
-    castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
+    modifier: Modifier = Modifier,
+    castDetailsViewModel: CastDetailsViewModel = koinViewModel()
 ) {
     val state by castDetailsViewModel.state.collectAsState()
     val context = LocalContext.current
@@ -61,49 +68,54 @@ fun CastDetailsScreen(
         events = castDetailsViewModel.effect,
     ) {
         when (it) {
-            is CastDetailsEffect.Error -> {}
             is CastDetailsEffect.OpenUrl -> {
                 val intent = Intent(Intent.ACTION_VIEW, it.url.toUri())
                 context.startActivity(intent)
             }
 
-            is CastDetailsEffect.NavigateToMovies -> {}
-            is CastDetailsEffect.NavigateToGallery -> {
-                navController.navigateToGallery(it.actorName, it.imageUrls)
-            }
-
+            is CastDetailsEffect.NavigateToGallery -> navigateToGallery(it.actorName, it.personId)
             is CastDetailsEffect.NavigateToCastCredit -> navigateToCastCredit(
                 it.castID,
                 it.actorName
             )
+
+            is CastDetailsEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
+            is CastDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
         }
     }
     if (state.isLoading) {
         LoadingView()
     } else {
-        CastDetailsContent(
-            state = state,
-            interaction = castDetailsViewModel,
-            onBackArrowClick = onBackButtonClick,
-            modifier = modifier,
-        )
-    }
-}
-
-@Composable
-fun LoadingView(
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .wrapContentSize()
-    ) {
-        Progress(
-            size = 40.dp,
-            strokeWidth = 4.dp
-        )
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Theme.color.background.screen)
+                .wrapContentSize()
+        ) {
+            CastDetailsContent(
+                state = state,
+                interaction = castDetailsViewModel,
+                onBackArrowClick = onBackButtonClick,
+                modifier = modifier,
+            )
+            AnimatedVisibility(
+                visible = !state.errorMessage.isNullOrBlank(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .background(Theme.color.shade.primary)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .align(Alignment.BottomCenter)
+            ) {
+                Text(
+                    text = state.errorMessage
+                        ?: stringResource(R.string.unknown_error),
+                    color = Theme.color.additional.primary.red,
+                    textAlign = TextAlign.Center,
+                    style = Theme.textStyle.label.md.regular
+                )
+            }
+        }
     }
 }
 
@@ -115,51 +127,65 @@ fun CastDetailsContent(
     onBackArrowClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollState = rememberLazyListState()
+    val padding16 = 16.dp
+    val scrollState = rememberScrollState()
+    val windowHeight = LocalWindowInfo.current.containerSize.height
+    var bottomSpacingHeight by remember { mutableIntStateOf(90) }
     val isScrolled by remember {
         derivedStateOf {
-            scrollState.firstVisibleItemIndex > 0 || scrollState.firstVisibleItemScrollOffset > 5
+            scrollState.value > 0
         }
     }
-    val padding16 = 16.dp
-    LazyColumn(
-        state = scrollState,
-        contentPadding = PaddingValues(bottom = padding16),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+    val innerColumnSpacing = 18.dp
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .systemBarsPadding()
     ) {
-        stickyHeader {
-            Box {
-                MainDetailsAnimatedContent(
-                    isScrolled = isScrolled,
-                    actorImageUrl = state.actorImageUrl,
-                    actorName = state.actorName,
-                    actorBirthday = state.actorBirth,
-                    actorPlaceOfBirth = state.actorPlace,
-                    onYoutubeClick = interaction::onActorYoutubeLinkClicked,
-                    onFacebookClick = interaction::onActorFacebookLinkClicked,
-                    onInstagramClick = interaction::onActorInstagramLinkClicked,
-                    hasYoutube = state.actorYouTubeLink.isNotBlank(),
-                    hasFacebook = state.actorFacebookLink.isNotBlank(),
-                    hasInstagram = state.actorInstagramLink.isNotBlank()
-                )
-                AppBar(
-                    showBackButton = true,
-                    hasBackground = false,
-                    onBackButtonClick = onBackArrowClick,
-                    modifier = Modifier.padding(horizontal = padding16)
-                )
-            }
+        Box {
+            MainDetailsAnimatedContent(
+                isScrolled = isScrolled,
+                actorImageUrl = state.actorImageUrl,
+                actorName = state.actorName,
+                actorBirthday = state.actorBirth,
+                actorPlaceOfBirth = state.actorPlace,
+                onYoutubeClick = interaction::onActorYoutubeLinkClicked,
+                onFacebookClick = interaction::onActorFacebookLinkClicked,
+                onInstagramClick = interaction::onActorInstagramLinkClicked,
+                hasYoutube = state.actorYouTubeLink.isNotBlank(),
+                hasFacebook = state.actorFacebookLink.isNotBlank(),
+                hasInstagram = state.actorInstagramLink.isNotBlank()
+            )
+            AppBar(
+                showBackButton = true,
+                hasBackground = false,
+                onBackButtonClick = onBackArrowClick,
+                modifier = Modifier.padding(horizontal = padding16)
+            )
         }
-        item {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(innerColumnSpacing),
+            modifier = Modifier
+                .verticalScroll(state = scrollState)
+                .onGloballyPositioned { coordinates ->
+                    val contentHeight = coordinates.size.height
+                    bottomSpacingHeight =
+                        if (contentHeight > windowHeight + bottomSpacingHeight) 16 else 115
+                }
+        ) {
             PosterListSection(
+                modifier = Modifier.padding(top = innerColumnSpacing),
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
-                poster = state.posters,
-                onClickPoster = {},
+                posters = state.posters,
+                onClickPoster = {
+                    interaction.onPosterClick(
+                        mediaId = it.id,
+                        mediaType = it.mediaTypeOfPoster.toString()
+                    )
+                },
                 onClickEndText = {
                     interaction.navigateToCastCreditScreen(
                         state.actorId,
@@ -167,8 +193,6 @@ fun CastDetailsContent(
                     )
                 }
             )
-        }
-        item {
             GallerySection(
                 modifier = Modifier
                     .height(314.dp)
@@ -177,16 +201,15 @@ fun CastDetailsContent(
                 imageUrls = state.actorGalleryImageUrls,
                 onShowMoreClick = interaction::navigateToActorGalleryScreen
             )
-        }
-        item {
             InfoSection(
-                modifier = Modifier.padding(horizontal = padding16),
+                modifier = Modifier
+                    .padding(horizontal = padding16)
+                    .padding(bottom = bottomSpacingHeight.dp),
                 title = stringResource(R.string.biography),
                 description = state.biographyInfo
             )
         }
     }
-
 }
 
 @Composable

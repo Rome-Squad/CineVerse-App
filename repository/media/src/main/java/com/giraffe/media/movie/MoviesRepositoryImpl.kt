@@ -117,16 +117,15 @@ class MoviesRepositoryImpl(
         remote.getUserMovieRating(movieId, sessionId)
     }
 
-    override suspend fun getPopularityMovies(): List<Movie> {
-        TODO("Not yet implemented")
+    override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall{
+        remote.getPopularityMovies(page).map ( MovieDto::toEntity)
+    }
+    override suspend fun getRecentlyReleasedMovies(page: Int): List<Movie>  = SafeCall{
+        remote.getRecentlyReleasedMovies(page).map ( MovieDto::toEntity)
     }
 
-    override suspend fun getRecentlyReleasedMovies(): List<Movie> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getUpcomingMovies(): List<Movie> {
-        TODO("Not yet implemented")
+    override suspend fun getUpcomingMovies(page: Int): List<Movie> = SafeCall{
+        remote.getUpcomingMovies(page).map ( MovieDto::toEntity)
     }
 
     private suspend fun getSessionId() = SafeCall {

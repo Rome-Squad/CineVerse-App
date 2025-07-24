@@ -1,24 +1,22 @@
 package com.giraffe.details.screens.castDetails
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.media.exception.NotFoundException
+import com.giraffe.details.screens.castCredit.MediaType
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 
 class CastDetailsViewModel(
-    personId: Int?,
+    savedStateHandle: SavedStateHandle,
     val getPersonDetailsUseCase: GetPersonDetailsUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
     CastDetailsInteractionListener {
+    private val personId: Int = savedStateHandle.toRoute<CastDetailsRoute>().id
 
     init {
-        if (personId == null) {
-            updateState { it.copy(isLoading = false) }
-            sendEffect(CastDetailsEffect.Error(NotFoundException()))
-        } else {
-            getPersonDetails(personId)
-        }
+        getPersonDetails(personId)
     }
 
     override fun onActorYoutubeLinkClicked() {
@@ -33,19 +31,11 @@ class CastDetailsViewModel(
         sendEffect(CastDetailsEffect.OpenUrl(state.value.actorInstagramLink))
     }
 
-    override fun onMovieClicked(movieId: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun navigateToMoviesListScreen() {
-        sendEffect(CastDetailsEffect.NavigateToMovies)
-    }
-
     override fun navigateToActorGalleryScreen() {
         sendEffect(
             CastDetailsEffect.NavigateToGallery(
                 actorName = state.value.actorName,
-                imageUrls = state.value.actorGalleryImageUrls
+                personId = state.value.actorId
             )
         )
     }
@@ -57,6 +47,13 @@ class CastDetailsViewModel(
                 actorName = actorName
             )
         )
+    }
+
+    override fun onPosterClick(mediaId: Int, mediaType: String) {
+        when (mediaType) {
+            MediaType.MOVIE.value -> sendEffect(CastDetailsEffect.NavigateToMovieDetails(mediaId))
+            MediaType.TV.value -> sendEffect(CastDetailsEffect.NavigateToSeriesDetails(mediaId))
+        }
     }
 
     private fun getPersonDetails(personId: Int) {
@@ -89,6 +86,7 @@ class CastDetailsViewModel(
                         name = personCredit.title,
                         imageUri = personCredit.posterPath.orEmpty(),
                         rating = personCredit.voteAverage.toFloat(),
+                        mediaTypeOfPoster = personCredit.mediaType
                     )
                 }
             )
@@ -96,8 +94,12 @@ class CastDetailsViewModel(
     }
 
     private fun getPersonDetailsError(exception: Throwable) {
-        updateState { it.copy(isLoading = false) }
-        sendEffect(CastDetailsEffect.Error(exception))
+        updateState {
+            it.copy(
+                isLoading = false,
+                errorMessage = exception.message
+            )
+        }
     }
 
 }

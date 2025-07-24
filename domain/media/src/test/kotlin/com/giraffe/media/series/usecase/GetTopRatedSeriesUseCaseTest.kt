@@ -47,10 +47,10 @@ class GetTopRatedSeriesUseCaseTest {
             )
         )
 
-        coEvery { repository.getTopRatedSeries() } returns expectedSeries
+        coEvery { repository.getTopRatedSeries(1) } returns expectedSeries
 
         // When
-        val actualSeries = useCase()
+        val actualSeries = useCase(1)
 
         // Then
         assertThat(actualSeries).isEqualTo(expectedSeries)

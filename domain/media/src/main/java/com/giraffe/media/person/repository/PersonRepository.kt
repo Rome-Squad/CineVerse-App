@@ -12,4 +12,5 @@ interface PersonRepository {
     suspend fun getPeopleByShowId(seriesId: Int): List<Person>
     suspend fun getPersonDetails(personId: Int): Person
     suspend fun getPeopleMediaCredits(personId: Int): List<PersonCredit>
+    suspend fun getPersonImages(personId: Int): List<String>
 }

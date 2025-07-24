@@ -4,9 +4,10 @@ import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.dto.CastDto
 import com.giraffe.media.person.datasource.remote.dto.CrewDto
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
+import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
-import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
+import com.giraffe.media.person.datasource.remote.dto.ProfileDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.entity.PersonSocialMediaLinks
@@ -17,8 +18,28 @@ import com.giraffe.media.utils.FACEBOOK_URL
 import com.giraffe.media.utils.INSTAGRAM_URL
 import com.giraffe.media.utils.YOUTUBE_URL
 import com.giraffe.media.utils.toFormattedDate
-import kotlinx.datetime.LocalDate
 
+
+fun mapToPerson(
+    personId: Int,
+    details: PersonDetailsDto,
+    images: List<ProfileDto>,
+    media: List<PersonCreditDto>,
+    socialMedia: PersonSocialMediaDto
+): Person = Person(
+    id = personId,
+    name = details.name,
+    imageUrl = details.profilePath?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    },
+    role = details.knownForDepartment,
+    birthday = details.birthday,
+    placeOfBirth = details.placeOfBirth,
+    biography = details.biography,
+    images = images.map(ProfileDto::toImageUrl),
+    personCredits = media.map(PersonCreditDto::toEntity),
+    socialMedia = socialMedia.toEntity()
+)
 
 fun PersonCacheDto.toEntity(type: PersonType = PersonType.CAST) = Person(
     id = id,
@@ -87,8 +108,8 @@ fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaL
     youtubeLink = youtubeId.prependIfNotBlank(YOUTUBE_URL + AT_SYMBOLS_URL),
 )
 
-fun PersonProfileImageDto.toImageList(): List<String> =
-    profiles.map { BASE_IMAGE_URL + it.filePath }
+fun ProfileDto.toImageUrl(): String = BASE_IMAGE_URL + filePath
 
-fun String?.prependIfNotBlank(prefix: String): String? =
-    this?.takeIf { it.isNotBlank() }?.let { prefix + it }
+fun String?.prependIfNotBlank(prefix: String): String? = if (!this.isNullOrBlank()) {
+    prefix + this
+} else null

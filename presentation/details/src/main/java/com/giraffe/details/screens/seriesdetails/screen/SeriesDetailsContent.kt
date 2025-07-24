@@ -128,14 +128,16 @@ fun SeriesDetailsContent(
                 PosterListSection(
                     title = stringResource(R.string.you_might_also_like),
                     endText = stringResource(R.string.show_more),
-                    poster = state.recommendedSeries,
+                    posters = state.recommendedSeries,
                     onClickEndText = {
                         interaction.navigateToRecommendedSeriesScreen(
                             seriesId = state.seriesDetails.id,
                             title = state.seriesDetails.name
                         )
                     },
-                    onClickPoster = interaction::navigateToSeriesDetails
+                    onClickPoster = {
+                        interaction.navigateToSeriesDetails(it.id)
+                    }
                 )
             }
 
