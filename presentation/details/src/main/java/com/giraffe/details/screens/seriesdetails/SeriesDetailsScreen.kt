@@ -54,8 +54,8 @@ fun SeriesDetailsScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    onBackButtonClick: () -> Unit,
     navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
-    onBackButtonClick: () -> Unit = {},
     viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
 ) {
     val state = viewModel.state.collectAsState().value
@@ -65,9 +65,7 @@ fun SeriesDetailsScreen(
     ) {
         when (it) {
             is SeriesDetailsEffect.Error -> {}
-            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
-                castID = it.personId
-            )
+            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(it.personId)
 
             is SeriesDetailsEffect.NavigateToSeasons -> {
                 /*navController.navigateToSeasons(

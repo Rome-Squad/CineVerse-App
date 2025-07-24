@@ -18,4 +18,7 @@ interface SeriesRepository {
     suspend fun getSeasonOfSeries(seriesId: Int): List<Season>
     suspend fun getSeriesByGenre(genreId: Int): List<Series>
     suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre>
+    suspend fun getPopularitySeries(): List<Series>
+    suspend fun getRecentlyReleasedSeries(): List<Series>
+    suspend fun getTopRatedSeries(): List<Series>
 }

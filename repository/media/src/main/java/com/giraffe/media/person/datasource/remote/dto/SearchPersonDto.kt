@@ -1,11 +1,10 @@
-package com.giraffe.media.person.response
+package com.giraffe.media.person.datasource.remote.dto
 
-import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchPersonResponse(
+data class SearchPersonDto(
     val page: Int,
     @SerialName("results")
     val people: List<PersonDto>,

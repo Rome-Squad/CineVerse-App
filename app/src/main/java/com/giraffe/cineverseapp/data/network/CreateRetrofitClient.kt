@@ -1,0 +1,22 @@
+package com.giraffe.cineverseapp.data.network
+
+import com.giraffe.cineverseapp.BuildConfig
+import com.giraffe.media.util.AuthInterceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+
+fun createRetrofitClient(accessToken: String): OkHttpClient {
+    val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+    }
+
+    return OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor(accessToken))
+        .addInterceptor(loggingInterceptor)
+        .build()
+}
+
+inline fun <reified T> provideRetrofitService(retrofit: Retrofit): T {
+    return retrofit.create(T::class.java)
+}

@@ -1,5 +1,6 @@
 package com.giraffe.media.person.mapper
 
+import com.giraffe.media.entity.PagingData
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.dto.CastDto
 import com.giraffe.media.person.datasource.remote.dto.CrewDto
@@ -8,6 +9,7 @@ import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
 import com.giraffe.media.person.datasource.remote.dto.ProfileDto
+import com.giraffe.media.person.datasource.remote.dto.SearchPersonDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.entity.PersonSocialMediaLinks
@@ -67,6 +69,11 @@ fun PersonDto.toEntity() = Person(
     imageUrl = profilePath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
+)
+
+fun SearchPersonDto.toEntity() = PagingData(
+    data = people.map(PersonDto::toEntity),
+    totalResults = totalResults
 )
 
 fun CastDto.toEntity(type: PersonType) = Person(

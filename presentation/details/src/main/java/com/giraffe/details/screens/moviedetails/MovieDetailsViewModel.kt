@@ -3,7 +3,7 @@ package com.giraffe.details.screens.moviedetails
 import android.util.Log
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.details.models.MovieUi
+import com.giraffe.details.models.toMovieUi
 import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
@@ -54,7 +54,7 @@ class MovieDetailsViewModel(
 
         updateState {
             it.copy(
-                movie = movie.MovieUi(),
+                movie = movie.toMovieUi(),
                 isLoadingMovieDetails = false
             )
         }
@@ -274,6 +274,10 @@ class MovieDetailsViewModel(
                 personId = personId
             )
         )
+    }
+
+    override fun navigateToMovieRecommendation(movieId: Int, title: String) {
+        sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
     }
 
     override fun onCollectionClick() {
