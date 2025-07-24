@@ -47,18 +47,16 @@ import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CastDetailsScreen(
-    personId: Int?,
     navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
-    modifier: Modifier = Modifier,
     navigateToGallery: (String, List<String?>) -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     onBackButtonClick: () -> Unit,
-    castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
+    modifier: Modifier = Modifier,
+    castDetailsViewModel: CastDetailsViewModel = koinViewModel()
 ) {
     val state by castDetailsViewModel.state.collectAsState()
     val context = LocalContext.current
