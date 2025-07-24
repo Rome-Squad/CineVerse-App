@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.SearchItem
 import com.giraffe.explore.util.VoiceSearchHelper
@@ -37,14 +38,16 @@ import org.koin.androidx.compose.koinViewModel
 fun SearchScreen(
     navigateToSearchResult: (String) -> Unit,
     onBackClick: () -> Unit,
+    onClickPoster: (Poster) -> Unit,
     viewModel: SearchViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     SearchContent(
-        state,
-        viewModel,
-        navigateToSearchResult,
-        onBackClick
+        state = state,
+        interactions = viewModel,
+        navigateToSearchResult = navigateToSearchResult,
+        onBackClick = onBackClick,
+        onClickPoster = onClickPoster
     )
 }
 
@@ -53,7 +56,8 @@ private fun SearchContent(
     state: SearchScreenState,
     interactions: SearchInteractionListener,
     navigateToSearchResult: (String) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onClickPoster: (Poster) -> Unit
 ) {
     val context = LocalContext.current
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -146,7 +150,8 @@ private fun SearchContent(
             endText = stringResource(R.string.clear_all),
             title = stringResource(R.string.you_recent_viewed),
             posters = state.recentPosters,
-            onClickEndText = interactions::clearAllRecentViewedPosters
+            onClickEndText = interactions::clearAllRecentViewedPosters,
+            onClickPoster = onClickPoster
         )
     }
 }
