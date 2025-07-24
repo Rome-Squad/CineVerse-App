@@ -47,10 +47,10 @@ class GetRecentlyReleasedSeriesUseCaseTest {
             )
         )
 
-        coEvery { repository.getRecentlyReleasedSeries() } returns expectedSeries
+        coEvery { repository.getRecentlyReleasedSeries(1) } returns expectedSeries
 
         // When
-        val actualSeries = useCase()
+        val actualSeries = useCase(1)
 
         // Then
         assertThat(actualSeries).isEqualTo(expectedSeries)
