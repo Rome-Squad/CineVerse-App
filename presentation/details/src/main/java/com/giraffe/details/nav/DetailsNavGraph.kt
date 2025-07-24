@@ -8,6 +8,7 @@ import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
 import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.gallery.galleryRoute
+import com.giraffe.details.screens.gallery.navigateToGallery
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
@@ -60,9 +61,11 @@ internal fun DetailsNavGraph(
         )
 
         castDetailsRoute(
-            navController = navController,
             onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
-            navigateToCastCredit = navController::navigateToCastCredit
+            navigateToCastCredit = navController::navigateToCastCredit,
+            navigateToGallery = navController::navigateToGallery,
+            navigateToMovieDetails = navController::navigateToMovieDetails,
+            navigateToSeriesDetails = navController::navigateToSeriesDetails
         )
         recommendedMoviesRoute(
             navigateToMovieDetails = { MovieId ->

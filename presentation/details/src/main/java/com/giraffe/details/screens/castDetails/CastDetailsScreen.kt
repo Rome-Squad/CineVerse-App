@@ -36,7 +36,6 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
@@ -46,7 +45,6 @@ import com.giraffe.details.R
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
-import com.giraffe.details.screens.gallery.navigateToGallery
 import com.giraffe.details.utils.EventListener
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -54,9 +52,11 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun CastDetailsScreen(
     personId: Int?,
-    navController: NavController,
     navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
     modifier: Modifier = Modifier,
+    navigateToGallery: (String, List<String?>) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     onBackButtonClick: () -> Unit,
     castDetailsViewModel: CastDetailsViewModel = koinViewModel(parameters = { parametersOf(personId) })
 ) {
@@ -72,15 +72,14 @@ fun CastDetailsScreen(
                 context.startActivity(intent)
             }
 
-            is CastDetailsEffect.NavigateToMovies -> {}
-            is CastDetailsEffect.NavigateToGallery -> {
-                navController.navigateToGallery(it.actorName, it.imageUrls)
-            }
-
+            is CastDetailsEffect.NavigateToGallery -> navigateToGallery(it.actorName, it.imageUrls)
             is CastDetailsEffect.NavigateToCastCredit -> navigateToCastCredit(
                 it.castID,
                 it.actorName
             )
+
+            is CastDetailsEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
+            is CastDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
         }
     }
     if (state.isLoading) {
@@ -172,8 +171,13 @@ fun CastDetailsContent(
                 modifier = Modifier.padding(top = innerColumnSpacing),
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
-                poster = state.posters,
-                onClickPoster = {},
+                posters = state.posters,
+                onClickPoster = {
+                    interaction.onPosterClick(
+                        mediaId = it.id,
+                        mediaType = it.mediaTypeOfPoster.toString()
+                    )
+                },
                 onClickEndText = {
                     interaction.navigateToCastCreditScreen(
                         state.actorId,

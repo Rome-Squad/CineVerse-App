@@ -14,7 +14,9 @@ internal fun NavController.navigateToCastDetails(id: Int) {
 }
 
 internal fun NavGraphBuilder.castDetailsRoute(
-    navController: NavController,
+    navigateToGallery: (String, List<String?>) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     navigateToCastCredit: (castID: Int, actorName: String) -> Unit,
     onBackButtonClick: () -> Unit,
 ) {
@@ -22,10 +24,12 @@ internal fun NavGraphBuilder.castDetailsRoute(
         val personId = backStackEntry.toRoute<CastDetailsRoute>().id
 
         CastDetailsScreen(
-            navController = navController,
             personId = personId,
             onBackButtonClick = onBackButtonClick,
             navigateToCastCredit = navigateToCastCredit,
+            navigateToGallery = navigateToGallery,
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails,
         )
     }
 }

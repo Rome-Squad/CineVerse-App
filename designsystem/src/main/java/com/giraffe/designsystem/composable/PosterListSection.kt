@@ -19,14 +19,14 @@ import com.giraffe.designsystem.uimodel.Poster
 @Composable
 fun PosterListSection(
     title: String,
-    poster: List<Poster>,
+    posters: List<Poster>,
     modifier: Modifier = Modifier,
     endText: String? = null,
     paddingHorizontal: Int = 16,
     onClickEndText: () -> Unit = {},
-    onClickPoster: (movieId: Int) -> Unit = {}
+    onClickPoster: (poster: Poster) -> Unit = {}
 ) {
-    AnimatedVisibility(poster.isNotEmpty()) {
+    AnimatedVisibility(posters.isNotEmpty()) {
         Column(
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -42,12 +42,12 @@ fun PosterListSection(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
             ) {
-                items(poster) { movie ->
+                items(posters) { poster ->
                     PosterItemVertically(
-                        movie = movie,
+                        poster = poster,
                         modifier = Modifier
                             .width(136.dp),
-                        onClickPoster = { onClickPoster(movie.id) }
+                        onClickPoster = { onClickPoster(poster) }
                     )
                 }
             }
@@ -66,7 +66,7 @@ private fun Preview() {
                 modifier = Modifier.fillMaxWidth(),
                 title = "Popular Movies",
                 endText = "Show More",
-                poster = listOf(
+                posters = listOf(
                     Poster(
                         id = 1,
                         name = "The FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe Flash",
@@ -99,7 +99,7 @@ private fun Preview() {
             PosterListSection(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Popular Movies",
-                poster = listOf(
+                posters = listOf(
                     Poster(
                         id = 1,
                         name = "The Flash",
