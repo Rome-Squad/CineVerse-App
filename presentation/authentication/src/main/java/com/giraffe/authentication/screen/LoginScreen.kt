@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,9 +29,25 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = koinViewModel()
+    viewModel: LoginViewModel = koinViewModel(),
+    navigateToHomeScreen: () -> Unit = {},
+    navigateToWebViewScreen: () -> Unit = {},
 ){
     val state by viewModel.state.collectAsState()
+    val effectFlow = viewModel.effect
+
+    LaunchedEffect(Unit) {
+        effectFlow.collect { effect ->
+            when (effect) {
+                is LoginEffect.NavigateToWebViewScreen -> {
+                    navigateToWebViewScreen()
+                }
+                else -> {}
+            }
+        }
+    }
+
+
     LoginContent(
         modifier = modifier,
         state = state,

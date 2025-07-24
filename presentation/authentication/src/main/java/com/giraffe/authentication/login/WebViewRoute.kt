@@ -3,6 +3,7 @@ package com.giraffe.authentication.login
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.authentication.screen.navigateLoginScreen
 import kotlinx.serialization.Serializable
 
 
@@ -18,6 +19,6 @@ fun NavGraphBuilder.webViewRoute(
     navController: NavController
 ){
     composable<WebViewRoute>{
-        AuthWebViewScreen(onBack = {navController.navigateUp()})
+        AuthWebViewScreen(onBack = {navController.navigateLoginScreen()})
     }
 }

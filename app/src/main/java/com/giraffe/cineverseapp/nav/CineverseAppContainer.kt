@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.details.DetailsApi
 import com.giraffe.details.DetailsStartDestination
 import com.giraffe.explore.ExploreApi
@@ -12,15 +13,16 @@ import com.giraffe.explore.ExploreApi
 @Composable
 fun CineVerseAppContainer(
     exploreApi: ExploreApi,
-    detailsApi: DetailsApi
+    detailsApi: DetailsApi,
+    authenticationApi: AuthenticationApi
 ) {
 
-    val navigator = remember { AppNavigator<AppScreen>(AppScreen.Explore) }
+    val navigator = remember { AppNavigator<AppScreen>(AppScreen.Authentication) }
 
     CompositionLocalProvider(LocalAppNavigator provides navigator) {
         val currentScreen = navigator.currentScreen
 
-        BackHandler(enabled = currentScreen !is AppScreen.Explore) {
+        BackHandler(enabled = currentScreen !is AppScreen.Authentication) {
             navigator.navigateBack()
         }
 
@@ -58,6 +60,12 @@ fun CineVerseAppContainer(
                         navigator.navigateBack()
                     }
                 )
+            }
+
+            is AppScreen.Authentication -> {
+                authenticationApi.LoginContainer {
+                     navigator.navigateBack()
+                }
             }
         }
     }
