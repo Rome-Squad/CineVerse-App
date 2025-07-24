@@ -21,7 +21,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 fun SeriesCacheDto.toEntity(
-    seasons: List<Season>,
+    seasons: List<Season> = emptyList(),
 ) = Series(
     id = id,
     name = name,
@@ -32,6 +32,17 @@ fun SeriesCacheDto.toEntity(
     releaseYear = releaseYear,
     seasons = seasons
 )
+
+fun Series.toCacheDto() = SeriesCacheDto(
+    id = id,
+    name = name,
+    overview = overview,
+    rate = rating,
+    posterUrl = posterUrl,
+    genresID = genreIDs,
+    releaseYear = releaseYear,
+)
+
 
 fun SeasonCacheDto.toEntity() = Season(
     id = id,
@@ -54,16 +65,6 @@ fun Genre.toCacheDto() = SeriesGenreCacheDto(
     id = id,
     name = title,
     count = rank
-)
-
-fun SeriesDto.toCacheDto() = SeriesCacheDto(
-    id = id,
-    name = name,
-    overview = overview,
-    rate = voteAverage.toFloat(),
-    posterUrl = posterPath.orEmpty(),
-    genresID = genreIds,
-    releaseYear = firstAirDate,
 )
 
 fun SeriesDto.toEntity() = Series(

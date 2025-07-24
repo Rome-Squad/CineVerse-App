@@ -26,8 +26,8 @@ interface SeriesDao {
     @Query("DELETE FROM $SERIES_TABLE WHERE isRecent = 0")
     suspend fun clearAllSeries()
 
-    @Query("SELECT * FROM $SERIES_TABLE WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%'")
-    suspend fun getSeriesByKeyword(keyword: String): List<SeriesCacheDto>
+    @Query("SELECT * FROM $SERIES_TABLE WHERE LOWER(name) LIKE '%' || LOWER(:keyword) || '%' AND page = :page")
+    suspend fun getSeriesByKeyword(keyword: String, page: Int): List<SeriesCacheDto>
 
     @Query(
         """

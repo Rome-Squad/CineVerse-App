@@ -4,7 +4,6 @@ import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import  com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
-import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 
 interface MoviesRemoteDataSource {
 
@@ -12,7 +11,7 @@ interface MoviesRemoteDataSource {
         movieId: Int
     ): MovieDto
 
-    suspend fun getMoviesByName(movieName: String): List<MovieDto>
+    suspend fun getMoviesByName(movieName: String, page: Int): List<MovieDto>
 
     suspend fun getMovieGenres(): List<MovieGenreDto>
 
