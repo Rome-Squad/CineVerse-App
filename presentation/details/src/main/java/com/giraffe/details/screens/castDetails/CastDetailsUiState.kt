@@ -14,5 +14,6 @@ data class CastDetailsUiState(
     val biographyInfo: String = "",
     val actorGalleryImageUrls: List<String?> = emptyList(),
     val posters: List<Poster> = emptyList(),
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
+    val errorMessage: String? = null,
 )

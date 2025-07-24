@@ -184,12 +184,12 @@ private fun MovieDetailsContent(
             PosterListSection(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
-                poster = state.recommendedMovies,
+                posters = state.recommendedMovies,
                 onClickEndText = {
                    interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                 },
                 onClickPoster = {
-                    navController.navigateToMovieDetails(it)
+                    navController.navigateToMovieDetails(it.id)
                 }
             )
 

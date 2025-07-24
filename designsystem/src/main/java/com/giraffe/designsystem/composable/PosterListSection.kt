@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,38 +19,37 @@ import com.giraffe.designsystem.uimodel.Poster
 @Composable
 fun PosterListSection(
     title: String,
-    poster: List<Poster>,
+    posters: List<Poster>,
     modifier: Modifier = Modifier,
     endText: String? = null,
     paddingHorizontal: Int = 16,
     onClickEndText: () -> Unit = {},
-    onClickPoster: (movieId: Int) -> Unit = {}
+    onClickPoster: (poster: Poster) -> Unit = {}
 ) {
-    if (poster.isEmpty()) {
-        return
-    }
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        SectionTitle(
-            modifier = Modifier
-                .padding(horizontal = paddingHorizontal.dp),
-            title = title,
-            clickableText = endText,
-            onClickableText = onClickEndText
-        )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+    AnimatedVisibility(posters.isNotEmpty()) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            items(poster) { movie ->
-                PosterItemVertically(
-                    movie = movie,
-                    modifier = Modifier
-                        .width(136.dp),
-                    onClickPoster = { onClickPoster(movie.id) }
-                )
+            SectionTitle(
+                modifier = Modifier
+                    .padding(horizontal = paddingHorizontal.dp),
+                title = title,
+                clickableText = endText,
+                onClickableText = onClickEndText
+            )
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+            ) {
+                items(posters) { poster ->
+                    PosterItemVertically(
+                        poster = poster,
+                        modifier = Modifier
+                            .width(136.dp),
+                        onClickPoster = { onClickPoster(poster) }
+                    )
+                }
             }
         }
     }
@@ -66,7 +66,7 @@ private fun Preview() {
                 modifier = Modifier.fillMaxWidth(),
                 title = "Popular Movies",
                 endText = "Show More",
-                poster = listOf(
+                posters = listOf(
                     Poster(
                         id = 1,
                         name = "The FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe Flash",
@@ -99,7 +99,7 @@ private fun Preview() {
             PosterListSection(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Popular Movies",
-                poster = listOf(
+                posters = listOf(
                     Poster(
                         id = 1,
                         name = "The Flash",
