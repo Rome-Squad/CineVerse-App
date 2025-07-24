@@ -5,6 +5,7 @@ import com.giraffe.home.screen.home.HomeUiModel
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.screen.home.PopularMediaUiModel
 import com.giraffe.home.screen.home.YourCollectionUiModel
+import com.giraffe.home.screen.movies_list.PosterUiState
 import com.giraffe.media.home.entity.FeaturedCollection
 import com.giraffe.media.home.entity.YourCollection
 import com.giraffe.media.movies.entity.Movie
@@ -28,6 +29,30 @@ fun Series.toHomeUiModel(): HomeUiModel {
         posterUrl = posterUrl,
         rating = rating,
         mediaType = MediaType.SERIES
+    )
+}
+
+fun Series.toPosterUi(): PosterUiState {
+    return PosterUiState(
+        id = id,
+        name = name,
+        imageUri = posterUrl,
+        rating = rating,
+//        genres = genreIDs,
+//        time = ,
+        date = releaseYear
+    )
+}
+
+fun Movie.toPosterUi(): PosterUiState {
+    return PosterUiState(
+        id = id,
+        name = title,
+        imageUri = posterUrl ?: "",
+        rating = rating,
+//        genres = genreIDs,
+//        time = ,
+        date = releaseYear.toString()
     )
 }
 

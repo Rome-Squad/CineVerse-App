@@ -47,12 +47,6 @@ class HomeViewModel(
         loadHomeScreen()
     }
 
-//    private fun handler(): CoroutineExceptionHandler {
-//        return CoroutineExceptionHandler { _, throwable ->
-//            Log.d("Throw", throwable.message.toString())
-//        }
-//    }
-
     private fun loadHomeScreen() {
         updateState { it.copy(isLoading = true, isError = false) }
 
@@ -123,7 +117,6 @@ class HomeViewModel(
                 sendEffect(HomeEffect.ShowError(errorResId))
             } catch (e: Exception) {
                 updateState { it.copy(isLoading = false, isError = true) }
-//                sendEffect(HomeEffect.ShowError(e.message))
             }
         }
     }
@@ -146,51 +139,65 @@ class HomeViewModel(
         }
     }
 
-    override fun onCollectionClicked(collectionId: Int, type: CollectionClickType) {
-        when (type) {
-            CollectionClickType.YOUR_COLLECTION -> sendEffect(
-                HomeEffect.NavigateToYourCollectionDetails(
-                    collectionId
-                )
+//    override fun onCollectionClicked(collectionId: Int, type: CollectionClickType) {
+//        when (type) {
+//            CollectionClickType.YOUR_COLLECTION -> sendEffect(
+//                HomeEffect.NavigateToYourCollectionDetails(
+//                    collectionId
+//                )
+//            )
+//
+//            CollectionClickType.FEATURED -> sendEffect(
+//                HomeEffect.NavigateToFeaturedCollectionDetails(
+//                    collectionId
+//                )
+//            )
+//        }
+//    }
+
+
+    override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
+        sendEffect(
+            HomeEffect.NavigateToRecentlyReleasedList(
+                sectionTitle = sectionTitle,
+                sectionType = sectionType
             )
+        )
+    }
 
-            CollectionClickType.FEATURED -> sendEffect(
-                HomeEffect.NavigateToFeaturedCollectionDetails(
-                    collectionId
-                )
+    override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {
+        sendEffect(
+            HomeEffect.NavigateToTopRatedList(
+                sectionTitle = sectionTitle,
+                sectionType = sectionType
             )
-        }
+        )
     }
 
-    override fun onSeeAllPopularClicked() {
-        sendEffect(HomeEffect.NavigateToPopularList)
+    override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {
+        sendEffect(
+            HomeEffect.NavigateToUpcomingList(
+                sectionTitle = sectionTitle,
+                sectionType = sectionType
+            )
+        )
     }
 
-    override fun onSeeAllRecentlyReleasedClicked() {
-        sendEffect(HomeEffect.NavigateToRecentlyReleasedList)
+    override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {
+        sendEffect(
+            HomeEffect.NavigateToRecentlyViewedList(
+                sectionTitle = sectionTitle,
+                sectionType = sectionType
+            )
+        )
     }
 
-    override fun onSeeAllTopRatedClicked() {
-        sendEffect(HomeEffect.NavigateToTopRatedList)
-    }
-
-    override fun onSeeAllUpcomingClicked() {
-        sendEffect(HomeEffect.NavigateToUpcomingList)
-    }
-
-    override fun onSeeAllRecentlyViewedClicked() {
-        sendEffect(HomeEffect.NavigateToRecentlyViewedList)
-    }
-
-    override fun onSeeAllYourCollection() {
-        sendEffect(HomeEffect.NavigateToAllYourCollections)
-    }
-
-    override fun onWhatShouldIWatchClicked() {
-        sendEffect(HomeEffect.NavigateToRecommendedList)
-    }
-
-    override fun onNeedMoreToWatchClicked() {
-        sendEffect(HomeEffect.NavigateToExploreMore)
+    override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {
+        sendEffect(
+            HomeEffect.NavigateToRecommendedList(
+                sectionTitle = sectionTitle,
+                sectionType = sectionType
+            )
+        )
     }
 }

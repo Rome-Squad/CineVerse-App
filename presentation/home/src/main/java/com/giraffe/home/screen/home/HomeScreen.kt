@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -26,16 +27,61 @@ import com.giraffe.home.components.MovieCard
 import com.giraffe.home.components.TopAppBar
 import com.giraffe.home.components.UserCollection
 import com.giraffe.home.components.YourCollectionsSections
+import com.giraffe.home.screen.movies_list.MovieSectionType
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    navigateToMoviesListScreen: () -> Unit,
+    navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is HomeEffect.NavigateToRecentlyReleasedList -> {
+                    navigateToMoviesListScreen(
+                        MovieSectionType.RECENTLY_RELEASED,
+                        "Recently Released"
+                    )
+                }
+
+                is HomeEffect.NavigateToUpcomingList -> {
+                    navigateToMoviesListScreen(
+                        MovieSectionType.UPCOMING_MOVIES,
+                        "Upcoming Movies"
+                    )
+                }
+
+                is HomeEffect.NavigateToRecommendedList -> {
+                    navigateToMoviesListScreen(
+                        MovieSectionType.MATCHES_YOUR_VIBES,
+                        "Matches Your Vibe"
+                    )
+                }
+
+                is HomeEffect.NavigateToTopRatedList -> {
+                    navigateToMoviesListScreen(
+                        MovieSectionType.TOP_RATED_TV_SHOWS,
+                        "Top Rated TV Shows"
+                    )
+                }
+
+                is HomeEffect.NavigateToRecentlyViewedList -> {
+                    navigateToMoviesListScreen(
+                        MovieSectionType.RECENTLY_VIEWED,
+                        "Recently Viewed"
+                    )
+                }
+
+                is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
+                is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
+                is HomeEffect.ShowError -> {}
+            }
+        }
+    }
     HomeContent(
         state = state,
         interactionListener = viewModel,
@@ -49,7 +95,7 @@ fun HomeScreen(
 fun HomeContent(
     state: HomeScreenUiState,
     interactionListener: HomeInteractionListener,
-    navigateToMoviesListScreen: () -> Unit,
+    navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
@@ -76,8 +122,19 @@ fun HomeContent(
                 title = stringResource(R.string.recently_released),
                 endText = stringResource(R.string.show_more),
                 uiModels = state.recentlyReleased,
-                onClickItem = interactionListener::onMediaClicked,
-                onClickEndText = navigateToMoviesListScreen
+                onClickItem = { id, mediaType ->
+                    if (mediaType == MediaType.MOVIE) {
+                        navigateToMoviesDetailsScreen(id)
+                    } else {
+                        navigateToSeriesDetailsScreen(id)
+                    }
+                },
+                onClickEndText = {
+                    interactionListener.onSeeAllRecentlyReleasedClicked(
+                        sectionTitle = "Recently Released",
+                        sectionType = MovieSectionType.RECENTLY_RELEASED
+                    )
+                }
             )
         }
         item {
@@ -106,6 +163,12 @@ fun HomeContent(
                         navigateToSeriesDetailsScreen(id)
                     }
                 },
+                onClickEndText = {
+                    interactionListener.onSeeAllUpcomingClicked(
+                        sectionTitle = "Upcoming Movies",
+                        sectionType = MovieSectionType.UPCOMING_MOVIES
+                    )
+                }
             )
         }
         item {
@@ -116,7 +179,19 @@ fun HomeContent(
                 title = stringResource(R.string.matches_your_vibe),
                 endText = stringResource(R.string.show_more),
                 uiModels = state.matchVibes,
-                onClickItem = interactionListener::onMediaClicked,
+                onClickItem = { id, mediaType ->
+                    if (mediaType == MediaType.MOVIE) {
+                        navigateToMoviesDetailsScreen(id)
+                    } else {
+                        navigateToSeriesDetailsScreen(id)
+                    }
+                },
+                onClickEndText = {
+                    interactionListener.onWhatShouldIWatchClicked(
+                        sectionTitle = "Matches Your Vibe",
+                        sectionType = MovieSectionType.MATCHES_YOUR_VIBES
+                    )
+                }
             )
         }
         item {
@@ -150,7 +225,19 @@ fun HomeContent(
                 title = stringResource(R.string.top_rated_tv_shows),
                 endText = stringResource(R.string.show_more),
                 uiModels = state.topRated,
-                onClickItem = interactionListener::onMediaClicked
+                onClickItem = { id, mediaType ->
+                    if (mediaType == MediaType.MOVIE) {
+                        navigateToMoviesDetailsScreen(id)
+                    } else {
+                        navigateToSeriesDetailsScreen(id)
+                    }
+                },
+                onClickEndText = {
+                    interactionListener.onSeeAllTopRatedClicked(
+                        sectionTitle = "Top Rated TV Shows",
+                        sectionType = MovieSectionType.TOP_RATED_TV_SHOWS
+                    )
+                },
             )
         }
         item {
@@ -158,10 +245,22 @@ fun HomeContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp),
-                endText = stringResource(R.string.clear_all),
+                endText = stringResource(R.string.show_more),
                 title = stringResource(R.string.you_recent_viewed),
                 uiModels = state.recentlyViewed,
-                onClickItem = interactionListener::onMediaClicked
+                onClickItem = { id, mediaType ->
+                    if (mediaType == MediaType.MOVIE) {
+                        navigateToMoviesDetailsScreen(id)
+                    } else {
+                        navigateToSeriesDetailsScreen(id)
+                    }
+                },
+                onClickEndText = {
+                    interactionListener.onSeeAllRecentlyViewedClicked(
+                        sectionTitle = "Recently Viewed",
+                        sectionType = MovieSectionType.RECENTLY_VIEWED
+                    )
+                }
             )
         }
         item {
@@ -190,7 +289,6 @@ val collections = listOf(
     UserCollection("My Watchlist", "10 movies"),
     UserCollection("Documentaries", "6 movies"),
 )
-
 val recentlyReleasedMovies = listOf(
     Poster(
         id = 1,
@@ -259,47 +357,33 @@ fun HomeContentPreview() {
             TODO("Not yet implemented")
         }
 
-        override fun onCollectionClicked(collectionId: Int, type: CollectionClickType) {
+        override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
             TODO("Not yet implemented")
         }
 
-        override fun onSeeAllPopularClicked() {
+        override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {
             TODO("Not yet implemented")
         }
 
-        override fun onSeeAllRecentlyReleasedClicked() {
+        override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {
             TODO("Not yet implemented")
         }
 
-        override fun onSeeAllTopRatedClicked() {
+        override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {
             TODO("Not yet implemented")
         }
 
-        override fun onSeeAllUpcomingClicked() {
+        override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {
             TODO("Not yet implemented")
         }
 
-        override fun onSeeAllRecentlyViewedClicked() {
-            TODO("Not yet implemented")
-        }
 
-        override fun onSeeAllYourCollection() {
-            TODO("Not yet implemented")
-        }
-
-        override fun onWhatShouldIWatchClicked() {
-            TODO("Not yet implemented")
-        }
-
-        override fun onNeedMoreToWatchClicked() {
-            TODO("Not yet implemented")
-        }
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(
             state = HomeScreenUiState(),
             interactionListener = interactionObject,
-            navigateToMoviesListScreen = {},
+            navigateToMoviesListScreen = { sectionType, sectionTitle -> },
             navigateToMoviesDetailsScreen = {},
             navigateToSeriesDetailsScreen = {},
         )

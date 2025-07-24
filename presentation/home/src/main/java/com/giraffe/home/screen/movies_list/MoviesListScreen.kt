@@ -19,18 +19,25 @@ import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.components.ListTitleSection
 import com.giraffe.home.components.TransitionLazyColumnToGrid
+import com.giraffe.home.screen.home.MediaType
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesListScreen(
+    sectionType: String,
+    sectionTitle: String,
     moviesListViewModel: MoviesListViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    navigateToMoviesDetailsScreen: (Int) -> Unit,
+    navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
     val state by moviesListViewModel.state.collectAsState()
     MoviesListContent(
         state = state,
         moviesListInteractionListener = moviesListViewModel,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
+        navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
     )
 }
 
@@ -38,7 +45,9 @@ fun MoviesListScreen(
 fun MoviesListContent(
     onBackClick: () -> Unit,
     state: MoviesListUiState,
-    moviesListInteractionListener: MoviesListInteractionListener
+    moviesListInteractionListener: MoviesListInteractionListener,
+    navigateToMoviesDetailsScreen: (Int) -> Unit,
+    navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
     Box {
         Column(
@@ -58,7 +67,13 @@ fun MoviesListContent(
                 TransitionLazyColumnToGrid(
                     poster = state.mediaList,
                     isListSelected = state.isListSelected,
-                    onPosterClicked = {} ////////////
+                    onClickItem = { mediaId, mediaType ->
+                        if (mediaType == MediaType.MOVIE) {
+                            navigateToMoviesDetailsScreen(mediaId)
+                        } else {
+                            navigateToSeriesDetailsScreen(mediaId)
+                        }
+                    }
                 )
             }
 
@@ -82,10 +97,16 @@ fun MoviesListPreview() {
         override fun onViewChanged(isGrid: Boolean) {
             TODO("Not yet implemented")
         }
+
+        override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
+            TODO("Not yet implemented")
+        }
     }
     MoviesListContent(
         state = MoviesListUiState(),
         moviesListInteractionListener = interactionListener,
         onBackClick = {},
+        navigateToMoviesDetailsScreen = {},
+        navigateToSeriesDetailsScreen = {},
     )
 }

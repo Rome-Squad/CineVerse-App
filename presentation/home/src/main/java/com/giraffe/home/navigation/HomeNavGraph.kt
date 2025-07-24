@@ -22,13 +22,20 @@ fun HomeNavGraph(
         startDestination = HomeRoute
     ) {
         homeRoute(
-            navigateToMoviesScreen = { navController.navigateToMoviesList() },
+            navigateToMoviesScreen = {
+                navController.navigateToMoviesList(
+                    sectionType =,
+                    sectionTitle =
+                )
+            },
             navigateToMoviesDetailsScreen = { navController.navigateToMovieDetails(it) },
             navigateToSeriesDetailsScreen = { navController.navigateToSeriesDetails(it) }
         )
 
         moviesListRoute(
-            onBackClick = { navController.popBackStack() }
+            onBackClick = { navController.popBackStack() },
+            navigateToMoviesDetailsScreen = { navController.navigateToMovieDetails(it) },
+            navigateToSeriesDetailsScreen = { navController.navigateToSeriesDetails(it) }
         )
 
 

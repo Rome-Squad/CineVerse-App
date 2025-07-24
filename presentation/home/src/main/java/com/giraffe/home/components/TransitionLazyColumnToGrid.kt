@@ -25,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.screen.movies_list.PosterUiState
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -34,7 +35,7 @@ fun TransitionLazyColumnToGrid(
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
-    onPosterClicked: (Int) -> Unit
+    onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
 ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
@@ -94,7 +95,7 @@ fun TransitionLazyColumnToGrid(
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
                             onClick = {
-                                onPosterClicked(poster.id)
+                                onClickItem(poster.id)
                             }
                         )
                     }
@@ -113,7 +114,7 @@ fun TransitionLazyColumnToGrid(
                             animatedVisibilityScope = this@AnimatedContent,
                             sharedTransitionScope = this@SharedTransitionLayout,
                             onClick = {
-                                onPosterClicked(poster.id)
+                                onClickItem(poster.id)
                             }
                         )
                     }

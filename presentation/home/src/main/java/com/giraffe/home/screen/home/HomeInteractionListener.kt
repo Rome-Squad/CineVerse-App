@@ -2,13 +2,13 @@ package com.giraffe.home.screen.home
 
 interface HomeInteractionListener {
     fun onMediaClicked(mediaId: Int, mediaType: MediaType)
-    fun onCollectionClicked(collectionId: Int, type: CollectionClickType)
-    fun onSeeAllPopularClicked()
-    fun onSeeAllRecentlyReleasedClicked()
-    fun onSeeAllTopRatedClicked()
-    fun onSeeAllUpcomingClicked()
-    fun onSeeAllRecentlyViewedClicked()
-    fun onSeeAllYourCollection()
-    fun onWhatShouldIWatchClicked()
-    fun onNeedMoreToWatchClicked()
+//    fun onCollectionClicked(collectionId: Int, type: CollectionClickType)
+//    fun onSeeAllPopularClicked()
+    fun onSeeAllRecentlyReleasedClicked(sectionTitle:String,sectionType:String)
+    fun onSeeAllTopRatedClicked(sectionTitle:String,sectionType:String)
+    fun onSeeAllUpcomingClicked(sectionTitle:String,sectionType:String)
+    fun onSeeAllRecentlyViewedClicked(sectionTitle:String,sectionType:String)
+//    fun onSeeAllYourCollection()
+    fun onWhatShouldIWatchClicked(sectionTitle:String,sectionType:String)
+//    fun onNeedMoreToWatchClicked()
 }
