@@ -40,13 +40,13 @@ class GetRecentlyReleasedMoviesUseCaseTest {
                 )
             )
 
-            coEvery { repository.getRecentlyReleasedMovies() } returns expectedMovies
+            coEvery { repository.getRecentlyReleasedMovies(1) } returns expectedMovies
 
             // When
-            val actualMovies = useCase()
+            val actualMovies = useCase(1)
 
             // Then
-            coVerify(exactly = 1) { repository.getRecentlyReleasedMovies() }
+            coVerify(exactly = 1) { repository.getRecentlyReleasedMovies(1) }
             assertThat(actualMovies).isEqualTo(expectedMovies)
         }
 }
