@@ -42,6 +42,7 @@ fun LoginScreen(
                 is LoginEffect.NavigateToWebViewScreen -> {
                     navigateToWebViewScreen()
                 }
+                is LoginEffect.NavigateToHomeScreen->{navigateToHomeScreen()}
                 else -> {}
             }
         }

@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.giraffe.authentication.login.navigateToWebView
 import com.giraffe.authentication.login.webViewRoute
+import com.giraffe.explore.screen.discover.navigateToDiscover
 import kotlinx.serialization.Serializable
 
 
@@ -21,7 +22,10 @@ fun NavGraphBuilder.loginRoute(
 ){
     composable<LoginRoute>{
         LoginScreen(
-            navigateToWebViewScreen = { navController.navigateToWebView() }
+            navigateToWebViewScreen = { navController.navigateToWebView()
+            },
+            navigateToHomeScreen = { navController.navigateToDiscover()
+            }
         )
     }
 }

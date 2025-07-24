@@ -11,5 +11,5 @@ import org.koin.dsl.module
 val featureApiModule = module {
     single<DetailsApi> { DetailsApiImp() }
     single<ExploreApi> { ExploreApiImp() }
-    single <AuthenticationApi> { AuthenticationApiImp() }
+    single <AuthenticationApi> { AuthenticationApiImp(get()) }
 }

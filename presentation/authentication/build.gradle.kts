@@ -43,6 +43,10 @@ dependencies {
     implementation(project(":imageviewer"))
     implementation(project(":api:authentication"))
     implementation(project(":domain:user"))
+    implementation(project(":api:explore"))
+    implementation(project(":presentation:explore"))
+
+
 
 
     implementation(libs.androidx.core.ktx)
