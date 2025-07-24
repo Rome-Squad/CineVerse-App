@@ -66,6 +66,7 @@ fun SearchResultContent(
 ) {
     val context = LocalContext.current
     val actors = state.actors.collectAsLazyPagingItems()
+    val posters = state.selectedPosters.collectAsLazyPagingItems()
     Box {
         LazyColumn(
             modifier = Modifier
@@ -110,9 +111,9 @@ fun SearchResultContent(
                                     .padding(top = 195.dp)
                             )
                         }
-                    } else if (state.selectedPosters.isNotEmpty()) {
+                    } else if (posters.itemCount != 0) {
                         TransitionLazyColumnToGrid(
-                            poster = state.selectedPosters,
+                            posters = posters,
                             isListSelected = !state.isGridSelected,
                             onPosterClicked = { id ->
                                 when (state.selectedTab) {
@@ -167,7 +168,7 @@ fun ActorsSection(
                 name = actors[actorIndex]?.name.toString(),
                 imageUrl = actors[actorIndex]?.imageUrl.toString(),
                 onClick = {
-                    navigateToCastDetails(actors[actorIndex]?.id?:0)
+                    navigateToCastDetails(actors[actorIndex]?.id ?: 0)
                 }
             )
         }

@@ -29,35 +29,22 @@ class PersonRepositoryImpl(
 
     override suspend fun searchByName(personName: String, page: Int) = SafeCall {
         withContext(Dispatchers.IO) {
-            val localKeywordData = localExploreDataSource.getSearchKeyword(query = personName)
-            if (localKeywordData != null) {
-                if (page in localKeywordData.actorsPages) {
-                    localDataSource.searchByName(personName, page).map(PersonCacheDto::toEntity)
-                } else {
-                    remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity).also {
-                        localExploreDataSource.insertSearchKeyword(
-                            localKeywordData.copy(
-                                actorsPages = localKeywordData.actorsPages + page,
-                                searchedAt = System.currentTimeMillis()
-                            )
-                        )
-                        localDataSource.storePeople(it.map { person ->
-                            person.toCacheDto().copy(page = page)
-                        })
-                    }
-                }
+            val keywordData = localExploreDataSource.getSearchKeyword(query = personName)
+            val isPageCached = keywordData?.actorsPages?.contains(page) == true
+            if (isPageCached) {
+                localDataSource.searchByName(personName, page).map(PersonCacheDto::toEntity)
             } else {
-                remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity).also {
-                    localExploreDataSource.insertSearchKeyword(
-                        SearchKeywordCacheDto(
-                            personName,
-                            actorsPages = listOf(page)
-                        )
-                    )
-                    localDataSource.storePeople(it.map { person ->
-                        person.toCacheDto().copy(page = page)
-                    })
-                }
+                val remoteActors = remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
+                val updatedKeyword = keywordData?.copy(
+                    actorsPages = keywordData.actorsPages + page,
+                    searchedAt = System.currentTimeMillis()
+                ) ?: SearchKeywordCacheDto(
+                    keyword = personName,
+                    actorsPages = listOf(page)
+                )
+                localExploreDataSource.insertSearchKeyword(updatedKeyword)
+                localDataSource.storePeople(remoteActors.map { it.toCacheDto().copy(page = page) })
+                remoteActors
             }
         }
     }

@@ -25,7 +25,7 @@ class GalleryViewModel(
 
     private fun getPersonImages(personId: Int) {
         updateState {
-            it.copy(isLoading = true, errorMessage = "error.message")
+            it.copy(isLoading = true)
         }
         safeExecute(
             onSuccess = ::getPersonImagesSuccess,
