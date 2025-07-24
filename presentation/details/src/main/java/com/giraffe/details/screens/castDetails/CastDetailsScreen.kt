@@ -34,7 +34,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -155,10 +155,10 @@ fun CastDetailsContent(
             }
         }
         item {
-            MoviesListSection(
+            PosterListSection(
                 title = stringResource(R.string.best_of) + " " + state.actorName,
                 endText = stringResource(R.string.show_more),
-                movies = state.posters,
+                poster = state.posters,
                 onClickPoster = {},
                 onClickEndText = {
                     interaction.navigateToCastCreditScreen(

@@ -11,17 +11,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.CustomCard
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
 
 @Composable
 fun StaffInfoSection(
@@ -51,7 +53,7 @@ fun StaffInfoSection(
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
                 staffList.entries.toList().forEachIndexed { index, (key, value) ->
-                    val name = value.joinToString(",")
+                    val name = value.joinToString(stringResource(R.string.split))
                     StaffItem(name = name, role = key)
 
                     if (index != staffList.entries.size - 1) {

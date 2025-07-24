@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
@@ -171,7 +171,6 @@ private fun MovieDetailsContent(
 
             StarCastSection(
                 title = stringResource(R.string.star_cast),
-                onShowMoreClick = {},
                 onCastClick = { interaction.navigateToCastDetailsScreen(it) },
                 castList = state.cast
             )
@@ -182,10 +181,10 @@ private fun MovieDetailsContent(
                 staffList = state.crew
             )
 
-            MoviesListSection(
+            PosterListSection(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
-                movies = state.recommendedMovies,
+                poster = state.recommendedMovies,
                 onClickEndText = {
                    interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                 },
