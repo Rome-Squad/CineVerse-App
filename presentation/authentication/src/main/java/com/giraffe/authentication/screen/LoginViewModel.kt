@@ -32,6 +32,8 @@ class LoginViewModel(
             onSuccess = {
                 updateState { it.copy(isLoadingLogin = false) }
                 sendEffect(LoginEffect.NavigateToHomeScreen)
+            /// TODO how pop back here when go from screen in app to login
+
             }) {
             loginUseCase(userInput = state.value.username, password = state.value.password)
         }
@@ -57,7 +59,7 @@ class LoginViewModel(
     }
 
     override fun onGoToWebsiteClick() {
-        // go to web view
+        sendEffect(LoginEffect.NavigateToWebViewScreen)
     }
 
     override fun onForgotPasswordClick() {
@@ -116,4 +118,5 @@ class LoginViewModel(
             LoginEffect.NavigateToSeriesDetails(seriesID)
         )
     }
+
 }
