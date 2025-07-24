@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
-import com.giraffe.authentication.composable.LogoSection
 import com.giraffe.authentication.composable.LoginBody
+import com.giraffe.authentication.composable.LogoSection
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
@@ -32,6 +32,7 @@ fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
     navigateToHomeScreen: () -> Unit = {},
     navigateToWebViewScreen: () -> Unit = {},
+    navigateToResetPasswordScreen: () -> Unit = {},
 ){
     val state by viewModel.state.collectAsState()
     val effectFlow = viewModel.effect
@@ -43,6 +44,11 @@ fun LoginScreen(
                     navigateToWebViewScreen()
                 }
                 is LoginEffect.NavigateToHomeScreen->{navigateToHomeScreen()}
+                is LoginEffect.NavigateToResetPasswordScreen -> {
+                    navigateToResetPasswordScreen()
+                }
+
+                is LoginEffect.Error -> {}
                 else -> {}
             }
         }
@@ -84,7 +90,8 @@ private fun LoginContent(
         )
 
         Box(
-            modifier = Modifier.padding(top = 24.dp, bottom = 6.5.dp)
+            modifier = Modifier
+                .padding(top = 24.dp, bottom = 6.5.dp)
                 .size(width = 120.dp, height = 3.dp)
                 .background(Theme.color.shade.secondary)
         )

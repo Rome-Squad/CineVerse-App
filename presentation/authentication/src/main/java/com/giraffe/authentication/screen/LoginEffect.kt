@@ -11,4 +11,6 @@ sealed class LoginEffect {
     object NavigateToHomeScreen : LoginEffect()
 
     object NavigateToWebViewScreen : LoginEffect()
+
+    object NavigateToResetPasswordScreen : LoginEffect()
 }

@@ -63,7 +63,7 @@ class LoginViewModel(
     }
 
     override fun onForgotPasswordClick() {
-        TODO("Not yet implemented")
+        sendEffect(LoginEffect.NavigateToResetPasswordScreen)
     }
 
     override fun onJoinAsGuestClick() {

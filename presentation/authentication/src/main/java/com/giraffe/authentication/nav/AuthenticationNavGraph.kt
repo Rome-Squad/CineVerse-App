@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.giraffe.authentication.login.webViewRoute
+import com.giraffe.authentication.resetpassword.resetPasswordRoute
 import com.giraffe.authentication.screen.LoginRoute
 import com.giraffe.authentication.screen.loginRoute
 import com.giraffe.explore.ExploreApi
@@ -25,11 +26,10 @@ internal fun AuthenticationNavGraph(
 
         loginRoute(navController)
 
+        resetPasswordRoute(navController)
+
         composable<DiscoverRoute> {
-
             exploreApi.ExploreContainer ({},{},{})
-
-
         }
 
     }

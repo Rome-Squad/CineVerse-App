@@ -48,6 +48,7 @@ fun LoginBody(
             errorMessage = state.passwordErrorMessage?.let { context.getString(it) },
             label = stringResource(R.string.password),
             maxLines = 1,
+            onForgotPasswordClick = interaction::onForgotPasswordClick,
             isPassword = true,
         )
 
