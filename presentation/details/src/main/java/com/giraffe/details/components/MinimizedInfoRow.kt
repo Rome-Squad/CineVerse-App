@@ -45,7 +45,7 @@ fun MinimizedInfoRow(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 100.dp, bottom = 12.dp),
+                    .padding(end = 100.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -104,6 +104,7 @@ fun MinimizedInfoRow(
                         .clip(RoundedCornerShape(Theme.radius.md))
                         .background(Theme.color.button.secondary)
                         .clickable(onClick = onClickAdd)
+                        .padding(10.dp)
                 )
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.play),
@@ -118,6 +119,7 @@ fun MinimizedInfoRow(
                         .clip(RoundedCornerShape(Theme.radius.md))
                         .background(Theme.color.button.primary)
                         .clickable(onClick = onClickPlay)
+                        .padding(10.dp)
                 )
             }
         }
