@@ -12,9 +12,6 @@ import retrofit2.http.POST
 
 interface UserApiServiceRetrofit {
 
-    @GET("authentication/guest_session/new")
-    suspend fun getGuestSession(): Response<GuestSessionResponse>
-
     @GET("authentication/token/new")
     suspend fun createRequestToken(): RequestTokenDto
 

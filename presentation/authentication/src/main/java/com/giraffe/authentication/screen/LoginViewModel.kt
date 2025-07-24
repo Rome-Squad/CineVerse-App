@@ -3,13 +3,11 @@ package com.giraffe.authentication.screen
 import com.giraffe.authentication.base.BaseViewModel
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
-import com.giraffe.user.usecase.JoinAsGuestUseCase
 import com.giraffe.user.usecase.LoginUseCase
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase,
-    private val joinAsGuestUseCase: JoinAsGuestUseCase,
-) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
+    private val loginUseCase: LoginUseCase
+    ) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
 
 
     override fun onUsernameChanged(username: String) {
@@ -67,18 +65,7 @@ class LoginViewModel(
     }
 
     override fun onJoinAsGuestClick() {
-        safeExecute(
-            onError = ::onJoinAsGuestError,
-            onSuccess = {
-                sendEffect(LoginEffect.NavigateToHomeScreen)
-            }
-        ) {
-             joinAsGuestUseCase()
-        }
-    }
-
-    private fun onJoinAsGuestError(throwable: Throwable) {
-        sendEffect(LoginEffect.Error(throwable))
+        sendEffect(LoginEffect.NavigateToHomeScreen)
     }
 
     override fun onCreateNewAccountClick() {

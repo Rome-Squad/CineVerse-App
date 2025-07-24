@@ -33,7 +33,7 @@ fun LoginScreen(
     navigateToHomeScreen: () -> Unit = {},
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},
-){
+) {
     val state by viewModel.state.collectAsState()
     val effectFlow = viewModel.effect
 
@@ -43,7 +43,11 @@ fun LoginScreen(
                 is LoginEffect.NavigateToWebViewScreen -> {
                     navigateToWebViewScreen()
                 }
-                is LoginEffect.NavigateToHomeScreen->{navigateToHomeScreen()}
+
+                is LoginEffect.NavigateToHomeScreen -> {
+                    navigateToHomeScreen()
+                }
+
                 is LoginEffect.NavigateToResetPasswordScreen -> {
                     navigateToResetPasswordScreen()
                 }
@@ -56,18 +60,14 @@ fun LoginScreen(
 
 
     LoginContent(
-        modifier = modifier,
-        state = state,
-        interaction = viewModel
+        modifier = modifier, state = state, interaction = viewModel
     )
 }
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier,
-    state: LoginState,
-    interaction : LoginInteractionListener 
-){
+    modifier: Modifier, state: LoginState, interaction: LoginInteractionListener
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -78,9 +78,7 @@ private fun LoginContent(
 
         LogoSection(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
         LoginBody(
-            modifier = Modifier.weight(1f),
-            state = state,
-            interaction = interaction
+            modifier = Modifier.weight(1f), state = state, interaction = interaction
         )
         SecondaryButton(
             text = stringResource(R.string.create_a_new_account),
@@ -112,13 +110,12 @@ private fun LoginContent(
                     onClickPrimaryButton = interaction::onGoToWebsiteClick,
                     onClickSecondaryButton = interaction::onDismissCreateNewAccountBottomSheet
                 )
-          }
-        )
+            })
     }
 }
 
 @Preview
 @Composable
-fun LoginScreenPreview(){
+fun LoginScreenPreview() {
     LoginScreen()
 }

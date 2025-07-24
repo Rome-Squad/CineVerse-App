@@ -20,11 +20,4 @@ class AuthRepositoryImpl(
         sessionIdManager.saveSessionId(sessionId)
 
     }
-
-    override suspend fun joinAsGuest(): String {
-        val guestSessionId = remoteDataSource.getGuestSessionId()
-            ?: throw GuestAuthenticationException("Failed to get guest session ID")
-        sessionIdManager.saveSessionId(guestSessionId)
-        return guestSessionId
-    }
 }
