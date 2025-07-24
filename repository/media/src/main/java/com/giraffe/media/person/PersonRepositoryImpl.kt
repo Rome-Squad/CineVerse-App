@@ -7,13 +7,14 @@ import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
+import com.giraffe.media.person.datasource.remote.dto.ProfileDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
+import com.giraffe.media.person.mapper.mapToPerson
 import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toEntity
-import com.giraffe.media.person.mapper.toImageList
+import com.giraffe.media.person.mapper.toImageUrl
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType
 import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
@@ -105,22 +106,23 @@ class PersonRepositoryImpl(
             val images = async { remoteDataSource.getPersonImages(personId) }
             val media = async { remoteDataSource.getPersonMediaCredits(personId) }
             val socialMedia = async { remoteDataSource.getPersonSocialMedia(personId) }
-            Person(
-                id = personId,
-                name = details.await().name,
-                imageUrl = BASE_IMAGE_URL + details.await().profilePath,
-                role = details.await().knownForDepartment,
-                birthday = details.await().birthday,
-                placeOfBirth = details.await().placeOfBirth,
-                biography = details.await().biography,
-                images = images.await().toImageList(),
-                personCredits = media.await().map(PersonCreditDto::toEntity),
-                socialMedia = socialMedia.await().toEntity()
+            mapToPerson(
+                personId = personId,
+                details = details.await(),
+                // The first image is typically the profile image already included in person details.
+                // Dropping it prevents duplication in the image list.
+                images = images.await().profiles.drop(1),
+                media = media.await(),
+                socialMedia = socialMedia.await()
             )
         }
     }
 
     override suspend fun getPeopleMediaCredits(personId: Int) = SafeCall {
         remoteDataSource.getPersonMediaCredits(personId).map(PersonCreditDto::toEntity)
+    }
+
+    override suspend fun getPersonImages(personId: Int): List<String> = SafeCall {
+        remoteDataSource.getPersonImages(personId).profiles.map(ProfileDto::toImageUrl)
     }
 }

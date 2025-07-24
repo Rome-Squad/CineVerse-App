@@ -40,4 +40,12 @@ class MoviesRemoteDataSourceImplRetrofit(
         retrofitRequestBuilder.get { getMovieRating(movieId, guestSessionId) }
             .results.firstOrNull { it.id == movieId }?.rating?.toFloat() ?: 0f
 
+    override suspend fun getPopularityMovies(page: Int): List<MovieDto> =
+        retrofitRequestBuilder.get { getPopularMovies(page) }.results
+
+    override suspend fun getRecentlyReleasedMovies(page: Int): List<MovieDto> =
+        retrofitRequestBuilder.get { getRecentlyReleasedMovies(page) }.results
+
+    override suspend fun getUpcomingMovies(page: Int): List<MovieDto> =
+        retrofitRequestBuilder.get { getUpcomingMovies(page) }.results
 }

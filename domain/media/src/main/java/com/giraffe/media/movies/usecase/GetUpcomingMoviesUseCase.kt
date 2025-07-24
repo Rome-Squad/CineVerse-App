@@ -4,5 +4,5 @@ import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 
 class GetUpcomingMoviesUseCase(private val repository: MoviesRepository) {
-    suspend operator fun invoke(): List<Movie> = repository.getUpcomingMovies()
+    suspend operator fun invoke(page: Int): List<Movie> = repository.getUpcomingMovies(page)
 }

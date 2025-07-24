@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.components.ExploreHeader
@@ -142,11 +142,11 @@ private fun SearchContent(
             )
         }
 
-        MoviesListSection(
+        PosterListSection(
             modifier = Modifier.padding(top = 16.dp),
             endText = stringResource(R.string.clear_all),
             title = stringResource(R.string.you_recent_viewed),
-            movies = state.recentPosters
+            posters = state.recentPosters
         )
     }
 }

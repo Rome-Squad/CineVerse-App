@@ -26,4 +26,10 @@ interface MoviesRemoteDataSource {
         movieId: Int,
         guestSessionId: String
     ): Float
+
+    suspend fun getPopularityMovies(page: Int): List<MovieDto>
+
+    suspend fun getRecentlyReleasedMovies(page: Int): List<MovieDto>
+
+    suspend fun getUpcomingMovies(page: Int): List<MovieDto>
 }

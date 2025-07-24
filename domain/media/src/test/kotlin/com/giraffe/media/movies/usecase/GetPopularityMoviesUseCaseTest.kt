@@ -48,13 +48,13 @@ class GetPopularityMoviesUseCaseTest {
             )
         )
 
-        coEvery { repository.getPopularityMovies() } returns expectedMovies
+        coEvery { repository.getPopularityMovies(1) } returns expectedMovies
 
         // When
-        val actualMovies = useCase()
+        val actualMovies = useCase(1)
 
         // Then
-        coVerify(exactly = 1) { repository.getPopularityMovies() }
+        coVerify(exactly = 1) { repository.getPopularityMovies(1) }
         assertThat(actualMovies).isEqualTo(expectedMovies)
     }
 }

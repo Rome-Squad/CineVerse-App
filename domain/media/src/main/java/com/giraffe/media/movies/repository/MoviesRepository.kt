@@ -39,10 +39,10 @@ interface MoviesRepository {
 
     suspend fun getUserMovieRating(movieId: Int): Float
 
-    suspend fun getPopularityMovies(): List<Movie>
+    suspend fun getPopularityMovies(page: Int): List<Movie>
 
-    suspend fun getRecentlyReleasedMovies(): List<Movie>
+    suspend fun getRecentlyReleasedMovies(page: Int): List<Movie>
 
-    suspend fun getUpcomingMovies(): List<Movie>
+    suspend fun getUpcomingMovies(page: Int): List<Movie>
 
 }
