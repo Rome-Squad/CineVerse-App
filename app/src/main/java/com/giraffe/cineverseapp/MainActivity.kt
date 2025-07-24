@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.authentication.screen.LoginScreen
 import com.giraffe.cineverseapp.nav.CineVerseAppContainer
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.details.DetailsApi
@@ -14,6 +16,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : ComponentActivity() {
     val detailsApi: DetailsApi by inject()
     val exploreApi: ExploreApi by inject()
+    val authenticationApi: AuthenticationApi by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,9 +24,11 @@ class MainActivity : ComponentActivity() {
 
 
             CineVerseTheme {
+              //  LoginScreen()
                 CineVerseAppContainer(
                     exploreApi = exploreApi,
-                    detailsApi = detailsApi
+                    detailsApi = detailsApi,
+                    authenticationApi = authenticationApi
                 )
             }
         }
