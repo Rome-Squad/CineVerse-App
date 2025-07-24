@@ -18,6 +18,8 @@ import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.FACEBOOK_URL
 import com.giraffe.media.utils.INSTAGRAM_URL
 import com.giraffe.media.utils.YOUTUBE_URL
+import com.giraffe.media.utils.toFormattedDate
+import kotlinx.datetime.LocalDate
 
 
 fun PersonCacheDto.toEntity(type: PersonType = PersonType.CAST) = Person(
@@ -74,14 +76,16 @@ fun CrewDto.toEntity(type: PersonType) = Person(
     type = type,
 )
 
-fun PersonCreditDto.toEntity(): PersonCredit = PersonCredit(
+fun PersonCreditDto.toEntity() = PersonCredit(
     id = id,
     title = title.orEmpty(),
     posterPath = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
     voteAverage = voteAverage,
-    mediaType = mediaType
+    mediaType = mediaType,
+    genreIds = genreIds,
+    releaseYear = if (releaseDate.isNullOrEmpty()) null else releaseDate.toFormattedDate(),
 )
 
 fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(
