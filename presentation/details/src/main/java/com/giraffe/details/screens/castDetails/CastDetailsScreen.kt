@@ -2,6 +2,7 @@ package com.giraffe.details.screens.castDetails
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.animateDpAsState
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -34,12 +36,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.MainDetails
@@ -64,7 +68,6 @@ fun CastDetailsScreen(
         events = castDetailsViewModel.effect,
     ) {
         when (it) {
-            is CastDetailsEffect.Error -> {}
             is CastDetailsEffect.OpenUrl -> {
                 val intent = Intent(Intent.ACTION_VIEW, it.url.toUri())
                 context.startActivity(intent)
@@ -83,12 +86,36 @@ fun CastDetailsScreen(
     if (state.isLoading) {
         LoadingView()
     } else {
-        CastDetailsContent(
-            state = state,
-            interaction = castDetailsViewModel,
-            onBackArrowClick = onBackButtonClick,
-            modifier = modifier,
-        )
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Theme.color.background.screen)
+                .wrapContentSize()
+        ) {
+            CastDetailsContent(
+                state = state,
+                interaction = castDetailsViewModel,
+                onBackArrowClick = onBackButtonClick,
+                modifier = modifier,
+            )
+            AnimatedVisibility(
+                visible = !state.errorMessage.isNullOrBlank(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .background(Theme.color.shade.primary)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .align(Alignment.BottomCenter)
+            ) {
+                Text(
+                    text = state.errorMessage
+                        ?: stringResource(R.string.unknown_error),
+                    color = Theme.color.additional.primary.red,
+                    textAlign = TextAlign.Center,
+                    style = Theme.textStyle.label.md.regular
+                )
+            }
+        }
     }
 }
 

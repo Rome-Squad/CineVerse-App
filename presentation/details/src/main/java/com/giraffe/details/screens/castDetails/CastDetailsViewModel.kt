@@ -94,8 +94,12 @@ class CastDetailsViewModel(
     }
 
     private fun getPersonDetailsError(exception: Throwable) {
-        updateState { it.copy(isLoading = false) }
-        sendEffect(CastDetailsEffect.Error(exception))
+        updateState {
+            it.copy(
+                isLoading = false,
+                errorMessage = exception.message
+            )
+        }
     }
 
 }
