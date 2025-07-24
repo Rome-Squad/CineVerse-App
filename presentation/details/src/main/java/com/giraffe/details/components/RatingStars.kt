@@ -3,10 +3,10 @@ package com.giraffe.details.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import com.giraffe.designsystem.composable.custom.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -61,7 +62,12 @@ fun RatingStars(
                 modifier = Modifier
                     .size(starSize)
                     .then(
-                        if (onRateClickEnabled) Modifier.clickable { onRateClick(i + 1) }
+                        if (onRateClickEnabled) Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onRateClick(i + 1) }
+                            )
                         else Modifier
 
                     )
