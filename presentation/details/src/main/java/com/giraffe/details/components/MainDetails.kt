@@ -28,8 +28,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +44,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -131,18 +131,20 @@ fun MainDetails(
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
                     )
-
-                    IconTextBox(
-                        icon = painterResource(Theme.icons.outline.cake),
-                        contentDescription = stringResource(R.string.birthday_cake_icon),
-                        text = stringResource(R.string.actor_birthday) + singleSpace + actorBirthday,
-                    )
-
-                    IconTextBox(
-                        icon = painterResource(Theme.icons.outline.location),
-                        contentDescription = stringResource(R.string.location_icon),
-                        text = stringResource(R.string.place_of_birth) + singleSpace + actorPlaceOfBirth,
-                    )
+                    if (actorBirthday.isNotBlank()) {
+                        IconTextBox(
+                            icon = painterResource(Theme.icons.outline.cake),
+                            contentDescription = stringResource(R.string.birthday_cake_icon),
+                            text = stringResource(R.string.actor_birthday) + singleSpace + actorBirthday,
+                        )
+                    }
+                    if (actorPlaceOfBirth.isNotBlank()) {
+                        IconTextBox(
+                            icon = painterResource(Theme.icons.outline.location),
+                            contentDescription = stringResource(R.string.location_icon),
+                            text = stringResource(R.string.place_of_birth) + singleSpace + actorPlaceOfBirth,
+                        )
+                    }
 
                 }
             }

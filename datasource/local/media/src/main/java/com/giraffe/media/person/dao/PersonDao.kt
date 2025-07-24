@@ -34,8 +34,8 @@ interface PersonDao {
     """)
     suspend fun getPeopleBySeriesId(seriesId: Int): List<PersonCacheDto>
 
-    @Query("SELECT * FROM $PERSONS_TABLE WHERE name LIKE '%' || :personName || '%'")
-    suspend fun searchByName(personName: String): List<PersonCacheDto>
+    @Query("SELECT * FROM $PERSONS_TABLE WHERE name LIKE '%' || :personName || '%' AND page = :page")
+    suspend fun searchByName(personName: String, page: Int): List<PersonCacheDto>
 
     @Query("SELECT * FROM $PERSONS_TABLE WHERE id = :id")
     suspend fun getPersonById(id: Int): PersonCacheDto

@@ -2,6 +2,7 @@ package com.giraffe.media.series.retrofit
 
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
+import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.util.RetrofitRequestBuilder
 
 class SeriesRemoteRetrofitDataSourceImp(
@@ -24,6 +25,16 @@ class SeriesRemoteRetrofitDataSourceImp(
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) =
         retrofitRequestBuilder.get { getSeriesReviews(seriesId, page) }.results
+
+    override suspend fun getPopularitySeries(page: Int): List<SeriesDto> =
+        retrofitRequestBuilder.get { getPopularSeries(page) }.results
+
+    override suspend fun getRecentlyReleasedSeries(page: Int): List<SeriesDto> =
+        retrofitRequestBuilder.get { getRecentlyReleasedSeries(page) }.results
+
+
+    override suspend fun getTopRatedSeries(page: Int): List<SeriesDto> =
+        retrofitRequestBuilder.get { getTopRatedSeries(page) }.results
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
         retrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results

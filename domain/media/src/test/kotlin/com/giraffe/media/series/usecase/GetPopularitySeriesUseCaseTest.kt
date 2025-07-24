@@ -49,13 +49,13 @@ class GetPopularitySeriesUseCaseTest {
             )
         )
 
-        coEvery { repository.getPopularitySeries() } returns expectedSeries
+        coEvery { repository.getPopularitySeries(1) } returns expectedSeries
 
         // When
-        val actualSeries = useCase()
+        val actualSeries = useCase(1)
 
         // Then
-        coVerify(exactly = 1) { repository.getPopularitySeries() }
+        coVerify(exactly = 1) { repository.getPopularitySeries(1) }
         assertThat(actualSeries).isEqualTo(expectedSeries)
     }
 }

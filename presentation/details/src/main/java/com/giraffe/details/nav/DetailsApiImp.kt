@@ -6,7 +6,7 @@ import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
 import com.giraffe.details.screens.castDetails.CastDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsRoute
-import com.giraffe.details.screens.seriesdetails.SeriesDetailsRoute
+import com.giraffe.details.screens.seriesdetails.screen.SeriesDetailsRoute
 
 class DetailsApiImp : DetailsApi {
 

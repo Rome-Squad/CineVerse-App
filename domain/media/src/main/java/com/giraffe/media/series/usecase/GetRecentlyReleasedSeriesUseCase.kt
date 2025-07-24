@@ -5,5 +5,5 @@ import com.giraffe.media.series.repository.SeriesRepository
 
 
 class GetRecentlyReleasedSeriesUseCase(private val repository: SeriesRepository) {
-    suspend operator fun invoke(): List<Series> = repository.getRecentlyReleasedSeries()
+    suspend operator fun invoke(page:Int): List<Series> = repository.getRecentlyReleasedSeries(page)
 }

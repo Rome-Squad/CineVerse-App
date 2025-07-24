@@ -12,14 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.giraffe.details.R
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainMovieOrSeriesDetailsAnimatedContent(
     type: String,
     name: String,
-    image: String?,
+    imageUrl: String?,
     rating: Float,
     genres: List<String>,
     releaseYear: String,
@@ -42,13 +44,13 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
                     animationSpec = tween(durationAnimation)
                 ) togetherWith fadeOut(animationSpec = tween(durationAnimation))
             },
-            label = "Animated Content"
+            label = stringResource(R.string.animated_content)
         ) { targetState ->
             when (targetState) {
                 false -> {
                     MainMovieOrSeriesDetails(
                         type = type,
-                        posterUrl = image,
+                        posterUrl = imageUrl,
                         name = name,
                         genres = genres,
                         rating = rating,
@@ -64,7 +66,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
 
                 true -> {
                     MinimizedInfoRow(
-                        posterUrl = image,
+                        posterUrl = imageUrl,
                         name = name,
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,

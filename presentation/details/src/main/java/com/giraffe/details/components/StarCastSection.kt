@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,10 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -36,39 +32,24 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 @Composable
 fun StarCastSection(
     title: String,
-    onShowMoreClick: () -> Unit,
     onCastClick: (personId: Int) -> Unit,
     castList: List<CastUi>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val chunkedList = castList.chunked(2)
+    val sizeOfChunkedList = if (castList.size > 2) 2 else 1
+    val chunkedList = castList.chunked(sizeOfChunkedList)
 
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = title,
-                color = Theme.color.shade.primary,
-                style = Theme.textStyle.title.sm,
-                modifier = Modifier.padding(start = 16.dp),
-            )
 
-            Text(
-                text = stringResource(R.string.show_more),
-                color = Theme.color.brand.primary,
-                modifier = Modifier
-                    .padding(start = 12.dp, end = 16.dp)
-                    .clickable { onShowMoreClick() },
-                style = Theme.textStyle.body.md.medium
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = title,
+            color = Theme.color.shade.primary,
+            style = Theme.textStyle.title.sm,
+            modifier = Modifier.padding(start = 16.dp),
+        )
 
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -123,7 +104,10 @@ fun CastCard(
                     painter = painterResource(Theme.icons.dueTone.image),
                     contentDescription = "$actorName image",
                     tint = Theme.color.brand.secondary,
-                    modifier = it.wrapContentSize()
+                    modifier = it
+                        .size(64.dp)
+                        .padding(12.dp)
+                        .wrapContentSize()
                 )
             }
 

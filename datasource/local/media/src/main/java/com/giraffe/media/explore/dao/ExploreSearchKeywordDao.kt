@@ -13,16 +13,17 @@ interface ExploreSearchKeywordDao {
     @Query(
         value =
             "SELECT * " +
-            "FROM SEARCH_KEYWORD " +
-            "ORDER BY lastSearchedTime DESC"
+                    "FROM SEARCH_KEYWORD " +
+                    "ORDER BY searchedAt DESC"
     )
     fun getSearchHistory(): Flow<List<SearchKeywordCacheDto>>
+
     @Query(
         value =
             "SELECT * " +
-            "FROM SEARCH_KEYWORD " +
-            "WHERE keyword = :query " +
-            "ORDER BY lastSearchedTime DESC"
+                    "FROM SEARCH_KEYWORD " +
+                    "WHERE keyword = :query " +
+                    "ORDER BY searchedAt DESC"
     )
     fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>>
 
@@ -32,12 +33,31 @@ interface ExploreSearchKeywordDao {
     @Query(
         value =
             "DELETE " +
-            "FROM SEARCH_KEYWORD " +
-            "WHERE keyword = :keyword "
+                    "FROM SEARCH_KEYWORD " +
+                    "WHERE keyword = :keyword "
     )
     suspend fun deleteKeyword(keyword: String)
 
     @Query("DELETE FROM SEARCH_KEYWORD")
     suspend fun clearSearchHistory()
 
+    @Query(
+        value =
+            "SELECT * " +
+                    "FROM SEARCH_KEYWORD " +
+                    "WHERE keyword = :query "
+    )
+    fun getSearchKeyword(query: String): SearchKeywordCacheDto?
+
+    @Query(
+        """
+    UPDATE SEARCH_KEYWORD
+    SET 
+        moviesPages = :emptyList,
+        seriesPages = :emptyList,
+        actorsPages = :emptyList
+    WHERE searchedAt <= :currentTime - 3600000
+    """
+    )
+    suspend fun clearExpiredKeywordPagesCache(currentTime: Long, emptyList: List<Int> = emptyList())
 }
