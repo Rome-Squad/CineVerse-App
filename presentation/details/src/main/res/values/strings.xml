@@ -46,5 +46,8 @@
     <string name="show_mores">Show more</string>
     <string name="best_of_">Best of %1$s</string>
     <string name="try_again">Try Again</string>
+    <string name="animated_content">Animated Content</string>
+    <string name="season">Season %1$s</string>
     <string name="viewtoggleanimation">View Toggle Animation</string>
+    <string name="split">, </string>
 </resources>
