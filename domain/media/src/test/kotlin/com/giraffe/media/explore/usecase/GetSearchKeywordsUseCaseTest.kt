@@ -8,7 +8,6 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -43,7 +42,7 @@ class GetSearchKeywordsUseCaseTest {
 
         // Then
         assertThat(result).isEqualTo(expected)
-        coVerify { repository.getSearchKeywords(trimmedQuery).single() }
+        coVerify { repository.getSearchKeywords(trimmedQuery) }
     }
 
     @Test
@@ -59,7 +58,7 @@ class GetSearchKeywordsUseCaseTest {
             useCase(rawQuery).first() // Collect the flow to trigger the repository call
 
             // Then
-            coVerify { repository.getSearchKeywords(trimmedQuery).single() }
+            coVerify { repository.getSearchKeywords(trimmedQuery) }
         }
 
 }
