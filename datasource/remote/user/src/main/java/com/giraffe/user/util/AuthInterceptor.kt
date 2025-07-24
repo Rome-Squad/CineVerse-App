@@ -1,4 +1,4 @@
-package com.giraffe.user
+package com.giraffe.user.util
 
 import okhttp3.Interceptor
 import okhttp3.Response
