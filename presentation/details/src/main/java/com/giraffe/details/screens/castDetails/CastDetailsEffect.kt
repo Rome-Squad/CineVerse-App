@@ -6,4 +6,6 @@ sealed interface CastDetailsEffect {
     data class OpenUrl(val url: String) : CastDetailsEffect
     data class NavigateToGallery(val actorName: String, val imageUrls: List<String?>) :
         CastDetailsEffect
+    data class NavigateToCastCredit(val castID: Int, val actorName: String) :
+        CastDetailsEffect
 }
