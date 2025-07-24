@@ -5,8 +5,5 @@ import androidx.compose.runtime.Composable
 
 interface HomeApi {
     @Composable
-    fun HomeContainer(
-        navigateToMovieDetails: (Int) -> Unit,
-        navigateToSeriesDetails: (Int) -> Unit,
-    )
+    fun HomeContainer()
 }
