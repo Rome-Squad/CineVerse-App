@@ -20,7 +20,7 @@ internal fun AuthenticationNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = LoginRoute,
+        startDestination = LoginRoute(),
     ){
         webViewRoute(navController)
 
