@@ -2,7 +2,6 @@ package com.giraffe.details.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -24,9 +23,7 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 fun RatingEmojiState(
     modifier: Modifier = Modifier,
     iconSize: Dp = 24.dp,
-    rate: Int = 0,
-    onRateClickEnabled: Boolean = true,
-    onRateClick: (Int) -> Unit = {}
+    rate: Int = 0
 ) {
 
     Row(
@@ -63,13 +60,6 @@ fun RatingEmojiState(
                             1f
                         else
                             .3f
-                    )
-                    .then(
-                        other = if (onRateClickEnabled)
-                            Modifier.clickable { onRateClick(i + 1) }
-                        else
-                            Modifier
-
                     )
 
             )
