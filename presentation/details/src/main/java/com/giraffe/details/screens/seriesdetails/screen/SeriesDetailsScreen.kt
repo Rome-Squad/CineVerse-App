@@ -21,13 +21,13 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SeriesDetailsScreen(
-    modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
     navigateToCastDetails: (castID: Int) -> Unit,
     navigateToSeason: (seriesId: Int) -> Unit,
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
-    onBackButtonClick: () -> Unit = {},
+    onBackButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     viewModel: SeriesDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
