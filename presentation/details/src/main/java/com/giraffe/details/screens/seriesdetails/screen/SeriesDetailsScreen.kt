@@ -62,7 +62,7 @@ fun SeriesDetailsScreen(
                 state = state,
                 interaction = viewModel,
                 onBackButtonClick = onBackButtonClick,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.fillMaxSize()
             )
         }
     }

@@ -7,6 +7,7 @@ interface SeriesDetailsInteractionListener {
     fun onDismissGiveStarsBottomSheet()
 
     fun navigateToCastDetailsScreen(personId: Int)
-    fun navigateToSeasonsScreen(personId: Int)
+    fun navigateToSeasonsScreen(seriesId: Int)
     fun navigateToRecommendedSeriesScreen(seriesId: Int, title: String)
+    fun navigateToSeriesDetails(seriesId: Int)
 }

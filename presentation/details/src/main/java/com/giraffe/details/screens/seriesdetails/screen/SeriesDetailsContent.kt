@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.details.R
@@ -75,13 +75,14 @@ fun SeriesDetailsContent(
                 description = state.seriesDetails.overview
             )
 
-            SectionTitle(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.latest_seasons),
-                clickableText = stringResource(R.string.show_more),
-                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
-            )
-
+            AnimatedVisibility(state.seasons.isNotEmpty()) {
+                SectionTitle(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.latest_seasons),
+                    clickableText = stringResource(R.string.show_more),
+                    onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
+                )
+            }
             AnimatedVisibility(state.seasons.isNotEmpty()) {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -110,9 +111,8 @@ fun SeriesDetailsContent(
             AnimatedVisibility(state.cast.isNotEmpty()) {
                 StarCastSection(
                     title = stringResource(R.string.star_cast),
-                    onShowMoreClick = {},
                     castList = state.cast,
-                    onCastClick = { interaction.navigateToCastDetailsScreen(it) }
+                    onCastClick = interaction::navigateToCastDetailsScreen
                 )
             }
 
@@ -125,17 +125,17 @@ fun SeriesDetailsContent(
             }
 
             AnimatedVisibility(state.recommendedSeries.isNotEmpty()) {
-                MoviesListSection(
+                PosterListSection(
                     title = stringResource(R.string.you_might_also_like),
                     endText = stringResource(R.string.show_more),
-                    movies = state.recommendedSeries,
+                    poster = state.recommendedSeries,
                     onClickEndText = {
                         interaction.navigateToRecommendedSeriesScreen(
                             seriesId = state.seriesDetails.id,
                             title = state.seriesDetails.name
                         )
                     },
-                    onClickPoster = { }
+                    onClickPoster = interaction::navigateToSeriesDetails
                 )
             }
 
