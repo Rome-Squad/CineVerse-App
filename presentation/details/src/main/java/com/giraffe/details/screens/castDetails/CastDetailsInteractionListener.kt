@@ -7,4 +7,5 @@ interface CastDetailsInteractionListener {
     fun onMovieClicked(movieId: Int)
     fun navigateToMoviesListScreen()
     fun navigateToActorGalleryScreen()
+    fun navigateToCastCreditScreen(castId: Int, actorName: String)
 }

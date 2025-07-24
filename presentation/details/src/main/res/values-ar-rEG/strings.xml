@@ -47,4 +47,7 @@
     <string name="try_again">حاول مجددا</string>
     <string name="animated_content">محتوى متحرك</string>
     <string name="season">الموسم %1$s</string>
+    <string name="split">، </string>
+    <string name="best_of_">أفضل ما في %1$s</string>
+    <string name="viewtoggleanimation">عرض تبديل الرسوم المتحركة</string>
 </resources>

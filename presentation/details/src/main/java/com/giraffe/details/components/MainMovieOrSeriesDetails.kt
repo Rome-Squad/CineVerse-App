@@ -76,6 +76,7 @@ fun MainMovieOrSeriesDetails(
                         tint = Theme.color.brand.secondary,
                         modifier = Modifier
                             .size(width = 216.dp, height = 289.dp)
+                            .clip(RoundedCornerShape(Theme.radius.xl))
                             .background(
                                 Theme.color.background.card,
                             )

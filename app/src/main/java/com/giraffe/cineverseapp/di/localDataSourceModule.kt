@@ -3,6 +3,8 @@ package com.giraffe.cineverseapp.di
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.media.explore.LocalExploreDataSourceImpl
+import com.giraffe.media.explore.cleaner.KeywordsCacheCleaner
+import com.giraffe.media.explore.cleaner.KeywordsCacheCleanerImp
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.person.PersonLocalDataSourceImp
@@ -17,6 +19,7 @@ import org.koin.dsl.module
 
 val localDataSourceModule = module {
     single<ExploreSearchKeywordDao> { get<CineVerseDatabase>().exploreSearchKeywordDao() }
+    single<KeywordsCacheCleaner> { KeywordsCacheCleanerImp(get()) }
     single<LocalExploreDataSource> { LocalExploreDataSourceImpl(get()) }
     single<MovieDao> { get<CineVerseDatabase>().movieDao() }
     single<MoviesLocalDataSource> { MovieLocalDataSourceImp(get()) }

@@ -16,16 +16,16 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.Poster
 
 @Composable
-fun MoviesListSection(
+fun PosterListSection(
     title: String,
-    movies: List<Poster>,
+    poster: List<Poster>,
     modifier: Modifier = Modifier,
     endText: String? = null,
     paddingHorizontal: Int = 16,
     onClickEndText: () -> Unit = {},
     onClickPoster: (movieId: Int) -> Unit = {}
 ) {
-    if (movies.isEmpty()) {
+    if (poster.isEmpty()) {
         return
     }
     Column(
@@ -43,7 +43,7 @@ fun MoviesListSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
         ) {
-            items(movies) { movie ->
+            items(poster) { movie ->
                 PosterItemVertically(
                     movie = movie,
                     modifier = Modifier
@@ -62,11 +62,11 @@ private fun Preview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(80.dp)
         ) {
-            MoviesListSection(
+            PosterListSection(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Popular Movies",
                 endText = "Show More",
-                movies = listOf(
+                poster = listOf(
                     Poster(
                         id = 1,
                         name = "The FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe FlashThe Flash",
@@ -96,10 +96,10 @@ private fun Preview() {
                 onClickPoster = {}
             )
 
-            MoviesListSection(
+            PosterListSection(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Popular Movies",
-                movies = listOf(
+                poster = listOf(
                     Poster(
                         id = 1,
                         name = "The Flash",

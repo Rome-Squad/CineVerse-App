@@ -8,5 +8,8 @@ import com.giraffe.media.utils.DatabaseConstants
 data class SearchKeywordCacheDto(
     @PrimaryKey(autoGenerate = false)
     val keyword: String,
-    val lastSearchedTime: String
+    val moviesPages: List<Int> = emptyList(),
+    val seriesPages: List<Int> = emptyList(),
+    val actorsPages: List<Int> = emptyList(),
+    val searchedAt: Long = System.currentTimeMillis(),
 )

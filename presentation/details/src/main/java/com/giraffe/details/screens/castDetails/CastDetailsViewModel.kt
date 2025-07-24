@@ -50,6 +50,15 @@ class CastDetailsViewModel(
         )
     }
 
+    override fun navigateToCastCreditScreen(castId: Int, actorName: String) {
+        sendEffect(
+            CastDetailsEffect.NavigateToCastCredit(
+                castID = castId,
+                actorName = actorName
+            )
+        )
+    }
+
     private fun getPersonDetails(personId: Int) {
         safeExecute(
             onSuccess = ::getPersonDetailsSuccess,
@@ -63,6 +72,7 @@ class CastDetailsViewModel(
     private fun getPersonDetailsSuccess(person: Person) {
         updateState {
             it.copy(
+                actorId = person.id,
                 isLoading = false,
                 actorImageUrl = person.imageUrl.orEmpty(),
                 actorName = person.name,

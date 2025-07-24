@@ -28,8 +28,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.giraffe.details.components.recomended.PosterHorizontal
-import com.giraffe.details.components.recomended.PosterVertically
+import com.giraffe.details.components.PosterHorizontal
+import com.giraffe.details.components.PosterVertically
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.toPoster
 import kotlinx.coroutines.flow.collectLatest
