@@ -37,14 +37,14 @@ class SearchMovieByNameUseCaseTest {
     @Test
     fun `invoke() should call search and genres methods on repository`() = runTest {
         // Given
-        coEvery { repository.searchMovieByName(any()) } returns emptyList()
+        coEvery { repository.searchMovieByName(any(), any()) } returns emptyList()
         coEvery { repository.getMoviesGenres() } returns emptyList()
 
         // When
-        useCase("test")
+        useCase("test", 1)
 
         // Then
-        coVerify(exactly = 1) { repository.searchMovieByName("test") }
+        coVerify(exactly = 1) { repository.searchMovieByName("test", 1) }
         coVerify(exactly = 1) { repository.getMoviesGenres() }
     }
 
@@ -52,11 +52,11 @@ class SearchMovieByNameUseCaseTest {
     fun `when genres list is empty should return unsorted search results`() = runTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
-        coEvery { repository.searchMovieByName(any()) } returns searchResults
+        coEvery { repository.searchMovieByName(any(), any()) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns emptyList()
 
         // When
-        val result = useCase("test")
+        val result = useCase("test", 1)
 
         // Then
         assertThat(result).isEqualTo(searchResults)
@@ -68,11 +68,11 @@ class SearchMovieByNameUseCaseTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         val genreWithZeroRank = Genre(id = 878, title = "Sci-Fi", rank = 0)
-        coEvery { repository.searchMovieByName(any()) } returns searchResults
+        coEvery { repository.searchMovieByName(any(), any()) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns listOf(genreWithZeroRank)
 
         // When
-        val result = useCase("test")
+        val result = useCase("test", 1)
 
         // Then
         assertThat(result).isEqualTo(searchResults)
@@ -84,11 +84,11 @@ class SearchMovieByNameUseCaseTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         val favoriteGenre = Genre(id = 878, title = "Sci-Fi", rank = 1)
-        coEvery { repository.searchMovieByName(any()) } returns searchResults
+        coEvery { repository.searchMovieByName(any(), any()) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns listOf(favoriteGenre)
 
         // When
-        val result = useCase("test")
+        val result = useCase("test", 1)
 
         // Then
         assertThat(result).containsExactly(movieSciFi, movieAction).inOrder()
