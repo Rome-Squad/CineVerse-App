@@ -6,5 +6,7 @@ class InvalidCredentialsException : AuthDataException()
 class TokenCreationException : AuthDataException()
 class TokenValidationException : AuthDataException()
 class SessionCreationException : AuthDataException()
-class GuestSessionCreationException : AuthDataException()
+
+class ApiDataException(val code: Int) : AuthDataException()
+
 

@@ -1,8 +1,8 @@
 package com.giraffe.repository
 
 import com.giraffe.repository.datasource.UserRemoteDataSource
+import com.giraffe.repository.utils.SafeCall
 import com.giraffe.user.SessionManager
-import com.giraffe.user.exception.GuestAuthenticationException
 import com.giraffe.user.repository.AuthRepository
 
 class AuthRepositoryImpl(
@@ -11,13 +11,14 @@ class AuthRepositoryImpl(
 ) : AuthRepository {
     override suspend fun login(username: String, password: String) {
 
-        val requestToken = remoteDataSource.createRequestToken()
+        SafeCall{
+            val requestToken = remoteDataSource.createRequestToken()
 
-        val validatedToken = remoteDataSource.validateTokenWithLogin(requestToken, username, password)
+            val validatedToken = remoteDataSource.validateTokenWithLogin(requestToken, username, password)
 
-        val sessionId = remoteDataSource.createSession(validatedToken)
+            val sessionId = remoteDataSource.createSession(validatedToken)
 
-        sessionIdManager.saveSessionId(sessionId)
-
+            sessionIdManager.saveSessionId(sessionId)
+        }
     }
 }

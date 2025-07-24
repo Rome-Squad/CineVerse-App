@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.giraffe.authentication.base.BaseViewModel
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
+import com.giraffe.user.exception.InvalidUsernameOrPasswordException
 import com.giraffe.user.usecase.LoginUseCase
 
 class LoginViewModel(
@@ -50,6 +51,13 @@ class LoginViewModel(
 
         if (throwable is InvalidPasswordException) updateState {
             it.copy(
+                passwordErrorMessage = mapExceptionToStringRes(throwable)
+            )
+        }
+
+        if(throwable is InvalidUsernameOrPasswordException) updateState {
+            it.copy(
+                usernameErrorMessage = mapExceptionToStringRes(throwable),
                 passwordErrorMessage = mapExceptionToStringRes(throwable)
             )
         }
