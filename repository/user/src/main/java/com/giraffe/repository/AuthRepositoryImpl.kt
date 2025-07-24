@@ -9,9 +9,7 @@ class AuthRepositoryImpl(
     private val remoteDataSource: UserRemoteDataSource,
     private val sessionIdManager: SessionManager
 ) : AuthRepository {
-    override suspend fun login(username: String, password: String) {
-
-        SafeCall{
+    override suspend fun login(username: String, password: String) = SafeCall {
             val requestToken = remoteDataSource.createRequestToken()
 
             val validatedToken = remoteDataSource.validateTokenWithLogin(requestToken, username, password)
@@ -20,5 +18,4 @@ class AuthRepositoryImpl(
 
             sessionIdManager.saveSessionId(sessionId)
         }
-    }
 }

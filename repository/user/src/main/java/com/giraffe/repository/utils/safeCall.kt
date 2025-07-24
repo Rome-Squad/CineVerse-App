@@ -22,7 +22,7 @@ object SafeCall {
     fun mapToDomainException(e: Throwable): AuthException = when (e) {
         is ApiDataException -> when (e.code) {
             // 401 Unauthorized (Auth or Token issues)
-            30 -> InvalidUsernameOrPasswordException()
+            401, 403 -> InvalidUsernameOrPasswordException()
             else -> UnknownException()
 
         }
