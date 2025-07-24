@@ -7,7 +7,6 @@ import com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
 
 @Entity(tableName = MOVIE_TABLE)
 data class MovieCacheDto(
-
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val title: String,

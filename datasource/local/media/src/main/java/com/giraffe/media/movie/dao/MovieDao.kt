@@ -4,17 +4,17 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
-import  com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
-import  com.giraffe.media.utils.DatabaseConstants.MOVIE_GENRE_TABLE
+import androidx.room.Upsert
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.utils.DatabaseConstants.MOVIE_GENRE_TABLE
+import com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
 
 
 @Dao
 interface MovieDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovies(movies: List<MovieCacheDto>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -53,7 +53,7 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_TABLE WHERE isRecent = 1")
     suspend fun getRecentlyMovies(): List<MovieCacheDto>
 
-    @Update
+    @Upsert
     suspend fun updateMovie(movie: MovieCacheDto)
 
     @Query(

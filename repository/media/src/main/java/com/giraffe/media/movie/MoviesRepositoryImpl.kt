@@ -86,8 +86,6 @@ class MoviesRepositoryImpl(
     override suspend fun clearRecentlyMovies() = SafeCall { cache.clearRecentlyMovies() }
 
     override suspend fun getMovieDetails(movieId: Int) = SafeCall {
-//        Log.d("TAG", "getMovieDetails: ${cache.getMovieById(movieId)?.toEntity()}")
-//        Log.d("TAG", "getMovieDetails: ${remote.getMovieById(movieId)}")
         cache.getMovieById(movieId)?.toEntity() ?: remote.getMovieById(movieId)
             .toEntity()
             .also { insertMovies(listOf(it)) }

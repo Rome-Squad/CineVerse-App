@@ -1,10 +1,13 @@
 package com.giraffe.repository.dto
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GuestSessionResponse(
     val success: Boolean,
-    val guest_session_id: String,
-    val expires_at: String
+    @SerialName("guest_session_id")
+    val guestSessionId: String,
+    @SerialName("expires_at")
+    val expiresAt: String
 )
