@@ -3,7 +3,6 @@ package com.giraffe.home.screen.movies_list
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -31,12 +30,9 @@ fun NavGraphBuilder.moviesListRoute(
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
-    composable<MoviesListRoute> { backStackEntry ->
-        val route = backStackEntry.toRoute<MoviesListRoute>()
+    composable<MoviesListRoute> {
         MoviesListScreen(
             onBackClick = onBackClick,
-            sectionType = route.sectionType,
-            sectionTitle = route.sectionTitle,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
         )

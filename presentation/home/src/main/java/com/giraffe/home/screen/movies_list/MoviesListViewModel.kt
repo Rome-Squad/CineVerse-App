@@ -1,7 +1,9 @@
 package com.giraffe.home.screen.movies_list
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.screen.home.MediaType
@@ -31,20 +33,22 @@ class MoviesListViewModel(
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
+    stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<MoviesListUiState, MoviesListEffect>(initialState = MoviesListUiState()),
     MoviesListInteractionListener {
+    private val sectionTitle = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionTitle
+    private val sectionType = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionType
 
-    private var currentSectionType: String = ""
-    private var currentPage: Int = 1
-
-    fun loadMoviesBySection(sectionType: String) {
-        currentSectionType = sectionType
-        currentPage = 1
+    init {
+        loadMoviesBySection(sectionType)
+    }
+    private fun loadMoviesBySection(sectionType: String) {
         updateState {
             it.copy(
                 isLoading = true,
                 errorMessage = null,
-                mediaList = emptyList()
+                mediaList = emptyList(),
+                moviesListTitle = sectionTitle
             )
         }
 

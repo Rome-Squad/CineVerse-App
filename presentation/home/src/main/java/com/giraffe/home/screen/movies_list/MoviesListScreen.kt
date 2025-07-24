@@ -24,8 +24,6 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesListScreen(
-    sectionType: String,
-    sectionTitle: String,
     moviesListViewModel: MoviesListViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
     navigateToMoviesDetailsScreen: (Int) -> Unit,
