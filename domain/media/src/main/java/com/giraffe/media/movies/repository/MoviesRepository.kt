@@ -1,8 +1,8 @@
 package com.giraffe.media.movies.repository
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.entity.Genre
 
 interface MoviesRepository {
 
@@ -38,6 +38,8 @@ interface MoviesRepository {
     suspend fun addRating(movieId: Int, ratingValue: Float)
 
     suspend fun getUserMovieRating(movieId: Int): Float
+
+    suspend fun deleteMovieRating(movieId: Int)
 
 
 }

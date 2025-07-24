@@ -2,6 +2,7 @@ package com.giraffe.media.series
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetDataException
+import com.giraffe.media.exception.UserNotLoggedInException
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
@@ -90,6 +91,9 @@ class SeriesRepositoryImpl(
 
     override suspend fun addSeriesRating(seriesId: Int, ratingValue: Float) = SafeCall{
         val sessionId = getSessionId()
+        if (sessionId.isBlank()) {
+            throw UserNotLoggedInException()
+        }
         val requestBody = RatingRequest(value = ratingValue)
         remote.addRating(seriesId, sessionId, requestBody)
     }
@@ -97,6 +101,14 @@ class SeriesRepositoryImpl(
     override suspend fun getUserSeriesRating(seriesId: Int): Float = SafeCall{
         val sessionId = getSessionId()
         remote.getSeriesRating(seriesId, sessionId)
+    }
+
+    override suspend fun deleteSeriesRating(seriesId: Int) {
+        val sessionId = getSessionId()
+        if (sessionId.isBlank()) {
+            throw UserNotLoggedInException()
+        }
+        remote.deleteSeriesRating(seriesId, sessionId)
     }
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {

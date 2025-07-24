@@ -2,6 +2,7 @@ package com.giraffe.media.movie
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetDataException
+import com.giraffe.media.exception.UserNotLoggedInException
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
@@ -110,6 +111,9 @@ class MoviesRepositoryImpl(
         ratingValue: Float
     ) = SafeCall {
         val sessionId = getSessionId()
+        if (sessionId.isBlank()) {
+            throw UserNotLoggedInException()
+        }
         val requestBody = RatingRequest(value = ratingValue)
         remote.addRating(movieId, sessionId, requestBody)
     }
@@ -117,6 +121,15 @@ class MoviesRepositoryImpl(
     override suspend fun getUserMovieRating(movieId: Int) = SafeCall {
         val sessionId = getSessionId()
         remote.getUserMovieRating(movieId, sessionId)
+    }
+
+    override suspend fun deleteMovieRating(movieId: Int) = SafeCall {
+        val sessionId = getSessionId()
+
+        if (sessionId.isBlank()) {
+            throw UserNotLoggedInException()
+        }
+        remote.deleteRating(movieId, sessionId)
     }
 
     private suspend fun getSessionId() = SafeCall {

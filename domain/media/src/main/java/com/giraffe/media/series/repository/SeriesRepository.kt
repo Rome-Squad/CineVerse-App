@@ -20,4 +20,5 @@ interface SeriesRepository {
     suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre>
     suspend fun addSeriesRating(seriesId: Int, ratingValue: Float)
     suspend fun getUserSeriesRating(seriesId: Int): Float
+    suspend fun deleteSeriesRating(seriesId: Int)
 }
