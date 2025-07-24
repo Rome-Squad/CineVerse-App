@@ -46,4 +46,5 @@
     <string name="show_mores">Show more</string>
     <string name="best_of_">Best of %1$s</string>
     <string name="try_again">Try Again</string>
+    <string name="viewtoggleanimation">View Toggle Animation</string>
 </resources>

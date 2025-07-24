@@ -18,7 +18,6 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CastCreditScreen(
-    actorName: String,
     onBackClick: () -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
@@ -51,7 +50,7 @@ fun CastCreditScreen(
         }
         AnimatedVisibility(!state.isLoading) {
             CastCreditContent(
-                actorName = actorName,
+                actorName = state.actorName,
                 state = state,
                 interaction = viewModel,
                 onBackClick = onBackClick,

@@ -53,9 +53,7 @@ internal fun DetailsNavGraph(
         castCreditRoute(
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
             navigateToMovieDetails = navController::navigateToMovieDetails,
-            onBackClick = {
-                navController.navigateUp()
-            }
+            onBackClick = navController::navigateUp
         )
 
         castDetailsRoute(

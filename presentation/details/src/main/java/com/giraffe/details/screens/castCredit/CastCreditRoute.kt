@@ -3,7 +3,6 @@ package com.giraffe.details.screens.castCredit
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,9 +18,7 @@ fun NavGraphBuilder.castCreditRoute(
     onBackClick: () -> Unit,
 ) {
     composable<CastCreditRoute> { backStackEntry ->
-        val actorName = backStackEntry.toRoute<CastCreditRoute>().actorName
         CastCreditScreen(
-            actorName = actorName,
             onBackClick = onBackClick,
             navigateToSeriesDetails = navigateToSeriesDetails,
             navigateToMovieDetails = navigateToMovieDetails
