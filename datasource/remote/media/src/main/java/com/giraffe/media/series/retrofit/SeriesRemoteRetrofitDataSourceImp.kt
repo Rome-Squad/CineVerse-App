@@ -42,6 +42,9 @@ class SeriesRemoteRetrofitDataSourceImp(
             .results.firstOrNull { it.id == seriesId }?.rating?.toFloat() ?: 0f
     }
 
+    override suspend fun deleteSeriesRating(seriesId: Int, sessionId: String) =
+        RetrofitRequestBuilder.delete { deleteSeriesRating(seriesId, sessionId) }
+
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
         RetrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results
 }

@@ -1,10 +1,9 @@
 package com.giraffe.media.movie.datasource.remote
 
-import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
-import  com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
-import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
-import com.giraffe.media.series.datasource.remote.dto.SeriesDto
+import com.giraffe.media.movie.datasource.remote.dto.MovieDto
+import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
+import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 
 interface MoviesRemoteDataSource {
 
@@ -27,4 +26,5 @@ interface MoviesRemoteDataSource {
         movieId: Int,
         sessionId: String
     ): Float
+    suspend fun deleteRating(movieId: Int, sessionId: String)
 }
