@@ -20,8 +20,8 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieGenres(movies: List<MovieGenreCacheDto>)
 
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE title LIKE '%' || :movieName || '%'")
-    suspend fun getMovieByName(movieName: String): List<MovieCacheDto>
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE title LIKE '%' || :movieName || '%' AND page = :page")
+    suspend fun getMovieByName(movieName: String, page: Int): List<MovieCacheDto>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id =:movieId")
     suspend fun getMovieById(movieId: Int): MovieCacheDto?

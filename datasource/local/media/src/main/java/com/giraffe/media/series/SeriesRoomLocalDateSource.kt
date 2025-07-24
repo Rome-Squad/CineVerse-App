@@ -29,9 +29,10 @@ class SeriesRoomLocalDateSource(
     }
 
 
-    override suspend fun getCachedSeriesForName(name: String): List<SeriesCacheDto> = safeCall {
-        seriesDao.getSeriesByKeyword(name)
-    }
+    override suspend fun getCachedSeriesForName(name: String, page: Int): List<SeriesCacheDto> =
+        safeCall {
+            seriesDao.getSeriesByKeyword(name, page)
+        }
 
 
     override suspend fun getCachedGenres(): List<SeriesGenreCacheDto> = safeCall {

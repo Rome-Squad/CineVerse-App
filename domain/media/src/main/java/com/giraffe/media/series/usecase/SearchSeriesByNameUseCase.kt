@@ -2,24 +2,27 @@ package com.giraffe.media.series.usecase
 
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.repository.SeriesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SearchSeriesByNameUseCase(
     private val seriesRepository: SeriesRepository
 ) {
-    suspend operator fun invoke(seriesName: String): List<Series> {
+    suspend operator fun invoke(seriesName: String, page: Int): List<Series> {
+        return withContext(Dispatchers.IO) {
+            val searchResults = seriesRepository.searchSeriesByName(seriesName, page)
 
-        val searchResults = seriesRepository.searchSeriesByName(seriesName)
+            val sortedPreferences = seriesRepository.getSeriesGenres()
 
-        val sortedPreferences = seriesRepository.getSeriesGenres()
+            if (sortedPreferences.isEmpty() || sortedPreferences.first().rank == 0) {
+                searchResults
+            }
 
-        if (sortedPreferences.isEmpty() || sortedPreferences.first().rank == 0) {
-            return searchResults
-        }
+            val favoriteGenreId = sortedPreferences.first().id
 
-        val favoriteGenreId = sortedPreferences.first().id
-
-        return searchResults.sortedByDescending { series ->
-           series.genreIDs.contains(favoriteGenreId)
+            searchResults.sortedByDescending { series ->
+                series.genreIDs.contains(favoriteGenreId)
+            }
         }
     }
 }

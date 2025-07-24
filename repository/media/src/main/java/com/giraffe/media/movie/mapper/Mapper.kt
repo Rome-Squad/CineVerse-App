@@ -34,7 +34,7 @@ fun MovieCacheDto.toEntity() = Movie(
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
 )
 
-fun Movie.toDto() = MovieCacheDto(
+fun Movie.toCacheDto() = MovieCacheDto(
     id = id,
     title = title,
     overview = description,

@@ -13,8 +13,8 @@ class MoviesRemoteDataSourceImplRetrofit(
     override suspend fun getMovieById(movieId: Int) =
         retrofitRequestBuilder.get { getMovieById(movieId) }
 
-    override suspend fun getMoviesByName(movieName: String) =
-        retrofitRequestBuilder.get { getMoviesByName(movieName) }.results
+    override suspend fun getMoviesByName(movieName: String, page: Int) =
+        retrofitRequestBuilder.get { getMoviesByName(movieName, page) }.results
 
     override suspend fun getMovieGenres() =
         retrofitRequestBuilder.get { getGenres() }.genres
@@ -36,8 +36,9 @@ class MoviesRemoteDataSourceImplRetrofit(
     override suspend fun addRating(movieId: Int, sessionId: String, request: RatingRequest) =
         retrofitRequestBuilder.post { rateMovie(movieId, sessionId, request) }
 
-    override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) = retrofitRequestBuilder.get { getMovieRating(movieId, guestSessionId) }
-        .results.firstOrNull { it.id == movieId }?.rating?.toFloat() ?: 0f
+    override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) =
+        retrofitRequestBuilder.get { getMovieRating(movieId, guestSessionId) }
+            .results.firstOrNull { it.id == movieId }?.rating?.toFloat() ?: 0f
 
     override suspend fun getPopularityMovies(page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getPopularMovies(page) }.results
