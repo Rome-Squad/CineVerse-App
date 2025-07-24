@@ -9,6 +9,7 @@ import com.giraffe.media.series.response.SeriesReviewsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -59,6 +60,12 @@ interface SeriesApiServiceRetrofit {
         @Path(SERIES_ID) seriesId: Int,
         @Query(SESSION_ID) sessionId: String
     ): Response<RatedMoviesResponse>
+
+    @HTTP(method = "DELETE", path = "$TV/{$SERIES_ID}/$RATING", hasBody = false)
+    suspend fun deleteSeriesRating(
+        @Path(SERIES_ID) seriesId: Int,
+        @Query(SESSION_ID) sessionId: String
+    ): Response<Unit>
 
     companion object {
         const val SEARCH_TV = "search/tv"

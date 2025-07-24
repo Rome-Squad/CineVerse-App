@@ -1,9 +1,18 @@
 package com.giraffe.media.movie.retrofit
 
-import com.giraffe.media.movie.datasource.remote.dto.*
-import com.giraffe.media.movie.response.*
+import com.giraffe.media.movie.datasource.remote.dto.MovieDto
+import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import com.giraffe.media.movie.datasource.remote.dto.ReviewsResponseDto
+import com.giraffe.media.movie.response.GenreResponse
+import com.giraffe.media.movie.response.MoviesListResponse
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MoviesApiServiceRetrofit {
 
@@ -40,6 +49,12 @@ interface MoviesApiServiceRetrofit {
         @Path(MOVIE_ID) movieId: Int,
         @Query(SESSION_ID) sessionId: String
     ): Response<RatedMoviesResponse>
+
+    @HTTP(method = "DELETE", path = "$MOVIE_END_POINT/{$MOVIE_ID}/$RATING", hasBody = false)
+    suspend fun deleteMovieRating(
+        @Path(MOVIE_ID) movieId: Int,
+        @Query(SESSION_ID) sessionId: String
+    ): Response<Unit>
 
     companion object {
         const val MOVIE_END_POINT = "movie"
