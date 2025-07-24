@@ -14,6 +14,8 @@ import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.navigateToReviews
+import com.giraffe.details.screens.seasons.screen.navigateToSeasons
+import com.giraffe.details.screens.seasons.screen.seasonsRoute
 import com.giraffe.details.screens.seriesdetails.screen.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.screen.seriesDetailsRoute
 
@@ -39,8 +41,11 @@ internal fun DetailsNavGraph(
             navigateToRecommendedSeries = navController::navigateToRecommendedSeries,
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
             navigateToCastDetails = navController::navigateToCastDetails,
-            navigateToSeason = navController::navigateToSeriesDetails               // change this to navigate to season screen
+            navigateToSeason = navController::navigateToSeasons               // change this to navigate to season screen
         )
+
+        seasonsRoute { if (navController.popBackStack().not()) onBackClick() }
+
 
         recommendedSeriesRoute(
             navigateToSeriesDetails = { seriesID ->
