@@ -6,13 +6,17 @@ import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
+import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
+import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val getSearchKeywords: GetSearchKeywordsUseCase,
@@ -22,6 +26,9 @@ class SearchViewModel(
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecentSeriesUseCase: GetRecentSeriesUseCase,
     private val getRecentPeopleUseCase: GetRecentPeopleUseCase,
+    private val clearRecentSeriesUseCase: ClearRecentSeriesUseCase,
+    private val clearRecentlyMoviesUseCase: ClearRecentlyMoviesUseCase,
+    private val clearRecentlyPeopleUseCase: ClearRecentPeopleUseCase
 ) : BaseViewModel<SearchScreenState>(SearchScreenState()),
     SearchInteractionListener {
     init {
@@ -70,6 +77,18 @@ class SearchViewModel(
 
     override fun clearAllKeywords() {
         safeExecute { clearSearchHistory() }
+    }
+
+    override fun clearAllRecentViewedPosters() {
+        safeExecute {
+            val job1 = launch { clearRecentSeriesUseCase() }
+            val job2 = launch { clearRecentlyMoviesUseCase() }
+            val job3 = launch { clearRecentlyPeopleUseCase() }
+            job1.join()
+            job2.join()
+            job3.join()
+            updateState { it.copy(recentPosters = emptyList()) }
+        }
     }
 
     override fun onPostfixIconClick() {

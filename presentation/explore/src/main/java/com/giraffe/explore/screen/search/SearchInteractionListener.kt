@@ -5,6 +5,7 @@ interface SearchInteractionListener {
     fun onKeywordClick(keyword: String)
     fun deleteKeyword(keyword: String)
     fun clearAllKeywords()
+    fun clearAllRecentViewedPosters()
     fun onPostfixIconClick()
     fun onPermissionResult(isGranted: Boolean)
     fun onVoiceSearchFinished()
