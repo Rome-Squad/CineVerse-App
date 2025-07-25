@@ -1,8 +1,10 @@
 package com.giraffe.home.screen.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,7 +24,6 @@ import com.giraffe.home.components.Carousel
 import com.giraffe.home.components.CollectionItemData
 import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
-import com.giraffe.home.components.HorizontalDivider
 import com.giraffe.home.components.TopAppBar
 import com.giraffe.home.components.UserCollection
 import com.giraffe.home.components.YourCollectionsSections
@@ -99,7 +100,14 @@ fun HomeContent(
             .statusBarsPadding()
     ) {
         stickyHeader { TopAppBar(userName = state.userName) }
-        item { HorizontalDivider(color = Theme.color.stroke.primary) }
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Theme.color.stroke.primary)
+            )
+        }
         item {
             Carousel(
                 modifier = Modifier

@@ -38,8 +38,6 @@ val viewModelModule = module {
     }
     viewModelOf(::RecommendedSeriesViewModel)
     viewModelOf(::HomeViewModel)
-    //viewModelOf(::RecommendedSeriesViewModel)
-    //viewModel { (seriesId: Long) -> SeriesRecommendationViewModel(get(), seriesId) }
     viewModelOf(::LoginViewModel)
     viewModelOf(::RecommendedSeriesViewModel)
     viewModelOf(::LoginViewModel)

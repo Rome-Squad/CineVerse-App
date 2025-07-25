@@ -13,14 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: CollectionItemData) {
@@ -32,11 +30,8 @@ fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: Collection
                 .height(80.dp),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(collectionItemData.image)
-                    .crossfade(true)
-                    .build(),
+            SafeIslamicImage(
+                imageUrl = collectionItemData.image,
                 contentDescription = stringResource(R.string.collection_item_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
