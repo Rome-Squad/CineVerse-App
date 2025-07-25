@@ -32,11 +32,10 @@ class SearchViewModel(
 ) : BaseViewModel<SearchScreenState>(SearchScreenState()),
     SearchInteractionListener {
     init {
-        getRecentViewedPoster()
         onQueryChange()
     }
 
-    private fun getRecentViewedPoster() {
+    override fun getRecentViewedPoster() {
         safeExecute {
             val recentMovies = async { getRecentlyMoviesUseCase().map { it.toPoster() } }
             val recentSeries = async { getRecentSeriesUseCase().map { it.toPoster() } }
