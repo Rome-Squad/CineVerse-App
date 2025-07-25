@@ -39,36 +39,8 @@ fun TransitionLazyColumnToGrid(
 ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
-    LaunchedEffect(listState) {
-        var previousIndex = listState.firstVisibleItemIndex
-        var previousScrollOffset = listState.firstVisibleItemScrollOffset
-        snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
-            .collect { (index, offset) ->
-                if (index > previousIndex || (index == previousIndex && offset > previousScrollOffset)) {
-                    onScroll(false)
-                } else if (index < previousIndex || (offset < previousScrollOffset)) {
-                    onScroll(true)
-                }
-
-                previousIndex = index
-                previousScrollOffset = offset
-            }
-    }
-    LaunchedEffect(gridState) {
-        var previousIndex = gridState.firstVisibleItemIndex
-        var previousScrollOffset = gridState.firstVisibleItemScrollOffset
-        snapshotFlow { gridState.firstVisibleItemIndex to gridState.firstVisibleItemScrollOffset }
-            .collect { (index, offset) ->
-                if (index > previousIndex || (index == previousIndex && offset > previousScrollOffset)) {
-                    onScroll(false)
-                } else if (index < previousIndex || (offset < previousScrollOffset)) {
-                    onScroll(true)
-                }
-
-                previousIndex = index
-                previousScrollOffset = offset
-            }
-    }
+    ObserveScrollDirection(listState, onScroll)
+    ObserveScrollDirection(gridState, onScroll)
     SharedTransitionLayout {
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -117,5 +89,47 @@ fun TransitionLazyColumnToGrid(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ObserveScrollDirection(
+    listState: androidx.compose.foundation.lazy.LazyListState,
+    onScroll: (isScrollingUp: Boolean) -> Unit
+) {
+    LaunchedEffect(listState) {
+        var previousIndex = listState.firstVisibleItemIndex
+        var previousScrollOffset = listState.firstVisibleItemScrollOffset
+        snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
+            .collect { (index, offset) ->
+                if (index > previousIndex || (index == previousIndex && offset > previousScrollOffset)) {
+                    onScroll(false)
+                } else if (index < previousIndex || offset < previousScrollOffset) {
+                    onScroll(true)
+                }
+                previousIndex = index
+                previousScrollOffset = offset
+            }
+    }
+}
+
+@Composable
+fun ObserveScrollDirection(
+    gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
+    onScroll: (isScrollingUp: Boolean) -> Unit
+) {
+    LaunchedEffect(gridState) {
+        var previousIndex = gridState.firstVisibleItemIndex
+        var previousScrollOffset = gridState.firstVisibleItemScrollOffset
+        snapshotFlow { gridState.firstVisibleItemIndex to gridState.firstVisibleItemScrollOffset }
+            .collect { (index, offset) ->
+                if (index > previousIndex || (index == previousIndex && offset > previousScrollOffset)) {
+                    onScroll(false)
+                } else if (index < previousIndex || offset < previousScrollOffset) {
+                    onScroll(true)
+                }
+                previousIndex = index
+                previousScrollOffset = offset
+            }
     }
 }
