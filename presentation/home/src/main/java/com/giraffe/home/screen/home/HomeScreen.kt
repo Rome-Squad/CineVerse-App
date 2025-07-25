@@ -22,6 +22,7 @@ import com.giraffe.home.components.Carousel
 import com.giraffe.home.components.CollectionItemData
 import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
+import com.giraffe.home.components.HorizontalDivider
 import com.giraffe.home.components.TopAppBar
 import com.giraffe.home.components.UserCollection
 import com.giraffe.home.components.YourCollectionsSections
@@ -99,6 +100,13 @@ fun HomeContent(
     ) {
         stickyHeader {
             TopAppBar(userName = state.userName)
+        }
+        item {
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(top = 9.dp, bottom = 16.dp),
+                color = Theme.color.stroke.primary
+            )
         }
         item {
             Carousel(
