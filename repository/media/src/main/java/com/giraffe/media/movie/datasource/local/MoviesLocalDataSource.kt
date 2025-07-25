@@ -14,23 +14,23 @@ interface MoviesLocalDataSource {
 
     suspend fun updateMovie(movie: MovieCacheDto)
 
-    suspend fun getMoviesByName(movieName: String): List<MovieCacheDto>
+    suspend fun getMoviesByName(movieName: String, page: Int): List<MovieCacheDto>
 
     suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
 
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
-    suspend fun getMovieGenres(genreIds : List<Int>): List<MovieGenreCacheDto>
+    suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenreCacheDto>
 
     suspend fun getMovieGenreById(genreId: Int): MovieGenreCacheDto
 
-    suspend fun getMovieGenresById(ids : List<Int>) : List<MovieGenreCacheDto>
+    suspend fun getMovieGenresById(ids: List<Int>): List<MovieGenreCacheDto>
 
     suspend fun clearMovieCache()
 
     suspend fun clearRecentlyMovies()
 
-    suspend fun getRecentlyMovies() : List<MovieCacheDto>
+    suspend fun getRecentlyMovies(): List<MovieCacheDto>
 
     suspend fun clearMovieGenreCache()
 

@@ -27,9 +27,10 @@ class MovieLocalDataSourceImp(
         movieDao.updateMovie(movie)
     }
 
-    override suspend fun getMoviesByName(movieName: String): List<MovieCacheDto> = safeCall {
-        movieDao.getMovieByName(movieName)
-    }
+    override suspend fun getMoviesByName(movieName: String, page: Int): List<MovieCacheDto> =
+        safeCall {
+            movieDao.getMovieByName(movieName, page)
+        }
 
     override suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto> = safeCall {
         movieDao.getMoviesByGenre(genreId)

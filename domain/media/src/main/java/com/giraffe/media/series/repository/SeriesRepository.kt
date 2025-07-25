@@ -7,7 +7,7 @@ import com.giraffe.media.series.entity.Series
 
 
 interface SeriesRepository {
-    suspend fun searchSeriesByName(seriesName: String): List<Series>
+    suspend fun searchSeriesByName(seriesName: String, page: Int): List<Series>
     suspend fun storeRecentSeries(series: Series)
     suspend fun getSeriesGenres(): List<Genre>
     suspend fun getRecentSeries(): List<Series>

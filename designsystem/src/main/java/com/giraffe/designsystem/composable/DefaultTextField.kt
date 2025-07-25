@@ -71,6 +71,8 @@ fun DefaultTextField(
     focusRequester: FocusRequester = FocusRequester(),
     onClicked: () -> Unit = {},
     onStartIconClick: ((String) -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     onForgotPasswordClick: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
 ) {
@@ -170,7 +172,9 @@ fun DefaultTextField(
                     backgroundColor = Theme.color.background.card,
                     cursorColor = Theme.color.brand.primary,
                     textColor = Theme.color.shade.primary
-                )
+                ),
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions
             )
             if (hasError && !isFocused && !isPassword) {
                 Icon(

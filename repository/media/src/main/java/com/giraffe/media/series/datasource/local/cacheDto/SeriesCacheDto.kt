@@ -17,7 +17,8 @@ data class SeriesCacheDto(
     val genresID: List<Int>,
     val releaseYear: String,
     val isRecent: Boolean = false,
-    val cachedAt: Long = System.currentTimeMillis()
+    val cachedAt: Long = System.currentTimeMillis(),
+    val page:Int = 0
 )
 
 
