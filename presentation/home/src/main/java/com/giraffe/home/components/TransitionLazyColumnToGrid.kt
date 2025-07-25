@@ -39,8 +39,10 @@ fun TransitionLazyColumnToGrid(
 ) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
+
     ObserveScrollDirection(listState, onScroll)
     ObserveScrollDirection(gridState, onScroll)
+
     SharedTransitionLayout {
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -54,40 +56,80 @@ fun TransitionLazyColumnToGrid(
                         ))
                     .togetherWith(fadeOut(animationSpec = tween(90, easing = EaseOut)))
             }
-        ) {
-            if (it) {
-                LazyColumn(
-                    state = listState,
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = contentPadding
-                ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
-                        PosterHorizontal(
-                            poster = poster,
-                            animatedVisibilityScope = this@AnimatedContent,
-                            sharedTransitionScope = this@SharedTransitionLayout,
-                            onClick = { onClickItem(poster.id, poster.mediaType) }
-                        )
-                    }
-                }
+        ) { isListView ->
+            if (isListView) {
+                PosterListView(
+                    poster = poster,
+                    listState = listState,
+                    contentPadding = contentPadding,
+                    animatedVisibilityScope = this@AnimatedContent,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    onClickItem = onClickItem
+                )
             } else {
-                LazyVerticalGrid(
-                    state = gridState,
-                    columns = GridCells.Fixed(2),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = contentPadding
-                ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
-                        PosterVertically(
-                            poster = poster,
-                            animatedVisibilityScope = this@AnimatedContent,
-                            sharedTransitionScope = this@SharedTransitionLayout,
-                            onClick = { onClickItem(poster.id, poster.mediaType) }
-                        )
-                    }
-                }
+                PosterGridView(
+                    poster = poster,
+                    gridState = gridState,
+                    contentPadding = contentPadding,
+                    animatedVisibilityScope = this@AnimatedContent,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    onClickItem = onClickItem
+                )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+private fun PosterListView(
+    poster: List<PosterUiState>,
+    listState: androidx.compose.foundation.lazy.LazyListState,
+    contentPadding: PaddingValues,
+    animatedVisibilityScope: androidx.compose.animation.AnimatedVisibilityScope,
+    sharedTransitionScope: androidx.compose.animation.SharedTransitionScope,
+    onClickItem: (id: Int, mediaType: MediaType) -> Unit
+) {
+    LazyColumn(
+        state = listState,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = contentPadding
+    ) {
+        items(items = poster, key = { poster -> poster.id }) { poster ->
+            PosterHorizontal(
+                poster = poster,
+                animatedVisibilityScope = animatedVisibilityScope,
+                sharedTransitionScope = sharedTransitionScope,
+                onClick = { onClickItem(poster.id, poster.mediaType) }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+private fun PosterGridView(
+    poster: List<PosterUiState>,
+    gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
+    contentPadding: PaddingValues,
+    animatedVisibilityScope: androidx.compose.animation.AnimatedVisibilityScope,
+    sharedTransitionScope: androidx.compose.animation.SharedTransitionScope,
+    onClickItem: (id: Int, mediaType: MediaType) -> Unit
+) {
+    LazyVerticalGrid(
+        state = gridState,
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = contentPadding
+    ) {
+        items(items = poster, key = { poster -> poster.id }) { poster ->
+            PosterVertically(
+                poster = poster,
+                animatedVisibilityScope = animatedVisibilityScope,
+                sharedTransitionScope = sharedTransitionScope,
+                onClick = { onClickItem(poster.id, poster.mediaType) }
+            )
         }
     }
 }
