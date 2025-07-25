@@ -9,4 +9,10 @@ data class Poster(
     val time: String? = null,
     val date: String? = null,
     val mediaTypeOfPoster: String? = null
-)
+) {
+    enum class Type(val value: String) {
+        MOVIE("movie"),
+        SERIES("series"),
+        PERSON("person")
+    }
+}
