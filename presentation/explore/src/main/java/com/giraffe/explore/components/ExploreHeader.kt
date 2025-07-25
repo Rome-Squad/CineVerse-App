@@ -81,7 +81,6 @@ fun ExploreHeader(
                 singleLine = true,
                 maxCharacters = 400,
                 startIcon = painterResource(Theme.icons.outline.search),
-                onStartIconClick = onSearchClick,
                 endIcon = {
                     Image(
                         modifier = Modifier.clickable(onClick = onEndIconClick),
