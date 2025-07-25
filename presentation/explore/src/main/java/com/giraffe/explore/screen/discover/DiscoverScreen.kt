@@ -19,12 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Chip
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
+import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
@@ -163,5 +165,30 @@ private fun GenresSection(
                 onCheckedChange = { onGenreSelected(genre) }
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDiscoverScreen() {
+    CineVerseTheme {
+        ExploreContent(
+            state = DiscoverScreenState(),
+            interactions = object : DiscoverInteractionListener {
+                override fun onTabSelected(tabIndex: Int) = Unit
+
+                override fun getMoviesByGenre(genreId: Int) = Unit
+
+                override fun getSeriesByGenre(genreId: Int) = Unit
+
+                override fun onViewChanged(isGrid: Boolean) = Unit
+
+                override fun onGenreSelected(genre: GenreUi) = Unit
+
+            },
+            navigateToMovieDetails = { },
+            navigateToSeriesDetails = { },
+            navigateToSearch = { }
+        )
     }
 }

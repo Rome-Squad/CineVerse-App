@@ -8,7 +8,7 @@ class UserRemoteDataSourceImplRetrofit(
 
     override suspend fun getGuestSessionId(): String? {
         val response = userApiServiceRetrofit.getGuestSession()
-        return response.body()?.guest_session_id
+        return response.body()?.guestSessionId
     }
 
 }

@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.seriesdetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
@@ -23,6 +24,7 @@ import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
+import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
 
 class SeriesDetailsViewModel(
     private val getSeriesDetails: GetSeriesDetailsUseCase,
@@ -31,13 +33,13 @@ class SeriesDetailsViewModel(
     private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
+    private val storeRecentSeriesUseCase: StoreRecentSeriesUseCase,
     savedStateHandle: SavedStateHandle
-) :
-    BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
-        SeriesDetailsScreenState()
-    ), SeriesDetailsInteractionListener {
+) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
+    SeriesDetailsScreenState()
+), SeriesDetailsInteractionListener {
 
-    val seriesID = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
+    private val seriesID = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
 
     init {
         loadSeriesDetails(seriesID)
@@ -46,142 +48,6 @@ class SeriesDetailsViewModel(
         loadSeriesReviews(seriesID)
         loadSeriesPeople(seriesID)
     }
-
-    fun loadError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoading = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
-    fun loadSeriesDetails(seriesId: Int) {
-        safeExecute(
-            onSuccess = ::loadSeriesDetailsSuccess,
-            onError = ::loadError
-        ) {
-            updateState {
-                it.copy(
-                    isLoading = true
-                )
-            }
-            getSeriesDetails(seriesId)
-        }
-    }
-
-    fun loadSeriesDetailsSuccess(series: Series) {
-        updateState {
-            it.copy(
-                seriesDetails = SeriesUi.fromEntity(series),
-                isLoading = false
-            )
-        }
-        loadSeriesGenres(series.genreIDs)
-    }
-
-
-    fun loadSeriesGenres(genreIDs: List<Int>) {
-        safeExecute(
-            onSuccess = ::loadSeriesGenresSuccess,
-            onError = ::loadError
-        ) {
-            getSeriesGenres(genreIDs)
-        }
-    }
-
-    fun loadSeriesGenresSuccess(genres: List<Genre>) {
-        updateState {
-            it.copy(
-                genres = genres.map { it.title },
-            )
-        }
-    }
-
-
-    fun loadSeason(seriesId: Int) {
-        safeExecute(
-            onSuccess = ::loadSeasonsSuccess,
-            onError = ::loadError
-        ) {
-            getLastSeasons(seriesId)
-        }
-    }
-
-    fun loadSeasonsSuccess(season: List<Season>) {
-        updateState {
-            it.copy(
-                seasons = season.map { SeasonUi.fromEntity(it) },
-                isLoading = false
-            )
-        }
-    }
-
-
-    fun loadSeriesPeople(seriesId: Int) {
-        safeExecute(
-            onSuccess = ::loadSeriesPeopleSuccess,
-            onError = ::loadError
-        ) {
-            getCastAndCrewOfSeries(seriesId)
-        }
-    }
-
-    fun loadSeriesPeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST }.take(10)
-        val crew = people.filter { it.type == PersonType.CREW }.take(10)
-        val mappedCrew = crew.map { it.toCrewUi() }
-        updateState {
-            it.copy(
-                cast = cast.map { it.toCastUi() },
-                crew = mappedCrew.groupByRole()
-            )
-        }
-    }
-
-
-    fun loadRecommendedSeries(seriesId: Int, page: Int) {
-        safeExecute(
-            onSuccess = ::loadRecommendedSeriesSuccess,
-            onError = ::loadError
-        ) {
-            getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
-        }
-    }
-
-    fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
-        updateState {
-            it.copy(
-                recommendedSeries = recommendedSeries.map {
-                    Poster(
-                        id = it.id,
-                        name = it.name,
-                        imageUri = it.posterUrl,
-                        rating = it.rating
-                    )
-                },
-            )
-        }
-    }
-
-
-    fun loadSeriesReviews(seriesId: Int) {
-        safeExecute(
-            onSuccess = ::loadSeriesReviewsSuccess,
-            onError = ::loadError
-        ) {
-            getSeriesReviews(seriesId)
-        }
-    }
-
-    fun loadSeriesReviewsSuccess(reviews: List<Review>) {
-        updateState {
-            it.copy(
-                seriesReviews = reviews.map { it.toReviewUI() },
-            )
-        }
-    }
-
 
     override fun onClickGiveStars() {
         updateState {
@@ -247,5 +113,151 @@ class SeriesDetailsViewModel(
         sendEffect(
             SeriesDetailsEffect.NavigateToSeriesDetails(seriesId)
         )
+    }
+
+    private fun loadError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false,
+            )
+        }
+        sendEffect(SeriesDetailsEffect.Error(error))
+    }
+
+    private fun loadSeriesDetails(seriesId: Int) {
+        safeExecute(
+            onSuccess = ::loadSeriesDetailsSuccess,
+            onError = ::loadError
+        ) {
+            updateState {
+                it.copy(
+                    isLoading = true
+                )
+            }
+            getSeriesDetails(seriesId)
+        }
+    }
+
+
+    private fun loadSeriesDetailsSuccess(series: Series) {
+        updateState {
+            it.copy(
+                seriesDetails = SeriesUi.fromEntity(series),
+                isLoading = false
+            )
+        }
+        loadSeriesGenres(series.genreIDs)
+        saveSeriesToRecent(series)
+    }
+
+    private fun saveSeriesToRecent(series: Series) {
+        safeExecute(
+            onError = { Log.i("dsdssd erererror", it.message.toString()) },
+            onSuccess = { Log.i("data saved", "success") }
+        ) {
+            storeRecentSeriesUseCase(series)
+        }
+    }
+
+
+    private fun loadSeriesGenres(genreIDs: List<Int>) {
+        safeExecute(
+            onSuccess = ::loadSeriesGenresSuccess,
+            onError = ::loadError
+        ) {
+            getSeriesGenres(genreIDs)
+        }
+    }
+
+    private fun loadSeriesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                genres = genres.map { it.title },
+            )
+        }
+    }
+
+
+    private fun loadSeason(seriesId: Int) {
+        safeExecute(
+            onSuccess = ::loadSeasonsSuccess,
+            onError = ::loadError
+        ) {
+            getLastSeasons(seriesId)
+        }
+    }
+
+    private fun loadSeasonsSuccess(season: List<Season>) {
+        updateState {
+            it.copy(
+                seasons = season.map { SeasonUi.fromEntity(it) },
+                isLoading = false
+            )
+        }
+    }
+
+
+    private fun loadSeriesPeople(seriesId: Int) {
+        safeExecute(
+            onSuccess = ::loadSeriesPeopleSuccess,
+            onError = ::loadError
+        ) {
+            getCastAndCrewOfSeries(seriesId)
+        }
+    }
+
+    private fun loadSeriesPeopleSuccess(people: List<Person>) {
+        val cast = people.filter { it.type == PersonType.CAST }.take(10)
+        val crew = people.filter { it.type == PersonType.CREW }.take(10)
+        val mappedCrew = crew.map { it.toCrewUi() }
+        updateState {
+            it.copy(
+                cast = cast.map { it.toCastUi() },
+                crew = mappedCrew.groupByRole()
+            )
+        }
+    }
+
+
+    private fun loadRecommendedSeries(seriesId: Int, page: Int) {
+        safeExecute(
+            onSuccess = ::loadRecommendedSeriesSuccess,
+            onError = ::loadError
+        ) {
+            getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
+        }
+    }
+
+    private fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
+        updateState {
+            it.copy(
+                recommendedSeries = recommendedSeries.map {
+                    Poster(
+                        id = it.id,
+                        name = it.name,
+                        imageUri = it.posterUrl,
+                        rating = it.rating
+                    )
+                },
+            )
+        }
+    }
+
+
+    private fun loadSeriesReviews(seriesId: Int) {
+        safeExecute(
+            onSuccess = ::loadSeriesReviewsSuccess,
+            onError = ::loadError
+        ) {
+            getSeriesReviews(seriesId)
+        }
+    }
+
+    private fun loadSeriesReviewsSuccess(reviews: List<Review>) {
+        updateState {
+            it.copy(
+                seriesReviews = reviews.map { it.toReviewUI() },
+            )
+        }
     }
 }

@@ -46,7 +46,10 @@ internal fun ExploreNavGraph(
 
         searchRoute(
             navigateToSearchResult = navController::navigateToSearchResult,
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            navigateToMovieDetail = navController::navigateToMovieDetails,
+            navigateToSeriesDetail = navController::navigateToSeriesDetails,
+            navigateToPersonDetail = navController::navigateToCastDetails,
         )
 
         searchResultRoute(

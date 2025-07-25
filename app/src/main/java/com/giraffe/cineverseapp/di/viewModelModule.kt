@@ -20,12 +20,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModelOf(::DiscoverViewModel)
     viewModelOf(::SearchViewModel)
-    viewModel { (savedStateHandle: SavedStateHandle) ->
-        CastDetailsViewModel(
-            savedStateHandle,
-            get()
-        )
-    }
+    viewModelOf(::CastDetailsViewModel)
     viewModelOf(::SeriesDetailsViewModel)
     viewModelOf(::MovieDetailsViewModel)
     viewModelOf(::SearchResultViewModel)

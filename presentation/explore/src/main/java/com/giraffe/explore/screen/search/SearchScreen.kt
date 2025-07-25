@@ -5,16 +5,16 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,9 +23,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.SearchItem
 import com.giraffe.explore.util.VoiceSearchHelper
@@ -36,14 +41,24 @@ import org.koin.androidx.compose.koinViewModel
 fun SearchScreen(
     navigateToSearchResult: (String) -> Unit,
     onBackClick: () -> Unit,
+    onClickPoster: (Poster) -> Unit,
     viewModel: SearchViewModel = koinViewModel(),
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycle = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.getRecentViewedPoster()
+        }
+    }
+
     SearchContent(
-        state,
-        viewModel,
-        navigateToSearchResult,
-        onBackClick
+        state = state,
+        interactions = viewModel,
+        navigateToSearchResult = navigateToSearchResult,
+        onBackClick = onBackClick,
+        onClickPoster = onClickPoster
     )
 }
 
@@ -52,7 +67,8 @@ private fun SearchContent(
     state: SearchScreenState,
     interactions: SearchInteractionListener,
     navigateToSearchResult: (String) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onClickPoster: (Poster) -> Unit
 ) {
     val context = LocalContext.current
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -102,58 +118,60 @@ private fun SearchContent(
         focusRequester.requestFocus()
     }
 
-
-
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .statusBarsPadding()
+            .navigationBarsPadding()
             .padding(top = 16.dp),
     ) {
-        ExploreHeader(
-            modifier = Modifier.padding(bottom = 12.dp),
-            showBackButton = true,
-            endIcon = painterResource(if (state.query.isBlank()) Theme.icons.outline.microphone else Theme.icons.outline.close),
-            onValueChange = interactions::onQueryChange,
-            value = state.query,
-            placeholder = stringResource(R.string.search),
-            focusRequester = focusRequester,
-            onEndIconClick = interactions::onPostfixIconClick,
-            onBackClick = onBackClick,
-            onSearchClick = {
-                interactions.onKeywordClick(it)
-                navigateToSearchResult(it)
-            }
-        )
-        if ((state.recentKeywords + state.keywords).isNotEmpty()) {
-            KeywordsSection(
-                modifier = Modifier.weight(1f),
-                query = state.query,
-                keywords = state.keywords,
-                recentKeywords = state.recentKeywords,
-                onClearClick = interactions::clearAllKeywords,
-                onKeywordArrowClick = interactions::onQueryChange,
-                onKeywordClearClick = interactions::deleteKeyword,
-                onKeywordsClick = {
+        stickyHeader {
+            ExploreHeader(
+                modifier = Modifier.padding(bottom = 12.dp),
+                showBackButton = true,
+                endIcon = painterResource(if (state.query.isBlank()) Theme.icons.outline.microphone else Theme.icons.outline.close),
+                onValueChange = interactions::onQueryChange,
+                value = state.query,
+                placeholder = stringResource(R.string.search),
+                focusRequester = focusRequester,
+                onEndIconClick = interactions::onPostfixIconClick,
+                onBackClick = onBackClick,
+                onSearch = { navigateToSearchResult(state.query) },
+                onSearchClick = {
                     interactions.onKeywordClick(it)
                     navigateToSearchResult(it)
                 }
             )
         }
 
-        PosterListSection(
-            modifier = Modifier.padding(top = 16.dp),
-            endText = stringResource(R.string.clear_all),
-            title = stringResource(R.string.you_recent_viewed),
-            posters = state.recentPosters
+        keywordsSection(
+            query = state.query,
+            keywords = state.keywords,
+            recentKeywords = state.recentKeywords,
+            onClearClick = interactions::clearAllKeywords,
+            onKeywordArrowClick = interactions::onQueryChange,
+            onKeywordClearClick = interactions::deleteKeyword,
+            onKeywordsClick = {
+                interactions.onKeywordClick(it)
+                navigateToSearchResult(it)
+            }
         )
+
+        item {
+            PosterListSection(
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+                endText = stringResource(R.string.clear_all),
+                title = stringResource(R.string.you_recent_viewed),
+                posters = state.recentPosters,
+                onClickEndText = interactions::clearAllRecentViewedPosters,
+                onClickPoster = onClickPoster
+            )
+        }
     }
 }
 
-@Composable
-private fun KeywordsSection(
-    modifier: Modifier = Modifier,
+private fun LazyListScope.keywordsSection(
     query: String,
     keywords: List<String>,
     recentKeywords: List<String>,
@@ -163,19 +181,19 @@ private fun KeywordsSection(
     onKeywordClearClick: (String) -> Unit = {},
 ) {
     val isJustRecent = keywords.isEmpty() && recentKeywords.isNotEmpty()
-    LazyColumn(
-        modifier = modifier
-    ) {
-        stickyHeader {
-            SectionTitle(
-                modifier = Modifier
-                    .background(Theme.color.background.screen)
-                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-                title = if (isJustRecent) stringResource(R.string.history) else stringResource(R.string.search_suggestions),
-                clickableText = if (isJustRecent) stringResource(R.string.clear_all) else "",
-                onClickableText = onClearClick
-            )
-        }
+
+    item {
+        SectionTitle(
+            modifier = Modifier
+                .background(Theme.color.background.screen)
+                .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+            title = if (isJustRecent) stringResource(R.string.history) else stringResource(R.string.search_suggestions),
+            clickableText = if (isJustRecent) stringResource(R.string.clear_all) else "",
+            onClickableText = onClearClick
+        )
+    }
+
+    if (recentKeywords.isNotEmpty()) {
         items(recentKeywords) { keyWord ->
             SearchItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -192,6 +210,9 @@ private fun KeywordsSection(
                 },
             )
         }
+    }
+
+    if (keywords.isNotEmpty()) {
         items(keywords) { keyWord ->
             SearchItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -205,4 +226,5 @@ private fun KeywordsSection(
             )
         }
     }
+
 }
