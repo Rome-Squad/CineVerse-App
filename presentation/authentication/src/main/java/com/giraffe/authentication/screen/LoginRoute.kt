@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.giraffe.authentication.login.navigateToWebView
+import com.giraffe.authentication.nav.route.navigateExploreContainer
 import com.giraffe.authentication.resetpassword.navigateToResetPassword
-import com.giraffe.explore.screen.discover.navigateToDiscover
 import kotlinx.serialization.Serializable
 
 
@@ -26,7 +26,7 @@ fun NavGraphBuilder.loginRoute(
                 navController.navigateToWebView()
             },
             navigateToHomeScreen = {
-                navController.navigateToDiscover()
+                navController.navigateExploreContainer()
             },
             navigateToResetPasswordScreen = {
                 navController.navigateToResetPassword()

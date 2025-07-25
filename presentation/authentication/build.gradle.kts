@@ -44,10 +44,6 @@ dependencies {
     implementation(project(":api:authentication"))
     implementation(project(":domain:user"))
     implementation(project(":api:explore"))
-    implementation(project(":presentation:explore"))
-
-
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
