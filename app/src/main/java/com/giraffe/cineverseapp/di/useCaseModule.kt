@@ -24,16 +24,17 @@ import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
+import com.giraffe.media.person.usecase.GetPersonImagesUseCase
 import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
+import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
@@ -94,4 +95,5 @@ val useCaseModule = module {
 
     //Auth useCase
     singleOf(::LoginUseCase)
+    singleOf(::GetPersonImagesUseCase)
 }

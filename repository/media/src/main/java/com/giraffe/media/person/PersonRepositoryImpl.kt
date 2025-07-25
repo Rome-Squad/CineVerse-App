@@ -1,17 +1,20 @@
 package com.giraffe.media.person
 
+import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDto
+import com.giraffe.media.person.datasource.remote.dto.ProfileDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.mapper.toDto
+import com.giraffe.media.person.mapper.mapToPerson
+import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toEntity
-import com.giraffe.media.person.mapper.toImageList
+import com.giraffe.media.person.mapper.toImageUrl
 import com.giraffe.media.person.repository.PersonRepository
-import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.ContentType
 import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
@@ -21,18 +24,33 @@ import kotlinx.coroutines.withContext
 class PersonRepositoryImpl(
     private val remoteDataSource: PersonRemoteDataSource,
     private val localDataSource: PersonLocalDataSource,
+    private val localExploreDataSource: LocalExploreDataSource,
 ) : PersonRepository {
 
-    override suspend fun searchByName(personName: String) = SafeCall {
-        localDataSource.searchByName(personName).map(PersonCacheDto::toEntity).ifEmpty {
-            val people = remoteDataSource.searchByName(personName).map(PersonDto::toEntity)
-            localDataSource.storePeople(people.map(Person::toDto))
-            people
+    override suspend fun searchByName(personName: String, page: Int) = SafeCall {
+        withContext(Dispatchers.IO) {
+            val keywordData = localExploreDataSource.getSearchKeyword(query = personName)
+            val isPageCached = keywordData?.actorsPages?.contains(page) == true
+            if (isPageCached) {
+                localDataSource.searchByName(personName, page).map(PersonCacheDto::toEntity)
+            } else {
+                val remoteActors = remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
+                val updatedKeyword = keywordData?.copy(
+                    actorsPages = keywordData.actorsPages + page,
+                    searchedAt = System.currentTimeMillis()
+                ) ?: SearchKeywordCacheDto(
+                    keyword = personName,
+                    actorsPages = listOf(page)
+                )
+                localExploreDataSource.insertSearchKeyword(updatedKeyword)
+                localDataSource.storePeople(remoteActors.map { it.toCacheDto().copy(page = page) })
+                remoteActors
+            }
         }
     }
 
     override suspend fun storeRecentPerson(person: Person) =
-        SafeCall { localDataSource.storePerson(person.toDto().copy(isRecent = true)) }
+        SafeCall { localDataSource.storePerson(person.toCacheDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {
         localDataSource.getRecentPeople().map(PersonCacheDto::toEntity)
@@ -65,7 +83,7 @@ class PersonRepositoryImpl(
         val crew = credits.crew.map { it.toEntity(PersonType.CREW) }
         val people = cast + crew
 
-        val dtos = people.map { content.toDto(it) }
+        val dtos = people.map { content.toCacheDto(it) }
 
         localDataSource.storePeople(dtos)
 
@@ -88,22 +106,23 @@ class PersonRepositoryImpl(
             val images = async { remoteDataSource.getPersonImages(personId) }
             val media = async { remoteDataSource.getPersonMediaCredits(personId) }
             val socialMedia = async { remoteDataSource.getPersonSocialMedia(personId) }
-            Person(
-                id = personId,
-                name = details.await().name,
-                imageUrl = BASE_IMAGE_URL + details.await().profilePath,
-                role = details.await().knownForDepartment,
-                birthday = details.await().birthday,
-                placeOfBirth = details.await().placeOfBirth,
-                biography = details.await().biography,
-                images = images.await().toImageList(),
-                personCredits = media.await().map(PersonCreditDto::toEntity),
-                socialMedia = socialMedia.await().toEntity()
+            mapToPerson(
+                personId = personId,
+                details = details.await(),
+                // The first image is typically the profile image already included in person details.
+                // Dropping it prevents duplication in the image list.
+                images = images.await().profiles.drop(1),
+                media = media.await(),
+                socialMedia = socialMedia.await()
             )
         }
     }
 
     override suspend fun getPeopleMediaCredits(personId: Int) = SafeCall {
         remoteDataSource.getPersonMediaCredits(personId).map(PersonCreditDto::toEntity)
+    }
+
+    override suspend fun getPersonImages(personId: Int): List<String> = SafeCall {
+        remoteDataSource.getPersonImages(personId).profiles.map(ProfileDto::toImageUrl)
     }
 }

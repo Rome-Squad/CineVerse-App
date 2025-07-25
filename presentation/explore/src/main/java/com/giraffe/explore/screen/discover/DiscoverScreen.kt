@@ -19,10 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Chip
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
+import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
@@ -57,6 +61,7 @@ fun ExploreContent(
     navigateToSearch: () -> Unit
 ) {
     val context = LocalContext.current
+    val posters = state.selectedPosters.collectAsLazyPagingItems()
     Box {
         LazyColumn(
             modifier = Modifier
@@ -91,7 +96,7 @@ fun ExploreContent(
                             SearchTab.ACTORS -> {}
                         }
                     },
-                    posters = state.selectedPosters,
+                    posters = posters,
                     selectedGenre = state.selectedGenre
                         ?: GenreUi(title = stringResource(R.string.all)),
                     genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
@@ -114,7 +119,7 @@ fun ExploreContent(
 @Composable
 private fun GenresAndCardsSection(
     modifier: Modifier = Modifier,
-    posters: List<Poster>,
+    posters: LazyPagingItems<Poster>,
     selectedGenre: GenreUi,
     genres: List<GenreUi>,
     isGridSelected: Boolean,
@@ -127,7 +132,7 @@ private fun GenresAndCardsSection(
             .background(Theme.color.background.screen)
     ) {
         TransitionLazyColumnToGrid(
-            poster = posters,
+            posters = posters,
             onPosterClicked = onPosterClicked,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 60.dp),
@@ -160,5 +165,30 @@ private fun GenresSection(
                 onCheckedChange = { onGenreSelected(genre) }
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDiscoverScreen() {
+    CineVerseTheme {
+        ExploreContent(
+            state = DiscoverScreenState(),
+            interactions = object : DiscoverInteractionListener {
+                override fun onTabSelected(tabIndex: Int) = Unit
+
+                override fun getMoviesByGenre(genreId: Int) = Unit
+
+                override fun getSeriesByGenre(genreId: Int) = Unit
+
+                override fun onViewChanged(isGrid: Boolean) = Unit
+
+                override fun onGenreSelected(genre: GenreUi) = Unit
+
+            },
+            navigateToMovieDetails = { },
+            navigateToSeriesDetails = { },
+            navigateToSearch = { }
+        )
     }
 }

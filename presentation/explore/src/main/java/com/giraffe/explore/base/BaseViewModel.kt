@@ -4,13 +4,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.InfrastructureException
-import com.giraffe.media.exception.InvalidRequestMethodException
-import com.giraffe.media.exception.NetworkException
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.ServerErrorException
-import com.giraffe.media.exception.TimeoutException
-import com.giraffe.media.exception.UnauthorizedException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.explore.R
@@ -36,7 +31,7 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         exceptionHandler: CoroutineExceptionHandler = handler(),
-        block: suspend () -> T
+        block: suspend CoroutineScope.() -> T
     ): Job {
         return coroutineScope.launch(dispatcher + exceptionHandler) {
             block()
@@ -56,14 +51,9 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
-            is NetworkException -> R.string.error_network
-            is TimeoutException -> R.string.error_timeout
-            is ServerErrorException -> R.string.error_server
-            is UnauthorizedException -> R.string.error_unauthorized
-            is InfrastructureException -> R.string.error_infrastructure
+            is NoInternetException -> R.string.error_network
             is AccessDeniedException -> R.string.error_access_denied
             is ValidationException -> R.string.error_validation
-            is InvalidRequestMethodException -> R.string.error_invalid_method
             is NotFoundException -> R.string.error_not_found
             is UnknownException -> R.string.error_unknown
             else -> R.string.error_unknown

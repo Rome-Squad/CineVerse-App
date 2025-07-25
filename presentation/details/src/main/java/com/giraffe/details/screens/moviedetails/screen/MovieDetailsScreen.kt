@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.MoviesListSection
+import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
@@ -39,11 +39,12 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.navigateToCastDetails
+import com.giraffe.details.screens.castDetails.CastDetailsRoute
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMoviesScreen
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -76,9 +77,12 @@ fun MovieDetailsScreen(
                 is MovieDetailsEffect.Error -> {}
                 MovieDetailsEffect.NavigateToCollection -> {}
                 MovieDetailsEffect.NavigateToLogin -> {}
-                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
-                    castID = effect.personId
+                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigate(
+                    CastDetailsRoute(effect.personId)
                 )
+                is MovieDetailsEffect.NavigateToMoviesRecommended -> {
+                    navController.navigateToRecommendedMoviesScreen(movieId = effect.movieId,title = effect.title)
+                }
             }
         }
     }
@@ -140,7 +144,7 @@ private fun MovieDetailsContent(
                 type = TypeOfScreen.MOVIE.toString(),
                 name = state.movie.title,
                 rating = state.movie.rating,
-                image = state.movie.posterUrl,
+                imageUrl = state.movie.posterUrl,
                 genres = state.movieGenres,
                 releaseYear = state.movie.releaseYear,
                 onClickAdd = interaction::onAddToCollectionClick,
@@ -167,7 +171,6 @@ private fun MovieDetailsContent(
 
             StarCastSection(
                 title = stringResource(R.string.star_cast),
-                onShowMoreClick = {},
                 onCastClick = { interaction.navigateToCastDetailsScreen(it) },
                 castList = state.cast
             )
@@ -178,15 +181,15 @@ private fun MovieDetailsContent(
                 staffList = state.crew
             )
 
-            MoviesListSection(
+            PosterListSection(
                 title = stringResource(R.string.you_might_also_like),
                 endText = stringResource(R.string.show_more),
-                movies = state.recommendedMovies,
+                posters = state.recommendedMovies,
                 onClickEndText = {
-
+                   interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                 },
                 onClickPoster = {
-                    navController.navigateToMovieDetails(it)
+                    navController.navigateToMovieDetails(it.id)
                 }
             )
 

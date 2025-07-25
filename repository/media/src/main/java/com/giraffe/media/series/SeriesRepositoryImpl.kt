@@ -1,7 +1,10 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
@@ -17,24 +20,26 @@ import com.giraffe.media.utils.SafeCall
 
 class SeriesRepositoryImpl(
     private val remote: SeriesRemoteDataSource,
-    private val local: SeriesLocalDateSource
+    private val local: SeriesLocalDateSource,
+    private val localExploreDataSource: LocalExploreDataSource
 ) : SeriesRepository {
-    override suspend fun searchSeriesByName(seriesName: String) = SafeCall {
-        val cached = local.getCachedSeriesForName(seriesName)
-        if (cached.isNotEmpty()) {
-            cached.map { dto ->
-                val seasons = local.getSeasonsForSeries(dto.id).map { it.toEntity() }
-                dto.toEntity(seasons)
-            }
+    override suspend fun searchSeriesByName(seriesName: String, page: Int) = SafeCall {
+        val keywordData = localExploreDataSource.getSearchKeyword(query = seriesName)
+        val isPageCached = keywordData?.seriesPages?.contains(page) == true
+        if (isPageCached) {
+            local.getCachedSeriesForName(seriesName, page).map(SeriesCacheDto::toEntity)
         } else {
-            val remoteSeries = remote.getSeriesByName(seriesName)
-            val cachedSeries = remoteSeries.map { it.toCacheDto() }
-
-            local.saveSearchResult(
-                seriesList = cachedSeries
+            val remoteSeries = remote.getSeriesByName(seriesName, page).map(SeriesDto::toEntity)
+            val updatedKeyword = keywordData?.copy(
+                seriesPages = keywordData.seriesPages + page,
+                searchedAt = System.currentTimeMillis()
+            ) ?: SearchKeywordCacheDto(
+                keyword = seriesName,
+                seriesPages = listOf(page)
             )
-
-            remoteSeries.map { it.toEntity() }
+            localExploreDataSource.insertSearchKeyword(updatedKeyword)
+            local.saveSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
+            remoteSeries
         }
     }
 
@@ -71,8 +76,8 @@ class SeriesRepositoryImpl(
         remote.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getSeriesByGenre(genreId: Int) = SafeCall {
-        remote.getSeriesByGenre(genreId).map { it.toEntity() }
+    override suspend fun getSeriesByGenre(genreId: Int, page: Int) = SafeCall {
+        remote.getSeriesByGenre(genreId, page).map { it.toEntity() }
     }
 
     override suspend fun getSeriesGenresByIds(genreIDs: List<Int>) = SafeCall {
@@ -83,6 +88,15 @@ class SeriesRepositoryImpl(
             remote.getGenres().filter { it.id in genreIDs }.map(GenreDto::toEntity)
         }
     }
+
+    override suspend fun getPopularitySeries(page: Int): List<Series> =
+        SafeCall { remote.getPopularitySeries(page).map(SeriesDto::toEntity) }
+
+    override suspend fun getRecentlyReleasedSeries(page: Int): List<Series> =
+        SafeCall { remote.getRecentlyReleasedSeries(page).map(SeriesDto::toEntity) }
+
+    override suspend fun getTopRatedSeries(page: Int): List<Series> =
+        SafeCall { remote.getTopRatedSeries(page).map(SeriesDto::toEntity) }
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {
         remote.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)

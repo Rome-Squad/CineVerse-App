@@ -25,9 +25,7 @@ fun RatingSelector(
         RatingEmojiState(
             modifier = Modifier,
             iconSize = iconSize,
-            rate = rate,
-            onRateClickEnabled = true,
-            onRateClick = onRateClick
+            rate = rate
         )
 
         RatingStars(

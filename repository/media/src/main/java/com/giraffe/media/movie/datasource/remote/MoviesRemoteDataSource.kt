@@ -4,7 +4,6 @@ import  com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import  com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import  com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import  com.giraffe.media.movie.datasource.remote.dto.RatingRequest
-import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 
 interface MoviesRemoteDataSource {
 
@@ -12,11 +11,11 @@ interface MoviesRemoteDataSource {
         movieId: Int
     ): MovieDto
 
-    suspend fun getMoviesByName(movieName: String): List<MovieDto>
+    suspend fun getMoviesByName(movieName: String, page: Int): List<MovieDto>
 
     suspend fun getMovieGenres(): List<MovieGenreDto>
 
-    suspend fun getMoviesByGenre(genreId: Int): List<MovieDto>
+    suspend fun getMoviesByGenre(genreId: Int, page: Int): List<MovieDto>
 
     suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto>
 
@@ -27,4 +26,10 @@ interface MoviesRemoteDataSource {
         movieId: Int,
         guestSessionId: String
     ): Float
+
+    suspend fun getPopularityMovies(page: Int): List<MovieDto>
+
+    suspend fun getRecentlyReleasedMovies(page: Int): List<MovieDto>
+
+    suspend fun getUpcomingMovies(page: Int): List<MovieDto>
 }

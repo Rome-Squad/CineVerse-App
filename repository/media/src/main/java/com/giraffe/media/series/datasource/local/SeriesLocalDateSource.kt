@@ -5,7 +5,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 
 interface SeriesLocalDateSource {
-    suspend fun getCachedSeriesForName(name: String): List<SeriesCacheDto>
+    suspend fun getCachedSeriesForName(name: String, page: Int): List<SeriesCacheDto>
     suspend fun saveSearchResult(seriesList: List<SeriesCacheDto>)
     suspend fun getCachedGenres(): List<SeriesGenreCacheDto>
     suspend fun saveGenres(genres: List<SeriesGenreCacheDto>)

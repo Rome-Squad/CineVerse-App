@@ -11,13 +11,19 @@ interface MoviesApiServiceRetrofit {
     suspend fun getMovieById(@Path(ID) movieId: Int): Response<MovieDto>
 
     @GET(MOVIES_BY_NAME_URL)
-    suspend fun getMoviesByName(@Query(QUERY) name: String): Response<MoviesListResponse>
+    suspend fun getMoviesByName(
+        @Query(QUERY) name: String,
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
 
     @GET(GENRES_URL)
     suspend fun getGenres(): Response<GenreResponse>
 
     @GET(MOVIES_BY_GENRE_URL)
-    suspend fun getMoviesByGenre(@Query(WITH_GENRES) genreId: String): Response<MoviesListResponse>
+    suspend fun getMoviesByGenre(
+        @Query(WITH_GENRES) genreId: String,
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
 
     @GET("$MOVIE_END_POINT/{$ID}/$REVIEWS_END_POINT")
     suspend fun getMovieReviews(@Path(ID) movieId: Int): Response<ReviewsResponseDto>
@@ -41,12 +47,30 @@ interface MoviesApiServiceRetrofit {
         @Query(GUEST_SESSION_ID) sessionId: String
     ): Response<RatedMoviesResponse>
 
+    @GET(POPULAR_MOVIES_URL)
+    suspend fun getPopularMovies(
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
+
+    @GET(UPCOMING_MOVIES_URL)
+    suspend fun getUpcomingMovies(
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
+
+    @GET(NOW_PLAYING_MOVIES_URL)
+    suspend fun getRecentlyReleasedMovies(
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
+
     companion object {
         const val MOVIE_END_POINT = "movie"
         const val REVIEWS_END_POINT = "reviews"
         const val MOVIES_BY_NAME_URL = "search/movie"
         const val GENRES_URL = "genre/movie/list"
         const val MOVIES_BY_GENRE_URL = "discover/movie"
+        const val POPULAR_MOVIES_URL = "movie/popular"
+        const val UPCOMING_MOVIES_URL = "movie/upcoming"
+        const val NOW_PLAYING_MOVIES_URL = "movie/now_playing"
         const val WITH_GENRES = "with_genres"
         const val PAGE = "page"
         const val QUERY = "query"

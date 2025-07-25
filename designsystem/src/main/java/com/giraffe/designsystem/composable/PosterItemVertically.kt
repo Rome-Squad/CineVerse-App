@@ -32,7 +32,7 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun PosterItemVertically(
-    movie: Poster,
+    poster: Poster,
     modifier: Modifier = Modifier,
     onClickPoster: () -> Unit = {}
 ) {
@@ -49,8 +49,8 @@ fun PosterItemVertically(
             contentAlignment = Alignment.Center
         ) {
             SafeIslamicImage(
-                imageUrl = movie.imageUri,
-                contentDescription = movie.name,
+                imageUrl = poster.imageUri,
+                contentDescription = poster.name,
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable(onClick = onClickPoster)
@@ -64,7 +64,7 @@ fun PosterItemVertically(
             }
 
             Rating(
-                value = movie.rating,
+                value = poster.rating,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = 8.dp, top = 8.dp)
@@ -74,7 +74,7 @@ fun PosterItemVertically(
 
 
         Text(
-            text = movie.name,
+            text = poster.name,
             style = Theme.textStyle.body.md.medium,
             color = Theme.color.shade.secondary,
             maxLines = 1,
@@ -89,7 +89,7 @@ fun PosterItemVertically(
 private fun Preview() {
     CineVerseTheme {
         PosterItemVertically(
-            movie = Poster(
+            poster = Poster(
                 id = 1,
                 name = "The Flash",
                 imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",

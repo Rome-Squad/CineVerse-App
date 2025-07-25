@@ -13,15 +13,18 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
@@ -43,7 +46,7 @@ fun SearchResultScreen(
     onBackClick: () -> Unit,
     viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     SearchResultContent(
         state = state,
         interactions = viewModel,
@@ -64,6 +67,8 @@ fun SearchResultContent(
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
+    val actors = state.actors.collectAsLazyPagingItems()
+    val posters = state.selectedPosters.collectAsLazyPagingItems()
     Box {
         LazyColumn(
             modifier = Modifier
@@ -90,16 +95,45 @@ fun SearchResultContent(
                     onTabSelected = interactions::selectTap
                 )
             }
+
             item {
                 Box(
                     modifier = Modifier
-                        .fillParentMaxHeight(),
+                        .fillParentMaxSize(),
                 ) {
-                    if (state.selectedTab == SearchTab.ACTORS) {
-                        if (state.actors.isNotEmpty()) {
-                            ActorsSection(
-                                actors = state.actors,
-                                navigateToCastDetails = navigateToCastDetails
+                    if (posters.loadState.refresh is LoadState.Loading) {
+                        Progress(
+                            size = 32.dp,
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = 16.dp)
+                        )
+                    } else {
+
+                        if (state.selectedTab == SearchTab.ACTORS) {
+                            if (actors.itemCount != 0) {
+                                ActorsSection(
+                                    actors = actors,
+                                    navigateToCastDetails = navigateToCastDetails
+                                )
+                            } else {
+                                NothingFound(
+                                    modifier = Modifier
+                                        .padding(horizontal = 60.dp)
+                                        .padding(top = 195.dp)
+                                )
+                            }
+                        } else if (posters.itemCount != 0) {
+                            TransitionLazyColumnToGrid(
+                                posters = posters,
+                                isListSelected = !state.isGridSelected,
+                                onPosterClicked = { id ->
+                                    when (state.selectedTab) {
+                                        SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                        SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                        SearchTab.ACTORS -> navigateToCastDetails(id)
+                                    }
+                                }
                             )
                         } else {
                             NothingFound(
@@ -108,24 +142,6 @@ fun SearchResultContent(
                                     .padding(top = 195.dp)
                             )
                         }
-                    } else if (state.selectedPosters.isNotEmpty()) {
-                        TransitionLazyColumnToGrid(
-                            poster = state.selectedPosters,
-                            isListSelected = !state.isGridSelected,
-                            onPosterClicked = { id ->
-                                when (state.selectedTab) {
-                                    SearchTab.MOVIES -> navigateToMovieDetails(id)
-                                    SearchTab.SERIES -> navigateToSeriesDetails(id)
-                                    SearchTab.ACTORS -> navigateToCastDetails(id)
-                                }
-                            }
-                        )
-                    } else {
-                        NothingFound(
-                            modifier = Modifier
-                                .padding(horizontal = 60.dp)
-                                .padding(top = 195.dp)
-                        )
                     }
                 }
             }
@@ -150,7 +166,7 @@ fun SearchResultContent(
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
-    actors: List<ActorUi>,
+    actors: LazyPagingItems<ActorUi>,
     navigateToCastDetails: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -160,12 +176,12 @@ fun ActorsSection(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(16.dp)
     ) {
-        items(items = actors, key = { actor -> actor.id }) { actor ->
+        items(actors.itemCount) { actorIndex ->
             CastItem(
-                name = actor.name,
-                imageUrl = actor.imageUrl,
+                name = actors[actorIndex]?.name.toString(),
+                imageUrl = actors[actorIndex]?.imageUrl.toString(),
                 onClick = {
-                    navigateToCastDetails(actor.id)
+                    navigateToCastDetails(actors[actorIndex]?.id ?: 0)
                 }
             )
         }

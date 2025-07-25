@@ -3,10 +3,10 @@ package com.giraffe.details.screens.moviedetails
 import android.util.Log
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
+import com.giraffe.details.models.toMovieUi
 import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
@@ -15,6 +15,7 @@ import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
@@ -26,7 +27,8 @@ class MovieDetailsViewModel(
     val getMovieGenres: GetMovieGenresUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
-    val getPeopleByMovieId: GetPeopleByMovieIdUseCase
+    val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
+    val setMovieRecentUseCase: SetMovieRecentUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
@@ -37,7 +39,7 @@ class MovieDetailsViewModel(
     }
 
     //loading movie data
-    fun loadMovieDetails(movieId: Int) {
+    private fun loadMovieDetails(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::loadMovieDetailsError
@@ -51,16 +53,16 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMovieDetailsSuccess(movie: Movie) {
-
         updateState {
             it.copy(
-                movie = movie.MovieUi(),
+                movie = movie.toMovieUi(),
                 isLoadingMovieDetails = false
             )
         }
         loadMovieGenres(movie.genresID)
         loadMoviePeople(movie.id)
         loadMovieReviews(movie.id)
+        saveToRecentViewed(movie)
     }
 
     private fun loadMovieDetailsError(error: Throwable) {
@@ -96,7 +98,7 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-    fun loadRecommendedMovie(movieId: Int, page: Int) {
+    private fun loadRecommendedMovie(movieId: Int, page: Int) {
         safeExecute(
             onSuccess = ::loadRecommendedMovieSuccess,
             onError = ::loadRecommendedMovieError
@@ -105,7 +107,7 @@ class MovieDetailsViewModel(
         }
     }
 
-    fun loadRecommendedMovieSuccess(recommendedSeries: List<Movie>) {
+    private fun loadRecommendedMovieSuccess(recommendedSeries: List<Movie>) {
         updateState {
             it.copy(
                 recommendedMovies = recommendedSeries.map {
@@ -121,7 +123,7 @@ class MovieDetailsViewModel(
         }
     }
 
-    fun loadRecommendedMovieError(error: Throwable) {
+    private fun loadRecommendedMovieError(error: Throwable) {
         updateState {
             it.copy(
                 isLoadingRecommendedMovies = false,
@@ -172,6 +174,12 @@ class MovieDetailsViewModel(
                 pageNumber = 1,
                 pageSize = 20
             )
+        }
+    }
+
+    private fun saveToRecentViewed(movie: Movie) {
+        safeExecute {
+            setMovieRecentUseCase(movie)
         }
     }
 
@@ -274,6 +282,10 @@ class MovieDetailsViewModel(
                 personId = personId
             )
         )
+    }
+
+    override fun navigateToMovieRecommendation(movieId: Int, title: String) {
+        sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
     }
 
     override fun onCollectionClick() {
