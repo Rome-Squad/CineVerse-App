@@ -125,6 +125,7 @@ private fun SearchContent(
             focusRequester = focusRequester,
             onEndIconClick = interactions::onPostfixIconClick,
             onBackClick = onBackClick,
+            onSearch = { navigateToSearchResult(state.query) },
             onSearchClick = {
                 interactions.onKeywordClick(it)
                 navigateToSearchResult(it)
