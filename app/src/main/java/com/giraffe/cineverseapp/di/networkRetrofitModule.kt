@@ -1,6 +1,7 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.cineverseapp.BuildConfig
+import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.ExploreRemoteDataSourceImplRetrofit
@@ -19,8 +20,8 @@ import com.giraffe.repository.datasource.UserRemoteDataSource
 import com.giraffe.user.SessionManager
 import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
+import com.giraffe.user.util.RetrofitUserRequestBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -60,6 +61,7 @@ val networkRetrofitModule = module {
     single { provideRetrofitService<SeriesApiServiceRetrofit>(get()) }
     single { provideRetrofitService<ExploreApiServiceRetrofit>(get()) }
     single { provideRetrofitService<PersonApiServiceRetrofit>(get()) }
+    single { RetrofitUserRequestBuilder(get<UserApiServiceRetrofit>()) }
 
     single<RetrofitRequestBuilder<MoviesApiServiceRetrofit>>(named("movies_builder")) {
         val api = get<Retrofit>().create(MoviesApiServiceRetrofit::class.java)
@@ -75,9 +77,9 @@ val networkRetrofitModule = module {
         val api = get<Retrofit>().create(ExploreApiServiceRetrofit::class.java)
         RetrofitRequestBuilder(api)
     }
-    single<RetrofitRequestBuilder<UserApiServiceRetrofit>>(named("user_builder")) {
+    single<RetrofitUserRequestBuilder<UserApiServiceRetrofit>>(named("user_builder")) {
         val api = get<Retrofit>().create(UserApiServiceRetrofit::class.java)
-        RetrofitRequestBuilder(api)
+        RetrofitUserRequestBuilder(api)
     }
 
 
@@ -120,7 +122,8 @@ val networkRetrofitModule = module {
 
 private fun createRetrofitClient(accessToken: String): OkHttpClient {
     val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        level =
+            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
     }
 
     return OkHttpClient.Builder()

@@ -17,4 +17,5 @@
     <string name="unknown_error">Unknown Error</string>
     <string name="Empty_username">Username can not be empty</string>
     <string name="guest_auth_error">Failed to Enter as guest,Try again later</string>
+    <string name="invalid_username_or_password">Invalid Username or Password</string>
 </resources>

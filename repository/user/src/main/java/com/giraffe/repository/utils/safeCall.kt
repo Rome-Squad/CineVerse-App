@@ -1,28 +1,38 @@
 package com.giraffe.repository.utils
 
-import com.giraffe.repository.exceptions.GuestSessionCreationException
+import com.giraffe.repository.exceptions.ApiDataException
 import com.giraffe.repository.exceptions.InvalidCredentialsException
 import com.giraffe.repository.exceptions.SessionCreationException
 import com.giraffe.repository.exceptions.TokenCreationException
 import com.giraffe.repository.exceptions.TokenValidationException
 import com.giraffe.user.exception.AuthException
+import com.giraffe.user.exception.InvalidUsernameOrPasswordException
 import com.giraffe.user.exception.UnknownException
 
-suspend inline fun <reified T> safeCall(
-    block: suspend () -> T
-): T {
-    return try {
-        block()
-    } catch (e: Throwable) {
-        throw mapToAuthException(e)
+object SafeCall {
+    suspend operator fun <T> invoke(execute: suspend () -> T): T {
+        return try {
+            execute()
+        } catch (e: Exception) {
+            throw mapToDomainException(e)
+        }
     }
-}
 
-fun mapToAuthException(e: Throwable):AuthException = when(e){
-    is InvalidCredentialsException-> com.giraffe.user.exception.InvalidCredentialsException()
-    is TokenCreationException -> com.giraffe.user.exception.TokenCreationException()
-    is TokenValidationException -> com.giraffe.user.exception.TokenValidationException()
-    is SessionCreationException -> com.giraffe.user.exception.SessionCreationException()
-    is GuestSessionCreationException -> com.giraffe.user.exception.GuestSessionCreationException()
-    else -> UnknownException()
+
+    fun mapToDomainException(e: Throwable): AuthException = when (e) {
+        is ApiDataException -> when (e.code) {
+            // 401 Unauthorized (Auth or Token issues)
+            401, 403 -> InvalidUsernameOrPasswordException()
+            else -> UnknownException()
+
+        }
+
+        is InvalidCredentialsException -> com.giraffe.user.exception.InvalidCredentialsException()
+        is TokenCreationException -> com.giraffe.user.exception.TokenCreationException()
+        is TokenValidationException -> com.giraffe.user.exception.TokenValidationException()
+        is SessionCreationException -> com.giraffe.user.exception.SessionCreationException()
+
+        else -> UnknownException()
+
+    }
 }

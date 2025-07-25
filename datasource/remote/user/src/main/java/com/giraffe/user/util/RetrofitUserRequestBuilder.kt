@@ -1,16 +1,16 @@
-package com.giraffe.media.util
+package com.giraffe.user.util
 
-import com.giraffe.media.exception.ApiDataException
-import com.giraffe.media.exception.InvalidIdDataException
-import com.giraffe.media.exception.MediaDataException
-import com.giraffe.media.exception.NoInternetDataException
-import com.giraffe.media.exception.RequestTimeoutDataException
-import com.giraffe.media.exception.SerializationDataException
-import com.giraffe.media.exception.UnknownNetworkDataException
+import com.giraffe.repository.exceptions.ApiDataException
+import com.giraffe.repository.exceptions.AuthDataException
+import com.giraffe.repository.exceptions.InvalidIdDataException
+import com.giraffe.repository.exceptions.NoInternetDataException
+import com.giraffe.repository.exceptions.RequestTimeoutDataException
+import com.giraffe.repository.exceptions.SerializationDataException
+import com.giraffe.repository.exceptions.UnknownNetworkDataException
 import retrofit2.Response
 import java.io.IOException
 
-class RetrofitRequestBuilder<API>(
+class RetrofitUserRequestBuilder<API>(
     val api: API
 ) {
 
@@ -50,8 +50,8 @@ class RetrofitRequestBuilder<API>(
             }
         }
 
-        fun mapToMediaException(e: Throwable): MediaDataException = when (e) {
-            is MediaDataException -> e
+        fun mapToMediaException(e: Throwable): AuthDataException = when (e) {
+            is AuthDataException -> e
             is java.net.SocketTimeoutException -> RequestTimeoutDataException()
             is IOException -> NoInternetDataException()
             is IllegalArgumentException -> InvalidIdDataException()
