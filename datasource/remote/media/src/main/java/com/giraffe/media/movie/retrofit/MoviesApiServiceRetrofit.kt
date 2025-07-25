@@ -20,7 +20,10 @@ interface MoviesApiServiceRetrofit {
     suspend fun getGenres(): Response<GenreResponse>
 
     @GET(MOVIES_BY_GENRE_URL)
-    suspend fun getMoviesByGenre(@Query(WITH_GENRES) genreId: String): Response<MoviesListResponse>
+    suspend fun getMoviesByGenre(
+        @Query(WITH_GENRES) genreId: String,
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
 
     @GET("$MOVIE_END_POINT/{$ID}/$REVIEWS_END_POINT")
     suspend fun getMovieReviews(@Path(ID) movieId: Int): Response<ReviewsResponseDto>

@@ -137,15 +137,12 @@ private fun SearchContent(
                 focusRequester = focusRequester,
                 onEndIconClick = interactions::onPostfixIconClick,
                 onBackClick = onBackClick,
-                onSearch = { navigateToSearchResult(state.query) },
-                onSearchClick = {
-                    interactions.onKeywordClick(it)
-                    navigateToSearchResult(it)
-                }
+                onSearch = navigateToSearchResult,
             )
         }
 
-        keywordsSection(
+
+        if ((state.recentKeywords + state.keywords).isNotEmpty()) keywordsSection(
             query = state.query,
             keywords = state.keywords,
             recentKeywords = state.recentKeywords,
@@ -182,7 +179,7 @@ private fun LazyListScope.keywordsSection(
 ) {
     val isJustRecent = keywords.isEmpty() && recentKeywords.isNotEmpty()
 
-    item {
+    stickyHeader {
         SectionTitle(
             modifier = Modifier
                 .background(Theme.color.background.screen)
@@ -193,23 +190,22 @@ private fun LazyListScope.keywordsSection(
         )
     }
 
-    if (recentKeywords.isNotEmpty()) {
-        items(recentKeywords) { keyWord ->
-            SearchItem(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = keyWord,
-                isRecent = isJustRecent,
-                postfixIcon = if (query.isBlank()) painterResource(Theme.icons.outline.close) else painterResource(
-                    Theme.icons.outline.arrowRightUp
-                ),
-                onClickItem = onKeywordsClick,
-                onClickIcon = {
-                    if (isJustRecent) onKeywordClearClick(keyWord) else onKeywordArrowClick(
-                        keyWord
-                    )
-                },
-            )
-        }
+
+    items(recentKeywords) { keyWord ->
+        SearchItem(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = keyWord,
+            isRecent = isJustRecent,
+            postfixIcon = if (query.isBlank()) painterResource(Theme.icons.outline.close) else painterResource(
+                Theme.icons.outline.arrowRightUp
+            ),
+            onClickItem = onKeywordsClick,
+            onClickIcon = {
+                if (isJustRecent) onKeywordClearClick(keyWord) else onKeywordArrowClick(
+                    keyWord
+                )
+            },
+        )
     }
 
     if (keywords.isNotEmpty()) {

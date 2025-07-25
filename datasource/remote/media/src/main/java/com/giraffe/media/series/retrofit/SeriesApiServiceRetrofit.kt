@@ -19,7 +19,8 @@ interface SeriesApiServiceRetrofit {
 
     @GET(DISCOVER_TV)
     suspend fun getSeriesByGenre(
-        @Query(WITH_GENRES) genreId: String
+        @Query(WITH_GENRES) genreId: String,
+        @Query(PAGE) page: Int = 1
     ): Response<SeriesResponse>
 
     @GET(GENRE_TV_LIST)
