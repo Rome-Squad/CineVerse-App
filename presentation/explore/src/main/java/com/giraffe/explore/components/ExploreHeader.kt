@@ -37,7 +37,6 @@ fun ExploreHeader(
     modifier: Modifier = Modifier,
     showBackButton: Boolean = false,
     onBackClick: () -> Unit = {},
-    onSearchClick: (String) -> Unit = {},
     endIcon: Painter,
     onEndIconClick: () -> Unit = {},
     tabsTitles: List<String> = listOf(),
@@ -47,7 +46,7 @@ fun ExploreHeader(
     value: String = "",
     readOnly: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
-    onSearch: () -> Unit = {},
+    onSearch: (String) -> Unit = {},
     onTextFieldClicked: () -> Unit = {},
     onValueChange: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {}
@@ -96,7 +95,7 @@ fun ExploreHeader(
                 readOnly = readOnly,
                 focusRequester = focusRequester,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = { onSearch() }),
+                keyboardActions = KeyboardActions(onSearch = { onSearch(value) }),
                 onClicked = onTextFieldClicked
             )
         }
