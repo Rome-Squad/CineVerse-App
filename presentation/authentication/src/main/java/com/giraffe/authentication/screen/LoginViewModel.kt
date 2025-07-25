@@ -16,16 +16,22 @@ class LoginViewModel(
 
     override fun onUsernameChanged(username: String) {
         updateState {
-            it.copy(username = username)
+            it.copy(
+                username = username,
+                usernameErrorMessage = null
+            )
         }
     }
+
 
     override fun onPasswordChanged(password: String) {
         updateState {
-            it.copy(password = password)
+            it.copy(
+                password = password,
+                passwordErrorMessage = null
+            )
         }
     }
-
     override fun onLoginClick() {
         updateState { it.copy(isLoadingLogin = true) }
 
@@ -41,25 +47,31 @@ class LoginViewModel(
     }
 
     private fun onLoginError(throwable: Throwable) {
-        if (throwable is EmptyUsernameException) updateState {
-            it.copy(
-                usernameErrorMessage = mapExceptionToStringRes(
-                    throwable
+        if (throwable is EmptyUsernameException) {
+            updateState {
+                it.copy(
+                    usernameErrorMessage = mapExceptionToStringRes(throwable),
+                    passwordErrorMessage = null
                 )
-            )
+            }
         }
 
-        if (throwable is InvalidPasswordException) updateState {
-            it.copy(
-                passwordErrorMessage = mapExceptionToStringRes(throwable)
-            )
+        if (throwable is InvalidPasswordException) {
+            updateState {
+                it.copy(
+                    passwordErrorMessage = mapExceptionToStringRes(throwable),
+                    usernameErrorMessage = null
+                )
+            }
         }
 
-        if(throwable is InvalidUsernameOrPasswordException) updateState {
-            it.copy(
-                usernameErrorMessage = mapExceptionToStringRes(throwable),
-                passwordErrorMessage = mapExceptionToStringRes(throwable)
-            )
+        if (throwable is InvalidUsernameOrPasswordException) {
+            updateState {
+                it.copy(
+                    usernameErrorMessage = mapExceptionToStringRes(throwable),
+                    passwordErrorMessage = mapExceptionToStringRes(throwable)
+                )
+            }
         }
 
         updateState { it.copy(isLoadingLogin = false) }
