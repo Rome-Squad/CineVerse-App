@@ -28,6 +28,7 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
+import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.util.toTitle
 import com.giraffe.media.explore.R
 import org.koin.androidx.compose.koinViewModel
@@ -127,13 +128,12 @@ private fun GenresAndCardsSection(
             .fillMaxWidth()
             .background(Theme.color.background.screen)
     ) {
-        //TODO
-        /*TransitionLazyColumnToGrid(
+        TransitionLazyColumnToGrid(
             posters = posters,
             onPosterClicked = onPosterClicked,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 60.dp),
-        )*/
+        )
         GenresSection(
             modifier = Modifier.padding(top = 12.dp, bottom = 16.dp),
             genres = genres,
