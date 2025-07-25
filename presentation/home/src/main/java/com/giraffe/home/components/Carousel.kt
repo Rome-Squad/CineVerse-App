@@ -1,8 +1,10 @@
 package com.giraffe.home.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,7 +26,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -60,9 +65,30 @@ fun Carousel(
             targetValue = if (isSelected) 1f else 0f,
             label = "ZIndexAnimation"
         ).value
+
+        val offsetY = animateDpAsState(
+            targetValue = if (isSelected) (-24).dp else 0.dp,
+            animationSpec = tween(400, easing = FastOutSlowInEasing),
+            label = "VerticalOffsetAnimation"
+        ).value
+
+        val scale = animateFloatAsState(
+            targetValue = if (isSelected) 1f else 0.8f,
+            animationSpec = tween(400, easing = FastOutSlowInEasing),
+            label = "ScaleAnimation"
+        ).value
+
+        val alpha = animateFloatAsState(
+            targetValue = if (isSelected) 1f else 0.7f,
+            animationSpec = tween(400, easing = FastOutSlowInEasing),
+            label = "AlphaAnimation"
+        ).value
         MovieItem(
             modifier = Modifier
                 .zIndex(zIndex)
+                .offset(y = offsetY)
+                .scale(scale)
+                .alpha(alpha)
                 .clickable {
                     onClickItem(
                         movieCards[pageIndex].id,
@@ -169,7 +195,7 @@ private fun Cover(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = rate.toString(),
+                    text = String.format("%.1f", rate),
                     style = Theme.textStyle.label.md.medium,
                     color = Theme.color.shade.primary
                 )

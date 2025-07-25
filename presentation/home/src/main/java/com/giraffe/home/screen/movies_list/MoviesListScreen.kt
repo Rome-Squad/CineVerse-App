@@ -37,9 +37,11 @@ fun MoviesListScreen(
                 is MoviesListEffect.NavigateToMovieDetails -> {
                     navigateToMoviesDetailsScreen(effect.movieId)
                 }
+
                 is MoviesListEffect.NavigateToSeriesDetails -> {
                     navigateToSeriesDetailsScreen(effect.seriesId)
                 }
+
                 is MoviesListEffect.ShowError -> {}
             }
         }
@@ -96,13 +98,8 @@ fun MoviesListContent(
 @Composable
 fun MoviesListPreview() {
     val interactionListener = object : MoviesListInteractionListener {
-        override fun onViewChanged(isGrid: Boolean) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
-            TODO("Not yet implemented")
-        }
+        override fun onViewChanged(isGrid: Boolean) {}
+        override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
     }
     MoviesListContent(
         state = MoviesListUiState(),

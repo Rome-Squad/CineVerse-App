@@ -41,28 +41,32 @@ fun CTACard(
             .clickable(onClick = onClick)
             .padding(start = 16.dp, end = 12.dp, top = 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Icon(
-            painter = icon,
-            contentDescription = stringResource(R.string.card_icon),
-            tint = Theme.color.brand.primary,
-            modifier = Modifier
-                .size(48.dp)
-                .background(
-                    Theme.color.shade.quinary,
-                    shape = RoundedCornerShape(Theme.radius.full)
-                )
-                .padding(12.dp)
-        )
-        InfoSection(
-            title = title,
-            description = caption,
-            modifier = Modifier
-                .weight(1f),
-            descriptionLimits = 2,
-            spaceBetween = 4
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.weight(1f)
+        ) {
+            Icon(
+                painter = icon,
+                contentDescription = stringResource(R.string.card_icon),
+                tint = Theme.color.brand.primary,
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        Theme.color.shade.quinary,
+                        shape = RoundedCornerShape(Theme.radius.full)
+                    )
+                    .padding(12.dp)
+            )
+            InfoSection(
+                title = title,
+                description = caption,
+                descriptionLimits = 2,
+                spaceBetween = 4
+            )
+        }
+
         Icon(
             painter = painterResource(Theme.icons.outline.altArrowRight),
             contentDescription = stringResource(R.string.alt_arrow_right_icon),

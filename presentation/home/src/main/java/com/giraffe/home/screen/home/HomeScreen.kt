@@ -98,18 +98,13 @@ fun HomeContent(
             .background(Theme.color.background.screen)
             .statusBarsPadding()
     ) {
-        stickyHeader {
-            TopAppBar(userName = state.userName)
-        }
-        item {
-            HorizontalDivider(
-                modifier = Modifier
-                    .padding(top = 9.dp, bottom = 16.dp),
-                color = Theme.color.stroke.primary
-            )
-        }
+        stickyHeader { TopAppBar(userName = state.userName) }
+        item { HorizontalDivider(color = Theme.color.stroke.primary) }
         item {
             Carousel(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp),
                 movieCards = state.popularity,
                 onClickItem = interactionListener::onMediaClicked
             )
@@ -117,8 +112,7 @@ fun HomeContent(
         item {
             HomeUiListSection(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 32.dp),
+                    .fillMaxWidth(),
                 title = stringResource(R.string.recently_released),
                 endText = stringResource(R.string.show_more),
                 uiModels = state.recentlyReleased,
@@ -264,38 +258,17 @@ val featuredCollection = listOf(
 @Composable
 fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
-        override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {
-            TODO("Not yet implemented")
-        }
-
+        override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
+        override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {}
+        override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {}
+        override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {}
+        override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {}
+        override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(
             state = HomeScreenUiState(),
             interactionListener = interactionObject,
-//            navigateToMoviesListScreen = { sectionType, sectionTitle -> },
-//            navigateToMoviesDetailsScreen = {},
-//            navigateToSeriesDetailsScreen = {},
         )
     }
 }
