@@ -73,13 +73,8 @@ class MoviesRepositoryImpl(
     }
 
 
-    override suspend fun getMoviesByGenre(genreId: Int) = SafeCall {
-        local.getMoviesByGenre(genreId).map(MovieCacheDto::toEntity)
-            .ifEmpty {
-                remote.getMoviesByGenre(genreId)
-                    .map(MovieDto::toEntity)
-                    .also { insertMovies(it) }
-            }
+    override suspend fun getMoviesByGenre(genreId: Int, page: Int) = SafeCall {
+        remote.getMoviesByGenre(genreId, page).map(MovieDto::toEntity)
     }
 
     override suspend fun insertMovies(movie: List<Movie>) = SafeCall {
@@ -137,15 +132,16 @@ class MoviesRepositoryImpl(
         remote.getUserMovieRating(movieId, sessionId)
     }
 
-    override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall{
-        remote.getPopularityMovies(page).map ( MovieDto::toEntity)
-    }
-    override suspend fun getRecentlyReleasedMovies(page: Int): List<Movie>  = SafeCall{
-        remote.getRecentlyReleasedMovies(page).map ( MovieDto::toEntity)
+    override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall {
+        remote.getPopularityMovies(page).map(MovieDto::toEntity)
     }
 
-    override suspend fun getUpcomingMovies(page: Int): List<Movie> = SafeCall{
-        remote.getUpcomingMovies(page).map ( MovieDto::toEntity)
+    override suspend fun getRecentlyReleasedMovies(page: Int): List<Movie> = SafeCall {
+        remote.getRecentlyReleasedMovies(page).map(MovieDto::toEntity)
+    }
+
+    override suspend fun getUpcomingMovies(page: Int): List<Movie> = SafeCall {
+        remote.getUpcomingMovies(page).map(MovieDto::toEntity)
     }
 
     private suspend fun getSessionId() = SafeCall {

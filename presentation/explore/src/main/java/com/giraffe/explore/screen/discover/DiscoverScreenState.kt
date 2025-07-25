@@ -1,8 +1,11 @@
 package com.giraffe.explore.screen.discover
 
 import androidx.annotation.StringRes
+import androidx.paging.PagingData
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.util.HasErrorMessage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 data class DiscoverScreenState(
     val errorMessageRes: Int? = null,
@@ -12,9 +15,12 @@ data class DiscoverScreenState(
     val selectedGenres: List<GenreUi> = emptyList(),
     val moviesGenres: List<GenreUi> = listOf(),
     val seriesGenres: List<GenreUi> = listOf(),
-    val selectedPosters: List<Poster> = emptyList(),
-    val moviesPosters: List<Poster> = emptyList(),
-    val seriesPosters: List<Poster> = emptyList(),
+    @Transient
+    val selectedPosters: Flow<PagingData<Poster>> = flowOf(),
+    @Transient
+    val moviesPosters: Flow<PagingData<Poster>> = flowOf(),
+    @Transient
+    val seriesPosters: Flow<PagingData<Poster>> = flowOf(),
     val selectedTab: SearchTab = SearchTab.MOVIES,
     val tabs: List<SearchTab> = listOf(SearchTab.MOVIES, SearchTab.SERIES),
     val isGridSelected: Boolean = true,

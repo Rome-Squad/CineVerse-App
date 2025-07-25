@@ -15,7 +15,7 @@ interface MoviesRemoteDataSource {
 
     suspend fun getMovieGenres(): List<MovieGenreDto>
 
-    suspend fun getMoviesByGenre(genreId: Int): List<MovieDto>
+    suspend fun getMoviesByGenre(genreId: Int, page: Int): List<MovieDto>
 
     suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto>
 

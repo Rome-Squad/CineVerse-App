@@ -20,12 +20,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Chip
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
+import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.util.toTitle
 import com.giraffe.media.explore.R
 import org.koin.androidx.compose.koinViewModel
@@ -56,6 +59,7 @@ fun ExploreContent(
     navigateToSearch: () -> Unit
 ) {
     val context = LocalContext.current
+    val posters = state.selectedPosters.collectAsLazyPagingItems()
     Box {
         LazyColumn(
             modifier = Modifier
@@ -90,7 +94,7 @@ fun ExploreContent(
                             SearchTab.ACTORS -> {}
                         }
                     },
-                    posters = state.selectedPosters,
+                    posters = posters,
                     selectedGenre = state.selectedGenre
                         ?: GenreUi(title = stringResource(R.string.all)),
                     genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
@@ -113,7 +117,7 @@ fun ExploreContent(
 @Composable
 private fun GenresAndCardsSection(
     modifier: Modifier = Modifier,
-    posters: List<Poster>,
+    posters: LazyPagingItems<Poster>,
     selectedGenre: GenreUi,
     genres: List<GenreUi>,
     isGridSelected: Boolean,
@@ -125,13 +129,12 @@ private fun GenresAndCardsSection(
             .fillMaxWidth()
             .background(Theme.color.background.screen)
     ) {
-        //TODO
-        /*TransitionLazyColumnToGrid(
+        TransitionLazyColumnToGrid(
             posters = posters,
             onPosterClicked = onPosterClicked,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 60.dp),
-        )*/
+        )
         GenresSection(
             modifier = Modifier.padding(top = 12.dp, bottom = 16.dp),
             genres = genres,
