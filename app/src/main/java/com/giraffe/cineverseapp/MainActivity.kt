@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
-import com.giraffe.home.HomeApi
 import com.giraffe.home.navigation.HomeApiImp
 import org.koin.android.ext.android.inject
 

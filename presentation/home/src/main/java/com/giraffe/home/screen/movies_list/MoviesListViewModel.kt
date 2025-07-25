@@ -13,14 +13,14 @@ import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
-import com.giraffe.media.home.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.home.usecase.GetRecentlyReleasedSeriesUseCase
-import com.giraffe.media.home.usecase.GetTopRatedSeriesUseCase
-import com.giraffe.media.home.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
+import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -42,6 +42,7 @@ class MoviesListViewModel(
     init {
         loadMoviesBySection(sectionType)
     }
+
     private fun loadMoviesBySection(sectionType: String) {
         updateState {
             it.copy(
@@ -56,8 +57,8 @@ class MoviesListViewModel(
             try {
                 val media = when (sectionType) {
                     MovieSectionType.RECENTLY_RELEASED -> {
-                        val recentMovies = getRecentlyReleasedMoviesUseCase()
-                        val recentSeries = getRecentlyReleasedSeriesUseCase()
+                        val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
+                        val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
 
                         val moviesUi = recentMovies.map { it.toPosterUi() }
                         val seriesUi = recentSeries.map { it.toPosterUi() }
@@ -66,12 +67,12 @@ class MoviesListViewModel(
                     }
 
                     MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                        val topRated = getTopRatedSeriesUseCase()
+                        val topRated = getTopRatedSeriesUseCase(page = 1)
                         topRated.map { it.toPosterUi() }
                     }
 
                     MovieSectionType.UPCOMING_MOVIES -> {
-                        val upcoming = getUpcomingMoviesUseCase()
+                        val upcoming = getUpcomingMoviesUseCase(page = 1)
                         upcoming.map { it.toPosterUi() }
                     }
 

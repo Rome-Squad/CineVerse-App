@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,22 +31,31 @@ fun MoviesListScreen(
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
     val state by moviesListViewModel.state.collectAsState()
+    LaunchedEffect(Unit) {
+        moviesListViewModel.effect.collect { effect ->
+            when (effect) {
+                is MoviesListEffect.NavigateToMovieDetails -> {
+                    navigateToMoviesDetailsScreen(effect.movieId)
+                }
+                is MoviesListEffect.NavigateToSeriesDetails -> {
+                    navigateToSeriesDetailsScreen(effect.seriesId)
+                }
+                is MoviesListEffect.ShowError -> {}
+            }
+        }
+    }
     MoviesListContent(
         state = state,
         moviesListInteractionListener = moviesListViewModel,
         onBackClick = onBackClick,
-        navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
-        navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
     )
 }
 
 @Composable
 fun MoviesListContent(
-    onBackClick: () -> Unit,
     state: MoviesListUiState,
     moviesListInteractionListener: MoviesListInteractionListener,
-    navigateToMoviesDetailsScreen: (Int) -> Unit,
-    navigateToSeriesDetailsScreen: (Int) -> Unit,
+    onBackClick: () -> Unit
 ) {
     Box {
         Column(
@@ -65,13 +75,7 @@ fun MoviesListContent(
                 TransitionLazyColumnToGrid(
                     poster = state.mediaList,
                     isListSelected = state.isListSelected,
-                    onClickItem = { mediaId, mediaType ->
-                        if (mediaType == MediaType.MOVIE) {
-                            navigateToMoviesDetailsScreen(mediaId)
-                        } else {
-                            navigateToSeriesDetailsScreen(mediaId)
-                        }
-                    }
+                    onClickItem = moviesListInteractionListener::onMediaClicked,
                 )
             }
 
@@ -104,7 +108,5 @@ fun MoviesListPreview() {
         state = MoviesListUiState(),
         moviesListInteractionListener = interactionListener,
         onBackClick = {},
-        navigateToMoviesDetailsScreen = {},
-        navigateToSeriesDetailsScreen = {},
     )
 }

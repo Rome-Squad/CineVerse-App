@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
@@ -56,7 +55,6 @@ fun CTACard(
                 )
                 .padding(12.dp)
         )
-
         InfoSection(
             title = title,
             description = caption,
@@ -69,14 +67,16 @@ fun CTACard(
             painter = painterResource(Theme.icons.outline.altArrowRight),
             contentDescription = stringResource(R.string.alt_arrow_right_icon),
             tint = Theme.color.shade.tertiary,
-            modifier = Modifier.size(20.dp).graphicsLayer {
-                scaleX = if (isRtl) -1f else 1f
-            }
+            modifier = Modifier
+                .size(20.dp)
+                .graphicsLayer {
+                    scaleX = if (isRtl) -1f else 1f
+                }
         )
     }
 }
 
-@Preview
+@CinePreview
 @Composable
 private fun Preview() {
     CineVerseTheme {

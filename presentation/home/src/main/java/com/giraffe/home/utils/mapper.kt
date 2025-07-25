@@ -38,9 +38,8 @@ fun Series.toPosterUi(): PosterUiState {
         name = name,
         imageUri = posterUrl,
         rating = rating,
-//        genres = genreIDs,
-//        time = ,
-        date = releaseYear
+        date = releaseYear,
+        mediaType = MediaType.SERIES
     )
 }
 
@@ -50,9 +49,8 @@ fun Movie.toPosterUi(): PosterUiState {
         name = title,
         imageUri = posterUrl ?: "",
         rating = rating,
-//        genres = genreIDs,
-//        time = ,
-        date = releaseYear.toString()
+        date = releaseYear.toString(),
+        mediaType = MediaType.MOVIE
     )
 }
 

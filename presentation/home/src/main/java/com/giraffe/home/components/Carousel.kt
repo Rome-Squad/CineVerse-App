@@ -105,7 +105,9 @@ private fun MovieItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 50.dp),
                     text = movieCard.title,
                     style = Theme.textStyle.body.md.medium,
                     color = Theme.color.shade.primary,
@@ -183,12 +185,6 @@ private fun Cover(
 
 }
 
-data class MovieCard(
-    val coverUrl: String,
-    val rate: Double,
-    val title: String,
-    val tags: List<String>,
-)
 
 @CinePreview
 @Composable
