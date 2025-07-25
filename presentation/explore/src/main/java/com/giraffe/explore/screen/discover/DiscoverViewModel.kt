@@ -1,12 +1,21 @@
 package com.giraffe.explore.screen.discover
 
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.giraffe.explore.base.BaseViewModel
+import com.giraffe.explore.util.BasePagingSource
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
+import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import kotlinx.coroutines.flow.map
 
 class DiscoverViewModel(
     private val getMoviesGenres: GetMoviesGenresUseCase,
@@ -37,29 +46,23 @@ class DiscoverViewModel(
 
     override fun getMoviesByGenre(genreId: Int) {
         safeExecute {
-            getMoviesByGenresUseCase(genreId).map { it.toPoster(state.value.moviesGenres) }
-                .let { movies ->
-                    updateState { it.copy(moviesPosters = movies) }
-                    if (state.value.selectedTab == SearchTab.MOVIES) updateState {
-                        it.copy(
-                            selectedPosters = movies
-                        )
-                    }
-                }
+            val moviesFlow =
+                Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
+                    BasePagingSource { page -> getMoviesByGenresUseCase(genreId, page) }
+                }.flow.cachedIn(viewModelScope).map { it.map(Movie::toPoster) }
+            updateState { it.copy(moviesPosters = moviesFlow) }
+            if (state.value.selectedTab == SearchTab.MOVIES) updateState { it.copy(selectedPosters = moviesFlow) }
         }
     }
 
     override fun getSeriesByGenre(genreId: Int) {
         safeExecute {
-            getSeriesByGenresUseCase(genreId).map { it.toPoster(state.value.seriesGenres) }
-                .let { series ->
-                    updateState { it.copy(seriesPosters = series) }
-                    if (state.value.selectedTab == SearchTab.SERIES) updateState {
-                        it.copy(
-                            selectedPosters = series
-                        )
-                    }
-                }
+            val seriesFlow =
+                Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
+                    BasePagingSource { page -> getSeriesByGenresUseCase(genreId, page) }
+                }.flow.cachedIn(viewModelScope).map { it.map(Series::toPoster) }
+            updateState { it.copy(seriesPosters = seriesFlow) }
+            if (state.value.selectedTab == SearchTab.SERIES) updateState { it.copy(selectedPosters = seriesFlow) }
         }
     }
 

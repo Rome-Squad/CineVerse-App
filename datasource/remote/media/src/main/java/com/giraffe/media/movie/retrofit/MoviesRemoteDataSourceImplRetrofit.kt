@@ -19,10 +19,10 @@ class MoviesRemoteDataSourceImplRetrofit(
     override suspend fun getMovieGenres() =
         retrofitRequestBuilder.get { getGenres() }.genres
 
-    override suspend fun getMoviesByGenre(genreId: Int) =
+    override suspend fun getMoviesByGenre(genreId: Int, page: Int) =
         retrofitRequestBuilder.get {
             getMoviesByGenre(
-                if (genreId == -1) "" else genreId.toString()
+                if (genreId == -1) "" else genreId.toString(), page
             )
         }.results
 

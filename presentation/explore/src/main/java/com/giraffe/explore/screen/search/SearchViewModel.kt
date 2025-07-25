@@ -16,6 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -83,9 +84,7 @@ class SearchViewModel(
             val job1 = launch { clearRecentSeriesUseCase() }
             val job2 = launch { clearRecentlyMoviesUseCase() }
             val job3 = launch { clearRecentlyPeopleUseCase() }
-            job1.join()
-            job2.join()
-            job3.join()
+            joinAll(job1, job2, job3)
             updateState { it.copy(recentPosters = emptyList()) }
         }
     }
