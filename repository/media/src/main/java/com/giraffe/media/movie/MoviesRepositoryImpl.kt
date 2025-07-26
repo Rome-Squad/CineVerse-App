@@ -145,8 +145,6 @@ class MoviesRepositoryImpl(
         remote.deleteRating(movieId, sessionId)
     }
 
-    override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall{
-        remote.getPopularityMovies(page).map ( MovieDto::toEntity)
     override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall {
         remote.getPopularityMovies(page).map(MovieDto::toEntity)
     }
