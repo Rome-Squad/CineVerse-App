@@ -43,21 +43,13 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         effectFlow.collect { effect ->
             when (effect) {
-                is LoginEffect.NavigateToWebViewScreen -> {
-                    navigateToWebViewScreen()
-                }
+                is LoginEffect.NavigateToWebViewScreen -> navigateToWebViewScreen()
 
-                is LoginEffect.NavigateToHomeScreen -> {
-                    navigateToHomeScreen()
-                }
+                is LoginEffect.NavigateToHomeScreen -> navigateToHomeScreen()
 
-                is LoginEffect.NavigateToResetPasswordScreen -> {
-                    navigateToResetPasswordScreen()
-                }
+                is LoginEffect.NavigateToResetPasswordScreen -> navigateToResetPasswordScreen()
 
-                is LoginEffect.PopBack -> {
-                    popBack()
-                }
+                is LoginEffect.PopBack -> popBack()
 
                 is LoginEffect.Error -> {}
             }
@@ -72,7 +64,7 @@ fun LoginScreen(
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier, state: LoginState, interaction: LoginInteractionListener
+    modifier: Modifier, state: LoginScreenState, interaction: LoginInteractionListener
 ) {
     Column(
         modifier = modifier

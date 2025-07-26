@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
 import com.giraffe.authentication.screen.LoginInteractionListener
-import com.giraffe.authentication.screen.LoginState
+import com.giraffe.authentication.screen.LoginScreenState
 import com.giraffe.designsystem.composable.DefaultTextField
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
@@ -20,7 +20,7 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun LoginBody(
     modifier: Modifier = Modifier,
-    state: LoginState,
+    state: LoginScreenState,
     interaction: LoginInteractionListener
 ){
     val context = LocalContext.current

@@ -9,7 +9,7 @@ import com.giraffe.user.usecase.LoginUseCase
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
-) : BaseViewModel<LoginState, LoginEffect>(LoginState()), LoginInteractionListener {
+) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
 
     private val fromRoute: Boolean = savedStateHandle.get<Boolean>("fromRoute") == true

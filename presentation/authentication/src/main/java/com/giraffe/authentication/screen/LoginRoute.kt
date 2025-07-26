@@ -22,18 +22,10 @@ fun NavGraphBuilder.loginRoute(
 ){
     composable<LoginRoute> {
         LoginScreen(
-            navigateToWebViewScreen = {
-                navController.navigateToWebView()
-            },
-            navigateToHomeScreen = {
-                navController.navigateExploreContainer()
-            },
-            navigateToResetPasswordScreen = {
-                navController.navigateToResetPassword()
-            },
-            popBack = {
-                navController.popBackStack()
-            }
+            navigateToWebViewScreen = navController::navigateToWebView,
+            navigateToHomeScreen = navController::navigateExploreContainer,
+            navigateToResetPasswordScreen = navController::navigateToResetPassword,
+            popBack = navController::popBackStack
         )
     }
 }

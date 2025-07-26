@@ -1,7 +1,7 @@
 package com.giraffe.authentication.screen
 
 
-data class LoginState(
+data class LoginScreenState(
 
     val username: String = "",
     val password: String = "",
