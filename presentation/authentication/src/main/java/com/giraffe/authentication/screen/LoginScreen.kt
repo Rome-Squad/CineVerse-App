@@ -32,7 +32,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
-    navigateToHomeScreen: () -> Unit = {},
+    navigateToHomeScreen: () -> Unit ,
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},
     popBack: () -> Unit = {}
@@ -116,5 +116,5 @@ private fun LoginContent(
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen(navigateToHomeScreen={})
 }

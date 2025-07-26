@@ -48,18 +48,7 @@ class CineVerseApp : Application() {
         setupCacheCleanupWorker()
     }
 
-    private fun createGuestSessionIfNotExists() {
-        applicationScope.launch {
-            try {
-                val newGuestSessionId = sessionManager.getSessionId()
-                    ?: throw Exception("Failed to create guest session")
 
-            } catch (e: Exception) {
-                Log.e("CineVerseApp", "Failed to create guest session", e)
-            }
-
-        }
-    }
 
     private fun setupCacheCleanupWorker() {
         val workRequest = PeriodicWorkRequestBuilder<CacheCleanupWorker>(

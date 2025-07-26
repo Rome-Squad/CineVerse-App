@@ -16,7 +16,6 @@ class LoginUseCase(private val authRepository: AuthRepository) {
 
     private fun validateUsername(username: String) {
         if (username.isBlank()) throw EmptyUsernameException()
-        if (username.contains(" ")) throw InvalidUsernameOrPasswordException()
         if (username.contains(Regex("[^a-zA-Z0-9_-]"))) throw InvalidUsernameOrPasswordException()
     }
 

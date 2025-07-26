@@ -9,6 +9,7 @@ import com.giraffe.repository.exceptions.SerializationDataException
 import com.giraffe.repository.exceptions.UnknownNetworkDataException
 import retrofit2.Response
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 class RetrofitUserRequestBuilder<API>(
     val api: API
@@ -52,7 +53,7 @@ class RetrofitUserRequestBuilder<API>(
 
         fun mapToMediaException(e: Throwable): AuthDataException = when (e) {
             is AuthDataException -> e
-            is java.net.SocketTimeoutException -> RequestTimeoutDataException()
+            is SocketTimeoutException -> RequestTimeoutDataException()
             is IOException -> NoInternetDataException()
             is IllegalArgumentException -> InvalidIdDataException()
             else -> UnknownNetworkDataException()

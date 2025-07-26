@@ -1,6 +1,7 @@
 package com.giraffe.authentication.screen
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.authentication.base.BaseViewModel
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
@@ -12,7 +13,7 @@ class LoginViewModel(
 ) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
 
-    private val fromRoute: Boolean = savedStateHandle.get<Boolean>("fromRoute") == true
+    private val fromRoute: Boolean = savedStateHandle.toRoute<LoginRoute>().fromRoute
 
     override fun onUsernameChanged(username: String) {
         updateState {

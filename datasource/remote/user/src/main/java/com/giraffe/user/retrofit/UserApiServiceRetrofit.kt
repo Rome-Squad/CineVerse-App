@@ -1,9 +1,9 @@
 package com.giraffe.user.retrofit
 
-import com.giraffe.user.dto.CreateSessionRequest
-import com.giraffe.user.dto.RequestTokenDto
-import com.giraffe.user.dto.SessionDto
-import com.giraffe.user.dto.ValidateTokenRequest
+import com.giraffe.user.dto.SessionRequestBody
+import com.giraffe.user.dto.RequestTokenResponse
+import com.giraffe.user.dto.SessionResponse
+import com.giraffe.user.dto.TokenValidationBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -12,13 +12,13 @@ import retrofit2.http.POST
 interface UserApiServiceRetrofit {
 
     @GET(TOKEN_NEW)
-    suspend fun createRequestToken(): Response<RequestTokenDto>
+    suspend fun createRequestToken(): Response<RequestTokenResponse>
 
     @POST(VALIDATE_WITH_LOGIN)
-    suspend fun validateTokenWithLogin(@Body requestBody: ValidateTokenRequest): Response<RequestTokenDto>
+    suspend fun validateTokenWithLogin(@Body requestBody: TokenValidationBody): Response<RequestTokenResponse>
 
     @POST(SESSION_NEW)
-    suspend fun createSession(@Body requestBody: CreateSessionRequest): Response<SessionDto>
+    suspend fun createSession(@Body requestBody: SessionRequestBody): Response<SessionResponse>
 
     companion object {
         private const val AUTHENTICATION = "authentication"
