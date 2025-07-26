@@ -36,11 +36,12 @@ class MoviesRemoteDataSourceImplRetrofit(
     override suspend fun addRating(movieId: Int, sessionId: String, request: RatingRequest) =
         retrofitRequestBuilder.post { rateMovie(movieId, sessionId, request) }
 
-    override suspend fun getUserMovieRating(movieId: Int, sessionId: String) = RetrofitRequestBuilder.get { getMovieRating(movieId, sessionId) }
+    override suspend fun getUserMovieRating(movieId: Int, sessionId: String) =
+        retrofitRequestBuilder.get { getMovieRating(movieId, sessionId) }
         .results.firstOrNull { it.id == movieId }?.rating?.toFloat() ?: 0f
 
     override suspend fun deleteRating(movieId: Int, sessionId: String) =
-        RetrofitRequestBuilder.delete { deleteMovieRating(movieId, sessionId) }
+        retrofitRequestBuilder.delete { deleteMovieRating(movieId, sessionId) }
 
     override suspend fun getPopularityMovies(page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getPopularMovies(page) }.results
