@@ -1,36 +1,23 @@
-package com.giraffe.details.screens.seriesdetails
+package com.giraffe.details.screens.seriesdetails.screen
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.MoviesListSection
-import com.giraffe.designsystem.composable.Progress
+import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.AddToCollectionContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
@@ -40,80 +27,14 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.SeasonCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
-import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.navigateToCastDetails
-import com.giraffe.details.utils.EventListener
+import com.giraffe.details.screens.seriesdetails.SeriesDetailsInteractionListener
+import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreenState
 import com.giraffe.details.utils.TypeOfScreen
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 import kotlin.math.min
-
-@Composable
-fun SeriesDetailsScreen(
-    seriesId: Int,
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
-    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
-    onBackButtonClick: () -> Unit = {},
-    viewModel: SeriesDetailsViewModel = koinViewModel(parameters = { parametersOf(seriesId) })
-) {
-    val state = viewModel.state.collectAsState().value
-    val context = LocalContext.current
-    EventListener(
-        events = viewModel.effect,
-    ) {
-        when (it) {
-            is SeriesDetailsEffect.Error -> {}
-            is SeriesDetailsEffect.NavigateToCastDetails -> navController.navigateToCastDetails(
-                castID = it.personId
-            )
-
-            is SeriesDetailsEffect.NavigateToSeasons -> {
-                /*navController.navigateToSeasons(
-                    seriesId = it.seriesId
-                )*/
-            }
-
-            is SeriesDetailsEffect.NavigateToRecommendedSeries -> navigateToRecommendedSeries(
-                it.seriesId,
-                it.title
-            )
-        }
-    }
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .systemBarsPadding(),
-        contentAlignment = Alignment.Center
-    ) {
-        AnimatedVisibility(state.isLoadingSeason) {
-            Progress(modifier = Modifier.size(40.dp))
-        }
-        AnimatedVisibility(!state.isLoadingSeason) {
-            SeriesDetailsContent(
-                state = state,
-                onAddToCollectionClick = viewModel::onClickAddToCollection,
-                onDismissAddToCollectionBottomSheet = viewModel::onDismissAddToCollectionBottomSheet,
-                onGiveStarClick = viewModel::onClickGiveStars,
-                onDismissAddRatingBottomSheet = viewModel::onDismissGiveStarsBottomSheet,
-                interaction = viewModel,
-                navController = navController,
-                onBackButtonClick = onBackButtonClick
-            )
-        }
-    }
-}
 
 @Composable
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
-    navController: NavController,
-    onAddToCollectionClick: () -> Unit,
-    onDismissAddToCollectionBottomSheet: () -> Unit,
-    onGiveStarClick: () -> Unit,
-    onDismissAddRatingBottomSheet: () -> Unit,
     interaction: SeriesDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -131,10 +52,10 @@ fun SeriesDetailsContent(
                 type = TypeOfScreen.SERIES.name,
                 name = state.seriesDetails.name,
                 rating = state.seriesDetails.rating,
-                image = state.seriesDetails.posterUrl,
+                imageUrl = state.seriesDetails.posterUrl,
                 genres = state.genres,
                 releaseYear = state.seriesDetails.releaseYear,
-                onClickAdd = onAddToCollectionClick,
+                onClickAdd = interaction::onClickAddToCollection,
                 onClickPlay = {},
                 isScrolled = scrollState.value > 0,
                 durationAnimation = 2000
@@ -154,16 +75,15 @@ fun SeriesDetailsContent(
                 description = state.seriesDetails.overview
             )
 
-
-            SectionTitle(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.latest_seasons),
-                clickableText = stringResource(R.string.show_more),
-                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
-
-            )
             AnimatedVisibility(state.seasons.isNotEmpty()) {
-
+                SectionTitle(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.latest_seasons),
+                    clickableText = stringResource(R.string.show_more),
+                    onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
+                )
+            }
+            AnimatedVisibility(state.seasons.isNotEmpty()) {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -171,7 +91,10 @@ fun SeriesDetailsContent(
                     for (i in 0..min(2, state.seasons.size - 1)) {
                         SeasonCard(
                             posterUrl = state.seasons[i].posterUrl,
-                            title = "Season ${state.seasons[i].seasonNumber + 1}",
+                            title = stringResource(
+                                R.string.season,
+                                state.seasons[i].seasonNumber + 1
+                            ),
                             overview = state.seasons[i].overview,
                             rating = state.seasons[i].rating,
                             episodes = state.seasons[i].episodeCount,
@@ -185,50 +108,50 @@ fun SeriesDetailsContent(
                 }
             }
 
-            StarCastSection(
-                title = stringResource(R.string.star_cast),
-                onShowMoreClick = {},
-                castList = state.cast,
-                onCastClick = { interaction.navigateToCastDetailsScreen(it) }
-            )
-
-            StaffInfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.behind_the_scenes),
-                staffList = state.crew
-            )
-
-            MoviesListSection(
-                title = stringResource(R.string.you_might_also_like),
-                endText = stringResource(R.string.show_more),
-                movies = state.recommendedSeries,
-                onClickEndText = {
-                    interaction.navigateToRecommendedSeriesScreen(
-                        seriesId = state.seriesDetails.id,
-                        title = state.seriesDetails.name
-                    )
-                },
-                onClickPoster = { navController.navigateToSeriesDetails(it) }
-            )
-
-            RatingSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClickCard = onGiveStarClick
-            )
-
-            AnimatedVisibility(
-                visible = state.seriesReviews.isNotEmpty(),
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut()
-            ) {
-                InfoSection(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.top_reviews),
-                    description = state.seriesDetails.overview
+            AnimatedVisibility(state.cast.isNotEmpty()) {
+                StarCastSection(
+                    title = stringResource(R.string.star_cast),
+                    castList = state.cast,
+                    onCastClick = interaction::navigateToCastDetailsScreen
                 )
             }
 
+            AnimatedVisibility(state.crew.isNotEmpty()) {
+                StaffInfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.behind_the_scenes),
+                    staffList = state.crew
+                )
+            }
+
+            AnimatedVisibility(state.recommendedSeries.isNotEmpty()) {
+                PosterListSection(
+                    title = stringResource(R.string.you_might_also_like),
+                    endText = stringResource(R.string.show_more),
+                    posters = state.recommendedSeries,
+                    onClickEndText = {
+                        interaction.navigateToRecommendedSeriesScreen(
+                            seriesId = state.seriesDetails.id,
+                            title = state.seriesDetails.name
+                        )
+                    },
+                    onClickPoster = {
+                        interaction.navigateToSeriesDetails(it.id)
+                    }
+                )
+            }
+
+            RatingSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClickCard = interaction::onClickGiveStars
+            )
+
             AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
+                SectionTitle(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.top_reviews),
+                    clickableText = stringResource(R.string.show_more),
+                )
 
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -259,7 +182,7 @@ fun SeriesDetailsContent(
 
     BaseBottomSheet(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
-        onDismiss = onDismissAddToCollectionBottomSheet,
+        onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
@@ -283,7 +206,7 @@ fun SeriesDetailsContent(
 
     BaseBottomSheet(
         isVisible = state.isVisibleGiveStarsBottomSheet,
-        onDismiss = onDismissAddRatingBottomSheet,
+        onDismiss = interaction::onDismissGiveStarsBottomSheet,
         title = stringResource(R.string.rate_the_movie),
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         content = {
@@ -297,7 +220,8 @@ fun SeriesDetailsContent(
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
                     enabled = false,
-                    onClick = {})
+                    onClick = {}
+                )
             }
         }
     )

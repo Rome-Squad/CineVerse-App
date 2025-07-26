@@ -2,7 +2,6 @@ package com.giraffe.media.explore.usecase
 
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.repository.ExploreRepository
-import com.giraffe.media.explore.utils.getCurrentLocalDateTime
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -25,8 +24,8 @@ class DeleteSearchKeywordUseCaseTest {
         // Given
         val keyword = SearchKeyword(
             keyword = "sci-fi",
-            isFromSearchHistory = true,
-            lastSearchedTime = getCurrentLocalDateTime()
+            isRecent = true,
+            searchedAt = System.currentTimeMillis()
         )
 
         // When

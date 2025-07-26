@@ -21,4 +21,7 @@ interface SeriesRepository {
     suspend fun addSeriesRating(seriesId: Int, ratingValue: Float)
     suspend fun getUserSeriesRating(seriesId: Int): Float
     suspend fun deleteSeriesRating(seriesId: Int)
+    suspend fun getPopularitySeries(page: Int): List<Series>
+    suspend fun getRecentlyReleasedSeries(page: Int): List<Series>
+    suspend fun getTopRatedSeries(page: Int): List<Series>
 }

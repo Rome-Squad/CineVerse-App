@@ -1,21 +1,28 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-keep class org.koin.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keep class com.giraffe.repository.dto.** { *; }
+-keepclassmembers class com.giraffe.repository.dto.** { *; }
+-keepclassmembers class com.giraffe.repository.dto.** {
+    public <init>(...);
+}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-keep interface retrofit2.Call
+-keep interface retrofit2.http.* { *; }
+-keep interface com.giraffe.user.retrofit.** { *; }
+-keep interface com.giraffe.media.retrofit.** { *; }
+-keep class retrofit2.** { *; }
+
+# Firebase
+-keep class com.google.firebase.** { *; }
+-keep class org.apache.http.** { *; }
+-keepnames class com.google.firebase.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes SourceFile,LineNumberTable
+
+-keepattributes KotlinMetadata

@@ -41,5 +41,10 @@ interface MoviesRepository {
 
     suspend fun deleteMovieRating(movieId: Int)
 
+    suspend fun getPopularityMovies(page: Int): List<Movie>
+
+    suspend fun getRecentlyReleasedMovies(page: Int): List<Movie>
+
+    suspend fun getUpcomingMovies(page: Int): List<Movie>
 
 }

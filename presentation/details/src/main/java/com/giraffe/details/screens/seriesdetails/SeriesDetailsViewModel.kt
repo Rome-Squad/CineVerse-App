@@ -1,5 +1,7 @@
 package com.giraffe.details.screens.seriesdetails
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.SeasonUi
@@ -8,7 +10,7 @@ import com.giraffe.details.models.groupByRole
 import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toReviewUI
-import com.giraffe.details.screens.castDetails.CastDetailsEffect
+import com.giraffe.details.screens.seriesdetails.screen.SeriesDetailsRoute
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.person.entity.Person
@@ -23,18 +25,19 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 
 class SeriesDetailsViewModel(
-    seriesID: Int,
     private val getSeriesDetails: GetSeriesDetailsUseCase,
     private val getLastSeasons: GetLastSeasonsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
     private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
+    savedStateHandle: SavedStateHandle
 ) :
     BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
         SeriesDetailsScreenState()
     ), SeriesDetailsInteractionListener {
 
+    val seriesID = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
 
     init {
         loadSeriesDetails(seriesID)
@@ -44,11 +47,25 @@ class SeriesDetailsViewModel(
         loadSeriesPeople(seriesID)
     }
 
+    fun loadError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false,
+            )
+        }
+        sendEffect(SeriesDetailsEffect.Error(error))
+    }
+
     fun loadSeriesDetails(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesDetailsSuccess,
-            onError = ::loadSeriesDetailsError
+            onError = ::loadError
         ) {
+            updateState {
+                it.copy(
+                    isLoading = true
+                )
+            }
             getSeriesDetails(seriesId)
         }
     }
@@ -57,27 +74,17 @@ class SeriesDetailsViewModel(
         updateState {
             it.copy(
                 seriesDetails = SeriesUi.fromEntity(series),
-                isLoadingSeries = false
+                isLoading = false
             )
         }
         loadSeriesGenres(series.genreIDs)
     }
 
-    fun loadSeriesDetailsError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingSeries = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
 
     fun loadSeriesGenres(genreIDs: List<Int>) {
-
         safeExecute(
             onSuccess = ::loadSeriesGenresSuccess,
-            onError = ::loadSeriesGenresError
+            onError = ::loadError
         ) {
             getSeriesGenres(genreIDs)
         }
@@ -87,53 +94,34 @@ class SeriesDetailsViewModel(
         updateState {
             it.copy(
                 genres = genres.map { it.title },
-                isLoadingGenres = false
             )
         }
-    }
-
-    fun loadSeriesGenresError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingGenres = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
 
     fun loadSeason(seriesId: Int) {
         safeExecute(
-            onSuccess = ::loadLastSeasonsSuccess,
-            onError = ::loadLastSeasonsError
+            onSuccess = ::loadSeasonsSuccess,
+            onError = ::loadError
         ) {
             getLastSeasons(seriesId)
         }
     }
 
-    fun loadLastSeasonsSuccess(season: List<Season>) {
+    fun loadSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
                 seasons = season.map { SeasonUi.fromEntity(it) },
-                isLoadingSeason = false
+                isLoading = false
             )
         }
-    }
-
-    fun loadLastSeasonsError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingSeason = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
 
     fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesPeopleSuccess,
-            onError = ::loadSeriesPeopleError
+            onError = ::loadError
         ) {
             getCastAndCrewOfSeries(seriesId)
         }
@@ -145,27 +133,17 @@ class SeriesDetailsViewModel(
         val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
-                isLoadingPeople = false,
                 cast = cast.map { it.toCastUi() },
                 crew = mappedCrew.groupByRole()
             )
         }
     }
 
-    fun loadSeriesPeopleError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingPeople = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
 
     fun loadRecommendedSeries(seriesId: Int, page: Int) {
         safeExecute(
             onSuccess = ::loadRecommendedSeriesSuccess,
-            onError = ::loadRecommendedSeriesError
+            onError = ::loadError
         ) {
             getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
         }
@@ -182,25 +160,15 @@ class SeriesDetailsViewModel(
                         rating = it.rating
                     )
                 },
-                isLoadingSeries = false
             )
         }
-    }
-
-    fun loadRecommendedSeriesError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingSeries = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
 
     fun loadSeriesReviews(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesReviewsSuccess,
-            onError = ::loadSeriesReviewsError
+            onError = ::loadError
         ) {
             getSeriesReviews(seriesId)
         }
@@ -210,30 +178,10 @@ class SeriesDetailsViewModel(
         updateState {
             it.copy(
                 seriesReviews = reviews.map { it.toReviewUI() },
-                isLoadingSeries = false
             )
         }
     }
 
-    fun loadSeriesReviewsError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingSeries = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
-
-    override fun showMoreSeason() {
-    }
-
-    override fun showMoreCast() {
-    }
-
-
-    override fun showMoreRecommendedSeries() {
-    }
 
     override fun onClickGiveStars() {
         updateState {
@@ -243,11 +191,6 @@ class SeriesDetailsViewModel(
         }
     }
 
-    override fun showMoreReviews() {
-    }
-
-    override fun onClickMovie(movieId: Int) {
-    }
 
     override fun onClickAddToCollection() {
         updateState {
@@ -257,8 +200,6 @@ class SeriesDetailsViewModel(
         }
     }
 
-    override fun onClickCreateCollection() {
-    }
 
     override fun onDismissAddToCollectionBottomSheet() {
         updateState {
@@ -268,8 +209,6 @@ class SeriesDetailsViewModel(
         }
     }
 
-    override fun onDismissLoginBottomSheet() {
-    }
 
     override fun onDismissGiveStarsBottomSheet() {
         updateState {
@@ -301,6 +240,12 @@ class SeriesDetailsViewModel(
                 seriesId = seriesId,
                 title = title
             )
+        )
+    }
+
+    override fun navigateToSeriesDetails(seriesId: Int) {
+        sendEffect(
+            SeriesDetailsEffect.NavigateToSeriesDetails(seriesId)
         )
     }
 }

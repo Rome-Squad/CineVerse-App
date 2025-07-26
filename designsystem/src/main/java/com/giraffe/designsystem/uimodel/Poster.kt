@@ -7,5 +7,6 @@ data class Poster(
     val rating: Float,
     val genres: String? = null,
     val time: String? = null,
-    val date: String? = null
+    val date: String? = null,
+    val mediaTypeOfPoster: String? = null
 )

@@ -1,8 +1,12 @@
 package com.giraffe.cineverseapp.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.giraffe.authentication.screen.LoginViewModel
+import com.giraffe.details.screens.castCredit.CastCreditViewModel
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
+import com.giraffe.details.screens.gallery.GalleryViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
+import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
 import com.giraffe.details.screens.seasons.SeasonsViewModel
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
@@ -16,11 +20,26 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModelOf(::DiscoverViewModel)
     viewModelOf(::SearchViewModel)
-    viewModel { (personId: Int) -> CastDetailsViewModel(personId, get()) }
+    viewModel { (savedStateHandle: SavedStateHandle) ->
+        CastDetailsViewModel(
+            savedStateHandle,
+            get()
+        )
+    }
     viewModelOf(::SeriesDetailsViewModel)
-    //viewModelOf(::SeasonsViewModel)
     viewModelOf(::MovieDetailsViewModel)
     viewModelOf(::SearchResultViewModel)
+    viewModelOf(::CastCreditViewModel)
     viewModelOf(::LoginViewModel)
     viewModelOf(::RecommendedSeriesViewModel)
+    viewModel { (savedStateHandle: SavedStateHandle) ->
+        RecommendedMoviesViewModel(
+            savedStateHandle = savedStateHandle,
+            getRecommendedMovies = get(),
+            getMovieGenres = get()
+        )
+    }
+    viewModelOf(::RecommendedSeriesViewModel)
+    viewModelOf(::GalleryViewModel)
+    viewModelOf(::SeasonsViewModel)
 }

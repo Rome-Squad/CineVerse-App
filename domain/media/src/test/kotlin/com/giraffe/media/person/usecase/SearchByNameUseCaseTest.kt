@@ -13,9 +13,7 @@ class SearchByNameUseCaseTest {
     private lateinit var repository: PersonRepository
     private lateinit var searchPeopleByNameUseCase: SearchPeopleByNameUseCase
 
-    val expectedList = listOf(
-        Person(1, "Tarek", "Acting")
-    )
+    val expectedList = List(15) { (Person(it, "Tarek", "Acting")) }
 
     @BeforeEach
     fun setup() {
@@ -27,9 +25,9 @@ class SearchByNameUseCaseTest {
     @Test
     fun `should returns list of people when repository returns search result`() = runTest {
         //given
-        coEvery { repository.searchByName("Tarek") } returns expectedList
+        coEvery { repository.searchByName("Tarek", 1) } returns expectedList
         //when
-        val result = searchPeopleByNameUseCase("Tarek")
+        val result = searchPeopleByNameUseCase("Tarek", 1)
         //then
         assertThat(result).isEqualTo(expectedList)
     }

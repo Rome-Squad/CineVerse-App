@@ -132,6 +132,17 @@ class MoviesRepositoryImpl(
         remote.deleteRating(movieId, sessionId)
     }
 
+    override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall{
+        remote.getPopularityMovies(page).map ( MovieDto::toEntity)
+    }
+    override suspend fun getRecentlyReleasedMovies(page: Int): List<Movie>  = SafeCall{
+        remote.getRecentlyReleasedMovies(page).map ( MovieDto::toEntity)
+    }
+
+    override suspend fun getUpcomingMovies(page: Int): List<Movie> = SafeCall{
+        remote.getUpcomingMovies(page).map ( MovieDto::toEntity)
+    }
+
     private suspend fun getSessionId() = SafeCall {
         sessionManager.createGuestSessionId() ?: throw NoInternetDataException()
     }

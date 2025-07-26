@@ -16,4 +16,7 @@ interface SeriesRemoteDataSource {
     suspend fun addRating(seriesId: Int, sessionId: String, request: RatingRequest)
     suspend fun getSeriesRating(seriesId: Int, sessionId: String): Float
     suspend fun deleteSeriesRating(seriesId: Int, sessionId: String)
+    suspend fun getPopularitySeries(page: Int): List<SeriesDto>
+    suspend fun getRecentlyReleasedSeries(page: Int): List<SeriesDto>
+    suspend fun getTopRatedSeries(page: Int): List<SeriesDto>
 }

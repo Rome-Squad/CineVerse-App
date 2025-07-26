@@ -38,17 +38,10 @@ class RetrofitRequestBuilder<API>(
         ): T {
             return try {
                 val response = execute()
-
                 if (response.isSuccessful) {
                     val body = response.body()
                     body ?: throw SerializationDataException()
                 } else {
-                    val errorBody = try {
-                        response.errorBody()?.string() ?: "Unknown error"
-                    } catch (e: Exception) {
-                        "Unknown error"
-                    }
-
                     throw ApiDataException(response.code())
                 }
             } catch (e: Throwable) {
