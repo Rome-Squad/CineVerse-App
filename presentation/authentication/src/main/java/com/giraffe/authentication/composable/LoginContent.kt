@@ -18,7 +18,7 @@ import com.giraffe.designsystem.composable.button_type.SecondaryButton
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
-fun LoginBody(
+fun LoginContent(
     modifier: Modifier = Modifier,
     state: LoginScreenState,
     interaction: LoginInteractionListener
