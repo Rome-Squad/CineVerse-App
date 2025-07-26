@@ -1,7 +1,8 @@
 package com.giraffe.user.usecase
 
-import com.giraffe.user.exception.InvalidEmailException
+import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
+import com.giraffe.user.exception.InvalidUsernameOrPasswordException
 import com.giraffe.user.repository.AuthRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -27,44 +28,36 @@ class LoginUseCaseTest {
         val username = ""
         val password = "validPass123"
 
-        assertThrows<InvalidEmailException> {
+        assertThrows<EmptyUsernameException> {
             loginUseCase(username, password)
         }
     }
 
-    @Test
-    fun `should throw exception when username is missing at symbol`() = runTest {
-        val username = "bilal.com"
-        val password = "validPass123"
-
-        assertThrows<InvalidEmailException> {
-            loginUseCase(username, password)
-        }
-    }
 
     @Test
-    fun `should throw exception when username is missing domain extension`() = runTest {
-        val username = "user@example"
+    fun `should throw exception when username is have space domain extension`() = runTest {
+        val username = "user name"
         val password = "validPass123"
 
-        assertThrows<InvalidEmailException> {
+        assertThrows<InvalidUsernameOrPasswordException> {
             loginUseCase(username, password)
         }
     }
 
     @Test
     fun `should throw exception when username contains invalid characters`() = runTest {
-        val username = "user@exam!ple.com"
+        val username = "user@exam!ple"
         val password = "validPass123"
 
-        assertThrows<InvalidEmailException> {
+        assertThrows<InvalidUsernameOrPasswordException> {
             loginUseCase(username, password)
         }
     }
 
+
     @Test
     fun `should throw exception when password is empty`() = runTest {
-        val username = "user@example.com"
+        val username = "Hend25"
         val password = ""
 
         assertThrows<InvalidPasswordException> {
@@ -73,9 +66,9 @@ class LoginUseCaseTest {
     }
 
     @Test
-    fun `should throw exception when password is less than 8 characters`() = runTest {
-        val username = "user@example.com"
-        val password = "1234567"
+    fun `should throw exception when password is less than 4 characters`() = runTest {
+        val username = "user123"
+        val password = "123"
 
         assertThrows<InvalidPasswordException> {
             loginUseCase(username, password)
@@ -84,7 +77,7 @@ class LoginUseCaseTest {
 
     @Test
     fun `should call login when username and password are valid`() = runTest {
-        val username = "user@example.com"
+        val username = "DoaaAbdelnaser"
         val password = "validPass123"
 
         coEvery {
@@ -95,8 +88,8 @@ class LoginUseCaseTest {
         } returns Unit
 
         loginUseCase(
-            email = username,
-            password = password
+            password = password,
+            userInput = username
         )
 
         coVerify(exactly = 1) {
@@ -111,7 +104,7 @@ class LoginUseCaseTest {
 
     @Test
     fun `should accept valid username with subdomain`() = runTest {
-        val username = "user@mail.example.co.uk"
+        val username = "user12"
         val password = "securePassword9"
 
         coEvery {
@@ -122,7 +115,7 @@ class LoginUseCaseTest {
         } returns Unit
 
         loginUseCase(
-            email = username,
+            userInput = username,
             password = password
         )
 
@@ -136,7 +129,7 @@ class LoginUseCaseTest {
 
     @Test
     fun `should accept valid password with special characters`() = runTest {
-        val username = "user@example.com"
+        val username = "user23"
         val password = "S3cur3#Pass!"
 
         coEvery {
@@ -147,7 +140,7 @@ class LoginUseCaseTest {
         } returns Unit
 
         loginUseCase(
-            email = username,
+            userInput = username,
             password = password
         )
 
