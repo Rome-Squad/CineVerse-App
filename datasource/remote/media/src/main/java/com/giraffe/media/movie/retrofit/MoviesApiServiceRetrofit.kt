@@ -20,13 +20,19 @@ interface MoviesApiServiceRetrofit {
     suspend fun getMovieById(@Path(ID) movieId: Int): Response<MovieDto>
 
     @GET(MOVIES_BY_NAME_URL)
-    suspend fun getMoviesByName(@Query(QUERY) name: String): Response<MoviesListResponse>
+    suspend fun getMoviesByName(
+        @Query(QUERY) name: String,
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
 
     @GET(GENRES_URL)
     suspend fun getGenres(): Response<GenreResponse>
 
     @GET(MOVIES_BY_GENRE_URL)
-    suspend fun getMoviesByGenre(@Query(WITH_GENRES) genreId: String): Response<MoviesListResponse>
+    suspend fun getMoviesByGenre(
+        @Query(WITH_GENRES) genreId: String,
+        @Query(PAGE) page: Int
+    ): Response<MoviesListResponse>
 
     @GET("$MOVIE_END_POINT/{$ID}/$REVIEWS_END_POINT")
     suspend fun getMovieReviews(@Path(ID) movieId: Int): Response<ReviewsResponseDto>

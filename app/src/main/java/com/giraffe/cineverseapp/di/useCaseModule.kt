@@ -13,8 +13,11 @@ import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.movies.usecase.GetUserMovieRatingUseCase
 import com.giraffe.media.movies.usecase.InsertGenresUseCase
 import com.giraffe.media.movies.usecase.InsertMoviesUseCase
@@ -33,7 +36,9 @@ import com.giraffe.media.series.usecase.AddSeriesRatingUseCase
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.DeleteSeriesRatingUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
+import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
@@ -41,8 +46,11 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.GetUserSeriesRatingUseCase
+import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
+import com.giraffe.user.usecase.LoginUseCase
+
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -68,6 +76,9 @@ val useCaseModule = module {
     singleOf(::AddSeriesRatingUseCase)
     singleOf(::GetUserSeriesRatingUseCase)
     singleOf(::DeleteSeriesRatingUseCase)
+    singleOf(::GetPopularitySeriesUseCase)
+    singleOf(::GetRecentlyReleasedSeriesUseCase)
+    singleOf(::GetTopRatedSeriesUseCase)
 
     // Movie UseCases
     singleOf(::SearchMovieByNameUseCase)
@@ -82,6 +93,10 @@ val useCaseModule = module {
     singleOf(::ClearRecentlyMoviesUseCase)
     singleOf(::GetMovieGenresUseCase)
     singleOf(::DeleteMovieRatingUseCase)
+    singleOf(::GetRecentlyReleasedMoviesUseCase)
+    singleOf(::GetPopularityMoviesUseCase)
+    singleOf(::GetUpcomingMoviesUseCase)
+
 
     // NEW: Add UseCases for Movie Details and Rating
     singleOf(::GetMovieDetailsUseCase)
@@ -98,5 +113,8 @@ val useCaseModule = module {
     singleOf(::GetPeopleBySeriesIdUseCase)
     singleOf(::GetPersonDetailsUseCase)
     singleOf(::GetPeopleMediaCreditsUseCase)
+
+    //Auth useCase
+    singleOf(::LoginUseCase)
     singleOf(::GetPersonImagesUseCase)
 }

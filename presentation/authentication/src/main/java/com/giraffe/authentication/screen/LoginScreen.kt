@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -17,8 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
+import com.giraffe.authentication.composable.LoginContent
 import com.giraffe.authentication.composable.LogoSection
-import com.giraffe.authentication.composable.LoginBody
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
@@ -28,35 +31,53 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = koinViewModel()
-){
+    viewModel: LoginViewModel = koinViewModel(),
+    navigateToHomeScreen: () -> Unit ,
+    navigateToWebViewScreen: () -> Unit = {},
+    navigateToResetPasswordScreen: () -> Unit = {},
+    popBack: () -> Unit = {}
+) {
     val state by viewModel.state.collectAsState()
+    val effectFlow = viewModel.effect
+
+    LaunchedEffect(Unit) {
+        effectFlow.collect { effect ->
+            when (effect) {
+                is LoginEffect.NavigateToWebViewScreen -> navigateToWebViewScreen()
+
+                is LoginEffect.NavigateToHomeScreen -> navigateToHomeScreen()
+
+                is LoginEffect.NavigateToResetPasswordScreen -> navigateToResetPasswordScreen()
+
+                is LoginEffect.PopBack -> popBack()
+
+                is LoginEffect.Error -> {}
+            }
+        }
+    }
+
+
     LoginContent(
-        modifier = modifier,
-        state = state,
-        interaction = viewModel
+        modifier = modifier, state = state, interaction = viewModel
     )
 }
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier,
-    state: LoginState,
-    interaction : LoginInteractionListener 
-){
+    modifier: Modifier, state: LoginScreenState, interaction: LoginInteractionListener
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(Theme.color.background.screen)
             .systemBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         LogoSection(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
-        LoginBody(
-            modifier = Modifier.weight(1f),
-            state = state,
-            interaction = interaction
+        LoginContent(
+            modifier = Modifier.weight(1f), state = state, interaction = interaction
         )
         SecondaryButton(
             text = stringResource(R.string.create_a_new_account),
@@ -66,7 +87,8 @@ private fun LoginContent(
         )
 
         Box(
-            modifier = Modifier.padding(top = 24.dp, bottom = 6.5.dp)
+            modifier = Modifier
+                .padding(top = 24.dp, bottom = 6.5.dp)
                 .size(width = 120.dp, height = 3.dp)
                 .background(Theme.color.shade.secondary)
         )
@@ -87,13 +109,12 @@ private fun LoginContent(
                     onClickPrimaryButton = interaction::onGoToWebsiteClick,
                     onClickSecondaryButton = interaction::onDismissCreateNewAccountBottomSheet
                 )
-          }
-        )
+            })
     }
 }
 
 @Preview
 @Composable
-fun LoginScreenPreview(){
-    LoginScreen()
+fun LoginScreenPreview() {
+    LoginScreen(navigateToHomeScreen={})
 }

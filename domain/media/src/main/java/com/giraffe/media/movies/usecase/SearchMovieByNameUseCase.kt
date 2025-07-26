@@ -6,8 +6,8 @@ import com.giraffe.media.movies.repository.MoviesRepository
 class SearchMovieByNameUseCase(
     private val repository: MoviesRepository
 ) {
-    suspend operator fun invoke(movieName: String): List<Movie> {
-        val searchResults = repository.searchMovieByName(movieName)
+    suspend operator fun invoke(movieName: String, page: Int): List<Movie> {
+        val searchResults = repository.searchMovieByName(movieName, page)
 
         val sortedPreferences = repository.getMoviesGenres()
 

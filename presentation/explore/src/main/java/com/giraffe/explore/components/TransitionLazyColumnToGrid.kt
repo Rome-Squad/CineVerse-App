@@ -16,21 +16,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.giraffe.designsystem.uimodel.Poster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TransitionLazyColumnToGrid(
-    poster: List<Poster>,
+    posters: LazyPagingItems<Poster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
@@ -88,15 +87,18 @@ fun TransitionLazyColumnToGrid(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
-                        PosterHorizontal(
-                            poster = poster,
-                            animatedVisibilityScope = this@AnimatedContent,
-                            sharedTransitionScope = this@SharedTransitionLayout,
-                            onClick = {
-                                onPosterClicked(poster.id)
-                            }
-                        )
+                    items(posters.itemCount) { index ->
+                        posters[index]?.let { poster ->
+                            PosterHorizontal(
+                                poster = poster,
+                                animatedVisibilityScope = this@AnimatedContent,
+                                sharedTransitionScope = this@SharedTransitionLayout,
+                                onClick = {
+                                    onPosterClicked(poster.id)
+                                }
+                            )
+                        }
+
                     }
                 }
             } else {
@@ -107,15 +109,18 @@ fun TransitionLazyColumnToGrid(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
-                        PosterVertically(
-                            poster = poster,
-                            animatedVisibilityScope = this@AnimatedContent,
-                            sharedTransitionScope = this@SharedTransitionLayout,
-                            onClick = {
-                                onPosterClicked(poster.id)
-                            }
-                        )
+                    items(posters.itemCount) { index ->
+                        posters[index]?.let { poster ->
+                            PosterVertically(
+                                poster = poster,
+                                animatedVisibilityScope = this@AnimatedContent,
+                                sharedTransitionScope = this@SharedTransitionLayout,
+                                onClick = {
+                                    onPosterClicked(poster.id)
+                                }
+                            )
+                        }
+
                     }
                 }
             }

@@ -6,13 +6,13 @@ import com.giraffe.media.movies.entity.Movie
 
 interface MoviesRepository {
 
-    suspend fun searchMovieByName(movieName: String): List<Movie>
+    suspend fun searchMovieByName(movieName: String, page: Int): List<Movie>
 
     suspend fun getMovieGenres(genreIds: List<Int>): List<Genre>
 
     suspend fun getMoviesGenres(): List<Genre>
 
-    suspend fun getMoviesByGenre(genreId: Int): List<Movie>
+    suspend fun getMoviesByGenre(genreId: Int, page: Int): List<Movie>
 
     suspend fun insertMovies(movie: List<Movie>)
 

@@ -9,12 +9,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Icon
@@ -29,7 +26,6 @@ fun CollectionItem(
     description: String,
     icon: Int,
 ) {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Row(
         modifier = modifier
             .background(
@@ -69,9 +65,6 @@ fun CollectionItem(
             modifier = Modifier
                 .padding(start = 8.dp)
                 .size(20.dp)
-                .graphicsLayer {
-                    scaleX = if (isRtl) -1f else 1f
-                }
         )
     }
 }

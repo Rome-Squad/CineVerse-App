@@ -15,7 +15,7 @@ class SeriesRemoteRetrofitDataSourceImp(
 
     override suspend fun getSeriesByGenre(genreId: Int, page: Int) =
         retrofitRequestBuilder.get {
-            getSeriesByGenre(if (genreId == -1) "" else genreId.toString())
+            getSeriesByGenre(if (genreId == -1) "" else genreId.toString(), page)
         }.results
 
     override suspend fun getGenres() =

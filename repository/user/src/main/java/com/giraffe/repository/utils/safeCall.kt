@@ -1,16 +1,39 @@
 package com.giraffe.repository.utils
 
-suspend inline fun <reified T> safeCall(
-    block: suspend () -> T
-): T {
-    return try {
-        block()
-    } catch (e: Throwable) {
-        throw mapToMoviesException(e)
+import com.giraffe.repository.exceptions.ApiDataException
+import com.giraffe.repository.exceptions.InvalidCredentialsException
+import com.giraffe.repository.exceptions.SessionCreationException
+import com.giraffe.repository.exceptions.TokenCreationException
+import com.giraffe.repository.exceptions.TokenValidationException
+import com.giraffe.user.exception.AuthException
+import com.giraffe.user.exception.InvalidLoginException
+import com.giraffe.user.exception.InvalidUsernameOrPasswordException
+import com.giraffe.user.exception.UnknownException
+
+object SafeCall {
+    suspend operator fun <T> invoke(execute: suspend () -> T): T {
+        return try {
+            execute()
+        } catch (e: Exception) {
+            throw mapToDomainException(e)
+        }
     }
-}
 
-fun mapToMoviesException(e: Throwable): Throwable {
-    return UnknownError(e.message)
 
+    fun mapToDomainException(e: Throwable): AuthException = when (e) {
+        is ApiDataException -> when (e.code) {
+            // 401 Unauthorized (Auth or Token issues)
+            401, 403 -> InvalidUsernameOrPasswordException()
+            else -> UnknownException()
+
+        }
+
+        is InvalidCredentialsException -> InvalidLoginException("Invalid credentials provided.")
+        is TokenCreationException -> InvalidLoginException("Error creating token.")
+        is TokenValidationException -> InvalidLoginException("Error validating token.")
+        is SessionCreationException -> InvalidLoginException("Error creating session.")
+
+        else -> UnknownException()
+
+    }
 }
