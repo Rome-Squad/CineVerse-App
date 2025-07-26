@@ -1,6 +1,5 @@
 package com.giraffe.home.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,12 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: CollectionItemData) {
@@ -31,13 +30,13 @@ fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: Collection
                 .height(80.dp),
             contentAlignment = Alignment.Center
         ) {
-            Image(
+            SafeIslamicImage(
+                imageUrl = collectionItemData.image,
+                contentDescription = stringResource(R.string.collection_item_image),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(Theme.radius.s)),
-                contentScale = ContentScale.Crop,
-                painter = painterResource(collectionItemData.image),
-                contentDescription = stringResource(R.string.collection_item_image)
+                    .clip(RoundedCornerShape(Theme.radius.s))
             )
             Box(
                 modifier = Modifier
@@ -85,6 +84,6 @@ fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: Collection
 }
 
 data class CollectionItemData(
-    val image: Int,
+    val image: String,
     val collectionType: String
 )

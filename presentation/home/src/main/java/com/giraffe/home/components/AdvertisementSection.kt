@@ -2,7 +2,6 @@ package com.giraffe.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -11,6 +10,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.CTACard
 import com.giraffe.designsystem.composable.CinePreview
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
@@ -21,7 +21,7 @@ fun AdvertisementSection(
     title: String,
     cardTitle: String,
     caption: String,
-    onCardClick: () -> Unit
+    onCardClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier,

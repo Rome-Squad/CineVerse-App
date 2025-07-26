@@ -13,6 +13,8 @@ import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.explore.screen.discover.DiscoverViewModel
 import com.giraffe.explore.screen.search.SearchViewModel
 import com.giraffe.explore.screen.searchresult.SearchResultViewModel
+import com.giraffe.home.screen.home.HomeViewModel
+import com.giraffe.home.screen.movies_list.MoviesListViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -35,6 +37,11 @@ val viewModelModule = module {
         )
     }
     viewModelOf(::RecommendedSeriesViewModel)
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::RecommendedSeriesViewModel)
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::MoviesListViewModel)
     viewModelOf(::GalleryViewModel)
     viewModelOf(::SeasonsViewModel)
 }
