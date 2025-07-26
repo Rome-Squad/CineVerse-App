@@ -28,7 +28,10 @@ class MainActivity : ComponentActivity() {
             )
         )
         setContent {
-            CineVerseTheme { authApi.LoginContainer {} }
+            CineVerseTheme {
+                authApi.LoginContainer {
+                }
+            }
         }
     }
 }
