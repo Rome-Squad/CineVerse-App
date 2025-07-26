@@ -7,4 +7,16 @@
     <string name="what_should_i_watch">What Should I Watch?</string>
     <string name="let_us_choose_for_you">Let Us Choose For You!</string>
     <string name="we_ll_help_you_skip_the_scroll_and_go_straight_to_the_good_stuff">We’ll help you skip the scroll and go straight to the good stuff.</string>
+    <string name="welcome">Welcome</string>
+    <string name="image_logo">Image logo</string>
+    <string name="recently_released">Recently Released</string>
+    <string name="upcoming_movies">Upcoming Movies</string>
+    <string name="matches_your_vibe">Matches your Vibe</string>
+    <string name="top_rated_tv_shows">Top Rated TV Shows</string>
+    <string name="clear_all">Clear All</string>
+    <string name="you_recent_viewed">You Recently Viewed</string>
+    <string name="need_more_to_watch">Need More to Watch?</string>
+    <string name="browse_everything">Browse Everything</string>
+    <string name="explore_all_movies_and_series">Explore all movies and series by genre or search for anything you like.</string>
+    <string name="back">Back Icon</string>
 </resources>
