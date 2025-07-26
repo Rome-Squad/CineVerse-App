@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
-import com.giraffe.authentication.composable.LoginContent
+import com.giraffe.authentication.composable.LoginForm
 import com.giraffe.authentication.composable.LogoSection
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
@@ -76,7 +76,7 @@ private fun LoginContent(
     ) {
 
         LogoSection(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
-        LoginContent(
+        LoginForm(
             modifier = Modifier.weight(1f), state = state, interaction = interaction
         )
         SecondaryButton(
