@@ -6,6 +6,7 @@ import com.giraffe.repository.exceptions.SessionCreationException
 import com.giraffe.repository.exceptions.TokenCreationException
 import com.giraffe.repository.exceptions.TokenValidationException
 import com.giraffe.user.exception.AuthException
+import com.giraffe.user.exception.InvalidLoginException
 import com.giraffe.user.exception.InvalidUsernameOrPasswordException
 import com.giraffe.user.exception.UnknownException
 
@@ -27,10 +28,10 @@ object SafeCall {
 
         }
 
-        is InvalidCredentialsException -> com.giraffe.user.exception.InvalidCredentialsException()
-        is TokenCreationException -> com.giraffe.user.exception.TokenCreationException()
-        is TokenValidationException -> com.giraffe.user.exception.TokenValidationException()
-        is SessionCreationException -> com.giraffe.user.exception.SessionCreationException()
+        is InvalidCredentialsException -> InvalidLoginException("Invalid credentials provided.")
+        is TokenCreationException -> InvalidLoginException("Error creating token.")
+        is TokenValidationException -> InvalidLoginException("Error validating token.")
+        is SessionCreationException -> InvalidLoginException("Error creating session.")
 
         else -> UnknownException()
 
