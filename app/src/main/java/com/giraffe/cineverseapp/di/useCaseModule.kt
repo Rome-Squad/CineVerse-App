@@ -45,6 +45,8 @@ import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
+import com.giraffe.user.usecase.LoginUseCase
+
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -103,5 +105,8 @@ val useCaseModule = module {
     singleOf(::GetPeopleBySeriesIdUseCase)
     singleOf(::GetPersonDetailsUseCase)
     singleOf(::GetPeopleMediaCreditsUseCase)
+
+    //Auth useCase
+    singleOf(::LoginUseCase)
     singleOf(::GetPersonImagesUseCase)
 }

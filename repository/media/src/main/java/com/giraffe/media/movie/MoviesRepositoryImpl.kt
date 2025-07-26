@@ -145,6 +145,6 @@ class MoviesRepositoryImpl(
     }
 
     private suspend fun getSessionId() = SafeCall {
-        sessionManager.createGuestSessionId() ?: throw NoInternetDataException()
+        sessionManager.getSessionId() ?: throw NoInternetDataException()
     }
 }

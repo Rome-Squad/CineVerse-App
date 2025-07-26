@@ -1,16 +1,17 @@
-package com.giraffe.media.util
+package com.giraffe.user.util
 
-import com.giraffe.media.exception.ApiDataException
-import com.giraffe.media.exception.InvalidIdDataException
-import com.giraffe.media.exception.MediaDataException
-import com.giraffe.media.exception.NoInternetDataException
-import com.giraffe.media.exception.RequestTimeoutDataException
-import com.giraffe.media.exception.SerializationDataException
-import com.giraffe.media.exception.UnknownNetworkDataException
+import com.giraffe.repository.exceptions.ApiDataException
+import com.giraffe.repository.exceptions.AuthDataException
+import com.giraffe.repository.exceptions.InvalidIdDataException
+import com.giraffe.repository.exceptions.NoInternetDataException
+import com.giraffe.repository.exceptions.RequestTimeoutDataException
+import com.giraffe.repository.exceptions.SerializationDataException
+import com.giraffe.repository.exceptions.UnknownNetworkDataException
 import retrofit2.Response
 import java.io.IOException
+import java.net.SocketTimeoutException
 
-class RetrofitRequestBuilder<API>(
+class RetrofitUserRequestBuilder<API>(
     val api: API
 ) {
 
@@ -32,10 +33,17 @@ class RetrofitRequestBuilder<API>(
         ): T {
             return try {
                 val response = execute()
+
                 if (response.isSuccessful) {
                     val body = response.body()
                     body ?: throw SerializationDataException()
                 } else {
+                    val errorBody = try {
+                        response.errorBody()?.string() ?: "Unknown error"
+                    } catch (e: Exception) {
+                        "Unknown error"
+                    }
+
                     throw ApiDataException(response.code())
                 }
             } catch (e: Throwable) {
@@ -43,9 +51,9 @@ class RetrofitRequestBuilder<API>(
             }
         }
 
-        fun mapToMediaException(e: Throwable): MediaDataException = when (e) {
-            is MediaDataException -> e
-            is java.net.SocketTimeoutException -> RequestTimeoutDataException()
+        fun mapToMediaException(e: Throwable): AuthDataException = when (e) {
+            is AuthDataException -> e
+            is SocketTimeoutException -> RequestTimeoutDataException()
             is IOException -> NoInternetDataException()
             is IllegalArgumentException -> InvalidIdDataException()
             else -> UnknownNetworkDataException()
