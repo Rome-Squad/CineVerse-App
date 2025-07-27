@@ -97,12 +97,12 @@ fun HomeScreen(
         AnimatedVisibility(state.isLoading) {
             Progress(modifier = Modifier.size(40.dp))
         }
-        AnimatedVisibility(!state.isLoading) {
-            HomeContent(
-                state = state,
-                interactionListener = viewModel
-            )
-        }
+    }
+    AnimatedVisibility(!state.isLoading) {
+        HomeContent(
+            state = state,
+            interactionListener = viewModel
+        )
     }
 }
 
