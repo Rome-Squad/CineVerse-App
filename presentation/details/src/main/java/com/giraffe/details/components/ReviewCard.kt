@@ -90,7 +90,9 @@ fun ReviewCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             RatingStars(
-                rate = rate, onRateClickEnabled = false, starSize = 16.dp, starSpace = 4.dp
+                rate = rate,
+                starSize = 16.dp,
+                starSpace = 4.dp
             )
             Text(
                 text = reviewDate?.formatAsMonthDayYear() ?: "",
