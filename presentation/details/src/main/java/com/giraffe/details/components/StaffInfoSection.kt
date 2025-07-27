@@ -31,6 +31,7 @@ fun StaffInfoSection(
     staffList: Map<String, List<String>>,
     modifier: Modifier = Modifier
 ) {
+    if (staffList.isEmpty()) return
     Column(
         modifier = modifier
     ) {
