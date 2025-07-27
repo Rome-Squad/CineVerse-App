@@ -2,9 +2,11 @@ package com.giraffe.cineverseapp.data.network
 
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.media.util.AuthInterceptor
+import com.giraffe.media.util.LanguageInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.util.Locale
 
 fun createRetrofitClient(accessToken: String): OkHttpClient {
     val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -14,6 +16,7 @@ fun createRetrofitClient(accessToken: String): OkHttpClient {
     return OkHttpClient.Builder()
         .addInterceptor(AuthInterceptor(accessToken))
         .addInterceptor(loggingInterceptor)
+        .addInterceptor(LanguageInterceptor(Locale.getDefault().language))
         .build()
 }
 
