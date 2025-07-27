@@ -80,6 +80,7 @@ fun SearchResultContent(
                 ExploreHeader(
                     modifier = Modifier.padding(bottom = 12.dp),
                     endIcon = painterResource(Theme.icons.outline.microphone),
+                    enabled = false,
                     readOnly = true,
                     showBackButton = true,
                     value = state.query,
