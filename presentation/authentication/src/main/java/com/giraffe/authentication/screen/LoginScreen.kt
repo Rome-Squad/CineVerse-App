@@ -64,7 +64,9 @@ fun LoginScreen(
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier, state: LoginScreenState, interaction: LoginInteractionListener
+    modifier: Modifier,
+    state: LoginScreenState,
+    interaction: LoginInteractionListener
 ) {
     Column(
         modifier = modifier
@@ -75,10 +77,22 @@ private fun LoginContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        LogoSection(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
-        LoginForm(
-            modifier = Modifier.weight(1f), state = state, interaction = interaction
+        LogoSection(
+            modifier = Modifier
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 16.dp
+                )
         )
+
+        LoginForm(
+            modifier = Modifier
+                .weight(1f),
+            state = state,
+            interaction = interaction
+        )
+
         SecondaryButton(
             text = stringResource(R.string.create_a_new_account),
             enabled = true,
