@@ -156,7 +156,7 @@ fun DefaultTextField(
                     ),
                 interactionSource = interactionSource,
                 enabled = enabled,
-                value = value,
+                value = textFieldValue,
                 maxLines = maxLines,
                 singleLine = singleLine,
                 onValueChange = { newValue ->
