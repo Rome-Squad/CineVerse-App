@@ -116,13 +116,11 @@ fun SeriesDetailsContent(
                 )
             }
 
-            AnimatedVisibility(state.crew.isNotEmpty()) {
-                StaffInfoSection(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.behind_the_scenes),
-                    staffList = state.crew
-                )
-            }
+            StaffInfoSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.behind_the_scenes),
+                staffList = state.crew
+            )
 
             AnimatedVisibility(state.recommendedSeries.isNotEmpty()) {
                 PosterListSection(
