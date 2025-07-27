@@ -66,15 +66,16 @@ fun DefaultTextField(
     singleLine: Boolean = false,
     maxCharacters: Int = 25,
     errorMessage: String? = null,
+    enabled: Boolean = true,
     readOnly: Boolean = false,
     isPassword: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
-    onClicked: () -> Unit = {},
     onStartIconClick: ((String) -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onForgotPasswordClick: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -83,7 +84,6 @@ fun DefaultTextField(
     LaunchedEffect(isFocused) {
         onFocusChanged(isFocused)
         if (isFocused && readOnly) {
-            onClicked()
             focusManager.clearFocus()
         }
     }
@@ -139,9 +139,13 @@ fun DefaultTextField(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .focusRequester(focusRequester),
+                    .focusRequester(focusRequester)
+                    .clickable(
+                        enabled = !enabled,
+                        onClick = onClick
+                    ),
                 interactionSource = interactionSource,
-                readOnly = readOnly,
+                enabled = enabled,
                 value = value,
                 maxLines = maxLines,
                 singleLine = singleLine,
