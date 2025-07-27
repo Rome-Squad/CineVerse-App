@@ -32,7 +32,6 @@ fun RatingSelector(
             modifier = Modifier,
             starSize = iconSize,
             rate = rate,
-            onRateClickEnabled = true,
             onRateClick = onRateClick
         )
     }
