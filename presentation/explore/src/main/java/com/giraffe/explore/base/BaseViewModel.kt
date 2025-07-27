@@ -1,6 +1,7 @@
 package com.giraffe.explore.base
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.exception.AccessDeniedException
@@ -31,7 +32,8 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         exceptionHandler: CoroutineExceptionHandler = handler(),
-        block: suspend CoroutineScope.() -> T
+        block:
+        suspend CoroutineScope.() -> T
     ): Job {
         return coroutineScope.launch(dispatcher + exceptionHandler) {
             block()

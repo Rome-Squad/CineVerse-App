@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -27,6 +28,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
@@ -108,7 +110,9 @@ fun SearchResultContent(
                                 .align(Alignment.TopCenter)
                                 .padding(top = 16.dp)
                         )
-                    } else {
+                    }else if (state.errorMessage != null) {
+                        NoInternetConnection(modifier = Modifier.padding(16.dp))
+                    }  else {
 
                         if (state.selectedTab == SearchTab.ACTORS) {
                             if (actors.itemCount != 0) {
@@ -187,4 +191,15 @@ fun ActorsSection(
         }
     }
 
+}
+
+
+
+@Composable
+fun NoInternetConnection(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "No Internet Connection",
+        )
+    }
 }

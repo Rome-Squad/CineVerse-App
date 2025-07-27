@@ -1,5 +1,7 @@
 package com.giraffe.explore.screen.searchresult
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -8,6 +10,7 @@ import androidx.paging.map
 import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.BasePagingSource
+import com.giraffe.explore.util.isNetworkAvailable
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
 import com.giraffe.media.movies.entity.Movie
@@ -21,6 +24,7 @@ import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import kotlinx.coroutines.flow.map
 
 class SearchResultViewModel(
+    private val context: Context,
     private val query: String,
     private val searchMovieByName: SearchMovieByNameUseCase,
     private val searchSeriesByName: SearchSeriesByNameUseCase,
@@ -37,6 +41,7 @@ class SearchResultViewModel(
         getActors()
     }
 
+    @SuppressLint("StateFlowValueCalledInComposition")
     override fun selectTap(tabIndex: Int) {
         safeExecute {
             updateState { it.copy(selectedTab = SearchTab.entries[tabIndex]) }
@@ -90,11 +95,15 @@ class SearchResultViewModel(
 
     private fun getActors() {
         safeExecute {
+            if (!isNetworkAvailable(context)) {
+                updateState { it.copy(errorMessage = "No Internet Connection") }
+                return@safeExecute
+            }
+
             val actorsFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                     BasePagingSource { page -> searchPeopleByName(query, page) }
                 }.flow.cachedIn(viewModelScope).map { it.map(Person::toUi) }
-            updateState { it.copy(actors = actorsFlow) }
+            updateState { it.copy(actors = actorsFlow, errorMessage = null) }
         }
-    }
-}
+}}
