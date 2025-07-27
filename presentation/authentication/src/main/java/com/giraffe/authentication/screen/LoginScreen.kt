@@ -1,9 +1,11 @@
 package com.giraffe.authentication.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
 import com.giraffe.authentication.composable.LoginForm
@@ -61,7 +64,9 @@ fun LoginScreen(
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier = Modifier, state: LoginScreenState, interaction: LoginInteractionListener
+    modifier: Modifier,
+    state: LoginScreenState,
+    interaction: LoginInteractionListener
 ) {
     Column(
         modifier = modifier
@@ -71,12 +76,23 @@ private fun LoginContent(
             .systemBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        LogoSection(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
+
+        LogoSection(
+            modifier = Modifier
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 16.dp
+                )
+        )
+
         LoginForm(
-            modifier = Modifier.padding(bottom = 96.dp),
+            modifier = Modifier
+                .padding(bottom = 96.dp),
             state = state,
             interaction = interaction
         )
+
         SecondaryButton(
             modifier = Modifier.padding(bottom = 24.dp),
             text = stringResource(R.string.create_a_new_account),

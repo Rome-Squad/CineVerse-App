@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+
 
 @Composable
 fun SectionTitle(
@@ -38,7 +39,9 @@ fun SectionTitle(
                 text = clickableText,
                 style = Theme.textStyle.body.md.medium,
                 color = Theme.color.brand.primary,
-                modifier = Modifier.clickable(onClick = onClickableText)
+                modifier = Modifier.noHoverClickable(
+                    onClick = onClickableText
+                )
             )
         }
     }

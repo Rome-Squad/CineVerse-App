@@ -108,13 +108,11 @@ fun SeriesDetailsContent(
                 }
             }
 
-            AnimatedVisibility(state.cast.isNotEmpty()) {
-                StarCastSection(
-                    title = stringResource(R.string.star_cast),
-                    castList = state.cast,
-                    onCastClick = interaction::navigateToCastDetailsScreen
-                )
-            }
+            StarCastSection(
+                title = stringResource(R.string.star_cast),
+                castList = state.cast,
+                onCastClick = interaction::navigateToCastDetailsScreen
+            )
 
             StaffInfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),

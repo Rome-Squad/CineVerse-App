@@ -42,6 +42,7 @@ fun ExploreHeader(
     selectedTabIndex: Int = 0,
     placeholder: String = "",
     value: String = "",
+    enabled: Boolean = true,
     readOnly: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
     onSearch: (String) -> Unit = {},
@@ -93,11 +94,12 @@ fun ExploreHeader(
                 onValueChange = onValueChange,
                 value = value,
                 onFocusChanged = onFocusChanged,
+                enabled = enabled,
                 readOnly = readOnly,
                 focusRequester = focusRequester,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = { onSearch(value) }),
-                onClicked = onTextFieldClicked
+                onClick = onTextFieldClicked
             )
         }
         if (tabsTitles.isNotEmpty()) {
