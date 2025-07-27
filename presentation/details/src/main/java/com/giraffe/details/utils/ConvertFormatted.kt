@@ -1,6 +1,5 @@
 package com.giraffe.details.utils
 
-import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -18,16 +17,7 @@ fun String.toFormattedDate(): String {
     val inputFormat = SimpleDateFormat("yyyy-M-dd", Locale.ENGLISH)
     val date = inputFormat.parse(this) ?: return this
 
-    val monthSymbols = DateFormatSymbols(Locale.ENGLISH).apply {
-        months = arrayOf(
-            "Jan", "Feb", "Mar", "Apr",
-            "May", "Jun", "Jul", "Aug",
-            "Sep", "Oct", "Nov", "Dec"
-        )
-    }
 
-    val outputFormat = SimpleDateFormat("yyyy, MMMM d", Locale.ENGLISH).apply {
-        dateFormatSymbols = monthSymbols
-    }
+    val outputFormat = SimpleDateFormat("yyyy, MMM d", Locale.ENGLISH)
     return outputFormat.format(date)
 }
