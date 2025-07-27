@@ -9,6 +9,5 @@ data class SearchScreenState(
     val recentKeywords: List<String> = emptyList(),
     val recentPosters: List<Poster> = emptyList(),
     val isVoiceRecording: Boolean = false,
-    val isPermissionGranted: Boolean = false,
-    val isLoading: Boolean = false
+    val isPermissionGranted: Boolean = false
 )

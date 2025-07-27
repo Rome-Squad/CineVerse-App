@@ -17,8 +17,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.Poster
@@ -35,10 +37,12 @@ fun PosterListSection(
     onClickEndText: () -> Unit = {},
     onClickPoster: (poster: Poster) -> Unit = {}
 ) {
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Ltr
+
     AnimatedVisibility(
         visible = posters.isNotEmpty(),
         enter = fadeIn(fadeAnimationSpec),
-        exit = fadeOut(fadeAnimationSpec) + slideOutHorizontally(slideAnimationSpec) { -it }
+        exit = fadeOut(fadeAnimationSpec) + slideOutHorizontally(slideAnimationSpec) { if (isRtl) -it else it }
     ) {
         Column(
             modifier = modifier,

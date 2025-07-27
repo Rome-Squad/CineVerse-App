@@ -96,9 +96,7 @@ private fun SearchContent(
                 }
                 interactions.onVoiceSearchFinished()
             },
-            onSoundLevelChange = { level ->
-
-            },
+            onSoundLevelChange = { level -> }, //todo remove VoiceSearchHelper
             onError = { error ->
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 interactions.onVoiceSearchFinished()
@@ -125,7 +123,7 @@ private fun SearchContent(
 
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
-        if (state.query.isBlank()) focusRequester.requestFocus()
+        focusRequester.requestFocus()
     }
 
     LazyColumn(
