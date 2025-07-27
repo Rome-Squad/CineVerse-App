@@ -49,11 +49,7 @@ internal fun DetailsNavGraph(
 
 
         recommendedSeriesRoute(
-            navigateToSeriesDetails = { seriesID ->
-                navController.navigate(
-                    "seriesDetails/$seriesID"
-                )
-            },
+            navigateToSeriesDetails = navController::navigateToSeriesDetails,
             onBackClick = {
                 navController.navigateUp()
             }
@@ -73,11 +69,7 @@ internal fun DetailsNavGraph(
             navigateToSeriesDetails = navController::navigateToSeriesDetails
         )
         recommendedMoviesRoute(
-            navigateToMovieDetails = { MovieId ->
-                navController.navigate(
-                    "movieDetails/$MovieId"
-                )
-            },
+            navigateToMovieDetails = navController::navigateToMovieDetails,
             onBackClick = { navController.navigateUp() }
         )
 
