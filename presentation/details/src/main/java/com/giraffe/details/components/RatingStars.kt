@@ -2,8 +2,6 @@ package com.giraffe.details.components
 
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -22,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -32,10 +31,9 @@ fun RatingStars(
     starSize: Dp = 24.dp,
     starSpace: Dp = 8.dp,
     rate: Int = 0,
-    onRateClickEnabled: Boolean = true,
-    onRateClick: (Int) -> Unit = {}
+    onRateClick: ((Int) -> Unit)? = null
 ) {
-
+    val onClickEnabled = onRateClick != null
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(starSpace),
@@ -61,16 +59,11 @@ fun RatingStars(
                 contentDescription = stringResource(R.string.rate, rate),
                 modifier = Modifier
                     .size(starSize)
-                    .then(
-                        if (onRateClickEnabled) Modifier
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = { onRateClick(i + 1) }
-                            )
-                        else Modifier
-
-                    )
+                    .noHoverClickable {
+                        if (onClickEnabled)
+                            onRateClick(i + 1)
+                        else null
+                    }
 
             )
 

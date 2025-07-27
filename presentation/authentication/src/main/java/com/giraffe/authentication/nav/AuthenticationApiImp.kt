@@ -3,9 +3,11 @@ package com.giraffe.authentication.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.authentication.AuthenticationApi
-import com.giraffe.explore.ExploreApi
+import com.giraffe.home.HomeApi
 
-class AuthenticationApiImp (private val exploreApi: ExploreApi): AuthenticationApi {
+class AuthenticationApiImp(
+    private val homeApi: HomeApi
+) : AuthenticationApi {
 
     @Composable
     override fun LoginContainer(onBack: () -> Unit) {
@@ -13,7 +15,7 @@ class AuthenticationApiImp (private val exploreApi: ExploreApi): AuthenticationA
 
         AuthenticationNavGraph(
             navController = navController,
-            exploreApi = exploreApi,
+            homeApi = homeApi,
         )
     }
 }

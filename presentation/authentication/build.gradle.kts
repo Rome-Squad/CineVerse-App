@@ -43,7 +43,7 @@ dependencies {
     implementation(project(":imageviewer"))
     implementation(project(":api:authentication"))
     implementation(project(":domain:user"))
-    implementation(project(":api:explore"))
+    implementation(project(":api:home"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
