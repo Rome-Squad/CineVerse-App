@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -108,7 +110,7 @@ private fun ToggleButtonIcon(
     Crossfade(
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.s))
-            .clickable(onClick = onClick)
+            .noHoverClickable(onClick=onClick)
             .size(40.dp)
             .wrapContentSize()
             .padding(horizontal = 10.dp),
