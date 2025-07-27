@@ -33,6 +33,7 @@ class SearchViewModel(
 ) : BaseViewModel<SearchScreenState>(SearchScreenState()),
     SearchInteractionListener {
     init {
+        updateState { it.copy(isLoading = true) }
         onQueryChange()
     }
 
@@ -42,7 +43,7 @@ class SearchViewModel(
             val recentSeries = async { getRecentSeriesUseCase().map { it.toPoster() } }
             val recentPeople = async { getRecentPeopleUseCase().map { it.toPoster() } }
             val recentPosters = recentMovies.await() + recentSeries.await() + recentPeople.await()
-            updateState { it.copy(recentPosters = recentPosters) }
+            updateState { it.copy(recentPosters = recentPosters, isLoading = false) }
         }
     }
 

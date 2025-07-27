@@ -1,6 +1,12 @@
 package com.giraffe.designsystem.composable
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.uimodel.Poster
@@ -21,12 +28,18 @@ fun PosterListSection(
     title: String,
     posters: List<Poster>,
     modifier: Modifier = Modifier,
+    fadeAnimationSpec: TweenSpec<Float> = tween(300, easing = EaseIn),
+    slideAnimationSpec: TweenSpec<IntOffset> = tween(300, easing = EaseIn),
     endText: String? = null,
     paddingHorizontal: Int = 16,
     onClickEndText: () -> Unit = {},
     onClickPoster: (poster: Poster) -> Unit = {}
 ) {
-    AnimatedVisibility(posters.isNotEmpty()) {
+    AnimatedVisibility(
+        visible = posters.isNotEmpty(),
+        enter = fadeIn(fadeAnimationSpec),
+        exit = fadeOut(fadeAnimationSpec) + slideOutHorizontally(slideAnimationSpec) { -it }
+    ) {
         Column(
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(12.dp),

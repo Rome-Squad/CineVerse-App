@@ -5,7 +5,10 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -62,6 +65,7 @@ fun SearchScreen(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SearchContent(
     state: SearchScreenState,
@@ -92,12 +96,18 @@ private fun SearchContent(
                 }
                 interactions.onVoiceSearchFinished()
             },
+            onSoundLevelChange = { level ->
+
+            },
             onError = { error ->
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 interactions.onVoiceSearchFinished()
             }
         )
     }
+
+    val isKeyboardVisible = WindowInsets.isImeVisible
+
     LaunchedEffect(state.isVoiceRecording) {
         if (state.isVoiceRecording) {
             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
@@ -115,7 +125,7 @@ private fun SearchContent(
 
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
+        if (state.query.isBlank()) focusRequester.requestFocus()
     }
 
     LazyColumn(
@@ -137,15 +147,15 @@ private fun SearchContent(
                 focusRequester = focusRequester,
                 onEndIconClick = interactions::onPostfixIconClick,
                 onBackClick = onBackClick,
-                onSearch = navigateToSearchResult,
+                onSearch = navigateToSearchResult
             )
         }
 
-
-        if ((state.recentKeywords + state.keywords).isNotEmpty()) keywordsSection(
+        keywordsSection(
             query = state.query,
             keywords = state.keywords,
             recentKeywords = state.recentKeywords,
+            isKeyboardVisible = isKeyboardVisible,
             onClearClick = interactions::clearAllKeywords,
             onKeywordArrowClick = interactions::onQueryChange,
             onKeywordClearClick = interactions::deleteKeyword,
@@ -176,51 +186,53 @@ private fun LazyListScope.keywordsSection(
     onKeywordsClick: (String) -> Unit = {},
     onKeywordArrowClick: (String) -> Unit = {},
     onKeywordClearClick: (String) -> Unit = {},
+    isKeyboardVisible: Boolean,
 ) {
-    val isJustRecent = keywords.isEmpty() && recentKeywords.isNotEmpty()
+    val isRecentKeyWordsVisible = recentKeywords.isNotEmpty()
+    val isSearchResultKeywordsVisible = keywords.isNotEmpty()
+    val isStickyHeaderVisible =
+        isRecentKeyWordsVisible || isSearchResultKeywordsVisible || query.isNotBlank()
 
-    stickyHeader {
-        SectionTitle(
-            modifier = Modifier
-                .background(Theme.color.background.screen)
-                .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-            title = if (isJustRecent) stringResource(R.string.history) else stringResource(R.string.search_suggestions),
-            clickableText = if (isJustRecent) stringResource(R.string.clear_all) else "",
-            onClickableText = onClearClick
-        )
-    }
-
-
-    items(recentKeywords) { keyWord ->
-        SearchItem(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = keyWord,
-            isRecent = isJustRecent,
-            postfixIcon = if (query.isBlank()) painterResource(Theme.icons.outline.close) else painterResource(
-                Theme.icons.outline.arrowRightUp
-            ),
-            onClickItem = onKeywordsClick,
-            onClickIcon = {
-                if (isJustRecent) onKeywordClearClick(keyWord) else onKeywordArrowClick(
-                    keyWord
-                )
-            },
-        )
-    }
-
-    if (keywords.isNotEmpty()) {
-        items(keywords) { keyWord ->
-            SearchItem(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = keyWord,
-                isRecent = false,
-                postfixIcon = if (query.isBlank()) painterResource(Theme.icons.outline.close) else painterResource(
-                    Theme.icons.outline.arrowRightUp
+    if (isStickyHeaderVisible) {
+        stickyHeader {
+            SectionTitle(
+                modifier = Modifier
+                    .background(Theme.color.background.screen)
+                    .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+                title = if (isRecentKeyWordsVisible) stringResource(R.string.history) else stringResource(
+                    R.string.search_suggestions
                 ),
-                onClickItem = onKeywordsClick,
-                onClickIcon = { onKeywordArrowClick(keyWord) },
+                clickableText = if (isRecentKeyWordsVisible) stringResource(R.string.clear_all) else "",
+                onClickableText = onClearClick
             )
         }
     }
 
+    if (isRecentKeyWordsVisible) {
+        items(recentKeywords) { keyWord ->
+            SearchItem(
+                text = keyWord,
+                isRecent = true,
+                postfixIcon = if (isKeyboardVisible) painterResource(Theme.icons.outline.arrowRightUp)
+                else painterResource(Theme.icons.outline.close),
+                onClickItem = onKeywordsClick,
+                onClickIcon = {
+                    if (isKeyboardVisible) onKeywordClearClick(keyWord)
+                    else onKeywordArrowClick(keyWord)
+                }
+            )
+        }
+    }
+
+    if (isSearchResultKeywordsVisible) {
+        items(keywords) { keyWord ->
+            SearchItem(
+                text = keyWord,
+                isRecent = false,
+                postfixIcon = painterResource(Theme.icons.outline.arrowRightUp),
+                onClickItem = onKeywordsClick,
+                onClickIcon = { onKeywordArrowClick(keyWord) }
+            )
+        }
+    }
 }

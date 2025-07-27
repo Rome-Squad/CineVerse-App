@@ -31,7 +31,7 @@ fun SectionTitle(
             text = title,
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary,
-            maxLines = 1,
+            maxLines = 1
         )
         clickableText?.let {
             Text(
