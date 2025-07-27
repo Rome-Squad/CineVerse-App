@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -156,7 +155,6 @@ fun DefaultTextField(
                 maxLines = maxLines,
                 singleLine = singleLine,
                 onValueChange = { newValue ->
-                    Log.i("maxCharacters", newValue.text.length.toString())
                     if (newValue.text.length <= maxCharacters) {
                         if (newValue.text.contains("\n")) onValueChange(
                             newValue.text.replace(
