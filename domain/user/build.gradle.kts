@@ -1,5 +1,6 @@
 plugins {
     id("java-library")
+    id("kotlin-kapt")
     alias(libs.plugins.jetbrains.kotlin.jvm)
     jacoco
 }
@@ -16,6 +17,8 @@ kotlin {
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.test)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
 
 tasks.test {

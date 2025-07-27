@@ -1,7 +1,10 @@
 plugins {
     id("java-library")
+    id("kotlin-kapt")
+
     alias(libs.plugins.jetbrains.kotlin.jvm)
     jacoco
+
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -18,9 +21,11 @@ dependencies {
     testImplementation(libs.bundles.test)
 
     implementation(libs.kotlinx.datetime)
-
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
+
 
 tasks.test {
     useJUnitPlatform()

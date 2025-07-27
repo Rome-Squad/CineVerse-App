@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.google.firebase.firebase.perf)
     alias(libs.plugins.ksp)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 fun getSecret(key: String): String {
@@ -142,7 +144,6 @@ dependencies {
 
     //worker
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.koin.androidx.workmanager)
 
     implementation(libs.androidx.navigation.compose)
 
@@ -161,4 +162,11 @@ dependencies {
     // OkHttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    // Hilt DI
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+
 }
