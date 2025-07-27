@@ -40,10 +40,8 @@ import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
@@ -89,14 +87,7 @@ fun DefaultTextField(
             focusManager.clearFocus()
         }
     }
-    var textFieldValue by remember {
-        mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
-    }
-    LaunchedEffect(value) {
-        if (textFieldValue.text != value) {
-            textFieldValue = TextFieldValue(text = value, selection = TextRange(value.length))
-        }
-    }
+
     val hasError = errorMessage != null
     var showPassword by remember { mutableStateOf(false) }
     val borderColor by animateColorAsState(
@@ -151,18 +142,13 @@ fun DefaultTextField(
                     .focusRequester(focusRequester),
                 interactionSource = interactionSource,
                 readOnly = readOnly,
-                value = textFieldValue,
+                value = value,
                 maxLines = maxLines,
                 singleLine = singleLine,
-                onValueChange = { newValue ->
-                    if (newValue.text.length <= maxCharacters) {
-                        if (newValue.text.contains("\n")) onValueChange(
-                            newValue.text.replace(
-                                "\n",
-                                " "
-                            )
-                        )
-                        else onValueChange(newValue.text)
+                onValueChange = {
+                    if (it.length <= maxCharacters) {
+                        if (it.contains("\n")) onValueChange(it.replace("\n", " "))
+                        else onValueChange(it)
                     }
                 },
                 textStyle = Theme.textStyle.body.md.medium,
@@ -246,8 +232,8 @@ data class TextFieldColors(
 @Composable
 private fun TextField(
     modifier: Modifier = Modifier,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
     placeholder: @Composable() (() -> Unit)? = null,
     enabled: Boolean = true,
@@ -300,7 +286,7 @@ private fun TextField(
                 maxLines = maxLines,
                 minLines = minLines,
                 decorationBox = { innerTextField ->
-                    if (value.text.isEmpty() && placeholder != null) placeholder()
+                    if (value.isEmpty() && placeholder != null) placeholder()
                     innerTextField()
                 }
             )
