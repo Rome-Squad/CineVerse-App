@@ -1,58 +1,94 @@
 package com.giraffe.authentication.screen
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.authentication.base.BaseViewModel
+import com.giraffe.user.exception.EmptyUsernameException
+import com.giraffe.user.exception.InvalidPasswordException
+import com.giraffe.user.exception.InvalidUsernameOrPasswordException
+import com.giraffe.user.usecase.LoginUseCase
 
-class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
-    LoginInteractionListener {
+class LoginViewModel(
+    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
+) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
 
-    private fun onLoginClicked() {
-        safeExecute(
-            onError = {
-            updateState { it.copy(isLoading = false) }
-            sendEffect(LoginEffect.Error(it))
-        }, onSuccess = {
-            updateState { it.copy(isLoading = false) }
-            sendEffect(LoginEffect.NavigateToHomeScreen)
-        }) {
-            //TODO authentication process
-        }
-    }
+    private val fromRoute: Boolean = savedStateHandle.toRoute<LoginRoute>().fromRoute
 
-    override fun onEmailChanged(email: String) {
+    override fun onUsernameChanged(username: String) {
         updateState {
-            it.copy(email = email)
+            it.copy(
+                username = username,
+                usernameErrorMessage = null
+            )
         }
     }
+
 
     override fun onPasswordChanged(password: String) {
         updateState {
-            it.copy(password = password)
+            it.copy(
+                password = password,
+                passwordErrorMessage = null
+            )
         }
     }
-
-    override fun onTogglePasswordVisibility() {
-        updateState {
-            it.copy(isPasswordVisible = !it.isPasswordVisible)
-        }
-    }
-
     override fun onLoginClick() {
-        onLoginClicked()
+        updateState { it.copy(isLoadingLogin = true) }
+
+        safeExecute(
+            onError = ::onLoginError, onSuccess = {
+                updateState { it.copy(isLoadingLogin = false) }
+                if (!fromRoute) sendEffect(LoginEffect.NavigateToHomeScreen)
+                else sendEffect(LoginEffect.PopBack)
+
+            }) {
+            loginUseCase(userInput = state.value.username, password = state.value.password)
+        }
+    }
+
+    private fun onLoginError(throwable: Throwable) {
+        if (throwable is EmptyUsernameException) {
+            updateState {
+                it.copy(
+                    usernameErrorMessage = mapExceptionToStringRes(throwable),
+                    passwordErrorMessage = null
+                )
+            }
+        }
+
+        if (throwable is InvalidPasswordException) {
+            updateState {
+                it.copy(
+                    passwordErrorMessage = mapExceptionToStringRes(throwable),
+                    usernameErrorMessage = null
+                )
+            }
+        }
+
+        if (throwable is InvalidUsernameOrPasswordException) {
+            updateState {
+                it.copy(
+                    usernameErrorMessage = mapExceptionToStringRes(throwable),
+                    passwordErrorMessage = mapExceptionToStringRes(throwable)
+                )
+            }
+        }
+
+        updateState { it.copy(isLoadingLogin = false) }
+        sendEffect(LoginEffect.Error(throwable))
     }
 
     override fun onGoToWebsiteClick() {
-        TODO("Not yet implemented")
+        sendEffect(LoginEffect.NavigateToWebViewScreen)
     }
 
     override fun onForgotPasswordClick() {
-        TODO("Not yet implemented")
+        sendEffect(LoginEffect.NavigateToResetPasswordScreen)
     }
 
     override fun onJoinAsGuestClick() {
-        sendEffect(
-            LoginEffect.NavigateToHomeScreen
-        )
+        sendEffect(LoginEffect.NavigateToHomeScreen)
     }
 
     override fun onCreateNewAccountClick() {
@@ -71,19 +107,14 @@ class LoginViewModel() : BaseViewModel<LoginState, LoginEffect>(LoginState()),
         }
     }
 
+    override fun onTogglePasswordVisibility() {
+        updateState {
+            it.copy(isPasswordVisible = !it.isPasswordVisible)
+        }
+    }
+
     override fun navigateToHomeScreen() {
         sendEffect(LoginEffect.NavigateToHomeScreen)
     }
 
-    override fun navigateToMovieDetailsScreen(movieID: Int) {
-        sendEffect(
-            LoginEffect.NavigateToMovieDetails(movieID)
-        )
-    }
-
-    override fun navigateToSeriesDetailsScreen(seriesID: Int) {
-        sendEffect(
-            LoginEffect.NavigateToSeriesDetails(seriesID)
-        )
-    }
 }

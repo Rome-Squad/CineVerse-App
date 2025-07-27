@@ -1,15 +1,29 @@
 package com.giraffe.user.retrofit
 
-import com.giraffe.repository.dto.GuestSessionResponse
+import com.giraffe.user.dto.SessionRequestBody
+import com.giraffe.user.dto.RequestTokenResponse
+import com.giraffe.user.dto.SessionResponse
+import com.giraffe.user.dto.TokenValidationBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface UserApiServiceRetrofit {
 
-    @GET(ENDPOINT_GUEST_SESSION)
-    suspend fun getGuestSession(): Response<GuestSessionResponse>
+    @GET(TOKEN_NEW)
+    suspend fun createRequestToken(): Response<RequestTokenResponse>
+
+    @POST(VALIDATE_WITH_LOGIN)
+    suspend fun validateTokenWithLogin(@Body requestBody: TokenValidationBody): Response<RequestTokenResponse>
+
+    @POST(SESSION_NEW)
+    suspend fun createSession(@Body requestBody: SessionRequestBody): Response<SessionResponse>
 
     companion object {
-        private const val ENDPOINT_GUEST_SESSION = "authentication/guest_session/new"
+        private const val AUTHENTICATION = "authentication"
+        const val TOKEN_NEW = "$AUTHENTICATION/token/new"
+        const val VALIDATE_WITH_LOGIN = "$AUTHENTICATION/token/validate_with_login"
+        const val SESSION_NEW = "$AUTHENTICATION/session/new"
     }
 }

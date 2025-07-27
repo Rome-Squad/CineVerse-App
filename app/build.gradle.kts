@@ -109,6 +109,8 @@ dependencies {
     implementation(project(":api:explore"))
     implementation(project(":api:home"))
     implementation(project(":api:match"))
+    implementation(project(":api:authentication"))
+
 
 
     implementation(libs.androidx.core.ktx)
@@ -137,8 +139,6 @@ dependencies {
     implementation(libs.firebase.perf.ktx)
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
-
-
 
     //worker
     implementation(libs.androidx.work.runtime.ktx)

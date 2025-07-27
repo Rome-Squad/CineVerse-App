@@ -1,7 +1,12 @@
 package com.giraffe.media.util
 
-import android.util.Log
-import com.giraffe.media.exception.*
+import com.giraffe.media.exception.ApiDataException
+import com.giraffe.media.exception.InvalidIdDataException
+import com.giraffe.media.exception.MediaDataException
+import com.giraffe.media.exception.NoInternetDataException
+import com.giraffe.media.exception.RequestTimeoutDataException
+import com.giraffe.media.exception.SerializationDataException
+import com.giraffe.media.exception.UnknownNetworkDataException
 import retrofit2.Response
 import java.io.IOException
 

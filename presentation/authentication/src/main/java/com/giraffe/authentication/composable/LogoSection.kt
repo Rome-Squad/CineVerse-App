@@ -34,6 +34,7 @@ fun LogoSection(
         Text(
             text = stringResource(com.giraffe.authentication.R.string.welcome_back_to_cineverse),
             style = Theme.textStyle.title.lg,
+            color = Theme.color.shade.primary,
             modifier = Modifier.padding(bottom = 48.dp)
         )
     }

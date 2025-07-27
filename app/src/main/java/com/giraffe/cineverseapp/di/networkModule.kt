@@ -4,6 +4,7 @@ import com.giraffe.cineverseapp.BuildConfig.ACCESS_TOKEN
 import com.giraffe.cineverseapp.BuildConfig.BASE_URL
 import com.giraffe.cineverseapp.data.network.createRetrofitClient
 import com.giraffe.cineverseapp.data.network.provideRetrofitService
+import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.ExploreRemoteDataSourceImplRetrofit
@@ -17,11 +18,11 @@ import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.RetrofitRequestBuilder
-import com.giraffe.repository.SessionManagerImpl
 import com.giraffe.repository.datasource.UserRemoteDataSource
 import com.giraffe.user.SessionManager
 import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
+import com.giraffe.user.util.RetrofitUserRequestBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -35,6 +36,7 @@ private const val QUALIFIER_MOVIES_BUILDER = "movies_builder"
 private const val QUALIFIER_SERIES_BUILDER = "series_builder"
 private const val QUALIFIER_EXPLORE_BUILDER = "explore_builder"
 private const val QUALIFIER_PERSON_BUILDER = "person_builder"
+private const val QUALIFIER_USER_BUILDER = "user_builder"
 
 val networkModule = module {
 
@@ -78,6 +80,12 @@ val networkModule = module {
         val api = get<Retrofit>().create(ExploreApiServiceRetrofit::class.java)
         RetrofitRequestBuilder(api)
     }
+    single<RetrofitUserRequestBuilder<UserApiServiceRetrofit>>(named(QUALIFIER_USER_BUILDER)) {
+        val api = get<Retrofit>().create(UserApiServiceRetrofit::class.java)
+        RetrofitUserRequestBuilder(api)
+    }
+
+
     single<ExploreRemoteDataSource> {
         ExploreRemoteDataSourceImplRetrofit(get(named(QUALIFIER_EXPLORE_BUILDER)))
     }
@@ -95,12 +103,7 @@ val networkModule = module {
         SeriesRemoteRetrofitDataSourceImp(get(named(QUALIFIER_SERIES_BUILDER)))
     }
     single<UserRemoteDataSource> {
-        UserRemoteDataSourceImplRetrofit(get())
+        UserRemoteDataSourceImplRetrofit(get(named(QUALIFIER_USER_BUILDER)))
     }
-    singleOf(::SessionManagerImpl) bind SessionManager::class
-
+    singleOf(::SessionIdManagerImpl) bind SessionManager::class
 }
-
-
-
-
