@@ -1,5 +1,6 @@
 package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,32 +39,33 @@ fun StarCastSection(
 ) {
     val sizeOfChunkedList = if (castList.size > 2) 2 else 1
     val chunkedList = castList.chunked(sizeOfChunkedList)
-
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-
-        Text(
-            text = title,
-            color = Theme.color.shade.primary,
-            style = Theme.textStyle.title.sm,
-            modifier = Modifier.padding(start = 16.dp),
-        )
-
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+    AnimatedVisibility(castList.isNotEmpty()) {
+        Column(
+            modifier = modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(chunkedList) { pair ->
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    pair.forEach { cast ->
-                        CastCard(
-                            actorName = cast.name,
-                            character = cast.role,
-                            actorImage = cast.urlImage.toString(),
-                            modifier = Modifier.clickable(onClick = { onCastClick(cast.id) })
-                        )
+
+            Text(
+                text = title,
+                color = Theme.color.shade.primary,
+                style = Theme.textStyle.title.sm,
+                modifier = Modifier.padding(start = 16.dp),
+            )
+
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(chunkedList) { pair ->
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        pair.forEach { cast ->
+                            CastCard(
+                                actorName = cast.name,
+                                character = cast.role,
+                                actorImage = cast.urlImage.toString(),
+                                modifier = Modifier.clickable(onClick = { onCastClick(cast.id) })
+                            )
+                        }
                     }
                 }
             }
