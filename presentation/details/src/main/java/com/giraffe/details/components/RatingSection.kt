@@ -1,6 +1,7 @@
 package com.giraffe.details.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,10 +32,7 @@ fun RatingSection(
 ) {
     val rated = !(rate == null || rate == 0)
     Column(
-        modifier = modifier
-            .noHoverClickable (
-                onClick = onClickCard
-            ),
+        modifier = modifier,
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -57,6 +55,9 @@ fun RatingSection(
                 )
                 .background(
                     color = Theme.color.background.card
+                )
+                .clickable (
+                    onClick = onClickCard
                 )
                 .padding(
                     all = 16.dp
