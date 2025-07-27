@@ -217,8 +217,8 @@ private fun LazyListScope.keywordsSection(
                 else painterResource(Theme.icons.outline.close),
                 onClickItem = onKeywordsClick,
                 onClickIcon = {
-                    if (isKeyboardVisible) onKeywordClearClick(keyWord)
-                    else onKeywordArrowClick(keyWord)
+                    if (isKeyboardVisible) onKeywordArrowClick(keyWord)
+                    else onKeywordClearClick(keyWord)
                 }
             )
         }
