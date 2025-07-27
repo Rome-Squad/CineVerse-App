@@ -147,6 +147,7 @@ private fun MovieDetailsContent(
                 imageUrl = state.movie.posterUrl,
                 genres = state.movieGenres,
                 releaseYear = state.movie.releaseYear,
+                duration = state.movie.duration,
                 onClickAdd = interaction::onAddToCollectionClick,
                 onClickPlay = {},
                 isScrolled = scrollState.value > 0,
