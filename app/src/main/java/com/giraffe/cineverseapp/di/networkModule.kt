@@ -1,9 +1,7 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.cineverseapp.BuildConfig.ACCESS_TOKEN
-import com.giraffe.cineverseapp.BuildConfig.BASE_URL
+import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.createRetrofitClient
-import com.giraffe.cineverseapp.data.network.provideRetrofitService
 import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
@@ -24,86 +22,131 @@ import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
 import com.giraffe.user.util.RetrofitUserRequestBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
-import org.koin.core.module.dsl.singleOf
-import org.koin.core.qualifier.named
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
-private const val QUALIFIER_MOVIES_BUILDER = "movies_builder"
-private const val QUALIFIER_SERIES_BUILDER = "series_builder"
-private const val QUALIFIER_EXPLORE_BUILDER = "explore_builder"
-private const val QUALIFIER_PERSON_BUILDER = "person_builder"
-private const val QUALIFIER_USER_BUILDER = "user_builder"
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
 
-val networkModule = module {
+    @Provides
+    @Singleton
+    fun provideBaseUrl(): String = BuildConfig.BASE_URL
 
-    single(named(BASE_URL)) { BASE_URL }
-    single(named(ACCESS_TOKEN)) { ACCESS_TOKEN }
+    @Provides
+    @Singleton
+    fun provideAccessToken(): String = BuildConfig.ACCESS_TOKEN
 
-    single {
-        createRetrofitClient(get(named(ACCESS_TOKEN)))
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(accessToken: String): OkHttpClient = createRetrofitClient(accessToken)
+
+    @Provides
+    @Singleton
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
     }
-    single {
-        Json {
-            ignoreUnknownKeys = true
-            coerceInputValues = true
-        }
-    }
-    single {
-        Retrofit.Builder()
-            .baseUrl(get<String>(named(BASE_URL)))
-            .addConverterFactory(get<Json>().asConverterFactory("application/json".toMediaType()))
-            .client(get())
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(baseUrl: String, json: Json, client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .client(client)
             .build()
     }
 
-    single { provideRetrofitService<MoviesApiServiceRetrofit>(get()) }
-    single { provideRetrofitService<SeriesApiServiceRetrofit>(get()) }
-    single { provideRetrofitService<ExploreApiServiceRetrofit>(get()) }
-    single { provideRetrofitService<PersonApiServiceRetrofit>(get()) }
-    single { provideRetrofitService<UserApiServiceRetrofit>(get()) }
+    @Provides
+    @Singleton
+    fun provideMoviesApi(retrofit: Retrofit): MoviesApiServiceRetrofit =
+        retrofit.create(MoviesApiServiceRetrofit::class.java)
 
-    single<RetrofitRequestBuilder<MoviesApiServiceRetrofit>>(named(QUALIFIER_MOVIES_BUILDER)) {
-        val api = get<Retrofit>().create(MoviesApiServiceRetrofit::class.java)
-        RetrofitRequestBuilder(api)
-    }
+    @Provides
+    @Singleton
+    fun provideSeriesApi(retrofit: Retrofit): SeriesApiServiceRetrofit =
+        retrofit.create(SeriesApiServiceRetrofit::class.java)
 
-    single<RetrofitRequestBuilder<SeriesApiServiceRetrofit>>(named(QUALIFIER_SERIES_BUILDER)) {
-        val api = get<Retrofit>().create(SeriesApiServiceRetrofit::class.java)
-        RetrofitRequestBuilder(api)
-    }
+    @Provides
+    @Singleton
+    fun provideExploreApi(retrofit: Retrofit): ExploreApiServiceRetrofit =
+        retrofit.create(ExploreApiServiceRetrofit::class.java)
 
-    single<RetrofitRequestBuilder<ExploreApiServiceRetrofit>>(named(QUALIFIER_EXPLORE_BUILDER)) {
-        val api = get<Retrofit>().create(ExploreApiServiceRetrofit::class.java)
+    @Provides
+    @Singleton
+    fun providePersonApi(retrofit: Retrofit): PersonApiServiceRetrofit =
+        retrofit.create(PersonApiServiceRetrofit::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApiServiceRetrofit =
+        retrofit.create(UserApiServiceRetrofit::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMoviesRequestBuilder(api: MoviesApiServiceRetrofit): RetrofitRequestBuilder<MoviesApiServiceRetrofit> =
         RetrofitRequestBuilder(api)
-    }
-    single<RetrofitUserRequestBuilder<UserApiServiceRetrofit>>(named(QUALIFIER_USER_BUILDER)) {
-        val api = get<Retrofit>().create(UserApiServiceRetrofit::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSeriesRequestBuilder(api: SeriesApiServiceRetrofit): RetrofitRequestBuilder<SeriesApiServiceRetrofit> =
+        RetrofitRequestBuilder(api)
+
+    @Provides
+    @Singleton
+    fun provideExploreRequestBuilder(api: ExploreApiServiceRetrofit): RetrofitRequestBuilder<ExploreApiServiceRetrofit> =
+        RetrofitRequestBuilder(api)
+
+    @Provides
+    @Singleton
+    fun providePersonRequestBuilder(api: PersonApiServiceRetrofit): RetrofitRequestBuilder<PersonApiServiceRetrofit> =
+        RetrofitRequestBuilder(api)
+
+    @Provides
+    @Singleton
+    fun provideUserRequestBuilder(api: UserApiServiceRetrofit): RetrofitUserRequestBuilder<UserApiServiceRetrofit> =
         RetrofitUserRequestBuilder(api)
-    }
 
+    @Provides
+    @Singleton
+    fun provideExploreRemoteDataSource(builder: RetrofitRequestBuilder<ExploreApiServiceRetrofit>): ExploreRemoteDataSource =
+        ExploreRemoteDataSourceImplRetrofit(builder)
 
-    single<ExploreRemoteDataSource> {
-        ExploreRemoteDataSourceImplRetrofit(get(named(QUALIFIER_EXPLORE_BUILDER)))
-    }
-    single<RetrofitRequestBuilder<PersonApiServiceRetrofit>>(named(QUALIFIER_PERSON_BUILDER)) {
-        val api = get<Retrofit>().create(PersonApiServiceRetrofit::class.java)
-        RetrofitRequestBuilder(api)
-    }
-    single<MoviesRemoteDataSource> {
-        MoviesRemoteDataSourceImplRetrofit(get(named(QUALIFIER_MOVIES_BUILDER)))
-    }
-    single<PersonRemoteDataSource> {
-        PersonRemoteDataSourceImplRetrofit(get(named(QUALIFIER_PERSON_BUILDER)))
-    }
-    single<SeriesRemoteDataSource> {
-        SeriesRemoteRetrofitDataSourceImp(get(named(QUALIFIER_SERIES_BUILDER)))
-    }
-    single<UserRemoteDataSource> {
-        UserRemoteDataSourceImplRetrofit(get(named(QUALIFIER_USER_BUILDER)))
-    }
-    singleOf(::SessionIdManagerImpl) bind SessionManager::class
+    @Provides
+    @Singleton
+    fun provideMoviesRemoteDataSource(builder: RetrofitRequestBuilder<MoviesApiServiceRetrofit>): MoviesRemoteDataSource =
+        MoviesRemoteDataSourceImplRetrofit(builder)
+
+    @Provides
+    @Singleton
+    fun providePersonRemoteDataSource(builder: RetrofitRequestBuilder<PersonApiServiceRetrofit>): PersonRemoteDataSource =
+        PersonRemoteDataSourceImplRetrofit(builder)
+
+    @Provides
+    @Singleton
+    fun provideSeriesRemoteDataSource(builder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>): SeriesRemoteDataSource =
+        SeriesRemoteRetrofitDataSourceImp(builder)
+
+    @Provides
+    @Singleton
+    fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>): UserRemoteDataSource =
+        UserRemoteDataSourceImplRetrofit(builder)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class SessionManagerModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindSessionManager(impl: SessionIdManagerImpl): SessionManager
 }

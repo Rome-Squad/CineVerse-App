@@ -4,8 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.media.person.usecase.GetPersonImagesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class GalleryViewModel(
+@HiltViewModel
+class GalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     val getPersonImagesUseCase: GetPersonImagesUseCase
 ) : BaseViewModel<GalleryUiState, Any>(GalleryUiState()) {

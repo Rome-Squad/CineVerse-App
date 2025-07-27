@@ -16,6 +16,8 @@ import com.giraffe.details.screens.recommended.movie.RecommendedInteractionListe
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -23,7 +25,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class RecommendedMoviesViewModel(
+@HiltViewModel
+class RecommendedMoviesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getRecommendedMovies: GetRecommendedMovieUseCase,
     private val getMovieGenres: GetMovieGenresUseCase

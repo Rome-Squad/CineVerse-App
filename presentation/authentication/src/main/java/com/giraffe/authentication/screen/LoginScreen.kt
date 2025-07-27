@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.authentication.R
 import com.giraffe.authentication.composable.LoginForm
 import com.giraffe.authentication.composable.LogoSection
@@ -26,12 +27,11 @@ import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
 import com.giraffe.designsystem.theme.Theme
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = koinViewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
     navigateToHomeScreen: () -> Unit ,
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},

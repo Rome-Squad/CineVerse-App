@@ -1,112 +1,166 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
-import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
-import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
-import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
-import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
-import com.giraffe.media.movies.usecase.ClearCacheUseCase
-import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
-import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
-import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
-import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
-import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
-import com.giraffe.media.movies.usecase.GetUserMovieRatingUseCase
-import com.giraffe.media.movies.usecase.InsertGenresUseCase
-import com.giraffe.media.movies.usecase.InsertMoviesUseCase
-import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
-import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
-import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
-import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
-import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
-import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
-import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
-import com.giraffe.media.person.usecase.GetPersonImagesUseCase
-import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
-import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
-import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
-import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
-import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
-import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
-import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
-import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
-import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
-import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
+import com.giraffe.media.explore.usecase.*
+import com.giraffe.media.movies.usecase.*
+import com.giraffe.media.person.usecase.*
+import com.giraffe.media.series.usecase.*
 import com.giraffe.user.usecase.LoginUseCase
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
+@Module
+@InstallIn(SingletonComponent::class)
+object UseCaseModule {
 
-val useCaseModule = module {
     // Explore UseCases
-    singleOf(::GetSearchKeywordsUseCase)
-    singleOf(::InsertSearchKeywordUseCase)
-    singleOf(::DeleteKeywordUseCase)
-    singleOf(::ClearSearchHistoryUseCase)
+    @Provides
+    @Singleton
+    fun provideGetSearchKeywordsUseCase(impl: GetSearchKeywordsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideInsertSearchKeywordUseCase(impl: InsertSearchKeywordUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideDeleteKeywordUseCase(impl: DeleteKeywordUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideClearSearchHistoryUseCase(impl: ClearSearchHistoryUseCase) = impl
 
     // Series UseCases
-    singleOf(::ClearRecentSeriesUseCase)
-    singleOf(::GetRecentSeriesUseCase)
-    singleOf(::GetSeriesGenresUseCase)
-    singleOf(::SearchSeriesByNameUseCase)
-    singleOf(::StoreRecentSeriesUseCase)
-    singleOf(::GetRecommendedSeriesUseCase)
-    singleOf(::GetSeriesDetailsUseCase)
-    singleOf(::GetLastSeasonsUseCase)
-    singleOf(::GetSeriesReviewsUseCase)
-    singleOf(::GetSeriesByGenresUseCase)
-    singleOf(::GetSeriesGenresByIdsUseCase)
-    singleOf(::GetPopularitySeriesUseCase)
-    singleOf(::GetRecentlyReleasedSeriesUseCase)
-    singleOf(::GetTopRatedSeriesUseCase)
+    @Provides
+    @Singleton
+    fun provideClearRecentSeriesUseCase(impl: ClearRecentSeriesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetRecentSeriesUseCase(impl: GetRecentSeriesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetSeriesGenresUseCase(impl: GetSeriesGenresUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideSearchSeriesByNameUseCase(impl: SearchSeriesByNameUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideStoreRecentSeriesUseCase(impl: StoreRecentSeriesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetRecommendedSeriesUseCase(impl: GetRecommendedSeriesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetSeriesDetailsUseCase(impl: GetSeriesDetailsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetLastSeasonsUseCase(impl: GetLastSeasonsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetSeriesReviewsUseCase(impl: GetSeriesReviewsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetSeriesByGenresUseCase(impl: GetSeriesByGenresUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetSeriesGenresByIdsUseCase(impl: GetSeriesGenresByIdsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetPopularitySeriesUseCase(impl: GetPopularitySeriesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetRecentlyReleasedSeriesUseCase(impl: GetRecentlyReleasedSeriesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetTopRatedSeriesUseCase(impl: GetTopRatedSeriesUseCase) = impl
 
     // Movie UseCases
-    singleOf(::SearchMovieByNameUseCase)
-    singleOf(::GetMoviesGenresUseCase)
-    singleOf(::GetMoviesByGenresUseCase)
-    singleOf(::InsertMoviesUseCase)
-    singleOf(::InsertGenresUseCase)
-    singleOf(::GetRecommendedMovieUseCase)
-    singleOf(::ClearCacheUseCase)
-    singleOf(::SetMovieRecentUseCase)
-    singleOf(::GetRecentlyMoviesUseCase)
-    singleOf(::ClearRecentlyMoviesUseCase)
-    singleOf(::GetMovieGenresUseCase)
-    singleOf(::GetRecentlyReleasedMoviesUseCase)
-    singleOf(::GetPopularityMoviesUseCase)
-    singleOf(::GetUpcomingMoviesUseCase)
+    @Provides
+    @Singleton
+    fun provideSearchMovieByNameUseCase(impl: SearchMovieByNameUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetMoviesGenresUseCase(impl: GetMoviesGenresUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetMoviesByGenresUseCase(impl: GetMoviesByGenresUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideInsertMoviesUseCase(impl: InsertMoviesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideInsertGenresUseCase(impl: InsertGenresUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetRecommendedMovieUseCase(impl: GetRecommendedMovieUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideClearCacheUseCase(impl: ClearCacheUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideSetMovieRecentUseCase(impl: SetMovieRecentUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetRecentlyMoviesUseCase(impl: GetRecentlyMoviesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideClearRecentlyMoviesUseCase(impl: ClearRecentlyMoviesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetMovieGenresUseCase(impl: GetMovieGenresUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetRecentlyReleasedMoviesUseCase(impl: GetRecentlyReleasedMoviesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetPopularityMoviesUseCase(impl: GetPopularityMoviesUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetUpcomingMoviesUseCase(impl: GetUpcomingMoviesUseCase) = impl
 
-
-    // NEW: Add UseCases for Movie Details and Rating
-    singleOf(::GetMovieDetailsUseCase)
-    singleOf(::GetMovieReviewsUseCase)
-    singleOf(::AddMovieRatingUseCase)
-    singleOf(::GetUserMovieRatingUseCase)
+    @Provides
+    @Singleton
+    fun provideGetMovieDetailsUseCase(impl: GetMovieDetailsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetMovieReviewsUseCase(impl: GetMovieReviewsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideAddMovieRatingUseCase(impl: AddMovieRatingUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetUserMovieRatingUseCase(impl: GetUserMovieRatingUseCase) = impl
 
     // Person UseCases
-    singleOf(::ClearRecentPeopleUseCase)
-    singleOf(::GetRecentPeopleUseCase)
-    singleOf(::SearchPeopleByNameUseCase)
-    singleOf(::StoreRecentPersonUseCase)
-    singleOf(::GetPeopleByMovieIdUseCase)
-    singleOf(::GetPeopleBySeriesIdUseCase)
-    singleOf(::GetPersonDetailsUseCase)
-    singleOf(::GetPeopleMediaCreditsUseCase)
+    @Provides
+    @Singleton
+    fun provideClearRecentPeopleUseCase(impl: ClearRecentPeopleUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetRecentPeopleUseCase(impl: GetRecentPeopleUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideSearchPeopleByNameUseCase(impl: SearchPeopleByNameUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideStoreRecentPersonUseCase(impl: StoreRecentPersonUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetPeopleByMovieIdUseCase(impl: GetPeopleByMovieIdUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetPeopleBySeriesIdUseCase(impl: GetPeopleBySeriesIdUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetPersonDetailsUseCase(impl: GetPersonDetailsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetPeopleMediaCreditsUseCase(impl: GetPeopleMediaCreditsUseCase) = impl
+    @Provides
+    @Singleton
+    fun provideGetPersonImagesUseCase(impl: GetPersonImagesUseCase) = impl
 
-    //Auth useCase
-    singleOf(::LoginUseCase)
-    singleOf(::GetPersonImagesUseCase)
+    // Auth UseCase
+    @Provides
+    @Singleton
+    fun provideLoginUseCase(impl: LoginUseCase) = impl
 }

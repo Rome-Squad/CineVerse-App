@@ -18,9 +18,12 @@ import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 
-class SearchResultViewModel(
+@HiltViewModel
+class SearchResultViewModel @Inject constructor(
     private val query: String,
     private val searchMovieByName: SearchMovieByNameUseCase,
     private val searchSeriesByName: SearchSeriesByNameUseCase,

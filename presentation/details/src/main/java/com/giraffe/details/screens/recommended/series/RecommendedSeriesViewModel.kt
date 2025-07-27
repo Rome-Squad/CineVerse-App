@@ -13,6 +13,8 @@ import com.giraffe.details.models.SeriesUi
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +23,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class RecommendedSeriesViewModel(
+@HiltViewModel
+class RecommendedSeriesViewModel @Inject constructor(
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesGenres: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
