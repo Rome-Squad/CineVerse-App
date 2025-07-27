@@ -108,21 +108,17 @@ fun SeriesDetailsContent(
                 }
             }
 
-            AnimatedVisibility(state.cast.isNotEmpty()) {
-                StarCastSection(
-                    title = stringResource(R.string.star_cast),
-                    castList = state.cast,
-                    onCastClick = interaction::navigateToCastDetailsScreen
-                )
-            }
+            StarCastSection(
+                title = stringResource(R.string.star_cast),
+                castList = state.cast,
+                onCastClick = interaction::navigateToCastDetailsScreen
+            )
 
-            AnimatedVisibility(state.crew.isNotEmpty()) {
-                StaffInfoSection(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.behind_the_scenes),
-                    staffList = state.crew
-                )
-            }
+            StaffInfoSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.behind_the_scenes),
+                staffList = state.crew
+            )
 
             AnimatedVisibility(state.recommendedSeries.isNotEmpty()) {
                 PosterListSection(

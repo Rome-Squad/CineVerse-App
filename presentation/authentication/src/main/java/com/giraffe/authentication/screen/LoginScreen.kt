@@ -32,7 +32,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
-    navigateToHomeScreen: () -> Unit ,
+    navigateToHomeScreen: () -> Unit,
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},
     popBack: () -> Unit = {}
@@ -88,25 +88,18 @@ private fun LoginContent(
 
         LoginForm(
             modifier = Modifier
-                .weight(1f),
+                .padding(bottom = 96.dp),
             state = state,
             interaction = interaction
         )
 
         SecondaryButton(
+            modifier = Modifier.padding(bottom = 24.dp),
             text = stringResource(R.string.create_a_new_account),
             enabled = true,
             isLoading = false,
             onClick = interaction::onCreateNewAccountClick
         )
-
-        Box(
-            modifier = Modifier
-                .padding(top = 24.dp, bottom = 6.5.dp)
-                .size(width = 120.dp, height = 3.dp)
-                .background(Theme.color.shade.secondary)
-        )
-
         BaseBottomSheet(
             isVisible = state.isVisibleCreateNewAccountBottomSheet,
             onDismiss = interaction::onDismissCreateNewAccountBottomSheet,
@@ -123,12 +116,7 @@ private fun LoginContent(
                     onClickPrimaryButton = interaction::onGoToWebsiteClick,
                     onClickSecondaryButton = interaction::onDismissCreateNewAccountBottomSheet
                 )
-            })
+            }
+        )
     }
-}
-
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(navigateToHomeScreen={})
 }
