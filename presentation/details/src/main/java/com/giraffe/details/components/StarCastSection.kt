@@ -62,7 +62,10 @@ fun StarCastSection(
                             actorName = cast.name,
                             character = cast.role,
                             actorImage = cast.urlImage.toString(),
-                            modifier = Modifier.clickable(onClick = { onCastClick(cast.id) })
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = { onCastClick(cast.id) }
+                                )
                         )
                     }
                 }
