@@ -1,7 +1,6 @@
 package com.giraffe.details.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -31,7 +31,10 @@ fun RatingSection(
 ) {
     val rated = !(rate == null || rate == 0)
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .noHoverClickable (
+                onClick = onClickCard
+            ),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -57,9 +60,7 @@ fun RatingSection(
                 )
                 .padding(
                     all = 16.dp
-                ).clickable {
-                onClickCard()
-            },
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -118,8 +119,7 @@ fun RatingSection(
                         if (rated) {
                             RatingStars(
                                 rate = rate,
-                                starSize = 16.dp,
-                                onRateClickEnabled = false
+                                starSize = 16.dp
                             )
                         }
 
