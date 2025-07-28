@@ -28,7 +28,7 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = koinViewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
     navigateToHomeScreen: () -> Unit,
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},

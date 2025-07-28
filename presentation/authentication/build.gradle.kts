@@ -58,7 +58,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.ui.tooling)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.koin.androidx.compose)
 
     implementation(libs.accompanist.webview)
 

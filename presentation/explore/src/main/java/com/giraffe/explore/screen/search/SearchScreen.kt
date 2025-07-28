@@ -36,7 +36,6 @@ import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.SearchItem
 import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.media.explore.R
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(

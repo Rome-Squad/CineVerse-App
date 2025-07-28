@@ -46,7 +46,6 @@ dependencies {
     implementation(project(":api:details"))
     implementation(project(":api:explore"))
 
-    implementation(libs.koin.androidx.compose)
     implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.paging.compose)

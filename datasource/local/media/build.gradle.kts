@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -42,4 +44,7 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
 }

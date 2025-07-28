@@ -9,7 +9,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecommendedSeriesScreen(

@@ -25,7 +25,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecommendedMoviesScreen(

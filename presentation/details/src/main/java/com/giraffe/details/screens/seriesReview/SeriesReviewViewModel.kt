@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class SeriesReviewViewModel(
-    private val seriesId: Int,
+
     private val getSeriesReviews: GetSeriesReviewsUseCase
 ) : ViewModel() {
+
+    private val seriesId: Int = 228
     val reviewsFlow = Pager(config = PagingConfig(pageSize = 20), initialKey = 1) {
         BasePagingSource { page -> getSeriesReviews(seriesId, page) }
     }

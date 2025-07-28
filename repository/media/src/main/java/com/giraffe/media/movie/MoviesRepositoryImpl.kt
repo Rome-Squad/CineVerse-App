@@ -21,8 +21,9 @@ import com.giraffe.media.utils.SafeCall
 import com.giraffe.user.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MoviesRepositoryImpl(
+class MoviesRepositoryImpl @Inject constructor(
     private val local: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
     private val sessionManager: SessionManager,

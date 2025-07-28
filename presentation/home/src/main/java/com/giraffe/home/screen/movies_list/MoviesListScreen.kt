@@ -22,7 +22,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.components.ListTitleSection
 import com.giraffe.home.components.TransitionLazyColumnToGrid
 import com.giraffe.home.screen.home.MediaType
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesListScreen(

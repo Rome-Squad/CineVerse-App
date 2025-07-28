@@ -1,5 +1,6 @@
 package com.giraffe.home.screen.home
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.giraffe.home.R
@@ -79,6 +80,8 @@ class HomeViewModel @Inject constructor(
                 val recentlyViewedSeriesUi = recentlyViewedSeries.map { it.toHomeUiModel() }
 
                 val recentlyViewed = recentlyViewedSeriesUi + recentlyViewedMovieUi
+                Log.d("test", "loadHomeScreen: recentlyViewed: $recentlyViewed")
+
                 val pickedForYou = recommendedSeriesUi + recommendedMoviesUi
 
 

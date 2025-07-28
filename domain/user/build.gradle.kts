@@ -17,8 +17,9 @@ kotlin {
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.test)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    implementation("com.google.dagger:dagger:2.57")
+    kapt("com.google.dagger:dagger-compiler:2.57")
+
 }
 
 tasks.test {

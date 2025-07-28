@@ -45,7 +45,6 @@ dependencies {
     implementation(project(":domain:media"))
     implementation(project(":api:match"))
 
-    implementation(libs.koin.androidx.compose)
     implementation(libs.kotlinx.datetime)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)

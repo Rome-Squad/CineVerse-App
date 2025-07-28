@@ -128,8 +128,6 @@ dependencies {
     //datastore
     implementation(libs.datastore.preferences)
 
-    //koin
-    implementation(libs.koin.androidx.compose)
 
     //serialization
     implementation(libs.gson)
@@ -168,5 +166,8 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation("androidx.hilt:hilt-work:1.2.0")
     kapt("androidx.hilt:hilt-compiler:1.2.0")
+    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.3.0-alpha02")
+    implementation("androidx.hilt:hilt-work:1.2.0")
+
 
 }

@@ -37,8 +37,6 @@ dependencies {
     implementation(project(":repository:user"))
     implementation(project(":repository:media"))
 
-    //koin
-    implementation(libs.koin.androidx.compose)
 
 
 

@@ -2,7 +2,6 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.createRetrofitClient
-import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.ExploreRemoteDataSourceImplRetrofit
@@ -17,12 +16,10 @@ import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.RetrofitRequestBuilder
 import com.giraffe.repository.datasource.UserRemoteDataSource
-import com.giraffe.user.SessionManager
 import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
 import com.giraffe.user.util.RetrofitUserRequestBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +28,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -38,16 +36,19 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
+    @Named("BaseUrl")
     @Singleton
     fun provideBaseUrl(): String = BuildConfig.BASE_URL
 
     @Provides
+    @Named("AccessToken")
     @Singleton
     fun provideAccessToken(): String = BuildConfig.ACCESS_TOKEN
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(accessToken: String): OkHttpClient = createRetrofitClient(accessToken)
+    fun provideOkHttpClient(@Named("AccessToken") accessToken: String): OkHttpClient =
+        createRetrofitClient(accessToken)
 
     @Provides
     @Singleton
@@ -58,7 +59,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String, json: Json, client: OkHttpClient): Retrofit {
+    fun provideRetrofit(
+        @Named("BaseUrl") baseUrl: String,
+        json: Json,
+        client: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -140,13 +145,4 @@ object NetworkModule {
     @Singleton
     fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>): UserRemoteDataSource =
         UserRemoteDataSourceImplRetrofit(builder)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class SessionManagerModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindSessionManager(impl: SessionIdManagerImpl): SessionManager
 }

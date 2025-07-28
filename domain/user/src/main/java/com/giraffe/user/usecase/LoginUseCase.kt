@@ -4,8 +4,9 @@ import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
 import com.giraffe.user.exception.InvalidUsernameOrPasswordException
 import com.giraffe.user.repository.AuthRepository
+import javax.inject.Inject
 
-class LoginUseCase(private val authRepository: AuthRepository) {
+class LoginUseCase @Inject constructor(private val authRepository: AuthRepository) {
 
     suspend operator fun invoke(userInput: String, password: String) {
         validateUsername(userInput)

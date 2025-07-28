@@ -4,8 +4,9 @@ import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.util.RetrofitRequestBuilder
+import javax.inject.Inject
 
-class SeriesRemoteRetrofitDataSourceImp(
+class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
     private val retrofitRequestBuilder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>
 ) : SeriesRemoteDataSource {
 

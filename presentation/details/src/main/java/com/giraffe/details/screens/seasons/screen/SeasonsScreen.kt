@@ -15,7 +15,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.screens.seasons.SeasonsViewModel
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SeasonsScreen(
