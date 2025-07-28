@@ -15,7 +15,7 @@ class ExploreApiImp(
 
         ExploreNavGraph(
             navController = navController,
-            detailsApi = detailsApi
+            detailsApi = detailsApi,
         )
     }
 }

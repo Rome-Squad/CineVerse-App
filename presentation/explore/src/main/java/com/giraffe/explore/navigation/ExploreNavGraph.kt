@@ -36,7 +36,7 @@ internal fun ExploreNavGraph(
         enterTransition = { fadeIn(transitionSpecs) },
         exitTransition = { fadeOut(transitionSpecs) },
         popEnterTransition = { fadeIn(transitionSpecs) },
-        popExitTransition = { fadeOut(transitionSpecs) }
+        popExitTransition = { fadeOut(transitionSpecs) },
     ) {
         discoverRoute(
             navigateToMovieDetails = navController::navigateToMovieDetails,
@@ -82,5 +82,9 @@ internal fun ExploreNavGraph(
                 navController.popBackStack()
             }
         }
+
+
     }
+
+
 }

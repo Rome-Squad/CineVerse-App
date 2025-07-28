@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,35 +34,37 @@ enum class BottomTab {
 fun BottomNavigationBar(
     selectedTab: BottomTab,
     onTabSelected: (BottomTab) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isBottomBarVisible: Boolean = true
 ) {
-    Column(
-        modifier = modifier.background(Theme.color.background.card)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(Theme.color.stroke.primary)
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+    AnimatedVisibility(isBottomBarVisible) {
+        Column(
+            modifier = modifier.background(Theme.color.background.card)
         ) {
-            BottomTab.entries.forEach { tab ->
-                BuildingBlock(
-                    icon = tab.getPainterForTab(),
-                    label = tab.getLabelForTab(),
-                    isSelected = selectedTab == tab,
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable { onTabSelected(tab) }
-                        .padding(vertical = 13.dp)
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Theme.color.stroke.primary)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                BottomTab.entries.forEach { tab ->
+                    BuildingBlock(
+                        icon = tab.getPainterForTab(),
+                        label = tab.getLabelForTab(),
+                        isSelected = selectedTab == tab,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { onTabSelected(tab) }
+                            .padding(vertical = 13.dp)
+                    )
+                }
             }
         }
     }
-
 }
 
 @Composable
