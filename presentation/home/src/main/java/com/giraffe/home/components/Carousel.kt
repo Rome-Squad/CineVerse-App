@@ -1,50 +1,37 @@
 package com.giraffe.home.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.zIndex
 import com.giraffe.designsystem.composable.CinePreview
-import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.screen.home.PopularMediaUiModel
-import com.giraffe.imageviewer.component.SafeIslamicImage
+import kotlin.math.abs
 
 @Composable
 fun Carousel(
@@ -53,86 +40,75 @@ fun Carousel(
     onClickItem: (Int, MediaType) -> Unit
 ) {
     val pagerState = rememberPagerState(2) { movieCards.size }
-    HorizontalPager(
-        modifier = modifier,
-        beyondViewportPageCount = movieCards.size,
-        pageSpacing = (-50).dp,
-        contentPadding = PaddingValues(horizontal = 24.dp),
-        state = pagerState,
-    ) { pageIndex ->
-        val isSelected = pageIndex == pagerState.currentPage
-        val zIndex = animateFloatAsState(
-            targetValue = if (isSelected) 1f else 0f,
-            label = "ZIndexAnimation"
-        ).value
+    val currentMovieCard = movieCards[pagerState.currentPage]
+    val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
+    val width = screenWidthDp - 48.dp
+    val initialHeight = width * (200f / 312f)
 
-        val offsetY = animateDpAsState(
-            targetValue = if (isSelected) (-24).dp else 0.dp,
-            animationSpec = tween(400, easing = FastOutSlowInEasing),
-            label = "VerticalOffsetAnimation"
-        ).value
-
-        val scale = animateFloatAsState(
-            targetValue = if (isSelected) 1f else 0.8f,
-            animationSpec = tween(400, easing = FastOutSlowInEasing),
-            label = "ScaleAnimation"
-        ).value
-
-        val alpha = animateFloatAsState(
-            targetValue = if (isSelected) 1f else 0.7f,
-            animationSpec = tween(400, easing = FastOutSlowInEasing),
-            label = "AlphaAnimation"
-        ).value
-        MovieItem(
-            modifier = Modifier
-                .zIndex(zIndex)
-                .offset(y = offsetY)
-                .scale(scale)
-                .alpha(alpha)
-                .clickable {
-                    onClickItem(
-                        movieCards[pageIndex].id,
-                        movieCards[pageIndex].mediaType
-                    )
-                },
-            movieCard = movieCards[pageIndex],
-            isSelected = isSelected
-        )
-    }
-}
-
-@Composable
-private fun MovieItem(
-    modifier: Modifier = Modifier,
-    movieCard: PopularMediaUiModel,
-    isSelected: Boolean
-) {
-    val width = animateDpAsState(
-        targetValue = if (!isSelected) 312.dp else 360.dp,
-        label = "ImageWidthAnimation"
-    ).value
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = initialHeight + 68.dp)
     ) {
-        Cover(
-            modifier = Modifier.width(width),
-            imageUrl = movieCard.posterUrl,
-            rate = movieCard.rating,
-            isSelected = isSelected
-        )
-        if (isSelected) {
-            Column(
+        HorizontalPager(
+            modifier = Modifier
+                .align(Alignment.BottomCenter),
+            beyondViewportPageCount = movieCards.size,
+            pageSpacing = (-24).dp,
+            contentPadding = PaddingValues(horizontal = 24.dp),
+            state = pagerState,
+        ) { pageIndex ->
+            val isSelected = pageIndex == pagerState.currentPage
+            val movieCard = movieCards[pageIndex]
+
+            val pageOffset =
+                (pageIndex - pagerState.currentPage) + pagerState.currentPageOffsetFraction
+            val progress = 1f - abs(pageOffset).coerceIn(0f, 1f)
+
+            val extraHeight = 38.dp * (1f - progress)
+            val dynamicHeight = initialHeight + extraHeight
+
+            val alpha = androidx.compose.ui.util.lerp(.7f, 1f, progress)
+            val offsetY = lerp(0.dp, (-48).dp, progress)
+            val zIndex = progress
+
+            MovieItem(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .padding(bottom = 7.dp),
+                    .graphicsLayer {
+                        translationY = offsetY.toPx()
+                    }
+                    .width(width)
+                    .height(dynamicHeight)
+                    .zIndex(zIndex)
+                    .alpha(alpha)
+                    .clickable {
+                        onClickItem(
+                            movieCard.id,
+                            movieCard.mediaType
+                        )
+                    }
+                    .align(Alignment.TopCenter),
+                movieCard = movieCard,
+                isSelected = isSelected
+            )
+        }
+
+        AnimatedContent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(horizontal = 12.dp)
+                .align(Alignment.BottomCenter),
+            targetState = currentMovieCard,
+        ) { movieCard ->
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .widthIn(max = screenWidthDp - 48.dp)
                         .padding(horizontal = 50.dp),
                     text = movieCard.title,
                     style = Theme.textStyle.body.md.medium,
@@ -154,63 +130,6 @@ private fun MovieItem(
         }
     }
 }
-
-@Composable
-private fun Cover(
-    modifier: Modifier = Modifier,
-    imageUrl: String,
-    rate: Float,
-    isSelected: Boolean
-) {
-    Box {
-        SafeIslamicImage(
-            modifier = modifier
-                .aspectRatio(312 / 200f)
-                .clip(RoundedCornerShape(Theme.radius.xl))
-                .shadow(
-                    80.dp,
-                    RoundedCornerShape(Theme.radius.xl),
-                    ambientColor = Color.Black.copy(.4f)
-                ),
-            imageUrl = imageUrl,
-            contentDescription = "cover",
-            contentScale = ContentScale.Crop
-        )
-        AnimatedVisibility(
-            modifier = Modifier.align(Alignment.TopEnd),
-            visible = isSelected,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .background(
-                        color = Theme.color.background.card,
-                        shape = RoundedCornerShape(Theme.radius.full),
-                    )
-                    .padding(vertical = 4.dp)
-                    .padding(start = 8.dp, end = 6.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = String.format("%.1f", rate),
-                    style = Theme.textStyle.label.md.medium,
-                    color = Theme.color.shade.primary
-                )
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    painter = painterResource(Theme.icons.dueTone.star),
-                    tint = Theme.color.additional.primary.yellow,
-                    contentDescription = "star rate"
-                )
-            }
-        }
-    }
-
-}
-
 
 @CinePreview
 @Composable
