@@ -71,6 +71,7 @@ fun SearchResultContent(
     val context = LocalContext.current
     val actors = state.actors.collectAsLazyPagingItems()
     val posters = state.selectedPosters.collectAsLazyPagingItems()
+
     Box {
         LazyColumn(
             modifier = Modifier
@@ -103,22 +104,42 @@ fun SearchResultContent(
                     modifier = Modifier
                         .fillParentMaxSize(),
                 ) {
-                    if (posters.loadState.refresh is LoadState.Loading) {
-                        Progress(
-                            size = 32.dp,
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(top = 16.dp)
-                        )
-                    }else if (state.errorMessage != null) {
+                    // If network is unavailable
+                    if (!state.isNetworkAvailable) {
                         NoInternetConnection(modifier = Modifier.padding(16.dp))
-                    }  else {
-
-                        if (state.selectedTab == SearchTab.ACTORS) {
-                            if (actors.itemCount != 0) {
-                                ActorsSection(
-                                    actors = actors,
-                                    navigateToCastDetails = navigateToCastDetails
+                    } else {
+                        if (posters.loadState.refresh is LoadState.Loading) {
+                            Progress(
+                                size = 32.dp,
+                                modifier = Modifier
+                                    .align(Alignment.TopCenter)
+                                    .padding(top = 16.dp)
+                            )
+                        } else {
+                            if (state.selectedTab == SearchTab.ACTORS) {
+                                if (actors.itemCount != 0) {
+                                    ActorsSection(
+                                        actors = actors,
+                                        navigateToCastDetails = navigateToCastDetails
+                                    )
+                                } else {
+                                    NothingFound(
+                                        modifier = Modifier
+                                            .padding(horizontal = 60.dp)
+                                            .padding(top = 195.dp)
+                                    )
+                                }
+                            } else if (posters.itemCount != 0) {
+                                TransitionLazyColumnToGrid(
+                                    posters = posters,
+                                    isListSelected = !state.isGridSelected,
+                                    onPosterClicked = { id ->
+                                        when (state.selectedTab) {
+                                            SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                            SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                            SearchTab.ACTORS -> navigateToCastDetails(id)
+                                        }
+                                    }
                                 )
                             } else {
                                 NothingFound(
@@ -127,46 +148,13 @@ fun SearchResultContent(
                                         .padding(top = 195.dp)
                                 )
                             }
-                        } else if (posters.itemCount != 0) {
-                            TransitionLazyColumnToGrid(
-                                posters = posters,
-                                isListSelected = !state.isGridSelected,
-                                onPosterClicked = { id ->
-                                    when (state.selectedTab) {
-                                        SearchTab.MOVIES -> navigateToMovieDetails(id)
-                                        SearchTab.SERIES -> navigateToSeriesDetails(id)
-                                        SearchTab.ACTORS -> navigateToCastDetails(id)
-                                    }
-                                }
-                            )
-                        } else {
-                            NothingFound(
-                                modifier = Modifier
-                                    .padding(horizontal = 60.dp)
-                                    .padding(top = 195.dp)
-                            )
                         }
                     }
                 }
             }
         }
-        AnimatedVisibility(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .navigationBarsPadding()
-                .padding(bottom = 16.dp, end = 16.dp),
-            visible = state.selectedTab != SearchTab.ACTORS,
-            enter = slideInHorizontally { it * 2 },
-            exit = slideOutHorizontally { it * 2 }
-        ) {
-            ViewToggle(
-                isListSelected = !state.isGridSelected,
-                onGridSelected = interactions::changeView,
-            )
-        }
     }
 }
-
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
