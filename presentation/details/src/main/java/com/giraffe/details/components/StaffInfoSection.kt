@@ -1,5 +1,6 @@
 package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,38 +32,40 @@ fun StaffInfoSection(
     staffList: Map<String, List<String>>,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+    AnimatedVisibility(staffList.isNotEmpty()) {
+        Column(
+            modifier = modifier
         ) {
-            Text(
-                text = title,
-                color = Theme.color.shade.primary,
-                style = Theme.textStyle.title.sm,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-        }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    color = Theme.color.shade.primary,
+                    style = Theme.textStyle.title.sm,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
 
-        CustomCard(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(Theme.radius.lg),
-        ) {
-            Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                staffList.entries.toList().forEachIndexed { index, (key, value) ->
-                    val name = value.joinToString(stringResource(R.string.split))
-                    StaffItem(name = name, role = key)
+            CustomCard(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(Theme.radius.lg),
+            ) {
+                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                    staffList.entries.toList().forEachIndexed { index, (key, value) ->
+                        val name = value.joinToString(stringResource(R.string.split))
+                        StaffItem(name = name, role = key)
 
-                    if (index != staffList.entries.size - 1) {
-                        Box(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(Theme.color.stroke.primary)
-                        )
+                        if (index != staffList.entries.size - 1) {
+                            Box(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(Theme.color.stroke.primary)
+                            )
+                        }
                     }
                 }
             }

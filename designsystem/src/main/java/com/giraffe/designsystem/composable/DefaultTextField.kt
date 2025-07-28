@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,11 +44,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -66,28 +67,26 @@ fun DefaultTextField(
     singleLine: Boolean = false,
     maxCharacters: Int = 25,
     errorMessage: String? = null,
+    enabled: Boolean = true,
     readOnly: Boolean = false,
     isPassword: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
-    onClicked: () -> Unit = {},
     onStartIconClick: ((String) -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onForgotPasswordClick: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
-
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
     LaunchedEffect(isFocused) {
         onFocusChanged(isFocused)
         if (isFocused && readOnly) {
-            onClicked()
             focusManager.clearFocus()
         }
     }
-
     val hasError = errorMessage != null
     var showPassword by remember { mutableStateOf(false) }
     val borderColor by animateColorAsState(
@@ -139,17 +138,25 @@ fun DefaultTextField(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .focusRequester(focusRequester),
+                    .focusRequester(focusRequester)
+                    .clickable(
+                        enabled = !enabled,
+                        onClick = onClick
+                    ),
                 interactionSource = interactionSource,
-                readOnly = readOnly,
+                enabled = enabled,
                 value = value,
                 maxLines = maxLines,
                 singleLine = singleLine,
-                onValueChange = {
-                    Log.i("maxCharacters", it.length.toString())
-                    if (it.length <= maxCharacters) {
-                        if (it.contains("\n")) onValueChange(it.replace("\n", " "))
-                        else onValueChange(it)
+                onValueChange = { newValue ->
+                    if (newValue.length <= maxCharacters) {
+                        if (newValue.contains("\n")) onValueChange(
+                            newValue.replace(
+                                "\n",
+                                " "
+                            )
+                        )
+                        else onValueChange(newValue)
                     }
                 },
                 textStyle = Theme.textStyle.body.md.medium,
@@ -216,7 +223,9 @@ fun DefaultTextField(
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .clickable(onClick = onForgotPasswordClick)
+                    .noHoverClickable(
+                        onClick = onForgotPasswordClick
+                    )
             )
         }
     }
@@ -254,7 +263,10 @@ private fun TextField(
     val focused = source.collectIsFocusedAsState().value
     val borderCol = if (focused) colors.focusedBorderColor else colors.unfocusedBorderColor
     val mergedTextStyle = textStyle.merge(
-        TextStyle(color = textStyle.color.takeOrElse { colors.textColor })
+        TextStyle(
+            color = textStyle.color.takeOrElse { colors.textColor },
+            textDirection = TextDirection.ContentOrLtr
+        )
     )
 
     CompositionLocalProvider(LocalTextSelectionColors provides LocalTextSelectionColors.current) {

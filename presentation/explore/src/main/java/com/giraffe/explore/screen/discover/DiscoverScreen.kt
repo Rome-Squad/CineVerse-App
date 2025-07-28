@@ -74,6 +74,7 @@ fun ExploreContent(
                     modifier = Modifier.padding(bottom = 12.dp),
                     endIcon = painterResource(Theme.icons.outline.microphone),
                     placeholder = stringResource(R.string.search),
+                    enabled = false,
                     readOnly = true,
                     onTextFieldClicked = navigateToSearch
                 )

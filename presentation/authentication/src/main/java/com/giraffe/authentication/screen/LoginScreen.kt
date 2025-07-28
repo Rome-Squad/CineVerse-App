@@ -1,11 +1,9 @@
 package com.giraffe.authentication.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.authentication.R
@@ -31,8 +28,8 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = hiltViewModel(),
-    navigateToHomeScreen: () -> Unit ,
+    viewModel: LoginViewModel = koinViewModel(),
+    navigateToHomeScreen: () -> Unit,
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},
     popBack: () -> Unit = {}
@@ -64,7 +61,9 @@ fun LoginScreen(
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier, state: LoginScreenState, interaction: LoginInteractionListener
+    modifier: Modifier,
+    state: LoginScreenState,
+    interaction: LoginInteractionListener
 ) {
     Column(
         modifier = modifier
@@ -75,24 +74,29 @@ private fun LoginContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        LogoSection(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
-        LoginForm(
-            modifier = Modifier.weight(1f), state = state, interaction = interaction
+        LogoSection(
+            modifier = Modifier
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 16.dp
+                )
         )
+
+        LoginForm(
+            modifier = Modifier
+                .padding(bottom = 96.dp),
+            state = state,
+            interaction = interaction
+        )
+
         SecondaryButton(
+            modifier = Modifier.padding(bottom = 24.dp),
             text = stringResource(R.string.create_a_new_account),
             enabled = true,
             isLoading = false,
             onClick = interaction::onCreateNewAccountClick
         )
-
-        Box(
-            modifier = Modifier
-                .padding(top = 24.dp, bottom = 6.5.dp)
-                .size(width = 120.dp, height = 3.dp)
-                .background(Theme.color.shade.secondary)
-        )
-
         BaseBottomSheet(
             isVisible = state.isVisibleCreateNewAccountBottomSheet,
             onDismiss = interaction::onDismissCreateNewAccountBottomSheet,
@@ -109,12 +113,7 @@ private fun LoginContent(
                     onClickPrimaryButton = interaction::onGoToWebsiteClick,
                     onClickSecondaryButton = interaction::onDismissCreateNewAccountBottomSheet
                 )
-            })
+            }
+        )
     }
-}
-
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(navigateToHomeScreen={})
 }
