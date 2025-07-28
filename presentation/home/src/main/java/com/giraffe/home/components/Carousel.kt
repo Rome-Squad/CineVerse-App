@@ -72,7 +72,7 @@ fun Carousel(
             val offsetY = lerp(0.dp, (-48).dp, progress)
             val zIndex = progress
 
-            MovieItem(
+            VODItem(
                 modifier = Modifier
                     .graphicsLayer {
                         translationY = offsetY.toPx()

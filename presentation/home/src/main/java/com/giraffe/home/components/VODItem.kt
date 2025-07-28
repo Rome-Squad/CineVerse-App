@@ -28,7 +28,7 @@ import com.giraffe.home.screen.home.PopularMediaUiModel
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
-fun MovieItem(
+fun VODItem(
     movieCard: PopularMediaUiModel,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
@@ -95,7 +95,7 @@ private fun PreviewMovieItem() {
     CineVerseTheme(
         isDarkTheme = false
     ) {
-        MovieItem(
+        VODItem(
             modifier = Modifier,
             movieCard =
                 PopularMediaUiModel(
@@ -120,7 +120,7 @@ private fun PreviewMovieItemDark() {
     CineVerseTheme(
         isDarkTheme = true
     ) {
-        MovieItem(
+        VODItem(
             modifier = Modifier,
             movieCard =
                 PopularMediaUiModel(
