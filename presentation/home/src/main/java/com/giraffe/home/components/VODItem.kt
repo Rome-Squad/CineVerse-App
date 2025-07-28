@@ -90,7 +90,7 @@ fun VODItem(
     showBackground = true,
     showSystemUi = false
 )
-private fun PreviewMovieItem() {
+private fun PreviewVODItem() {
 
     CineVerseTheme(
         isDarkTheme = false
