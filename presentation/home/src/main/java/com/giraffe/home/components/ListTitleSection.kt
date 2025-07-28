@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -22,8 +25,12 @@ fun ListTitleSection(onBackClick: () -> Unit, title: String) {
         horizontalArrangement = Arrangement.spacedBy(9.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        val rotationAngle = if (isRtl) 180f else 0f
         Icon(
-            modifier = Modifier.clickable(onClick = onBackClick),
+            modifier = Modifier
+                .clickable(onClick = onBackClick)
+                .graphicsLayer(rotationZ = rotationAngle),
             painter = painterResource(Theme.icons.outline.arrowLeft),
             contentDescription = stringResource(R.string.back),
             tint = Theme.color.shade.primary
