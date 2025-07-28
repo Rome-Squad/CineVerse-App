@@ -46,7 +46,7 @@ fun MovieItem(
                 .align(Alignment.TopCenter),
             imageUrl = movieCard.posterUrl,
             contentDescription = "cover",
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.Crop
         )
         AnimatedVisibility(
             modifier = Modifier
