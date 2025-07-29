@@ -2,15 +2,16 @@ package com.giraffe.details.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,24 +31,19 @@ fun CollectionBottomSheetContent(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
+        Image(
+            painter = painterResource(Theme.icons.dueTone.videoLibrary),
+            contentDescription = stringResource(R.string.video_library_icon),
+            colorFilter = ColorFilter.tint(Theme.color.brand.primary),
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
                 .size(64.dp)
+                .clip(CircleShape)
                 .background(
                     Theme.color.brand.tertiary,
                     shape = RoundedCornerShape(Theme.radius.full)
-                ),
-            contentAlignment = Alignment.Center
-
-        ) {
-            Image(
-                painter = painterResource(Theme.icons.dueTone.videoLibrary),
-                contentDescription = stringResource(R.string.video_library_icon),
-                colorFilter = ColorFilter.tint(Theme.color.brand.primary),
-                modifier = Modifier.size(28.dp)
-            )
-        }
+                )
+                .padding(18.dp)
+        )
         Text(
             text = stringResource(R.string.no_collections_yet),
             style = Theme.textStyle.title.sm,
