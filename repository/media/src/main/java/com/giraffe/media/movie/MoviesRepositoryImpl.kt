@@ -17,7 +17,10 @@ import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class MoviesRepositoryImpl(
@@ -90,8 +93,9 @@ class MoviesRepositoryImpl(
         local.clearMovieCache()
     }
 
-    override suspend fun getRecentlyMovies() =
-        SafeCall { local.getRecentlyMovies().map(MovieCacheDto::toEntity) }
+    override fun getRecentlyMovies() = local.getRecentlyMovies().map { movies ->
+        movies.map(MovieCacheDto::toEntity)
+    }.catch { throw mapToDomainException(it) }
 
     override suspend fun clearRecentlyMovies() = SafeCall { local.clearRecentlyMovies() }
 

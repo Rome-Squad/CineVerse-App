@@ -2,6 +2,7 @@ package com.giraffe.media.movie.datasource.local
 
 import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import kotlinx.coroutines.flow.Flow
 
 interface MoviesLocalDataSource {
     suspend fun getMovieById(
@@ -30,7 +31,7 @@ interface MoviesLocalDataSource {
 
     suspend fun clearRecentlyMovies()
 
-    suspend fun getRecentlyMovies(): List<MovieCacheDto>
+    fun getRecentlyMovies(): Flow<List<MovieCacheDto>>
 
     suspend fun clearMovieGenreCache()
 
