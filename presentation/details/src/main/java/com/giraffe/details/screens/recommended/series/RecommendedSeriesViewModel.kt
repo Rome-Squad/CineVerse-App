@@ -3,6 +3,7 @@ package com.giraffe.details.screens.recommended.series
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -43,7 +44,8 @@ class RecommendedSeriesViewModel @Inject constructor(
         }
     }
 
-    val seriesId = savedStateHandle.get<Int>("seriesID") ?: 0
+    val seriesId = savedStateHandle.toRoute<RecommendedSeriesRoute>().seriesID
+    val titleSeries = savedStateHandle.toRoute<RecommendedSeriesRoute>().titleSeries
 
     val recommendationScreenState = Pager(config = PagingConfig(20)) {
         BasePagingSource { page -> getRecommendedSeries(seriesId.toLong(), page) }

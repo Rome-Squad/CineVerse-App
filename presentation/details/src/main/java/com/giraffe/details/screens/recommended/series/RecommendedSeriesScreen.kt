@@ -12,7 +12,6 @@ import com.giraffe.details.utils.EventListener
 
 @Composable
 fun RecommendedSeriesScreen(
-    titleSeries: String,
     navigateToSeriesDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -30,7 +29,7 @@ fun RecommendedSeriesScreen(
 
     val lazyPagingItems = viewModel.recommendationScreenState.collectAsLazyPagingItems()
     RecommendedSeriesContent(
-        title = titleSeries,
+        title = viewModel.titleSeries,
         lazyPagingItems = lazyPagingItems,
         onBackButtonClick = onBackClick,
         interaction = viewModel,

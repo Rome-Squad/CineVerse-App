@@ -1,4 +1,4 @@
-package com.giraffe.details.screens.recommended.movies
+package com.giraffe.details.screens.recommended.movie
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,8 +11,6 @@ import androidx.paging.map
 import com.giraffe.details.base.BasePagingSource
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.toMovieUi
-import com.giraffe.details.screens.recommended.movie.RecommendedEffectMovie
-import com.giraffe.details.screens.recommended.movie.RecommendedInteractionListener
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
@@ -53,12 +51,12 @@ class RecommendedMoviesViewModel @Inject constructor(
     }
 
 
-
     override fun navigateToMovieDetailsScreen(movieId: Int) {
         viewModelScope.launch {
             _effect.send(
                 RecommendedEffectMovie.NavigateToMovieDetails(movieId)
             )
-        }    }
+        }
+    }
 
 }

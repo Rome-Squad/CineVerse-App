@@ -23,7 +23,6 @@ import com.giraffe.designsystem.composable.custom.Button
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import com.giraffe.details.utils.EventListener
 
 @Composable
@@ -110,8 +109,8 @@ private fun ErrorContent(
             containerColor = Theme.color.brand.primary,
             contentColor = Theme.color.button.onPrimary,
             contentPadding = PaddingValues(
-                horizontal =  16.dp,
-                vertical =  12.dp
+                horizontal = 16.dp,
+                vertical = 12.dp
             )
         ) {
             Text(
