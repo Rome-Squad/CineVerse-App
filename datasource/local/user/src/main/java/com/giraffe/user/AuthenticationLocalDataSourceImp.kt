@@ -1,10 +1,8 @@
 package com.giraffe.user
 
-import android.util.Log
 import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
 import com.giraffe.user.datastore.SessionProvider
-import kotlinx.coroutines.flow.Flow
 
 class AuthenticationLocalDataSourceImp(
     private val dataStore: AuthenticationDatastore,
