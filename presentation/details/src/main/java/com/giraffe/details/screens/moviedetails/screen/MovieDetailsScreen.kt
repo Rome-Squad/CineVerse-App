@@ -29,7 +29,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
@@ -46,12 +45,10 @@ import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
 import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.CastDetailsRoute
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
-import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMoviesScreen
 import com.giraffe.details.utils.TypeOfScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -61,11 +58,14 @@ import kotlin.math.min
 @Composable
 fun MovieDetailsScreen(
     movieID: Int,
-    navController: NavController,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
-    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
+    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) }),
+    onClickPlay: () -> Unit,
+    onClickPoster: (Int) -> Unit,
+    navigateToCastDetails: (Int) -> Unit,
+    navigateToMoviesRecommended: (Int, String) -> Unit,
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -82,18 +82,14 @@ fun MovieDetailsScreen(
                 }
 
                 is MovieDetailsEffect.Error -> {}
-                MovieDetailsEffect.NavigateToCollection -> {}
-                MovieDetailsEffect.NavigateToLogin -> {}
-                is MovieDetailsEffect.NavigateToCastDetails -> navController.navigate(
-                    CastDetailsRoute(effect.personId)
-                )
+                is MovieDetailsEffect.NavigateToCollection -> {}
+                is MovieDetailsEffect.NavigateToLogin -> {}
+                is MovieDetailsEffect.NavigateToCastDetails -> navigateToCastDetails(effect.personId)
 
-                is MovieDetailsEffect.NavigateToMoviesRecommended -> {
-                    navController.navigateToRecommendedMoviesScreen(
-                        movieId = effect.movieId,
-                        title = effect.title
-                    )
-                }
+                is MovieDetailsEffect.NavigateToMoviesRecommended -> navigateToMoviesRecommended(
+                    effect.movieId,
+                    effect.title
+                )
             }
         }
     }
@@ -113,10 +109,11 @@ fun MovieDetailsScreen(
     AnimatedVisibility(!state.isLoadingMovieDetails) {
         MovieDetailsContent(
             modifier = Modifier.fillMaxSize(),
-            navController = navController,
             state = state,
             interaction = viewModel,
-            onBackButtonClick = onBackButtonClick
+            onBackButtonClick = onBackButtonClick,
+            onClickPlay = onClickPlay,
+            onClickPoster = onClickPoster,
         )
     }
 
@@ -125,10 +122,11 @@ fun MovieDetailsScreen(
 @Composable
 private fun MovieDetailsContent(
     modifier: Modifier,
-    navController: NavController,
     state: MovieDetailsScreenState,
     interaction: MovieDetailsInteractionListener,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    onClickPlay: () -> Unit,
+    onClickPoster: (Int) -> Unit,
 ) {
     var isScrollingUp by remember { mutableStateOf(false) }
     val scrollState = rememberLazyListState()
@@ -175,9 +173,10 @@ private fun MovieDetailsContent(
                         rating = state.movie.rating,
                         imageUrl = state.movie.posterUrl,
                         genres = state.movieGenres,
+                        duration = state.movie.duration,
                         releaseYear = state.movie.releaseYear,
                         onClickAdd = interaction::onAddToCollectionClick,
-                        onClickPlay = {},
+                        onClickPlay = onClickPlay,
                         isScrolled = isScrollingUp,
                         durationAnimation = 400,
                         modifier = Modifier.padding(horizontal = 16.dp)
@@ -213,9 +212,7 @@ private fun MovieDetailsContent(
                     onClickEndText = {
                         interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                     },
-                    onClickPoster = {
-                        navController.navigateToMovieDetails(it.id)
-                    }
+                    onClickPoster = { onClickPoster(it.id) }
                 )
             }
             item {
@@ -295,7 +292,8 @@ private fun MovieDetailsContent(
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
                     enabled = false,
-                    onClick = {})
+                    onClick = onClickPlay
+                )
             }
         }
     )
