@@ -34,7 +34,7 @@ fun VoiceRecordingOverlay(
 ) {
     if (!isRecording) return
 
-    val infiniteTransition = rememberInfiniteTransition(label = "voice-pulse")
+    val infiniteTransition = rememberInfiniteTransition(label = stringResource(R.string.voice_pulse))
 
     val pulse1 by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -43,7 +43,7 @@ fun VoiceRecordingOverlay(
             animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Restart
         ),
-        label = "pulse1"
+        label = stringResource(R.string.pulse1)
     )
 
     val pulse2 by infiniteTransition.animateFloat(
@@ -53,7 +53,7 @@ fun VoiceRecordingOverlay(
             animation = tween(durationMillis = 1300, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Restart
         ),
-        label = "pulse2"
+        label = stringResource(R.string.pulse2)
     )
 
     Box(
@@ -69,7 +69,7 @@ fun VoiceRecordingOverlay(
 
                 Icon(
                     painter = painterResource(id = Theme.icons.outline.microphone),
-                    contentDescription = "Microphone",
+                    contentDescription = stringResource(R.string.microphone),
                     tint = Theme.color.shade.primary,
                     modifier = Modifier
                         .size(48.dp)
