@@ -42,4 +42,7 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
+
+    //datastore
+    implementation(libs.datastore.preferences)
 }

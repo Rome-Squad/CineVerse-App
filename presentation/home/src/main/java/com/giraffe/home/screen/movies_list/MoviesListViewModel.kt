@@ -13,6 +13,7 @@ import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
+import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
@@ -22,7 +23,9 @@ import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.collections.emptyList
 
 class MoviesListViewModel(
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
@@ -55,14 +58,12 @@ class MoviesListViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val media = when (sectionType) {
+                when (sectionType) {
                     MovieSectionType.RECENTLY_RELEASED -> {
                         val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
                         val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
-
                         val moviesUi = recentMovies.map { it.toPosterUi() }
                         val seriesUi = recentSeries.map { it.toPosterUi() }
-
                         moviesUi + seriesUi
                     }
 
@@ -76,40 +77,9 @@ class MoviesListViewModel(
                         upcoming.map { it.toPosterUi() }
                     }
 
-                    MovieSectionType.RECENTLY_VIEWED -> {
-                        val recentlyViewedMovies = getRecentlyMoviesUseCase()
-                        val recentlyViewedSeries = getRecentlySeriesUseCase()
+                    MovieSectionType.RECENTLY_VIEWED -> getRecent()
 
-                        val moviesUi = recentlyViewedMovies.map { it.toPosterUi() }
-                        val seriesUi = recentlyViewedSeries.map { it.toPosterUi() }
-
-                        moviesUi + seriesUi
-                    }
-
-                    MovieSectionType.MATCHES_YOUR_VIBES -> {
-                        val recentlyViewedMovies = getRecentlyMoviesUseCase()
-                        val recentlyViewedSeries = getRecentlySeriesUseCase()
-
-                        val recommendedMovies = recentlyViewedMovies.firstOrNull()
-                            ?.let { getRecommendedMovieUseCase(it.id, 1) } ?: emptyList()
-                        val recommendedSeries = recentlyViewedSeries.firstOrNull()
-                            ?.let { getRecommendedSeriesUseCase(it.id.toLong(), 1) } ?: emptyList()
-
-                        val moviesUi = recommendedMovies.map { it.toPosterUi() }
-                        val seriesUi = recommendedSeries.map { it.toPosterUi() }
-
-                        moviesUi + seriesUi
-                    }
-
-                    else -> emptyList()
-                }
-
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        mediaList = media,
-                    )
+                    MovieSectionType.MATCHES_YOUR_VIBES -> getRecommended()
                 }
 
             } catch (e: MediaException) {
@@ -123,6 +93,34 @@ class MoviesListViewModel(
         }
     }
 
+    private fun getRecent() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val recentMovies = getRecentlyMoviesUseCase().first()
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    mediaList = recentMovies.map(Movie::toPosterUi),
+                )
+            }
+        }
+    }
+
+    private fun getRecommended() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getRecentlyMoviesUseCase().first().firstOrNull()?.id?.let { movieId ->
+                val recommendedMovies =
+                    getRecommendedMovieUseCase(movieId = movieId, page = 1).map(Movie::toPosterUi)
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = null,
+                        mediaList = recommendedMovies,
+                    )
+                }
+            }
+        }
+    }
 
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
