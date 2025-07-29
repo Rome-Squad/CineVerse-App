@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,18 +23,18 @@ fun LoginForm(
     modifier: Modifier = Modifier,
     state: LoginScreenState,
     interaction: LoginInteractionListener
-){
+) {
     val context = LocalContext.current
-
-    Column (
+    val focusManager = LocalFocusManager.current
+    Column(
         modifier = modifier.padding(horizontal = 16.dp)
-    ){
+    ) {
         DefaultTextField(
             startIcon = painterResource(Theme.icons.outline.user),
             placeholder = stringResource(R.string.enter_your_username),
             value = state.username,
             onValueChange = interaction::onUsernameChanged,
-            errorMessage = state.usernameErrorMessage?.let { context.getString(it) } ,
+            errorMessage = state.usernameErrorMessage?.let { context.getString(it) },
             label = stringResource(R.string.username),
             maxLines = 1,
             isPassword = false,
@@ -59,7 +60,10 @@ fun LoginForm(
             text = stringResource(R.string.login),
             enabled = true,
             isLoading = state.isLoadingLogin,
-            onClick = interaction::onLoginClick,
+            onClick = {
+                focusManager.clearFocus()
+                interaction.onLoginClick()
+            },
         )
 
         SecondaryButton(

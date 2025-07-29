@@ -40,10 +40,8 @@ import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
@@ -52,6 +50,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -68,33 +67,24 @@ fun DefaultTextField(
     singleLine: Boolean = false,
     maxCharacters: Int = 25,
     errorMessage: String? = null,
+    enabled: Boolean = true,
     readOnly: Boolean = false,
     isPassword: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
-    onClicked: () -> Unit = {},
     onStartIconClick: ((String) -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onForgotPasswordClick: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
-
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
     LaunchedEffect(isFocused) {
         onFocusChanged(isFocused)
         if (isFocused && readOnly) {
-            onClicked()
             focusManager.clearFocus()
-        }
-    }
-    var textFieldValue by remember {
-        mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
-    }
-    LaunchedEffect(value) {
-        if (textFieldValue.text != value) {
-            textFieldValue = TextFieldValue(text = value, selection = TextRange(value.length))
         }
     }
     val hasError = errorMessage != null
@@ -148,21 +138,25 @@ fun DefaultTextField(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .focusRequester(focusRequester),
+                    .focusRequester(focusRequester)
+                    .clickable(
+                        enabled = !enabled,
+                        onClick = onClick
+                    ),
                 interactionSource = interactionSource,
-                readOnly = readOnly,
-                value = textFieldValue,
+                enabled = enabled,
+                value = value,
                 maxLines = maxLines,
                 singleLine = singleLine,
                 onValueChange = { newValue ->
-                    if (newValue.text.length <= maxCharacters) {
-                        if (newValue.text.contains("\n")) onValueChange(
-                            newValue.text.replace(
+                    if (newValue.length <= maxCharacters) {
+                        if (newValue.contains("\n")) onValueChange(
+                            newValue.replace(
                                 "\n",
                                 " "
                             )
                         )
-                        else onValueChange(newValue.text)
+                        else onValueChange(newValue)
                     }
                 },
                 textStyle = Theme.textStyle.body.md.medium,
@@ -229,7 +223,9 @@ fun DefaultTextField(
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .clickable(onClick = onForgotPasswordClick)
+                    .noHoverClickable(
+                        onClick = onForgotPasswordClick
+                    )
             )
         }
     }
@@ -246,8 +242,8 @@ data class TextFieldColors(
 @Composable
 private fun TextField(
     modifier: Modifier = Modifier,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
     placeholder: @Composable() (() -> Unit)? = null,
     enabled: Boolean = true,
@@ -300,7 +296,7 @@ private fun TextField(
                 maxLines = maxLines,
                 minLines = minLines,
                 decorationBox = { innerTextField ->
-                    if (value.text.isEmpty() && placeholder != null) placeholder()
+                    if (value.isEmpty() && placeholder != null) placeholder()
                     innerTextField()
                 }
             )
