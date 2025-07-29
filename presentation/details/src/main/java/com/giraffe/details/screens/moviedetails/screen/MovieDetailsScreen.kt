@@ -200,7 +200,7 @@ private fun MovieDetailsContent(
             )
 
             AnimatedVisibility(
-                visible = true,
+                visible =  state.movieReviews.isNotEmpty(),
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut()
             ) {
