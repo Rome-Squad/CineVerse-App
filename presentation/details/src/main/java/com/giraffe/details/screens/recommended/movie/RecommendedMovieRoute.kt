@@ -21,7 +21,7 @@ internal fun NavGraphBuilder.recommendedMoviesRoute(
     composable<RecommendedMovieRoute> {
         RecommendedMoviesScreen(
             onBackClick = onBackClick,
-            navigateToSeriesDetails = navigateToMovieDetails,
+            navigateToMovieDetails = navigateToMovieDetails,
         )
     }
 }

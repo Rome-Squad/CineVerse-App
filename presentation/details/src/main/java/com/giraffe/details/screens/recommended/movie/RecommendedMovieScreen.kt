@@ -30,7 +30,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RecommendedMoviesScreen(
     onBackClick: () -> Unit,
-    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: RecommendedMoviesViewModel = koinViewModel()
@@ -43,7 +43,7 @@ fun RecommendedMoviesScreen(
             is RecommendedEffectMovie.NavigateToMovieDetails -> {
                 val movieId = effect.MovieId
                 if (movieId != null) {
-                    navigateToSeriesDetails(movieId)
+                    navigateToMovieDetails(movieId)
                 } else {
                     Log.e("RecommendedMovies", "Invalid movie ID received: $movieId")
                 }
