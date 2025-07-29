@@ -7,5 +7,5 @@ interface AuthenticationLocalDataSource {
 
     suspend fun saveSessionId(sessionId: String)
 
-    suspend fun getSessionId(): Flow<String?>
+    suspend fun getSessionId(): String?
 }

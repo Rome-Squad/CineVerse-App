@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class AuthenticationDatastore(
@@ -22,10 +23,10 @@ class AuthenticationDatastore(
         }
     }
 
-    fun getSessionId(): Flow<String?> {
+    suspend fun getSessionId(): String? {
         return context.dataStore.data.map { preferences ->
             preferences[PreferencesKeys.SESSION_ID]
-        }
+        }.first()
     }
 
     companion object {

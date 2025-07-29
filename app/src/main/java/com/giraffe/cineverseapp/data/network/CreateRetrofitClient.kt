@@ -3,8 +3,7 @@ package com.giraffe.cineverseapp.data.network
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.media.util.AuthInterceptor
 import com.giraffe.media.util.LanguageInterceptor
-import com.giraffe.media.util.SessionIdInterceptor
-import com.giraffe.media.util.SessionProvider
+import com.giraffe.user.datastore.SessionProvider
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

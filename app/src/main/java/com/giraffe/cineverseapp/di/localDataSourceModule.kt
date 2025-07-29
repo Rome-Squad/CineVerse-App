@@ -29,5 +29,5 @@ val localDataSourceModule = module {
     single<SeriesLocalDateSource> { SeriesRoomLocalDateSource(get()) }
     single<PersonDao> { get<CineVerseDatabase>().personDao() }
     single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }
-    single<AuthenticationLocalDataSource> { AuthenticationLocalDataSourceImp(get()) }
+    single<AuthenticationLocalDataSource> { AuthenticationLocalDataSourceImp(get(), get()) }
 }

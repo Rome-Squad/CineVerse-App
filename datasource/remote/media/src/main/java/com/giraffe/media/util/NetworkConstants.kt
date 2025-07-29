@@ -18,4 +18,5 @@ object NetworkConstants {
     const val ID = "id"
     const val MOVIE_ID = "movie_id"
     const val NEEDS_SESSION = "need_session_id"
+    const val SESSION_ID = "session_id"
 }
