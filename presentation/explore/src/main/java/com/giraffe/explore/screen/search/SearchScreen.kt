@@ -197,10 +197,13 @@ private fun LazyListScope.keywordsSection(
                 modifier = Modifier
                     .background(Theme.color.background.screen)
                     .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-                title = if (isRecentKeyWordsVisible) stringResource(R.string.history) else stringResource(
-                    R.string.search_suggestions
-                ),
-                clickableText = if (isRecentKeyWordsVisible) stringResource(R.string.clear_all) else "",
+                title = if (isRecentKeyWordsVisible && !isSearchResultKeywordsVisible) stringResource(
+                    R.string.history
+                )
+                else stringResource(R.string.search_suggestions),
+                clickableText = if (isRecentKeyWordsVisible && !isSearchResultKeywordsVisible) stringResource(
+                    R.string.clear_all
+                ) else "",
                 onClickableText = onClearClick
             )
         }

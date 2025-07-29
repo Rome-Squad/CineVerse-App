@@ -22,7 +22,7 @@ interface ExploreSearchKeywordDao {
         value =
             "SELECT * " +
                     "FROM SEARCH_KEYWORD " +
-                    "WHERE keyword = :query " +
+                    "WHERE keyword like '%' || :query || '%' " +
                     "ORDER BY searchedAt DESC"
     )
     fun getSearchKeywords(query: String): Flow<List<SearchKeywordCacheDto>>
