@@ -1,5 +1,6 @@
 package com.giraffe.explore.base
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
@@ -46,6 +47,7 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
 
     private fun handler(): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
+            Log.e("Exception", "Caught exception: ${throwable.message.toString()}", throwable)
             _error.update { mapExceptionToStringRes(throwable) }
         }
     }

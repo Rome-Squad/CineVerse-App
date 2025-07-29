@@ -103,7 +103,7 @@ fun SearchResultContent(
                         .fillParentMaxSize(),
                 ) {
                     // If network is unavailable
-                    if (state.errorMessage!=null && state.errorMessage == "No Internet Connection") {
+                    if (state.errorMessage=="No Internet Connection") {
                         NoInternetScreen  (modifier = Modifier.align(Alignment.Center))
                     }
                     else {
