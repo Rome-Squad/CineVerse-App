@@ -3,6 +3,8 @@ package com.giraffe.details.components
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -41,8 +43,8 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
             targetState = isScrolled,
             transitionSpec = {
                 fadeIn(
-                    animationSpec = tween(durationAnimation)
-                ) togetherWith fadeOut(animationSpec = tween(durationAnimation))
+                    animationSpec = tween(durationAnimation, easing = EaseIn)
+                ) togetherWith fadeOut(animationSpec = tween(durationAnimation, easing = EaseOut))
             },
             label = stringResource(R.string.animated_content)
         ) { targetState ->
