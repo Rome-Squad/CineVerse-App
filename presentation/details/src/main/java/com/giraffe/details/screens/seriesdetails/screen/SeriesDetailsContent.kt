@@ -1,15 +1,27 @@
 package com.giraffe.details.screens.seriesdetails.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
@@ -18,6 +30,7 @@ import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
+import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.CollectionBottomSheetContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
@@ -39,50 +52,68 @@ fun SeriesDetailsContent(
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollState = rememberScrollState()
-    Column(modifier = modifier) {
-
-        // Header
-        Column(Modifier.padding(horizontal = 16.dp)) {
-            AppBar(
-                showBackButton = true,
-                onBackButtonClick = onBackButtonClick
-            )
-            MainMovieOrSeriesDetailsAnimatedContent(
-                type = TypeOfScreen.SERIES.name,
-                name = state.seriesDetails.name,
-                rating = state.seriesDetails.rating,
-                imageUrl = state.seriesDetails.posterUrl,
-                genres = state.genres,
-                releaseYear = state.seriesDetails.releaseYear,
-                onClickAdd = interaction::onClickAddToCollection,
-                onClickPlay = {},
-                isScrolled = scrollState.value > 0,
-                durationAnimation = 2000
-            )
+    var isScrollingUp by rememberSaveable { mutableStateOf(false) }
+    val scrollState = rememberLazyListState()
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                isScrollingUp = available.y < 0 || scrollState.firstVisibleItemScrollOffset > 0
+                return Offset.Zero
+            }
         }
-
-        // Scrolling Body
-        Column(
-            modifier = Modifier
-                .padding(top = 24.dp)
-                .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
+    }
+    LazyColumn(
+        state = scrollState,
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .background(Theme.color.background.screen)
+            .fillMaxSize()
+            .systemBarsPadding()
+            .nestedScroll(nestedScrollConnection),
+    ) {
+        stickyHeader {
+            Column(
+                modifier = modifier
+                    .background(Theme.color.background.screen)
+            ) {
+                AppBar(
+                    showBackButton = true,
+                    onBackButtonClick = onBackButtonClick,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+                MainMovieOrSeriesDetailsAnimatedContent(
+                    type = TypeOfScreen.SERIES.name,
+                    name = state.seriesDetails.name,
+                    rating = state.seriesDetails.rating,
+                    imageUrl = state.seriesDetails.posterUrl,
+                    genres = state.genres,
+                    duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
+                    releaseYear = state.seriesDetails.releaseYear,
+                    onClickAdd = interaction::onClickAddToCollection,
+                    onClickPlay = {},
+                    isScrolled = isScrollingUp,
+                    durationAnimation = 400,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+        }
+        item {
             InfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.storyline),
                 description = state.seriesDetails.overview
             )
-
-            AnimatedVisibility(state.seasons.isNotEmpty()) {
-                SectionTitle(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.latest_seasons),
-                    clickableText = stringResource(R.string.show_more),
-                    onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
-                )
-            }
+        }
+        item {
+            SectionTitle(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.latest_seasons),
+                clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
+                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
+            )
+        }
+        item {
             AnimatedVisibility(state.seasons.isNotEmpty()) {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -107,19 +138,22 @@ fun SeriesDetailsContent(
                     }
                 }
             }
-
+        }
+        item {
             StarCastSection(
                 title = stringResource(R.string.star_cast),
                 castList = state.cast,
                 onCastClick = interaction::navigateToCastDetailsScreen
             )
-
+        }
+        item {
             StaffInfoSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.behind_the_scenes),
                 staffList = state.crew
             )
-
+        }
+        item {
             AnimatedVisibility(state.recommendedSeries.isNotEmpty()) {
                 PosterListSection(
                     title = stringResource(R.string.you_might_also_like),
@@ -136,12 +170,14 @@ fun SeriesDetailsContent(
                     }
                 )
             }
-
+        }
+        item {
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onClickCard = interaction::onClickGiveStars
             )
-
+        }
+        item {
             AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
                 SectionTitle(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -163,7 +199,7 @@ fun SeriesDetailsContent(
                         }
                         ReviewCard(
                             modifier = padding,
-                            rate = review.rating.toInt(),
+                            rate = review.rating,
                             reviewText = review.content,
                             reviewDate = review.createdAt,
                             reviewerImageUrl = review.authorImageUrl,
