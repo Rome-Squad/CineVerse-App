@@ -11,7 +11,7 @@ sealed interface MovieDetailsEffect {
 
     object NavigateToMovies : MovieDetailsEffect
 
-    data class NavigateToReviews(val reviews: List<ReviewUI>) : MovieDetailsEffect
+    data class NavigateToReviews(val movieId: Int) : MovieDetailsEffect
 
     data class Error(val error: Throwable) : MovieDetailsEffect
 

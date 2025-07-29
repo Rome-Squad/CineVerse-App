@@ -234,7 +234,7 @@ class MovieDetailsViewModel(
     }
 
     override fun onShowMoreReviewsClick() {
-        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movieReviews))
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))
     }
 
     override fun onMovieClick(movieId: Int) {

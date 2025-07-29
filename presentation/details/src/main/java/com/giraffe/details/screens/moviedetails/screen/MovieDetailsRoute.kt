@@ -18,7 +18,7 @@ fun NavController.navigateToMovieDetails(id: Int) {
 fun NavGraphBuilder.movieDetailsRoute(
     navController: NavController,
     onBackButtonClick: () -> Unit,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
+    navigateToReviews:(Int?) -> Unit
 ) {
     composable<MovieDetailsRoute> { backStackEntry ->
         val movieID = backStackEntry.toRoute<MovieDetailsRoute>().id
@@ -26,7 +26,7 @@ fun NavGraphBuilder.movieDetailsRoute(
         MovieDetailsScreen(
             navController = navController,
             movieID = movieID,
-            navigateToReviews = navigateToReviews,
+            navigateToReviews ={ navigateToReviews(movieID) },
             onBackButtonClick = onBackButtonClick
         )
     }

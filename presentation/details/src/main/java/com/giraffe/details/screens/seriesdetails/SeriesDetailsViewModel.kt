@@ -257,7 +257,10 @@ class SeriesDetailsViewModel(
         updateState {
             it.copy(
                 seriesReviews = reviews.map { it.toReviewUI() },
+
             )
+
         }
+        println("Series Reviews: ${state.value.seriesReviews}")
     }
 }

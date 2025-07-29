@@ -56,7 +56,7 @@ fun MovieDetailsScreen(
     movieID: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    navigateToReviews:  (Int) -> Unit= {},
     onBackButtonClick: () -> Unit = {},
     viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
 ) {
@@ -71,7 +71,7 @@ fun MovieDetailsScreen(
                 }
 
                 is MovieDetailsEffect.NavigateToReviews -> {
-                    navigateToReviews(effect.reviews)
+                    navigateToReviews(effect.movieId)
                 }
 
                 is MovieDetailsEffect.Error -> {}
@@ -200,7 +200,7 @@ private fun MovieDetailsContent(
             )
 
             AnimatedVisibility(
-                visible = state.movieReviews.isNotEmpty(),
+                visible = true,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut()
             ) {

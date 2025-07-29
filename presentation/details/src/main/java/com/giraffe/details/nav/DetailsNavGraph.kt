@@ -15,6 +15,7 @@ import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.navigateToReviews
+import com.giraffe.details.screens.reviewScreen.reviewRoute
 import com.giraffe.details.screens.seasons.screen.navigateToSeasons
 import com.giraffe.details.screens.seasons.screen.seasonsRoute
 import com.giraffe.details.screens.seriesdetails.screen.navigateToSeriesDetails
@@ -78,6 +79,9 @@ internal fun DetailsNavGraph(
             onBackClick = { navController.navigateUp() }
         )
 
-//        reviewRoute(navController)
+
+        reviewRoute(
+            navController = navController
+        )
     }
 }

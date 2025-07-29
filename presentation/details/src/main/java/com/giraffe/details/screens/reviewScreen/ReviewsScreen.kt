@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -15,15 +16,24 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.models.ReviewUI
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun ReviewsScreen(
-    reviewsList: List<ReviewUI>?,
-    navController: NavController
+    movieId: Int?,
+    seriesId: Int?,
+    navController: NavController,
+    reviewsViewModel: ReviewsViewModel = koinViewModel()
 ) {
+    LaunchedEffect(movieId, seriesId) {
+        reviewsViewModel.fetchReviews(movieId, seriesId)
+    }
+
+    val reviews = reviewsViewModel.reviewsState.value
+
     ReviewsContent(
-        reviewsList = reviewsList ?: emptyList(),
+        reviewsList = reviews ?: emptyList(),
         onBackArrowClick = { navController.navigateUp() }
     )
 }

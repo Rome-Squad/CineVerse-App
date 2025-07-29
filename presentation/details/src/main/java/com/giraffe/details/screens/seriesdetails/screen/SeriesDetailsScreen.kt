@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsEffect
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.details.utils.EventListener
@@ -27,7 +28,7 @@ fun SeriesDetailsScreen(
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    navigateToReviews:   (Int) -> Unit= {},
     viewModel: SeriesDetailsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -44,6 +45,9 @@ fun SeriesDetailsScreen(
                 it.seriesId,
                 it.title
             )
+            is SeriesDetailsEffect.NavigateToReviews -> {
+                navigateToReviews(it.seriesId)
+            }
         }
     }
 

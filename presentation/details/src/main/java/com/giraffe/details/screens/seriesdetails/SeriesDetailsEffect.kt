@@ -1,5 +1,7 @@
 package com.giraffe.details.screens.seriesdetails
 
+import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
+
 
 interface SeriesDetailsEffect {
     data class Error(val error: Throwable) : SeriesDetailsEffect
@@ -14,4 +16,8 @@ interface SeriesDetailsEffect {
 
     data class NavigateToRecommendedSeries(val seriesId: Int, val title: String) :
         SeriesDetailsEffect
+
+    data class NavigateToReviews(val seriesId: Int) : SeriesDetailsEffect
+
+
 }

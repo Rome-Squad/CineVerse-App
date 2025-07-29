@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.seriesdetails.screen
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -142,7 +143,7 @@ fun SeriesDetailsContent(
                 onClickCard = interaction::onClickGiveStars
             )
 
-            AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
+            AnimatedVisibility(visible=true) {
                 SectionTitle(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     title = stringResource(R.string.top_reviews),
@@ -155,6 +156,7 @@ fun SeriesDetailsContent(
                 ) {
                     for (index in 0..min(2, state.seriesReviews.size - 1)) {
                         val review = state.seriesReviews[index]
+                        Log.d("SERIES_DETAILS","Review:$review")
                         val padding = when (index) {
                             0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
                             1 -> Modifier.padding(horizontal = 16.dp)
