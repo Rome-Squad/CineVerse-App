@@ -1,9 +1,9 @@
 package com.giraffe.cineverseapp.data.preference
 
 import com.giraffe.user.SessionManager
-import android.util.Log
+import javax.inject.Inject
 
-class SessionIdManagerImpl(
+class SessionIdManagerImpl @Inject constructor(
     private val dataStorePreferences: DataStorePreferences
 ) : SessionManager {
     override suspend fun saveSessionId(sessionId: String) {
