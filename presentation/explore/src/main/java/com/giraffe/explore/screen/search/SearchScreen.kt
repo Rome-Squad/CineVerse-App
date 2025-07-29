@@ -1,6 +1,7 @@
 package com.giraffe.explore.screen.search
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,6 +38,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.SearchItem
+import com.giraffe.explore.components.VoiceRecordingOverlay
 import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.media.explore.R
 import org.koin.androidx.compose.koinViewModel
@@ -56,13 +59,18 @@ fun SearchScreen(
         }
     }
 
-    SearchContent(
-        state = state,
-        interactions = viewModel,
-        navigateToSearchResult = navigateToSearchResult,
-        onBackClick = onBackClick,
-        onClickPoster = onClickPoster
-    )
+    Box {
+        SearchContent(
+            state = state,
+            interactions = viewModel,
+            navigateToSearchResult = navigateToSearchResult,
+            onBackClick = onBackClick,
+            onClickPoster = onClickPoster
+        )
+        VoiceRecordingOverlay(
+            isRecording = state.isVoiceRecording && state.isPermissionGranted
+        )
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -75,6 +83,7 @@ private fun SearchContent(
     onClickPoster: (Poster) -> Unit
 ) {
     val context = LocalContext.current
+
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -108,7 +117,16 @@ private fun SearchContent(
 
     LaunchedEffect(state.isVoiceRecording) {
         if (state.isVoiceRecording) {
-            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            val isGranted = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (isGranted) {
+                interactions.onPermissionResult(true)
+            } else {
+                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            }
         }
     }
     LaunchedEffect(state.isVoiceRecording, state.isPermissionGranted) {

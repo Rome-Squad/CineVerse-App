@@ -42,7 +42,7 @@ fun PrimaryButton(
         else {
             Text(
                 text = text,
-                style = Theme.textStyle.body.md.regular,
+                style = Theme.textStyle.body.md.medium,
             )
         }
 
