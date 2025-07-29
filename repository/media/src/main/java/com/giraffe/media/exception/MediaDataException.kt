@@ -2,7 +2,7 @@ package com.giraffe.media.exception
 
 open class MediaDataException : Exception()
 
-class NoInternetDataException : MediaDataException()
+class NoInternetDataException(): MediaDataException()
 class RequestTimeoutDataException : MediaDataException()
 class TooManyRequestsDataException : MediaDataException()
 class ServerDataException : MediaDataException()

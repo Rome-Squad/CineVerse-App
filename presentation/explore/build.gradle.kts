@@ -43,6 +43,8 @@ dependencies {
     implementation(project(":domain:media"))
     implementation(project(":api:details"))
     implementation(project(":api:explore"))
+    implementation(project(":datasource:remote:media"))
+
 
     implementation(libs.koin.androidx.compose)
     implementation(libs.kotlinx.datetime)

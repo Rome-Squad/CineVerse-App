@@ -1,12 +1,10 @@
 package com.giraffe.cineverseapp.di
-import android.app.Application
-import org.koin.android.ext.koin.androidContext
 import com.giraffe.cineverseapp.BuildConfig.ACCESS_TOKEN
 import com.giraffe.cineverseapp.BuildConfig.BASE_URL
 import com.giraffe.cineverseapp.data.network.createRetrofitClient
 import com.giraffe.cineverseapp.data.network.provideRetrofitService
 import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
-import com.giraffe.explore.util.NetworkInterceptor
+import com.giraffe.media.util.NetworkInterceptor
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.ExploreRemoteDataSourceImplRetrofit

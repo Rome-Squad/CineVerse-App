@@ -9,7 +9,6 @@ import androidx.paging.map
 import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.BasePagingSource
-import com.giraffe.explore.util.NetworkInterceptor
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
 import com.giraffe.media.movies.entity.Movie
@@ -20,7 +19,10 @@ import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
+import com.giraffe.media.util.NetworkInterceptor
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEmpty
+import kotlinx.coroutines.flow.toList
 
 class SearchResultViewModel(
     private val query: String,
@@ -98,7 +100,7 @@ class SearchResultViewModel(
     private fun getActors() {
         safeExecute {
             if (!networkInterceptor.isNetworkAvailable()) {
-                updateState { it.copy(errorMessage = state.value.errorMessage) }
+                updateState { it.copy(errorMessage = "No Internet Connection" ) }
                 return@safeExecute
             }
             val actorsFlow =
@@ -106,5 +108,16 @@ class SearchResultViewModel(
                     BasePagingSource { page -> searchPeopleByName(query, page) }
                 }.flow.cachedIn(viewModelScope).map { it.map(Person::toUi) }
             updateState { it.copy(actors = actorsFlow, errorMessage = null) }
+
+            if (actorsFlow.onEmpty(
+                    action ={}
+                ).toList().isEmpty()) {
+                updateState { it.copy(errorMessage = "Nothing Found!") }
+            } else {
+                updateState { it.copy(actors = actorsFlow, errorMessage = null) }
+            }
         }
-}}
+
+
+        }
+}

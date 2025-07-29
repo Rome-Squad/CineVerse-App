@@ -7,8 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,10 +23,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
-import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
@@ -105,9 +103,12 @@ fun SearchResultContent(
                         .fillParentMaxSize(),
                 ) {
                     // If network is unavailable
-                    if (state.errorMessage!=null) {
-                        NoInternetConnection(modifier = Modifier.padding(16.dp))
-                    } else {
+                    if (state.errorMessage!=null && state.errorMessage == "No Internet Connection") {
+                        NoInternetScreen  (modifier = Modifier.align(Alignment.Center))
+                    }
+                    else {
+
+
                         if (posters.loadState.refresh is LoadState.Loading) {
                             Progress(
                                 size = 32.dp,
@@ -181,13 +182,3 @@ fun ActorsSection(
 
 }
 
-
-
-@Composable
-fun NoInternetConnection(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(
-            text = "No Internet Connection",
-        )
-    }
-}
