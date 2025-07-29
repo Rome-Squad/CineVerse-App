@@ -24,6 +24,7 @@ import com.giraffe.details.components.PosterHorizontal
 import com.giraffe.details.components.PosterVertically
 import com.giraffe.details.models.SeriesUi
 import com.giraffe.details.models.toPoster
+import com.giraffe.details.utils.ObserveScrollDirection
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
