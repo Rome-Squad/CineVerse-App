@@ -2,7 +2,6 @@ package com.giraffe.details.screens.moviedetails.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +26,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
@@ -68,7 +67,6 @@ fun MovieDetailsScreen(
     navigateToMoviesRecommended: (Int, String) -> Unit,
 ) {
     val state = viewModel.state.collectAsState().value
-
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -128,7 +126,7 @@ private fun MovieDetailsContent(
     onClickPlay: () -> Unit,
     onClickPoster: (Int) -> Unit,
 ) {
-    var isScrollingUp by remember { mutableStateOf(false) }
+    var isScrollingUp by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberLazyListState()
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -138,115 +136,105 @@ private fun MovieDetailsContent(
             }
         }
     }
-
-    Column(
+    LazyColumn(
+        state = scrollState,
+        verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
+        modifier = Modifier
             .background(Theme.color.background.screen)
+            .fillMaxSize()
             .systemBarsPadding()
-            .pointerInput(Unit) {
-                detectVerticalDragGestures { _, dragAmount ->
-                    isScrollingUp = dragAmount < 0 || scrollState.firstVisibleItemScrollOffset > 0
-                }
-            },
+            .nestedScroll(nestedScrollConnection),
     ) {
-        AppBar(
-            showBackButton = true,
-            onBackButtonClick = onBackButtonClick,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-        LazyColumn(
-            state = scrollState,
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.nestedScroll(nestedScrollConnection),
-        ) {
-            stickyHeader {
-                Box(
-                    modifier = modifier
-                        .background(Theme.color.background.screen)
+        stickyHeader {
+            Column(
+                modifier = modifier
+                    .background(Theme.color.background.screen)
+            ) {
+                AppBar(
+                    showBackButton = true,
+                    onBackButtonClick = onBackButtonClick,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+                MainMovieOrSeriesDetailsAnimatedContent(
+                    type = TypeOfScreen.MOVIE.toString(),
+                    name = state.movie.title,
+                    rating = state.movie.rating,
+                    imageUrl = state.movie.posterUrl,
+                    genres = state.movieGenres,
+                    duration = state.movie.duration,
+                    releaseYear = state.movie.releaseYear,
+                    onClickAdd = interaction::onAddToCollectionClick,
+                    onClickPlay = onClickPlay,
+                    isScrolled = isScrollingUp,
+                    durationAnimation = 0,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+        }
+        item {
+            InfoSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.storyline),
+                description = state.movie.description
+            )
+        }
+        item {
+            StarCastSection(
+                title = stringResource(R.string.star_cast),
+                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
+                castList = state.cast
+            )
+        }
+        item {
+            StaffInfoSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.behind_the_scenes),
+                staffList = state.crew
+            )
+        }
+        item {
+            PosterListSection(
+                title = stringResource(R.string.you_might_also_like),
+                endText = stringResource(R.string.show_more),
+                posters = state.recommendedMovies,
+                onClickEndText = {
+                    interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
+                },
+                onClickPoster = { onClickPoster(it.id) }
+            )
+        }
+        item {
+            RatingSection(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClickCard = interaction::onGiveStarsClick
+            )
+        }
+        item {
+
+            AnimatedVisibility(state.movieReviews.isNotEmpty()) {
+
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    MainMovieOrSeriesDetailsAnimatedContent(
-                        type = TypeOfScreen.MOVIE.toString(),
-                        name = state.movie.title,
-                        rating = state.movie.rating,
-                        imageUrl = state.movie.posterUrl,
-                        genres = state.movieGenres,
-                        duration = state.movie.duration,
-                        releaseYear = state.movie.releaseYear,
-                        onClickAdd = interaction::onAddToCollectionClick,
-                        onClickPlay = onClickPlay,
-                        isScrolled = isScrollingUp,
-                        durationAnimation = 400,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                }
-            }
-            item {
-                InfoSection(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.storyline),
-                    description = state.movie.description
-                )
-            }
-            item {
-                StarCastSection(
-                    title = stringResource(R.string.star_cast),
-                    onCastClick = { interaction.navigateToCastDetailsScreen(it) },
-                    castList = state.cast
-                )
-            }
-            item {
-                StaffInfoSection(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.behind_the_scenes),
-                    staffList = state.crew
-                )
-            }
-            item {
-                PosterListSection(
-                    title = stringResource(R.string.you_might_also_like),
-                    endText = stringResource(R.string.show_more),
-                    posters = state.recommendedMovies,
-                    onClickEndText = {
-                        interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
-                    },
-                    onClickPoster = { onClickPoster(it.id) }
-                )
-            }
-            item {
-                RatingSection(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    onClickCard = interaction::onGiveStarsClick
-                )
-            }
-            item {
-
-                AnimatedVisibility(state.movieReviews.isNotEmpty()) {
-
-                    Column(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        for (index in 0..min(2, state.movieReviews.size - 1)) {
-                            val review = state.movieReviews[index]
-                            val padding = when (index) {
-                                0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                                1 -> Modifier.padding(horizontal = 16.dp)
-                                2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
-                                else -> Modifier
-                            }
-                            ReviewCard(
-                                modifier = padding,
-                                rate = review.rating,
-                                reviewText = review.content,
-                                reviewDate = review.createdAt,
-                                reviewerImageUrl = review.authorImageUrl,
-                                reviewerName = review.authorName,
-                                reviewerUsername = review.authorUserName
-                            )
+                    for (index in 0..min(2, state.movieReviews.size - 1)) {
+                        val review = state.movieReviews[index]
+                        val padding = when (index) {
+                            0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                            1 -> Modifier.padding(horizontal = 16.dp)
+                            2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                            else -> Modifier
                         }
+                        ReviewCard(
+                            modifier = padding,
+                            rate = review.rating,
+                            reviewText = review.content,
+                            reviewDate = review.createdAt,
+                            reviewerImageUrl = review.authorImageUrl,
+                            reviewerName = review.authorName,
+                            reviewerUsername = review.authorUserName
+                        )
                     }
                 }
             }
