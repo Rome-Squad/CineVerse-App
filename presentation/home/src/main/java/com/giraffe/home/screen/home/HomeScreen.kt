@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -33,11 +34,10 @@ import com.giraffe.home.components.TopAppBar
 import com.giraffe.home.components.UserCollection
 import com.giraffe.home.components.YourCollectionsSections
 import com.giraffe.home.screen.movies_list.MovieSectionType
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
     navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,

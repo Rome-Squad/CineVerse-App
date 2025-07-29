@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
@@ -30,13 +31,12 @@ import com.giraffe.details.R
 import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.gallery.GalleryItemLayoutLTR
 import com.giraffe.details.components.gallery.GalleryItemLayoutRTL
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun GalleryScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    galleryViewModel: GalleryViewModel = koinViewModel()
+    galleryViewModel: GalleryViewModel = hiltViewModel()
 ) {
     val state by galleryViewModel.state.collectAsState()
     if (state.isLoading) {

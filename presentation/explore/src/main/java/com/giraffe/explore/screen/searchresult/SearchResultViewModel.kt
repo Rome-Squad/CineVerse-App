@@ -1,5 +1,6 @@
 package com.giraffe.explore.screen.searchresult
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -18,17 +19,25 @@ import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class SearchResultViewModel(
-    private val query: String,
+@HiltViewModel
+class SearchResultViewModel @Inject constructor(
     private val searchMovieByName: SearchMovieByNameUseCase,
     private val searchSeriesByName: SearchSeriesByNameUseCase,
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
-) : BaseViewModel<SearchResultScreenState>(SearchResultScreenState(query = query)),
+    savedStateHandle: SavedStateHandle
+) : BaseViewModel<SearchResultScreenState>(
+    SearchResultScreenState(query = savedStateHandle["query"] ?: "")
+),
     SearchResultInteractionListener {
+
+    private val query: String = savedStateHandle["query"] ?: ""
+
     init {
         getMoviesGenres()
         getSeriesGenres()
