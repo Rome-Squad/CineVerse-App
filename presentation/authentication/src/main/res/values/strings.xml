@@ -18,4 +18,5 @@
     <string name="Empty_username">Username can not be empty</string>
     <string name="guest_auth_error">Failed to Enter as guest,Try again later</string>
     <string name="invalid_username_or_password">Incorrect username or password. Please try again.</string>
+    <string name="invalid_username_format">Usernames can only include letters and numbers</string>
 </resources>

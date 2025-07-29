@@ -68,6 +68,15 @@ class LoginViewModel(
                 )
             }
 
+            R.string.invalid_username_format -> updateState {
+                it.copy(
+                    usernameErrorMessage = exceptionMessage,
+                    isLoadingLogin = false,
+                    passwordErrorMessage = null,
+                    screenErrorMessage = null
+                )
+            }
+
             else -> updateState {
                 it.copy(
                     screenErrorMessage = exceptionMessage,
