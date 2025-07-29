@@ -205,16 +205,6 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-    private fun addUserRating(movieId: Int, rating: Float) {
-        safeExecute {
-            addRatingUseCase(
-                movieId = movieId,
-                ratingValue = rating
-            )
-        }
-    }
-
-
     //user interaction listeners
     override fun onAddToCollectionClick() {
         updateState {
@@ -299,13 +289,25 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
     }
 
+    override fun onRateChange(rate: Int) {
+        safeExecute {
+            updateState { it.copy(currentRating = rate) }
+        }
+    }
+
     override fun onCollectionClick() {
     }
 
     override fun onPersonClick(personId: Int) {
     }
 
-    override fun onAddRatingClick(movieId: Int, rating: Float) {
-        addUserRating(movieId = movieId, rating = rating)
+    override fun onAddRatingClick() {
+        updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
+        safeExecute {
+            addRatingUseCase(
+                movieId = state.value.movie.id,
+                ratingValue =  state.value.currentRating.toFloat()
+            )
+        }
     }
 }

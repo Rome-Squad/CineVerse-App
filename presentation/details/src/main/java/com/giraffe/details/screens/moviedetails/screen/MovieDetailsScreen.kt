@@ -18,10 +18,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -65,7 +61,6 @@ fun MovieDetailsScreen(
     viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) })
 ) {
     val state = viewModel.state.collectAsState().value
-
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -127,7 +122,6 @@ private fun MovieDetailsContent(
     onBackButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    var currentRating by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = modifier
@@ -281,26 +275,17 @@ private fun MovieDetailsContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RatingSelector(
-                    rate = currentRating,
-                    onRateClick = { newRating ->
-                        currentRating = newRating
-                    }
+                    rate = state.currentRating,
+                    onRateClick = interaction::onRateChange
                 )
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
-                    enabled = currentRating > 0,
-                    onClick = {
-                        state.movie.let { movie ->
-                            interaction.onAddRatingClick(
-                                movieId = movie.id,
-                                rating = currentRating.toFloat()
-                            )
-                            interaction.onDismissGiveStarsBottomSheet()
-                        }
-                    })
+                    enabled = state.currentRating > 0,
+                    onClick = interaction::onAddRatingClick
+                )
             }
         })
 }
