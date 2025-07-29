@@ -4,8 +4,9 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.repository.SeriesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SearchSeriesByNameUseCase(
+class SearchSeriesByNameUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(seriesName: String, page: Int): List<Series> {
