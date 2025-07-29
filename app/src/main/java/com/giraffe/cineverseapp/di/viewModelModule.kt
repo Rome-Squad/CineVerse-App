@@ -6,7 +6,7 @@ import com.giraffe.details.screens.castCredit.CastCreditViewModel
 import com.giraffe.details.screens.castDetails.CastDetailsViewModel
 import com.giraffe.details.screens.gallery.GalleryViewModel
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
-import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
+import com.giraffe.details.screens.recommended.movie.RecommendedMoviesViewModel
 import com.giraffe.details.screens.recommended.series.RecommendedSeriesViewModel
 import com.giraffe.details.screens.seasons.SeasonsViewModel
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
