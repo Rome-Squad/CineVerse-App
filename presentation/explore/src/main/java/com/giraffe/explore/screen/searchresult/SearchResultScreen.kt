@@ -105,7 +105,7 @@ fun SearchResultContent(
                         .fillParentMaxSize(),
                 ) {
                     // If network is unavailable
-                    if (!state.isNetworkAvailable) {
+                    if (state.errorMessage!=null) {
                         NoInternetConnection(modifier = Modifier.padding(16.dp))
                     } else {
                         if (posters.loadState.refresh is LoadState.Loading) {

@@ -60,4 +60,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 }

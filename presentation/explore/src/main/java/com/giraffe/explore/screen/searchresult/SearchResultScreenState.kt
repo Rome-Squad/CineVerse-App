@@ -23,7 +23,7 @@ data class SearchResultScreenState(
     val moviesGenres: List<GenreUi> = emptyList(),
     val seriesGenres: List<GenreUi> = emptyList(),
     val errorMessage: String? = null,
-    val isNetworkAvailable: Boolean = true
+
 )
 
 data class ActorUi(

@@ -9,9 +9,9 @@ import androidx.paging.map
 import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.BasePagingSource
+import com.giraffe.explore.util.NetworkInterceptor
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
-import com.giraffe.media.explore.repository.ExploreRepository
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
@@ -29,11 +29,11 @@ class SearchResultViewModel(
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
-    private val exploreRepository: ExploreRepository
-) : BaseViewModel<SearchResultScreenState>(SearchResultScreenState(query = query)),
+    private val networkInterceptor: NetworkInterceptor,
+    ) : BaseViewModel<SearchResultScreenState>(SearchResultScreenState(query = query)),
     SearchResultInteractionListener {
     init {
-        checkNetworkStatus()
+
         getMoviesGenres()
         getSeriesGenres()
         getMovies()
@@ -41,14 +41,9 @@ class SearchResultViewModel(
         getActors()
     }
 
-    private fun checkNetworkStatus() {
-        safeExecute {
-            val networkAvailable = exploreRepository.isNetworkAvailable()
-            updateState { it.copy(isNetworkAvailable = networkAvailable) }
-        }
-    }
 
-    @SuppressLint("StateFlowValueCalledInComposition")
+
+            @SuppressLint("StateFlowValueCalledInComposition")
     override fun selectTap(tabIndex: Int) {
         safeExecute {
             updateState { it.copy(selectedTab = SearchTab.entries[tabIndex]) }
@@ -102,6 +97,10 @@ class SearchResultViewModel(
 
     private fun getActors() {
         safeExecute {
+            if (!networkInterceptor.isNetworkAvailable()) {
+                updateState { it.copy(errorMessage = state.value.errorMessage) }
+                return@safeExecute
+            }
             val actorsFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                     BasePagingSource { page -> searchPeopleByName(query, page) }

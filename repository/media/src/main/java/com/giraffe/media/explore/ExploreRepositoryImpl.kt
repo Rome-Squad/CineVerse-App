@@ -19,33 +19,33 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class ExploreRepositoryImpl(
-    private val context: Context,
     private val local: LocalExploreDataSource,
     private val remote: ExploreRemoteDataSource,
 ) : ExploreRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
-        return if (isNetworkAvailable()) {
-            val remoteResults = remote.getSearchKeywords(query).map {
-                it.toEntity()
-            }
-
-            val history = local.getSearchKeywords(query).map {
-                it.map { cacheDto -> cacheDto.toEntity() }
-            }
-
-            history.map { historyList ->
-                (historyList + remoteResults)
-                    .distinctBy { it.keyword }
-                    .sortedByDescending { it.searchedAt }
-            }.catch { throw mapToDomainException(it) }
-
-        } else {
-            local.getSearchHistory().map {
+        if (query.isBlank())
+            return local.getSearchHistory().map {
                 it.map { cacheDto -> cacheDto.toEntity() }
             }.catch { throw mapToDomainException(it) }
+
+
+        val history = local.getSearchKeywords(query).map {
+            it.map { cacheDto -> cacheDto.toEntity() }
         }
+
+        val remoteResults = remote.getSearchKeywords(query).map {
+            it.toEntity()
+        }
+
+        return history.map { historyList ->
+            (historyList + remoteResults)
+                .distinctBy { it.keyword }
+                .sortedByDescending { it.searchedAt }
+        }.catch { throw mapToDomainException(it) }
+
     }
+
 
 
     override suspend fun insertSearchKeyword(searchKeyword: String) = SafeCall {
@@ -63,17 +63,6 @@ class ExploreRepositoryImpl(
         local.clearSearchHistory()
     }
 
-    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-    override suspend fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val activeNetwork = connectivityManager.activeNetwork
-            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-            return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
-        } else {
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-            return activeNetworkInfo?.isConnected == true
-        }
-    }
+
     }
 

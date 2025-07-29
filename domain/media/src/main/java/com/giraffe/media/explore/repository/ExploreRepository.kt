@@ -13,5 +13,5 @@ interface ExploreRepository {
 
     suspend fun clearSearchHistory()
 
-    suspend fun isNetworkAvailable(): Boolean
+
 }
