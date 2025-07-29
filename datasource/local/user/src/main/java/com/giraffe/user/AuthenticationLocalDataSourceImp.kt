@@ -2,15 +2,12 @@ package com.giraffe.user
 
 import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
-import com.giraffe.user.datastore.SessionProvider
 
 class AuthenticationLocalDataSourceImp(
-    private val dataStore: AuthenticationDatastore,
-    private val sessionProvider: SessionProvider
+    private val dataStore: AuthenticationDatastore
 ) : AuthenticationLocalDataSource {
     override suspend fun saveSessionId(sessionId: String) {
         dataStore.saveSessionId(sessionId)
-        sessionProvider.setSessionId(sessionId)
     }
 
     override suspend fun getSessionId(): String? {

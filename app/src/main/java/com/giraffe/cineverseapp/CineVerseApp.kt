@@ -13,23 +13,11 @@ import com.giraffe.cineverseapp.di.useCaseModule
 import com.giraffe.cineverseapp.di.viewModelModule
 import com.giraffe.cineverseapp.worker.CacheCleanupWorker
 import com.giraffe.imageviewer.di.imageViewerModule
-import com.giraffe.user.datastore.AuthenticationDatastore
-import com.giraffe.user.datastore.SessionProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
 
 class CineVerseApp : Application() {
-
-    val sessionProvider: SessionProvider by inject()
-    val authenticationDatastore: AuthenticationDatastore by inject()
-
-    val coroutineScope = CoroutineScope(Dispatchers.IO)
-
 
     override fun onCreate() {
         super.onCreate()
@@ -46,17 +34,8 @@ class CineVerseApp : Application() {
                 networkModule
             )
         }
-        getSessionId()
         setupCacheCleanupWorker()
     }
-
-    private fun getSessionId() {
-        coroutineScope.launch {
-            val sessionId = authenticationDatastore.getSessionId()
-            sessionProvider.setSessionId(sessionId)
-        }
-    }
-
 
     private fun setupCacheCleanupWorker() {
         val workRequest = PeriodicWorkRequestBuilder<CacheCleanupWorker>(

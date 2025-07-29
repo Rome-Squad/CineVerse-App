@@ -4,7 +4,6 @@ import com.giraffe.cineverseapp.BuildConfig.ACCESS_TOKEN
 import com.giraffe.cineverseapp.BuildConfig.BASE_URL
 import com.giraffe.cineverseapp.data.network.createRetrofitClient
 import com.giraffe.cineverseapp.data.network.provideRetrofitService
-import com.giraffe.cineverseapp.data.network.SessionProviderImp
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.ExploreRemoteDataSourceImplRetrofit
@@ -20,7 +19,6 @@ import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.RetrofitRequestBuilder
 import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
-import com.giraffe.user.datastore.SessionProvider
 import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpRetrofit
 import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
@@ -42,12 +40,11 @@ val networkModule = module {
 
     single(named(BASE_URL)) { BASE_URL }
     single(named(ACCESS_TOKEN)) { ACCESS_TOKEN }
-    single<SessionProvider>{ SessionProviderImp() }
 
     single {
         createRetrofitClient(
             accessToken = get(named(ACCESS_TOKEN)),
-            sessionProvider = get()
+            authenticationDatastore = get()
         )
     }
     single {
