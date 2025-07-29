@@ -28,5 +28,5 @@ data class AuthorDetailsDto(
     val name: String?,
     val username: String,
     @SerialName("avatar_path") val avatarPath: String?,
-    val rating: Int
+    val rating: Float?
 )
