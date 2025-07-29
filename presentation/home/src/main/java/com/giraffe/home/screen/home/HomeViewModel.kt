@@ -6,6 +6,7 @@ import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.media.exception.AccessDeniedException
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -43,7 +44,7 @@ class HomeViewModel(
     }
 
     private fun loadHomeScreen() {
-        updateState { it.copy(isLoading = true, isError = false) }
+        updateState { it.copy(isLoading = true, isGenricError = false) }
 
         safeExecute {
             val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
@@ -94,7 +95,7 @@ class HomeViewModel(
             updateState {
                 it.copy(
                     isLoading = false,
-                    isError = false,
+                    isGenricError = false,
                     matchVibes = pickedForYou,
                     popularity = popularMovieUi + popularSeriesUi,
                     recentlyReleased = recentMovieUi + recentSeriesUi,
@@ -108,6 +109,7 @@ class HomeViewModel(
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
+            is NoInternetException -> R.string.error_network
             is AccessDeniedException -> R.string.error_access_denied
             is ValidationException -> R.string.error_validation
             is NotFoundException -> R.string.error_not_found
@@ -117,7 +119,15 @@ class HomeViewModel(
     }
     override fun onError(throwable: Throwable) {
         val resId = mapExceptionToStringRes(throwable)
-        updateState { it.copy(isLoading = false, isError = true) }
+        val isNetworkError = throwable is NoInternetException
+
+        updateState {
+            it.copy(
+                isLoading = false,
+                isGenricError = true,
+                isNetworkError = isNetworkError
+            )
+        }
         sendEffect(HomeEffect.ShowError(resId))
     }
     override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
@@ -125,6 +135,10 @@ class HomeViewModel(
             MediaType.MOVIE -> sendEffect(HomeEffect.NavigateToMovieDetails(mediaId))
             MediaType.SERIES -> sendEffect(HomeEffect.NavigateToSeriesDetails(mediaId))
         }
+    }
+
+    override fun loadHomeContent() {
+        loadHomeScreen()
     }
 
     override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
