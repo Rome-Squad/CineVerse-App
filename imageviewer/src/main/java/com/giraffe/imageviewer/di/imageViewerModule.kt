@@ -19,7 +19,6 @@ object ImageViewerModule {
     @Singleton
     fun provideSafeIslamicImageClassifier(
         @ApplicationContext context: Context
-    ): SafeIslamicImageClassifier {
-        return SafeIslamicImageClassifierImpl(context)
-    }
+    ): SafeIslamicImageClassifier = SafeIslamicImageClassifierImpl(context)
+
 }
