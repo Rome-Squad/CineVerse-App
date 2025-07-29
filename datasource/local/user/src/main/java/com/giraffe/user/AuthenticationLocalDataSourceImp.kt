@@ -13,8 +13,6 @@ class AuthenticationLocalDataSourceImp(
     override suspend fun saveSessionId(sessionId: String) {
         dataStore.saveSessionId(sessionId)
         sessionProvider.setSessionId(sessionId)
-        val session = sessionProvider.getSessionId()
-        Log.d("TAG", "savedSessionId from session provider: $session")
     }
 
     override suspend fun getSessionId(): String? {

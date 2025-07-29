@@ -54,12 +54,7 @@ class CineVerseApp : Application() {
     private fun getSessionId() {
         coroutineScope.launch {
             val sessionId = authenticationDatastore.getSessionId()
-            Log.d("TAG", "Session id from datastore: $sessionId")
             sessionProvider.setSessionId(sessionId)
-
-            val session = sessionProvider.getSessionId()
-            Log.d("TAG", "Session id from session provider: $session")
-
         }
     }
 
