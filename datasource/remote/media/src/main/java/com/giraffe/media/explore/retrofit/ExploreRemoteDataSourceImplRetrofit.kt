@@ -2,8 +2,9 @@ package com.giraffe.media.explore.retrofit
 
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.util.RetrofitRequestBuilder
+import javax.inject.Inject
 
-class ExploreRemoteDataSourceImplRetrofit(
+class ExploreRemoteDataSourceImplRetrofit @Inject constructor(
     private val retrofitRequestBuilder: RetrofitRequestBuilder<ExploreApiServiceRetrofit>
 ) : ExploreRemoteDataSource {
 

@@ -5,8 +5,9 @@ import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.util.RetrofitRequestBuilder
+import javax.inject.Inject
 
-class MoviesRemoteDataSourceImplRetrofit(
+class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
     private val retrofitRequestBuilder: RetrofitRequestBuilder<MoviesApiServiceRetrofit>
 ) : MoviesRemoteDataSource {
 
