@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -71,12 +72,12 @@ fun SeasonCard(
                     .fillMaxWidth()
                     .height(intrinsicSize = IntrinsicSize.Min),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
             ) {
 
                 Box(
                     modifier = Modifier
                         .width(posterWidth)
+                        .heightIn(min = 71.dp)
                         .fillMaxHeight()
                         .clip(
                             RoundedCornerShape(
