@@ -4,8 +4,9 @@ import com.giraffe.repository.datasource.UserRemoteDataSource
 import com.giraffe.repository.utils.SafeCall
 import com.giraffe.user.SessionManager
 import com.giraffe.user.repository.AuthRepository
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val remoteDataSource: UserRemoteDataSource,
     private val sessionIdManager: SessionManager
 ) : AuthRepository {

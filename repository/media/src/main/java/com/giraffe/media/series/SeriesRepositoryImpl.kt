@@ -17,8 +17,9 @@ import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
+import javax.inject.Inject
 
-class SeriesRepositoryImpl(
+class SeriesRepositoryImpl @Inject constructor(
     private val remote: SeriesRemoteDataSource,
     private val local: SeriesLocalDateSource,
     private val localExploreDataSource: LocalExploreDataSource
