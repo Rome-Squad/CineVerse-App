@@ -48,6 +48,10 @@
     <string name="try_again">Try Again</string>
     <string name="animated_content">Animated Content</string>
     <string name="season">Season %1$s</string>
-    <string name="viewtoggleanimation">View Toggle Animation</string>
+    <string name="view_toggle_animation">View Toggle Animation</string>
     <string name="split">, </string>
+    <string name="video_library_icon">Video library icon</string>
+    <string name="no_collections_yet">No Collections Yet</string>
+    <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">Create a new collection to start saving your favorite movies and series.</string>
+    <string name="create_collection">Create collection</string>
 </resources>
