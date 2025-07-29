@@ -1,4 +1,4 @@
-package com.giraffe.details.components.recommended
+package com.giraffe.details.screens.recommended.movie
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
@@ -23,8 +23,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -32,7 +30,7 @@ import com.giraffe.details.components.PosterHorizontal
 import com.giraffe.details.components.PosterVertically
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.toPoster
-import kotlinx.coroutines.flow.collectLatest
+import com.giraffe.details.utils.ObserveScrollDirection
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -127,7 +125,7 @@ private fun MovieGridView(
 ) {
     LazyVerticalGrid(
         state = gridState,
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(165.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = contentPadding
@@ -142,28 +140,5 @@ private fun MovieGridView(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun <T> ObserveScrollDirection(
-    state: T,
-    getIndex: (T) -> Int,
-    getOffset: (T) -> Int,
-    onScroll: (isScrollingUp: Boolean) -> Unit
-) {
-    LaunchedEffect(state) {
-        var previousIndex = getIndex(state)
-        var previousOffset = getOffset(state)
-        snapshotFlow { getIndex(state) to getOffset(state) }
-            .collectLatest { (index, offset) ->
-                if (index > previousIndex || (index == previousIndex && offset > previousOffset)) {
-                    onScroll(false)
-                } else if (index < previousIndex || offset < previousOffset) {
-                    onScroll(true)
-                }
-                previousIndex = index
-                previousOffset = offset
-            }
     }
 }
