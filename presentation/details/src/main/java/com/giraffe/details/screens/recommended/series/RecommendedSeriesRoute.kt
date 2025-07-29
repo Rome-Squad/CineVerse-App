@@ -3,7 +3,6 @@ package com.giraffe.details.screens.recommended.series
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,11 +18,9 @@ internal fun NavGraphBuilder.recommendedSeriesRoute(
 ) {
     composable<RecommendedSeriesRoute>
     { backStackEntry ->
-        val titleSeries = backStackEntry.toRoute<RecommendedSeriesRoute>().titleSeries
         RecommendedSeriesScreen(
             navigateToSeriesDetails = navigateToSeriesDetails,
             onBackClick = onBackClick,
-            titleSeries = titleSeries,
         )
     }
 
