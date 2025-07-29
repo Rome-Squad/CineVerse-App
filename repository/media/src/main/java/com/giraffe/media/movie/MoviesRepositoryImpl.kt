@@ -1,7 +1,6 @@
 package com.giraffe.media.movie
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource

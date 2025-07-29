@@ -5,7 +5,6 @@ import com.giraffe.media.util.AuthInterceptor
 import com.giraffe.media.util.LanguageInterceptor
 import com.giraffe.media.util.SessionIdInterceptor
 import com.giraffe.media.util.SessionProvider
-import com.giraffe.user.AuthenticationLocalDataSourceImp
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

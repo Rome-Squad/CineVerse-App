@@ -1,8 +1,6 @@
 package com.giraffe.user.retrofit
 
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
-import com.giraffe.user.dto.SessionRequestBody
-import com.giraffe.user.dto.TokenValidationBody
 import com.giraffe.user.util.RetrofitUserRequestBuilder
 
 class UserRemoteDataSourceImplRetrofit(
