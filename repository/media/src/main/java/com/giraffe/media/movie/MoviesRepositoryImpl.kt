@@ -1,16 +1,17 @@
 package com.giraffe.media.movie
 
+import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
+import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
-import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.mapper.toCacheDto
 import com.giraffe.media.movie.mapper.toDto
@@ -112,7 +113,7 @@ class MoviesRepositoryImpl(
 
     override suspend fun getMovieReviews(
         movieId: Int
-    ) = SafeCall { remote.getMovieReviews(movieId).map(MovieReviewDto::toEntity) }
+    ) = SafeCall { remote.getMovieReviews(movieId).map(ReviewDto::toEntity) }
 
     override suspend fun addRating(
         movieId: Int,

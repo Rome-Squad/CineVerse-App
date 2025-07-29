@@ -1,14 +1,24 @@
 package com.giraffe.media.movie.retrofit
 
-import com.giraffe.media.movie.datasource.remote.dto.*
-import com.giraffe.media.movie.response.*
+import com.giraffe.media.movie.datasource.remote.dto.MovieDto
+import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import com.giraffe.media.movie.response.GenreResponse
+import com.giraffe.media.movie.response.MoviesListResponse
+import com.giraffe.media.util.AllReviewsDto
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MoviesApiServiceRetrofit {
 
     @GET("$MOVIE_END_POINT/{$ID}")
-    suspend fun getMovieById(@Path(ID) movieId: Int): Response<MovieDto>
+    suspend fun getMovieById(
+        @Path(ID) movieId: Int
+    ): Response<MovieDto>
 
     @GET(MOVIES_BY_NAME_URL)
     suspend fun getMoviesByName(
@@ -26,7 +36,9 @@ interface MoviesApiServiceRetrofit {
     ): Response<MoviesListResponse>
 
     @GET("$MOVIE_END_POINT/{$ID}/$REVIEWS_END_POINT")
-    suspend fun getMovieReviews(@Path(ID) movieId: Int): Response<ReviewsResponseDto>
+    suspend fun getMovieReviews(
+        @Path(ID) movieId: Int
+    ): Response<AllReviewsDto>
 
     @GET("$MOVIE_END_POINT/{$MOVIE_ID}/$RECOMMENDATIONS")
     suspend fun getRecommendations(

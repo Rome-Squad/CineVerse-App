@@ -3,7 +3,7 @@ package com.giraffe.media.series.retrofit
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.response.GenresResponse
 import com.giraffe.media.series.response.SeriesResponse
-import com.giraffe.media.series.response.SeriesReviewsResponse
+import com.giraffe.media.util.AllReviewsDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -35,7 +35,7 @@ interface SeriesApiServiceRetrofit {
     suspend fun getSeriesReviews(
         @Path(SERIES_ID) seriesId: Int,
         @Query(PAGE) page: Int = 1
-    ): Response<SeriesReviewsResponse>
+    ): Response<AllReviewsDto>
 
     @GET("$TV/{$SERIES_ID}/$RECOMMENDATIONS")
     suspend fun getSeriesRecommendations(

@@ -1,11 +1,11 @@
-package com.giraffe.media.series.response
+package com.giraffe.media.util
 
-import com.giraffe.media.series.datasource.remote.dto.ReviewDto
+import com.giraffe.media.dto.ReviewDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SeriesReviewsResponse(
+data class AllReviewsDto(
     val id: Int,
     val page: Int,
     val results: List<ReviewDto>,

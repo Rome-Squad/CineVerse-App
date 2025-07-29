@@ -1,12 +1,10 @@
 package com.giraffe.media.series.mapper
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.entity.Review
 import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
-import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeasonDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
@@ -103,22 +101,6 @@ fun SeriesDetailsDto.toEntity() = Series(
     releaseYear = firstAirDate.toFormattedDate(),
     overview = overview,
     seasons = seasons.map { it.toEntity() }
-)
-
-@OptIn(ExperimentalTime::class)
-fun ReviewDto.toEntity() = Review(
-    id = this.id,
-    authorImageUrl = BASE_IMAGE_URL + this.authorDetails.avatarPath.toString(),
-    authorName = this.authorDetails.name?.takeIf { it.isNotBlank() } ?: this.author,
-    authorUserName = this.authorDetails.username,
-    content = this.content,
-    rating = (this.authorDetails.rating ?: 0f).toInt(),
-    createdAt = try {
-        val instant = Instant.parse(this.createdAt)
-        instant.toLocalDateTime(TimeZone.UTC)
-    } catch (e: Exception) {
-        null
-    },
 )
 
 @OptIn(ExperimentalTime::class)
