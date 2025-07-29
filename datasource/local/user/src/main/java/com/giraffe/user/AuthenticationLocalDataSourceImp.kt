@@ -17,4 +17,9 @@ class AuthenticationLocalDataSourceImp(
         val sessionId = dataStore.getSessionId()
         return sessionId
     }
+
+    override suspend fun isLoggedIn(): Boolean {
+        val sessionId = dataStore.getSessionId()
+        return sessionId != null
+    }
 }

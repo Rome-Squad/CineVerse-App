@@ -21,4 +21,8 @@ class AuthenticationRepositoryImpl(
 
         localDataSource.saveSessionId(sessionId)
     }
+
+    override suspend fun isLoggedIn(): Boolean {
+        return localDataSource.isLoggedIn()
+    }
 }
