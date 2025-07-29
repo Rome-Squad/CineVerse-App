@@ -11,6 +11,7 @@ import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
@@ -28,7 +29,8 @@ class MovieDetailsViewModel(
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
-    val setMovieRecentUseCase: SetMovieRecentUseCase
+    val setMovieRecentUseCase: SetMovieRecentUseCase,
+    val addRatingUseCase: AddMovieRatingUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
@@ -203,6 +205,15 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
+    private fun addUserRating(movieId: Int, rating: Float) {
+        safeExecute {
+            addRatingUseCase(
+                movieId = movieId,
+                ratingValue = rating
+            )
+        }
+    }
+
 
     //user interaction listeners
     override fun onAddToCollectionClick() {
@@ -294,7 +305,7 @@ class MovieDetailsViewModel(
     override fun onPersonClick(personId: Int) {
     }
 
-    override fun onAddRatingClick() {
+    override fun onAddRatingClick(movieId: Int, rating: Float) {
+        addUserRating(movieId = movieId, rating = rating)
     }
-
 }

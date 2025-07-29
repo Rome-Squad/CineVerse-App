@@ -18,6 +18,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -80,8 +84,12 @@ fun MovieDetailsScreen(
                 is MovieDetailsEffect.NavigateToCastDetails -> navController.navigate(
                     CastDetailsRoute(effect.personId)
                 )
+
                 is MovieDetailsEffect.NavigateToMoviesRecommended -> {
-                    navController.navigateToRecommendedMoviesScreen(movieId = effect.movieId,title = effect.title)
+                    navController.navigateToRecommendedMoviesScreen(
+                        movieId = effect.movieId,
+                        title = effect.title
+                    )
                 }
             }
         }
@@ -118,8 +126,8 @@ private fun MovieDetailsContent(
     interaction: MovieDetailsInteractionListener,
     onBackButtonClick: () -> Unit
 ) {
-
     val scrollState = rememberScrollState()
+    var currentRating by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = modifier
@@ -187,7 +195,7 @@ private fun MovieDetailsContent(
                 endText = stringResource(R.string.show_more),
                 posters = state.recommendedMovies,
                 onClickEndText = {
-                   interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
+                    interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                 },
                 onClickPoster = {
                     navController.navigateToMovieDetails(it.id)
@@ -272,14 +280,27 @@ private fun MovieDetailsContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RatingSelector()
+                RatingSelector(
+                    rate = currentRating,
+                    onRateClick = { newRating ->
+                        currentRating = newRating
+                    }
+                )
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
-                    enabled = false,
-                    onClick = {})
+                    enabled = currentRating > 0,
+                    onClick = {
+                        state.movie.let { movie ->
+                            interaction.onAddRatingClick(
+                                movieId = movie.id,
+                                rating = currentRating.toFloat()
+                            )
+                            interaction.onDismissGiveStarsBottomSheet()
+                        }
+                    })
             }
         })
 }

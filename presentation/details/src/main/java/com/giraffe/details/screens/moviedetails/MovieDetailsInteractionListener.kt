@@ -20,7 +20,7 @@ interface MovieDetailsInteractionListener {
 
     fun onGiveStarsClick()
 
-    fun onAddRatingClick()
+    fun onAddRatingClick(movieId: Int, rating: Float)
 
     fun onDismissAddToCollectionBottomSheet()
 
