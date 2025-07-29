@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.recommended.movie
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,22 +23,22 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.recommended.TransitionLazyColumnToGridMovie
 import com.giraffe.details.models.MovieUi
 
 @Composable
 fun RecommendedContent(
     title: String,
     lazyPagingItems: LazyPagingItems<MovieUi>,
-    modifier: Modifier = Modifier,
     interaction: RecommendedInteractionListener,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isGridSelected by rememberSaveable { mutableStateOf(false) }
 
     Box {
         LazyColumn(
             modifier = modifier
+                .fillMaxWidth()
                 .background(Theme.color.background.screen)
                 .systemBarsPadding()
         ) {
@@ -74,7 +75,6 @@ fun RecommendedContent(
 }
 
 
-
 @Composable
 private fun CardsSection(
     modifier: Modifier = Modifier,
@@ -92,7 +92,10 @@ private fun CardsSection(
             lazyPagingItems = lazyPagingItems,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 5.dp),
-            onItemClick = onItemClick
+            onItemClick = { movieId ->
+                movieId?.let {
+                    onItemClick(it)
+                } ?: Log.e("RecommendedMovies", "Movie ID is null.")}
         )
     }
 }

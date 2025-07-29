@@ -5,6 +5,7 @@ import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.util.safeCall
+import com.giraffe.media.util.safeFlow
 
 
 class MovieLocalDataSourceImp(
@@ -60,7 +61,7 @@ class MovieLocalDataSourceImp(
         movieDao.clearRecentlyMovies()
     }
 
-    override suspend fun getRecentlyMovies(): List<MovieCacheDto> = safeCall {
+    override fun getRecentlyMovies() = safeFlow {
         movieDao.getRecentlyMovies()
     }
 

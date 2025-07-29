@@ -9,18 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
@@ -32,7 +29,6 @@ fun SearchItem(
     onClickItem: (item: String) -> Unit,
     onClickIcon: () -> Unit,
 ) {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Row(
         modifier = modifier
             .clickable { onClickItem(text) }
@@ -59,9 +55,6 @@ fun SearchItem(
             contentDescription = "Navigate",
             modifier = Modifier
                 .size(20.dp)
-                .graphicsLayer {
-                    rotationY = if (isRtl) 0f else 180f
-                }
                 .clickable { onClickIcon() },
             tint = Theme.color.shade.tertiary
         )

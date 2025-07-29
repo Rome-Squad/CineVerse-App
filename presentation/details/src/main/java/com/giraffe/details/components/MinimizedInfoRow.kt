@@ -6,7 +6,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,41 +40,45 @@ fun MinimizedInfoRow(
 ) {
     val key = "_KEY"
     with(sharedTransitionScope) {
-        Box(modifier.background(Theme.color.background.screen)) {
+        Row(
+            modifier = modifier
+                .background(Theme.color.background.screen)
+                .padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 100.dp),
+                    .weight(1f),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                posterUrl?.let {
-                    SafeIslamicImage(
-                        imageUrl = it,
-                        contentDescription = stringResource(R.string.poster_image),
-                        modifier = Modifier
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = posterUrl.toString() + key),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            )
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(Theme.radius.full)),
-                        contentScale = ContentScale.FillBounds
-                    ) {
-                        Icon(
-                            painter = painterResource(Theme.icons.dueTone.image),
-                            contentDescription = null,
-                            tint = Theme.color.brand.secondary,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(
-                                    Theme.color.background.card,
-                                    shape = CircleShape
-                                )
-                                .padding(12.dp)
-                                .wrapContentSize(),
+                SafeIslamicImage(
+                    imageUrl = posterUrl.toString(),
+                    contentDescription = stringResource(R.string.poster_image),
+                    modifier = Modifier
+                        .sharedElement(
+                            sharedContentState = rememberSharedContentState(key = posterUrl.toString() + key),
+                            animatedVisibilityScope = animatedVisibilityScope
                         )
-                    }
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(Theme.radius.full)),
+                    contentScale = ContentScale.FillBounds
+                ) {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = null,
+                        tint = Theme.color.brand.secondary,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(
+                                Theme.color.background.card,
+                                shape = CircleShape
+                            )
+                            .padding(12.dp)
+                            .wrapContentSize(),
+                    )
                 }
                 Text(
                     text = name,
@@ -89,7 +92,6 @@ fun MinimizedInfoRow(
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.align(Alignment.TopEnd)
             ) {
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.add),

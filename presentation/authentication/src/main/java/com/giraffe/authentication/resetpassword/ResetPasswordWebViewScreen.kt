@@ -3,22 +3,31 @@ package com.giraffe.authentication.resetpassword
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.fillMaxSize
-import com.giraffe.designsystem.composable.AppBar
 import androidx.compose.ui.platform.LocalContext
+import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.theme.Theme
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
+
 @Composable
 fun ResetPasswordWebViewScreen(onBack: () -> Unit) {
     val resetPasswordUrl = "https://www.themoviedb.org/reset-password"
     var webViewState = rememberWebViewState(url = resetPasswordUrl)
     val context = LocalContext.current
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .systemBarsPadding()
+    ) {
         AppBar(
             title = "Reset Password",
             showBackButton = true,
