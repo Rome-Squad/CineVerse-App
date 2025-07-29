@@ -1,4 +1,4 @@
-package com.giraffe.details.screens.recommended.series
+package com.giraffe.details.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

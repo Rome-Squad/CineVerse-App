@@ -58,7 +58,7 @@ fun PrimaryButton(
             } else {
                 Text(
                     text = text,
-                    style = Theme.textStyle.body.md.regular,
+                    style = Theme.textStyle.body.md.medium,
                     fontSize = 14.sp,
                     lineHeight = 20.sp,
                     letterSpacing = 0.sp

@@ -22,22 +22,22 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.recommended.TransitionLazyColumnToGridMovie
 import com.giraffe.details.models.MovieUi
 
 @Composable
 fun RecommendedContent(
     title: String,
     lazyPagingItems: LazyPagingItems<MovieUi>,
-    modifier: Modifier = Modifier,
     interaction: RecommendedInteractionListener,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isGridSelected by rememberSaveable { mutableStateOf(false) }
 
     Box {
         LazyColumn(
             modifier = modifier
+                .fillMaxWidth()
                 .background(Theme.color.background.screen)
                 .systemBarsPadding()
         ) {
@@ -72,7 +72,6 @@ fun RecommendedContent(
         )
     }
 }
-
 
 
 @Composable
