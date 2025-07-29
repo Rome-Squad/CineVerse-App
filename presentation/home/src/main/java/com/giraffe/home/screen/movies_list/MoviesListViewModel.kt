@@ -2,14 +2,12 @@ package com.giraffe.home.screen.movies_list
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.utils.toPosterUi
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -21,8 +19,6 @@ import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MoviesListViewModel(
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
@@ -53,72 +49,47 @@ class MoviesListViewModel(
             )
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val media = when (sectionType) {
-                    MovieSectionType.RECENTLY_RELEASED -> {
-                        val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
-                        val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
-
-                        val moviesUi = recentMovies.map { it.toPosterUi() }
-                        val seriesUi = recentSeries.map { it.toPosterUi() }
-
-                        moviesUi + seriesUi
-                    }
-
-                    MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                        val topRated = getTopRatedSeriesUseCase(page = 1)
-                        topRated.map { it.toPosterUi() }
-                    }
-
-                    MovieSectionType.UPCOMING_MOVIES -> {
-                        val upcoming = getUpcomingMoviesUseCase(page = 1)
-                        upcoming.map { it.toPosterUi() }
-                    }
-
-                    MovieSectionType.RECENTLY_VIEWED -> {
-                        val recentlyViewedMovies = getRecentlyMoviesUseCase()
-                        val recentlyViewedSeries = getRecentlySeriesUseCase()
-
-                        val moviesUi = recentlyViewedMovies.map { it.toPosterUi() }
-                        val seriesUi = recentlyViewedSeries.map { it.toPosterUi() }
-
-                        moviesUi + seriesUi
-                    }
-
-                    MovieSectionType.MATCHES_YOUR_VIBES -> {
-                        val recentlyViewedMovies = getRecentlyMoviesUseCase()
-                        val recentlyViewedSeries = getRecentlySeriesUseCase()
-
-                        val recommendedMovies = recentlyViewedMovies.firstOrNull()
-                            ?.let { getRecommendedMovieUseCase(it.id, 1) } ?: emptyList()
-                        val recommendedSeries = recentlyViewedSeries.firstOrNull()
-                            ?.let { getRecommendedSeriesUseCase(it.id.toLong(), 1) } ?: emptyList()
-
-                        val moviesUi = recommendedMovies.map { it.toPosterUi() }
-                        val seriesUi = recommendedSeries.map { it.toPosterUi() }
-
-                        moviesUi + seriesUi
-                    }
-
-                    else -> emptyList()
+        safeExecute {
+            val media = when (sectionType) {
+                MovieSectionType.RECENTLY_RELEASED -> {
+                    val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
+                    val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
+                    recentMovies.map { it.toPosterUi() } + recentSeries.map { it.toPosterUi() }
                 }
 
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        mediaList = media,
-                    )
+                MovieSectionType.TOP_RATED_TV_SHOWS -> {
+                    getTopRatedSeriesUseCase(page = 1).map { it.toPosterUi() }
                 }
 
-            } catch (e: MediaException) {
-                val errorResId = mapExceptionToStringRes(e)
-                updateState { it.copy(isLoading = false, errorMessage = e.message) }
-                sendEffect(MoviesListEffect.ShowError(errorResId))
-            } catch (e: Exception) {
-                updateState { it.copy(isLoading = false, errorMessage = e.message) }
-                sendEffect(MoviesListEffect.ShowError(R.string.error_unknown))
+                MovieSectionType.UPCOMING_MOVIES -> {
+                    getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
+                }
+
+                MovieSectionType.RECENTLY_VIEWED -> {
+                    val recentlyViewedMovies = getRecentlyMoviesUseCase()
+                    val recentlyViewedSeries = getRecentlySeriesUseCase()
+                    recentlyViewedMovies.map { it.toPosterUi() } + recentlyViewedSeries.map { it.toPosterUi() }
+                }
+
+                MovieSectionType.MATCHES_YOUR_VIBES -> {
+                    val recentlyViewedMovies = getRecentlyMoviesUseCase()
+                    val recentlyViewedSeries = getRecentlySeriesUseCase()
+                    val recommendedMovies = recentlyViewedMovies.firstOrNull()
+                        ?.let { getRecommendedMovieUseCase(it.id, 1) } ?: emptyList()
+                    val recommendedSeries = recentlyViewedSeries.firstOrNull()
+                        ?.let { getRecommendedSeriesUseCase(it.id.toLong(), 1) } ?: emptyList()
+                    recommendedMovies.map { it.toPosterUi() } + recommendedSeries.map { it.toPosterUi() }
+                }
+
+                else -> emptyList()
+            }
+
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    mediaList = media,
+                )
             }
         }
     }
@@ -146,5 +117,16 @@ class MoviesListViewModel(
             MediaType.MOVIE -> sendEffect(MoviesListEffect.NavigateToMovieDetails(mediaId))
             MediaType.SERIES -> sendEffect(MoviesListEffect.NavigateToSeriesDetails(mediaId))
         }
+    }
+
+    override fun onError(throwable: Throwable) {
+        val errorResId = mapExceptionToStringRes(throwable)
+        updateState {
+            it.copy(
+                isLoading = false,
+                errorMessage = throwable.message ?: "Unknown error"
+            )
+        }
+        sendEffect(MoviesListEffect.ShowError(errorResId))
     }
 }
