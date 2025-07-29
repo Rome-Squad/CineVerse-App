@@ -1,13 +1,11 @@
 package com.giraffe.home.screen.home
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.viewModelScope
 import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -22,9 +20,7 @@ import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getPopularityMoviesUseCase: GetPopularityMoviesUseCase,
@@ -49,75 +45,66 @@ class HomeViewModel(
     private fun loadHomeScreen() {
         updateState { it.copy(isLoading = true, isError = false) }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
-                val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
-                val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase() }
-                val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
-                val recentlyViewedMoviesDeferred = async { getRecentlyMoviesUseCase() }
-                val recentlyViewedSeriesDeferred = async { getRecentlySeriesUseCase() }
-                val recentlyViewedMovies = recentlyViewedMoviesDeferred.await()
-                val recentlyViewedSeries = recentlyViewedSeriesDeferred.await()
-                val popularMovies = popularMoviesDeferred.await()
-                val popularSeries = popularSeriesDeferred.await()
-                val recentMovies = recentMoviesDeferred.await()
-                val recentSeries = recentSeriesDeferred.await()
+        safeExecute {
+            val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
+            val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
+            val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase() }
+            val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
+            val recentlyViewedMoviesDeferred = async { getRecentlyMoviesUseCase() }
+            val recentlyViewedSeriesDeferred = async { getRecentlySeriesUseCase() }
 
+            val recentlyViewedMovies = recentlyViewedMoviesDeferred.await()
+            val recentlyViewedSeries = recentlyViewedSeriesDeferred.await()
+            val popularMovies = popularMoviesDeferred.await()
+            val popularSeries = popularSeriesDeferred.await()
+            val recentMovies = recentMoviesDeferred.await()
+            val recentSeries = recentSeriesDeferred.await()
 
-                val recommendedSeries = recentlyViewedSeries.firstOrNull()
-                    ?.let { getRecommendedSeriesUseCase(it.id.toLong(), 1) } ?: emptyList()
-                val recommendedMovies = recentlyViewedMovies.firstOrNull()
-                    ?.let { getRecommendedMovieUseCase(it.id, 1) } ?: emptyList()
+            val recommendedSeries = recentlyViewedSeries.firstOrNull()
+                ?.let { getRecommendedSeriesUseCase(it.id.toLong(), 1) } ?: emptyList()
+            val recommendedMovies = recentlyViewedMovies.firstOrNull()
+                ?.let { getRecommendedMovieUseCase(it.id, 1) } ?: emptyList()
 
-                val recommendedSeriesUi = recommendedSeries.map { it.toHomeUiModel() }
-                val recommendedMoviesUi = recommendedMovies.map { it.toHomeUiModel() }
-                val recentlyViewedMovieUi = recentlyViewedMovies.map { it.toHomeUiModel() }
-                val recentlyViewedSeriesUi = recentlyViewedSeries.map { it.toHomeUiModel() }
+            val recommendedSeriesUi = recommendedSeries.map { it.toHomeUiModel() }
+            val recommendedMoviesUi = recommendedMovies.map { it.toHomeUiModel() }
+            val recentlyViewedMovieUi = recentlyViewedMovies.map { it.toHomeUiModel() }
+            val recentlyViewedSeriesUi = recentlyViewedSeries.map { it.toHomeUiModel() }
 
-                val recentlyViewed = recentlyViewedSeriesUi + recentlyViewedMovieUi
-                val pickedForYou = recommendedSeriesUi + recommendedMoviesUi
+            val recentlyViewed = recentlyViewedSeriesUi + recentlyViewedMovieUi
+            val pickedForYou = recommendedSeriesUi + recommendedMoviesUi
 
+            val topRated = getTopRatedSeriesUseCase(page = 1)
+            val upcoming = getUpcomingMoviesUseCase(page = 1)
 
-                val topRated = getTopRatedSeriesUseCase(page = 1)
-                val upcoming = getUpcomingMoviesUseCase(page = 1)
+            val popularMovieUi = popularMovies.map { movie ->
+                val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                movie.toPopularMediaUiModel(genres)
+            }
 
-                val popularMovieUi = popularMovies.map { movie ->
-                    val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                    movie.toPopularMediaUiModel(genres)
-                }
+            val popularSeriesUi = popularSeries.map { series ->
+                val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+                series.toPopularMediaUiModel(genres)
+            }
 
-                val popularSeriesUi = popularSeries.map { series ->
-                    val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                    series.toPopularMediaUiModel(genres)
-                }
+            val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
+            val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
+            val topRatedUi = topRated.map { it.toHomeUiModel() }
+            val upcomingUi = upcoming.map { it.toHomeUiModel() }
 
-                val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
-                val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
-                val topRatedUi = topRated.map { it.toHomeUiModel() }
-                val upcomingUi = upcoming.map { it.toHomeUiModel() }
-
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        isError = false,
-                        matchVibes = pickedForYou,
-                        popularity = popularMovieUi + popularSeriesUi,
-                        recentlyReleased = recentMovieUi + recentSeriesUi,
-                        topRated = topRatedUi,
-                        recentlyViewed = recentlyViewed,
-                        upcomingMovies = upcomingUi
-                    )
-                }
-
-            } catch (e: MediaException) {
-                val errorResId = mapExceptionToStringRes(e)
-                updateState { it.copy(isLoading = false, isError = true) }
-                sendEffect(HomeEffect.ShowError(errorResId))
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    isError = false,
+                    matchVibes = pickedForYou,
+                    popularity = popularMovieUi + popularSeriesUi,
+                    recentlyReleased = recentMovieUi + recentSeriesUi,
+                    topRated = topRatedUi,
+                    recentlyViewed = recentlyViewed,
+                    upcomingMovies = upcomingUi
+                )
             }
         }
     }
-
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
@@ -128,7 +115,11 @@ class HomeViewModel(
             else -> R.string.error_unknown
         }
     }
-
+    override fun onError(throwable: Throwable) {
+        val resId = mapExceptionToStringRes(throwable)
+        updateState { it.copy(isLoading = false, isError = true) }
+        sendEffect(HomeEffect.ShowError(resId))
+    }
     override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
         when (mediaType) {
             MediaType.MOVIE -> sendEffect(HomeEffect.NavigateToMovieDetails(mediaId))
