@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+    implementation("androidx.compose.foundation:foundation:1.5.4")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)

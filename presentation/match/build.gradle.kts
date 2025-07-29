@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -39,6 +39,7 @@ dependencies {
     implementation(project(":imageviewer"))
     implementation(project(":domain:media"))
     implementation(libs.kotlinx.datetime)
+    implementation("androidx.compose.foundation:foundation:1.5.4")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui)

@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation("androidx.compose.foundation:foundation:1.5.4")
     implementation(libs.kotlinx.datetime)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
