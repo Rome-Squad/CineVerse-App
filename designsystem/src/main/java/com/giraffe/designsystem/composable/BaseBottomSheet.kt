@@ -43,7 +43,7 @@ fun BaseBottomSheet(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 AnimatedVisibility(title != null) {
