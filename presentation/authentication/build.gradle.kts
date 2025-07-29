@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("kotlin-kapt")
 }
 
 android {
@@ -57,8 +58,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.ui.tooling)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.koin.androidx.compose)
-
+    implementation(libs.androidx.compose.foundation.foundation)
     implementation(libs.accompanist.webview)
 
 
@@ -68,4 +68,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Hilt DI
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
 }
