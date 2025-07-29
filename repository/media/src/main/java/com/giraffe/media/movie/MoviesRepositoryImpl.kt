@@ -18,14 +18,12 @@ import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
-import com.giraffe.user.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MoviesRepositoryImpl(
     private val local: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
-    private val sessionManager: SessionManager,
     private val localExploreDataSource: LocalExploreDataSource
 ) : MoviesRepository {
 
@@ -118,14 +116,12 @@ class MoviesRepositoryImpl(
         movieId: Int,
         ratingValue: Float
     ) = SafeCall {
-        val sessionId = getSessionId()
         val requestBody = RatingRequest(value = ratingValue)
-        remote.addRating(movieId, sessionId, requestBody)
+        remote.addRating(movieId, requestBody)
     }
 
     override suspend fun getUserMovieRating(movieId: Int) = SafeCall {
-        val sessionId = getSessionId()
-        remote.getUserMovieRating(movieId, sessionId)
+        remote.getUserMovieRating(movieId)
     }
 
     override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall {
@@ -140,7 +136,4 @@ class MoviesRepositoryImpl(
         remote.getUpcomingMovies(page).map(MovieDto::toEntity)
     }
 
-    private suspend fun getSessionId() = SafeCall {
-        sessionManager.getSessionId() ?: throw NoInternetDataException()
-    }
 }
