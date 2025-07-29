@@ -13,10 +13,10 @@ fun NavGraphBuilder.homeRoute(
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
     composable<HomeRoute> {
-//        HomeScreen(
-//            navigateToMoviesListScreen = navigateToMoviesScreen,
-//            navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
-//            navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
-//        )
+        HomeScreen(
+            navigateToMoviesListScreen = navigateToMoviesScreen,
+            navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
+            navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
+        )
     }
 }

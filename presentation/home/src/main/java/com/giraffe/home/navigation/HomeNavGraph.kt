@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,51 +26,44 @@ fun HomeNavGraph(
     detailsApi: DetailsApi,
     exploreApi: ExploreApi
 ) {
-    var isBottomBarVisible by remember { mutableStateOf(true) }
+    val navBackStackEntry = navController.currentDestination?.route.toString()
+
+    val bottomBarRoutes = listOf(
+        HomeRoute,
+        DiscoverRoute
+    )
+
+    val isBottomBarVisible = navBackStackEntry in bottomBarRoutes
     var selectedTabBottomBar by remember { mutableStateOf(BottomTab.Home) }
     Column {
 
         NavHost(
             navController = navController,
-            startDestination = HomeRoute,
-            modifier = Modifier.weight(1f)
+            startDestination = HomeRoute
         ) {
             homeRoute(
-                navigateToMoviesScreen = { sectionType, sectionTitle ->
-                    isBottomBarVisible = false
-                    navController.navigateToMoviesList(
-                        sectionType = sectionType,
-                        sectionTitle = sectionTitle
-                    )
-                },
-                navigateToMoviesDetailsScreen = {
-                    isBottomBarVisible = false
-                    navController.navigateToMovieDetails(it)
-                },
-                navigateToSeriesDetailsScreen = {
-                    isBottomBarVisible = false
-                    navController.navigateToSeriesDetails(it)
-                }
+                navigateToMoviesScreen = navController::navigateToMoviesList,
+                navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
+                navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
             )
 
             moviesListRoute(
-                onBackClick = {
-                    isBottomBarVisible = true
-                    navController.popBackStack()
-                },
-                navigateToMoviesDetailsScreen = { navController.navigateToMovieDetails(it) },
-                navigateToSeriesDetailsScreen = { navController.navigateToSeriesDetails(it) }
+                onBackClick = navController::popBackStack,
+                navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
+                navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
             )
 
 
             composable<SeriesDetailsRoute> { backStackEntry ->
-                detailsApi.SeriesDetailsContainer(seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId) {
+                val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
+                detailsApi.SeriesDetailsContainer(seriesId) {
                     navController.popBackStack()
                 }
             }
 
             composable<MovieDetailsRoute> { backStackEntry ->
-                detailsApi.MovieDetailsContainer(movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId) {
+                val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId
+                detailsApi.MovieDetailsContainer(movieId) {
                     navController.popBackStack()
                 }
             }
@@ -83,7 +75,7 @@ fun HomeNavGraph(
 
         BottomNavigationBar(
             selectedTab = selectedTabBottomBar,
-            isBottomBarVisible = isBottomBarVisible,
+            isBottomBarVisible = !isBottomBarVisible,
             onTabSelected = {
                 when (it) {
                     BottomTab.Explore -> {
@@ -97,7 +89,6 @@ fun HomeNavGraph(
                     }
 
                     else -> {
-                        //navController.popBackStack()
                     }
                 }
             }
