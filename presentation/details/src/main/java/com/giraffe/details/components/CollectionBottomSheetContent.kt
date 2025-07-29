@@ -27,19 +27,18 @@ fun CollectionBottomSheetContent(
     modifier: Modifier = Modifier
 ) {
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .size(64.dp)
-                //  .padding(bottom = 16.dp)
                 .background(
                     Theme.color.brand.tertiary,
                     shape = RoundedCornerShape(Theme.radius.full)
                 ),
             contentAlignment = Alignment.Center
-
 
         ) {
             Image(
