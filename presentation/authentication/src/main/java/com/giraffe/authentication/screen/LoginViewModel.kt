@@ -87,7 +87,7 @@ class LoginViewModel(
             }
         }
 
-        updateState { it.copy() }
+        
         sendEffect(LoginEffect.Error(throwable))
     }
 
