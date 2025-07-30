@@ -10,11 +10,12 @@ class HomeApiImp(
     private val detailsApi: DetailsApi
 ) : HomeApi {
     @Composable
-    override fun HomeContainer() {
+    override fun HomeContainer(onShowBottomBarChange: (Boolean) -> Unit) {
         val navController: NavHostController = rememberNavController()
         HomeNavGraph(
             navController = navController,
             detailsApi = detailsApi,
+            onShowBottomBarChange = onShowBottomBarChange
         )
     }
 }
