@@ -258,14 +258,17 @@ private fun MovieDetailsContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RatingSelector()
+                RatingSelector(
+                    rate = state.currentRating,
+                    onRateClick = interaction::onRateChange
+                )
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
-                    enabled = false,
-                    onClick = onClickPlay
+                    enabled = state.currentRating > 0,
+                    onClick = interaction::onAddRatingClick
                 )
             }
         }

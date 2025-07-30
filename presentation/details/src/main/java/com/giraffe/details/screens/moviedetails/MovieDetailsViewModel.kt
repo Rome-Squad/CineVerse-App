@@ -12,6 +12,7 @@ import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
@@ -31,7 +32,8 @@ class MovieDetailsViewModel @Inject constructor(
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
     val setMovieRecentUseCase: SetMovieRecentUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    val addRatingUseCase: AddMovieRatingUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
@@ -207,7 +209,6 @@ class MovieDetailsViewModel @Inject constructor(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-
     //user interaction listeners
     override fun onAddToCollectionClick() {
         updateState {
@@ -292,6 +293,12 @@ class MovieDetailsViewModel @Inject constructor(
         sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
     }
 
+    override fun onRateChange(rate: Int) {
+        safeExecute {
+            updateState { it.copy(currentRating = rate) }
+        }
+    }
+
     override fun onCollectionClick() {
     }
 
@@ -299,6 +306,12 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onAddRatingClick() {
+        updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
+        safeExecute {
+            addRatingUseCase(
+                movieId = state.value.movie.id,
+                ratingValue =  state.value.currentRating.toFloat()
+            )
+        }
     }
-
 }
