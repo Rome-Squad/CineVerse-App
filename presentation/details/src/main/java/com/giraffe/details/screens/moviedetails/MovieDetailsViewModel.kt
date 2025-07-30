@@ -32,7 +32,7 @@ class MovieDetailsViewModel @Inject constructor(
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
     val setMovieRecentUseCase: SetMovieRecentUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
     val addRatingUseCase: AddMovieRatingUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
