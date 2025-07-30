@@ -8,10 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.explore.ExploreApi
+import com.giraffe.home.HomeApi
+import org.koin.android.ext.android.inject
 
 
 class MainActivity : ComponentActivity() {
 
+    val homeApi: HomeApi by inject()
+    val exploreApi: ExploreApi by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -26,7 +31,7 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             CineVerseTheme {
-                MainScreen()
+                MainScreen(exploreApi, homeApi)
             }
         }
     }
