@@ -66,6 +66,7 @@ class SeriesDetailsViewModel(
         }
     }
 
+    override fun onClickCreateCollection() {}
 
     override fun onDismissAddToCollectionBottomSheet() {
         updateState {

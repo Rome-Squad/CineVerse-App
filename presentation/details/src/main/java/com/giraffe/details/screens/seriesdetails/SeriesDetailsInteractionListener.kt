@@ -3,6 +3,7 @@ package com.giraffe.details.screens.seriesdetails
 interface SeriesDetailsInteractionListener {
     fun onClickGiveStars()
     fun onClickAddToCollection()
+    fun onClickCreateCollection()
     fun onDismissAddToCollectionBottomSheet()
     fun onDismissGiveStarsBottomSheet()
 
