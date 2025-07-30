@@ -72,7 +72,7 @@ fun MovieDetailsScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 MovieDetailsEffect.NavigateToMovies -> {
-                    //navController.navigateToMovieDetails(movieID)
+                  //  navController.navigateToMovieDetails(movieID)
                 }
 
                 is MovieDetailsEffect.NavigateToReviews -> {
@@ -211,8 +211,7 @@ private fun MovieDetailsContent(
             )
         }
         item {
-
-            AnimatedVisibility(visible = true) {
+            AnimatedVisibility(visible = state.movieReviews.isNotEmpty()) {
 
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),

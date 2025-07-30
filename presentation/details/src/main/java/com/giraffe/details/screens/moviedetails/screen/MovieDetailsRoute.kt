@@ -27,7 +27,7 @@ fun NavGraphBuilder.movieDetailsRoute(
 
         MovieDetailsScreen(
             movieID = movieID,
-            navigateToReviews = navigateToReviews,
+            navigateToReviews = { navigateToReviews(movieID) },
             onBackButtonClick = onBackButtonClick,
             onClickPlay = {},
             onClickPoster = {
