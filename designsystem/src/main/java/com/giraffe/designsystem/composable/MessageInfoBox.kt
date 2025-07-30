@@ -31,16 +31,17 @@ fun MessageInfoBox(
     title: String,
     caption: String,
     icon: Painter,
-    iconTint: Color,
+    iconTintColor:Color,
+    buttonBackgroundColor: Color,
     iconBackgroundColor: Color,
     isButtonsVisible: Boolean = true,
+    isSecondaryButtonVisible: Boolean = true,
     titlePrimaryButton: String = "",
     titleSecondaryButton: String = "",
     modifier: Modifier = Modifier,
     onClickPrimaryButton: () -> Unit = {},
     onClickSecondaryButton: () -> Unit = {}
 ) {
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -53,9 +54,8 @@ fun MessageInfoBox(
                 .clip(RoundedCornerShape(Theme.radius.full))
                 .background(iconBackgroundColor)
                 .padding(18.dp),
-            tint = iconTint
+            tint = iconTintColor
         )
-
 
         Text(
             text = title,
@@ -71,29 +71,34 @@ fun MessageInfoBox(
             modifier = Modifier.padding(top = 8.dp),
             textAlign = TextAlign.Center
         )
-        if (isButtonsVisible) Row(
-            modifier = Modifier.padding(top = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            SecondaryButton(
-                text = titleSecondaryButton,
-                onClick = onClickSecondaryButton,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp)
-            )
-            PrimaryButton(
-                text = titlePrimaryButton,
-                onClick = onClickPrimaryButton,
-                buttonColorEnabled = iconTint,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp)
-            )
+
+        if (isButtonsVisible) {
+            Row(
+                modifier = Modifier.padding(top = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (isSecondaryButtonVisible) {
+                    SecondaryButton(
+                        text = titleSecondaryButton,
+                        onClick = onClickSecondaryButton,
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(48.dp)
+                    )
+                }
+
+                PrimaryButton(
+                    text = titlePrimaryButton,
+                    onClick = onClickPrimaryButton,
+                    buttonColorEnabled = buttonBackgroundColor,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp)
+                )
+            }
         }
     }
 }
-
 @Preview(showBackground = true, backgroundColor = 0xFF1B1C2A)
 @Composable
 fun PreviewEditProfileMessage() {
@@ -102,7 +107,8 @@ fun PreviewEditProfileMessage() {
             title = "Edit Profile",
             caption = "You’ll be taken to the website to update your name, username, or profile picture.",
             icon = painterResource(Theme.icons.dueTone.linkMinimalistic),
-            iconTint = Theme.color.brand.primary,
+            buttonBackgroundColor = Theme.color.brand.primary,
+            iconTintColor = Theme.color.additional.primary.red ,
             iconBackgroundColor = Theme.color.brand.tertiary,
             titlePrimaryButton = "Go to Website",
             titleSecondaryButton = "Cancel",
@@ -119,7 +125,8 @@ fun PreviewLogoutMessage() {
             title = "Are you sure you want to logout?",
             caption = "You can always sign back in with your account.",
             icon = painterResource(Theme.icons.dueTone.linkMinimalistic),
-            iconTint = Theme.color.additional.primary.red,
+            iconTintColor =Theme.color.additional.primary.red ,
+            buttonBackgroundColor = Theme.color.additional.primary.red,
             iconBackgroundColor = Theme.color.additional.secondary.red,
             titlePrimaryButton = "Logout",
             titleSecondaryButton = "Cancel",

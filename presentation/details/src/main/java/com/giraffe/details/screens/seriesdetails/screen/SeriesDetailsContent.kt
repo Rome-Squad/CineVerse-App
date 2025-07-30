@@ -179,26 +179,20 @@ fun SeriesDetailsContent(
         }
         item {
             AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
-                SectionTitle(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.top_reviews),
-                    clickableText = stringResource(R.string.show_more),
-                )
 
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    for (index in 0..min(2, state.seriesReviews.size - 1)) {
-                        val review = state.seriesReviews[index]
-                        val padding = when (index) {
-                            0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                            1 -> Modifier.padding(horizontal = 16.dp)
-                            2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
-                            else -> Modifier
-                        }
+                    SectionTitle(
+                        modifier = Modifier,
+                        title = stringResource(R.string.top_reviews),
+                        clickableText = stringResource(R.string.show_more),
+                    )
+
+                    val reviewsToShow = state.seriesReviews.take(3)
+                    reviewsToShow.forEach { review ->
                         ReviewCard(
-                            modifier = padding,
                             rate = review.rating,
                             reviewText = review.content,
                             reviewDate = review.createdAt,
@@ -206,10 +200,10 @@ fun SeriesDetailsContent(
                             reviewerName = review.authorName,
                             reviewerUsername = review.authorUserName
                         )
-                    }
                 }
             }
         }
+    }
     }
 
     BaseBottomSheet(
