@@ -28,11 +28,13 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
+import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -49,22 +51,18 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.TypeOfScreen
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
-import kotlin.math.min
 
 
 @Composable
 fun MovieDetailsScreen(
-    movieID: Int,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
-    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) }),
     onClickPlay: () -> Unit,
     onClickPoster: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     navigateToMoviesRecommended: (Int, String) -> Unit,
+    viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -218,16 +216,15 @@ private fun MovieDetailsContent(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    for (index in 0..min(2, state.movieReviews.size - 1)) {
-                        val review = state.movieReviews[index]
-                        val padding = when (index) {
-                            0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                            1 -> Modifier.padding(horizontal = 16.dp)
-                            2 -> Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp)
-                            else -> Modifier
-                        }
+                    SectionTitle(
+                        modifier = Modifier,
+                        title = stringResource(R.string.top_reviews),
+                        clickableText = stringResource(R.string.show_more),
+                    )
+
+                    val reviewsToShow = state.movieReviews.take(3)
+                    reviewsToShow.forEach { review ->
                         ReviewCard(
-                            modifier = padding,
                             rate = review.rating,
                             reviewText = review.content,
                             reviewDate = review.createdAt,

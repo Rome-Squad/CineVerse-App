@@ -2,8 +2,9 @@ package com.giraffe.media.movies.usecase
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.repository.MoviesRepository
+import javax.inject.Inject
 
-class GetMoviesGenresUseCase(
+class GetMoviesGenresUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(): List<Genre> {

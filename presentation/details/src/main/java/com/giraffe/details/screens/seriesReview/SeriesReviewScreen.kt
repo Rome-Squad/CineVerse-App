@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -17,17 +18,12 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.models.ReviewUI
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SeriesReviewScreen(
-    seriesId: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
-    seriesReviewViewModel: SeriesReviewViewModel = koinViewModel(parameters = {
-        parametersOf(seriesId)
-    })
+    seriesReviewViewModel: SeriesReviewViewModel = hiltViewModel()
 ) {
     val lazyPagingItems = seriesReviewViewModel.reviewsFlow.collectAsLazyPagingItems()
 

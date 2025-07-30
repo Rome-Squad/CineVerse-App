@@ -8,13 +8,29 @@ import com.giraffe.explore.ExploreApi
 import com.giraffe.explore.navigation.ExploreApiImp
 import com.giraffe.home.HomeApi
 import com.giraffe.home.navigation.HomeApiImp
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-val featureApiModule = module {
-    singleOf(::AuthenticationApiImp) bind AuthenticationApi::class
-    singleOf(::DetailsApiImp) bind DetailsApi::class
-    singleOf(::ExploreApiImp) bind ExploreApi::class
-    singleOf(::HomeApiImp) bind HomeApi::class
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class FeatureApiBindModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindDetailsApi(impl: DetailsApiImp): DetailsApi
+
+    @Binds
+    @Singleton
+    abstract fun bindExploreApi(impl: ExploreApiImp): ExploreApi
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeApi(impl: HomeApiImp): HomeApi
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthenticationApi(impl: AuthenticationApiImp): AuthenticationApi
 }

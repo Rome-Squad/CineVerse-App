@@ -45,4 +45,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     annotationProcessor(libs.room.compiler)
     testImplementation(libs.bundles.test)
+    // Hilt DI
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 }

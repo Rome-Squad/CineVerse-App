@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.home.HomeApi
+import javax.inject.Inject
 
-class AuthenticationApiImp(
+class AuthenticationApiImp @Inject constructor(
     private val homeApi: HomeApi
 ) : AuthenticationApi {
 

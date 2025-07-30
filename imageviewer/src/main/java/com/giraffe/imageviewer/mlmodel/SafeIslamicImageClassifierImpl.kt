@@ -9,8 +9,9 @@ import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
+import javax.inject.Inject
 
-class SafeIslamicImageClassifierImpl(
+class SafeIslamicImageClassifierImpl @Inject constructor(
     context: Context
 ) : SafeIslamicImageClassifier {
 

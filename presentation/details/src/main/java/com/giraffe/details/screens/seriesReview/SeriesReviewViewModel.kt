@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.seriesReview
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -14,9 +15,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class SeriesReviewViewModel(
-    private val seriesId: Int,
-    private val getSeriesReviews: GetSeriesReviewsUseCase
+    private val getSeriesReviews: GetSeriesReviewsUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val seriesId: Int = savedStateHandle["id"] ?: 0
+
     val reviewsFlow = Pager(config = PagingConfig(pageSize = 20), initialKey = 1) {
         BasePagingSource { page -> getSeriesReviews(seriesId, page) }
     }
