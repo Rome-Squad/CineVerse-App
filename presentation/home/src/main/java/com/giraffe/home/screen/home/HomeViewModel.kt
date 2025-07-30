@@ -24,10 +24,8 @@ import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,7 +60,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun loadHomeScreen() {
         updateState { it.copy(isLoading = true, isGenricError = false) }
@@ -112,23 +109,6 @@ class HomeViewModel @Inject constructor(
         safeExecute {
             getRecentlyMoviesUseCase().collectLatest { movies ->
                 updateState { it.copy(recentlyViewed = movies.map(Movie::toHomeUiModel)) }
-        updateState {
-            it.copy(
-                isLoading = false,
-                isGenricError = false,
-                popularity = popularMovieUi + popularSeriesUi,
-                recentlyReleased = recentMovieUi + recentSeriesUi,
-                topRated = topRatedUi,
-                upcomingMovies = upcomingUi
-            )
-        }
-    }
-}
-
- private fun getRecentMovies() {
-    safeExecute {
-        getRecentlyMoviesUseCase().collectLatest { movies ->
-            updateState { it.copy(recentlyViewed = movies.map(Movie::toHomeUiModel)) }
 
                 movies.firstOrNull()?.let { movie ->
                     val recommendedMovies = getRecommendedMovieUseCase(movie.id, 1)
@@ -140,14 +120,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-                updateState { it.copy(matchVibes = recommendedMovies) }
-            }
-        }
-    }
-}
 
     @StringRes
-    private fun mapExceptionToStringRes(throwable: Throwable): Int {
+    fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
             is NoInternetException -> R.string.error_network
             is AccessDeniedException -> R.string.error_access_denied
