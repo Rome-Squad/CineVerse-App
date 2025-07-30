@@ -88,13 +88,6 @@ fun MovieDetailsScreen(
                     effect.movieId,
                     effect.title
                 )
-
-                is MovieDetailsEffect.NavigateToMoviesRecommended -> {
-                    navController.navigateToRecommendedMoviesScreen(
-                        movieId = effect.movieId,
-                        title = effect.title
-                    )
-                }
             }
         }
     }
