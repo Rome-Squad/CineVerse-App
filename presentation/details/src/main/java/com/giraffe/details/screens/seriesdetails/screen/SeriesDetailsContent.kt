@@ -32,7 +32,7 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.AddToCollectionContent
+import com.giraffe.details.components.CollectionBottomSheetContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
@@ -210,22 +210,10 @@ fun SeriesDetailsContent(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+        modifier = Modifier.padding(vertical = 28.dp, horizontal = 12.dp),
         content = {
-            AddToCollectionContent(
-                title = "My Favorite TV",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "My WatchLis",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "Cristian Bale Movies",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            CollectionBottomSheetContent(
+                onCreateCollectionClick = interaction::onClickAddToCollection
             )
         }
     )

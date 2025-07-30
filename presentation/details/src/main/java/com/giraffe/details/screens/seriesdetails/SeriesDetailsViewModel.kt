@@ -69,6 +69,7 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
+    override fun onClickCreateCollection() {}
 
     override fun onDismissAddToCollectionBottomSheet() {
         updateState {
