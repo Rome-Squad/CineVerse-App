@@ -5,7 +5,7 @@ import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.response.GenreResponse
 import com.giraffe.media.movie.response.MoviesListResponse
-import com.giraffe.media.util.AllReviewsDto
+import com.giraffe.media.response.AllReviewsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -38,7 +38,7 @@ interface MoviesApiServiceRetrofit {
     @GET("$MOVIE_END_POINT/{$ID}/$REVIEWS_END_POINT")
     suspend fun getMovieReviews(
         @Path(ID) movieId: Int
-    ): Response<AllReviewsDto>
+    ): Response<AllReviewsResponse>
 
     @GET("$MOVIE_END_POINT/{$MOVIE_ID}/$RECOMMENDATIONS")
     suspend fun getRecommendations(
