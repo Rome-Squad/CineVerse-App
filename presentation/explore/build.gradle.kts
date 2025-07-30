@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":api:details"))
     implementation(project(":api:explore"))
     implementation(project(":datasource:remote:media"))
+    implementation(project(":repository:media"))
 
 
     implementation(libs.koin.androidx.compose)

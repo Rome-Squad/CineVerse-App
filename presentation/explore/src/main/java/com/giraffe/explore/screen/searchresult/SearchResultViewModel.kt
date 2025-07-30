@@ -19,8 +19,8 @@ import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
+import com.giraffe.media.util.NetworkInterceptor
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 
 class SearchResultViewModel(
     private val query: String,
@@ -96,16 +96,20 @@ class SearchResultViewModel(
 
     private fun getActors() {
         safeExecute {
+            if (!isConnect.value) {
+                forceUpdateNetworkState(false)
+                return@safeExecute
+            }
             val actorsFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                     BasePagingSource { page -> searchPeopleByName(query, page) }
                 }.flow.cachedIn(viewModelScope).map { it.map(Person::toUi) }
 
-            if (actorsFlow.toList().isEmpty()) {
-                updateState { it.copy(errorMessage = "Nothing Found!") }
-            } else {
-                updateState { it.copy(actors = actorsFlow, errorMessage = null) }
-            }
+             updateState { it.copy(actors = actorsFlow) }
 
         }
-}}
+}
+
+
+
+}

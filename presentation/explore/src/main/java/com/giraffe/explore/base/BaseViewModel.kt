@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.exception.AccessDeniedException
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
@@ -28,6 +29,8 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
     private val _error = MutableStateFlow<Int?>(null)
     val error = _state.asStateFlow()
 
+    private val _isConnect= MutableStateFlow<Boolean>(true)
+     val isConnect=_isConnect.asStateFlow()
 
     protected fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
@@ -47,13 +50,20 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
 
     private fun handler(): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
-            Log.e("Exception", "Caught exception: ${throwable.message.toString()}", throwable)
+            if (throwable is NoInternetDataException ){
+               // Log.e("Exception", "Caught exception: ${throwable.message.toString()}", throwable)
+
+                _isConnect.update { false }
+                Log.e("IsConnect", "isConnect updated to false")  // Debug log
+            }
+
+           // Log.e("Exception", "Caught exception: ${throwable.message.toString()}", throwable)
             _error.update { mapExceptionToStringRes(throwable) }
         }
     }
 
     @StringRes
-    private fun mapExceptionToStringRes(throwable: Throwable): Int {
+    fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
             is NoInternetException -> R.string.error_network
             is AccessDeniedException -> R.string.error_access_denied
@@ -62,5 +72,9 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
             is UnknownException -> R.string.error_unknown
             else -> R.string.error_unknown
         }
+    }
+
+    fun forceUpdateNetworkState(isConnected: Boolean) {
+        _isConnect.update { isConnected }
     }
 }
