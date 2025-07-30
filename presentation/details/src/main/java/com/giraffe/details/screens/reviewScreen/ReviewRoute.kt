@@ -16,9 +16,10 @@ fun NavController.navigateToReviews(movieId: Int? = null, seriesId: Int? = null)
 }
 
 fun NavGraphBuilder.reviewRoute(navController: NavController) {
-    composable("reviews_route?movieId={movieId}&seriesId={seriesId}") { backStackEntry ->
-        val movieId = backStackEntry.arguments?.getInt("movieId")
-        val seriesId = backStackEntry.arguments?.getInt("seriesId")
+    composable<ReviewRoute> { backStackEntry ->
+        val route = backStackEntry.toRoute<ReviewRoute>()
+        val movieId = route.movieId
+        val seriesId = route.seriesId
 
         ReviewsScreen(
             movieId = movieId,
