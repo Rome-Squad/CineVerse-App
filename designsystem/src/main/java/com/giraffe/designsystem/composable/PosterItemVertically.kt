@@ -63,12 +63,14 @@ fun PosterItemVertically(
                 )
             }
 
-            Rating(
-                value = poster.rating,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(end = 8.dp, top = 8.dp)
-            )
+            if (poster.rating > 0f) {
+                Rating(
+                    value = poster.rating,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(end = 8.dp, top = 8.dp)
+                )
+            }
         }
 
 
@@ -93,7 +95,7 @@ private fun Preview() {
                 id = 1,
                 name = "The Flash",
                 imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
-                rating = 7.5f,
+                rating = 0f,
             ),
             modifier = Modifier.width(156.dp)
         )
