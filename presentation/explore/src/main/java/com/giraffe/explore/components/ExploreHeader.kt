@@ -17,14 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.DefaultTextField
 import com.giraffe.designsystem.composable.Tabs
@@ -61,16 +58,12 @@ fun ExploreHeader(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (showBackButton) {
-                val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
                 Image(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                         .padding(start = 10.dp)
                         .size(20.dp)
-                        .clickable(onClick = onBackClick)
-                        .graphicsLayer {
-                            rotationY = if (isRtl) 180f else 0f
-                        },
+                        .clickable(onClick = onBackClick),
                     painter = painterResource(Theme.icons.outline.arrowLeft),
                     contentDescription = stringResource(R.string.back),
                     colorFilter = ColorFilter.tint(Theme.color.shade.primary)

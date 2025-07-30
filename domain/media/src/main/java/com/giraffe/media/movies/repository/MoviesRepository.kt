@@ -3,6 +3,7 @@ package com.giraffe.media.movies.repository
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
+import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {
 
@@ -25,7 +26,7 @@ interface MoviesRepository {
 
     suspend fun clearCache()
 
-    suspend fun getRecentlyMovies(): List<Movie>
+    fun getRecentlyMovies(): Flow<List<Movie>>
 
     suspend fun clearRecentlyMovies()
 

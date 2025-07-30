@@ -3,6 +3,7 @@ package com.giraffe.repository.utils
 import com.giraffe.repository.exceptions.ApiDataException
 import com.giraffe.repository.exceptions.InvalidCredentialsException
 import com.giraffe.repository.exceptions.SessionCreationException
+import com.giraffe.repository.exceptions.SessionNotFoundException
 import com.giraffe.repository.exceptions.TokenCreationException
 import com.giraffe.repository.exceptions.TokenValidationException
 import com.giraffe.user.exception.AuthException
@@ -32,6 +33,8 @@ object SafeCall {
         is TokenCreationException -> InvalidLoginException("Error creating token.")
         is TokenValidationException -> InvalidLoginException("Error validating token.")
         is SessionCreationException -> InvalidLoginException("Error creating session.")
+
+        is SessionNotFoundException -> UnknownException("Session not found.")
 
         else -> UnknownException()
 

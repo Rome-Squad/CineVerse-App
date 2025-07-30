@@ -6,6 +6,7 @@ import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
+import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
@@ -13,7 +14,6 @@ import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.joinAll
@@ -38,11 +38,9 @@ class SearchViewModel(
 
     override fun getRecentViewedPoster() {
         safeExecute {
-            val recentMovies = async { getRecentlyMoviesUseCase().map { it.toPoster() } }
-            val recentSeries = async { getRecentSeriesUseCase().map { it.toPoster() } }
-            val recentPeople = async { getRecentPeopleUseCase().map { it.toPoster() } }
-            val recentPosters = recentMovies.await() + recentSeries.await() + recentPeople.await()
-            updateState { it.copy(recentPosters = recentPosters) }
+            getRecentlyMoviesUseCase().collectLatest { movies->
+                updateState { it.copy(recentPosters = movies.map(Movie::toPoster)) }
+            }
         }
     }
 
