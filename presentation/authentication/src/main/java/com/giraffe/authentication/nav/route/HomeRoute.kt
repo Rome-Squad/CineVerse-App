@@ -14,9 +14,12 @@ fun NavController.navigateHomeScreen() {
 }
 
 fun NavGraphBuilder.homeRoute(
-    homeApi: HomeApi
+    homeApi: HomeApi,
+    onShowBottomBarChange: (Boolean) -> Unit = {}
 ) {
     composable<HomeRoute> {
-        homeApi.HomeContainer()
+        homeApi.HomeContainer(
+            onShowBottomBarChange = onShowBottomBarChange
+        )
     }
 }
