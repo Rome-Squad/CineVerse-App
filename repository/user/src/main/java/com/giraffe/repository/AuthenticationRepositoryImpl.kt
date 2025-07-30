@@ -5,8 +5,9 @@ import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
 import com.giraffe.repository.utils.SafeCall
 import com.giraffe.user.repository.AuthRepository
+import javax.inject.Inject
 
-class AuthenticationRepositoryImpl(
+class AuthenticationRepositoryImpl @Inject constructor(
     private val remoteDataSource: AuthenticationRemoteDataSource,
     private val localDataSource: AuthenticationLocalDataSource
 ) : AuthRepository {
