@@ -21,10 +21,15 @@ import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val getPopularityMoviesUseCase: GetPopularityMoviesUseCase,
     private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
@@ -85,9 +90,9 @@ class HomeViewModel(
                 upcomingMovies = upcomingUi
             )
         }
-    } 
+    }
 }
- 
+
  private fun getRecentMovies() {
     safeExecute {
         getRecentlyMoviesUseCase().collectLatest { movies ->
@@ -102,7 +107,7 @@ class HomeViewModel(
         }
     }
 }
-              
+
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {

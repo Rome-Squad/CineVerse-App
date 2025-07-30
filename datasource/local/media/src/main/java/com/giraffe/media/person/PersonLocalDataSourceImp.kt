@@ -4,8 +4,10 @@ import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.util.safeCall
+import javax.inject.Inject
 
-class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSource {
+class PersonLocalDataSourceImp @Inject constructor(private val dao: PersonDao) :
+    PersonLocalDataSource {
     override suspend fun storePerson(person: PersonCacheDto) = safeCall {
         dao.storePerson(person)
     }

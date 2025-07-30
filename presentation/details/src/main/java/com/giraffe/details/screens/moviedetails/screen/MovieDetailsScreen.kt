@@ -28,6 +28,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
@@ -50,21 +51,18 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.TypeOfScreen
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 
 @Composable
 fun MovieDetailsScreen(
-    movieID: Int,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
-    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) }),
     onClickPlay: () -> Unit,
     onClickPoster: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     navigateToMoviesRecommended: (Int, String) -> Unit,
+    viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
 

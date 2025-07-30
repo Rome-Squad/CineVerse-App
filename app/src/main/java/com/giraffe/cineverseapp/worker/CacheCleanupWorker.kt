@@ -5,25 +5,24 @@ import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
-import com.giraffe.cineverseapp.di.DATABASE_NAME
-import com.giraffe.media.explore.cleaner.KeywordsCacheCleanerImp
+import com.giraffe.media.movie.cleaner.MovieCacheCleanerImp
 import com.giraffe.media.person.cleaner.PersonCacheCleanerImp
 import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
-import  com.giraffe.media.movie.cleaner.MovieCacheCleanerImp
 
-class CacheCleanupWorker(
+
+class CacheCleanupWorker constructor(
     appContext: Context,
     workerParams: WorkerParameters,
 ) : CoroutineWorker(appContext, workerParams) {
+
     private val database =
-        Room.databaseBuilder(appContext, CineVerseDatabase::class.java, DATABASE_NAME).build()
-    private val keywordsCleaner = KeywordsCacheCleanerImp(database.exploreSearchKeywordDao())
+        Room.databaseBuilder(appContext, CineVerseDatabase::class.java, "CineVerseDataBase").build()
     private val personCacheCleaner = PersonCacheCleanerImp(database.personDao())
     private val seriesCacheCleaner = SeriesCacheCleanerImp(database.seriesDao())
     private val movieCacheCleaner = MovieCacheCleanerImp(database.movieDao())
+
     override suspend fun doWork(): Result {
         return try {
-            keywordsCleaner.clearExpiredKeywordsCache()
             personCacheCleaner.clearPersonCache()
             seriesCacheCleaner.clearSeriesCache()
             movieCacheCleaner.clearMovieCache()

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Progress
@@ -24,7 +25,6 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecommendedMoviesScreen(
@@ -32,7 +32,7 @@ fun RecommendedMoviesScreen(
     navigateToMovieDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: RecommendedMoviesViewModel = koinViewModel()
+    val viewModel: RecommendedMoviesViewModel = hiltViewModel()
 
     val lazyPagingItems = viewModel.recommendationScreenState.collectAsLazyPagingItems()
     EventListener(

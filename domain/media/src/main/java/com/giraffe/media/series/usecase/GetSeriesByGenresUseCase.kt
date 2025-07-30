@@ -1,8 +1,9 @@
 package com.giraffe.media.series.usecase
 
 import com.giraffe.media.series.repository.SeriesRepository
+import javax.inject.Inject
 
-class GetSeriesByGenresUseCase(
+class GetSeriesByGenresUseCase @Inject constructor(
     private val repository: SeriesRepository
 ) {
     suspend operator fun invoke(genresId: Int, page: Int) =
