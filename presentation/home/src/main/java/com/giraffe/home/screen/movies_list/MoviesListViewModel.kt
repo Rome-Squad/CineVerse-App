@@ -2,12 +2,14 @@ package com.giraffe.home.screen.movies_list
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.utils.toPosterUi
 import com.giraffe.media.exception.AccessDeniedException
+import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -17,12 +19,10 @@ import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
-import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlin.collections.emptyList
 import kotlinx.coroutines.launch
 
 class MoviesListViewModel(
@@ -32,7 +32,6 @@ class MoviesListViewModel(
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
-    private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<MoviesListUiState, MoviesListEffect>(initialState = MoviesListUiState()),
