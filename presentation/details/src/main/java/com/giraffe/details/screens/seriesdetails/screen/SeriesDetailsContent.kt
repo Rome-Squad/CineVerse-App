@@ -44,6 +44,7 @@ import com.giraffe.details.screens.seriesdetails.SeriesDetailsInteractionListene
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsScreenState
 import com.giraffe.details.utils.TypeOfScreen
 import kotlin.math.min
+import android.util.Log
 
 @Composable
 fun SeriesDetailsContent(
@@ -190,7 +191,9 @@ fun SeriesDetailsContent(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     for (index in 0..min(2, state.seriesReviews.size - 1)) {
+
                         val review = state.seriesReviews[index]
+                        Log.d("SERIES_DETAILS","Review:$review")
                         val padding = when (index) {
                             0 -> Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
                             1 -> Modifier.padding(horizontal = 16.dp)

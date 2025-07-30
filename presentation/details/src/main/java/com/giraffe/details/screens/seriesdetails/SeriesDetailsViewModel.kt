@@ -261,5 +261,6 @@ class SeriesDetailsViewModel(
             )
 
         }
+        println("Series Reviews: ${state.value.seriesReviews}")
     }
 }

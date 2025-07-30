@@ -58,7 +58,7 @@ import kotlin.math.min
 fun MovieDetailsScreen(
     movieID: Int,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    navigateToReviews: (Int) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
     viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) }),
     onClickPlay: () -> Unit,
@@ -76,7 +76,7 @@ fun MovieDetailsScreen(
                 }
 
                 is MovieDetailsEffect.NavigateToReviews -> {
-                    navigateToReviews(effect.reviews)
+                    navigateToReviews(effect.movieId)
                 }
 
                 is MovieDetailsEffect.Error -> {}
@@ -212,7 +212,7 @@ private fun MovieDetailsContent(
         }
         item {
 
-            AnimatedVisibility(state.movieReviews.isNotEmpty()) {
+            AnimatedVisibility(visible = true) {
 
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
