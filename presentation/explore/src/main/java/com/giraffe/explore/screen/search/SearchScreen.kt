@@ -18,7 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
@@ -50,6 +52,7 @@ fun SearchScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current
+    var rmsDbLevel by remember { mutableFloatStateOf(0f) }
 
     LaunchedEffect(Unit) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -63,10 +66,12 @@ fun SearchScreen(
             interactions = viewModel,
             navigateToSearchResult = navigateToSearchResult,
             onBackClick = onBackClick,
-            onClickPoster = onClickPoster
+            onClickPoster = onClickPoster,
+            onRmsChanged = { rmsDbLevel = it }
         )
         VoiceRecordingOverlay(
-            isRecording = state.isVoiceRecording && state.isPermissionGranted
+            isRecording = state.isVoiceRecording && state.isPermissionGranted,
+            rmsDbLevel = rmsDbLevel
         )
     }
 }
@@ -77,7 +82,8 @@ private fun SearchContent(
     interactions: SearchInteractionListener,
     navigateToSearchResult: (String) -> Unit,
     onBackClick: () -> Unit,
-    onClickPoster: (Poster) -> Unit
+    onClickPoster: (Poster) -> Unit,
+    onRmsChanged: (Float) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -101,7 +107,9 @@ private fun SearchContent(
                     interactions.onQueryChange(result)
                 }
                 interactions.onVoiceSearchFinished()
-            },
+            }
+            ,
+            onRmsChanged = onRmsChanged,
             onError = { error ->
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 interactions.onVoiceSearchFinished()
