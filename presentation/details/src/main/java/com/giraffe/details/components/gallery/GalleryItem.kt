@@ -27,7 +27,7 @@ fun GalleryItem(
     SafeIslamicImage(
         imageUrl = imageUrl.orEmpty(),
         contentDescription = imageUrl.orEmpty(),
-        contentScale = ContentScale.Crop,
+        contentScale = ContentScale.FillBounds,
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
     ) {
