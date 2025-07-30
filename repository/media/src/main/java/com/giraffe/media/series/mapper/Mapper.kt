@@ -1,12 +1,10 @@
 package com.giraffe.media.series.mapper
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.entity.Review
 import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
-import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeasonDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
@@ -103,16 +101,6 @@ fun SeriesDetailsDto.toEntity() = Series(
     releaseYear = firstAirDate.toFormattedDate(),
     overview = overview,
     seasons = seasons.map { it.toEntity() }
-)
-
-fun ReviewDto.toEntity() = Review(
-    id = id,
-    authorImageUrl = authorDetails.avatarPath,
-    authorName = authorDetails.name,
-    authorUserName = authorDetails.username,
-    content = content,
-    rating = authorDetails.rating,
-    createdAt = parseData(createdAt)
 )
 
 @OptIn(ExperimentalTime::class)
