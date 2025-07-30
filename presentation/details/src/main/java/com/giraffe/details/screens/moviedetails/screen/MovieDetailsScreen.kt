@@ -215,7 +215,9 @@ private fun MovieDetailsContent(
             AnimatedVisibility(state.movieReviews.isNotEmpty()) {
 
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     SectionTitle(

@@ -57,8 +57,9 @@ fun SeasonCard(
     CustomCard(
         modifier = modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(Theme.radius.lg))
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(Theme.radius.lg),
         colors = Theme.color.background.card,
     ) {
         Column(
