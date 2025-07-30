@@ -246,7 +246,11 @@ private fun MovieDetailsContent(
         onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
         modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp),
-        content = { CollectionBottomSheetContent() },
+        content = {
+            CollectionBottomSheetContent(
+                onCreateCollectionClick = interaction::onCreateCollectionClick
+            )
+        },
     )
     BaseBottomSheet(
         isVisible = state.isVisibleGiveStarsBottomSheet,

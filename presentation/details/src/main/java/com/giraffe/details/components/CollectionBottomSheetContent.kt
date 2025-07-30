@@ -25,7 +25,8 @@ import com.giraffe.details.R
 
 @Composable
 fun CollectionBottomSheetContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCreateCollectionClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -64,7 +65,7 @@ fun CollectionBottomSheetContent(
             text = stringResource(R.string.create_collection),
             enabled = true,
             isLoading = false,
-            onClick = {}
+            onClick = { onCreateCollectionClick }
         )
     }
 }
@@ -72,5 +73,7 @@ fun CollectionBottomSheetContent(
 @Preview
 @Composable
 private fun Preview() {
-    CollectionBottomSheetContent()
+    CollectionBottomSheetContent(
+        onCreateCollectionClick = {}
+    )
 }
