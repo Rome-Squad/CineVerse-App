@@ -1,5 +1,6 @@
 package com.giraffe.authentication.screen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,20 +56,23 @@ fun LoginScreen(
 
 
     LoginContent(
-        modifier = modifier, state = state, interaction = viewModel
+        modifier = modifier,
+        state = state,
+        interaction = viewModel
     )
 }
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier,
     state: LoginScreenState,
-    interaction: LoginInteractionListener
+    interaction: LoginInteractionListener,
+    modifier: Modifier,
+    scrollState: ScrollState = rememberScrollState()
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
             .background(Theme.color.background.screen)
             .systemBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,6 +101,7 @@ private fun LoginContent(
             isLoading = false,
             onClick = interaction::onCreateNewAccountClick
         )
+
         BaseBottomSheet(
             isVisible = state.isVisibleCreateNewAccountBottomSheet,
             onDismiss = interaction::onDismissCreateNewAccountBottomSheet,
