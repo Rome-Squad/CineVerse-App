@@ -15,6 +15,8 @@ import  com.giraffe.media.movie.MovieLocalDataSourceImp
 import  com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.series.SeriesRoomLocalDateSource
 import com.giraffe.media.series.dao.SeriesDao
+import com.giraffe.user.AuthenticationLocalDataSourceImp
+import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
@@ -27,4 +29,5 @@ val localDataSourceModule = module {
     single<SeriesLocalDateSource> { SeriesRoomLocalDateSource(get()) }
     single<PersonDao> { get<CineVerseDatabase>().personDao() }
     single<PersonLocalDataSource> { PersonLocalDataSourceImp(get()) }
+    single<AuthenticationLocalDataSource> { AuthenticationLocalDataSourceImp(get()) }
 }

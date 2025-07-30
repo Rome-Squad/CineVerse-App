@@ -21,10 +21,13 @@ interface MoviesRemoteDataSource {
 
     suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto>
 
-    suspend fun addRating(movieId: Int, sessionId: String, request: RatingRequest)
-    suspend fun getUserMovieRating(
+    suspend fun addRating(
         movieId: Int,
-        guestSessionId: String
+        request: RatingRequest
+    )
+
+    suspend fun getUserMovieRating(
+        movieId: Int
     ): Float
 
     suspend fun getPopularityMovies(page: Int): List<MovieDto>

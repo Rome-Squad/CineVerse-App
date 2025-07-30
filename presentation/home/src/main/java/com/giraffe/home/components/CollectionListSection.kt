@@ -4,15 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import com.giraffe.designsystem.composable.custom.Text
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
 
@@ -31,21 +32,20 @@ fun CollectionListSection(
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary
         )
-        LazyRow(
+
+        LazyHorizontalGrid(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            rows = GridCells.Adaptive(92.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            items(collectionItems.chunked(2)) { rowItems ->
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    rowItems.forEach { item ->
-                        CollectionItem(
-                            modifier = Modifier.width(280.dp),
-                            collectionItemData = item
-                        )
-                    }
-                }
+            items(collectionItems) { item ->
+                CollectionItem(
+                    collectionItemData = item
+                )
             }
         }
     }
