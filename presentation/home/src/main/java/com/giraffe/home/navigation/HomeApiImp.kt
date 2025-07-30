@@ -4,12 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
-import com.giraffe.explore.ExploreApi
 import com.giraffe.home.HomeApi
 
 class HomeApiImp(
-    private val detailsApi: DetailsApi,
-    private val exploreApi: ExploreApi
+    private val detailsApi: DetailsApi
 ) : HomeApi {
     @Composable
     override fun HomeContainer() {
@@ -17,7 +15,6 @@ class HomeApiImp(
         HomeNavGraph(
             navController = navController,
             detailsApi = detailsApi,
-            exploreApi = exploreApi
         )
     }
 }

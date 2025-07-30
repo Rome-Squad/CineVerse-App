@@ -24,7 +24,7 @@ import com.giraffe.explore.screen.searchresult.navigateToSeriesDetails
 import com.giraffe.explore.screen.searchresult.searchResultRoute
 
 @Composable
-internal fun ExploreNavGraph(
+fun ExploreNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
     transitionSpecs: FiniteAnimationSpec<Float> = tween(200)
