@@ -8,32 +8,29 @@ import com.giraffe.explore.ExploreApi
 import com.giraffe.explore.navigation.ExploreApiImp
 import com.giraffe.home.HomeApi
 import com.giraffe.home.navigation.HomeApiImp
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FeatureApiModule {
+abstract class FeatureApiBindModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideAuthenticationApi(homeApi: HomeApi): AuthenticationApi =
-        AuthenticationApiImp(homeApi)
+    abstract fun bindDetailsApi(impl: DetailsApiImp): DetailsApi
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideDetailsApi(): DetailsApi = DetailsApiImp()
+    abstract fun bindExploreApi(impl: ExploreApiImp): ExploreApi
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideExploreApi(detailsApi: DetailsApi): ExploreApi = ExploreApiImp(detailsApi)
+    abstract fun bindHomeApi(impl: HomeApiImp): HomeApi
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideHomeApi(detailsApi: DetailsApi): HomeApi = HomeApiImp(detailsApi)
-
-
+    abstract fun bindAuthenticationApi(impl: AuthenticationApiImp): AuthenticationApi
 }
