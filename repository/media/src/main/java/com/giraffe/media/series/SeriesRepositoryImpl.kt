@@ -1,14 +1,15 @@
 package com.giraffe.media.series
 
+import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
+import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
-import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series

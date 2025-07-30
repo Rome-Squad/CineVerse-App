@@ -1,8 +1,8 @@
 package com.giraffe.media.movie.retrofit
 
+import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.util.RetrofitRequestBuilder
 import javax.inject.Inject
@@ -28,7 +28,7 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         }.results
 
 
-    override suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto> =
+    override suspend fun getMovieReviews(movieId: Int): List<ReviewDto> =
         retrofitRequestBuilder.get { getMovieReviews(movieId) }.results
 
     override suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto> =
