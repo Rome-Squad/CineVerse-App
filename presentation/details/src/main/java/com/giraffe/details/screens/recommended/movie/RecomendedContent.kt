@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.recommended.movie
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -91,7 +92,10 @@ private fun CardsSection(
             lazyPagingItems = lazyPagingItems,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 5.dp),
-            onItemClick = onItemClick
+            onItemClick = { movieId ->
+                movieId?.let {
+                    onItemClick(it)
+                } ?: Log.e("RecommendedMovies", "Movie ID is null.")}
         )
     }
 }

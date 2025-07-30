@@ -4,6 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.screens.castDetails.navigateToCastDetails
+import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMoviesScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,9 +24,21 @@ fun NavGraphBuilder.movieDetailsRoute(
     composable<MovieDetailsRoute> { backStackEntry ->
 
         MovieDetailsScreen(
-            navController = navController,
             navigateToReviews = navigateToReviews,
-            onBackButtonClick = onBackButtonClick
+            onBackButtonClick = onBackButtonClick,
+            onClickPlay = {},
+            onClickPoster = {
+                navController.navigateToMovieDetails(it)
+            },
+            navigateToCastDetails = {
+                navController.navigateToCastDetails(it)
+            },
+            navigateToMoviesRecommended = { movieId, title ->
+                navController.navigateToRecommendedMoviesScreen(
+                    movieId = movieId,
+                    title = title
+                )
+            }
         )
     }
 }

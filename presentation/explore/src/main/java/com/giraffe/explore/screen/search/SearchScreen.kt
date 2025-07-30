@@ -1,10 +1,12 @@
 package com.giraffe.explore.screen.search
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -16,13 +18,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -34,6 +39,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.SearchItem
+import com.giraffe.explore.components.VoiceRecordingOverlay
 import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.media.explore.R
 
@@ -46,6 +52,7 @@ fun SearchScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current
+    var rmsDbLevel by remember { mutableFloatStateOf(0f) }
 
     LaunchedEffect(Unit) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -53,13 +60,20 @@ fun SearchScreen(
         }
     }
 
-    SearchContent(
-        state = state,
-        interactions = viewModel,
-        navigateToSearchResult = navigateToSearchResult,
-        onBackClick = onBackClick,
-        onClickPoster = onClickPoster
-    )
+    Box {
+        SearchContent(
+            state = state,
+            interactions = viewModel,
+            navigateToSearchResult = navigateToSearchResult,
+            onBackClick = onBackClick,
+            onClickPoster = onClickPoster,
+            onRmsChanged = { rmsDbLevel = it }
+        )
+        VoiceRecordingOverlay(
+            isRecording = state.isVoiceRecording && state.isPermissionGranted,
+            rmsDbLevel = rmsDbLevel
+        )
+    }
 }
 
 @Composable
@@ -68,9 +82,11 @@ private fun SearchContent(
     interactions: SearchInteractionListener,
     navigateToSearchResult: (String) -> Unit,
     onBackClick: () -> Unit,
-    onClickPoster: (Poster) -> Unit
+    onClickPoster: (Poster) -> Unit,
+    onRmsChanged: (Float) -> Unit
 ) {
     val context = LocalContext.current
+
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -91,7 +107,9 @@ private fun SearchContent(
                     interactions.onQueryChange(result)
                 }
                 interactions.onVoiceSearchFinished()
-            },
+            }
+            ,
+            onRmsChanged = onRmsChanged,
             onError = { error ->
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 interactions.onVoiceSearchFinished()
@@ -100,7 +118,16 @@ private fun SearchContent(
     }
     LaunchedEffect(state.isVoiceRecording) {
         if (state.isVoiceRecording) {
-            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            val isGranted = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (isGranted) {
+                interactions.onPermissionResult(true)
+            } else {
+                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            }
         }
     }
     LaunchedEffect(state.isVoiceRecording, state.isPermissionGranted) {

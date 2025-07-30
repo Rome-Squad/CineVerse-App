@@ -11,9 +11,11 @@ import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
+import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
@@ -25,6 +27,7 @@ import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +35,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getPopularityMoviesUseCase: GetPopularityMoviesUseCase,
     private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
-    private val getRecentlyReleasedMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
@@ -47,7 +50,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         loadHomeScreen()
+        getRecentMovies()
     }
+
 
     private fun loadHomeScreen() {
         updateState { it.copy(isLoading = true, isError = false) }
@@ -56,32 +61,13 @@ class HomeViewModel @Inject constructor(
             try {
                 val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
                 val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
-                val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase() }
+                val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
                 val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
-                val recentlyViewedMoviesDeferred = async { getRecentlyMoviesUseCase() }
-                val recentlyViewedSeriesDeferred = async { getRecentlySeriesUseCase() }
-                val recentlyViewedMovies = recentlyViewedMoviesDeferred.await()
-                val recentlyViewedSeries = recentlyViewedSeriesDeferred.await()
+
                 val popularMovies = popularMoviesDeferred.await()
                 val popularSeries = popularSeriesDeferred.await()
                 val recentMovies = recentMoviesDeferred.await()
                 val recentSeries = recentSeriesDeferred.await()
-
-
-                val recommendedSeries = recentlyViewedSeries.firstOrNull()
-                    ?.let { getRecommendedSeriesUseCase(it.id.toLong(), 1) } ?: emptyList()
-                val recommendedMovies = recentlyViewedMovies.firstOrNull()
-                    ?.let { getRecommendedMovieUseCase(it.id, 1) } ?: emptyList()
-
-                val recommendedSeriesUi = recommendedSeries.map { it.toHomeUiModel() }
-                val recommendedMoviesUi = recommendedMovies.map { it.toHomeUiModel() }
-                val recentlyViewedMovieUi = recentlyViewedMovies.map { it.toHomeUiModel() }
-                val recentlyViewedSeriesUi = recentlyViewedSeries.map { it.toHomeUiModel() }
-
-                val recentlyViewed = recentlyViewedSeriesUi + recentlyViewedMovieUi
-                val pickedForYou = recommendedSeriesUi + recommendedMoviesUi
-
-
                 val topRated = getTopRatedSeriesUseCase(page = 1)
                 val upcoming = getUpcomingMoviesUseCase(page = 1)
 
@@ -89,12 +75,10 @@ class HomeViewModel @Inject constructor(
                     val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
                     movie.toPopularMediaUiModel(genres)
                 }
-
                 val popularSeriesUi = popularSeries.map { series ->
                     val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
                     series.toPopularMediaUiModel(genres)
                 }
-
                 val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
                 val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
                 val topRatedUi = topRated.map { it.toHomeUiModel() }
@@ -104,11 +88,9 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         isError = false,
-                        matchVibes = pickedForYou,
                         popularity = popularMovieUi + popularSeriesUi,
                         recentlyReleased = recentMovieUi + recentSeriesUi,
                         topRated = topRatedUi,
-                        recentlyViewed = recentlyViewed,
                         upcomingMovies = upcomingUi
                     )
                 }
@@ -117,6 +99,19 @@ class HomeViewModel @Inject constructor(
                 val errorResId = mapExceptionToStringRes(e)
                 updateState { it.copy(isLoading = false, isError = true) }
                 sendEffect(HomeEffect.ShowError(errorResId))
+            }
+        }
+    }
+
+    private fun getRecentMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getRecentlyMoviesUseCase().collectLatest { movies ->
+                updateState { it.copy(recentlyViewed = movies.map(Movie::toHomeUiModel)) }
+                movies.firstOrNull()?.let { movie ->
+                    val recommendedMovies =
+                        getRecommendedMovieUseCase(movie.id, 1).map(Movie::toHomeUiModel)
+                    updateState { it.copy(matchVibes = recommendedMovies) }
+                }
             }
         }
     }

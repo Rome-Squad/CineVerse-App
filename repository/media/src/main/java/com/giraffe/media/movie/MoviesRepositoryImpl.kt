@@ -1,7 +1,6 @@
 package com.giraffe.media.movie
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
@@ -18,15 +17,16 @@ import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
-import com.giraffe.user.SessionManager
+import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MoviesRepositoryImpl @Inject constructor(
     private val local: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
-    private val sessionManager: SessionManager,
     private val localExploreDataSource: LocalExploreDataSource
 ) : MoviesRepository {
 
@@ -94,8 +94,9 @@ class MoviesRepositoryImpl @Inject constructor(
         local.clearMovieCache()
     }
 
-    override suspend fun getRecentlyMovies() =
-        SafeCall { local.getRecentlyMovies().map(MovieCacheDto::toEntity) }
+    override fun getRecentlyMovies() = local.getRecentlyMovies().map { movies ->
+        movies.map(MovieCacheDto::toEntity)
+    }.catch { throw mapToDomainException(it) }
 
     override suspend fun clearRecentlyMovies() = SafeCall { local.clearRecentlyMovies() }
 
@@ -119,14 +120,12 @@ class MoviesRepositoryImpl @Inject constructor(
         movieId: Int,
         ratingValue: Float
     ) = SafeCall {
-        val sessionId = getSessionId()
         val requestBody = RatingRequest(value = ratingValue)
-        remote.addRating(movieId, sessionId, requestBody)
+        remote.addRating(movieId, requestBody)
     }
 
     override suspend fun getUserMovieRating(movieId: Int) = SafeCall {
-        val sessionId = getSessionId()
-        remote.getUserMovieRating(movieId, sessionId)
+        remote.getUserMovieRating(movieId)
     }
 
     override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall {
@@ -141,7 +140,4 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getUpcomingMovies(page).map(MovieDto::toEntity)
     }
 
-    private suspend fun getSessionId() = SafeCall {
-        sessionManager.getSessionId() ?: throw NoInternetDataException()
-    }
 }
