@@ -24,8 +24,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -129,20 +131,20 @@ fun PosterHorizontal(
                     }
                 }
 
-                Row(Modifier.padding(top = 8.dp)) {
-                    if (!poster.time.isNullOrBlank()) {
-                        IconWithText(
-                            icon = painterResource(Theme.icons.dueTone.clock),
-                            text = poster.time.toString()
-                        )
-                    }
+                if (!poster.time.isNullOrBlank()) {
+                    IconWithText(
+                        modifier = Modifier.padding(top = 8.dp),
+                        icon = painterResource(Theme.icons.dueTone.clock),
+                        text = poster.time.toString()
+                    )
+                }
 
-                    if (!poster.date.isNullOrBlank()) {
-                        IconWithText(
-                            icon = painterResource(Theme.icons.dueTone.calendar),
-                            text = poster.date.toString()
-                        )
-                    }
+                if (!poster.date.isNullOrBlank()) {
+                    IconWithText(
+                        modifier = Modifier.padding(top = 8.dp),
+                        icon = painterResource(Theme.icons.dueTone.calendar),
+                        text = poster.date.toString()
+                    )
                 }
             }
         }
@@ -171,4 +173,20 @@ private fun IconWithText(
             color = Theme.color.shade.secondary
         )
     }
+}
+
+@Preview
+@Composable
+private fun PosterHorizontal() {
+    PosterItemHorizontal(
+        movie = Poster(
+            id = 1,
+            name = "The Flash",
+            imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
+            rating = 0f,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(88.dp)
+    )
 }

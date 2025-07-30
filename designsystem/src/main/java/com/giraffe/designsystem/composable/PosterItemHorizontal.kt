@@ -93,29 +93,40 @@ fun PosterItemHorizontal(
                         style = Theme.textStyle.body.md.medium,
                         color = Theme.color.shade.primary
                     )
-                    Text(
-                        text = movie.genres ?: stringResource(R.string.unknown_genre),
-                        style = Theme.textStyle.body.sm.regular,
-                        color = Theme.color.shade.secondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                    if (movie.genres != null) {
+                        Text(
+                            text = movie.genres,
+                            style = Theme.textStyle.body.sm.regular,
+                            color = Theme.color.shade.secondary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+
+                if (movie.rating != 0f) {
+                    Rating(
+                        value = movie.rating,
                     )
                 }
-                Rating(
-                    value = movie.rating,
-                )
             }
 
 
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                IconWithText(
-                    icon = painterResource(Theme.icons.dueTone.clock),
-                    text = movie.time ?: stringResource(R.string.unknown_time)
-                )
-                IconWithText(
-                    icon = painterResource(Theme.icons.dueTone.calendar),
-                    text = movie.date ?: stringResource(R.string.unknown_date)
-                )
+            if (movie.time != null || movie.date != null) {
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    if (movie.time != null) {
+                        IconWithText(
+                            icon = painterResource(Theme.icons.dueTone.clock),
+                            text = movie.time
+                        )
+                    }
+                    if (movie.date != null) {
+                        IconWithText(
+                            icon = painterResource(Theme.icons.dueTone.calendar),
+                            text = movie.date
+                        )
+                    }
+                }
             }
         }
     }
