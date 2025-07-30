@@ -1,7 +1,7 @@
 package com.giraffe.media.series.datasource.remote
 
+import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
-import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 

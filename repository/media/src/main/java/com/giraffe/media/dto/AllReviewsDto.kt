@@ -1,19 +1,10 @@
-package com.giraffe.media.movie.datasource.remote.dto
+package com.giraffe.media.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReviewsResponseDto(
-    val id: Int,
-    val page: Int,
-    val results: List<MovieReviewDto>,
-    @SerialName("total_pages") val totalPages: Int,
-    @SerialName("total_results") val totalResults: Int
-)
-
-@Serializable
-data class MovieReviewDto(
+data class ReviewDto(
     val id: String,
     val author: String,
     @SerialName("author_details") val authorDetails: AuthorDetailsDto,
@@ -28,5 +19,5 @@ data class AuthorDetailsDto(
     val name: String?,
     val username: String,
     @SerialName("avatar_path") val avatarPath: String?,
-    val rating: Int
+    val rating: Float?
 )
