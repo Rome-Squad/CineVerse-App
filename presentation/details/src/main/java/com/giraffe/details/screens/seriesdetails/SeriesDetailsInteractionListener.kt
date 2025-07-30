@@ -10,4 +10,6 @@ interface SeriesDetailsInteractionListener {
     fun navigateToSeasonsScreen(seriesId: Int)
     fun navigateToRecommendedSeriesScreen(seriesId: Int, title: String)
     fun navigateToSeriesDetails(seriesId: Int)
+    fun navigateToReviews(seriesId: Int)
+
 }

@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.seriesdetails
 
-import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 
 
 interface SeriesDetailsEffect {

@@ -188,6 +188,7 @@ fun SeriesDetailsContent(
                         modifier = Modifier,
                         title = stringResource(R.string.top_reviews),
                         clickableText = stringResource(R.string.show_more),
+                        onClickableText = {interaction.navigateToReviews(state.seriesDetails.id)}
                     )
 
                     val reviewsToShow = state.seriesReviews.take(3)

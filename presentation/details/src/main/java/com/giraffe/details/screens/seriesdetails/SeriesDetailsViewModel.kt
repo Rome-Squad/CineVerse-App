@@ -115,6 +115,12 @@ class SeriesDetailsViewModel(
         )
     }
 
+    override fun navigateToReviews(seriesId: Int) {
+        sendEffect(
+            SeriesDetailsEffect.NavigateToReviews(seriesId)
+        )
+    }
+
     private fun loadError(error: Throwable) {
         updateState {
             it.copy(
@@ -261,6 +267,5 @@ class SeriesDetailsViewModel(
             )
 
         }
-        println("Series Reviews: ${state.value.seriesReviews}")
     }
 }

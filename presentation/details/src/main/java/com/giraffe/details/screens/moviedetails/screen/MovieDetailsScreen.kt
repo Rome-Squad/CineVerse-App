@@ -44,7 +44,6 @@ import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
-import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
@@ -136,6 +135,7 @@ private fun MovieDetailsContent(
             }
         }
     }
+
     LazyColumn(
         state = scrollState,
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -221,6 +221,7 @@ private fun MovieDetailsContent(
                         modifier = Modifier,
                         title = stringResource(R.string.top_reviews),
                         clickableText = stringResource(R.string.show_more),
+                      onClickableText = {interaction.navigateToReviews(state.movie.id)}
                     )
 
                     val reviewsToShow = state.movieReviews.take(3)

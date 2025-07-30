@@ -288,6 +288,10 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
     }
 
+    override fun navigateToReviews(movieId: Int) {
+       sendEffect(MovieDetailsEffect.NavigateToReviews(movieId))
+    }
+
     override fun onCollectionClick() {
     }
 
