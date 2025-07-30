@@ -10,6 +10,8 @@ import com.giraffe.media.person.PersonLocalDataSourceImp
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.series.SeriesRoomLocalDateSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
+import com.giraffe.user.AuthenticationLocalDataSourceImp
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,5 +41,10 @@ abstract class LocalDataSourceBindModule {
     @Binds
     @Singleton
     abstract fun bindPersonLocalDataSource(impl: PersonLocalDataSourceImp): PersonLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthenticationLocalDataSource(impl: AuthenticationLocalDataSourceImp): AuthenticationLocalDataSource
+
 }
 

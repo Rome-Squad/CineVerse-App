@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.cineverseapp.data.preference.DataStorePreferences
-import com.giraffe.cineverseapp.data.preference.SessionIdManagerImpl
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.movie.cleaner.MovieCacheCleaner
 import com.giraffe.media.movie.cleaner.MovieCacheCleanerImp
@@ -15,7 +14,7 @@ import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.series.cleaner.SeriesCacheCleaner
 import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.user.SessionManager
+import com.giraffe.user.datastore.AuthenticationDatastore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -40,15 +39,18 @@ abstract class DatabaseModule {
     @Singleton
     abstract fun bindMovieCacheCleaner(imp: MovieCacheCleanerImp): MovieCacheCleaner
 
-    @Binds
-    @Singleton
-    abstract fun bindSessionManager(imp: SessionIdManagerImpl): SessionManager
 
     companion object {
         @Provides
         @Singleton
         fun provideDataStorePreferences(@ApplicationContext context: Context): DataStorePreferences =
             DataStorePreferences(context)
+
+        @Provides
+        @Singleton
+        fun provideAuthenticationDatastore(@ApplicationContext context: Context): AuthenticationDatastore =
+            AuthenticationDatastore(context)
+
 
         @Provides
         @Singleton

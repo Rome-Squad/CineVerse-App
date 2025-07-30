@@ -15,7 +15,10 @@ import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.RetrofitRequestBuilder
-import com.giraffe.repository.datasource.UserRemoteDataSource
+import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
+import com.giraffe.repository.datasource.remote.UserRemoteDataSource
+import com.giraffe.user.datastore.AuthenticationDatastore
+import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpRetrofit
 import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
 import com.giraffe.user.util.RetrofitUserRequestBuilder
@@ -47,8 +50,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(@Named("AccessToken") accessToken: String): OkHttpClient =
-        createRetrofitClient(accessToken)
+    fun provideOkHttpClient(
+        @Named("AccessToken") accessToken: String,
+        authenticationDatastore: AuthenticationDatastore
+    ): OkHttpClient {
+        return createRetrofitClient(
+            accessToken = accessToken,
+            authenticationDatastore = authenticationDatastore
+        )
+    }
+
 
     @Provides
     @Singleton
@@ -141,6 +152,13 @@ object NetworkModule {
     fun provideSeriesRemoteDataSource(builder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>): SeriesRemoteDataSource =
         SeriesRemoteRetrofitDataSourceImp(builder)
 
+    @Provides
+    @Singleton
+    fun provideAuthenticationRemoteDataSource(
+        builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>
+    ): AuthenticationRemoteDataSource {
+        return AuthenticationRemoteDataSourceImpRetrofit(builder)
+    }
     @Provides
     @Singleton
     fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>): UserRemoteDataSource =
