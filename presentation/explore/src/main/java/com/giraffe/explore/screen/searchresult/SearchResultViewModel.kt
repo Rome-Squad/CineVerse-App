@@ -36,9 +36,9 @@ class SearchResultViewModel @Inject constructor(
 ),
     SearchResultInteractionListener {
 
-    private val query: String = savedStateHandle["query"] ?: ""
 
     init {
+
         getMoviesGenres()
         getSeriesGenres()
         getMovies()
@@ -81,7 +81,7 @@ class SearchResultViewModel @Inject constructor(
         safeExecute {
             val moviesFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                    BasePagingSource { page -> searchMovieByName(query, page) }
+                    BasePagingSource { page -> searchMovieByName(state.value.query, page) }
                 }.flow.cachedIn(viewModelScope).map { it.map(Movie::toPoster) }
             updateState { it.copy(selectedPosters = moviesFlow, moviesPosters = moviesFlow) }
         }
@@ -91,7 +91,7 @@ class SearchResultViewModel @Inject constructor(
         safeExecute {
             val seriesFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                    BasePagingSource { page -> searchSeriesByName(query, page) }
+                    BasePagingSource { page -> searchSeriesByName(state.value.query, page) }
                 }.flow.cachedIn(viewModelScope).map { it.map(Series::toPoster) }
             updateState { it.copy(seriesPosters = seriesFlow) }
         }
@@ -101,7 +101,7 @@ class SearchResultViewModel @Inject constructor(
         safeExecute {
             val actorsFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                    BasePagingSource { page -> searchPeopleByName(query, page) }
+                    BasePagingSource { page -> searchPeopleByName(state.value.query, page) }
                 }.flow.cachedIn(viewModelScope).map { it.map(Person::toUi) }
             updateState { it.copy(actors = actorsFlow) }
         }
