@@ -181,7 +181,9 @@ fun SeriesDetailsContent(
             AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
 
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     SectionTitle(

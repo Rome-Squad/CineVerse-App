@@ -162,7 +162,7 @@ fun CastDetailsContent(
                 showBackButton = true,
                 hasBackground = false,
                 onBackButtonClick = onBackArrowClick,
-                modifier = Modifier.padding(horizontal = padding16)
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
         Column(
