@@ -41,11 +41,12 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
     implementation(project(":domain:media"))
-    implementation(libs.koin.androidx.compose)
+
     implementation(libs.kotlinx.datetime)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui)
+    implementation(libs.androidx.compose.foundation.foundation)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

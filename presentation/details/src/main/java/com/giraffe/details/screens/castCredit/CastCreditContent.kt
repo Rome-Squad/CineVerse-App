@@ -28,7 +28,7 @@ fun CastCreditContent(
                 title = stringResource(R.string.best_of_, actorName),
                 showBackButton = true,
                 onBackButtonClick = onBackClick,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
 
             TransitionBetweenColumnAndVerticalGrid(

@@ -1,6 +1,5 @@
 package com.giraffe.details.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -103,6 +102,7 @@ fun MainMovieOrSeriesDetails(
                                 style = Theme.textStyle.label.md.medium,
                                 color = Theme.color.brand.primary
                             )
+
                             Text(
                                 text = name,
                                 style = Theme.textStyle.title.md,
@@ -112,7 +112,8 @@ fun MainMovieOrSeriesDetails(
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
                             )
-                            AnimatedVisibility(genres.isNotEmpty()) {
+
+                            if (genres.isNotEmpty()) {
                                 Text(
                                     text = genres.joinToString(", "),
                                     style = Theme.textStyle.body.sm.medium,
@@ -122,25 +123,31 @@ fun MainMovieOrSeriesDetails(
                                 )
                             }
                         }
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            IconWithText(
-                                icon = painterResource(Theme.icons.dueTone.star),
-                                text = "%.1f".format(rating),
-                                colorOfIcon = Theme.color.additional.primary.yellow
-                            )
-                            AnimatedVisibility(!duration.isNullOrEmpty()) {
-                                IconWithText(
-                                    icon = painterResource(Theme.icons.dueTone.clock),
-                                    text = duration.toString(),
-                                    colorOfIcon = Theme.color.shade.secondary
-                                )
-                            }
-                            AnimatedVisibility(releaseDate.isNotEmpty()) {
-                                IconWithText(
-                                    icon = painterResource(Theme.icons.dueTone.calendar),
-                                    text = releaseDate,
-                                    colorOfIcon = Theme.color.shade.secondary
-                                )
+                        if (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty()) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                if (rating != 0f) {
+                                    IconWithText(
+                                        icon = painterResource(Theme.icons.dueTone.star),
+                                        text = "%.1f".format(rating),
+                                        colorOfIcon = Theme.color.additional.primary.yellow
+                                    )
+                                }
+
+                                if (!duration.isNullOrEmpty()) {
+                                    IconWithText(
+                                        icon = painterResource(Theme.icons.dueTone.clock),
+                                        text = duration.toString(),
+                                        colorOfIcon = Theme.color.shade.secondary
+                                    )
+                                }
+
+                                if (releaseDate.isNotEmpty()) {
+                                    IconWithText(
+                                        icon = painterResource(Theme.icons.dueTone.calendar),
+                                        text = releaseDate,
+                                        colorOfIcon = Theme.color.shade.secondary
+                                    )
+                                }
                             }
                         }
                     }

@@ -16,16 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.components.ListTitleSection
 import com.giraffe.home.components.TransitionLazyColumnToGrid
 import com.giraffe.home.screen.home.MediaType
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesListScreen(
-    moviesListViewModel: MoviesListViewModel = koinViewModel(),
+    moviesListViewModel: MoviesListViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,

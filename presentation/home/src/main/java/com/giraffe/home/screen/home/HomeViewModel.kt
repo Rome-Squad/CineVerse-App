@@ -1,13 +1,12 @@
 package com.giraffe.home.screen.home
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.viewModelScope
 import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.MediaException
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -19,17 +18,18 @@ import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val getPopularityMoviesUseCase: GetPopularityMoviesUseCase,
     private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
@@ -39,9 +39,7 @@ class HomeViewModel(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMovieGenresUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
-    private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
@@ -51,71 +49,69 @@ class HomeViewModel(
     }
 
 
-    private fun loadHomeScreen() {
-        updateState { it.copy(isLoading = true, isError = false) }
+ private fun loadHomeScreen() {
+    updateState { it.copy(isLoading = true, isGenricError = false) }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
-                val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
-                val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
-                val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
+    safeExecute {
+        val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
+        val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
+        val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
+        val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
 
-                val popularMovies = popularMoviesDeferred.await()
-                val popularSeries = popularSeriesDeferred.await()
-                val recentMovies = recentMoviesDeferred.await()
-                val recentSeries = recentSeriesDeferred.await()
-                val topRated = getTopRatedSeriesUseCase(page = 1)
-                val upcoming = getUpcomingMoviesUseCase(page = 1)
+        val popularMovies = popularMoviesDeferred.await()
+        val popularSeries = popularSeriesDeferred.await()
+        val recentMovies = recentMoviesDeferred.await()
+        val recentSeries = recentSeriesDeferred.await()
+        val topRated = getTopRatedSeriesUseCase(page = 1)
+        val upcoming = getUpcomingMoviesUseCase(page = 1)
 
-                val popularMovieUi = popularMovies.map { movie ->
-                    val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                    movie.toPopularMediaUiModel(genres)
-                }
-                val popularSeriesUi = popularSeries.map { series ->
-                    val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                    series.toPopularMediaUiModel(genres)
-                }
-                val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
-                val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
-                val topRatedUi = topRated.map { it.toHomeUiModel() }
-                val upcomingUi = upcoming.map { it.toHomeUiModel() }
+        val popularMovieUi = popularMovies.map { movie ->
+            val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+            movie.toPopularMediaUiModel(genres)
+        }
 
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        isError = false,
-                        popularity = popularMovieUi + popularSeriesUi,
-                        recentlyReleased = recentMovieUi + recentSeriesUi,
-                        topRated = topRatedUi,
-                        upcomingMovies = upcomingUi
-                    )
-                }
+        val popularSeriesUi = popularSeries.map { series ->
+            val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+            series.toPopularMediaUiModel(genres)
+        }
 
-            } catch (e: MediaException) {
-                val errorResId = mapExceptionToStringRes(e)
-                updateState { it.copy(isLoading = false, isError = true) }
-                sendEffect(HomeEffect.ShowError(errorResId))
+        val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
+        val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
+        val topRatedUi = topRated.map { it.toHomeUiModel() }
+        val upcomingUi = upcoming.map { it.toHomeUiModel() }
+
+        updateState {
+            it.copy(
+                isLoading = false,
+                isGenricError = false,
+                popularity = popularMovieUi + popularSeriesUi,
+                recentlyReleased = recentMovieUi + recentSeriesUi,
+                topRated = topRatedUi,
+                upcomingMovies = upcomingUi
+            )
+        }
+    }
+}
+
+ private fun getRecentMovies() {
+    safeExecute {
+        getRecentlyMoviesUseCase().collectLatest { movies ->
+            updateState { it.copy(recentlyViewed = movies.map(Movie::toHomeUiModel)) }
+
+            movies.firstOrNull()?.let { movie ->
+                val recommendedMovies = getRecommendedMovieUseCase(movie.id, 1)
+                    .map(Movie::toHomeUiModel)
+
+                updateState { it.copy(matchVibes = recommendedMovies) }
             }
         }
     }
-
-    private fun getRecentMovies() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getRecentlyMoviesUseCase().collectLatest { movies ->
-                updateState { it.copy(recentlyViewed = movies.map(Movie::toHomeUiModel)) }
-                movies.firstOrNull()?.let { movie ->
-                    val recommendedMovies =
-                        getRecommendedMovieUseCase(movie.id, 1).map(Movie::toHomeUiModel)
-                    updateState { it.copy(matchVibes = recommendedMovies) }
-                }
-            }
-        }
-    }
+}
 
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
+            is NoInternetException -> R.string.error_network
             is AccessDeniedException -> R.string.error_access_denied
             is ValidationException -> R.string.error_validation
             is NotFoundException -> R.string.error_not_found
@@ -123,12 +119,28 @@ class HomeViewModel(
             else -> R.string.error_unknown
         }
     }
+    override fun onError(throwable: Throwable) {
+        val resId = mapExceptionToStringRes(throwable)
+        val isNetworkError = throwable is NoInternetException
 
+        updateState {
+            it.copy(
+                isLoading = false,
+                isGenricError = true,
+                isNetworkError = isNetworkError
+            )
+        }
+        sendEffect(HomeEffect.ShowError(resId))
+    }
     override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
         when (mediaType) {
             MediaType.MOVIE -> sendEffect(HomeEffect.NavigateToMovieDetails(mediaId))
             MediaType.SERIES -> sendEffect(HomeEffect.NavigateToSeriesDetails(mediaId))
         }
+    }
+
+    override fun loadHomeContent() {
+        loadHomeScreen()
     }
 
     override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {

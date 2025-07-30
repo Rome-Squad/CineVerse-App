@@ -7,8 +7,9 @@ import com.giraffe.details.DetailsApi
 import com.giraffe.details.screens.castDetails.CastDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsRoute
 import com.giraffe.details.screens.seriesdetails.screen.SeriesDetailsRoute
+import javax.inject.Inject
 
-class DetailsApiImp : DetailsApi {
+class DetailsApiImp @Inject constructor() : DetailsApi {
 
     @Composable
     override fun MovieDetailsContainer(movieId: Int, onBackClick: () -> Unit) {

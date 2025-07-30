@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,14 +37,14 @@ fun BaseBottomSheet(
         ModalBottomSheet(
             onDismissRequest = onDismiss,
             sheetState = rememberModalBottomSheetState(),
-            modifier = modifier,
+            modifier = modifier.navigationBarsPadding(),
             shape = RoundedCornerShape(Theme.radius.xl),
             contentColor = Theme.color.background.bottomSheet,
-            containerColor = Theme.color.background.bottomSheet
+            containerColor = Theme.color.background.bottomSheet,
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 AnimatedVisibility(title != null) {

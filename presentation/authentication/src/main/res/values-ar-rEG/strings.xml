@@ -18,7 +18,7 @@
     <string name="Empty_username">اسم المستخدم لا يمكن ان يكون فارغ</string>
     <string name="guest_auth_error">فشل ف الدخول كضيف , حاول مرة اخر لاحقا</string>
     <string name="invalid_username_or_password">خطأ ف اسم المستخدم او كلمه المرور</string>
-
+    <string name="invalid_username_format">اسم المستخدم يجب ان يحتوي على حروف و ارقام فقط</string>
 
 
 </resources>

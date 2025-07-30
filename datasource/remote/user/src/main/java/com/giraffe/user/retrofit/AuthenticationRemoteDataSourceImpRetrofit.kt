@@ -4,8 +4,9 @@ import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
 import com.giraffe.user.dto.SessionRequestBody
 import com.giraffe.user.dto.TokenValidationBody
 import com.giraffe.user.util.RetrofitUserRequestBuilder
+import javax.inject.Inject
 
-class AuthenticationRemoteDataSourceImpRetrofit(
+class AuthenticationRemoteDataSourceImpRetrofit @Inject constructor(
     private val retrofitRequestBuilder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>
 ) : AuthenticationRemoteDataSource {
 

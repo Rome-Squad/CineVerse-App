@@ -11,9 +11,9 @@ import java.util.Locale
 class VoiceSearchHelper(
     private val context: Context,
     private val onResult: (String) -> Unit,
-    private val onError: ((String) -> Unit)? = null,
-    private val onSoundLevelChange: (Int) -> Unit
-) : RecognitionListener {
+    private val onRmsChanged: ((Float) -> Unit)? = null,
+    private val onError: ((String) -> Unit)? = null
+) {
 
     private var speechRecognizer: SpeechRecognizer? = null
 
@@ -23,8 +23,35 @@ class VoiceSearchHelper(
             return
         }
 
-        if (speechRecognizer == null) speechRecognizer =
-            SpeechRecognizer.createSpeechRecognizer(context)
+        if (speechRecognizer == null) {
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+        }
+
+
+        val listener = object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {
+                onRmsChanged?.invoke(rmsdB)
+            }
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
+            override fun onError(error: Int) {
+                val errorMsg = getErrorMessage(error)
+                onError?.invoke(errorMsg)
+            }
+
+            override fun onResults(results: Bundle?) {
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                val result = matches?.firstOrNull() ?: ""
+                onResult(result)
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {}
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        }
+
+        speechRecognizer?.setRecognitionListener(listener)
 
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(
@@ -35,7 +62,6 @@ class VoiceSearchHelper(
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search...")
         }
 
-        speechRecognizer?.setRecognitionListener(this)
         speechRecognizer?.startListening(intent)
     }
 
@@ -45,6 +71,7 @@ class VoiceSearchHelper(
         speechRecognizer?.destroy()
         speechRecognizer = null
     }
+
 
     private fun getErrorMessage(errorCode: Int): String {
         return when (errorCode) {
@@ -60,33 +87,4 @@ class VoiceSearchHelper(
             else -> "Unknown error"
         }
     }
-
-    override fun onError(error: Int) {
-        val errorMsg = getErrorMessage(error)
-        onError?.invoke(errorMsg)
-    }
-
-    override fun onResults(results: Bundle?) {
-        val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-        val result = matches?.firstOrNull() ?: ""
-        onResult(result)
-    }
-
-    override fun onRmsChanged(rms: Float) {
-        val soundLevel = rms.toInt().coerceIn(1..10)
-        onSoundLevelChange(soundLevel)
-    }
-
-    override fun onBeginningOfSpeech() = Unit
-
-    override fun onBufferReceived(p0: ByteArray?) = Unit
-
-    override fun onEndOfSpeech() = Unit
-
-
-    override fun onEvent(p0: Int, p1: Bundle?) = Unit
-
-    override fun onPartialResults(p0: Bundle?) = Unit
-
-    override fun onReadyForSpeech(p0: Bundle?) = Unit
 }
