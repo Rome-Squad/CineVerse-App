@@ -9,6 +9,7 @@ import com.giraffe.details.DetailsApi
 import com.giraffe.home.screen.home.HomeRoute
 import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
+import com.giraffe.home.screen.movies_list.navigateToCollectionList
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
 
 
@@ -29,7 +30,13 @@ fun HomeNavGraph(
                 )
             },
             navigateToMoviesDetailsScreen = { navController.navigateToMovieDetails(it) },
-            navigateToSeriesDetailsScreen = { navController.navigateToSeriesDetails(it) }
+            navigateToSeriesDetailsScreen = { navController.navigateToSeriesDetails(it) },
+            navigateToCollectionList = { collectionId, collectionTitle ->
+                navController.navigateToCollectionList(
+                    collectionId = collectionId,
+                    collectionTitle = collectionTitle
+                )
+            },
         )
 
         moviesListRoute(

@@ -14,10 +14,12 @@ import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
@@ -25,7 +27,6 @@ import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlin.collections.emptyList
 
 class MoviesListViewModel(
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
@@ -36,14 +37,37 @@ class MoviesListViewModel(
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
+    private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<MoviesListUiState, MoviesListEffect>(initialState = MoviesListUiState()),
     MoviesListInteractionListener {
     private val sectionTitle = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionTitle
     private val sectionType = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionType
+    private val collectionId = stateSavedStateHandle.toRoute<MoviesListRoute>().collectionId
 
     init {
-        loadMoviesBySection(sectionType)
+        sectionType?.let { loadMoviesBySection(it) }
+        collectionId?.let { loadMoviesByGenres(it) }
+    }
+
+    private fun loadMoviesByGenres(genreId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val movies = getMoviesByGenresUseCase(genreId = genreId, page = 1)
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = null,
+                        mediaList = movies.map(Movie::toPosterUi),
+                        moviesListTitle = sectionTitle
+                    )
+                }
+            } catch (e: MediaException) {
+                val errorResId = mapExceptionToStringRes(e)
+                updateState { it.copy(isLoading = false, errorMessage = e.message) }
+                sendEffect(MoviesListEffect.ShowError(errorResId))
+            }
+        }
     }
 
     private fun loadMoviesBySection(sectionType: String) {
@@ -59,23 +83,11 @@ class MoviesListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (sectionType) {
-                    MovieSectionType.RECENTLY_RELEASED -> {
-                        val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
-                        val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
-                        val moviesUi = recentMovies.map { it.toPosterUi() }
-                        val seriesUi = recentSeries.map { it.toPosterUi() }
-                        moviesUi + seriesUi
-                    }
+                    MovieSectionType.RECENTLY_RELEASED -> getRecentlyReleased()
 
-                    MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                        val topRated = getTopRatedSeriesUseCase(page = 1)
-                        topRated.map { it.toPosterUi() }
-                    }
+                    MovieSectionType.TOP_RATED_TV_SHOWS -> getTopRated()
 
-                    MovieSectionType.UPCOMING_MOVIES -> {
-                        val upcoming = getUpcomingMoviesUseCase(page = 1)
-                        upcoming.map { it.toPosterUi() }
-                    }
+                    MovieSectionType.UPCOMING_MOVIES -> getUpcomingMovies()
 
                     MovieSectionType.RECENTLY_VIEWED -> getRecent()
 
@@ -89,6 +101,46 @@ class MoviesListViewModel(
             } catch (e: Exception) {
                 updateState { it.copy(isLoading = false, errorMessage = e.message) }
                 sendEffect(MoviesListEffect.ShowError(R.string.error_unknown))
+            }
+        }
+    }
+
+    private fun getUpcomingMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val upcomingMovies = getUpcomingMoviesUseCase(page = 1).map(Movie::toPosterUi)
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    mediaList = upcomingMovies,
+                )
+            }
+        }
+    }
+
+    private fun getTopRated() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val topRatedSeries = getTopRatedSeriesUseCase(page = 1).map(Series::toPosterUi)
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    mediaList = topRatedSeries,
+                )
+            }
+        }
+    }
+
+    private fun getRecentlyReleased() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1).map(Movie::toPosterUi)
+            val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1).map(Series::toPosterUi)
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    mediaList = recentMovies + recentSeries,
+                )
             }
         }
     }

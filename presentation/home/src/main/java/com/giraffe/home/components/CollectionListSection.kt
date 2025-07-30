@@ -16,11 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
+import com.giraffe.home.screen.home.FeaturedCollectionUiModel
 
 @Composable
 fun CollectionListSection(
     modifier: Modifier = Modifier,
-    collectionItems: List<CollectionItemData>
+    collectionItems: List<FeaturedCollectionUiModel>,
+    onCollectionItemClick: (Int, String) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -44,7 +46,8 @@ fun CollectionListSection(
         ) {
             items(collectionItems) { item ->
                 CollectionItem(
-                    collectionItemData = item
+                    collectionItemData = item,
+                    onClick = { onCollectionItemClick(item.id, item.title) }
                 )
             }
         }

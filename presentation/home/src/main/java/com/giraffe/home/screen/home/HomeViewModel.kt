@@ -6,6 +6,7 @@ import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
+import com.giraffe.home.utils.toUiModel
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
@@ -13,6 +14,7 @@ import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
@@ -42,12 +44,24 @@ class HomeViewModel(
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
     init {
         loadHomeScreen()
         getRecentMovies()
+        getFeaturedCollection()
+    }
+
+    private fun getFeaturedCollection() {
+        safeExecute {
+            val featuredCollection = getMoviesGenresUseCase().map { it.toUiModel() }
+            updateState {
+                it.copy(
+                    featuredCollections = featuredCollection)
+            }
+        }
     }
 
 
@@ -172,6 +186,15 @@ class HomeViewModel(
             HomeEffect.NavigateToRecommendedList(
                 sectionTitle = sectionTitle,
                 sectionType = sectionType
+            )
+        )
+    }
+
+    override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
+        sendEffect(
+            HomeEffect.NavigateToYourCollection(
+                collectionId = collectionId,
+                collectionTitle = collectionTitle
             )
         )
     }

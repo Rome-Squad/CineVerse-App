@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 object HomeRoute
 
 fun NavGraphBuilder.homeRoute(
+    navigateToCollectionList:(Int,String)-> Unit,
     navigateToMoviesScreen: (String, String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
@@ -17,6 +18,7 @@ fun NavGraphBuilder.homeRoute(
             navigateToMoviesListScreen = navigateToMoviesScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
+            navigateToCollection = navigateToCollectionList
         )
     }
 }
