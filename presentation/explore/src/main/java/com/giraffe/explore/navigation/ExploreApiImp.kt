@@ -10,12 +10,13 @@ class ExploreApiImp(
     private val detailsApi: DetailsApi
 ) : ExploreApi {
     @Composable
-    override fun ExploreContainer() {
+    override fun ExploreContainer(onShowBottomBarChange: (Boolean) -> Unit) {
         val navController: NavHostController = rememberNavController()
 
         ExploreNavGraph(
             navController = navController,
             detailsApi = detailsApi,
+            onShowBottomBarChange = onShowBottomBarChange
         )
     }
 }

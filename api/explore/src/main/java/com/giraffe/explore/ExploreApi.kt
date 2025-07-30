@@ -5,5 +5,5 @@ import androidx.compose.runtime.Composable
 
 interface ExploreApi {
     @Composable
-    fun ExploreContainer()
+    fun ExploreContainer(onShowBottomBarChange: (Boolean) -> Unit)
 }
