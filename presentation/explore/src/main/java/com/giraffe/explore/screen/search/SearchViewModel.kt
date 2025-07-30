@@ -13,13 +13,16 @@ import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val getSearchKeywords: GetSearchKeywordsUseCase,
     private val insertSearchKeyword: InsertSearchKeywordUseCase,
     private val deleteKeywordUseCase: DeleteKeywordUseCase,

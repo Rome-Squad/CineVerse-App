@@ -1,6 +1,7 @@
 package com.giraffe.details.screens.moviedetails
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.groupByRole
@@ -19,19 +20,22 @@ import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class MovieDetailsViewModel(
-    movieID: Int,
+@HiltViewModel
+class MovieDetailsViewModel @Inject constructor(
     val getMovieDetails: GetMovieDetailsUseCase,
     val getMovieGenres: GetMovieGenresUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
-    val setMovieRecentUseCase: SetMovieRecentUseCase
+    val setMovieRecentUseCase: SetMovieRecentUseCase,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
+    private val movieID: Int = savedStateHandle["id"] ?: 0
 
     init {
         loadMovieDetails(movieID)

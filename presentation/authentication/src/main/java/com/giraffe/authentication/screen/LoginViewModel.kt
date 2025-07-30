@@ -7,8 +7,11 @@ import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
 import com.giraffe.user.exception.InvalidUsernameOrPasswordException
 import com.giraffe.user.usecase.LoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
 ) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
