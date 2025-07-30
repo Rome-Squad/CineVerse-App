@@ -6,9 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.composable.BottomNavigationBar
 import com.giraffe.designsystem.composable.BottomTab
@@ -26,20 +28,21 @@ fun HomeNavGraph(
     detailsApi: DetailsApi,
     exploreApi: ExploreApi
 ) {
-    val navBackStackEntry = navController.currentDestination?.route.toString()
-
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     val bottomBarRoutes = listOf(
-        HomeRoute,
-        DiscoverRoute
+        HomeRoute::class.qualifiedName,
+        DiscoverRoute::class.qualifiedName
     )
 
-    val isBottomBarVisible = navBackStackEntry in bottomBarRoutes
+    val isBottomBarVisible = currentRoute in bottomBarRoutes
     var selectedTabBottomBar by remember { mutableStateOf(BottomTab.Home) }
     Column {
 
         NavHost(
             navController = navController,
-            startDestination = HomeRoute
+            startDestination = HomeRoute,
+            modifier = Modifier.weight(1f)
         ) {
             homeRoute(
                 navigateToMoviesScreen = navController::navigateToMoviesList,
@@ -75,7 +78,7 @@ fun HomeNavGraph(
 
         BottomNavigationBar(
             selectedTab = selectedTabBottomBar,
-            isBottomBarVisible = !isBottomBarVisible,
+            isBottomBarVisible = isBottomBarVisible,
             onTabSelected = {
                 when (it) {
                     BottomTab.Explore -> {
