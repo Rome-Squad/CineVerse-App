@@ -18,14 +18,11 @@ import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getPopularityMoviesUseCase: GetPopularityMoviesUseCase,
@@ -37,9 +34,7 @@ class HomeViewModel(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMovieGenresUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
-    private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
@@ -83,7 +78,7 @@ class HomeViewModel(
         updateState {
             it.copy(
                 isLoading = false,
-                isError = false,
+                isGenricError = false,
                 popularity = popularMovieUi + popularSeriesUi,
                 recentlyReleased = recentMovieUi + recentSeriesUi,
                 topRated = topRatedUi,
