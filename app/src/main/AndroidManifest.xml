@@ -13,17 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CineVerseApp">
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false">
-            <meta-data
-                android:name="androidx.work.WorkManagerInitializer"
-                android:value="androidx.startup" />
-        </provider>
-        <meta-data
-            android:name="androidx.work.WorkManagerInitializer"
-            android:value="androidx.hilt.work.HiltWorkerFactory" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
