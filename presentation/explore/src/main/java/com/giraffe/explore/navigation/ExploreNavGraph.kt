@@ -2,8 +2,6 @@ package com.giraffe.explore.navigation
 
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -56,14 +54,10 @@ fun ExploreNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = DiscoverRoute,
-        enterTransition = { fadeIn(transitionSpecs) },
-        exitTransition = { fadeOut(transitionSpecs) },
-        popEnterTransition = { fadeIn(transitionSpecs) },
-        popExitTransition = { fadeOut(transitionSpecs) },
+        startDestination = DiscoverRoute
     ) {
 
-    discoverRoute(
+        discoverRoute(
             navigateToMovieDetails = navController::navigateToMovieDetails,
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
             navigateToSearch = navController::navigateToSearch
@@ -86,23 +80,26 @@ fun ExploreNavGraph(
 
         composable<CastDetailsRoute> { backStackEntry ->
             val castId = backStackEntry.toRoute<CastDetailsRoute>().castId
-            detailsApi.CastDetailsContainer(castId) {
-                navController.popBackStack()
-            }
+            detailsApi.CastDetailsContainer(
+                castId = castId,
+                onBackClick = navController::popBackStack
+            )
         }
 
         composable<SeriesDetailsRoute> { backStackEntry ->
             val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
-            detailsApi.SeriesDetailsContainer(seriesId) {
-                navController.popBackStack()
-            }
+            detailsApi.SeriesDetailsContainer(
+                seriesId = seriesId,
+                onBackClick = navController::popBackStack
+            )
         }
 
         composable<MovieDetailsRoute> { backStackEntry ->
             val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId
-            detailsApi.MovieDetailsContainer(movieId) {
-                navController.popBackStack()
-            }
+            detailsApi.MovieDetailsContainer(
+                movieId = movieId,
+                onBackClick = navController::popBackStack
+            )
         }
     }
 }
