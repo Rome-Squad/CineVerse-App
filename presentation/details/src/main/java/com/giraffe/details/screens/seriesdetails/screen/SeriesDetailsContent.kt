@@ -202,7 +202,7 @@ fun SeriesDetailsContent(
                     SectionTitle(
                         modifier = Modifier,
                         title = stringResource(R.string.top_reviews),
-                        clickableText = stringResource(R.string.show_more),
+                        clickableText = if (state.seriesReviews.size > 3) stringResource(R.string.show_more) else null,
                         onClickableText = {interaction.navigateToReviews(state.seriesDetails.id)}
                     )
 

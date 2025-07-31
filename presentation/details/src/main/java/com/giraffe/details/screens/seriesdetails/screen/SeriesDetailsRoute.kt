@@ -21,7 +21,7 @@ internal fun NavController.navigateToSeriesDetails(seriesId: Int) {
 fun NavGraphBuilder.seriesDetailsRoute(
     navController: NavController,
     onBackButtonClick: () -> Unit,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit
+    navigateToReviews: (Int) -> Unit
 ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         SeriesDetailsScreen(

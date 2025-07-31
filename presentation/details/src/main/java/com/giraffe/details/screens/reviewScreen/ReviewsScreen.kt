@@ -11,12 +11,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.models.ReviewUI
-import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
@@ -24,7 +24,7 @@ fun ReviewsScreen(
     movieId: Int?,
     seriesId: Int?,
     navController: NavController,
-    reviewsViewModel: ReviewsViewModel = koinViewModel()
+    reviewsViewModel: ReviewsViewModel = hiltViewModel()
 ) {
     LaunchedEffect(movieId, seriesId) {
         reviewsViewModel.fetchReviews(movieId, seriesId)

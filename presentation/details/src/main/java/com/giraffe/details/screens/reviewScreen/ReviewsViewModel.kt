@@ -8,9 +8,12 @@ import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.series.repository.SeriesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReviewsViewModel(
+@HiltViewModel
+class ReviewsViewModel @Inject constructor(
     private val moviesRepository: MoviesRepository,
     private val seriesRepository: SeriesRepository
 ) : ViewModel() {

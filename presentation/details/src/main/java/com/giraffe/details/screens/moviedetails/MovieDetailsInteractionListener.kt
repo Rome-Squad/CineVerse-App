@@ -12,8 +12,6 @@ interface MovieDetailsInteractionListener {
 
     fun onPersonClick(personId: Int)
 
-    fun onShowMoreMoviesClick()
-
     fun onShowMoreReviewsClick()
 
     fun onMovieClick(movieId: Int)
