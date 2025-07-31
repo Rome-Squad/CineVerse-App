@@ -155,7 +155,7 @@ private fun MovieDetailsContent(
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
                 MainMovieOrSeriesDetailsAnimatedContent(
-                    type = TypeOfScreen.MOVIE.toString(),
+                    type = stringResource(id = TypeOfScreen.MOVIE.titleResId),
                     name = state.movie.title,
                     rating = state.movie.rating,
                     imageUrl = state.movie.posterUrl,
