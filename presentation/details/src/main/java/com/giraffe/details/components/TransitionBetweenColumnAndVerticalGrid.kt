@@ -52,7 +52,7 @@ fun TransitionBetweenColumnAndVerticalGrid(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
+                    items(items = poster) { poster ->
                         PosterHorizontal(
                             poster = poster,
                             animatedVisibilityScope = this@AnimatedContent,
@@ -70,7 +70,7 @@ fun TransitionBetweenColumnAndVerticalGrid(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(items = poster, key = { poster -> poster.id }) { poster ->
+                    items(items = poster) { poster ->
                         PosterVertically(
                             poster = poster,
                             animatedVisibilityScope = this@AnimatedContent,
