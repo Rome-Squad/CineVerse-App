@@ -44,8 +44,6 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         }
     }
 
-    protected abstract fun onError(throwable: Throwable)
-
     protected fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,

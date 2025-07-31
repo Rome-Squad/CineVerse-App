@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
@@ -49,7 +48,7 @@ fun CollectionItem(
             contentAlignment = Alignment.Center
         ) {
             SafeIslamicImage(
-                imageUrl = collectionItemData.backgroundImageUrl.toString(),
+                imageUrl = collectionItemData.backgroundImageUrl,
                 contentDescription = stringResource(R.string.collection_item_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -99,21 +98,4 @@ fun CollectionItem(
                 .background(Theme.color.shade.quinary)
         )
     }
-}
-
-//data class CollectionItemData(
-//    val image: String,
-//    val collectionType: String
-//)
-
-@Preview
-@Composable
-fun PreviewCollectionItemPreview() {
-//    CollectionItem(
-//        collectionItemData = FeaturedCollectionUiModel(
-//            backgroundImageUrl = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-//            title = "My Collection",
-//            id = 1
-//        )
-//    )
 }
