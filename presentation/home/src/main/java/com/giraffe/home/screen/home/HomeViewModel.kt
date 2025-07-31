@@ -1,16 +1,9 @@
 package com.giraffe.home.screen.home
 
-import androidx.annotation.StringRes
-import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
-import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.UnknownException
-import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
@@ -117,19 +110,6 @@ class HomeViewModel @Inject constructor(
                     updateState { it.copy(matchVibes = recommendedMovies) }
                 }
             }
-        }
-    }
-
-
-    @StringRes
-    fun mapExceptionToStringRes(throwable: Throwable): Int {
-        return when (throwable) {
-            is NoInternetException -> R.string.error_network
-            is AccessDeniedException -> R.string.error_access_denied
-            is ValidationException -> R.string.error_validation
-            is NotFoundException -> R.string.error_not_found
-            is UnknownException -> R.string.error_unknown
-            else -> R.string.error_unknown
         }
     }
 
