@@ -168,6 +168,7 @@ fun HomeContent(
                 )
             }
             item {
+                val recentlyReleased = stringResource(R.string.recently_released)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -177,7 +178,7 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllRecentlyReleasedClicked(
-                            sectionTitle = "Recently Released",
+                            sectionTitle = recentlyReleased,
                             sectionType = MovieSectionType.RECENTLY_RELEASED
                         )
                     }
@@ -195,6 +196,7 @@ fun HomeContent(
                 )
             }
             item {
+                val upcomingMovies = stringResource(R.string.upcoming_movies)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -205,13 +207,14 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllUpcomingClicked(
-                            sectionTitle = "Upcoming Movies",
+                            sectionTitle = upcomingMovies,
                             sectionType = MovieSectionType.UPCOMING_MOVIES
                         )
                     }
                 )
             }
             item {
+                val matchVibes = stringResource(R.string.matches_your_vibe)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -222,7 +225,7 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onWhatShouldIWatchClicked(
-                            sectionTitle = "Matches Your Vibe",
+                            sectionTitle = matchVibes,
                             sectionType = MovieSectionType.MATCHES_YOUR_VIBES
                         )
                     }
@@ -235,6 +238,7 @@ fun HomeContent(
                 )
             }
             item {
+                val topRated = stringResource(R.string.top_rated_tv_shows)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -245,13 +249,14 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllTopRatedClicked(
-                            sectionTitle = "Top Rated TV Shows",
+                            sectionTitle = topRated,
                             sectionType = MovieSectionType.TOP_RATED_TV_SHOWS
                         )
                     },
                 )
             }
             item {
+                val recentlyReleasedTitle = stringResource(R.string.you_recent_viewed)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -262,7 +267,7 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllRecentlyViewedClicked(
-                            sectionTitle = "Recently Viewed",
+                            sectionTitle = recentlyReleasedTitle,
                             sectionType = MovieSectionType.RECENTLY_VIEWED
                         )
                     }
