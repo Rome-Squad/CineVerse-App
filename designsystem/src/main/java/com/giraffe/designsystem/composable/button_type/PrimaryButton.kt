@@ -39,9 +39,12 @@ fun PrimaryButton(
         modifier = modifier,
         shape = RoundedCornerShape(Theme.radius.lg),
         onClick = if (enabled) onClick else ({}),
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor.value,
-            contentColor = if (enabled) Theme.color.button.onPrimary else Theme.color.button.onDisabled,
+            disabledContainerColor = Theme.color.button.disabled,
+            contentColor = Theme.color.button.onPrimary,
+            disabledContentColor = Theme.color.button.onDisabled
         ),
         contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp)
     ) {
