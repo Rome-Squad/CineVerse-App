@@ -9,6 +9,7 @@ import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.utils.DatabaseConstants.MOVIE_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -51,7 +52,7 @@ interface MovieDao {
     suspend fun clearRecentlyMovies()
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE isRecent = 1")
-    suspend fun getRecentlyMovies(): List<MovieCacheDto>
+    fun getRecentlyMovies(): Flow<List<MovieCacheDto>>
 
     @Upsert
     suspend fun updateMovie(movie: MovieCacheDto)

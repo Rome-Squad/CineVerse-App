@@ -8,7 +8,7 @@ import com.giraffe.media.person.PersonRepositoryImpl
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
-import com.giraffe.repository.AuthRepositoryImpl
+import com.giraffe.repository.AuthenticationRepositoryImpl
 import com.giraffe.user.repository.AuthRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -19,5 +19,5 @@ val repositoryModule = module {
     singleOf(::SeriesRepositoryImpl) bind SeriesRepository::class
     singleOf(::MoviesRepositoryImpl) bind MoviesRepository::class
     singleOf(::PersonRepositoryImpl) bind PersonRepository::class
-    singleOf(::AuthRepositoryImpl) bind AuthRepository::class
+    singleOf(::AuthenticationRepositoryImpl) bind AuthRepository::class
 }

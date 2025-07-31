@@ -1,6 +1,5 @@
 package com.giraffe.home.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,13 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.CinePreview
 import com.giraffe.designsystem.composable.CollectionItem
+import com.giraffe.designsystem.composable.custom.Text
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
@@ -43,7 +43,7 @@ fun YourCollectionsSections(
                 color = Theme.color.shade.primary
             )
             Text(
-                modifier = Modifier.clickable(onClick = onShowMoreClick),
+                modifier = Modifier.noHoverClickable(onClick = onShowMoreClick),
                 text = stringResource(R.string.show_more),
                 style = Theme.textStyle.body.md.medium,
                 color = Theme.color.brand.primary
