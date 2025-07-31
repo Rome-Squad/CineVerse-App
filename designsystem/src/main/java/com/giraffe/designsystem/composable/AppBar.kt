@@ -83,7 +83,7 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
     if (showBackButton) {
         Icon(
             painter = painterResource(Theme.icons.outline.arrowLeft),
-            contentDescription = "",
+            contentDescription = "arrow back",
             tint = Theme.color.shade.primary,
             modifier = Modifier
                 .size(40.dp)
