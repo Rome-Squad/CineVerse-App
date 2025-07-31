@@ -203,15 +203,15 @@ private fun MovieDetailsContent(
             )
         }
         item {
-            RatingSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClickCard = interaction::onGiveStarsClick
-            )
+            AnimatedVisibility(state.movie.title.isNotBlank()) {
+                RatingSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    onClickCard = interaction::onGiveStarsClick
+                )
+            }
         }
         item {
-
             AnimatedVisibility(state.movieReviews.isNotEmpty()) {
-
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)

@@ -172,10 +172,12 @@ fun SeriesDetailsContent(
             }
         }
         item {
-            RatingSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClickCard = interaction::onClickGiveStars
-            )
+            AnimatedVisibility(state.seriesDetails.name.isNotBlank()) {
+                RatingSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    onClickCard = interaction::onClickGiveStars
+                )
+            }
         }
         item {
             AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
@@ -202,10 +204,10 @@ fun SeriesDetailsContent(
                             reviewerName = review.authorName,
                             reviewerUsername = review.authorUserName
                         )
+                    }
                 }
             }
         }
-    }
     }
 
     BaseBottomSheet(
