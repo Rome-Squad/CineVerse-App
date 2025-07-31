@@ -1,5 +1,6 @@
 package com.giraffe.explore.screen.search
 
+import androidx.lifecycle.viewModelScope
 import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.util.toPoster
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
@@ -10,12 +11,14 @@ import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
-import com.giraffe.media.person.usecase.GetRecentPeopleUseCase
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -29,7 +32,6 @@ class SearchViewModel @Inject constructor(
     private val clearSearchHistory: ClearSearchHistoryUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecentSeriesUseCase: GetRecentSeriesUseCase,
-    private val getRecentPeopleUseCase: GetRecentPeopleUseCase,
     private val clearRecentSeriesUseCase: ClearRecentSeriesUseCase,
     private val clearRecentlyMoviesUseCase: ClearRecentlyMoviesUseCase,
     private val clearRecentlyPeopleUseCase: ClearRecentPeopleUseCase
@@ -37,13 +39,35 @@ class SearchViewModel @Inject constructor(
     SearchInteractionListener {
     init {
         onQueryChange()
+        getRecentViewed()
     }
 
-    override fun getRecentViewedPoster() {
-        safeExecute {
-            getRecentlyMoviesUseCase().collectLatest { movies->
-                updateState { it.copy(recentPosters = movies.map(Movie::toPoster)) }
-            }
+    private fun onFail(errorMsgRes: Int) = updateState { it.copy(errorMsgRes = errorMsgRes) }
+
+    private fun getRecentViewed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecentlyMoviesSuccess,
+                onError = ::onFail,
+                block = getRecentlyMoviesUseCase::invoke
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecentlySeriesSuccess,
+                onError = ::onFail,
+                block = getRecentSeriesUseCase::invoke
+            )
+        }
+    }
+
+    private suspend fun onGetRecentlyMoviesSuccess(moviesFlow: Flow<List<Movie>>) {
+        moviesFlow.collectLatest { movies ->
+            updateState { it.copy(recentPosters = (it.recentPosters + movies.map(Movie::toPoster)).distinctBy { poster -> poster.id }) }
+        }
+    }
+
+    private suspend fun onGetRecentlySeriesSuccess(seriesFlow: Flow<List<Series>>) {
+        seriesFlow.collectLatest { series ->
+            updateState { it.copy(recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id }) }
         }
     }
 

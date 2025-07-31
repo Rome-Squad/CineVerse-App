@@ -23,18 +23,27 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
 
-    private val _error = MutableStateFlow<Int?>(null)
-    val error = _state.asStateFlow()
+
+    protected fun <T> safeExecute(
+        coroutineScope: CoroutineScope = viewModelScope,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        block: suspend CoroutineScope.() -> T
+    ): Job {
+        return coroutineScope.launch(dispatcher + handler()) {
+            block()
+        }
+    }
 
 
     protected fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        exceptionHandler: CoroutineExceptionHandler = handler(),
-        block: suspend CoroutineScope.() -> T
+        onSuccess: suspend (T) -> Unit,
+        onError: (Int) -> Unit,
+        block: suspend () -> T
     ): Job {
-        return coroutineScope.launch(dispatcher + exceptionHandler) {
-            block()
+        return coroutineScope.launch(dispatcher + handler(onError)) {
+            onSuccess(block())
         }
     }
 
@@ -42,9 +51,9 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
         _state.update(updater)
     }
 
-    private fun handler(): CoroutineExceptionHandler {
+    private fun handler(onError: (Int) -> Unit = {}): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
-            _error.update { mapExceptionToStringRes(throwable) }
+            onError(mapExceptionToStringRes(throwable))
         }
     }
 

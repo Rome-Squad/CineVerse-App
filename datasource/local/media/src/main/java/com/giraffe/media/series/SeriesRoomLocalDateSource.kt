@@ -6,6 +6,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.util.safeCall
+import com.giraffe.media.util.safeFlow
 import com.giraffe.media.utils.SafeCall
 import javax.inject.Inject
 
@@ -61,7 +62,7 @@ class SeriesRoomLocalDateSource @Inject constructor(
             seriesDao.getAllGenres().filter { it.id in genreIds }
         }
 
-    override suspend fun getRecentSeries(): List<SeriesCacheDto> = safeCall {
+    override suspend fun getRecentSeries() = safeFlow {
         seriesDao.getRecentSeries()
     }
 

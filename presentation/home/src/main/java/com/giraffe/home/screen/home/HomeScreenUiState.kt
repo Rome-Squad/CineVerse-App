@@ -12,5 +12,8 @@ data class HomeScreenUiState(
     val collections: List<YourCollectionUiModel> = emptyList(),
     val featuredCollections: List<FeaturedCollectionUiModel> = emptyList(),
     val isLoading: Boolean = false,
+    val isError: Boolean = false,
+    val errorMsgRes: Int? = null,
     val isGenricError: Boolean = false,
-    val isNetworkError: Boolean = false)
+    val isNetworkError: Boolean = false
+)
