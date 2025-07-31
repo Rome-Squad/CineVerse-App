@@ -7,6 +7,11 @@ import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.seasons.screen.navigateToSeasons
+import com.giraffe.details.nav.route.navigateLoginScreen
+import com.giraffe.details.screens.castDetails.navigateToCastDetails
+import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
+import com.giraffe.details.screens.seasons.screen.navigateToSeasons
+import com.giraffe.details.screens.videoPlayer.navigateToYouTubePlayer
 import kotlinx.serialization.Serializable
 
 
@@ -19,23 +24,28 @@ internal fun NavController.navigateToSeriesDetails(seriesId: Int) {
 }
 
 fun NavGraphBuilder.seriesDetailsRoute(
+    navController: NavController,
     onBackButtonClick: () -> Unit,
-    navigateToReviews: (Int) -> Unit,
-    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
-    navigateToCastDetails: (castID: Int) -> Unit,
-    navigateToSeason: (seriesId: Int) -> Unit,
-    navigateToSeriesDetails: (seriesId: Int) -> Unit,
-    navigateToLogIn: () -> Unit
 ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         SeriesDetailsScreen(
-            navigateToRecommendedSeries = navigateToRecommendedSeries,
-            navigateToCastDetails = navigateToCastDetails,
-            navigateToSeason = navigateToSeason,
-            navigateToSeriesDetails = navigateToSeriesDetails,
+            navigateToRecommendedSeries = { seriesID, title ->
+                navController.navigateToRecommendedSeries(seriesID, title)
+            },
+            navigateToCastDetails = {
+                navController.navigateToCastDetails(it)
+            },
+            navigateToSeason = {
+                navController.navigateToSeasons(it)
+            },
+            navigateToSeriesDetails = {
+                navController.navigateToSeriesDetails(it)
+            },
             onBackButtonClick = onBackButtonClick,
-            navigateToLogIn = navigateToLogIn,
-            navigateToReviews = navigateToReviews,
+            onClickPlay = navController::navigateToYouTubePlayer,
+            navigateToLogIn = navController::navigateLoginScreen,
+            navigateToReviews =navController:: navigateToReviews,
+
         )
     }
 }

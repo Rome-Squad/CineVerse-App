@@ -25,6 +25,7 @@ fun SeriesDetailsScreen(
     navigateToSeason: (seriesId: Int) -> Unit,
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
     onBackButtonClick: () -> Unit,
+    onClickPlay: (String) -> Unit,
     navigateToLogIn: () -> Unit,
     modifier: Modifier = Modifier,
     navigateToReviews: (Int) -> Unit ,
@@ -63,8 +64,9 @@ fun SeriesDetailsScreen(
                 state = state,
                 interaction = viewModel,
                 onBackButtonClick = onBackButtonClick,
+                onClickPlay = onClickPlay,
                 navigateToLogIn = navigateToLogIn,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize()
             )
         }
     }

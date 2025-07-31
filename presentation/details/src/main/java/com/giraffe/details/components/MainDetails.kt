@@ -11,7 +11,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +43,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
-import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -103,22 +101,23 @@ fun MainDetails(
                             .size(height = 80.dp, width = 64.dp)
                             .clip(shape = shapeImage)
                             .fillMaxHeight(),
-                    ) {
-                        Icon(
-                            painter = painterResource(Theme.icons.dueTone.image),
-                            contentDescription = actorName,
-                            tint = Theme.color.brand.secondary,
-                            modifier = Modifier
-                                .size(height = 80.dp, width = 64.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = Theme.color.stroke.primary,
-                                    shape = shapeImage
-                                )
-                                .clip(shape = shapeImage)
-                                .wrapContentSize()
-                        )
-                    }
+                    )
+//                    {
+//                        Icon(
+//                            painter = painterResource(Theme.icons.dueTone.image),
+//                            contentDescription = actorName,
+//                            tint = Theme.color.brand.secondary,
+//                            modifier = Modifier
+//                                .size(height = 80.dp, width = 64.dp)
+//                                .border(
+//                                    width = 1.dp,
+//                                    color = Theme.color.stroke.primary,
+//                                    shape = shapeImage
+//                                )
+//                                .clip(shape = shapeImage)
+//                                .wrapContentSize()
+//                        )
+//                    }
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
@@ -256,21 +255,22 @@ fun MainDetailsHeader(
                             )
                             .size(40.dp)
                             .clip(CircleShape)
-                    ) {
-                        Icon(
-                            painter = painterResource(Theme.icons.dueTone.image),
-                            contentDescription = actorName,
-                            tint = Theme.color.brand.secondary,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(
-                                    Theme.color.background.card,
-                                    shape = CircleShape
-                                )
-                                .padding(12.dp)
-                                .wrapContentSize(),
-                        )
-                    }
+                    )
+//                    {
+//                        Icon(
+//                            painter = painterResource(Theme.icons.dueTone.image),
+//                            contentDescription = actorName,
+//                            tint = Theme.color.brand.secondary,
+//                            modifier = Modifier
+//                                .size(40.dp)
+//                                .background(
+//                                    Theme.color.background.card,
+//                                    shape = CircleShape
+//                                )
+//                                .padding(12.dp)
+//                                .wrapContentSize(),
+//                        )
+//                    }
                 }
                 Text(
                     style = Theme.textStyle.title.md,

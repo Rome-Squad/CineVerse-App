@@ -46,7 +46,8 @@ fun CastItem(
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .clickable(onClick = onClick)
-        ) {
+        )
+        {
             Icon(
                 painter = painterResource(Theme.icons.dueTone.image),
                 contentDescription = null,

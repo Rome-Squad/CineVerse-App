@@ -67,6 +67,7 @@ fun TransitionLazyColumnToGrid(
                 previousScrollOffset = offset
             }
     }
+
     SharedTransitionLayout {
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -120,7 +121,6 @@ fun TransitionLazyColumnToGrid(
                                 }
                             )
                         }
-
                     }
                 }
             }

@@ -18,6 +18,9 @@ import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 
@@ -74,7 +77,12 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
-        remote.getSeriesDetails(seriesId).toEntity()
+        withContext(Dispatchers.IO) {
+            val youtubeVideoId = async { remote.getSeriesTrailerUrl(seriesId) }
+            val seriesDetails = async { remote.getSeriesDetails(seriesId) }
+            seriesDetails.await().youtubeVideoId = youtubeVideoId.await()
+            seriesDetails.await().toEntity()
+        }
     }
 
     override suspend fun getSeasonOfSeries(seriesId: Int): List<Season> = SafeCall {

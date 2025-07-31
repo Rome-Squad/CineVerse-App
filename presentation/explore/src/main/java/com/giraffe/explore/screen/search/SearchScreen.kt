@@ -227,7 +227,7 @@ private fun LazyListScope.keywordsSection(
     }
 
     if (isRecentKeyWordsVisible) {
-        items(recentKeywords) { keyWord ->
+        items(items = recentKeywords, key = { it }) { keyWord ->
             SearchItem(
                 text = keyWord,
                 isRecent = true,
@@ -243,7 +243,7 @@ private fun LazyListScope.keywordsSection(
     }
 
     if (isSearchResultKeywordsVisible) {
-        items(keywords) { keyWord ->
+        items(items = keywords, key = { it }) { keyWord ->
             SearchItem(
                 text = keyWord,
                 isRecent = false,

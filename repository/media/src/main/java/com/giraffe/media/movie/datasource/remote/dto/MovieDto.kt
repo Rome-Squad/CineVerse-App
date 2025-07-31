@@ -18,4 +18,5 @@ data class MovieDto(
     @SerialName("release_date")
     val releaseDate : String? = null,
     val runtime: Int? = null,
+    var youtubeVideoId: String? = null
 )

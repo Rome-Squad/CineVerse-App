@@ -3,6 +3,7 @@ accompanistWebview = "0.32.0"
 agp = "8.10.1"
 coilCompose = "3.2.0"
 coilComposeVersion = "2.4.0"
+core = "12.1.2"
 coreTesting = "2.2.0"
 dagger = "2.57"
 daggerCompiler = "2.57"
@@ -74,6 +75,7 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "core" }
 foundation = { module = "androidx.compose.foundation:foundation" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -11,5 +11,6 @@ data class Movie(
     val duration: Int?,
     val posterUrl: String?,
     val genresID: List<Int>,
-    val releaseYear: LocalDate?
+    val releaseYear: LocalDate?,
+    val youtubeVideoId: String = ""
 )

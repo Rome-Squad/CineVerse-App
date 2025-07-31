@@ -48,6 +48,9 @@ dependencies {
     implementation(project(":api:details"))
     implementation(project(":api:authentication"))
 
+    //android youtube player
+    implementation(libs.core)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

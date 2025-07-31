@@ -23,7 +23,8 @@ class GetMovieDetailsUseCaseTest {
         duration = null,
         posterUrl = null,
         genresID = listOf(1, 2),
-        releaseYear = null
+        releaseYear = null,
+        youtubeVideoId = ""
     )
 
     @BeforeEach

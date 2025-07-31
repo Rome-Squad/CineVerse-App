@@ -100,7 +100,8 @@ fun SeriesDetailsDto.toEntity() = Series(
     rating = voteAverage.toFloat(),
     releaseYear = firstAirDate.toFormattedDate(),
     overview = overview,
-    seasons = seasons.map { it.toEntity() }
+    seasons = seasons.map { it.toEntity() },
+    youtubeVideoId = youtubeVideoId.orEmpty()
 )
 
 @OptIn(ExperimentalTime::class)

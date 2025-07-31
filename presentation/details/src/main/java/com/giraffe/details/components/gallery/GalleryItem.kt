@@ -30,7 +30,8 @@ fun GalleryItem(
         contentScale = ContentScale.Crop,
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
-    ) {
+    )
+    {
         Icon(
             painter = painterResource(Theme.icons.dueTone.image),
             contentDescription = imageUrl,
