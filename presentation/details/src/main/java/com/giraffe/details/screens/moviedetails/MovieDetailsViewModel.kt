@@ -2,6 +2,7 @@ package com.giraffe.details.screens.moviedetails
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.groupByRole
@@ -9,6 +10,7 @@ import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toMovieUi
 import com.giraffe.details.models.toReviewUI
+import com.giraffe.details.screens.moviedetails.screen.MovieDetailsRoute
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
@@ -37,7 +39,7 @@ class MovieDetailsViewModel @Inject constructor(
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
-    private val movieID: Int = savedStateHandle["id"] ?: 0
+    private val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
 
     init {
         loadMovieDetails(movieID)
@@ -310,7 +312,7 @@ class MovieDetailsViewModel @Inject constructor(
         safeExecute {
             addRatingUseCase(
                 movieId = state.value.movie.id,
-                ratingValue =  state.value.currentRating.toFloat()
+                ratingValue = state.value.currentRating.toFloat()
             )
         }
     }
