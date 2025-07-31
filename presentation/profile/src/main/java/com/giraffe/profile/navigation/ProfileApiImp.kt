@@ -9,8 +9,9 @@ import androidx.compose.ui.res.stringResource
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.profile.ProfileApi
 import com.giraffe.profile.R
+import javax.inject.Inject
 
-class ProfileApiImp: ProfileApi {
+class ProfileApiImp @Inject constructor(): ProfileApi {
     @Composable
     override fun ProfileContainer(onShowBottomBarChange: (Boolean) -> Unit) {
         Box(

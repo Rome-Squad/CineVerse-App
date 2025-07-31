@@ -156,6 +156,7 @@ fun HomeNavGraph(
             selectedTabRoute = currentRoute,
             isBottomBarVisible = isBottomBarVisible,
             onTabSelected = { tab ->
+                Log.d("Tab", "Tab: ${tab.route}")
                 navController.navigate(tab.route) {
                     popUpTo(navController.graph.startDestinationRoute ?: "") {
                         saveState = true

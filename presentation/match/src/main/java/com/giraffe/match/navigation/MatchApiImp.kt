@@ -9,10 +9,22 @@ import androidx.compose.ui.res.stringResource
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.match.MatchApi
 import com.giraffe.match.R
+import javax.inject.Inject
 
-class MatchApiImp: MatchApi {
+class MatchApiImp @Inject constructor(): MatchApi {
+
     @Composable
     override fun MatchContainer(onShowBottomBarChange: (Boolean) -> Unit) {
+        MatchScreen(
+            onShowBottomBarChange = onShowBottomBarChange
+        )
+    }
+
+    @Composable
+    fun MatchScreen(
+        modifier: Modifier = Modifier,
+        onShowBottomBarChange: (Boolean) -> Unit
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
