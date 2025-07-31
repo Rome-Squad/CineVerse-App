@@ -1,5 +1,6 @@
 package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,7 +45,7 @@ fun PosterHorizontal(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
-    if (poster.name.isNotBlank()) {
+    AnimatedVisibility(poster.name.isNotBlank()) {
         Row(
             modifier = modifier
                 .height(IntrinsicSize.Min)
@@ -77,7 +79,7 @@ fun PosterHorizontal(
                         painter = painterResource(Theme.icons.dueTone.image),
                         contentDescription = stringResource(R.string.loading_image),
                         modifier = Modifier
-                            .height(88.dp)
+                            .heightIn(min = 88.dp)
                             .width(64.dp)
                             .padding(16.dp),
                         tint = Theme.color.brand.secondary
@@ -110,7 +112,7 @@ fun PosterHorizontal(
                                     )
                             )
 
-                            if (!poster.genres.isNullOrBlank()) {
+                            AnimatedVisibility(!poster.genres.isNullOrBlank()) {
                                 Text(
                                     text = poster.genres.toString(),
                                     style = Theme.textStyle.body.sm.regular,
@@ -121,7 +123,7 @@ fun PosterHorizontal(
                             }
                         }
 
-                        if (poster.rating != 0f) {
+                        AnimatedVisibility(poster.rating != 0f) {
                             Rating(
                                 value = poster.rating,
                                 modifier = Modifier
@@ -133,7 +135,7 @@ fun PosterHorizontal(
                         }
                     }
 
-                    if (!poster.time.isNullOrBlank()) {
+                    AnimatedVisibility(!poster.time.isNullOrBlank()) {
                         IconWithText(
                             modifier = Modifier.padding(top = 8.dp),
                             icon = painterResource(Theme.icons.dueTone.clock),
@@ -141,7 +143,7 @@ fun PosterHorizontal(
                         )
                     }
 
-                    if (!poster.date.isNullOrBlank()) {
+                    AnimatedVisibility(!poster.date.isNullOrBlank()) {
                         IconWithText(
                             modifier = Modifier.padding(top = 8.dp),
                             icon = painterResource(Theme.icons.dueTone.calendar),
