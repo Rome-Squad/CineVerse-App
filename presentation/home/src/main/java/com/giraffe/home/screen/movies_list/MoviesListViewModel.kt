@@ -6,11 +6,7 @@ import androidx.navigation.toRoute
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.utils.toPosterUi
-import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.MediaException
-import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.UnknownException
-import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
@@ -52,10 +48,12 @@ class MoviesListViewModel @Inject constructor(
         when (sectionType) {
             MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
             MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
-            else -> loadMoviesBySection(sectionType)
+            MovieSectionType.RECENTLY_RELEASED,
+            MovieSectionType.TOP_RATED_TV_SHOWS,
+            MovieSectionType.UPCOMING_MOVIES -> loadMoviesBySection(sectionType)
+
+            else -> collectionId?.let { loadMoviesByGenres(it) }
         }
-        sectionType?.let { loadMoviesBySection(it) }
-        collectionId?.let { loadMoviesByGenres(it) }
     }
 
     private fun loadMoviesByGenres(genreId: Int) {
@@ -71,9 +69,7 @@ class MoviesListViewModel @Inject constructor(
                     )
                 }
             } catch (e: MediaException) {
-                val errorResId = mapExceptionToStringRes(e)
                 updateState { it.copy(isLoading = false, errorMessage = e.message) }
-                sendEffect(MoviesListEffect.ShowError(errorResId))
             }
         }
     }
@@ -99,18 +95,10 @@ class MoviesListViewModel @Inject constructor(
                 MovieSectionType.TOP_RATED_TV_SHOWS -> {
                     getTopRatedSeriesUseCase(page = 1).map { it.toPosterUi() }
                 }
-                    MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                        val topRated = getTopRatedSeriesUseCase(page = 1)
-                        topRated.map { it.toPosterUi() }
-                    }
 
                 MovieSectionType.UPCOMING_MOVIES -> {
                     getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
                 }
-                    MovieSectionType.UPCOMING_MOVIES -> {
-                        val upcoming = getUpcomingMoviesUseCase(page = 1)
-                        upcoming.map { it.toPosterUi() }
-                    }
 
                 else -> emptyList()
             }

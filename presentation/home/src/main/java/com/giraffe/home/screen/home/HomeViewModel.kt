@@ -28,9 +28,11 @@ import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,11 +54,24 @@ class HomeViewModel @Inject constructor(
     HomeInteractionListener {
 
     init {
-        loadHomeScreen()
-        getRecentMovies()
         getFeaturedCollection()
         loadHomeContent()
         getRecentViewed()
+    }
+
+    private fun getRecentViewed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecentlyMoviesSuccess,
+                onError = ::onFail,
+                block = getRecentlyMoviesUseCase::invoke
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecentlySeresSuccess,
+                onError = ::onFail,
+                block = getRecentlySeriesUseCase::invoke
+            )
+        }
     }
 
     private fun getFeaturedCollection() {
@@ -70,14 +85,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun loadHomeScreen() {
-        updateState { it.copy(isLoading = true, isGenricError = false) }
-
-        safeExecute {
-            val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
-            val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
-            val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
-            val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
     override fun loadHomeContent() {
         updateState { it.copy(isLoading = true, isError = false) }
         viewModelScope.launch(Dispatchers.IO) {
@@ -93,39 +100,21 @@ class HomeViewModel @Inject constructor(
                 val recentSeries = recentSeriesDeferred.await()
                 val topRated = getTopRatedSeriesUseCase(page = 1)
                 val upcoming = getUpcomingMoviesUseCase(page = 1)
-            val popularMovies = popularMoviesDeferred.await()
-            val popularSeries = popularSeriesDeferred.await()
-            val recentMovies = recentMoviesDeferred.await()
-            val recentSeries = recentSeriesDeferred.await()
-            val topRated = getTopRatedSeriesUseCase(page = 1)
-            val upcoming = getUpcomingMoviesUseCase(page = 1)
 
                 val popularMovieUi = popularMovies.map { movie ->
                     val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
                     movie.toPopularMediaUiModel(genres)
                 }
+
                 val popularSeriesUi = popularSeries.map { series ->
                     val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
                     series.toPopularMediaUiModel(genres)
                 }
+
                 val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
                 val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
                 val topRatedUi = topRated.map { it.toHomeUiModel() }
                 val upcomingUi = upcoming.map { it.toHomeUiModel() }
-            val popularMovieUi = popularMovies.map { movie ->
-                val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                movie.toPopularMediaUiModel(genres)
-            }
-
-            val popularSeriesUi = popularSeries.map { series ->
-                val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                series.toPopularMediaUiModel(genres)
-            }
-
-            val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
-            val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
-            val topRatedUi = topRated.map { it.toHomeUiModel() }
-            val upcomingUi = upcoming.map { it.toHomeUiModel() }
 
                 updateState {
                     it.copy(
@@ -146,37 +135,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getRecentViewed() {
-        viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::onGetRecentlyMoviesSuccess,
-                onError = ::onFail,
-                block = getRecentlyMoviesUseCase::invoke
-            ).join()
-            safeExecute(
-                onSuccess = ::onGetRecentlySeresSuccess,
-                onError = ::onFail,
-                block = getRecentlySeriesUseCase::invoke
-            )
-        }
-    }
-            updateState {
-                it.copy(
-                    isLoading = false,
-                    isGenricError = false,
-                    popularity = popularMovieUi + popularSeriesUi,
-                    recentlyReleased = recentMovieUi + recentSeriesUi,
-                    topRated = topRatedUi,
-                    upcomingMovies = upcomingUi
-                )
-            }
-        }
-    }
-
-    private fun getRecentMovies() {
-        safeExecute {
-            getRecentlyMoviesUseCase().collectLatest { movies ->
-                updateState { it.copy(recentlyViewed = movies.map(Movie::toHomeUiModel)) }
     private suspend fun onGetRecentlyMoviesSuccess(moviesFlow: Flow<List<Movie>>) {
         moviesFlow.collectLatest { movies ->
             updateState { it.copy(recentlyViewed = (it.recentlyViewed + movies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
@@ -184,15 +142,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-                movies.firstOrNull()?.let { movie ->
-                    val recommendedMovies = getRecommendedMovieUseCase(movie.id, 1)
-                        .map(Movie::toHomeUiModel)
-
-                    updateState { it.copy(matchVibes = recommendedMovies) }
-                }
-            }
-        }
-    }
     private suspend fun onGetRecentlySeresSuccess(seriesFlow: Flow<List<Series>>) {
         seriesFlow.collectLatest { series ->
             updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }

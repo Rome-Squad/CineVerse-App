@@ -68,10 +68,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     }
 
     private fun handler(onError: (Int) -> Unit = {}): CoroutineExceptionHandler {
-
-    private fun handler(): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
-            _error.update { mapExceptionToStringRes(throwable) }
             onError(mapExceptionToStringRes(throwable))
         }
     }
