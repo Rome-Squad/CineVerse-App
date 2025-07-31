@@ -43,6 +43,9 @@ dependencies {
     implementation(project(":domain:media"))
     implementation(project(":api:details"))
 
+    //android youtube player
+    implementation(libs.core)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

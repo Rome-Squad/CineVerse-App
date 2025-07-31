@@ -3,6 +3,7 @@ accompanistWebview = "0.32.0"
 agp = "8.10.1"
 coilCompose = "3.2.0"
 coilComposeVersion = "2.4.0"
+core = "12.1.2"
 coreTesting = "2.2.0"
 junitJupiter = "5.13.2"
 junitJupiterApi = "5.13.2"
@@ -62,6 +63,7 @@ androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", v
 coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "core" }
 foundation = { module = "androidx.compose.foundation:foundation" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
