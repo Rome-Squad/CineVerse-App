@@ -1,12 +1,29 @@
 package com.giraffe.home.navigation
 
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
+import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.DetailsApi
+import com.giraffe.explore.ExploreApi
 import com.giraffe.home.screen.home.HomeRoute
+import com.giraffe.home.screen.home.HomeTab
 import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
 import com.giraffe.home.screen.movies_list.navigateToCollectionList
@@ -17,45 +34,144 @@ import com.giraffe.home.screen.movies_list.navigateToMoviesList
 fun HomeNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
+    exploreApi: ExploreApi
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = HomeRoute
+
+    val homeTab = HomeTab(
+        labelRes = R.string.home,
+        iconRes = Theme.icons.outline.home
+    )
+
+    val exploreTab = ExploreTab(
+        labelRes = R.string.explore,
+        iconRes = Theme.icons.outline.search
+    )
+
+    val profileTab = ProfileTab(
+        labelRes = R.string.me,
+        iconRes = Theme.icons.outline.userSquare
+    )
+
+    val matchTab = MatchTab(
+        labelRes = R.string.match,
+        iconRes = Theme.icons.outline.magicStick
+    )
+
+    val bottomTabs = listOf(
+        homeTab,
+        exploreTab,
+        matchTab,
+        profileTab
+    )
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRouteString = navBackStackEntry?.destination?.route
+
+    val currentRoute = when (currentRouteString) {
+        HomeRoute::class.qualifiedName -> HomeRoute
+        ExploreRoute::class.qualifiedName -> ExploreRoute
+        MatchRoute::class.qualifiedName -> MatchRoute
+        ProfileRoute::class.qualifiedName -> ProfileRoute
+        else -> null
+    }
+
+    var isBottomBarVisible by remember {
+        mutableStateOf(
+            true
+        )
+    }
+
+    LaunchedEffect(currentRouteString) {
+        if (currentRouteString == HomeRoute::class.qualifiedName) {
+            isBottomBarVisible = true
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .systemBarsPadding()
     ) {
-        homeRoute(
-            navigateToMoviesScreen = { sectionType, sectionTitle ->
-                navController.navigateToMoviesList(
-                    sectionType = sectionType,
-                    sectionTitle = sectionTitle
-                )
-            },
-            navigateToMoviesDetailsScreen = { navController.navigateToMovieDetails(it) },
-            navigateToSeriesDetailsScreen = { navController.navigateToSeriesDetails(it) },
-            navigateToCollectionList = { collectionId, collectionTitle ->
-                navController.navigateToCollectionList(
-                    collectionId = collectionId,
-                    collectionTitle = collectionTitle
-                )
-            },
-        )
+        NavHost(
+            navController = navController,
+            startDestination = HomeRoute,
+            modifier = Modifier.weight(1f)
+        ) {
 
-        moviesListRoute(
-            onBackClick = { navController.popBackStack() },
-            navigateToMoviesDetailsScreen = { navController.navigateToMovieDetails(it) },
-            navigateToSeriesDetailsScreen = { navController.navigateToSeriesDetails(it) }
-        )
+            homeRoute(
+                navigateToMoviesScreen = { sectionType, sectionTitle ->
+                    navController.navigateToMoviesList(sectionType, sectionTitle)
+                    isBottomBarVisible = false
+                },
+                navigateToMoviesDetailsScreen = {
+                    navController.navigateToMovieDetails(it)
+                    isBottomBarVisible = false
+                },
+                navigateToSeriesDetailsScreen = {
+                    navController.navigateToSeriesDetails(it)
+                    isBottomBarVisible = false
+                },
+                navigateToCollectionList = { collectionId, collectionTitle ->
+                    navController.navigateToCollectionList(
+                        collectionId = collectionId,
+                        collectionTitle = collectionTitle
+                    )
+                },
+            )
+
+            moviesListRoute(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
+                navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
+            )
 
 
-        composable<SeriesDetailsRoute> { backStackEntry ->
-            detailsApi.SeriesDetailsContainer(seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId) {
-                navController.popBackStack()
+            composable<SeriesDetailsRoute> { backStackEntry ->
+                val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
+                detailsApi.SeriesDetailsContainer(seriesId) {
+                    navController.popBackStack()
+                }
+            }
+
+            composable<MovieDetailsRoute> { backStackEntry ->
+                val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId
+                detailsApi.MovieDetailsContainer(movieId) {
+                    navController.popBackStack()
+                }
+            }
+
+            composable<ExploreRoute> {
+                exploreApi.ExploreContainer {
+                    isBottomBarVisible = it
+                }
+            }
+
+            composable<MatchRoute> {
+                MatchScreen { isBottomBarVisible = it }
+            }
+
+            composable<ProfileRoute> {
+                ProfileScreen { isBottomBarVisible = it }
             }
         }
 
-        composable<MovieDetailsRoute> { backStackEntry ->
-            detailsApi.MovieDetailsContainer(movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId) {
-                navController.popBackStack()
+        BottomNavigationBar(
+            tabs = bottomTabs,
+            selectedTabRoute = currentRoute,
+            isBottomBarVisible = isBottomBarVisible,
+            onTabSelected = { tab ->
+                Log.d("Tab", "Tab: ${tab.route}")
+                navController.navigate(tab.route) {
+                    popUpTo(navController.graph.startDestinationRoute ?: "") {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
-        }
+        )
     }
 }
