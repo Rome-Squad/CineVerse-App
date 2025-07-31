@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,7 +51,7 @@ fun StaffInfoSection(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(Theme.radius.lg),
             ) {
-                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                Column {
                     staffList.entries.toList().forEachIndexed { index, (key, value) ->
                         val name = value.joinToString(stringResource(R.string.split))
                         StaffItem(name = name, role = key)
@@ -79,8 +77,9 @@ fun StaffItem(name: String, role: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 18.dp),
+            .padding(horizontal = 16.dp, vertical = 18.5.dp),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = role,
@@ -89,7 +88,6 @@ fun StaffItem(name: String, role: String) {
             color = Theme.color.shade.secondary,
             textAlign = TextAlign.Start,
         )
-        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = name,
             style = Theme.textStyle.body.md.medium,

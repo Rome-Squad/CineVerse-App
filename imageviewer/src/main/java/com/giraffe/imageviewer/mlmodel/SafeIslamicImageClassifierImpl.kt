@@ -19,47 +19,69 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
     context: Context
 ) : SafeIslamicImageClassifier {
 
-
     companion object {
+        // Interpreter to run the Model
         @Volatile
-        private var modelFile: ByteBuffer? = null
+        private var interpreterNsfwModel: Interpreter? = null
 
         @Volatile
-        private var interpreter: Interpreter? = null
+        private var interpreterNsfwModelTmdbData: Interpreter? = null
+
         val cachedImages = ConcurrentHashMap<String, Boolean>()
 
+        private fun getInterpreterNsfwModel(
+            context: Context,
+            fileName: String = "nsfw_model.tflite"
+        ): Interpreter {
+            return interpreterNsfwModel ?: synchronized(this) {
+                val nsfwModel = loadModelFile(context, fileName = fileName)
+                interpreterNsfwModel = Interpreter(nsfwModel)
+                interpreterNsfwModel!!
+            }
+        }
+
+        private fun getInterpreterNsfwModelTmdbData(
+            context: Context,
+            fileName: String = "nsfw_model_tmdb_data.tflite"
+        ): Interpreter {
+            return interpreterNsfwModel ?: synchronized(this) {
+                val nsfwModelTmdbData =
+                    loadModelFile(context, fileName = fileName)
+                interpreterNsfwModelTmdbData = Interpreter(nsfwModelTmdbData)
+                interpreterNsfwModelTmdbData!!
+            }
+        }
 
         private fun loadModelFile(
             context: Context,
-            fileName: String = "mustafa_islamic_safe_image_classifier.tflite"
+            fileName: String
         ): ByteBuffer {
-            return modelFile ?: synchronized(this) {
-                val assetFileDescriptor = context.assets.openFd(fileName)
-                val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
-                inputStream.channel.use { fileChannel ->
-                    val startOffset = assetFileDescriptor.startOffset
-                    val declaredLength = assetFileDescriptor.declaredLength
-                    val bytes = fileChannel.map(
-                        FileChannel.MapMode.READ_ONLY,
-                        startOffset,
-                        declaredLength
-                    )
-                    interpreter = Interpreter(bytes)
-                    bytes
-                }
+
+            val assetFileDescriptor = context.assets.openFd(fileName)
+            val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
+            inputStream.channel.use { fileChannel ->
+                val startOffset = assetFileDescriptor.startOffset
+                val declaredLength = assetFileDescriptor.declaredLength
+
+                return fileChannel.map(
+                    FileChannel.MapMode.READ_ONLY,
+                    startOffset,
+                    declaredLength
+                )
             }
         }
     }
-
-    private val labels = listOf("unsafe", "safe")
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     init {
         // Load the TFLite model from assets
         coroutineScope.launch {
-            val modelFile = loadModelFile(context)
-            interpreter = Interpreter(modelFile)
+            val nsfwModelTmdbData = loadModelFile(context, fileName = "nsfw_model_tmdb_data.tflite")
+            interpreterNsfwModel = Interpreter(nsfwModel)
+            interpreterNsfwModelTmdbData = Interpreter(
+                nsfwModelTmdbData
+            )
         }
     }
 
@@ -73,14 +95,19 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         // convert the bitmap to byte buffer
         val inputBuffer = convertBitmapToByteBuffer(resizedBitmap)
 
-        //the output shape is Array<FloatArray(size = 2)>
-        val output = Array(1) { FloatArray(labels.size) }
+        val outputNsfwModel = Array(1) { FloatArray(1) }
+        val outputNsfwModelTmdbData = Array(1) { FloatArray(1) }
 
-        // run the model
-        interpreter!!.run(inputBuffer, output)
+        // Run both models
+        interpreterNsfwModel.run(inputBuffer, outputNsfwModel)
+        interpreterNsfwModelTmdbData.run(inputBuffer, outputNsfwModelTmdbData)
 
-        // return map of the results <label: String, score: Float>
-        return labels.zip(output[0].toList()).toMap()
+        val unsafeNsfwModel = outputNsfwModel[0][0]
+        val unsafeNsfwModelTmdbData = outputNsfwModelTmdbData[0][0]
+
+        val finalUnsafe = maxOf(unsafeNsfwModel, unsafeNsfwModelTmdbData)
+
+        return finalUnsafe
     }
 
     private fun convertBitmapToByteBuffer(
@@ -104,21 +131,12 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         return buffer
     }
 
-
     override suspend fun isUnsafe(bitmap: Bitmap, imageUrl: String): Boolean {
         return getResultFromCache(imageUrl) ?: withContext(Dispatchers.Default) {
-            val result = classify(bitmap)
-
-            val safeScore = result["safe"] ?: 1f
-            val unsafeScore = result["unsafe"] ?: 1f
-
-            val isUnsafe = when {
-                unsafeScore > .25f -> true
-                unsafeScore >= safeScore -> true
-                else -> false
-            }
+            val unsafeScore = classify(bitmap)
+            val isSafe = unsafeScore > 0.5f  // Threshold
             cachedImages[imageUrl] = isUnsafe
-            isUnsafe
+            isSafe
         }
     }
 
