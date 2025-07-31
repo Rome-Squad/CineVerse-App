@@ -7,7 +7,8 @@ data class MoviesListUiState(
     val errorMessage: String? = null,
     val mediaList: List<PosterUiState> = emptyList(),
     val moviesListTitle: String = "",
-    val isListSelected: Boolean = false
+    val isListSelected: Boolean = false,
+    val errorMsgRes:Int? = null
 )
 
 
