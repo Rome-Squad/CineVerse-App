@@ -97,17 +97,19 @@ fun PosterHorizontal(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text(
-                            text = poster.name,
-                            style = Theme.textStyle.body.md.medium,
-                            color = Theme.color.shade.primary,
-                            maxLines = 1,
-                            modifier = Modifier
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
-                                    animatedVisibilityScope = animatedVisibilityScope
-                                )
-                        )
+                        if (poster.name.isNotBlank()) {
+                            Text(
+                                text = poster.name,
+                                style = Theme.textStyle.body.md.medium,
+                                color = Theme.color.shade.primary,
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .sharedElement(
+                                        sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
+                                        animatedVisibilityScope = animatedVisibilityScope
+                                    )
+                            )
+                        }
                         if (!poster.genres.isNullOrBlank()) {
                             Text(
                                 text = poster.genres.toString(),
