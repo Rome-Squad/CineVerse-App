@@ -18,7 +18,6 @@ import com.giraffe.details.screens.seasons.SeasonsScreenState
 fun SeasonsContent(
     state: SeasonsScreenState,
     onBackClick: () -> Unit,
-
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -26,7 +25,7 @@ fun SeasonsContent(
             title = stringResource(R.string.seasons),
             showBackButton = true,
             onBackButtonClick = onBackClick,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 8.dp)
         )
         LazyColumn(
             contentPadding = PaddingValues(16.dp),

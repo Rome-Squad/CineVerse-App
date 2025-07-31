@@ -14,4 +14,6 @@ data class HomeScreenUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val errorMsgRes: Int? = null,
+    val isGenricError: Boolean = false,
+    val isNetworkError: Boolean = false
 )

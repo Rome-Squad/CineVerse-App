@@ -89,10 +89,12 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
             tint = Theme.color.shade.primary,
             modifier = Modifier
                 .size(40.dp)
-                .padding(8.dp)
+                .clip(shape = CircleShape)
                 .clickable(
                     onClick = onBackButtonClick
-                ).graphicsLayer(rotationZ = rotationAngle)
+                )
+                .padding(8.dp)
+                .graphicsLayer(rotationZ = rotationAngle)
         )
     }
 }
@@ -149,11 +151,11 @@ private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit,modifier: Modi
             tint = Theme.color.shade.primary,
             modifier = modifier
                 .size(40.dp)
-                .padding(8.dp)
                 .clickable(
                     enabled = true,
                     onClick = onEndIconClick
-                ).graphicsLayer(rotationZ = rotationAngle)
+                )
+                .graphicsLayer(rotationZ = rotationAngle)
         )
     }
 }

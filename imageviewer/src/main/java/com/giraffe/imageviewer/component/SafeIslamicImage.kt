@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.AsyncImagePainter.Companion.DefaultTransform
@@ -26,11 +27,9 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import com.giraffe.imageviewer.R
 import com.giraffe.imageviewer.blur.BlurTransformer
-import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifier
 import com.giraffe.imageviewer.utils.drawableToBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun SafeIslamicImage(
@@ -54,7 +53,7 @@ fun SafeIslamicImage(
     val context = LocalContext.current
 
     // Preserve classifier over recomposition and config changes
-    val classifier: SafeIslamicImageClassifier by inject(SafeIslamicImageClassifier::class.java)
+    val viewModel: SafeImageViewModel = hiltViewModel()
 
     // Use app-level Coil ImageLoader
     val imageLoader = LocalContext.current.imageLoader
@@ -86,7 +85,7 @@ fun SafeIslamicImage(
                 val drawable = result.drawable
                 val bitmap = drawable?.let { drawableToBitmap(it) }
 
-                shouldBlur = bitmap?.let { classifier.isUnsafe(it) } ?: false
+                shouldBlur = bitmap?.let { viewModel.isImageUnsafe(it) } ?: false
                 unsafeCache[imageUrl] = shouldBlur
                 isPlaceholder = false
             } catch (_: Exception) {

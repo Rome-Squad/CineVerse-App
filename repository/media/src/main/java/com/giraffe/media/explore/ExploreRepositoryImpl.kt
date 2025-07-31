@@ -11,8 +11,9 @@ import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class ExploreRepositoryImpl(
+class ExploreRepositoryImpl @Inject constructor(
     private val local: LocalExploreDataSource,
     private val remote: ExploreRemoteDataSource,
 ) : ExploreRepository {

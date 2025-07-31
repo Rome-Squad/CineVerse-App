@@ -25,8 +25,11 @@ import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SeriesDetailsViewModel(
+@HiltViewModel
+class SeriesDetailsViewModel @Inject constructor(
     private val getSeriesDetails: GetSeriesDetailsUseCase,
     private val getLastSeasons: GetLastSeasonsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
@@ -66,6 +69,7 @@ class SeriesDetailsViewModel(
         }
     }
 
+    override fun onClickCreateCollection() {}
 
     override fun onDismissAddToCollectionBottomSheet() {
         updateState {

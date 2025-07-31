@@ -2,14 +2,12 @@ package com.giraffe.home.screen.movies_list
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.utils.toPosterUi
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -23,13 +21,17 @@ import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.collections.emptyList
 
-class MoviesListViewModel(
+@HiltViewModel
+class MoviesListViewModel @Inject constructor(
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
@@ -48,6 +50,15 @@ class MoviesListViewModel(
         loadMoviesBySection(sectionType)
     }
 
+   private fun loadMoviesBySection(sectionType: String) {
+    updateState {
+        it.copy(
+            isLoading = true,
+            errorMessage = null,
+            mediaList = emptyList(),
+            moviesListTitle = sectionTitle
+        )
+    }
     private fun onFail(errorMsgRes: Int) {
         updateState { it.copy(isLoading = false, errorMsgRes = errorMsgRes) }
     }
@@ -62,39 +73,37 @@ class MoviesListViewModel(
             )
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                when (sectionType) {
+    when (sectionType) {
+        MovieSectionType.RECENTLY_VIEWED -> getRecent()
+        MovieSectionType.MATCHES_YOUR_VIBES -> getRecommended()
+
+        else -> {
+            safeExecute {
+                val media = when (sectionType) {
                     MovieSectionType.RECENTLY_RELEASED -> {
                         val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
                         val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
-                        val moviesUi = recentMovies.map { it.toPosterUi() }
-                        val seriesUi = recentSeries.map { it.toPosterUi() }
-                        moviesUi + seriesUi
+                        recentMovies.map { it.toPosterUi() } + recentSeries.map { it.toPosterUi() }
                     }
 
                     MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                        val topRated = getTopRatedSeriesUseCase(page = 1)
-                        topRated.map { it.toPosterUi() }
+                        getTopRatedSeriesUseCase(page = 1).map { it.toPosterUi() }
                     }
 
                     MovieSectionType.UPCOMING_MOVIES -> {
-                        val upcoming = getUpcomingMoviesUseCase(page = 1)
-                        upcoming.map { it.toPosterUi() }
+                        getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
                     }
 
-                    MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
-
-                    MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
+                    else -> emptyList()
                 }
 
-            } catch (e: MediaException) {
-                val errorResId = mapExceptionToStringRes(e)
-                updateState { it.copy(isLoading = false, errorMessage = e.message) }
-                sendEffect(MoviesListEffect.ShowError(errorResId))
-            } catch (e: Exception) {
-                updateState { it.copy(isLoading = false, errorMessage = e.message) }
-                sendEffect(MoviesListEffect.ShowError(R.string.error_unknown))
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = null,
+                        mediaList = media,
+                    )
+                }
             }
         }
     }
@@ -203,5 +212,16 @@ class MoviesListViewModel(
             MediaType.MOVIE -> sendEffect(MoviesListEffect.NavigateToMovieDetails(mediaId))
             MediaType.SERIES -> sendEffect(MoviesListEffect.NavigateToSeriesDetails(mediaId))
         }
+    }
+
+    override fun onError(throwable: Throwable) {
+        val errorResId = mapExceptionToStringRes(throwable)
+        updateState {
+            it.copy(
+                isLoading = false,
+                errorMessage = throwable.message ?: "Unknown error"
+            )
+        }
+        sendEffect(MoviesListEffect.ShowError(errorResId))
     }
 }

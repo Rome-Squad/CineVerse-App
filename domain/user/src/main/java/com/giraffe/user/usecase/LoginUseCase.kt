@@ -2,10 +2,11 @@ package com.giraffe.user.usecase
 
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
-import com.giraffe.user.exception.InvalidUsernameOrPasswordException
+import com.giraffe.user.exception.InvalidUsernameMatchException
 import com.giraffe.user.repository.AuthRepository
+import javax.inject.Inject
 
-class LoginUseCase(private val authRepository: AuthRepository) {
+class LoginUseCase @Inject constructor(private val authRepository: AuthRepository) {
 
     suspend operator fun invoke(userInput: String, password: String) {
         validateUsername(userInput)
@@ -16,7 +17,7 @@ class LoginUseCase(private val authRepository: AuthRepository) {
 
     private fun validateUsername(username: String) {
         if (username.isBlank()) throw EmptyUsernameException()
-        if (username.contains(Regex("[^a-zA-Z0-9_-]"))) throw InvalidUsernameOrPasswordException()
+        if (username.contains(Regex("[^a-zA-Z0-9_-]"))) throw InvalidUsernameMatchException()
     }
 
     private fun validatePassword(password: String) {

@@ -8,8 +8,9 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
 import com.giraffe.media.utils.SafeCall
+import javax.inject.Inject
 
-class SeriesRoomLocalDateSource(
+class SeriesRoomLocalDateSource @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
