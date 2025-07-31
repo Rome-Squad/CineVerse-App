@@ -32,6 +32,7 @@ import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.CollectionBottomSheetContent
+import com.giraffe.details.components.LoginBottomSheet
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
@@ -49,6 +50,7 @@ fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
     interaction: SeriesDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
+    navigateToLogIn: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isScrollingUp by rememberSaveable { mutableStateOf(false) }
@@ -82,7 +84,7 @@ fun SeriesDetailsContent(
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
                 MainMovieOrSeriesDetailsAnimatedContent(
-                    type = TypeOfScreen.SERIES.name,
+                    type = stringResource(id = TypeOfScreen.SERIES.titleResId),
                     name = state.seriesDetails.name,
                     rating = state.seriesDetails.rating,
                     imageUrl = state.seriesDetails.posterUrl,
@@ -242,16 +244,25 @@ fun SeriesDetailsContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RatingSelector()
+                RatingSelector(
+                    rate = state.currentRating,
+                    onRateClick = interaction::onRateChange
+                )
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
-                    enabled = false,
-                    onClick = {}
+                    enabled = state.currentRating > 0,
+                    onClick = interaction::addRate
                 )
             }
         }
+    )
+
+    LoginBottomSheet(
+        isVisible = state.isVisibleLoginBottomSheet,
+        onLogInClick = navigateToLogIn,
+        onDismiss = interaction::onDismissGiveStarsBottomSheet
     )
 }

@@ -19,5 +19,6 @@ data class SeriesDetailsScreenState(
 
     val isVisibleAddToCollectionBottomSheet: Boolean = false,
     val isVisibleGiveStarsBottomSheet: Boolean = false,
-    val isVisibleLoginBottomSheet: Boolean = false
+    val isVisibleLoginBottomSheet: Boolean = false,
+    val currentRating: Int = 0
 )

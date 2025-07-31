@@ -27,6 +27,10 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     private val _effect = Channel<E>()
     val effect = _effect.receiveAsFlow()
 
+    private val _error = MutableStateFlow<Int?>(null)
+    val error = _error.asStateFlow()
+
+
     protected fun updateState(updater: (S) -> S) {
         _state.update(updater)
     }
@@ -80,5 +84,4 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
             else -> R.string.error_unknown
         }
     }
-
 }
