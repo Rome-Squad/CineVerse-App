@@ -14,8 +14,8 @@ import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
-import kotlinx.coroutines.Dispatchers
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -39,33 +39,33 @@ class SearchViewModel @Inject constructor(
     SearchInteractionListener {
     init {
         onQueryChange()
-        getRecentViewedPoster()
+        getRecentViewed()
     }
 
     private fun onFail(errorMsgRes: Int) = updateState { it.copy(errorMsgRes = errorMsgRes) }
 
-    private fun getRecentViewedPoster() {
+    private fun getRecentViewed() {
         viewModelScope.launch(Dispatchers.IO) {
             safeExecute(
-                onSuccess = ::onGetRecentlyMovies,
+                onSuccess = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
                 block = getRecentlyMoviesUseCase::invoke
             ).join()
             safeExecute(
-                onSuccess = ::onGetRecentlySeries,
+                onSuccess = ::onGetRecentlySeriesSuccess,
                 onError = ::onFail,
                 block = getRecentSeriesUseCase::invoke
             )
         }
     }
 
-    private suspend fun onGetRecentlyMovies(moviesFlow: Flow<List<Movie>>) {
+    private suspend fun onGetRecentlyMoviesSuccess(moviesFlow: Flow<List<Movie>>) {
         moviesFlow.collectLatest { movies ->
             updateState { it.copy(recentPosters = (it.recentPosters + movies.map(Movie::toPoster)).distinctBy { poster -> poster.id }) }
         }
     }
 
-    private suspend fun onGetRecentlySeries(seriesFlow: Flow<List<Series>>) {
+    private suspend fun onGetRecentlySeriesSuccess(seriesFlow: Flow<List<Series>>) {
         seriesFlow.collectLatest { series ->
             updateState { it.copy(recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id }) }
         }
