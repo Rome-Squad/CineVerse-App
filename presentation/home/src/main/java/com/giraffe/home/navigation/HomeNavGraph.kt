@@ -24,27 +24,44 @@ import com.giraffe.home.screen.home.HomeTab
 import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
+import com.giraffe.match.MatchApi
+import com.giraffe.profile.ProfileApi
 
 
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
-    exploreApi: ExploreApi
+    exploreApi: ExploreApi,
+    profileApi: ProfileApi,
+    matchApi: MatchApi
 ) {
 
     val homeTab = HomeTab(
         labelRes = R.string.home,
         iconRes = Theme.icons.outline.home
     )
+
     val exploreTab = ExploreTab(
         labelRes = R.string.explore,
         iconRes = Theme.icons.outline.search
     )
 
+    val profileTab = ProfileTab(
+        labelRes = R.string.me,
+        iconRes = Theme.icons.outline.userSquare
+    )
+
+    val matchTab = MatchTab(
+        labelRes = R.string.match,
+        iconRes = Theme.icons.outline.magicStick
+    )
+
     val bottomTabs = listOf(
         homeTab,
-        exploreTab
+        exploreTab,
+        matchTab,
+        profileTab
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -53,6 +70,8 @@ fun HomeNavGraph(
     val currentRoute = when (currentRouteString) {
         HomeRoute::class.qualifiedName -> HomeRoute
         ExploreRoute::class.qualifiedName -> ExploreRoute
+        MatchRoute::class.qualifiedName -> MatchRoute
+        ProfileRoute::class.qualifiedName -> ProfileRoute
         else -> null
     }
 
@@ -67,6 +86,7 @@ fun HomeNavGraph(
             isBottomBarVisible = true
         }
     }
+
     Column {
         NavHost(
             navController = navController,
@@ -115,7 +135,6 @@ fun HomeNavGraph(
             composable<ExploreRoute> {
                 exploreApi.ExploreContainer {
                     isBottomBarVisible = it
-                    Log.d("TAG", "explore container say $it but the bottom bar is $isBottomBarVisible")
                 }
             }
         }
