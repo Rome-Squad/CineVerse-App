@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.seriesdetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
