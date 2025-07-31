@@ -5,8 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
 import com.giraffe.home.HomeApi
+import javax.inject.Inject
 
-class HomeApiImp(
+class HomeApiImp @Inject constructor(
     private val detailsApi: DetailsApi
 ) : HomeApi {
     @Composable

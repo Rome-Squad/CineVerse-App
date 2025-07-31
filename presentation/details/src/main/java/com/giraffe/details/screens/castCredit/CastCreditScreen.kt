@@ -11,10 +11,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.EventListener
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CastCreditScreen(
@@ -22,7 +22,7 @@ fun CastCreditScreen(
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CastCreditViewModel = koinViewModel()
+    viewModel: CastCreditViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
     EventListener(

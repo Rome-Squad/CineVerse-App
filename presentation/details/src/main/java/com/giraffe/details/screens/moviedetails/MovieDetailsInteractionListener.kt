@@ -32,4 +32,10 @@ interface MovieDetailsInteractionListener {
 
     fun navigateToMovieRecommendation(movieId: Int, title: String)
 
+    fun onRateChange(rate: Int)
 }
+
+
+
+
+

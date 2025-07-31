@@ -3,7 +3,6 @@ package com.giraffe.details.screens.moviedetails.screen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMoviesScreen
@@ -23,10 +22,8 @@ fun NavGraphBuilder.movieDetailsRoute(
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit,
 ) {
     composable<MovieDetailsRoute> { backStackEntry ->
-        val movieID = backStackEntry.toRoute<MovieDetailsRoute>().id
 
         MovieDetailsScreen(
-            movieID = movieID,
             navigateToReviews = navigateToReviews,
             onBackButtonClick = onBackButtonClick,
             onClickPlay = {},

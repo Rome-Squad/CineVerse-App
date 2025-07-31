@@ -3,11 +3,11 @@ package com.giraffe.explore.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
@@ -51,7 +52,6 @@ fun ExploreHeader(
 ) {
     Column(
         modifier = modifier.background(color = Theme.color.background.screen),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
             modifier = Modifier,
@@ -60,29 +60,34 @@ fun ExploreHeader(
             if (showBackButton) {
                 Image(
                     modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .padding(start = 10.dp)
-                        .size(20.dp)
-                        .clickable(onClick = onBackClick),
+                        .padding(vertical = 6.dp, horizontal = 4.dp)
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .clickable(onClick = onBackClick)
+                        .padding(10.dp),
                     painter = painterResource(Theme.icons.outline.arrowLeft),
                     contentDescription = stringResource(R.string.back),
                     colorFilter = ColorFilter.tint(Theme.color.shade.primary)
                 )
             }
             DefaultTextField(
-                modifier = Modifier
-                    .padding(
-                        horizontal = 16.dp
-                    ),
+                modifier = Modifier.padding(
+                    start = if (showBackButton) 0.dp else 16.dp,
+                    end = 16.dp
+                ),
                 singleLine = true,
                 maxCharacters = 400,
                 startIcon = painterResource(Theme.icons.outline.search),
                 endIcon = {
                     Image(
-                        modifier = Modifier.clickable(onClick = onEndIconClick),
                         painter = endIcon,
                         contentDescription = "end_icon",
-                        colorFilter = ColorFilter.tint(Theme.color.shade.primary)
+                        colorFilter = ColorFilter.tint(Theme.color.shade.primary),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .clickable(onClick = onEndIconClick)
+                            .padding(10.dp)
                     )
                 },
                 placeholder = placeholder,

@@ -1,6 +1,12 @@
 package com.giraffe.designsystem.composable.button_type
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -11,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -38,14 +45,26 @@ fun PrimaryButton(
         ),
         contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp)
     ) {
-        if (isLoading) Progress()
-        else {
-            Text(
-                text = text,
-                style = Theme.textStyle.body.md.medium,
-            )
+        AnimatedContent(
+            targetState = isLoading,
+            label = "PrimaryButton",
+            transitionSpec = {
+                slideInVertically(tween(250, easing = LinearEasing)) { 2 * it } togetherWith
+                        slideOutVertically(tween(250, easing = LinearEasing)) { 2 * -it }
+            }
+        ) { loadingState ->
+            if (loadingState) {
+                Progress()
+            } else {
+                Text(
+                    text = text,
+                    style = Theme.textStyle.body.md.medium,
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    letterSpacing = 0.sp
+                )
+            }
         }
-
     }
 }
 

@@ -20,8 +20,9 @@ import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PersonRepositoryImpl(
+class PersonRepositoryImpl @Inject constructor(
     private val remoteDataSource: PersonRemoteDataSource,
     private val localDataSource: PersonLocalDataSource,
     private val localExploreDataSource: LocalExploreDataSource,
