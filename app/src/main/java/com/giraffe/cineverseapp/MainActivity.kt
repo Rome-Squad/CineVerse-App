@@ -8,19 +8,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.giraffe.designsystem.theme.CineVerseTheme
-import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
 import com.giraffe.explore.ExploreApi
 import com.giraffe.home.HomeApi
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var authApi: AuthenticationApi
+    lateinit var homeApi: HomeApi
 
-    val homeApi: HomeApi by inject()
-    val exploreApi: ExploreApi by inject()
+    @Inject
+    lateinit var exploreApi: ExploreApi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
