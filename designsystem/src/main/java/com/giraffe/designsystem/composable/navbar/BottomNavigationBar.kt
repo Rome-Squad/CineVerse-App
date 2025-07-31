@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable.navbar
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +18,6 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.BuildingBlock
 import com.giraffe.designsystem.theme.Theme
 
-/*enum class BottomTab {
-    Home, Explore, Match, Me
-}*/
-
 @Composable
 fun BottomNavigationBar(
     tabs: List<BottomTab<out Route>>,
@@ -31,7 +26,7 @@ fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     isBottomBarVisible: Boolean = true
 ) {
-    AnimatedVisibility(isBottomBarVisible) {
+    if(isBottomBarVisible) {
         Column(
             modifier = modifier.background(Theme.color.background.card)
         ) {
@@ -61,34 +56,3 @@ fun BottomNavigationBar(
         }
     }
 }
-/*
-
-@Composable
-private fun BottomTab.getLabelForTab(): String = when (this) {
-    BottomTab.Home -> stringResource(R.string.home)
-    BottomTab.Explore -> stringResource(R.string.explore)
-    BottomTab.Match -> stringResource(R.string.match)
-    BottomTab.Me -> stringResource(R.string.me)
-}
-
-@Composable
-private fun BottomTab.getPainterForTab(): Painter = when (this) {
-    BottomTab.Home -> painterResource(Theme.icons.outline.home)
-    BottomTab.Explore -> painterResource(Theme.icons.outline.search)
-    BottomTab.Match -> painterResource(Theme.icons.outline.magicStick)
-    BottomTab.Me -> painterResource(Theme.icons.outline.userSquare)
-}
-*/
-/*
-
-@PreviewLightDark
-@Composable
-fun BottomNavigationBarPreview() {
-    var selectedTab by rememberSaveable { mutableStateOf(BottomTab.Home) }
-    CineVerseTheme {
-        BottomNavigationBar(
-            selectedTabRoute = selectedTab,
-            onTabSelected = { selectedTab = it }
-        )
-    }
-}*/
