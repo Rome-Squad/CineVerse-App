@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation(project(":repository:media"))
-    implementation(project(":domain:media"))
 
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
