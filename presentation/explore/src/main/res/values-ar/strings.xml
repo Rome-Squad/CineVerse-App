@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="history">History</string>
-    <string name="clear_all" translatable="false">Clear All</string>
-    <string name="you_recent_viewed" translatable="false">You Recent Viewed</string>
-    <string name="search_suggestions" translatable="false">Search Suggestions</string>
-    <string name="voice_permission_granted" translatable="false">Voice permission granted</string>
-    <string name="voice_permission_denied" translatable="false">Voice permission denied</string>
-    <string name="search">Search…</string>
-    <string name="back">Back</string>
-    <string name="end_icon">End Icon</string>
-    <string name="movies">Movies</string>
-    <string name="series">Series</string>
-    <string name="actors">Actors</string>
-    <string name="all">All</string>
-    <string name="nothing_found">Nothing Found!</string>
-    <string name="we_searched_the_entire_universe_but_found_nothing_matching_your_query_try_something_else">We searched the entire universe… but found nothing matching your query. Try something else?</string>
-    <string name="recording">Recording…</string>
+    <string name="history">سجلات</string>
+    <string name="clear_all" translatable="false">مسح الكل</string>
+    <string name="you_recent_viewed" translatable="false">لقد شاهدت مؤخرا</string>
+    <string name="search_suggestions" translatable="false">اقتراحات البحث</string>
+    <string name="voice_permission_granted" translatable="false">تم منح إذن الصوت</string>
+    <string name="voice_permission_denied" translatable="false">تم رفض إذن الصوت</string>
+    <string name="search">يبحث…</string>
+    <string name="back">رجوع</string>
+    <string name="end_icon">أيقونة النهاية</string>
+    <string name="movies">أفلام</string>
+    <string name="series">مسلسلات</string>
+    <string name="actors">الممثلون</string>
+    <string name="all">الكل</string>
+    <string name="nothing_found">لم يتم العثور على شيء!</string>
+    <string name="we_searched_the_entire_universe_but_found_nothing_matching_your_query_try_something_else">بحثنا في الكون كله... ولم نجد شيئًا يُطابق استفسارك. هل تُجرِّب شيئًا آخر؟</string>
+    <string name="recording">تسجيل…</string>
 </resources>
