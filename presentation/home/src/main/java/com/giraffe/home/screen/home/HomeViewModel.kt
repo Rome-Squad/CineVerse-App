@@ -133,20 +133,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onError(throwable: Throwable) {
-        val resId = mapExceptionToStringRes(throwable)
-        val isNetworkError = throwable is NoInternetException
-
-        updateState {
-            it.copy(
-                isLoading = false,
-                isGenricError = true,
-                isNetworkError = isNetworkError
-            )
-        }
-        sendEffect(HomeEffect.ShowError(resId))
-    }
-
     override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
         when (mediaType) {
             MediaType.MOVIE -> sendEffect(HomeEffect.NavigateToMovieDetails(mediaId))

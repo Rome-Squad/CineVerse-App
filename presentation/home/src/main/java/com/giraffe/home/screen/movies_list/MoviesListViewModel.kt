@@ -168,15 +168,4 @@ private fun getRecommended() {
             MediaType.SERIES -> sendEffect(MoviesListEffect.NavigateToSeriesDetails(mediaId))
         }
     }
-
-    override fun onError(throwable: Throwable) {
-        val errorResId = mapExceptionToStringRes(throwable)
-        updateState {
-            it.copy(
-                isLoading = false,
-                errorMessage = throwable.message ?: "Unknown error"
-            )
-        }
-        sendEffect(MoviesListEffect.ShowError(errorResId))
-    }
 }
