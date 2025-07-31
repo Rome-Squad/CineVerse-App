@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -95,21 +93,22 @@ fun SeasonCard(
                             contentDescription = stringResource(R.string.season_image),
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop
-                        ) {
-                            Icon(
-                                painter = painterResource(Theme.icons.dueTone.image),
-                                contentDescription = null,
-                                tint = Theme.color.brand.secondary,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .background(
-                                        Theme.color.background.card,
-                                        shape = CircleShape
-                                    )
-                                    .padding(12.dp)
-                                    .wrapContentSize(),
-                            )
-                        }
+                        )
+//                        {
+//                            Icon(
+//                                painter = painterResource(Theme.icons.dueTone.image),
+//                                contentDescription = null,
+//                                tint = Theme.color.brand.secondary,
+//                                modifier = Modifier
+//                                    .size(40.dp)
+//                                    .background(
+//                                        Theme.color.background.card,
+//                                        shape = CircleShape
+//                                    )
+//                                    .padding(12.dp)
+//                                    .wrapContentSize(),
+//                            )
+//                        }
                     }
                 }
                 Column(

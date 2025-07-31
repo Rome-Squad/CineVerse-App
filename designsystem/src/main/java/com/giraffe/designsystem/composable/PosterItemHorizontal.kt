@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -59,22 +58,23 @@ fun PosterItemHorizontal(
                         topEnd = Theme.radius.lg
                     )
                 )
-        ) {
-            Image(
-                painter = painterResource(Theme.icons.dueTone.image),
-                contentDescription = stringResource(R.string.placeholder),
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(64.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg
-                        )
-                    )
-            )
-        }
+        )
+//        {
+//            Image(
+//                painter = painterResource(Theme.icons.dueTone.image),
+//                contentDescription = stringResource(R.string.placeholder),
+//                modifier = Modifier
+//                    .fillMaxHeight()
+//                    .width(64.dp)
+//                    .clip(
+//                        RoundedCornerShape(
+//                            topStart = Theme.radius.lg,
+//                            bottomStart = Theme.radius.lg,
+//                            topEnd = Theme.radius.lg
+//                        )
+//                    )
+//            )
+//        }
 
         Column(
             modifier = Modifier.padding(vertical = 12.dp),

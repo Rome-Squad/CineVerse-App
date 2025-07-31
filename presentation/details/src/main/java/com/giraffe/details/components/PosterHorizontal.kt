@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -72,18 +71,19 @@ fun PosterHorizontal(
                         sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                         animatedVisibilityScope = animatedVisibilityScope
                     )
-            ) {
-                Icon(
-                    painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = stringResource(R.string.loading_image),
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(64.dp)
-                        .padding(16.dp),
-                    tint = Theme.color.brand.secondary
-                )
-
-            }
+            )
+//            {
+//                Icon(
+//                    painter = painterResource(Theme.icons.dueTone.image),
+//                    contentDescription = stringResource(R.string.loading_image),
+//                    modifier = Modifier
+//                        .fillMaxHeight()
+//                        .width(64.dp)
+//                        .padding(16.dp),
+//                    tint = Theme.color.brand.secondary
+//                )
+//
+//            }
 
             Column(
                 modifier = Modifier.padding(vertical = 12.dp),

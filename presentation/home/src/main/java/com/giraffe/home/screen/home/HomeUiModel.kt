@@ -1,10 +1,13 @@
 package com.giraffe.home.screen.home
 
+import androidx.compose.runtime.Stable
+
 enum class MediaType {
     MOVIE,
     SERIES
 }
 
+@Stable
 data class HomeUiModel(
     val id: Int,
     val title: String,
@@ -25,6 +28,7 @@ data class FeaturedCollectionUiModel(
     val backgroundImageUrl: String
 )
 
+@Stable
 data class PopularMediaUiModel(
     val id: Int,
     val title: String,

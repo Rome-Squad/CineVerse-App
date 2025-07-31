@@ -2,6 +2,7 @@ package com.giraffe.imageviewer.di
 
 
 import android.content.Context
+import coil.ImageLoader
 import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifier
 import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifierImpl
 import dagger.Module
@@ -21,4 +22,9 @@ object ImageViewerModule {
         @ApplicationContext context: Context
     ): SafeIslamicImageClassifier = SafeIslamicImageClassifierImpl(context)
 
+    @Provides
+    @Singleton
+    fun provideImageLoader(
+        @ApplicationContext context: Context
+    ): ImageLoader = ImageLoader.Builder(context).build()
 }

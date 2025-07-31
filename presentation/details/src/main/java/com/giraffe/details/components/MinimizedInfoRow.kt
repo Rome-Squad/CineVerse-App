@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -65,21 +63,22 @@ fun MinimizedInfoRow(
                         .size(40.dp)
                         .clip(RoundedCornerShape(Theme.radius.full)),
                     contentScale = ContentScale.FillBounds
-                ) {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = null,
-                        tint = Theme.color.brand.secondary,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .background(
-                                Theme.color.background.card,
-                                shape = CircleShape
-                            )
-                            .padding(12.dp)
-                            .wrapContentSize(),
-                    )
-                }
+                )
+//                {
+//                    Icon(
+//                        painter = painterResource(Theme.icons.dueTone.image),
+//                        contentDescription = null,
+//                        tint = Theme.color.brand.secondary,
+//                        modifier = Modifier
+//                            .size(40.dp)
+//                            .background(
+//                                Theme.color.background.card,
+//                                shape = CircleShape
+//                            )
+//                            .padding(12.dp)
+//                            .wrapContentSize(),
+//                    )
+//                }
                 Text(
                     text = name,
                     style = Theme.textStyle.title.sm,

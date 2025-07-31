@@ -3,37 +3,72 @@ package com.giraffe.imageviewer.mlmodel
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.get
-import androidx.core.graphics.scale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 class SafeIslamicImageClassifierImpl @Inject constructor(
     context: Context
 ) : SafeIslamicImageClassifier {
 
-    // Interpreter to run the Model
-    private val interpreter: Interpreter
+
+    companion object {
+        @Volatile
+        private var modelFile: ByteBuffer? = null
+
+        @Volatile
+        private var interpreter: Interpreter? = null
+        val cachedImages = ConcurrentHashMap<String, Boolean>()
+
+
+        private fun loadModelFile(
+            context: Context,
+            fileName: String = "mustafa_islamic_safe_image_classifier.tflite"
+        ): ByteBuffer {
+            return modelFile ?: synchronized(this) {
+                val assetFileDescriptor = context.assets.openFd(fileName)
+                val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
+                inputStream.channel.use { fileChannel ->
+                    val startOffset = assetFileDescriptor.startOffset
+                    val declaredLength = assetFileDescriptor.declaredLength
+                    val bytes = fileChannel.map(
+                        FileChannel.MapMode.READ_ONLY,
+                        startOffset,
+                        declaredLength
+                    )
+                    interpreter = Interpreter(bytes)
+                    bytes
+                }
+            }
+        }
+    }
+
     private val labels = listOf("unsafe", "safe")
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     init {
         // Load the TFLite model from assets
-        val modelFile = loadModelFile(context)
-        interpreter = Interpreter(modelFile)
+        coroutineScope.launch {
+            val modelFile = loadModelFile(context)
+            interpreter = Interpreter(modelFile)
+        }
     }
 
-    fun classify(
+    private suspend fun classify(
         bitmap: Bitmap
     ): Map<String, Float> {
 
         // rescale the image to be suitable for the model's expected input
-        val resizedBitmap = bitmap.scale(
-            width = 224,
-            height = 224
-        )
+        val resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, 224, 224)
 
         // convert the bitmap to byte buffer
         val inputBuffer = convertBitmapToByteBuffer(resizedBitmap)
@@ -42,7 +77,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         val output = Array(1) { FloatArray(labels.size) }
 
         // run the model
-        interpreter.run(inputBuffer, output)
+        interpreter!!.run(inputBuffer, output)
 
         // return map of the results <label: String, score: Float>
         return labels.zip(output[0].toList()).toMap()
@@ -69,37 +104,25 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         return buffer
     }
 
-    private fun loadModelFile(
-        context: Context,
-        fileName: String = "mustafa_islamic_safe_image_classifier.tflite"
-    ): ByteBuffer {
 
-        val assetFileDescriptor = context.assets.openFd(fileName)
-        val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
-        val fileChannel = inputStream.channel
+    override suspend fun isUnsafe(bitmap: Bitmap, imageUrl: String): Boolean {
+        return getResultFromCache(imageUrl) ?: withContext(Dispatchers.Default) {
+            val result = classify(bitmap)
 
-        val startOffset = assetFileDescriptor.startOffset
-        val declaredLength = assetFileDescriptor.declaredLength
+            val safeScore = result["safe"] ?: 1f
+            val unsafeScore = result["unsafe"] ?: 1f
 
-        return fileChannel.map(
-            FileChannel.MapMode.READ_ONLY,
-            startOffset,
-            declaredLength
-        )
+            val isUnsafe = when {
+                unsafeScore > .25f -> true
+                unsafeScore >= safeScore -> true
+                else -> false
+            }
+            cachedImages[imageUrl] = isUnsafe
+            isUnsafe
+        }
     }
 
-    override fun isUnsafe(bitmap: Bitmap): Boolean {
-
-        val result = classify(bitmap)
-
-        val safeScore = result["safe"] ?: 1f
-        val unsafeScore = result["unsafe"] ?: 1f
-
-        val isUnsafe = when {
-            unsafeScore > .25f -> true
-            unsafeScore >= safeScore -> true
-            else -> false
-        }
-        return isUnsafe
+    override fun getResultFromCache(imageUrl: String): Boolean? {
+        return cachedImages[imageUrl]
     }
 }
