@@ -34,6 +34,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     protected fun updateState(updater: (S) -> S) {
         _state.update(updater)
     }
+
     protected fun sendEffect(
         effect: E,
         coroutineScope: CoroutineScope = viewModelScope,
@@ -47,28 +48,42 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     protected fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        exceptionHandler: CoroutineExceptionHandler = handler(),
         block: suspend CoroutineScope.() -> T
     ): Job {
-        return coroutineScope.launch(dispatcher + exceptionHandler) {
+        return coroutineScope.launch(dispatcher + handler()) {
             block()
         }
     }
 
+    protected fun <T> safeExecute(
+        coroutineScope: CoroutineScope = viewModelScope,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        onSuccess: suspend (T) -> Unit,
+        onError: (Int) -> Unit,
+        block: suspend () -> T
+    ): Job {
+        return coroutineScope.launch(dispatcher + handler(onError)) {
+            onSuccess(block())
+        }
+    }
+
+    private fun handler(onError: (Int) -> Unit = {}): CoroutineExceptionHandler {
+
     private fun handler(): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
             _error.update { mapExceptionToStringRes(throwable) }
+            onError(mapExceptionToStringRes(throwable))
         }
     }
 
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {
         return when (throwable) {
-            is NoInternetException -> R.string.error_network
             is AccessDeniedException -> R.string.error_access_denied
             is ValidationException -> R.string.error_validation
             is NotFoundException -> R.string.error_not_found
             is UnknownException -> R.string.error_unknown
+            is NoInternetException -> R.string.error_network
             else -> R.string.error_unknown
         }
     }
