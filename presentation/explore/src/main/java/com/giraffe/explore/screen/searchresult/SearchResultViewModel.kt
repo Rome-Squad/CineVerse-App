@@ -1,6 +1,5 @@
 package com.giraffe.explore.screen.searchresult
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -28,10 +27,9 @@ class SearchResultViewModel(
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
-    ) : BaseViewModel<SearchResultScreenState>(SearchResultScreenState(query = query)),
+) : BaseViewModel<SearchResultScreenState>(SearchResultScreenState(query = query)),
     SearchResultInteractionListener {
     init {
-
         getMoviesGenres()
         getSeriesGenres()
         getMovies()
@@ -39,9 +37,6 @@ class SearchResultViewModel(
         getActors()
     }
 
-
-
-            @SuppressLint("StateFlowValueCalledInComposition")
     override fun selectTap(tabIndex: Int) {
         safeExecute {
             updateState { it.copy(selectedTab = SearchTab.entries[tabIndex]) }
@@ -95,20 +90,11 @@ class SearchResultViewModel(
 
     private fun getActors() {
         safeExecute {
-            if (!isConnect.value) {
-                forceUpdateNetworkState(false)
-                return@safeExecute
-            }
             val actorsFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                     BasePagingSource { page -> searchPeopleByName(query, page) }
                 }.flow.cachedIn(viewModelScope).map { it.map(Person::toUi) }
-
-             updateState { it.copy(actors = actorsFlow) }
-
+            updateState { it.copy(actors = actorsFlow) }
         }
-}
-
-
-
+    }
 }

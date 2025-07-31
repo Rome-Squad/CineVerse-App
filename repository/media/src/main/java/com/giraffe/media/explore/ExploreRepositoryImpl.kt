@@ -24,29 +24,32 @@ class ExploreRepositoryImpl(
 ) : ExploreRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
-        if (query.isBlank())
-            return local.getSearchHistory().map {
-                it.map { cacheDto -> cacheDto.toEntity() }
+        return if (query.isBlank()) {
+            SafeCall {
+                local.getSearchHistory().map { it.map { cacheDto -> cacheDto.toEntity() } }
+            }
+        } else {
+            // Get history from local data source
+            val history = SafeCall {
+                local.getSearchKeywords(query).map { it.map { cacheDto -> cacheDto.toEntity() } }
+            }
+
+            // Get remote search keywords
+            val remoteResults = SafeCall {
+                remote.getSearchKeywords(query).map { it.toEntity() }
+            }
+
+            // Combine both flows and sort the results
+
+            return history.map { historyList ->
+                (historyList + remoteResults)
+                    .distinctBy { it.keyword }
+                    .sortedByDescending { it.searchedAt }
             }.catch { throw mapToDomainException(it) }
 
-
-        val history = local.getSearchKeywords(query).map {
-            it.map { cacheDto -> cacheDto.toEntity() }
         }
-
-        val remoteResults = remote.getSearchKeywords(query).map {
-            it.toEntity()
-        }
-
-        return history.map { historyList ->
-            (historyList + remoteResults)
-                .distinctBy { it.keyword }
-                .sortedByDescending { it.searchedAt }
-        }.catch { throw mapToDomainException(it) }
 
     }
-
-
 
     override suspend fun insertSearchKeyword(searchKeyword: String) = SafeCall {
         val cachedKeyword =

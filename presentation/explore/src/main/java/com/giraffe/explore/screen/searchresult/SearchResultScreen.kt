@@ -1,9 +1,7 @@
 package com.giraffe.explore.screen.searchresult
 
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,24 +47,27 @@ fun SearchResultScreen(
     viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val isConnectState by viewModel.isConnect.collectAsStateWithLifecycle()
-    Log.e("IsConnect", "is connect state  :${isConnectState}")
 
+    val isNoInternet by viewModel.isNoInternet.collectAsState()
+    Log.e("isInternettVm", "isConnect updated to false ${isNoInternet}")
+    if (isNoInternet) {
+
+
+        NoInternetScreen()
+    } else {
     SearchResultContent(
         state = state,
-        isConnectState=isConnectState,
         interactions = viewModel,
         navigateToMovieDetails = navigateToMovieDetails,
         navigateToSeriesDetails = navigateToSeriesDetails,
         navigateToCastDetails = navigateToCastDetails,
         onBackClick = onBackClick
     )
-}
+}}
 
 @Composable
 fun SearchResultContent(
     state: SearchResultScreenState,
-    isConnectState:Boolean,
     interactions: SearchResultInteractionListener,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
@@ -76,7 +77,6 @@ fun SearchResultContent(
     val context = LocalContext.current
     val actors = state.actors.collectAsLazyPagingItems()
     val posters = state.selectedPosters.collectAsLazyPagingItems()
-    Log.e("SearchResultContent", "Rendering with isConnectState: $isConnectState")
     Box {
         LazyColumn(
             modifier = Modifier
@@ -109,14 +109,7 @@ fun SearchResultContent(
                 Box(
                     modifier = Modifier.fillParentMaxSize(),
                 ) {
-                    // Handle network state and loading states
-                    //Log.e("IsConnect", "is connect state  :${!isConnectState}")
-                    if (!isConnectState) {
-                       // Log.e("IsConnect", "is connect state  :${isConnectState}")
-                        Log.e("SearchResultContent", "No internet connection: Showing NoInternetScreen")
 
-                        NoInternetScreen(modifier = Modifier.align(Alignment.Center))
-                    } else {
                         if (posters.loadState.refresh is LoadState.Loading) {
                             Progress(
                                 size = 32.dp,
@@ -164,7 +157,7 @@ fun SearchResultContent(
             }
         }
     }
-}
+
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
