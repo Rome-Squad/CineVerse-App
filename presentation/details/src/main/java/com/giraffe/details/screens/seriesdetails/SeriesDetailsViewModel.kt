@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.seriesdetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
@@ -14,6 +13,7 @@ import com.giraffe.details.models.toReviewUI
 import com.giraffe.details.screens.seriesdetails.screen.SeriesDetailsRoute
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
@@ -25,6 +25,7 @@ import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -37,6 +38,8 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
     private val storeRecentSeriesUseCase: StoreRecentSeriesUseCase,
+    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val addRatingUseCase: AddMovieRatingUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
     SeriesDetailsScreenState()
@@ -88,6 +91,14 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
+    override fun onDismissLoginBottomSheet() {
+        updateState {
+            it.copy(
+                isVisibleLoginBottomSheet = false
+            )
+        }
+    }
+
     override fun navigateToCastDetailsScreen(personId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToCastDetails(
@@ -117,6 +128,26 @@ class SeriesDetailsViewModel @Inject constructor(
         sendEffect(
             SeriesDetailsEffect.NavigateToSeriesDetails(seriesId)
         )
+    }
+
+    override fun addRate() {
+        safeExecute {
+            if (isLoggedInUseCase()) {
+                updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
+                addRatingUseCase(
+                    movieId = seriesID,
+                    ratingValue = state.value.currentRating.toFloat()
+                )
+            } else {
+                updateState { it.copy(isVisibleLoginBottomSheet = true) }
+            }
+        }
+    }
+
+    override fun onRateChange(rate: Int) {
+        safeExecute {
+            updateState { it.copy(currentRating = rate) }
+        }
     }
 
     private fun loadError(error: Throwable) {
@@ -156,8 +187,8 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun saveSeriesToRecent(series: Series) {
         safeExecute(
-            onError = { Log.i("dsdssd erererror", it.message.toString()) },
-            onSuccess = { Log.i("data saved", "success") }
+            onError = {},
+            onSuccess = {}
         ) {
             storeRecentSeriesUseCase(series)
         }

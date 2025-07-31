@@ -39,6 +39,7 @@ import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.CollectionBottomSheetContent
+import com.giraffe.details.components.LoginBottomSheet
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
@@ -62,6 +63,7 @@ fun MovieDetailsScreen(
     onClickPoster: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     navigateToMoviesRecommended: (Int, String) -> Unit,
+    navigateToLogin: () -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -110,6 +112,7 @@ fun MovieDetailsScreen(
             onBackButtonClick = onBackButtonClick,
             onClickPlay = onClickPlay,
             onClickPoster = onClickPoster,
+            navigateToLogIn = navigateToLogin
         )
     }
 
@@ -123,6 +126,7 @@ private fun MovieDetailsContent(
     onBackButtonClick: () -> Unit,
     onClickPlay: () -> Unit,
     onClickPoster: (Int) -> Unit,
+    navigateToLogIn: () -> Unit
 ) {
     var isScrollingUp by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberLazyListState()
@@ -283,5 +287,11 @@ private fun MovieDetailsContent(
                 )
             }
         }
+    )
+
+    LoginBottomSheet(
+        isVisible = state.isVisibleLoginBottomSheet,
+        onLogInClick = navigateToLogIn,
+        onDismiss = interaction::onDismissLoginBottomSheet
     )
 }
