@@ -139,15 +139,11 @@ fun HomeNavGraph(
             }
 
             composable<MatchRoute> {
-                matchApi.MatchContainer {
-                    isBottomBarVisible = it
-                }
+                MatchScreen { isBottomBarVisible = it }
             }
 
             composable<ProfileRoute> {
-                profileApi.ProfileContainer {
-                    isBottomBarVisible = it
-                }
+                ProfileScreen { isBottomBarVisible = it }
             }
         }
 
