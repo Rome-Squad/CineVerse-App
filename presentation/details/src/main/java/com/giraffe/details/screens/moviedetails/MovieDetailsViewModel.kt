@@ -23,6 +23,7 @@ import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -34,6 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
     val setMovieRecentUseCase: SetMovieRecentUseCase,
+    val isLoggedInUseCase: IsLoggedInUseCase,
     savedStateHandle: SavedStateHandle,
     val addRatingUseCase: AddMovieRatingUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
@@ -308,12 +310,16 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onAddRatingClick() {
-        updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
         safeExecute {
-            addRatingUseCase(
-                movieId = state.value.movie.id,
-                ratingValue = state.value.currentRating.toFloat()
-            )
+            if (isLoggedInUseCase()) {
+                updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
+                addRatingUseCase(
+                    movieId = state.value.movie.id,
+                    ratingValue = state.value.currentRating.toFloat()
+                )
+            } else {
+                updateState { it.copy(isVisibleLoginBottomSheet = true) }
+            }
         }
     }
 }

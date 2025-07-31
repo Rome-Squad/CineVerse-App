@@ -110,6 +110,7 @@ dependencies {
     implementation(project(":api:explore"))
     implementation(project(":api:home"))
     implementation(project(":api:match"))
+    implementation(project(":api:profile"))
     implementation(project(":api:authentication"))
 
 

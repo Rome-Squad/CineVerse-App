@@ -1,7 +1,6 @@
 package com.giraffe.explore.screen.search
 
 interface SearchInteractionListener {
-    fun getRecentViewedPoster()
     fun onQueryChange(query: String = "")
     fun onKeywordClick(keyword: String)
     fun deleteKeyword(keyword: String)

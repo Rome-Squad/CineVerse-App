@@ -2,12 +2,23 @@ package com.giraffe.home.screen.home
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.designsystem.composable.navbar.BottomTab
+import com.giraffe.designsystem.composable.navbar.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeRoute
+object HomeRoute: Route
+
+class HomeTab(
+    override val labelRes: Int,
+    override val iconRes: Int
+) : BottomTab<HomeRoute> {
+    override val route = HomeRoute
+}
+
 
 fun NavGraphBuilder.homeRoute(
+    navigateToCollectionList:(Int,String)-> Unit,
     navigateToMoviesScreen: (String, String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
@@ -17,6 +28,7 @@ fun NavGraphBuilder.homeRoute(
             navigateToMoviesListScreen = navigateToMoviesScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
+            navigateToCollection = navigateToCollectionList
         )
     }
 }

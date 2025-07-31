@@ -45,7 +45,8 @@ fun PosterItemVertically(
             modifier = Modifier
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(Theme.color.background.card)
-                .aspectRatio(0.74f),
+                .aspectRatio(0.74f)
+                .clickable(onClick = onClickPoster),
             contentAlignment = Alignment.Center
         ) {
             SafeIslamicImage(
@@ -53,7 +54,6 @@ fun PosterItemVertically(
                 contentDescription = poster.name,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clickable(onClick = onClickPoster)
             ) {
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.image),

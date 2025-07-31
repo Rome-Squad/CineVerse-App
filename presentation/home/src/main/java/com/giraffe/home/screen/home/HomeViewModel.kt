@@ -1,29 +1,36 @@
 package com.giraffe.home.screen.home
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.viewModelScope
 import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
+import com.giraffe.home.utils.toUiModel
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,108 +46,144 @@ class HomeViewModel @Inject constructor(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMovieGenresUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
+    private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
     init {
-        loadHomeScreen()
-        getRecentMovies()
+        getFeaturedCollection()
+        loadHomeContent()
+        getRecentViewed()
     }
 
-
- private fun loadHomeScreen() {
-    updateState { it.copy(isLoading = true, isGenricError = false) }
-
-    safeExecute {
-        val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
-        val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
-        val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
-        val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
-
-        val popularMovies = popularMoviesDeferred.await()
-        val popularSeries = popularSeriesDeferred.await()
-        val recentMovies = recentMoviesDeferred.await()
-        val recentSeries = recentSeriesDeferred.await()
-        val topRated = getTopRatedSeriesUseCase(page = 1)
-        val upcoming = getUpcomingMoviesUseCase(page = 1)
-
-        val popularMovieUi = popularMovies.map { movie ->
-            val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-            movie.toPopularMediaUiModel(genres)
-        }
-
-        val popularSeriesUi = popularSeries.map { series ->
-            val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-            series.toPopularMediaUiModel(genres)
-        }
-
-        val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
-        val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
-        val topRatedUi = topRated.map { it.toHomeUiModel() }
-        val upcomingUi = upcoming.map { it.toHomeUiModel() }
-
-        updateState {
-            it.copy(
-                isLoading = false,
-                isGenricError = false,
-                popularity = popularMovieUi + popularSeriesUi,
-                recentlyReleased = recentMovieUi + recentSeriesUi,
-                topRated = topRatedUi,
-                upcomingMovies = upcomingUi
+    private fun getRecentViewed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecentlyMoviesSuccess,
+                onError = ::onFail,
+                block = getRecentlyMoviesUseCase::invoke
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecentlySeresSuccess,
+                onError = ::onFail,
+                block = getRecentlySeriesUseCase::invoke
             )
         }
     }
-}
 
- private fun getRecentMovies() {
-    safeExecute {
-        getRecentlyMoviesUseCase().collectLatest { movies ->
-            updateState { it.copy(recentlyViewed = movies.map(Movie::toHomeUiModel)) }
-
-            movies.firstOrNull()?.let { movie ->
-                val recommendedMovies = getRecommendedMovieUseCase(movie.id, 1)
-                    .map(Movie::toHomeUiModel)
-
-                updateState { it.copy(matchVibes = recommendedMovies) }
+    private fun getFeaturedCollection() {
+        safeExecute {
+            val featuredCollection = getMoviesGenresUseCase().map { it.toUiModel() }
+            updateState {
+                it.copy(
+                    featuredCollections = featuredCollection
+                )
             }
         }
     }
-}
 
-    @StringRes
-    private fun mapExceptionToStringRes(throwable: Throwable): Int {
-        return when (throwable) {
-            is NoInternetException -> R.string.error_network
-            is AccessDeniedException -> R.string.error_access_denied
-            is ValidationException -> R.string.error_validation
-            is NotFoundException -> R.string.error_not_found
-            is UnknownException -> R.string.error_unknown
-            else -> R.string.error_unknown
+    override fun loadHomeContent() {
+        updateState { it.copy(isLoading = true, isError = false) }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
+                val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
+                val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
+                val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
+
+                val popularMovies = popularMoviesDeferred.await()
+                val popularSeries = popularSeriesDeferred.await()
+                val recentMovies = recentMoviesDeferred.await()
+                val recentSeries = recentSeriesDeferred.await()
+                val topRated = getTopRatedSeriesUseCase(page = 1)
+                val upcoming = getUpcomingMoviesUseCase(page = 1)
+
+                val popularMovieUi = popularMovies.map { movie ->
+                    val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                    movie.toPopularMediaUiModel(genres)
+                }
+
+                val popularSeriesUi = popularSeries.map { series ->
+                    val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+                    series.toPopularMediaUiModel(genres)
+                }
+
+                val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
+                val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
+                val topRatedUi = topRated.map { it.toHomeUiModel() }
+                val upcomingUi = upcoming.map { it.toHomeUiModel() }
+
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        isError = false,
+                        popularity = popularMovieUi + popularSeriesUi,
+                        recentlyReleased = recentMovieUi + recentSeriesUi,
+                        topRated = topRatedUi,
+                        upcomingMovies = upcomingUi
+                    )
+                }
+
+            } catch (e: MediaException) {
+                val errorResId = mapExceptionToStringRes(e)
+                updateState { it.copy(isLoading = false, isError = true) }
+                sendEffect(HomeEffect.ShowError(errorResId))
+            }
         }
     }
-    override fun onError(throwable: Throwable) {
-        val resId = mapExceptionToStringRes(throwable)
-        val isNetworkError = throwable is NoInternetException
 
-        updateState {
-            it.copy(
-                isLoading = false,
-                isGenricError = true,
-                isNetworkError = isNetworkError
-            )
+    private suspend fun onGetRecentlyMoviesSuccess(moviesFlow: Flow<List<Movie>>) {
+        moviesFlow.collectLatest { movies ->
+            updateState { it.copy(recentlyViewed = (it.recentlyViewed + movies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
+            getRecommendedMovies(movies)
         }
-        sendEffect(HomeEffect.ShowError(resId))
     }
+
+    private suspend fun onGetRecentlySeresSuccess(seriesFlow: Flow<List<Series>>) {
+        seriesFlow.collectLatest { series ->
+            updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
+            getRecommendedSeries(series)
+        }
+    }
+
+    private fun getRecommendedMovies(movies: List<Movie>) {
+        movies.firstOrNull()?.let { movie ->
+            safeExecute(
+                onSuccess = ::onGetRecommendedMoviesSuccess,
+                onError = ::onFail,
+            ) {
+                getRecommendedMovieUseCase(movie.id, 1)
+            }
+        }
+    }
+
+    private fun onGetRecommendedMoviesSuccess(recommendedMovies: List<Movie>) {
+        updateState { it.copy(matchVibes = (it.matchVibes + recommendedMovies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
+    }
+
+    private fun getRecommendedSeries(series: List<Series>) {
+        series.firstOrNull()?.let { series ->
+            safeExecute(
+                onSuccess = ::onGetRecommendedSeriesSuccess,
+                onError = ::onFail,
+            ) {
+                getRecommendedSeriesUseCase(series.id.toLong(), 1)
+            }
+        }
+    }
+
+    private fun onGetRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
+        updateState { it.copy(matchVibes = (it.matchVibes + recommendedSeries.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
+    }
+
     override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
         when (mediaType) {
             MediaType.MOVIE -> sendEffect(HomeEffect.NavigateToMovieDetails(mediaId))
             MediaType.SERIES -> sendEffect(HomeEffect.NavigateToSeriesDetails(mediaId))
         }
-    }
-
-    override fun loadHomeContent() {
-        loadHomeScreen()
     }
 
     override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
@@ -184,6 +227,28 @@ class HomeViewModel @Inject constructor(
             HomeEffect.NavigateToRecommendedList(
                 sectionTitle = sectionTitle,
                 sectionType = sectionType
+            )
+        )
+    }
+
+    private fun onFail(errorMesRes: Int) = updateState { it.copy(errorMsgRes = errorMesRes) }
+
+    @StringRes
+    private fun mapExceptionToStringRes(throwable: Throwable): Int {
+        return when (throwable) {
+            is AccessDeniedException -> R.string.error_access_denied
+            is ValidationException -> R.string.error_validation
+            is NotFoundException -> R.string.error_not_found
+            is UnknownException -> R.string.error_unknown
+            else -> R.string.error_unknown
+        }
+    }
+
+    override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
+        sendEffect(
+            HomeEffect.NavigateToYourCollection(
+                collectionId = collectionId,
+                collectionTitle = collectionTitle
             )
         )
     }

@@ -2,6 +2,7 @@ package com.giraffe.home.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,22 +18,27 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
+import com.giraffe.home.screen.home.FeaturedCollectionUiModel
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
-fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: CollectionItemData) {
+fun CollectionItem(
+    modifier: Modifier = Modifier,
+    collectionItemData: FeaturedCollectionUiModel,
+    onClick: () -> Unit
+) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
     Column(
         modifier = modifier
             .widthIn(min = screenWidth * 0.5f, max = screenWidth * 0.75f)
+            .clickable { onClick() }
     ) {
         Box(
             Modifier
@@ -42,7 +48,7 @@ fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: Collection
             contentAlignment = Alignment.Center
         ) {
             SafeIslamicImage(
-                imageUrl = collectionItemData.image,
+                imageUrl = collectionItemData.backgroundImageUrl,
                 contentDescription = stringResource(R.string.collection_item_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -59,7 +65,7 @@ fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: Collection
                 Text(
                     modifier = Modifier
                         .align(Alignment.Center),
-                    text = collectionItemData.collectionType,
+                    text = collectionItemData.title,
                     style = Theme.textStyle.body.sm.medium,
                     color = Theme.color.shade.primary
                 )
@@ -92,20 +98,4 @@ fun CollectionItem(modifier: Modifier = Modifier, collectionItemData: Collection
                 .background(Theme.color.shade.quinary)
         )
     }
-}
-
-data class CollectionItemData(
-    val image: String,
-    val collectionType: String
-)
-
-@Preview
-@Composable
-fun PreviewCollectionItemPreview() {
-    CollectionItem(
-        collectionItemData = CollectionItemData(
-            image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-            collectionType = "My Collection"
-        )
-    )
 }
