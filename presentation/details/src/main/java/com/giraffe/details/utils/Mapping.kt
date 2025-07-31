@@ -8,6 +8,6 @@ fun PersonCredit.toPoster() = Poster(
     name = title,
     imageUri = posterPath.toString(),
     rating = voteAverage.toFloat(),
-    date = releaseYear.toString(),
+    date = releaseYear,
     mediaTypeOfPoster = mediaType
 )
