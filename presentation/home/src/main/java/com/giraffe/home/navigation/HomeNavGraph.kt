@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,6 +25,7 @@ import com.giraffe.home.screen.home.HomeRoute
 import com.giraffe.home.screen.home.HomeTab
 import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
+import com.giraffe.home.screen.movies_list.navigateToCollectionList
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
 
 
@@ -90,7 +90,6 @@ fun HomeNavGraph(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
-            .systemBarsPadding()
     ) {
         NavHost(
             navController = navController,
@@ -110,7 +109,13 @@ fun HomeNavGraph(
                 navigateToSeriesDetailsScreen = {
                     navController.navigateToSeriesDetails(it)
                     isBottomBarVisible = false
-                }
+                },
+                navigateToCollectionList = { collectionId, collectionTitle ->
+                    navController.navigateToCollectionList(
+                        collectionId = collectionId,
+                        collectionTitle = collectionTitle
+                    )
+                },
             )
 
             moviesListRoute(

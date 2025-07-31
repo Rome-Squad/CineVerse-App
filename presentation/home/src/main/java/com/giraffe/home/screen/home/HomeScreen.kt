@@ -31,7 +31,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
 import com.giraffe.home.components.AdvertisementSection
 import com.giraffe.home.components.Carousel
-import com.giraffe.home.components.CollectionItemData
 import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
 import com.giraffe.home.components.TopAppBar
@@ -43,6 +42,7 @@ import com.giraffe.home.screen.movies_list.MovieSectionType
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
+    navigateToCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
@@ -88,6 +88,12 @@ fun HomeScreen(
                 is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
                 is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
                 is HomeEffect.ShowError -> {}
+                is HomeEffect.NavigateToYourCollection -> {
+                    navigateToCollection(
+                        effect.collectionId,
+                        effect.collectionTitle
+                    )
+                }
             }
         }
     }
@@ -168,6 +174,7 @@ fun HomeContent(
                 )
             }
             item {
+                val recentlyReleased = stringResource(R.string.recently_released)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -177,7 +184,7 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllRecentlyReleasedClicked(
-                            sectionTitle = "Recently Released",
+                            sectionTitle = recentlyReleased,
                             sectionType = MovieSectionType.RECENTLY_RELEASED
                         )
                     }
@@ -195,6 +202,7 @@ fun HomeContent(
                 )
             }
             item {
+                val upcomingMovies = stringResource(R.string.upcoming_movies)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -205,13 +213,14 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllUpcomingClicked(
-                            sectionTitle = "Upcoming Movies",
+                            sectionTitle = upcomingMovies,
                             sectionType = MovieSectionType.UPCOMING_MOVIES
                         )
                     }
                 )
             }
             item {
+                val matchVibes = stringResource(R.string.matches_your_vibe)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -222,7 +231,7 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onWhatShouldIWatchClicked(
-                            sectionTitle = "Matches Your Vibe",
+                            sectionTitle = matchVibes,
                             sectionType = MovieSectionType.MATCHES_YOUR_VIBES
                         )
                     }
@@ -231,10 +240,11 @@ fun HomeContent(
             item {
                 CollectionListSection(
                     modifier = Modifier.padding(bottom = 32.dp),
-                    collectionItems = featuredCollection
-                )
+                    collectionItems = state.featuredCollections,
+                    onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,                )
             }
             item {
+                val topRated = stringResource(R.string.top_rated_tv_shows)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -245,13 +255,14 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllTopRatedClicked(
-                            sectionTitle = "Top Rated TV Shows",
+                            sectionTitle = topRated,
                             sectionType = MovieSectionType.TOP_RATED_TV_SHOWS
                         )
                     },
                 )
             }
             item {
+                val recentlyReleasedTitle = stringResource(R.string.you_recent_viewed)
                 HomeUiListSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -262,7 +273,7 @@ fun HomeContent(
                     onClickItem = interactionListener::onMediaClicked,
                     onClickEndText = {
                         interactionListener.onSeeAllRecentlyViewedClicked(
-                            sectionTitle = "Recently Viewed",
+                            sectionTitle = recentlyReleasedTitle,
                             sectionType = MovieSectionType.RECENTLY_VIEWED
                         )
                     }
@@ -296,24 +307,6 @@ val yourCollections = listOf(
     UserCollection("My Watchlist", "10 movies"),
     UserCollection("Documentaries", "6 movies"),
 )
-val featuredCollection = listOf(
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Late-Night Thrills"
-    ),
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Action"
-    ),
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Crime"
-    ),
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Drama"
-    )
-)
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
@@ -326,6 +319,7 @@ fun HomeContentPreview() {
         override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {}
         override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {}
         override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
+        override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(

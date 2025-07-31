@@ -19,26 +19,23 @@ internal fun NavController.navigateToSeriesDetails(seriesId: Int) {
 }
 
 fun NavGraphBuilder.seriesDetailsRoute(
-    navController: NavController,
     onBackButtonClick: () -> Unit,
-    navigateToReviews: (Int) -> Unit
+    navigateToReviews: (Int) -> Unit,
+    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
+    navigateToCastDetails: (castID: Int) -> Unit,
+    navigateToSeason: (seriesId: Int) -> Unit,
+    navigateToSeriesDetails: (seriesId: Int) -> Unit,
+    navigateToLogIn: () -> Unit
 ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         SeriesDetailsScreen(
-            navigateToReviews = navigateToReviews,
-            navigateToRecommendedSeries = { seriesID, title ->
-                navController.navigateToRecommendedSeries(seriesID, title)
-            },
-            navigateToCastDetails = {
-                navController.navigateToCastDetails(it)
-            },
-            navigateToSeason = {
-                navController.navigateToSeasons(it)
-            },
-            navigateToSeriesDetails = {
-                navController.navigateToSeriesDetails(it)
-            },
+            navigateToRecommendedSeries = navigateToRecommendedSeries,
+            navigateToCastDetails = navigateToCastDetails,
+            navigateToSeason = navigateToSeason,
+            navigateToSeriesDetails = navigateToSeriesDetails,
             onBackButtonClick = onBackButtonClick,
+            navigateToLogIn = navigateToLogIn,
+            navigateToReviews = navigateToReviews,
         )
     }
 }

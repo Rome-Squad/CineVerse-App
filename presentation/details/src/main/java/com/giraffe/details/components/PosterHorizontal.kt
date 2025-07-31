@@ -1,5 +1,6 @@
 package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -9,9 +10,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,107 +45,111 @@ fun PosterHorizontal(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
-    Row(
-        modifier = modifier
-            .height(IntrinsicSize.Min)
-            .clip(RoundedCornerShape(Theme.radius.lg))
-            .background(Theme.color.background.card)
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        with(sharedTransitionScope) {
+    AnimatedVisibility(poster.name.isNotBlank()) {
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+                .clip(RoundedCornerShape(Theme.radius.lg))
+                .background(Theme.color.background.card)
+                .clickable(onClick = onClick),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            with(sharedTransitionScope) {
 
-            SafeIslamicImage(
-                imageUrl = poster.imageUri,
-                contentDescription = poster.name,
-                modifier = Modifier
-                    .height(88.dp)
-                    .width(64.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg
-                        )
-                    )
-                    .sharedElement(
-                        sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
-                        animatedVisibilityScope = animatedVisibilityScope
-                    )
-            ) {
-                Icon(
-                    painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = stringResource(R.string.loading_image),
+                SafeIslamicImage(
+                    imageUrl = poster.imageUri,
+                    contentDescription = poster.name,
                     modifier = Modifier
-                        .fillMaxHeight()
+                        .height(88.dp)
                         .width(64.dp)
-                        .padding(16.dp),
-                    tint = Theme.color.brand.secondary
-                )
-
-            }
-
-            Column(
-                modifier = Modifier.padding(vertical = 12.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = poster.name,
-                            style = Theme.textStyle.body.md.medium,
-                            color = Theme.color.shade.primary,
-                            maxLines = 1,
-                            modifier = Modifier
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
-                                    animatedVisibilityScope = animatedVisibilityScope
-                                )
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = Theme.radius.lg,
+                                bottomStart = Theme.radius.lg,
+                                topEnd = Theme.radius.lg
+                            )
                         )
-                        if (!poster.genres.isNullOrBlank()) {
+                        .sharedElement(
+                            sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                ) {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = stringResource(R.string.loading_image),
+                        modifier = Modifier
+                            .heightIn(min = 88.dp)
+                            .width(64.dp)
+                            .padding(16.dp),
+                        tint = Theme.color.brand.secondary
+                    )
+
+                }
+
+                Column(
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+
                             Text(
-                                text = poster.genres.toString(),
-                                style = Theme.textStyle.body.sm.regular,
-                                color = Theme.color.shade.secondary,
+                                text = poster.name,
+                                style = Theme.textStyle.body.md.medium,
+                                color = Theme.color.shade.primary,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                modifier = Modifier
+                                    .sharedElement(
+                                        sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
+                                        animatedVisibilityScope = animatedVisibilityScope
+                                    )
+                            )
+
+                            AnimatedVisibility(!poster.genres.isNullOrBlank()) {
+                                Text(
+                                    text = poster.genres.toString(),
+                                    style = Theme.textStyle.body.sm.regular,
+                                    color = Theme.color.shade.secondary,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+
+                        AnimatedVisibility(poster.rating != 0f) {
+                            Rating(
+                                value = poster.rating,
+                                modifier = Modifier
+                                    .sharedElement(
+                                        sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
+                                        animatedVisibilityScope = animatedVisibilityScope
+                                    )
                             )
                         }
                     }
 
-                    if (poster.rating != 0f) {
-                        Rating(
-                            value = poster.rating,
-                            modifier = Modifier
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
-                                    animatedVisibilityScope = animatedVisibilityScope
-                                )
+                    AnimatedVisibility(!poster.time.isNullOrBlank()) {
+                        IconWithText(
+                            modifier = Modifier.padding(top = 8.dp),
+                            icon = painterResource(Theme.icons.dueTone.clock),
+                            text = poster.time.toString()
                         )
                     }
-                }
 
-                if (!poster.time.isNullOrBlank()) {
-                    IconWithText(
-                        modifier = Modifier.padding(top = 8.dp),
-                        icon = painterResource(Theme.icons.dueTone.clock),
-                        text = poster.time.toString()
-                    )
-                }
-
-                if (!poster.date.isNullOrBlank()) {
-                    IconWithText(
-                        modifier = Modifier.padding(top = 8.dp),
-                        icon = painterResource(Theme.icons.dueTone.calendar),
-                        text = poster.date.toString()
-                    )
+                    AnimatedVisibility(!poster.date.isNullOrBlank()) {
+                        IconWithText(
+                            modifier = Modifier.padding(top = 8.dp),
+                            icon = painterResource(Theme.icons.dueTone.calendar),
+                            text = poster.date.toString()
+                        )
+                    }
                 }
             }
         }
