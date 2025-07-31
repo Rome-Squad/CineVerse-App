@@ -46,6 +46,8 @@ dependencies {
     implementation(project(":api:details"))
     implementation(project(":api:home"))
     implementation(project(":api:explore"))
+    implementation(project(":api:profile"))
+    implementation(project(":api:match"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
