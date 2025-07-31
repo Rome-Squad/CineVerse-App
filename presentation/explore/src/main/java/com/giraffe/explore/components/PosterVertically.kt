@@ -61,8 +61,8 @@ fun PosterVertically(
                             sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                             animatedVisibilityScope = animatedVisibilityScope
                         )
-                ) {
-
+                )
+                {
                     Icon(
                         painter = painterResource(Theme.icons.dueTone.image),
                         contentDescription = stringResource(R.string.loading_image),

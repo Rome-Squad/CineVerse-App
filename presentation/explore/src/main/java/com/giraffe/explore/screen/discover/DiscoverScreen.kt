@@ -159,7 +159,7 @@ private fun GenresSection(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
-        items(genres) { genre ->
+        items(genres, key = { it.id }) { genre ->
             Chip(
                 text = genre.title,
                 isSelected = genre == selectedGenre,

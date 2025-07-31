@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -18,14 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.SectionTitle
-import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.screen.home.HomeUiModel
@@ -42,7 +37,7 @@ fun HomeUiListSection(
     onClickEndText: () -> Unit = {},
     onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
 ) {
-    if (uiModels.isEmpty()) return
+//    if (uiModels.isEmpty()) return
 
     Column(
         modifier = modifier,
@@ -58,7 +53,7 @@ fun HomeUiListSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
         ) {
-            items(uiModels) { uiModel ->
+            items(items = uiModels, key = { it.id }) { uiModel ->
                 HomeItemVertically(
                     item = uiModel,
                     modifier = Modifier.width(136.dp),
@@ -92,14 +87,15 @@ fun HomeItemVertically(
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable { onClick(item.id, item.mediaType) }
-            ) {
-                Icon(
-                    painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = stringResource(R.string.loading_image),
-                    modifier = Modifier.size(32.dp),
-                    tint = Theme.color.brand.secondary
-                )
-            }
+            )
+//            {
+//                Icon(
+//                    painter = painterResource(Theme.icons.dueTone.image),
+//                    contentDescription = stringResource(R.string.loading_image),
+//                    modifier = Modifier.size(32.dp),
+//                    tint = Theme.color.brand.secondary
+//                )
+//            }
 
             Rating(
                 value = item.rating,

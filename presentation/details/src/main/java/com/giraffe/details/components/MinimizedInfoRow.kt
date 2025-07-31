@@ -65,7 +65,8 @@ fun MinimizedInfoRow(
                         .size(40.dp)
                         .clip(RoundedCornerShape(Theme.radius.full)),
                     contentScale = ContentScale.FillBounds
-                ) {
+                )
+                {
                     Icon(
                         painter = painterResource(Theme.icons.dueTone.image),
                         contentDescription = null,
@@ -80,6 +81,7 @@ fun MinimizedInfoRow(
                             .wrapContentSize(),
                     )
                 }
+
                 Text(
                     text = name,
                     style = Theme.textStyle.title.sm,

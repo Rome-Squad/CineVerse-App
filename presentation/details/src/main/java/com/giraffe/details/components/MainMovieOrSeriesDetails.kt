@@ -68,7 +68,8 @@ fun MainMovieOrSeriesDetails(
                         .size(width = 216.dp, height = 289.dp)
                         .clip(RoundedCornerShape(Theme.radius.xl)),
                     contentScale = ContentScale.Crop
-                ) {
+                )
+                {
                     Icon(
                         painter = painterResource(Theme.icons.dueTone.image),
                         contentDescription = null,
@@ -83,6 +84,7 @@ fun MainMovieOrSeriesDetails(
                             .wrapContentSize(),
                     )
                 }
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
