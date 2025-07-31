@@ -11,7 +11,7 @@ import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
@@ -19,11 +19,8 @@ import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.collections.emptyList
 
 @HiltViewModel
 class MoviesListViewModel @Inject constructor(
@@ -33,6 +30,7 @@ class MoviesListViewModel @Inject constructor(
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
+    private val getMovieGenresUseCase: GetMovieGenresUseCase,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<MoviesListUiState, MoviesListEffect>(initialState = MoviesListUiState()),
     MoviesListInteractionListener {
@@ -43,80 +41,93 @@ class MoviesListViewModel @Inject constructor(
         loadMoviesBySection(sectionType)
     }
 
-   private fun loadMoviesBySection(sectionType: String) {
-    updateState {
-        it.copy(
-            isLoading = true,
-            errorMessage = null,
-            mediaList = emptyList(),
-            moviesListTitle = sectionTitle
-        )
-    }
+    private fun loadMoviesBySection(sectionType: String) {
+        updateState {
+            it.copy(
+                isLoading = true,
+                errorMessage = null,
+                mediaList = emptyList(),
+                moviesListTitle = sectionTitle
+            )
+        }
 
-    when (sectionType) {
-        MovieSectionType.RECENTLY_VIEWED -> getRecent()
-        MovieSectionType.MATCHES_YOUR_VIBES -> getRecommended()
+        when (sectionType) {
+            MovieSectionType.RECENTLY_VIEWED -> getRecent()
+            MovieSectionType.MATCHES_YOUR_VIBES -> getRecommended()
 
-        else -> {
-            safeExecute {
-                val media = when (sectionType) {
-                    MovieSectionType.RECENTLY_RELEASED -> {
-                        val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
-                        val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
-                        recentMovies.map { it.toPosterUi() } + recentSeries.map { it.toPosterUi() }
+            else -> {
+                safeExecute {
+                    val media = when (sectionType) {
+                        MovieSectionType.RECENTLY_RELEASED -> {
+                            val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
+                            val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
+                            recentMovies.map { movie ->
+                                movie.toPosterUi(getMovieGenresUseCase(movie.genresID).map { it.title })
+                            } + recentSeries.map { series ->
+                                series.toPosterUi(getMovieGenresUseCase(series.genreIDs).map { it.title })
+                            }
+                        }
+
+                        MovieSectionType.TOP_RATED_TV_SHOWS -> {
+                            getTopRatedSeriesUseCase(page = 1).map { series ->
+                                series.toPosterUi(getMovieGenresUseCase(series.genreIDs).map { it.title })
+                            }
+                        }
+
+                        MovieSectionType.UPCOMING_MOVIES -> {
+                            getUpcomingMoviesUseCase(page = 1).map { movie ->
+                                movie.toPosterUi(getMovieGenresUseCase(movie.genresID).map { it.title })
+                            }
+                        }
+
+                        else -> emptyList()
                     }
 
-                    MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                        getTopRatedSeriesUseCase(page = 1).map { it.toPosterUi() }
+                    updateState {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = null,
+                            mediaList = media,
+                        )
                     }
-
-                    MovieSectionType.UPCOMING_MOVIES -> {
-                        getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
-                    }
-
-                    else -> emptyList()
-                }
-
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        mediaList = media,
-                    )
                 }
             }
         }
     }
-}
-  private fun getRecent() {
-    safeExecute {
-        val recentMovies = getRecentlyMoviesUseCase().first()
-        updateState {
-            it.copy(
-                isLoading = false,
-                errorMessage = null,
-                mediaList = recentMovies.map(Movie::toPosterUi),
-            )
+
+    private fun getRecent() {
+        safeExecute {
+            val recentMovies = getRecentlyMoviesUseCase().first().map { movie ->
+                movie.toPosterUi(getMovieGenresUseCase(movie.genresID).map { it.title })
+            }
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    mediaList = recentMovies,
+                )
+            }
         }
     }
-}
 
-private fun getRecommended() {
-    safeExecute {
-        val recentMovies = getRecentlyMoviesUseCase().first()
-        val recommendedMovies = recentMovies.firstOrNull()?.id?.let { movieId ->
-            getRecommendedMovieUseCase(movieId = movieId, page = 1).map(Movie::toPosterUi)
-        } ?: emptyList()
+    private fun getRecommended() {
+        safeExecute {
+            val recentMovies = getRecentlyMoviesUseCase().first()
+            val recommendedMovies = recentMovies.firstOrNull()?.id?.let { movieId ->
+                getRecommendedMovieUseCase(movieId = movieId, page = 1).map { movie ->
+                    movie.toPosterUi(getMovieGenresUseCase(movie.genresID).map { it.title })
+                }
+            } ?: emptyList()
 
-        updateState {
-            it.copy(
-                isLoading = false,
-                errorMessage = null,
-                mediaList = recommendedMovies,
-            )
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    mediaList = recommendedMovies,
+                )
+            }
         }
     }
-}
 
     @StringRes
     private fun mapExceptionToStringRes(throwable: Throwable): Int {

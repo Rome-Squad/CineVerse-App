@@ -16,8 +16,8 @@ data class PosterUiState(
     val name: String,
     val imageUri: String,
     val rating: Float,
-    val genres: String? = null,
+    val genres: List<String>,
     val time: String? = null,
-    val date: String? = null,
+    val date: String,
     val mediaType: MediaType
 )

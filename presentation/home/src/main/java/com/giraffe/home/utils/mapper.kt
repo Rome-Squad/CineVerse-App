@@ -32,25 +32,28 @@ fun Series.toHomeUiModel(): HomeUiModel {
     )
 }
 
-fun Series.toPosterUi(): PosterUiState {
+fun Series.toPosterUi(genres: List<String>): PosterUiState {
     return PosterUiState(
         id = id,
         name = name,
         imageUri = posterUrl,
         rating = rating,
         date = releaseYear,
-        mediaType = MediaType.SERIES
+        mediaType = MediaType.SERIES,
+        genres = genres
     )
 }
 
-fun Movie.toPosterUi(): PosterUiState {
+fun Movie.toPosterUi(genres: List<String>): PosterUiState {
     return PosterUiState(
         id = id,
         name = title,
         imageUri = posterUrl ?: "",
         rating = rating,
-        date = releaseYear.toString(),
-        mediaType = MediaType.MOVIE
+        date = releaseYear.toString().toFormattedDate(),
+        mediaType = MediaType.MOVIE,
+        genres = genres,
+        time = duration.toString()
     )
 }
 

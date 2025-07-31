@@ -106,7 +106,11 @@ fun PosterHorizontal(
                                 )
                         )
                         Text(
-                            text = poster.genres ?: stringResource(R.string.unknown_genre),
+                            text = if (poster.genres.isNotEmpty()) {
+                                poster.genres.joinToString(separator = ", ")
+                            } else {
+                                stringResource(R.string.unknown_genre)
+                            },
                             style = Theme.textStyle.body.sm.regular,
                             color = Theme.color.shade.secondary,
                             maxLines = 1,
@@ -122,15 +126,14 @@ fun PosterHorizontal(
                             )
                     )
                 }
-                poster.date?.let {
+                poster.date.let {
                     if (it.isNotEmpty()) {
                         IconWithText(
                             icon = painterResource(Theme.icons.dueTone.calendar),
-                            text = poster.date ?: stringResource(R.string.unknown_date)
+                            text = poster.date
                         )
                     }
                 }
-
             }
         }
     }
