@@ -43,8 +43,7 @@ class HomeViewModel(
 
     init {
         loadHomeScreen()
-        getRecentMovies()
-        getRecentSeries()
+        getRecentViewed()
     }
 
 
@@ -89,7 +88,7 @@ class HomeViewModel(
                     )
                 }
 
-            } catch (e: MediaException) {
+            } catch (_: MediaException) {
                 updateState { it.copy(isLoading = false, isError = true) }
             }
         }
@@ -100,32 +99,31 @@ class HomeViewModel(
         sendEffect(HomeEffect.ShowError(errorMsgRes))
     }
 
-    private fun getRecentMovies() {
-        safeExecute(
-            onSuccess = ::onGetRecentMoviesSuccess,
-            onError = ::onFail,
-            block = getRecentlyMoviesUseCase::invoke
-        )
+    private fun getRecentViewed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecentMoviesSuccess,
+                onError = ::onFail,
+                block = getRecentlyMoviesUseCase::invoke
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecentSeriesSuccess,
+                onError = ::onFail,
+                block = getRecentlySeriesUseCase::invoke
+            )
+        }
     }
 
     private suspend fun onGetRecentMoviesSuccess(moviesFlow: Flow<List<Movie>>) {
         moviesFlow.collectLatest { movies ->
-            updateState { it.copy(recentlyViewed = (it.recentlyViewed + movies.map(Movie::toHomeUiModel)).distinct()) }
+            updateState { it.copy(recentlyViewed = (it.recentlyViewed + movies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
             getRecommendedMovies(movies)
         }
     }
 
-    private fun getRecentSeries() {
-        safeExecute(
-            onSuccess = ::onGetRecentSeriesSuccess,
-            onError = ::onFail,
-            block = getRecentlySeriesUseCase::invoke
-        )
-    }
-
     private suspend fun onGetRecentSeriesSuccess(seriesFlow: Flow<List<Series>>) {
         seriesFlow.collectLatest { series ->
-            updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinct()) }
+            updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinctBy { movie -> movie.id }) }
             getRecommendedSeries(series)
         }
     }

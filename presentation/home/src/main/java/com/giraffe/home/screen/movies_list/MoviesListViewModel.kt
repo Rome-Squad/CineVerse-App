@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlin.collections.emptyList
 
 class MoviesListViewModel(
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
@@ -84,15 +83,9 @@ class MoviesListViewModel(
                         upcoming.map { it.toPosterUi() }
                     }
 
-                    MovieSectionType.RECENTLY_VIEWED -> {
-                        getRecentMovies()
-                        getRecentSeries()
-                    }
+                    MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
 
-                    MovieSectionType.MATCHES_YOUR_VIBES -> {
-                        getRecommendedMovies()
-                        getRecommendedSeries()
-                    }
+                    MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
                 }
 
             } catch (e: MediaException) {
@@ -106,20 +99,19 @@ class MoviesListViewModel(
         }
     }
 
-    private fun getRecentMovies() {
-        safeExecute(
-            onSuccess = ::onGetRecentMoviesSuccess,
-            onError = ::onFail,
-            block = getRecentlyMoviesUseCase::invoke
-        )
-    }
-
-    private fun getRecentSeries() {
-        safeExecute(
-            onSuccess = ::onGetRecentSeriesSuccess,
-            onError = ::onFail,
-            block = getRecentlySeriesUseCase::invoke
-        )
+    private fun getRecentViewed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecentMoviesSuccess,
+                onError = ::onFail,
+                block = getRecentlyMoviesUseCase::invoke
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecentSeriesSuccess,
+                onError = ::onFail,
+                block = getRecentlySeriesUseCase::invoke
+            )
+        }
     }
 
     private suspend fun onGetRecentMoviesSuccess(movies: Flow<List<Movie>>) {
@@ -128,7 +120,7 @@ class MoviesListViewModel(
                 it.copy(
                     isLoading = false,
                     errorMsgRes = null,
-                    mediaList = (it.mediaList + moviesList.map(Movie::toPosterUi)).distinct(),
+                    mediaList = (it.mediaList + moviesList.map(Movie::toPosterUi)).distinctBy { poster -> poster.id },
                 )
             }
         }
@@ -140,43 +132,41 @@ class MoviesListViewModel(
                 it.copy(
                     isLoading = false,
                     errorMsgRes = null,
-                    mediaList = (it.mediaList + seriesList.map(Series::toPosterUi)).distinct(),
+                    mediaList = (it.mediaList + seriesList.map(Series::toPosterUi)).distinctBy { poster -> poster.id },
                 )
             }
         }
     }
 
-    private fun getRecommendedMovies() {
-        safeExecute(
-            onSuccess = ::onGetRecommendedMoviesSuccess,
-            onError = ::onFail,
-            block = {
-                getRecentlyMoviesUseCase().first().firstOrNull()?.id?.let { movieId ->
-                    getRecommendedMovieUseCase(movieId = movieId, page = 1)
-                } ?: emptyList()
-            }
-        )
+    private fun getRecommendations() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecommendedMoviesSuccess,
+                onError = ::onFail,
+                block = {
+                    getRecentlyMoviesUseCase().first().firstOrNull()?.id?.let { movieId ->
+                        getRecommendedMovieUseCase(movieId = movieId, page = 1)
+                    } ?: emptyList()
+                }
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecommendedSeriesSuccess,
+                onError = ::onFail,
+                block = {
+                    getRecentlySeriesUseCase().first().firstOrNull()?.id?.let { seriesId ->
+                        getRecommendedSeriesUseCase(seriesId = seriesId.toLong(), page = 1)
+                    } ?: emptyList()
+                }
+            )
+        }
     }
-
-    private fun getRecommendedSeries() {
-        safeExecute(
-            onSuccess = ::onGetRecommendedSeriesSuccess,
-            onError = ::onFail,
-            block = {
-                getRecentlySeriesUseCase().first().firstOrNull()?.id?.let { seriesId ->
-                    getRecommendedSeriesUseCase(seriesId = seriesId.toLong(), page = 1)
-                } ?: emptyList()
-            }
-        )
-    }
-
 
     private fun onGetRecommendedMoviesSuccess(recommendedMovies: List<Movie>) {
         updateState {
             it.copy(
                 isLoading = false,
                 errorMsgRes = null,
-                mediaList = recommendedMovies.map(Movie::toPosterUi),
+                mediaList = (it.mediaList + recommendedMovies.map(Movie::toPosterUi)).distinctBy { poster -> poster.id },
             )
         }
     }
@@ -186,7 +176,7 @@ class MoviesListViewModel(
             it.copy(
                 isLoading = false,
                 errorMsgRes = null,
-                mediaList = recommendedSeries.map(Series::toPosterUi),
+                mediaList = (it.mediaList + recommendedSeries.map(Series::toPosterUi)).distinctBy { poster -> poster.id },
             )
         }
     }

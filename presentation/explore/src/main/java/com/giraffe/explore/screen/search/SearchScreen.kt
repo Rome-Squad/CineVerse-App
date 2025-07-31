@@ -28,10 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
@@ -51,14 +48,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val lifecycle = LocalLifecycleOwner.current
     var rmsDbLevel by remember { mutableFloatStateOf(0f) }
-
-    LaunchedEffect(Unit) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.getRecentViewedPoster()
-        }
-    }
 
     Box {
         SearchContent(
