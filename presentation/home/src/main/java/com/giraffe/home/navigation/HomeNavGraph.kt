@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -90,7 +89,6 @@ fun HomeNavGraph(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
-            .systemBarsPadding()
     ) {
         NavHost(
             navController = navController,

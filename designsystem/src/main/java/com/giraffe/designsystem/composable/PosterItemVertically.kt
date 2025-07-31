@@ -9,15 +9,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -40,7 +45,8 @@ fun PosterItemVertically(
             modifier = Modifier
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(Theme.color.background.card)
-                .aspectRatio(0.74f),
+                .aspectRatio(0.74f)
+                .clickable(onClick = onClickPoster),
             contentAlignment = Alignment.Center
         ) {
             SafeIslamicImage(
@@ -48,16 +54,14 @@ fun PosterItemVertically(
                 contentDescription = poster.name,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clickable(onClick = onClickPoster)
-            )
-//            {
-//                Icon(
-//                    painter = painterResource(Theme.icons.dueTone.image),
-//                    contentDescription = stringResource(R.string.loading_image),
-//                    modifier = Modifier.size(32.dp),
-//                    tint = Theme.color.brand.secondary
-//                )
-//            }
+            ) {
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = stringResource(R.string.loading_image),
+                    modifier = Modifier.size(32.dp),
+                    tint = Theme.color.brand.secondary
+                )
+            }
 
             if (poster.rating > 0f) {
                 Rating(
