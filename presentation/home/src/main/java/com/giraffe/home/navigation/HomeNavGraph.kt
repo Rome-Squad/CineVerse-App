@@ -137,6 +137,18 @@ fun HomeNavGraph(
                     isBottomBarVisible = it
                 }
             }
+
+            composable<MatchRoute> {
+                matchApi.MatchContainer {
+                    isBottomBarVisible = it
+                }
+            }
+
+            composable<ProfileRoute> {
+                profileApi.ProfileContainer {
+                    isBottomBarVisible = it
+                }
+            }
         }
 
         BottomNavigationBar(
