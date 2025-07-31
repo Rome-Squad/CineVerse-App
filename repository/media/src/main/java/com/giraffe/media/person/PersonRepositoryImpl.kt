@@ -1,6 +1,5 @@
 package com.giraffe.media.person
 
-import android.util.Log
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource

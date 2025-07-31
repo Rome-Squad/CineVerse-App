@@ -1,7 +1,5 @@
 package com.giraffe.explore.screen.searchresult
 
-import android.util.Log
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,7 +24,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.Tabs
-import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
@@ -49,21 +46,20 @@ fun SearchResultScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val isNoInternet = viewModel.isNoInternet.collectAsState()
-    Log.e("isInternettVm", "isConnect updated to false ${isNoInternet.value}")
+
     if (isNoInternet.value) {
-
-
         NoInternetScreen()
     } else {
-    SearchResultContent(
-        state = state,
-        interactions = viewModel,
-        navigateToMovieDetails = navigateToMovieDetails,
-        navigateToSeriesDetails = navigateToSeriesDetails,
-        navigateToCastDetails = navigateToCastDetails,
-        onBackClick = onBackClick
-    )
-}}
+        SearchResultContent(
+            state = state,
+            interactions = viewModel,
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails,
+            navigateToCastDetails = navigateToCastDetails,
+            onBackClick = onBackClick
+        )
+    }
+}
 
 @Composable
 fun SearchResultContent(
@@ -110,39 +106,20 @@ fun SearchResultContent(
                     modifier = Modifier.fillParentMaxSize(),
                 ) {
 
-                        if (posters.loadState.refresh is LoadState.Loading) {
-                            Progress(
-                                size = 32.dp,
-                                modifier = Modifier
-                                    .align(Alignment.TopCenter)
-                                    .padding(top = 16.dp)
-                            )
-                        } else {
-                            // Show content based on selected tab
-                            if (state.selectedTab == SearchTab.ACTORS) {
-                                if (actors.itemCount != 0) {
-                                    ActorsSection(
-                                        actors = actors,
-                                        navigateToCastDetails = navigateToCastDetails
-                                    )
-                                } else {
-                                    NothingFound(
-                                        modifier = Modifier
-                                            .padding(horizontal = 60.dp)
-                                            .padding(top = 195.dp)
-                                    )
-                                }
-                            } else if (posters.itemCount != 0) {
-                                TransitionLazyColumnToGrid(
-                                    posters = posters,
-                                    isListSelected = !state.isGridSelected,
-                                    onPosterClicked = { id ->
-                                        when (state.selectedTab) {
-                                            SearchTab.MOVIES -> navigateToMovieDetails(id)
-                                            SearchTab.SERIES -> navigateToSeriesDetails(id)
-                                            SearchTab.ACTORS -> navigateToCastDetails(id)
-                                        }
-                                    }
+                    if (posters.loadState.refresh is LoadState.Loading) {
+                        Progress(
+                            size = 32.dp,
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = 16.dp)
+                        )
+                    } else {
+                        // Show content based on selected tab
+                        if (state.selectedTab == SearchTab.ACTORS) {
+                            if (actors.itemCount != 0) {
+                                ActorsSection(
+                                    actors = actors,
+                                    navigateToCastDetails = navigateToCastDetails
                                 )
                             } else {
                                 NothingFound(
@@ -151,12 +128,31 @@ fun SearchResultContent(
                                         .padding(top = 195.dp)
                                 )
                             }
+                        } else if (posters.itemCount != 0) {
+                            TransitionLazyColumnToGrid(
+                                posters = posters,
+                                isListSelected = !state.isGridSelected,
+                                onPosterClicked = { id ->
+                                    when (state.selectedTab) {
+                                        SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                        SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                        SearchTab.ACTORS -> navigateToCastDetails(id)
+                                    }
+                                }
+                            )
+                        } else {
+                            NothingFound(
+                                modifier = Modifier
+                                    .padding(horizontal = 60.dp)
+                                    .padding(top = 195.dp)
+                            )
                         }
                     }
                 }
             }
         }
     }
+}
 
 @Composable
 fun ActorsSection(

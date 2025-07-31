@@ -1,6 +1,5 @@
 package com.giraffe.media.utils
 
-import android.util.Log
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.ApiDataException
 import com.giraffe.media.exception.ForbiddenAccessDataException
@@ -26,7 +25,6 @@ object SafeCall {
             execute()
         } catch (e: Exception) {
             val mappedException = mapToDomainException(e)
-           // Log.e("SafeCallE", "Mapped Exception: ${mappedException::class.java.simpleName} - ${mappedException}", mappedException)
             throw mappedException
         }
 

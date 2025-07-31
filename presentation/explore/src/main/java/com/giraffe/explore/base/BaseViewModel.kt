@@ -28,8 +28,8 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
     private val _error = MutableStateFlow<Int?>(null)
     val error = _state.asStateFlow()
 
-    private val _isConnect= MutableStateFlow<Boolean>(true)
-     val isConnect=_isConnect.asStateFlow()
+    private val _isConnect = MutableStateFlow<Boolean>(true)
+    val isConnect = _isConnect.asStateFlow()
 
     private val _isNoInternet = MutableStateFlow(false)
     val isNoInternet = _isNoInternet.asStateFlow()
@@ -41,24 +41,21 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
         block:
         suspend CoroutineScope.() -> T
     ): Job {
-        Log.e("Exception", "Caught exception: ${exceptionHandler}")
-
         return coroutineScope.launch(dispatcher + exceptionHandler) {
+            _isNoInternet.update { true }
             block()
         }
     }
 
     protected fun updateState(updater: (S) -> S) {
+
         _state.update(updater)
     }
 
     private fun handler(): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
-            Log.e("Exceptionv", "Caught exception: ${throwable}", throwable)
-
-            if (throwable is NoInternetException ){
-                _isNoInternet.update { true }
-                Log.e("IsConnectVm", "isConnect updated to false ${_isNoInternet.value}")
+            if (throwable is NoInternetException) {
+                _isNoInternet.update { false }
             }
 
             _error.update { mapExceptionToStringRes(throwable) }
@@ -77,7 +74,4 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    fun forceUpdateNetworkState(isConnected: Boolean) {
-        _isConnect.update { isConnected }
-    }
 }
