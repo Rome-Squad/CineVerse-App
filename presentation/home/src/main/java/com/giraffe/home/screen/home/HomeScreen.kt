@@ -31,7 +31,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
 import com.giraffe.home.components.AdvertisementSection
 import com.giraffe.home.components.Carousel
-import com.giraffe.home.components.CollectionItemData
 import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
 import com.giraffe.home.components.TopAppBar
@@ -43,6 +42,7 @@ import com.giraffe.home.screen.movies_list.MovieSectionType
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
+    navigateToCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
@@ -88,6 +88,12 @@ fun HomeScreen(
                 is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
                 is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
                 is HomeEffect.ShowError -> {}
+                is HomeEffect.NavigateToYourCollection -> {
+                    navigateToCollection(
+                        effect.collectionId,
+                        effect.collectionTitle
+                    )
+                }
             }
         }
     }
@@ -231,8 +237,8 @@ fun HomeContent(
             item {
                 CollectionListSection(
                     modifier = Modifier.padding(bottom = 32.dp),
-                    collectionItems = featuredCollection
-                )
+                    collectionItems = state.featuredCollections,
+                    onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,                )
             }
             item {
                 HomeUiListSection(
@@ -296,24 +302,6 @@ val yourCollections = listOf(
     UserCollection("My Watchlist", "10 movies"),
     UserCollection("Documentaries", "6 movies"),
 )
-val featuredCollection = listOf(
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Late-Night Thrills"
-    ),
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Action"
-    ),
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Crime"
-    ),
-    CollectionItemData(
-        image = "https://drive.google.com/uc?export=download&id=16psefCb52QbPtMbCCNbAtOocHq6dr3ol",
-        collectionType = "Drama"
-    )
-)
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
@@ -326,6 +314,7 @@ fun HomeContentPreview() {
         override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {}
         override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {}
         override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
+        override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(

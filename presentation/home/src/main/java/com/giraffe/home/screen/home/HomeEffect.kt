@@ -11,5 +11,6 @@ sealed interface HomeEffect {
     data class NavigateToUpcomingList(val sectionTitle: String, val sectionType: String) : HomeEffect
     data class NavigateToRecentlyViewedList(val sectionTitle: String, val sectionType: String) : HomeEffect
     data class NavigateToRecommendedList(val sectionTitle: String, val sectionType: String) : HomeEffect
+    data class NavigateToYourCollection(val collectionId: Int, val collectionTitle: String) : HomeEffect
     data class ShowError(@param:StringRes val messageRes: Int) : HomeEffect
 }
