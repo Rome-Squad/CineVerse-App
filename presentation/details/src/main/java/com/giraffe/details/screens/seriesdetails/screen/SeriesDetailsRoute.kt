@@ -11,10 +11,10 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class SeriesDetailsRoute(val seriesID: Int)
+internal data class SeriesDetailsRoute(val seriesID: Int)
 
 
-fun NavController.navigateToSeriesDetails(seriesId: Int) {
+internal fun NavController.navigateToSeriesDetails(seriesId: Int) {
     navigate(SeriesDetailsRoute(seriesId))
 }
 

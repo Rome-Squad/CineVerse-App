@@ -9,7 +9,7 @@ import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMovies
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieDetailsRoute(val id: Int)
+internal data class MovieDetailsRoute(val id: Int)
 
 
 fun NavController.navigateToMovieDetails(id: Int) {

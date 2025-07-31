@@ -1,7 +1,5 @@
 package com.giraffe.explore.navigation
 
-import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,11 +26,10 @@ import com.giraffe.explore.screen.searchresult.navigateToSeriesDetails
 import com.giraffe.explore.screen.searchresult.searchResultRoute
 
 @Composable
-fun ExploreNavGraph(
+internal fun ExploreNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
-    onShowBottomBarChange: (Boolean) -> Unit,
-    transitionSpecs: FiniteAnimationSpec<Float> = tween(200)
+    onShowBottomBarChange: (Boolean) -> Unit
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var currentRoute = navBackStackEntry?.destination
