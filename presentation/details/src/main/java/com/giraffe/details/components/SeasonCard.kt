@@ -93,22 +93,21 @@ fun SeasonCard(
                             contentDescription = stringResource(R.string.season_image),
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop
-                        )
-//                        {
-//                            Icon(
-//                                painter = painterResource(Theme.icons.dueTone.image),
-//                                contentDescription = null,
-//                                tint = Theme.color.brand.secondary,
-//                                modifier = Modifier
-//                                    .size(40.dp)
-//                                    .background(
-//                                        Theme.color.background.card,
-//                                        shape = CircleShape
-//                                    )
-//                                    .padding(12.dp)
-//                                    .wrapContentSize(),
-//                            )
-//                        }
+                        ) {
+                            Icon(
+                                painter = painterResource(Theme.icons.dueTone.image),
+                                contentDescription = null,
+                                tint = Theme.color.brand.secondary,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .background(
+                                        Theme.color.background.card,
+                                        shape = CircleShape
+                                    )
+                                    .padding(12.dp)
+                                    .wrapContentSize(),
+                            )
+                        }
                     }
                 }
                 Column(

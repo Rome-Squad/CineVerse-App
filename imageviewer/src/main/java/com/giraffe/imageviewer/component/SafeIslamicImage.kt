@@ -1,6 +1,7 @@
 package com.giraffe.imageviewer.component
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,7 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
+import com.giraffe.imageviewer.R
 import com.giraffe.imageviewer.model.SafeIslamicImageHost
 
 @NonRestartableComposable
@@ -20,7 +24,14 @@ fun SafeIslamicImage(
     contentDescription: String,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.FillBounds,
-    alignment: Alignment = Alignment.Center
+    alignment: Alignment = Alignment.Center,
+    placeHolder: @Composable (modifier: Modifier) -> Unit = { modifier ->
+        Image(
+            painter = painterResource(id = R.drawable.placeholder),
+            contentDescription = stringResource(id = R.string.placeholder),
+            modifier = modifier
+        )
+    }
 ) {
 
     val context = LocalContext.current

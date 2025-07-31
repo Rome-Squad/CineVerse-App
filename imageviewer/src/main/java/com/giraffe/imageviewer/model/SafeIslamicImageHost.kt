@@ -30,7 +30,7 @@ class SafeIslamicImageHost(
     var imageState by mutableStateOf<Bitmap?>(null)
         private set
 
-    var isBlurState by mutableStateOf(false)
+    private var isBlurState by mutableStateOf(false)
 
 
     suspend fun loadImage(imageUrl: String, context: Context) {
@@ -41,7 +41,6 @@ class SafeIslamicImageHost(
                 val request = if (isBlurState) {
                     ImageRequest.Builder(context)
                         .data(imageUrl)
-                        .placeholder(R.drawable.placeholder)
                         .allowHardware(false)
                         .allowConversionToBitmap(true)
                         .memoryCacheKey(imageUrl)
@@ -51,7 +50,6 @@ class SafeIslamicImageHost(
                 } else {
                     ImageRequest.Builder(context)
                         .data(imageUrl)
-                        .placeholder(R.drawable.placeholder)
                         .allowHardware(false)
                         .allowConversionToBitmap(true)
                         .memoryCacheKey(imageUrl)
@@ -62,11 +60,6 @@ class SafeIslamicImageHost(
                 val result = imageLoader.execute(request)
                 val drawable = result.drawable
                 val bitmap = drawable?.toBitmapOrNull() ?: return@withContext
-
-                if (isBlurState) {
-                    imageState = bitmap
-                    return@withContext
-                }
 
                 isBlurState = isImageUnsafe(bitmap, imageUrl)
 
@@ -79,7 +72,6 @@ class SafeIslamicImageHost(
                 }
             } catch (e: Exception) {
                 imageState = context.getDrawable(R.drawable.placeholder)?.toBitmapOrNull()
-                throw e
             }
         }
     }

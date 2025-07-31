@@ -64,21 +64,22 @@ fun MinimizedInfoRow(
                         .clip(RoundedCornerShape(Theme.radius.full)),
                     contentScale = ContentScale.FillBounds
                 )
-//                {
-//                    Icon(
-//                        painter = painterResource(Theme.icons.dueTone.image),
-//                        contentDescription = null,
-//                        tint = Theme.color.brand.secondary,
-//                        modifier = Modifier
-//                            .size(40.dp)
-//                            .background(
-//                                Theme.color.background.card,
-//                                shape = CircleShape
-//                            )
-//                            .padding(12.dp)
-//                            .wrapContentSize(),
-//                    )
-//                }
+                {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = null,
+                        tint = Theme.color.brand.secondary,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(
+                                Theme.color.background.card,
+                                shape = CircleShape
+                            )
+                            .padding(12.dp)
+                            .wrapContentSize(),
+                    )
+                }
+
                 Text(
                     text = name,
                     style = Theme.textStyle.title.sm,

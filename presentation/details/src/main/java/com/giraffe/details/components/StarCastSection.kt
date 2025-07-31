@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,9 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.CustomCard
+import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.models.CastUi
@@ -102,18 +105,17 @@ fun CastCard(
                         )
                     ),
                 contentScale = ContentScale.Crop
-            )
-//            {
-//                Icon(
-//                    painter = painterResource(Theme.icons.dueTone.image),
-//                    contentDescription = "$actorName image",
-//                    tint = Theme.color.brand.secondary,
-//                    modifier = it
-//                        .size(64.dp)
-//                        .padding(12.dp)
-//                        .wrapContentSize()
-//                )
-//            }
+            ) {
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = "$actorName image",
+                    tint = Theme.color.brand.secondary,
+                    modifier = it
+                        .size(64.dp)
+                        .padding(12.dp)
+                        .wrapContentSize()
+                )
+            }
 
             Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.5.dp)) {
                 Text(

@@ -12,18 +12,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Rating
+import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.media.explore.R
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -57,16 +62,15 @@ fun PosterVertically(
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                 )
-//                {
-//
-//                    Icon(
-//                        painter = painterResource(Theme.icons.dueTone.image),
-//                        contentDescription = stringResource(R.string.loading_image),
-//                        modifier = Modifier.size(32.dp),
-//                        tint = Theme.color.brand.secondary
-//                    )
-//
-//                }
+                {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = stringResource(R.string.loading_image),
+                        modifier = Modifier.size(32.dp),
+                        tint = Theme.color.brand.secondary
+                    )
+
+                }
 
                 Rating(
                     value = poster.rating,

@@ -3,9 +3,8 @@ package com.giraffe.imageviewer.mlmodel
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.get
-import kotlinx.coroutines.CoroutineScope
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
@@ -16,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 class SafeIslamicImageClassifierImpl @Inject constructor(
-    context: Context
+    @ApplicationContext private val context: Context
 ) : SafeIslamicImageClassifier {
 
     companion object {
@@ -72,22 +71,10 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         }
     }
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
-
-    init {
-        // Load the TFLite model from assets
-        coroutineScope.launch {
-            val nsfwModelTmdbData = loadModelFile(context, fileName = "nsfw_model_tmdb_data.tflite")
-            interpreterNsfwModel = Interpreter(nsfwModel)
-            interpreterNsfwModelTmdbData = Interpreter(
-                nsfwModelTmdbData
-            )
-        }
-    }
 
     private suspend fun classify(
         bitmap: Bitmap
-    ): Map<String, Float> {
+    ): Float {
 
         // rescale the image to be suitable for the model's expected input
         val resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, 224, 224)
@@ -99,8 +86,8 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         val outputNsfwModelTmdbData = Array(1) { FloatArray(1) }
 
         // Run both models
-        interpreterNsfwModel.run(inputBuffer, outputNsfwModel)
-        interpreterNsfwModelTmdbData.run(inputBuffer, outputNsfwModelTmdbData)
+        getInterpreterNsfwModel(context).run(inputBuffer, outputNsfwModel)
+        getInterpreterNsfwModelTmdbData(context).run(inputBuffer, outputNsfwModelTmdbData)
 
         val unsafeNsfwModel = outputNsfwModel[0][0]
         val unsafeNsfwModelTmdbData = outputNsfwModelTmdbData[0][0]
@@ -110,7 +97,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         return finalUnsafe
     }
 
-    private fun convertBitmapToByteBuffer(
+    private suspend fun convertBitmapToByteBuffer(
         bitmap: Bitmap
     ): ByteBuffer {
         val buffer = ByteBuffer.allocateDirect(1 * 224 * 224 * 3 * 4)
@@ -135,7 +122,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         return getResultFromCache(imageUrl) ?: withContext(Dispatchers.Default) {
             val unsafeScore = classify(bitmap)
             val isSafe = unsafeScore > 0.5f  // Threshold
-            cachedImages[imageUrl] = isUnsafe
+            cachedImages[imageUrl] = isSafe
             isSafe
         }
     }
