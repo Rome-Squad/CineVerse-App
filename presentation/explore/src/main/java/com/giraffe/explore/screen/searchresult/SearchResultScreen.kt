@@ -48,9 +48,9 @@ fun SearchResultScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val isNoInternet by viewModel.isNoInternet.collectAsState()
-    Log.e("isInternettVm", "isConnect updated to false ${isNoInternet}")
-    if (isNoInternet) {
+    val isNoInternet = viewModel.isNoInternet.collectAsState()
+    Log.e("isInternettVm", "isConnect updated to false ${isNoInternet.value}")
+    if (isNoInternet.value) {
 
 
         NoInternetScreen()
