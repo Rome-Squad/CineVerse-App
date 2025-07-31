@@ -7,20 +7,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.ExploreApi
-import com.giraffe.home.HomeApi
-import com.giraffe.home.navigation.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var homeApi: HomeApi
+    lateinit var authenticationApi: AuthenticationApi
 
-    @Inject
-    lateinit var exploreApi: ExploreApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +32,7 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             CineVerseTheme {
-                MainScreen(exploreApi, homeApi)
+                authenticationApi.LoginContainer { }
             }
         }
     }
