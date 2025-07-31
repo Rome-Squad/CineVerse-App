@@ -31,9 +31,12 @@ fun SecondaryButton(
     Button(
         shape = RoundedCornerShape(Theme.radius.lg),
         onClick = if (enabled) onClick else ({}),
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) Theme.color.button.secondary else Theme.color.button.disabled,
-            contentColor = if (enabled) Theme.color.button.onSecondary else Theme.color.button.onDisabled,
+            containerColor = Theme.color.button.secondary,
+            disabledContainerColor = Theme.color.button.disabled,
+            contentColor = Theme.color.button.onSecondary,
+            disabledContentColor = Theme.color.button.onDisabled
         ),
         contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
         modifier = modifier
