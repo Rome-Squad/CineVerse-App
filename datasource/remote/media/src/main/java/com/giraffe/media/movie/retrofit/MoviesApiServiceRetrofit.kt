@@ -5,8 +5,8 @@ import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.response.GenreResponse
 import com.giraffe.media.movie.response.MoviesListResponse
-import com.giraffe.media.movie.response.TrailerResponse
 import com.giraffe.media.response.AllReviewsResponse
+import com.giraffe.media.response.TrailerResponse
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_STATES
 import com.giraffe.media.util.NetworkConstants.GENRES_URL
 import com.giraffe.media.util.NetworkConstants.ID

@@ -1,4 +1,4 @@
-package com.giraffe.media.movie.response
+package com.giraffe.media.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

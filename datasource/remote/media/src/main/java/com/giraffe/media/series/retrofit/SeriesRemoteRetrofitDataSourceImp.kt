@@ -38,4 +38,9 @@ class SeriesRemoteRetrofitDataSourceImp(
 
     override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
         retrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results
+
+    override suspend fun getSeriesTrailerUrl(seriesId: Int): String {
+        val results = retrofitRequestBuilder.get { getSeriesTrailerUrl(seriesId) }.results
+        return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
+    }
 }
