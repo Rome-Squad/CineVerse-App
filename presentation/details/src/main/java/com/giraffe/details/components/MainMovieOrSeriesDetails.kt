@@ -3,6 +3,7 @@ package com.giraffe.details.components
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +45,7 @@ fun MainMovieOrSeriesDetails(
     rating: Float,
     duration: String?,
     releaseDate: String,
+    isPlayButtonEnabled: Boolean,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onClickPlay: () -> Unit,
@@ -50,6 +53,9 @@ fun MainMovieOrSeriesDetails(
     modifier: Modifier = Modifier
 ) {
     val key = "_KEY"
+    val playButtonBackground by animateColorAsState(
+        if (isPlayButtonEnabled) Theme.color.button.primary else Theme.color.button.onDisabled
+    )
     with(sharedTransitionScope) {
         Column(
             modifier = modifier.background(Theme.color.background.screen),
@@ -168,8 +174,11 @@ fun MainMovieOrSeriesDetails(
                                 )
                                 .size(40.dp)
                                 .clip(RoundedCornerShape(Theme.radius.md))
-                                .background(Theme.color.button.primary)
-                                .clickable(onClick = onClickPlay)
+                                .background(playButtonBackground)
+                                .clickable(
+                                    enabled = isPlayButtonEnabled,
+                                    onClick = onClickPlay
+                                )
                                 .padding(10.dp)
                         )
                         Icon(

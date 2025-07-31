@@ -18,7 +18,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 @Composable
-fun YouTubePlayer(
+fun YouTubePlayerScreen(
     youtubeVideoId: String,
     onBackClick: () -> Unit
 ) {

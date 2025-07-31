@@ -19,6 +19,8 @@ import com.giraffe.details.screens.seasons.screen.navigateToSeasons
 import com.giraffe.details.screens.seasons.screen.seasonsRoute
 import com.giraffe.details.screens.seriesdetails.screen.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.screen.seriesDetailsRoute
+import com.giraffe.details.screens.videoPlayer.navigateToYouTubePlayer
+import com.giraffe.details.screens.videoPlayer.youTubePlayerRouteRoute
 
 @Composable
 internal fun DetailsNavGraph(
@@ -42,7 +44,8 @@ internal fun DetailsNavGraph(
             navigateToRecommendedSeries = navController::navigateToRecommendedSeries,
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
             navigateToCastDetails = navController::navigateToCastDetails,
-            navigateToSeason = navController::navigateToSeasons               // change this to navigate to season screen
+            navigateToSeason = navController::navigateToSeasons,
+            onClickPlay = navController::navigateToYouTubePlayer
         )
 
         seasonsRoute { if (navController.popBackStack().not()) onBackClick() }
@@ -78,6 +81,9 @@ internal fun DetailsNavGraph(
             onBackClick = { navController.navigateUp() }
         )
 
+        youTubePlayerRouteRoute(
+            onBackClick = { navController.navigateUp() }
+        )
 //        reviewRoute(navController)
     }
 }

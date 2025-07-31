@@ -14,7 +14,8 @@ data class MovieUi(
     val genresID: List<Int> = emptyList(),
     val genres: List<String> = emptyList(),
     val posterUrl: String? = null,
-    val releaseYear: String = ""
+    val releaseYear: String = "",
+    val youtubeVideoId: String = ""
 )
 
 

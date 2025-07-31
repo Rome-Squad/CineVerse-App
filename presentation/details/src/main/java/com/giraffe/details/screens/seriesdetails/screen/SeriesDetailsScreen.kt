@@ -26,6 +26,7 @@ fun SeriesDetailsScreen(
     navigateToSeason: (seriesId: Int) -> Unit,
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
     onBackButtonClick: () -> Unit,
+    onClickPlay: (String) -> Unit,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     viewModel: SeriesDetailsViewModel = koinViewModel()
@@ -62,6 +63,7 @@ fun SeriesDetailsScreen(
                 state = state,
                 interaction = viewModel,
                 onBackButtonClick = onBackButtonClick,
+                onClickPlay = onClickPlay,
                 modifier = Modifier.fillMaxSize()
             )
         }

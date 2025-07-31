@@ -22,7 +22,7 @@ fun NavGraphBuilder.seriesDetailsRoute(
     navigateToCastDetails: (castID: Int) -> Unit,
     navigateToSeason: (seriesId: Int) -> Unit,
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
-
+    onClickPlay: (String) -> Unit,
     ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         SeriesDetailsScreen(
@@ -32,6 +32,7 @@ fun NavGraphBuilder.seriesDetailsRoute(
             navigateToSeason = navigateToSeason,
             navigateToSeriesDetails = navigateToSeriesDetails,
             onBackButtonClick = onBackButtonClick,
+            onClickPlay = onClickPlay
         )
     }
 }

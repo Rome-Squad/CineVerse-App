@@ -61,7 +61,7 @@ fun MovieDetailsScreen(
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
     viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) }),
-    onClickPlay: () -> Unit,
+    onClickPlay: (String) -> Unit,
     onClickPoster: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     navigateToMoviesRecommended: (Int, String) -> Unit,
@@ -123,7 +123,7 @@ private fun MovieDetailsContent(
     state: MovieDetailsScreenState,
     interaction: MovieDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
-    onClickPlay: () -> Unit,
+    onClickPlay: (String) -> Unit,
     onClickPoster: (Int) -> Unit,
 ) {
     var isScrollingUp by rememberSaveable { mutableStateOf(false) }
@@ -165,7 +165,8 @@ private fun MovieDetailsContent(
                     duration = state.movie.duration,
                     releaseYear = state.movie.releaseYear,
                     onClickAdd = interaction::onAddToCollectionClick,
-                    onClickPlay = onClickPlay,
+                    onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
+                    isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),
                     isScrolled = isScrollingUp,
                     durationAnimation = 0,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -279,7 +280,7 @@ private fun MovieDetailsContent(
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
                     enabled = false,
-                    onClick = onClickPlay
+                    onClick = { }
                 )
             }
         }

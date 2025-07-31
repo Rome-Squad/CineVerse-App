@@ -27,6 +27,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
     rating: Float,
     genres: List<String>,
     releaseYear: String,
+    isPlayButtonEnabled: Boolean,
     onClickPlay: () -> Unit,
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
@@ -62,6 +63,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
                         animatedVisibilityScope = this@AnimatedContent,
                         onClickAdd = onClickAdd,
                         onClickPlay = onClickPlay,
+                        isPlayButtonEnabled = isPlayButtonEnabled,
                         modifier = modifier.padding(top = topPadding)
                     )
                 }
@@ -74,6 +76,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
                         animatedVisibilityScope = this@AnimatedContent,
                         onClickAdd = onClickAdd,
                         onClickPlay = onClickPlay,
+                        isPlayButtonEnabled = isPlayButtonEnabled,
                         modifier = modifier.padding(top = topPadding)
                     )
                 }
