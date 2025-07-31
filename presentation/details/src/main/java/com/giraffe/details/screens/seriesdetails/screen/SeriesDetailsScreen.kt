@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsEffect
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.details.utils.EventListener
@@ -27,8 +26,8 @@ fun SeriesDetailsScreen(
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
     onBackButtonClick: () -> Unit,
     onClickPlay: (String) -> Unit,
+    navigateToLogIn: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     viewModel: SeriesDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -64,6 +63,7 @@ fun SeriesDetailsScreen(
                 interaction = viewModel,
                 onBackButtonClick = onBackButtonClick,
                 onClickPlay = onClickPlay,
+                navigateToLogIn = navigateToLogIn,
                 modifier = Modifier.fillMaxSize()
             )
         }

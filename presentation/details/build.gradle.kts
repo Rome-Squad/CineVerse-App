@@ -44,7 +44,9 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
     implementation(project(":domain:media"))
+    implementation(project(":domain:user"))
     implementation(project(":api:details"))
+    implementation(project(":api:authentication"))
 
     //android youtube player
     implementation(libs.core)

@@ -3,6 +3,8 @@ package com.giraffe.details.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.details.nav.route.loginRoute
 import com.giraffe.details.screens.castCredit.castCreditRoute
 import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
@@ -22,7 +24,8 @@ import com.giraffe.details.screens.videoPlayer.youTubePlayerRouteRoute
 internal fun DetailsNavGraph(
     navController: NavHostController,
     startDestinationRoute: Any,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    authApi: AuthenticationApi
 ) {
     NavHost(
         navController = navController,
@@ -36,7 +39,6 @@ internal fun DetailsNavGraph(
 
         seriesDetailsRoute(
             navController = navController,
-            navigateToReviews = navController::navigateToReviews,
             onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
         )
 
@@ -77,5 +79,6 @@ internal fun DetailsNavGraph(
             onBackClick = { navController.navigateUp() }
         )
 //        reviewRoute(navController)
+        loginRoute(authApi)
     }
 }

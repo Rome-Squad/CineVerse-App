@@ -6,6 +6,7 @@ import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
+import com.giraffe.home.utils.toUiModel
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
@@ -13,6 +14,7 @@ import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
@@ -47,12 +49,40 @@ class HomeViewModel @Inject constructor(
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
     init {
+        getFeaturedCollection()
         loadHomeContent()
         getRecentViewed()
+    }
+
+    private fun getRecentViewed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecentlyMoviesSuccess,
+                onError = ::onFail,
+                block = getRecentlyMoviesUseCase::invoke
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecentlySeresSuccess,
+                onError = ::onFail,
+                block = getRecentlySeriesUseCase::invoke
+            )
+        }
+    }
+
+    private fun getFeaturedCollection() {
+        safeExecute {
+            val featuredCollection = getMoviesGenresUseCase().map { it.toUiModel() }
+            updateState {
+                it.copy(
+                    featuredCollections = featuredCollection
+                )
+            }
+        }
     }
 
     override fun loadHomeContent() {
@@ -75,10 +105,12 @@ class HomeViewModel @Inject constructor(
                     val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
                     movie.toPopularMediaUiModel(genres)
                 }
+
                 val popularSeriesUi = popularSeries.map { series ->
                     val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
                     series.toPopularMediaUiModel(genres)
                 }
+
                 val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
                 val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
                 val topRatedUi = topRated.map { it.toHomeUiModel() }
@@ -100,21 +132,6 @@ class HomeViewModel @Inject constructor(
                 updateState { it.copy(isLoading = false, isError = true) }
                 sendEffect(HomeEffect.ShowError(errorResId))
             }
-        }
-    }
-
-    private fun getRecentViewed() {
-        viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::onGetRecentlyMoviesSuccess,
-                onError = ::onFail,
-                block = getRecentlyMoviesUseCase::invoke
-            ).join()
-            safeExecute(
-                onSuccess = ::onGetRecentlySeresSuccess,
-                onError = ::onFail,
-                block = getRecentlySeriesUseCase::invoke
-            )
         }
     }
 
@@ -225,5 +242,14 @@ class HomeViewModel @Inject constructor(
             is UnknownException -> R.string.error_unknown
             else -> R.string.error_unknown
         }
+    }
+
+    override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
+        sendEffect(
+            HomeEffect.NavigateToYourCollection(
+                collectionId = collectionId,
+                collectionTitle = collectionTitle
+            )
+        )
     }
 }

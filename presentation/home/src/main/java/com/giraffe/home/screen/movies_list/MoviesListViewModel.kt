@@ -6,7 +6,9 @@ import androidx.navigation.toRoute
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.utils.toPosterUi
+import com.giraffe.media.exception.MediaException
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
@@ -33,18 +35,42 @@ class MoviesListViewModel @Inject constructor(
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
+    private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<MoviesListUiState, MoviesListEffect>(initialState = MoviesListUiState()),
     MoviesListInteractionListener {
     private val sectionTitle = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionTitle
     private val sectionType = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionType
+    private val collectionId = stateSavedStateHandle.toRoute<MoviesListRoute>().collectionId
 
     init {
         when (sectionType) {
             MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
             MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
-            else -> loadMoviesBySection(sectionType)
+            MovieSectionType.RECENTLY_RELEASED,
+            MovieSectionType.TOP_RATED_TV_SHOWS,
+            MovieSectionType.UPCOMING_MOVIES -> loadMoviesBySection(sectionType)
+
+            else -> collectionId?.let { loadMoviesByGenres(it) }
+        }
+    }
+
+    private fun loadMoviesByGenres(genreId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val movies = getMoviesByGenresUseCase(genreId = genreId, page = 1)
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = null,
+                        mediaList = movies.map(Movie::toPosterUi),
+                        moviesListTitle = sectionTitle
+                    )
+                }
+            } catch (e: MediaException) {
+                updateState { it.copy(isLoading = false, errorMessage = e.message) }
+            }
         }
     }
 

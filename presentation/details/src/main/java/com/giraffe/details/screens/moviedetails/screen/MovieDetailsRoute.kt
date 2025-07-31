@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.nav.route.navigateLoginScreen
 import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.recommended.movie.navigateToRecommendedMoviesScreen
 import com.giraffe.details.screens.videoPlayer.navigateToYouTubePlayer
@@ -30,7 +31,8 @@ fun NavGraphBuilder.movieDetailsRoute(
             onClickPlay = navController::navigateToYouTubePlayer,
             onClickPoster = navController::navigateToMovieDetails,
             navigateToCastDetails = navController::navigateToCastDetails,
-            navigateToMoviesRecommended = navController::navigateToRecommendedMoviesScreen
+            navigateToMoviesRecommended = navController::navigateToRecommendedMoviesScreen,
+            navigateToLogin = navController::navigateLoginScreen
         )
     }
 }

@@ -5,6 +5,9 @@
     <string name="gallery">المعرض</string>
     <string name="show_more">عرض المزيد</string>
     <string name="actor_image">صورة الممثل</string>
+    <string name="type_movie">فيلم</string>
+    <string name="type_series">مسلسل</string>
+    <string name="type_cast">طاقم العمل</string>
     <string name="birthday_cake_icon">أيقونة كعكة عيد الميلاد</string>
     <string name="actor_birthday">تاريخ الميلاد</string>
     <string name="location_icon">أيقونة الموقع</string>

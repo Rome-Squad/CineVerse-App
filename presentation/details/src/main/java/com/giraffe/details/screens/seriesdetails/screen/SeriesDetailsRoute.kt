@@ -3,7 +3,7 @@ package com.giraffe.details.screens.seriesdetails.screen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.details.models.ReviewUI
+import com.giraffe.details.nav.route.navigateLoginScreen
 import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.seasons.screen.navigateToSeasons
@@ -22,11 +22,9 @@ internal fun NavController.navigateToSeriesDetails(seriesId: Int) {
 fun NavGraphBuilder.seriesDetailsRoute(
     navController: NavController,
     onBackButtonClick: () -> Unit,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit
 ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         SeriesDetailsScreen(
-            navigateToReviews = navigateToReviews,
             navigateToRecommendedSeries = { seriesID, title ->
                 navController.navigateToRecommendedSeries(seriesID, title)
             },
@@ -40,7 +38,8 @@ fun NavGraphBuilder.seriesDetailsRoute(
                 navController.navigateToSeriesDetails(it)
             },
             onBackButtonClick = onBackButtonClick,
-            onClickPlay = navController::navigateToYouTubePlayer
+            onClickPlay = navController::navigateToYouTubePlayer,
+            navigateToLogIn = navController::navigateLoginScreen
         )
     }
 }
