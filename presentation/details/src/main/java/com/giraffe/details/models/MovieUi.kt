@@ -14,7 +14,7 @@ data class MovieUi(
     val genresID: List<Int> = emptyList(),
     val genres: List<String> = emptyList(),
     val posterUrl: String? = null,
-    val releaseYear: String = ""
+    val releaseYear: String? = null
 )
 
 
@@ -23,10 +23,10 @@ fun Movie.toMovieUi() = MovieUi(
     title = title,
     description = description,
     rating = rating,
-    duration = duration?.toFormattedDuration(),
+    duration = if (duration != null && duration!! > 0) duration?.toFormattedDuration() else null,
     posterUrl = posterUrl,
     genresID = genresID,
-    releaseYear = releaseYear.toString().toFormattedDate()
+    releaseYear = if (releaseYear != null) releaseYear.toString().toFormattedDate() else null
 )
 
 fun MovieUi.toPoster(): Poster {
