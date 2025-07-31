@@ -59,7 +59,7 @@ fun MovieDetailsScreen(
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
-    onClickPlay: () -> Unit,
+    onClickPlay: (String) -> Unit,
     onClickPoster: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     navigateToMoviesRecommended: (Int, String) -> Unit,
@@ -124,7 +124,7 @@ private fun MovieDetailsContent(
     state: MovieDetailsScreenState,
     interaction: MovieDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
-    onClickPlay: () -> Unit,
+    onClickPlay: (String) -> Unit,
     onClickPoster: (Int) -> Unit,
     navigateToLogIn: () -> Unit
 ) {
@@ -167,7 +167,8 @@ private fun MovieDetailsContent(
                     duration = state.movie.duration,
                     releaseYear = state.movie.releaseYear ?: "",
                     onClickAdd = interaction::onAddToCollectionClick,
-                    onClickPlay = onClickPlay,
+                    onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
+                    isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),
                     isScrolled = isScrollingUp,
                     durationAnimation = 0,
                     modifier = Modifier.padding(horizontal = 16.dp)

@@ -52,4 +52,9 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
 
     override suspend fun getUpcomingMovies(page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getUpcomingMovies(page) }.results
+
+    override suspend fun getMovieTrailerUrl(movieId: Int): String {
+        val results = retrofitRequestBuilder.get { getMovieTrailerUrl(movieId) }.results
+        return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
+    }
 }

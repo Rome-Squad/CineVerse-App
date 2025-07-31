@@ -1,9 +1,12 @@
 package com.giraffe.media.series.retrofit
 
 import com.giraffe.media.response.AllReviewsResponse
+import com.giraffe.media.response.TrailerResponse
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
+import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.response.GenresResponse
 import com.giraffe.media.series.response.SeriesResponse
+import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,13 +18,13 @@ interface SeriesApiServiceRetrofit {
     suspend fun getSeriesByName(
         @Query(QUERY) name: String,
         @Query(PAGE) page: Int = 1
-    ): Response<SeriesResponse>
+    ): Response<SeriesResponse<SeriesDto>>
 
     @GET(DISCOVER_TV)
     suspend fun getSeriesByGenre(
         @Query(WITH_GENRES) genreId: String,
         @Query(PAGE) page: Int = 1
-    ): Response<SeriesResponse>
+    ): Response<SeriesResponse<SeriesDto>>
 
     @GET(GENRE_TV_LIST)
     suspend fun getGenres(): Response<GenresResponse>
@@ -41,23 +44,28 @@ interface SeriesApiServiceRetrofit {
     suspend fun getSeriesRecommendations(
         @Path(SERIES_ID) seriesId: Long,
         @Query(PAGE) page: Int = 1
-    ): Response<SeriesResponse>
+    ): Response<SeriesResponse<SeriesDto>>
 
 
     @GET(POPULAR_TV_URL)
     suspend fun getPopularSeries(
         @Query(PAGE) page: Int = 1
-    ): Response<SeriesResponse>
+    ): Response<SeriesResponse<SeriesDto>>
 
     @GET(ON_THE_AIR_TV_URL)
     suspend fun getRecentlyReleasedSeries(
         @Query(PAGE) page: Int = 1
-    ): Response<SeriesResponse>
+    ): Response<SeriesResponse<SeriesDto>>
 
     @GET(TOP_RATED_TV_URL)
     suspend fun getTopRatedSeries(
         @Query(PAGE) page: Int = 1
-    ): Response<SeriesResponse>
+    ): Response<SeriesResponse<SeriesDto>>
+
+    @GET("$TV/{$SERIES_ID}/$VIDEOS_END_POINT")
+    suspend fun getSeriesTrailerUrl(
+        @Path(SERIES_ID) seriesId: Int
+    ): Response<SeriesResponse<TrailerResponse>>
 
     companion object {
         const val SEARCH_TV = "search/tv"

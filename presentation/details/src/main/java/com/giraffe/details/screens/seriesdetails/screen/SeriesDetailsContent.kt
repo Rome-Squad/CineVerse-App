@@ -50,6 +50,7 @@ fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
     interaction: SeriesDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
+    onClickPlay: (String) -> Unit,
     navigateToLogIn: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -92,7 +93,8 @@ fun SeriesDetailsContent(
                     duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
                     releaseYear = state.seriesDetails.releaseYear,
                     onClickAdd = interaction::onClickAddToCollection,
-                    onClickPlay = {},
+                    onClickPlay = { onClickPlay(state.seriesDetails.youtubeVideoId) },
+                    isPlayButtonEnabled = state.seriesDetails.youtubeVideoId.isNotBlank(),
                     isScrolled = isScrollingUp,
                     durationAnimation = 400,
                     modifier = Modifier.padding(horizontal = 16.dp)

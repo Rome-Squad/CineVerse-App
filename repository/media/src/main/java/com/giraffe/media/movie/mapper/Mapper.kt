@@ -50,5 +50,6 @@ fun MovieDto.toEntity() = Movie(
     duration = runtime,
     posterUrl = BASE_IMAGE_URL + posterPath,
     genresID = genresID.ifEmpty { genres.map { it.id } },
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
+    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    youtubeVideoId = youtubeVideoId.orEmpty()
 )

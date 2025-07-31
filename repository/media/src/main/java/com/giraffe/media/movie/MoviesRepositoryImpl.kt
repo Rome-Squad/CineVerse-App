@@ -20,6 +20,7 @@ import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
 import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -102,7 +103,12 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun clearRecentlyMovies() = SafeCall { local.clearRecentlyMovies() }
 
     override suspend fun getMovieDetails(movieId: Int) = SafeCall {
-        remote.getMovieById(movieId).toEntity()
+        withContext(Dispatchers.IO) {
+            val youtubeVideoId = async { remote.getMovieTrailerUrl(movieId) }
+            val movieDetails = async { remote.getMovieById(movieId) }
+            movieDetails.await().youtubeVideoId = youtubeVideoId.await()
+            movieDetails.await().toEntity()
+        }
     }
 
     override suspend fun getRecommendedMovie(
