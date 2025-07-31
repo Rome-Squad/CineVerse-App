@@ -11,7 +11,7 @@ data class SeriesUi(
     val posterUrl: String? = null,
     val releaseYear: String = "",
     val youtubeVideoId: String = "",
-    val genres: List<String> = emptyList()
+    val genres: List<String> = emptyList(),
 ) {
     companion object {
         fun fromEntity(series: Series) = SeriesUi(
@@ -21,7 +21,8 @@ data class SeriesUi(
             rating = series.rating,
             posterUrl = series.posterUrl,
             releaseYear = series.releaseYear,
-            genres = emptyList()
+            genres = emptyList(),
+            youtubeVideoId = series.youtubeVideoId
         )
     }
 }

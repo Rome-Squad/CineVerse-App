@@ -34,4 +34,5 @@ data class SeriesDetailsDto(
     val originalName: String,
     @SerialName("poster_path")
     val posterPath: String,
+    var youtubeVideoId: String? = null
 )

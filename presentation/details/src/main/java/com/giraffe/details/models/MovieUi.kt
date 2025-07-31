@@ -27,7 +27,8 @@ fun Movie.toMovieUi() = MovieUi(
     duration = duration?.toFormattedDuration(),
     posterUrl = posterUrl,
     genresID = genresID,
-    releaseYear = releaseYear.toString().toFormattedDate()
+    releaseYear = releaseYear.toString().toFormattedDate(),
+    youtubeVideoId = youtubeVideoId
 )
 
 fun MovieUi.toPoster(): Poster {
