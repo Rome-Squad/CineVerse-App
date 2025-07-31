@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.seriesdetails.screen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,7 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.AddToCollectionContent
+import com.giraffe.details.components.CollectionBottomSheetContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
@@ -98,23 +97,29 @@ fun SeriesDetailsContent(
                 )
             }
         }
-        item {
-            InfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.storyline),
-                description = state.seriesDetails.overview
-            )
+
+        if (state.seriesDetails.overview.isNotBlank()) {
+            item {
+                InfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.storyline),
+                    description = state.seriesDetails.overview
+                )
+            }
         }
-        item {
-            SectionTitle(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.latest_seasons),
-                clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
-                onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
-            )
+
+        if (state.seasons.isNotEmpty()) {
+            item {
+                SectionTitle(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.latest_seasons),
+                    clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
+                    onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
+                )
+            }
         }
-        item {
-            AnimatedVisibility(state.seasons.isNotEmpty()) {
+        if (state.seasons.isNotEmpty()) {
+            item {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -139,22 +144,29 @@ fun SeriesDetailsContent(
                 }
             }
         }
-        item {
-            StarCastSection(
-                title = stringResource(R.string.star_cast),
-                castList = state.cast,
-                onCastClick = interaction::navigateToCastDetailsScreen
-            )
+
+        if (state.cast.isNotEmpty()) {
+            item {
+                StarCastSection(
+                    title = stringResource(R.string.star_cast),
+                    castList = state.cast,
+                    onCastClick = interaction::navigateToCastDetailsScreen
+                )
+            }
         }
-        item {
-            StaffInfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.behind_the_scenes),
-                staffList = state.crew
-            )
+
+        if (state.crew.isNotEmpty()) {
+            item {
+                StaffInfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.behind_the_scenes),
+                    staffList = state.crew
+                )
+            }
         }
-        item {
-            AnimatedVisibility(state.recommendedSeries.isNotEmpty()) {
+
+        if (state.recommendedSeries.isNotEmpty()) {
+            item {
                 PosterListSection(
                     title = stringResource(R.string.you_might_also_like),
                     endText = stringResource(R.string.show_more),
@@ -171,17 +183,20 @@ fun SeriesDetailsContent(
                 )
             }
         }
+
         item {
             RatingSection(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onClickCard = interaction::onClickGiveStars
             )
         }
-        item {
-            AnimatedVisibility(state.seriesReviews.isNotEmpty()) {
 
+        if (state.seriesReviews.isNotEmpty()) {
+            item {
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     SectionTitle(
@@ -201,32 +216,20 @@ fun SeriesDetailsContent(
                             reviewerName = review.authorName,
                             reviewerUsername = review.authorUserName
                         )
+                    }
                 }
             }
         }
-    }
     }
 
     BaseBottomSheet(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+        modifier = Modifier.padding(vertical = 28.dp, horizontal = 12.dp),
         content = {
-            AddToCollectionContent(
-                title = "My Favorite TV",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "My WatchLis",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "Cristian Bale Movies",
-                isLoading = false,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            CollectionBottomSheetContent(
+                onCreateCollectionClick = interaction::onClickAddToCollection
             )
         }
     )

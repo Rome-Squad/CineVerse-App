@@ -2,6 +2,7 @@ plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
     jacoco
+    alias(libs.plugins.ksp)
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -16,6 +17,9 @@ kotlin {
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.test)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 }
 
 tasks.test {

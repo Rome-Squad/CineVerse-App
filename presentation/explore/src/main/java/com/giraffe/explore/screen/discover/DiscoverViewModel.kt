@@ -15,9 +15,12 @@ import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class DiscoverViewModel(
+@HiltViewModel
+class DiscoverViewModel @Inject constructor(
     private val getMoviesGenres: GetMoviesGenresUseCase,
     private val getSeriesGenres: GetSeriesGenresUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,

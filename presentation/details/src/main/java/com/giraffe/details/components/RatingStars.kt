@@ -61,8 +61,7 @@ fun RatingStars(
                     .size(starSize)
                     .noHoverClickable {
                         if (onClickEnabled)
-                            onRateClick(i + 1)
-                        else null
+                            onRateClick?.let { it(i + 1) }
                     }
 
             )

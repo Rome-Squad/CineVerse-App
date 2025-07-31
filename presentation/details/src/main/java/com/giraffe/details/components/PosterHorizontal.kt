@@ -1,6 +1,5 @@
 package com.giraffe.details.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -25,8 +24,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -58,7 +59,7 @@ fun PosterHorizontal(
                 imageUrl = poster.imageUri,
                 contentDescription = poster.name,
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .height(88.dp)
                     .width(64.dp)
                     .clip(
                         RoundedCornerShape(
@@ -84,10 +85,9 @@ fun PosterHorizontal(
 
             }
 
-
             Column(
                 modifier = Modifier.padding(vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.Center
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -108,7 +108,7 @@ fun PosterHorizontal(
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
                         )
-                        AnimatedVisibility(!poster.genres.isNullOrBlank()) {
+                        if (!poster.genres.isNullOrBlank()) {
                             Text(
                                 text = poster.genres.toString(),
                                 style = Theme.textStyle.body.sm.regular,
@@ -118,24 +118,30 @@ fun PosterHorizontal(
                             )
                         }
                     }
-                    Rating(
-                        value = poster.rating,
-                        modifier = Modifier
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            )
-                    )
+
+                    if (poster.rating != 0f) {
+                        Rating(
+                            value = poster.rating,
+                            modifier = Modifier
+                                .sharedElement(
+                                    sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
+                                    animatedVisibilityScope = animatedVisibilityScope
+                                )
+                        )
+                    }
                 }
 
-                AnimatedVisibility(!poster.time.isNullOrBlank()) {
+                if (!poster.time.isNullOrBlank()) {
                     IconWithText(
+                        modifier = Modifier.padding(top = 8.dp),
                         icon = painterResource(Theme.icons.dueTone.clock),
                         text = poster.time.toString()
                     )
                 }
-                AnimatedVisibility(!poster.date.isNullOrBlank()) {
+
+                if (!poster.date.isNullOrBlank()) {
                     IconWithText(
+                        modifier = Modifier.padding(top = 8.dp),
                         icon = painterResource(Theme.icons.dueTone.calendar),
                         text = poster.date.toString()
                     )
@@ -146,8 +152,15 @@ fun PosterHorizontal(
 }
 
 @Composable
-private fun IconWithText(icon: Painter, text: String) {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+private fun IconWithText(
+    icon: Painter,
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.clock_icon),
@@ -160,4 +173,20 @@ private fun IconWithText(icon: Painter, text: String) {
             color = Theme.color.shade.secondary
         )
     }
+}
+
+@Preview
+@Composable
+private fun PosterHorizontal() {
+    PosterItemHorizontal(
+        movie = Poster(
+            id = 1,
+            name = "The Flash",
+            imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
+            rating = 0f,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(88.dp)
+    )
 }

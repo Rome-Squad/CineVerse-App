@@ -2,8 +2,9 @@ package com.giraffe.user
 
 import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
+import javax.inject.Inject
 
-class AuthenticationLocalDataSourceImp(
+class AuthenticationLocalDataSourceImp @Inject constructor(
     private val dataStore: AuthenticationDatastore
 ) : AuthenticationLocalDataSource {
     override suspend fun saveSessionId(sessionId: String) {

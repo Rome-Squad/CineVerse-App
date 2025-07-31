@@ -28,6 +28,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
@@ -37,33 +38,31 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.AddToCollectionContent
+import com.giraffe.details.components.CollectionBottomSheetContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.TypeOfScreen
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 
 @Composable
 fun MovieDetailsScreen(
-    movieID: Int,
     modifier: Modifier = Modifier,
-    navigateToReviews: (Int) -> Unit = {},
+    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
-    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) }),
     onClickPlay: () -> Unit,
     onClickPoster: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     navigateToMoviesRecommended: (Int, String) -> Unit,
+    viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -71,11 +70,11 @@ fun MovieDetailsScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 MovieDetailsEffect.NavigateToMovies -> {
-                  //  navController.navigateToMovieDetails(movieID)
+                    //navController.navigateToMovieDetails(movieID)
                 }
 
                 is MovieDetailsEffect.NavigateToReviews -> {
-                    navigateToReviews(effect.movieId)
+                    navigateToReviews(effect.reviews)
                 }
 
                 is MovieDetailsEffect.Error -> {}
@@ -135,7 +134,6 @@ private fun MovieDetailsContent(
             }
         }
     }
-
     LazyColumn(
         state = scrollState,
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -163,7 +161,7 @@ private fun MovieDetailsContent(
                     imageUrl = state.movie.posterUrl,
                     genres = state.movieGenres,
                     duration = state.movie.duration,
-                    releaseYear = state.movie.releaseYear,
+                    releaseYear = state.movie.releaseYear ?: "",
                     onClickAdd = interaction::onAddToCollectionClick,
                     onClickPlay = onClickPlay,
                     isScrolled = isScrollingUp,
@@ -172,37 +170,47 @@ private fun MovieDetailsContent(
                 )
             }
         }
-        item {
-            InfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.storyline),
-                description = state.movie.description
-            )
+        if (state.movie.description.isNotBlank()) {
+            item {
+                InfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.storyline),
+                    description = state.movie.description
+                )
+            }
         }
-        item {
-            StarCastSection(
-                title = stringResource(R.string.star_cast),
-                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
-                castList = state.cast
-            )
+
+        if (state.cast.isNotEmpty()) {
+            item {
+                StarCastSection(
+                    title = stringResource(R.string.star_cast),
+                    onCastClick = { interaction.navigateToCastDetailsScreen(it) },
+                    castList = state.cast
+                )
+            }
         }
-        item {
-            StaffInfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.behind_the_scenes),
-                staffList = state.crew
-            )
+        if (state.crew.isNotEmpty()) {
+            item {
+                StaffInfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.behind_the_scenes),
+                    staffList = state.crew
+                )
+            }
         }
-        item {
-            PosterListSection(
-                title = stringResource(R.string.you_might_also_like),
-                endText = stringResource(R.string.show_more),
-                posters = state.recommendedMovies,
-                onClickEndText = {
-                    interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
-                },
-                onClickPoster = { onClickPoster(it.id) }
-            )
+
+        if (state.recommendedMovies.isNotEmpty()) {
+            item {
+                PosterListSection(
+                    title = stringResource(R.string.you_might_also_like),
+                    endText = stringResource(R.string.show_more),
+                    posters = state.recommendedMovies,
+                    onClickEndText = {
+                        interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
+                    },
+                    onClickPoster = { onClickPoster(it.id) }
+                )
+            }
         }
         item {
             RatingSection(
@@ -210,18 +218,19 @@ private fun MovieDetailsContent(
                 onClickCard = interaction::onGiveStarsClick
             )
         }
-        item {
-            AnimatedVisibility(visible = state.movieReviews.isNotEmpty()) {
 
+        if (state.movieReviews.isNotEmpty()) {
+            item {
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     SectionTitle(
                         modifier = Modifier,
                         title = stringResource(R.string.top_reviews),
                         clickableText = stringResource(R.string.show_more),
-                      onClickableText = {interaction.navigateToReviews(state.movie.id)}
                     )
 
                     val reviewsToShow = state.movieReviews.take(3)
@@ -244,22 +253,10 @@ private fun MovieDetailsContent(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp),
         content = {
-            AddToCollectionContent(
-                title = "My Favorite TV",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "My WatchLis",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "Cristian Bale Movies",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
+            CollectionBottomSheetContent(
+                onCreateCollectionClick = interaction::onCreateCollectionClick
             )
         },
     )
@@ -272,14 +269,17 @@ private fun MovieDetailsContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RatingSelector()
+                RatingSelector(
+                    rate = state.currentRating,
+                    onRateClick = interaction::onRateChange
+                )
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
-                    enabled = false,
-                    onClick = onClickPlay
+                    enabled = state.currentRating > 0,
+                    onClick = interaction::onAddRatingClick
                 )
             }
         }

@@ -12,12 +12,15 @@ import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CastCreditViewModel(
+@HiltViewModel
+class CastCreditViewModel @Inject constructor(
     private val getPeopleMediaCredits: GetPeopleMediaCreditsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
     private val getMovieGenres: GetMovieGenresUseCase,

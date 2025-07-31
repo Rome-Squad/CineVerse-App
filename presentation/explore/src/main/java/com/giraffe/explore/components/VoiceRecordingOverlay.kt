@@ -1,12 +1,10 @@
 package com.giraffe.explore.components
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,74 +26,75 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.media.explore.R
 
+
 @Composable
 fun VoiceRecordingOverlay(
     modifier: Modifier = Modifier,
-    isRecording: Boolean
+    isRecording: Boolean,
+    rmsDbLevel: Float = 0f
 ) {
     if (!isRecording) return
 
-    val infiniteTransition = rememberInfiniteTransition(label = stringResource(R.string.voice_pulse))
+    val clampedScale = (rmsDbLevel / 10f + 0.8f).coerceIn(0.8f, 1.6f)
 
-    val pulse1 by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = stringResource(R.string.pulse1)
-    )
-
-    val pulse2 by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1300, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = stringResource(R.string.pulse2)
-    )
-
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f)),
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(contentAlignment = Alignment.Center) {
-                PulseCircle(scale = pulse2, color = Theme.color.shade.primary.copy(alpha = 0.3f))
-                PulseCircle(scale = pulse1, color = Theme.color.shade.primary.copy(alpha = 0.5f))
+        Box(
+            modifier = Modifier.size(100.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            PulseCircle(
+                scale = clampedScale,
+                color = Theme.color.shade.primary.copy(alpha = 0.4f)
+            )
 
-                Icon(
-                    painter = painterResource(id = Theme.icons.outline.microphone),
-                    contentDescription = stringResource(R.string.microphone),
-                    tint = Theme.color.shade.primary,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .padding(bottom = 16.dp)
+            Icon(
+                painter = painterResource(id = Theme.icons.outline.microphone),
+                contentDescription = stringResource(R.string.microphone),
+                tint = Theme.color.shade.primary,
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(bottom = 16.dp)
+            )
+        }
+
+        Text(
+            text = stringResource(R.string.recording),
+            style = Theme.textStyle.body.md.semiBold,
+            color = Theme.color.shade.primary
+        )
+    }
+}
+
+@Composable
+fun PulseCircle(scale: Float, color: Color) {
+    val animatedScale = remember { Animatable(1f) }
+
+    LaunchedEffect(scale) {
+        if (kotlin.math.abs(animatedScale.value - scale) > 0.05f) {
+            animatedScale.animateTo(
+                targetValue = scale,
+                animationSpec = spring(
+                    stiffness = Spring.StiffnessLow,
+                    dampingRatio = Spring.DampingRatioMediumBouncy
                 )
-            }
-
-            Text(
-                text = stringResource(R.string.recording),
-                style = Theme.textStyle.body.md.semiBold,
-                color = Theme.color.shade.primary
             )
         }
     }
-}
-@Composable
-fun PulseCircle(scale: Float, color: Color) {
-    Box(
-        modifier = Modifier
-            .size(100.dp)
-            .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
-                alpha = 1f - scale
-            }
-            .background(color, shape = CircleShape)
-    )
+
+    if (animatedScale.value > 1f) {
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .graphicsLayer {
+                    scaleX = animatedScale.value
+                    scaleY = animatedScale.value
+                    alpha = 1f - (animatedScale.value - 0.8f).coerceIn(0f, 1f)
+                }
+                .background(color, shape = CircleShape)
+        )
+    }
 }

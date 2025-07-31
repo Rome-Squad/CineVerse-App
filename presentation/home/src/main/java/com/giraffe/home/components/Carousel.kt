@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,10 +42,13 @@ fun Carousel(
     movieCards: List<PopularMediaUiModel>,
     onClickItem: (Int, MediaType) -> Unit
 ) {
+    if (movieCards.isEmpty()) return
     val pagerState = rememberPagerState(2) { movieCards.size }
     val currentMovieCard = movieCards[pagerState.currentPage]
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
-    val width = screenWidthDp - 48.dp
+    val density = LocalDensity.current
+
+    val screenWidth = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
+    val width = screenWidth - 48.dp
     val initialHeight = width * (200f / 312f)
 
     Box(
@@ -81,6 +87,7 @@ fun Carousel(
                     .height(dynamicHeight)
                     .zIndex(zIndex)
                     .alpha(alpha)
+                    .clip(shape = RoundedCornerShape(Theme.radius.lg))
                     .clickable {
                         onClickItem(
                             movieCard.id,
@@ -108,7 +115,7 @@ fun Carousel(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .widthIn(max = screenWidthDp - 48.dp)
+                        .widthIn(max = screenWidth - 48.dp)
                         .padding(horizontal = 50.dp),
                     text = movieCard.title,
                     style = Theme.textStyle.body.md.medium,

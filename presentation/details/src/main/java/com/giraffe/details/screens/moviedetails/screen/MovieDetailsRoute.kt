@@ -26,8 +26,7 @@ fun NavGraphBuilder.movieDetailsRoute(
         val movieID = backStackEntry.toRoute<MovieDetailsRoute>().id
 
         MovieDetailsScreen(
-            movieID = movieID,
-            navigateToReviews = { navigateToReviews(movieID) },
+            navigateToReviews = navigateToReviews,
             onBackButtonClick = onBackButtonClick,
             onClickPlay = {},
             onClickPoster = {
