@@ -1,6 +1,8 @@
 package com.giraffe.details.screens.moviedetails
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.groupByRole
@@ -8,9 +10,11 @@ import com.giraffe.details.models.toCastUi
 import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toMovieUi
 import com.giraffe.details.models.toReviewUI
+import com.giraffe.details.screens.moviedetails.screen.MovieDetailsRoute
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
@@ -19,19 +23,23 @@ import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class MovieDetailsViewModel(
-    movieID: Int,
+@HiltViewModel
+class MovieDetailsViewModel @Inject constructor(
     val getMovieDetails: GetMovieDetailsUseCase,
     val getMovieGenres: GetMovieGenresUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
-    val setMovieRecentUseCase: SetMovieRecentUseCase
+    val setMovieRecentUseCase: SetMovieRecentUseCase,
+    savedStateHandle: SavedStateHandle,
+    val addRatingUseCase: AddMovieRatingUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
+    private val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
 
     init {
         loadMovieDetails(movieID)
@@ -203,7 +211,6 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-
     //user interaction listeners
     override fun onAddToCollectionClick() {
         updateState {
@@ -288,6 +295,12 @@ class MovieDetailsViewModel(
         sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
     }
 
+    override fun onRateChange(rate: Int) {
+        safeExecute {
+            updateState { it.copy(currentRating = rate) }
+        }
+    }
+
     override fun onCollectionClick() {
     }
 
@@ -295,6 +308,12 @@ class MovieDetailsViewModel(
     }
 
     override fun onAddRatingClick() {
+        updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
+        safeExecute {
+            addRatingUseCase(
+                movieId = state.value.movie.id,
+                ratingValue = state.value.currentRating.toFloat()
+            )
+        }
     }
-
 }

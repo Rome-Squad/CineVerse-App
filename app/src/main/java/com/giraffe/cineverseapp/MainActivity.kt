@@ -9,13 +9,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.explore.ExploreApi
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-   // private val authApi: AuthenticationApi by inject()
-  private val explorApi: ExploreApi by inject()
+    @Inject
+    lateinit var authApi: AuthenticationApi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -30,8 +31,8 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             CineVerseTheme {
-                //authApi.LoginContainer {}
-                explorApi.ExploreContainer()
+                authApi.LoginContainer {
+                }
             }
         }
     }

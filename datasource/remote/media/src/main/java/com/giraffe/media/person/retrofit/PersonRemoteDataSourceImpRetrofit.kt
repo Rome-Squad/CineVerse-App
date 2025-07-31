@@ -2,8 +2,9 @@ package com.giraffe.media.person.retrofit
 
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.util.RetrofitRequestBuilder
+import javax.inject.Inject
 
-class PersonRemoteDataSourceImplRetrofit(
+class PersonRemoteDataSourceImplRetrofit @Inject constructor(
     private val retrofitRequestBuilder: RetrofitRequestBuilder<PersonApiServiceRetrofit>
 ) : PersonRemoteDataSource {
 

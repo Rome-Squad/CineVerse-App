@@ -64,6 +64,7 @@ fun StarCastSection(
                                 character = cast.role,
                                 actorImage = cast.urlImage.toString(),
                                 modifier = Modifier
+                                    .clip(shape = RoundedCornerShape(Theme.radius.lg))
                                     .clickable(
                                         onClick = { onCastClick(cast.id) }
                                     )
@@ -84,7 +85,7 @@ fun CastCard(
     modifier: Modifier = Modifier
 ) {
     CustomCard(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(Theme.radius.lg),
         modifier = modifier.width(200.dp)
     ) {
         Row(

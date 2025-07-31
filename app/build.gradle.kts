@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.google.firebase.firebase.perf)
     alias(libs.plugins.ksp)
+    id("com.google.dagger.hilt.android")
 }
 
 fun getSecret(key: String): String {
@@ -126,8 +127,6 @@ dependencies {
     //datastore
     implementation(libs.datastore.preferences)
 
-    //koin
-    implementation(libs.koin.androidx.compose)
 
     //serialization
     implementation(libs.gson)
@@ -142,7 +141,6 @@ dependencies {
 
     //worker
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.koin.androidx.workmanager)
 
     implementation(libs.androidx.navigation.compose)
 
@@ -161,4 +159,11 @@ dependencies {
     // OkHttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    // Hilt DI
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    implementation(libs.androidx.hilt.work)
 }

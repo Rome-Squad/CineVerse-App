@@ -1,6 +1,7 @@
 package com.giraffe.details.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.EaseIn
@@ -34,48 +35,55 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
     duration: String? = null,
     durationAnimation: Int = 400
 ) {
+    AnimatedVisibility(name.isNotBlank()) {
 
-    val topPadding by animateDpAsState(
-        if (isScrolled) 0.dp else 16.dp
-    )
-    SharedTransitionLayout {
-        AnimatedContent(
-            targetState = isScrolled,
-            transitionSpec = {
-                fadeIn(
-                    animationSpec = tween(durationAnimation, easing = EaseIn)
-                ) togetherWith fadeOut(animationSpec = tween(durationAnimation, easing = EaseOut))
-            },
-            label = stringResource(R.string.animated_content)
-        ) { targetState ->
-            when (targetState) {
-                false -> {
-                    MainMovieOrSeriesDetails(
-                        type = type,
-                        posterUrl = imageUrl,
-                        name = name,
-                        genres = genres,
-                        rating = rating,
-                        duration = duration,
-                        releaseDate = releaseYear,
-                        sharedTransitionScope = this@SharedTransitionLayout,
-                        animatedVisibilityScope = this@AnimatedContent,
-                        onClickAdd = onClickAdd,
-                        onClickPlay = onClickPlay,
-                        modifier = modifier.padding(top = topPadding)
+        val topPadding by animateDpAsState(
+            if (isScrolled) 0.dp else 16.dp
+        )
+        SharedTransitionLayout {
+            AnimatedContent(
+                targetState = isScrolled,
+                transitionSpec = {
+                    fadeIn(
+                        animationSpec = tween(durationAnimation, easing = EaseIn)
+                    ) togetherWith fadeOut(
+                        animationSpec = tween(
+                            durationAnimation,
+                            easing = EaseOut
+                        )
                     )
-                }
+                },
+                label = stringResource(R.string.animated_content)
+            ) { targetState ->
+                when (targetState) {
+                    false -> {
+                        MainMovieOrSeriesDetails(
+                            type = type,
+                            posterUrl = imageUrl,
+                            name = name,
+                            genres = genres,
+                            rating = rating,
+                            duration = duration,
+                            releaseDate = releaseYear,
+                            sharedTransitionScope = this@SharedTransitionLayout,
+                            animatedVisibilityScope = this@AnimatedContent,
+                            onClickAdd = onClickAdd,
+                            onClickPlay = onClickPlay,
+                            modifier = modifier.padding(top = topPadding)
+                        )
+                    }
 
-                true -> {
-                    MinimizedInfoRow(
-                        posterUrl = imageUrl,
-                        name = name,
-                        sharedTransitionScope = this@SharedTransitionLayout,
-                        animatedVisibilityScope = this@AnimatedContent,
-                        onClickAdd = onClickAdd,
-                        onClickPlay = onClickPlay,
-                        modifier = modifier.padding(top = topPadding)
-                    )
+                    true -> {
+                        MinimizedInfoRow(
+                            posterUrl = imageUrl,
+                            name = name,
+                            sharedTransitionScope = this@SharedTransitionLayout,
+                            animatedVisibilityScope = this@AnimatedContent,
+                            onClickAdd = onClickAdd,
+                            onClickPlay = onClickPlay,
+                            modifier = modifier.padding(top = topPadding)
+                        )
+                    }
                 }
             }
         }
