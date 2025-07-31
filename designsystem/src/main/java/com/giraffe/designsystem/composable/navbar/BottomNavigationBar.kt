@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable.navbar
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +27,7 @@ fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     isBottomBarVisible: Boolean = true
 ) {
-    if(isBottomBarVisible) {
+    AnimatedVisibility(isBottomBarVisible) {
         Column(
             modifier = modifier.background(Theme.color.background.card)
         ) {
