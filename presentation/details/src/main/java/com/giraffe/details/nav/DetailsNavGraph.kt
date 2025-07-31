@@ -20,6 +20,8 @@ import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.navigateToReviews
 import com.giraffe.details.screens.seasons.screen.navigateToSeasons
 import com.giraffe.details.screens.seasons.screen.seasonsRoute
+import com.giraffe.details.screens.seriesReview.navigateToSeriesReview
+import com.giraffe.details.screens.seriesdetails.SeriesDetailsEffect
 import com.giraffe.details.screens.seriesdetails.screen.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.screen.seriesDetailsRoute
 
@@ -46,7 +48,8 @@ internal fun DetailsNavGraph(
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
             navigateToCastDetails = navController::navigateToCastDetails,
             navigateToSeason = navController::navigateToSeasons,
-            navigateToLogIn = navController::navigateLoginScreen
+            navigateToLogIn = navController::navigateLoginScreen,
+            navigateToReviews = navController::navigateToSeriesReview
         )
 
         seasonsRoute { if (navController.popBackStack().not()) onBackClick() }
