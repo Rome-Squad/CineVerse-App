@@ -165,7 +165,7 @@ private fun MovieDetailsContent(
                     imageUrl = state.movie.posterUrl,
                     genres = state.movieGenres,
                     duration = state.movie.duration,
-                    releaseYear = state.movie.releaseYear,
+                    releaseYear = state.movie.releaseYear ?: "",
                     onClickAdd = interaction::onAddToCollectionClick,
                     onClickPlay = onClickPlay,
                     isScrolled = isScrollingUp,
@@ -174,37 +174,47 @@ private fun MovieDetailsContent(
                 )
             }
         }
-        item {
-            InfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.storyline),
-                description = state.movie.description
-            )
+        if (state.movie.description.isNotBlank()) {
+            item {
+                InfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.storyline),
+                    description = state.movie.description
+                )
+            }
         }
-        item {
-            StarCastSection(
-                title = stringResource(R.string.star_cast),
-                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
-                castList = state.cast
-            )
+
+        if (state.cast.isNotEmpty()) {
+            item {
+                StarCastSection(
+                    title = stringResource(R.string.star_cast),
+                    onCastClick = { interaction.navigateToCastDetailsScreen(it) },
+                    castList = state.cast
+                )
+            }
         }
-        item {
-            StaffInfoSection(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.behind_the_scenes),
-                staffList = state.crew
-            )
+        if (state.crew.isNotEmpty()) {
+            item {
+                StaffInfoSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.behind_the_scenes),
+                    staffList = state.crew
+                )
+            }
         }
-        item {
-            PosterListSection(
-                title = stringResource(R.string.you_might_also_like),
-                endText = stringResource(R.string.show_more),
-                posters = state.recommendedMovies,
-                onClickEndText = {
-                    interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
-                },
-                onClickPoster = { onClickPoster(it.id) }
-            )
+
+        if (state.recommendedMovies.isNotEmpty()) {
+            item {
+                PosterListSection(
+                    title = stringResource(R.string.you_might_also_like),
+                    endText = stringResource(R.string.show_more),
+                    posters = state.recommendedMovies,
+                    onClickEndText = {
+                        interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
+                    },
+                    onClickPoster = { onClickPoster(it.id) }
+                )
+            }
         }
         item {
             RatingSection(
@@ -212,10 +222,9 @@ private fun MovieDetailsContent(
                 onClickCard = interaction::onGiveStarsClick
             )
         }
-        item {
 
-            AnimatedVisibility(state.movieReviews.isNotEmpty()) {
-
+        if (state.movieReviews.isNotEmpty()) {
+            item {
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
