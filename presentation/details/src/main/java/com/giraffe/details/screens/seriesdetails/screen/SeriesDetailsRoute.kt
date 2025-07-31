@@ -22,8 +22,8 @@ fun NavGraphBuilder.seriesDetailsRoute(
     navigateToCastDetails: (castID: Int) -> Unit,
     navigateToSeason: (seriesId: Int) -> Unit,
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
-
-    ) {
+    navigateToLogIn: () -> Unit
+) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         SeriesDetailsScreen(
             navigateToReviews = navigateToReviews,
@@ -32,6 +32,7 @@ fun NavGraphBuilder.seriesDetailsRoute(
             navigateToSeason = navigateToSeason,
             navigateToSeriesDetails = navigateToSeriesDetails,
             onBackButtonClick = onBackButtonClick,
+            navigateToLogIn = navigateToLogIn
         )
     }
 }

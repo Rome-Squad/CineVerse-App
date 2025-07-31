@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="you_re_almost_there">You\'re Almost There!</string>
+    <string name="log_in_to_save_movies_create_collections_and_get_personalized_recommendations">Log in to save movies, create collections, and get personalized recommendations.</string>
+    <string name="not_now">Not Now</string>
+    <string name="log_in">Log In</string>
+</resources>

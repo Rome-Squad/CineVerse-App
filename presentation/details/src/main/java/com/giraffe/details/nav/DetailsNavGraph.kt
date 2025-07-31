@@ -3,6 +3,9 @@ package com.giraffe.details.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.details.nav.route.loginRoute
+import com.giraffe.details.nav.route.navigateLoginScreen
 import com.giraffe.details.screens.castCredit.castCreditRoute
 import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
@@ -24,7 +27,8 @@ import com.giraffe.details.screens.seriesdetails.screen.seriesDetailsRoute
 internal fun DetailsNavGraph(
     navController: NavHostController,
     startDestinationRoute: Any,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    authApi: AuthenticationApi
 ) {
     NavHost(
         navController = navController,
@@ -42,7 +46,8 @@ internal fun DetailsNavGraph(
             navigateToRecommendedSeries = navController::navigateToRecommendedSeries,
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
             navigateToCastDetails = navController::navigateToCastDetails,
-            navigateToSeason = navController::navigateToSeasons               // change this to navigate to season screen
+            navigateToSeason = navController::navigateToSeasons,               // change this to navigate to season screen
+            navigateToLogIn = navController::navigateLoginScreen
         )
 
         seasonsRoute { if (navController.popBackStack().not()) onBackClick() }
@@ -77,6 +82,8 @@ internal fun DetailsNavGraph(
         galleryRoute(
             onBackClick = { navController.navigateUp() }
         )
+
+        loginRoute(authApi)
 
 //        reviewRoute(navController)
     }
