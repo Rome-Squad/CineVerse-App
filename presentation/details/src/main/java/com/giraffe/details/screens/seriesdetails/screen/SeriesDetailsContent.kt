@@ -82,7 +82,7 @@ fun SeriesDetailsContent(
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
                 MainMovieOrSeriesDetailsAnimatedContent(
-                    type = TypeOfScreen.SERIES.name,
+                    type = stringResource(id = TypeOfScreen.SERIES.titleResId),
                     name = state.seriesDetails.name,
                     rating = state.seriesDetails.rating,
                     imageUrl = state.seriesDetails.posterUrl,
