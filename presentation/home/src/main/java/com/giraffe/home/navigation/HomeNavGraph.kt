@@ -1,23 +1,26 @@
 package com.giraffe.home.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
-import com.giraffe.designsystem.composable.BottomNavigationBar
-import com.giraffe.designsystem.composable.BottomTab
+import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
+import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.home.screen.home.HomeRoute
+import com.giraffe.home.screen.home.HomeTab
 import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
@@ -29,27 +32,41 @@ fun HomeNavGraph(
     detailsApi: DetailsApi,
     exploreApi: ExploreApi
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var currentRoute = navBackStackEntry?.destination
-    val bottomBarRoutes = listOf(
-        HomeRoute::class,
-        DiscoverRoute::class
+
+    val homeTab = HomeTab(
+        labelRes = R.string.home,
+        iconRes = Theme.icons.outline.home
     )
-    var isBottomBarVisible by remember { mutableStateOf(true) }
-    var selectedTabBottomBar by remember { mutableStateOf(BottomTab.Home) }
+    val exploreTab = ExploreTab(
+        labelRes = R.string.explore,
+        iconRes = Theme.icons.outline.search
+    )
 
+    val bottomTabs = listOf(
+        homeTab,
+        exploreTab
+    )
 
-    isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
-        navDestination.route?.let { route ->
-            bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName ?: "")
-            }
-        } == true
-    } == true
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRouteString = navBackStackEntry?.destination?.route
 
+    val currentRoute = when (currentRouteString) {
+        HomeRoute::class.qualifiedName -> HomeRoute
+        ExploreRoute::class.qualifiedName -> ExploreRoute
+        else -> null
+    }
 
+    var isBottomBarVisible by remember {
+        mutableStateOf(
+            true
+        )
+    }
 
-
+    LaunchedEffect(currentRouteString) {
+        if (currentRouteString == HomeRoute::class.qualifiedName) {
+            isBottomBarVisible = true
+        }
+    }
     Column {
         NavHost(
             navController = navController,
@@ -58,13 +75,24 @@ fun HomeNavGraph(
         ) {
 
             homeRoute(
-                navigateToMoviesScreen = navController::navigateToMoviesList,
-                navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
-                navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
+                navigateToMoviesScreen = { sectionType, sectionTitle ->
+                    navController.navigateToMoviesList(sectionType, sectionTitle)
+                    isBottomBarVisible = false
+                },
+                navigateToMoviesDetailsScreen = {
+                    navController.navigateToMovieDetails(it)
+                    isBottomBarVisible = false
+                },
+                navigateToSeriesDetailsScreen = {
+                    navController.navigateToSeriesDetails(it)
+                    isBottomBarVisible = false
+                }
             )
 
             moviesListRoute(
-                onBackClick = navController::popBackStack,
+                onBackClick = {
+                    navController.popBackStack()
+                },
                 navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
                 navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
             )
@@ -84,42 +112,25 @@ fun HomeNavGraph(
                 }
             }
 
-            composable<DiscoverRoute> {
+            composable<ExploreRoute> {
                 exploreApi.ExploreContainer {
                     isBottomBarVisible = it
+                    Log.d("TAG", "explore container say $it but the bottom bar is $isBottomBarVisible")
                 }
             }
         }
 
         BottomNavigationBar(
-            selectedTab = selectedTabBottomBar,
+            tabs = bottomTabs,
+            selectedTabRoute = currentRoute,
             isBottomBarVisible = isBottomBarVisible,
-            onTabSelected = {
-                when (it) {
-                    BottomTab.Explore -> {
-                        selectedTabBottomBar = BottomTab.Explore
-                        navController.navigate(DiscoverRoute) {
-                            popUpTo(navController.graph.startDestinationRoute ?: "") {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+            onTabSelected = { tab ->
+                navController.navigate(tab.route) {
+                    popUpTo(navController.graph.startDestinationRoute ?: "") {
+                        saveState = true
                     }
-
-                    BottomTab.Home -> {
-                        selectedTabBottomBar = BottomTab.Home
-                        navController.navigate(HomeRoute) {
-                            popUpTo(navController.graph.startDestinationRoute ?: "") {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-
-                    else -> {
-                    }
+                    launchSingleTop = true
+                    restoreState = true
                 }
             }
         )

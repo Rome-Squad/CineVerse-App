@@ -1,4 +1,4 @@
-package com.giraffe.designsystem.composable
+package com.giraffe.designsystem.composable.navbar
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -11,29 +11,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.R
-import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.composable.BuildingBlock
 import com.giraffe.designsystem.theme.Theme
 
-enum class BottomTab {
+/*enum class BottomTab {
     Home, Explore, Match, Me
-}
+}*/
 
 @Composable
 fun BottomNavigationBar(
-    selectedTab: BottomTab,
-    onTabSelected: (BottomTab) -> Unit,
+    tabs: List<BottomTab<out Route>>,
+    selectedTabRoute: Route?,
+    onTabSelected: (BottomTab<out Route>) -> Unit,
     modifier: Modifier = Modifier,
     isBottomBarVisible: Boolean = true
 ) {
@@ -51,11 +45,12 @@ fun BottomNavigationBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                BottomTab.entries.forEach { tab ->
+                tabs.forEach { tab ->
+                    val isSelected = selectedTabRoute == tab.route
                     BuildingBlock(
-                        icon = tab.getPainterForTab(),
-                        label = tab.getLabelForTab(),
-                        isSelected = selectedTab == tab,
+                        icon = painterResource(tab.iconRes),
+                        label = stringResource(tab.labelRes),
+                        isSelected = isSelected,
                         modifier = Modifier
                             .weight(1f)
                             .clickable { onTabSelected(tab) }
@@ -66,6 +61,7 @@ fun BottomNavigationBar(
         }
     }
 }
+/*
 
 @Composable
 private fun BottomTab.getLabelForTab(): String = when (this) {
@@ -82,6 +78,8 @@ private fun BottomTab.getPainterForTab(): Painter = when (this) {
     BottomTab.Match -> painterResource(Theme.icons.outline.magicStick)
     BottomTab.Me -> painterResource(Theme.icons.outline.userSquare)
 }
+*/
+/*
 
 @PreviewLightDark
 @Composable
@@ -89,8 +87,8 @@ fun BottomNavigationBarPreview() {
     var selectedTab by rememberSaveable { mutableStateOf(BottomTab.Home) }
     CineVerseTheme {
         BottomNavigationBar(
-            selectedTab = selectedTab,
+            selectedTabRoute = selectedTab,
             onTabSelected = { selectedTab = it }
         )
     }
-}
+}*/
