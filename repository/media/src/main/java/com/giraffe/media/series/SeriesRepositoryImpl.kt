@@ -21,8 +21,9 @@ import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SeriesRepositoryImpl(
+class SeriesRepositoryImpl @Inject constructor(
     private val remote: SeriesRemoteDataSource,
     private val local: SeriesLocalDateSource,
     private val localExploreDataSource: LocalExploreDataSource

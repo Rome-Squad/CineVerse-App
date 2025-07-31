@@ -37,7 +37,7 @@ fun TransitionBetweenColumnAndVerticalGrid(
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             targetState = isListSelected,
-            label = stringResource(R.string.viewtoggleanimation),
+            label = stringResource(R.string.view_toggle_animation),
             transitionSpec = {
                 (fadeIn(animationSpec = tween(220, delayMillis = 90, easing = EaseIn)) +
                         scaleIn(

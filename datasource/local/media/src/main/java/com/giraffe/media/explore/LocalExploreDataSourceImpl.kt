@@ -1,12 +1,13 @@
 package com.giraffe.media.explore
 
-import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
+import javax.inject.Inject
 
-class LocalExploreDataSourceImpl(
+class LocalExploreDataSourceImpl @Inject constructor(
     private val dao: ExploreSearchKeywordDao
 ) : LocalExploreDataSource {
     override fun getSearchHistory() = safeFlow {

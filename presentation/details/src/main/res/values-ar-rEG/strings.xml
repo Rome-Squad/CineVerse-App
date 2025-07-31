@@ -49,5 +49,10 @@
     <string name="season">الموسم %1$s</string>
     <string name="split">، </string>
     <string name="best_of_">أفضل ما في %1$s</string>
-    <string name="viewtoggleanimation">عرض تبديل الرسوم المتحركة</string>
+    <string name="view_toggle_animation">عرض تبديل الرسوم المتحركة</string>
+    <string name="video_library_icon">أيقونة مكتبة الفيديو</string>
+    <string name="no_collections_yet">لا توجد مجموعات بعد</string>
+    <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">أنشئ مجموعة جديدة لبدء حفظ أفلامك ومسلسلاتك المفضلة.</string>
+    <string name="create_collection">انشاء مجموعة</string>
+
 </resources>

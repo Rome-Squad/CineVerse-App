@@ -1,5 +1,6 @@
 package com.giraffe.authentication.screen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.authentication.R
 import com.giraffe.authentication.composable.LoginForm
 import com.giraffe.authentication.composable.LogoSection
@@ -23,12 +25,11 @@ import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
 import com.giraffe.designsystem.theme.Theme
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = koinViewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
     navigateToHomeScreen: () -> Unit,
     navigateToWebViewScreen: () -> Unit = {},
     navigateToResetPasswordScreen: () -> Unit = {},
@@ -55,20 +56,23 @@ fun LoginScreen(
 
 
     LoginContent(
-        modifier = modifier, state = state, interaction = viewModel
+        modifier = modifier,
+        state = state,
+        interaction = viewModel
     )
 }
 
 @Composable
 private fun LoginContent(
-    modifier: Modifier,
     state: LoginScreenState,
-    interaction: LoginInteractionListener
+    interaction: LoginInteractionListener,
+    modifier: Modifier,
+    scrollState: ScrollState = rememberScrollState()
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
             .background(Theme.color.background.screen)
             .systemBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,6 +101,7 @@ private fun LoginContent(
             isLoading = false,
             onClick = interaction::onCreateNewAccountClick
         )
+
         BaseBottomSheet(
             isVisible = state.isVisibleCreateNewAccountBottomSheet,
             onDismiss = interaction::onDismissCreateNewAccountBottomSheet,

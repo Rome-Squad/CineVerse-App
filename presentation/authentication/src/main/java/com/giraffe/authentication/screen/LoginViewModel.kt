@@ -2,13 +2,14 @@ package com.giraffe.authentication.screen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.giraffe.authentication.R
 import com.giraffe.authentication.base.BaseViewModel
-import com.giraffe.user.exception.EmptyUsernameException
-import com.giraffe.user.exception.InvalidPasswordException
-import com.giraffe.user.exception.InvalidUsernameOrPasswordException
 import com.giraffe.user.usecase.LoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
 ) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
@@ -19,7 +20,8 @@ class LoginViewModel(
         updateState {
             it.copy(
                 username = username,
-                usernameErrorMessage = null
+                usernameErrorMessage = null,
+                screenErrorMessage = null
             )
         }
     }
@@ -29,10 +31,12 @@ class LoginViewModel(
         updateState {
             it.copy(
                 password = password,
-                passwordErrorMessage = null
+                passwordErrorMessage = null,
+                screenErrorMessage = null
             )
         }
     }
+
     override fun onLoginClick() {
         updateState { it.copy(isLoadingLogin = true) }
 
@@ -48,50 +52,65 @@ class LoginViewModel(
     }
 
     private fun onLoginError(throwable: Throwable) {
-        if (throwable is EmptyUsernameException) {
-            updateState {
+        when (val exceptionMessage = mapExceptionToStringRes(throwable)) {
+            R.string.invalid_password -> updateState {
                 it.copy(
-                    usernameErrorMessage = mapExceptionToStringRes(throwable),
+                    passwordErrorMessage = exceptionMessage,
+                    isLoadingLogin = false,
+                    usernameErrorMessage = null,
+                    screenErrorMessage = null
+                )
+            }
+
+            R.string.Empty_username -> updateState {
+                it.copy(
+                    usernameErrorMessage = exceptionMessage,
+                    isLoadingLogin = false,
+                    passwordErrorMessage = null,
+                    screenErrorMessage = null
+                )
+            }
+
+            R.string.invalid_username_format -> updateState {
+                it.copy(
+                    usernameErrorMessage = exceptionMessage,
+                    isLoadingLogin = false,
+                    passwordErrorMessage = null,
+                    screenErrorMessage = null
+                )
+            }
+
+            else -> updateState {
+                it.copy(
+                    screenErrorMessage = exceptionMessage,
+                    isLoadingLogin = false,
+                    usernameErrorMessage = null,
                     passwordErrorMessage = null
                 )
             }
         }
 
-        if (throwable is InvalidPasswordException) {
-            updateState {
-                it.copy(
-                    passwordErrorMessage = mapExceptionToStringRes(throwable),
-                    usernameErrorMessage = null
-                )
-            }
-        }
-
-        if (throwable is InvalidUsernameOrPasswordException) {
-            updateState {
-                it.copy(
-                    usernameErrorMessage = mapExceptionToStringRes(throwable),
-                    passwordErrorMessage = mapExceptionToStringRes(throwable)
-                )
-            }
-        }
-
-        updateState { it.copy(isLoadingLogin = false) }
+        
         sendEffect(LoginEffect.Error(throwable))
     }
 
     override fun onGoToWebsiteClick() {
+        clearErrorMessages()
         sendEffect(LoginEffect.NavigateToWebViewScreen)
     }
 
     override fun onForgotPasswordClick() {
+        clearErrorMessages()
         sendEffect(LoginEffect.NavigateToResetPasswordScreen)
     }
 
     override fun onJoinAsGuestClick() {
+        clearErrorMessages()
         sendEffect(LoginEffect.NavigateToHomeScreen)
     }
 
     override fun onCreateNewAccountClick() {
+        clearErrorMessages()
         updateState {
             it.copy(
                 isVisibleCreateNewAccountBottomSheet = true
@@ -114,7 +133,18 @@ class LoginViewModel(
     }
 
     override fun navigateToHomeScreen() {
+        clearErrorMessages()
         sendEffect(LoginEffect.NavigateToHomeScreen)
+    }
+
+    private fun clearErrorMessages() {
+        updateState {
+            it.copy(
+                usernameErrorMessage = null,
+                passwordErrorMessage = null,
+                screenErrorMessage = null
+            )
+        }
     }
 
 }

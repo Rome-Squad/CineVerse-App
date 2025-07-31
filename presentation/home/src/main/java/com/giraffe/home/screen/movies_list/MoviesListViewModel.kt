@@ -18,10 +18,15 @@ import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.collections.emptyList
 
-class MoviesListViewModel(
+@HiltViewModel
+class MoviesListViewModel @Inject constructor(
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,

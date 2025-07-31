@@ -47,7 +47,7 @@ fun RecommendedContent(
                     title = title,
                     caption = stringResource(R.string.because_you_watched),
                     showBackButton = true,
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(8.dp),
                     onBackButtonClick = onBackClick
                 )
             }

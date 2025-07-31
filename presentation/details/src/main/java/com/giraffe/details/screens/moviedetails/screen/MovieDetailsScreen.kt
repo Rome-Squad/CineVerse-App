@@ -28,6 +28,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
@@ -37,7 +38,7 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.AddToCollectionContent
+import com.giraffe.details.components.CollectionBottomSheetContent
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
 import com.giraffe.details.components.RatingSelector
@@ -50,21 +51,18 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.TypeOfScreen
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 
 @Composable
 fun MovieDetailsScreen(
-    movieID: Int,
     modifier: Modifier = Modifier,
     navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
-    viewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieID) }),
     onClickPlay: (String) -> Unit,
     onClickPoster: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     navigateToMoviesRecommended: (Int, String) -> Unit,
+    viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -216,7 +214,9 @@ private fun MovieDetailsContent(
             AnimatedVisibility(state.movieReviews.isNotEmpty()) {
 
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     SectionTitle(
@@ -245,22 +245,10 @@ private fun MovieDetailsContent(
         isVisible = state.isVisibleAddToCollectionBottomSheet,
         onDismiss = interaction::onDismissAddToCollectionBottomSheet,
         title = stringResource(R.string.add_to_collection),
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp),
         content = {
-            AddToCollectionContent(
-                title = "My Favorite TV",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "My WatchLis",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
-            AddToCollectionContent(
-                title = "Cristian Bale Movies",
-                isLoading = false,
-                modifier = Modifier.padding(vertical = 16.dp)
+            CollectionBottomSheetContent(
+                onCreateCollectionClick = interaction::onCreateCollectionClick
             )
         },
     )
@@ -273,14 +261,17 @@ private fun MovieDetailsContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RatingSelector()
+                RatingSelector(
+                    rate = state.currentRating,
+                    onRateClick = interaction::onRateChange
+                )
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp),
                     text = stringResource(R.string.add_to_rate),
-                    enabled = false,
-                    onClick = { }
+                    enabled = state.currentRating > 0,
+                    onClick = interaction::onAddRatingClick
                 )
             }
         }

@@ -24,8 +24,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MoviesRepositoryImpl(
+class MoviesRepositoryImpl @Inject constructor(
     private val local: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
     private val localExploreDataSource: LocalExploreDataSource

@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
@@ -50,7 +51,6 @@ import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CastDetailsScreen(
@@ -60,7 +60,7 @@ fun CastDetailsScreen(
     navigateToSeriesDetails: (Int) -> Unit,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    castDetailsViewModel: CastDetailsViewModel = koinViewModel()
+    castDetailsViewModel: CastDetailsViewModel = hiltViewModel()
 ) {
     val state by castDetailsViewModel.state.collectAsState()
     val context = LocalContext.current
@@ -162,7 +162,7 @@ fun CastDetailsContent(
                 showBackButton = true,
                 hasBackground = false,
                 onBackButtonClick = onBackArrowClick,
-                modifier = Modifier.padding(horizontal = padding16)
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
         Column(
