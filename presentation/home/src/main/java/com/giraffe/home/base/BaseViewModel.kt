@@ -28,7 +28,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     val effect = _effect.receiveAsFlow()
 
     private val _error = MutableStateFlow<Int?>(null)
-    val error = _state.asStateFlow()
+    val error = _error.asStateFlow()
 
 
     protected fun updateState(updater: (S) -> S) {
