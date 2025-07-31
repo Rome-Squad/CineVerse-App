@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 
 class SeriesRepositoryImpl @Inject constructor(
     private val remote: SeriesRemoteDataSource,
@@ -58,10 +59,12 @@ class SeriesRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun getRecentSeries(): List<Series> = SafeCall {
-        local.getRecentSeries().map { dto ->
-            val seasons = local.getSeasonsForSeries(dto.id).map { it.toEntity() }
-            dto.toEntity(seasons)
+    override suspend fun getRecentSeries() = SafeCall {
+        local.getRecentSeries().map { seriesList ->
+            seriesList.map { series ->
+                val seasons = local.getSeasonsForSeries(series.id).map { it.toEntity() }
+                series.toEntity(seasons)
+            }
         }
     }
 

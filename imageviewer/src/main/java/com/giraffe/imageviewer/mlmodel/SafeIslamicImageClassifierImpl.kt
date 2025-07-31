@@ -16,36 +16,37 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
 ) : SafeIslamicImageClassifier {
 
     // Interpreter to run the Model
-    private val interpreter: Interpreter
-    private val labels = listOf("unsafe", "safe")
+    private val interpreterNsfwModel: Interpreter
+    private val interpreterNsfwModelTmdbData: Interpreter
 
     init {
         // Load the TFLite model from assets
-        val modelFile = loadModelFile(context)
-        interpreter = Interpreter(modelFile)
+        val nsfwModel = loadModelFile(context, fileName = "nsfw_model.tflite")
+        val nsfwModelTmdbData = loadModelFile(context, fileName = "nsfw_model_tmdb_data.tflite")
+        interpreterNsfwModel = Interpreter(nsfwModel)
+        interpreterNsfwModelTmdbData = Interpreter(
+            nsfwModelTmdbData
+        )
     }
 
-    fun classify(
-        bitmap: Bitmap
-    ): Map<String, Float> {
+    private fun classify(bitmap: Bitmap): Float {
 
-        // rescale the image to be suitable for the model's expected input
-        val resizedBitmap = bitmap.scale(
-            width = 224,
-            height = 224
-        )
-
-        // convert the bitmap to byte buffer
+        val resizedBitmap = bitmap.scale(224, 224)
         val inputBuffer = convertBitmapToByteBuffer(resizedBitmap)
 
-        //the output shape is Array<FloatArray(size = 2)>
-        val output = Array(1) { FloatArray(labels.size) }
+        val outputNsfwModel = Array(1) { FloatArray(1) }
+        val outputNsfwModelTmdbData = Array(1) { FloatArray(1) }
 
-        // run the model
-        interpreter.run(inputBuffer, output)
+        // Run both models
+        interpreterNsfwModel.run(inputBuffer, outputNsfwModel)
+        interpreterNsfwModelTmdbData.run(inputBuffer, outputNsfwModelTmdbData)
 
-        // return map of the results <label: String, score: Float>
-        return labels.zip(output[0].toList()).toMap()
+        val unsafeNsfwModel = outputNsfwModel[0][0]
+        val unsafeNsfwModelTmdbData = outputNsfwModelTmdbData[0][0]
+
+        val finalUnsafe = maxOf(unsafeNsfwModel, unsafeNsfwModelTmdbData)
+
+        return finalUnsafe
     }
 
     private fun convertBitmapToByteBuffer(
@@ -71,7 +72,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
 
     private fun loadModelFile(
         context: Context,
-        fileName: String = "mustafa_islamic_safe_image_classifier.tflite"
+        fileName: String = "optimized_model.tflite"
     ): ByteBuffer {
 
         val assetFileDescriptor = context.assets.openFd(fileName)
@@ -89,17 +90,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
     }
 
     override fun isUnsafe(bitmap: Bitmap): Boolean {
-
-        val result = classify(bitmap)
-
-        val safeScore = result["safe"] ?: 1f
-        val unsafeScore = result["unsafe"] ?: 1f
-
-        val isUnsafe = when {
-            unsafeScore > .25f -> true
-            unsafeScore >= safeScore -> true
-            else -> false
-        }
-        return isUnsafe
+        val unsafeScore = classify(bitmap)
+        return unsafeScore > 0.5f  // Threshold
     }
 }
