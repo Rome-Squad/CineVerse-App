@@ -15,7 +15,8 @@ import jakarta.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var authApi: AuthenticationApi
+    lateinit var authenticationApi: AuthenticationApi
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +32,7 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             CineVerseTheme {
-                authApi.LoginContainer {
-                }
+                authenticationApi.LoginContainer { }
             }
         }
     }

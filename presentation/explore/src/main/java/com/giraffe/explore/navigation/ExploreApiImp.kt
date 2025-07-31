@@ -11,12 +11,13 @@ class ExploreApiImp @Inject constructor(
     private val detailsApi: DetailsApi
 ) : ExploreApi {
     @Composable
-    override fun ExploreContainer() {
+    override fun ExploreContainer(onShowBottomBarChange: (Boolean) -> Unit) {
         val navController: NavHostController = rememberNavController()
 
         ExploreNavGraph(
             navController = navController,
-            detailsApi = detailsApi
+            detailsApi = detailsApi,
+            onShowBottomBarChange = onShowBottomBarChange
         )
     }
 }
