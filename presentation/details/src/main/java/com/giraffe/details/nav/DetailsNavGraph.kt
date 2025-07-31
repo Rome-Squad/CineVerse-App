@@ -41,7 +41,6 @@ internal fun DetailsNavGraph(
         )
 
         seriesDetailsRoute(
-            navigateToReviews = navController::navigateToReviews,
             onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
             navigateToRecommendedSeries = navController::navigateToRecommendedSeries,
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
@@ -84,7 +83,5 @@ internal fun DetailsNavGraph(
         )
 
         loginRoute(authApi)
-
-//        reviewRoute(navController)
     }
 }
