@@ -39,7 +39,7 @@ fun CollectionListSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
-            rows = GridCells.Adaptive(92.dp),
+            rows = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
