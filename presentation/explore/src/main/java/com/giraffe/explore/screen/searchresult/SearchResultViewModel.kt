@@ -19,7 +19,6 @@ import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
-import com.giraffe.media.util.NetworkInterceptor
 import kotlinx.coroutines.flow.map
 
 class SearchResultViewModel(

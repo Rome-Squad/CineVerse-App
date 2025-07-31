@@ -40,7 +40,7 @@ class RetrofitRequestBuilder<API>(
                     throw ApiDataException(response.code())
                 }
             } catch (e: Throwable) {
-                Log.e("RetrofitRequestBuilder", "Error during API call: ${e.localizedMessage}", e)
+                Log.e("RetrofitRequestBuilder", "Error during API call: ${e}", e)
                 throw mapToMediaException(e)
             }
         }

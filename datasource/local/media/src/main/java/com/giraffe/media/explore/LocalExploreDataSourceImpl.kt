@@ -13,7 +13,7 @@ class LocalExploreDataSourceImpl(
         dao.getSearchHistory()
     }
 
-    override fun getSearchKeywords(query: String) = safeFlow {
+    override  fun getSearchKeywords(query: String) = safeFlow {
         dao.getSearchKeywords(query)
     }
 

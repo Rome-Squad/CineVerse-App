@@ -22,6 +22,7 @@ import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpRetrofit
 import com.giraffe.user.retrofit.UserApiServiceRetrofit
 import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
+//import com.giraffe.media.util.NetworkInterceptor
 import com.giraffe.user.util.RetrofitUserRequestBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -40,11 +41,13 @@ val networkModule = module {
 
     single(named(BASE_URL)) { BASE_URL }
     single(named(ACCESS_TOKEN)) { ACCESS_TOKEN }
+   // single { NetworkInterceptor(get()) }
 
     single {
         createRetrofitClient(
             accessToken = get(named(ACCESS_TOKEN)),
             authenticationDatastore = get()
+            //networkInterceptor=get()
         )
     }
     single {

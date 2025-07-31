@@ -93,9 +93,10 @@ class MoviesRepositoryImpl(
         local.clearMovieCache()
     }
 
-    override fun getRecentlyMovies() = local.getRecentlyMovies().map { movies ->
-        movies.map(MovieCacheDto::toEntity)
-    }.catch { throw mapToDomainException(it) }
+    override fun getRecentlyMovies() =
+        local.getRecentlyMovies().map { movies ->
+            movies.map(MovieCacheDto::toEntity)
+        }.catch { throw mapToDomainException(it) }
 
     override suspend fun clearRecentlyMovies() = SafeCall { local.clearRecentlyMovies() }
 

@@ -2,11 +2,10 @@ package com.giraffe.explore.base
 
 import android.util.Log
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.NoInternetDataException
+import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
@@ -40,6 +39,7 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
         suspend CoroutineScope.() -> T
     ): Job {
         return coroutineScope.launch(dispatcher + exceptionHandler) {
+            _isConnect.update { true }
             block()
         }
     }
@@ -50,11 +50,11 @@ abstract class BaseViewModel<S>(initialState: S) : ViewModel() {
 
     private fun handler(): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
-            if (throwable is NoInternetDataException ){
-               // Log.e("Exception", "Caught exception: ${throwable.message.toString()}", throwable)
+            if (throwable is NoInternetException ){
+               Log.e("Exception", "Caught exception: ${throwable}", throwable)
 
                 _isConnect.update { false }
-                Log.e("IsConnect", "isConnect updated to false")  // Debug log
+                Log.e("IsConnectVm", "isConnect updated to false")
             }
 
            // Log.e("Exception", "Caught exception: ${throwable.message.toString()}", throwable)
