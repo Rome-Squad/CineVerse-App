@@ -3,7 +3,7 @@ package com.giraffe.cineverseapp.data.network
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.media.util.AuthInterceptor
 import com.giraffe.media.util.LanguageInterceptor
-//import com.giraffe.media.util.NetworkInterceptor
+import com.giraffe.media.util.NetworkInterceptor
 import com.giraffe.user.datastore.AuthenticationDatastore
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 fun createRetrofitClient(
     accessToken: String,
     authenticationDatastore: AuthenticationDatastore,
-   // networkInterceptor: NetworkInterceptor
+    networkInterceptor: NetworkInterceptor
 ): OkHttpClient {
     val loggingInterceptor = HttpLoggingInterceptor().apply {
         level =
@@ -24,7 +24,7 @@ fun createRetrofitClient(
         .addInterceptor(loggingInterceptor)
         .addInterceptor(LanguageInterceptor())
         .addInterceptor(SessionIdInterceptor(authenticationDatastore))
-       // .addInterceptor(networkInterceptor)
+        .addInterceptor(networkInterceptor)
         .build()
 }
 
