@@ -9,16 +9,13 @@ import com.giraffe.details.nav.route.navigateLoginScreen
 import com.giraffe.details.screens.castCredit.castCreditRoute
 import com.giraffe.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.details.screens.castDetails.castDetailsRoute
-import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.gallery.galleryRoute
 import com.giraffe.details.screens.gallery.navigateToGallery
 import com.giraffe.details.screens.moviedetails.screen.movieDetailsRoute
 import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
-import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.navigateToReviews
-import com.giraffe.details.screens.seasons.screen.navigateToSeasons
 import com.giraffe.details.screens.seasons.screen.seasonsRoute
 import com.giraffe.details.screens.seriesdetails.screen.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.screen.seriesDetailsRoute
@@ -47,6 +44,8 @@ internal fun DetailsNavGraph(
             navigateToCastDetails = navController::navigateToCastDetails,
             navigateToSeason = navController::navigateToSeasons,               // change this to navigate to season screen
             navigateToLogIn = navController::navigateLoginScreen
+            navController = navController,
+            navigateToReviews = navController::navigateToReviews,
         )
 
         seasonsRoute { if (navController.popBackStack().not()) onBackClick() }

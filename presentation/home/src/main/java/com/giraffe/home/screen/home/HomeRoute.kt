@@ -2,10 +2,20 @@ package com.giraffe.home.screen.home
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.designsystem.composable.navbar.BottomTab
+import com.giraffe.designsystem.composable.navbar.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeRoute
+object HomeRoute: Route
+
+class HomeTab(
+    override val labelRes: Int,
+    override val iconRes: Int
+) : BottomTab<HomeRoute> {
+    override val route = HomeRoute
+}
+
 
 fun NavGraphBuilder.homeRoute(
     navigateToMoviesScreen: (String, String) -> Unit,
