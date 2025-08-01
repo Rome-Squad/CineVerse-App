@@ -11,4 +11,8 @@ data class PersonSocialMediaDto(
     val instagramId: String? = null,
     @SerialName("youtube_id")
     val youtubeId: String? = null,
+    @SerialName("tiktok_id")
+    val tiktokId: String? = null,
+    @SerialName("twitter_id")
+    val twitterId: String? = null,
 )
