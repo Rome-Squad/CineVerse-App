@@ -61,4 +61,8 @@
     <string name="log_in_to_save_movies_create_collections_and_get_personalized_recommendations">Log in to save movies, create collections, and get personalized recommendations.</string>
     <string name="not_now">Not Now</string>
     <string name="log_in">Log In</string>
+    <string name="error_unknown">Something went wrong. Please try again later.</string>
+    <string name="error_not_found">Resource not found.</string>
+    <string name="error_access_denied">Access denied. You don’t have permission.</string>
+    <string name="error_network">Please check your internet connection.</string>
 </resources>

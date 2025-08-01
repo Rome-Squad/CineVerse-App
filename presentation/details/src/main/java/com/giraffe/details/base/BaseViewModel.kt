@@ -1,7 +1,13 @@
 package com.giraffe.details.base
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.details.R
+import com.giraffe.media.exception.AccessDeniedException
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.exception.NotFoundException
+import com.giraffe.media.exception.UnknownException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +75,17 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
     ) {
         coroutineScope.launch(dispatcher) {
             _effect.send(effect)
+        }
+    }
+
+    @StringRes
+    fun mapExceptionToStringRes(throwable: Throwable): Int {
+        return when (throwable) {
+            is NoInternetException -> R.string.error_network
+            is AccessDeniedException -> R.string.error_access_denied
+            is NotFoundException -> R.string.error_not_found
+            is UnknownException -> R.string.error_unknown
+            else -> R.string.error_unknown
         }
     }
 
