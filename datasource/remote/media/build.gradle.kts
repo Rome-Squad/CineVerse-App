@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(":repository:media"))
+
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
     implementation(libs.retrofit)

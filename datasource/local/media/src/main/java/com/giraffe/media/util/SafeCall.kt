@@ -8,6 +8,7 @@ import com.giraffe.media.exception.CorruptDatabaseDataException
 import com.giraffe.media.exception.DiskAccessDataException
 import com.giraffe.media.exception.InvalidIdDataException
 import com.giraffe.media.exception.MediaDataException
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.exception.UnknownNetworkDataException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -42,7 +43,7 @@ private fun mapToMediaException(throwable: Throwable): MediaDataException = when
     is StaleDataException -> CorruptDatabaseDataException()
 
     is IOException -> DiskAccessDataException()
-
+    is NoInternetDataException -> MediaDataException()
     is IllegalArgumentException,
     is IllegalStateException -> InvalidIdDataException()
 

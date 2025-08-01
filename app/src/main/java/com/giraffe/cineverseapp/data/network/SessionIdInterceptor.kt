@@ -1,7 +1,10 @@
 package com.giraffe.cineverseapp.data.network
 
+import android.util.Log
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.util.NetworkConstants.NEEDS_SESSION
 import com.giraffe.media.util.NetworkConstants.SESSION_ID
+//import com.giraffe.media.util.NetworkInterceptor
 import com.giraffe.user.datastore.AuthenticationDatastore
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -11,6 +14,7 @@ class SessionIdInterceptor(
     private val authenticationDatastore: AuthenticationDatastore
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
+
         val original = chain.request()
 
         val needsSession = original.header(NEEDS_SESSION) == "true"

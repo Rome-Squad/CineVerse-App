@@ -22,6 +22,11 @@ data class SearchResultScreenState(
     val actors: Flow<PagingData<ActorUi>> = flowOf(),
     val moviesGenres: List<GenreUi> = emptyList(),
     val seriesGenres: List<GenreUi> = emptyList(),
+    val errorMessage: Int? = null,
+    val isNetworkError: Boolean = false,
+    val isLoading:Boolean=false,
+
+
 )
 
 data class ActorUi(

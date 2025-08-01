@@ -1,14 +1,14 @@
 package com.giraffe.media.exception
 
-open class MediaDataException : Exception()
+open class MediaDataException: Exception()
 
-class NoInternetDataException : MediaDataException()
+
+class NoInternetDataException: MediaDataException()
 class RequestTimeoutDataException : MediaDataException()
 class TooManyRequestsDataException : MediaDataException()
 class ServerDataException : MediaDataException()
 class SerializationDataException : MediaDataException()
 class ApiDataException(val code: Int) : MediaDataException()
-class UnauthorizedAccessDataException : MediaDataException()
 class ForbiddenAccessDataException : MediaDataException()
 class RateLimitExceededDataException : MediaDataException()
 class NotFoundDataException : MediaDataException()

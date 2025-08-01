@@ -35,7 +35,8 @@ class PersonRepositoryImpl @Inject constructor(
             if (isPageCached) {
                 localDataSource.searchByName(personName, page).map(PersonCacheDto::toEntity)
             } else {
-                val remoteActors = remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
+                val remoteActors =
+                    remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
                 val updatedKeyword = keywordData?.copy(
                     actorsPages = keywordData.actorsPages + page,
                     searchedAt = System.currentTimeMillis()
@@ -48,6 +49,7 @@ class PersonRepositoryImpl @Inject constructor(
                 remoteActors
             }
         }
+
     }
 
     override suspend fun storeRecentPerson(person: Person) =
@@ -72,12 +74,12 @@ class PersonRepositoryImpl @Inject constructor(
         getPeopleForContent(content)
     }
 
-    private suspend fun getPeopleForContent(content: ContentType): List<Person> {
+    private suspend fun getPeopleForContent(content: ContentType) = SafeCall {
         val cachedPeople = loadPeopleFromCache(content)
-        return cachedPeople.ifEmpty { fetchAndCachePeople(content) }
+        cachedPeople.ifEmpty { fetchAndCachePeople(content) }
     }
 
-    private suspend fun fetchAndCachePeople(content: ContentType): List<Person> {
+    private suspend fun fetchAndCachePeople(content: ContentType) = SafeCall {
         val credits = content.fetchCredits()
 
         val cast = credits.cast.map { it.toEntity(PersonType.CAST) }
@@ -88,17 +90,17 @@ class PersonRepositoryImpl @Inject constructor(
 
         localDataSource.storePeople(dtos)
 
-        return people
+        people
     }
 
     private suspend fun loadPeopleFromCache(
         content: ContentType
-    ): List<Person> {
+    ) = SafeCall {
         val cachedDtos = when (content) {
             is ContentType.Movie -> localDataSource.getPeopleByMovieId(content.id)
             is ContentType.Series -> localDataSource.getPeopleBySeriesId(content.id)
         }
-        return cachedDtos.map(PersonCacheDto::toEntity)
+        cachedDtos.map(PersonCacheDto::toEntity)
     }
 
     override suspend fun getPersonDetails(personId: Int) = SafeCall {

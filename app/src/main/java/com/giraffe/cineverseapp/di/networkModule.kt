@@ -14,6 +14,7 @@ import com.giraffe.media.person.retrofit.PersonRemoteDataSourceImplRetrofit
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
+import com.giraffe.media.util.NetworkInterceptor
 import com.giraffe.media.util.RetrofitRequestBuilder
 import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
@@ -52,11 +53,13 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         @Named("AccessToken") accessToken: String,
-        authenticationDatastore: AuthenticationDatastore
+        authenticationDatastore: AuthenticationDatastore,
+        networkInterceptor: NetworkInterceptor
     ): OkHttpClient {
         return createRetrofitClient(
             accessToken = accessToken,
-            authenticationDatastore = authenticationDatastore
+            authenticationDatastore = authenticationDatastore,
+            networkInterceptor = networkInterceptor
         )
     }
 

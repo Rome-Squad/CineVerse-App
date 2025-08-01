@@ -12,4 +12,6 @@ interface ExploreRepository {
     suspend fun deleteKeyword(keyword: String)
 
     suspend fun clearSearchHistory()
+
+
 }

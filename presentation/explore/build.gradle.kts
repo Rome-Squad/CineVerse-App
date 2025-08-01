@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":api:details"))
     implementation(project(":api:explore"))
 
+
     implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.paging.compose)
@@ -66,4 +67,8 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 }

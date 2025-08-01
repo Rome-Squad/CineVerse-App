@@ -24,8 +24,10 @@ object SafeCall {
         return try {
             execute()
         } catch (e: Exception) {
-            throw mapToDomainException(e)
+            val mappedException = mapToDomainException(e)
+            throw mappedException
         }
+
     }
 
     fun mapToDomainException(e: Throwable): MediaException = when (e) {
