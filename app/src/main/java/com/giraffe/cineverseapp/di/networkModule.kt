@@ -54,13 +54,12 @@ object NetworkModule {
     fun provideOkHttpClient(
         @Named("AccessToken") accessToken: String,
         authenticationDatastore: AuthenticationDatastore,
-        networkInterceptor:NetworkInterceptor
-
+        networkInterceptor: NetworkInterceptor
     ): OkHttpClient {
         return createRetrofitClient(
             accessToken = accessToken,
             authenticationDatastore = authenticationDatastore,
-            networkInterceptor=networkInterceptor
+            networkInterceptor = networkInterceptor
         )
     }
 

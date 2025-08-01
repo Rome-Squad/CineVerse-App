@@ -1,5 +1,6 @@
 package com.giraffe.explore.base
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,36 +32,51 @@ import kotlinx.coroutines.launch
     private val _isConnect = MutableStateFlow<Boolean>(true)
     val isConnect = _isConnect.asStateFlow()
 
-    private val _isNoInternet = MutableStateFlow(false)
-    val isNoInternet = _isNoInternet.asStateFlow()
+     protected fun <T> safeExecute(
+         coroutineScope: CoroutineScope = viewModelScope,
+         dispatcher: CoroutineDispatcher = Dispatchers.IO,
+         exceptionHandler: CoroutineExceptionHandler = handler(),
+         block:
+         suspend CoroutineScope.() -> T
+     ): Job {
+         return coroutineScope.launch(dispatcher + exceptionHandler) {
+             _isConnect.update { true }
+             block()
+         }
+     }
 
-    protected fun <T> safeExecute(
-        coroutineScope: CoroutineScope = viewModelScope,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        exceptionHandler: CoroutineExceptionHandler = handler(),
-        block:
-        suspend CoroutineScope.() -> T
-    ): Job {
-        return coroutineScope.launch(dispatcher + exceptionHandler) {
-            _isNoInternet.update { true }
-            block()
-        }
-    }
+
+     protected fun <T> safeExecute(
+         coroutineScope: CoroutineScope = viewModelScope,
+         dispatcher: CoroutineDispatcher = Dispatchers.IO,
+         onSuccess: suspend (T) -> Unit,
+         onError: (Int, Boolean) -> Unit,
+         block: suspend () -> T
+     ): Job {
+         return coroutineScope.launch(dispatcher) {
+             try {
+                 val result = block()
+                 onSuccess(result)
+             } catch (e: Throwable) {
+                 Log.e("Exception","exception caught is ${e}")
+                 onError(mapExceptionToStringRes(e), e !is NoInternetException)
+             }
+         }
+     }
+
 
     protected fun updateState(updater: (S) -> S) {
 
         _state.update(updater)
     }
 
-    private fun handler(): CoroutineExceptionHandler {
-        return CoroutineExceptionHandler { _, throwable ->
-            if (throwable is NoInternetException) {
-                _isNoInternet.update { false }
-            }
+     private fun handler(onError: (Int, Boolean) -> Unit = {_,_->}): CoroutineExceptionHandler {
+         return CoroutineExceptionHandler { _, throwable ->
 
-            _error.update { mapExceptionToStringRes(throwable) }
-        }
-    }
+             onError(mapExceptionToStringRes(throwable), throwable !is NoInternetException)
+
+         }
+     }
 
     @StringRes
     fun mapExceptionToStringRes(throwable: Throwable): Int {

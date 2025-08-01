@@ -1,5 +1,6 @@
 package com.giraffe.explore.screen.searchresult
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,25 +45,28 @@ fun SearchResultScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val isNoInternet = viewModel.isNoInternet.collectAsState()
+    val isConnect = viewModel.isConnect.collectAsState()
 
-    if (isNoInternet.value) {
-        NoInternetScreen()
-    } else {
+
+    LaunchedEffect (isConnect.value){ Log.e("IsInternet","${isConnect.value}") }
+
+
         SearchResultContent(
             state = state,
             interactions = viewModel,
             navigateToMovieDetails = navigateToMovieDetails,
             navigateToSeriesDetails = navigateToSeriesDetails,
             navigateToCastDetails = navigateToCastDetails,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            isConnect = isConnect.value
         )
     }
-}
+
 
 @Composable
 fun SearchResultContent(
     state: SearchResultScreenState,
+    isConnect:Boolean,
     interactions: SearchResultInteractionListener,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
@@ -103,21 +108,43 @@ fun SearchResultContent(
                 Box(
                     modifier = Modifier.fillParentMaxSize(),
                 ) {
-
-                    if (posters.loadState.refresh is LoadState.Loading) {
-                        Progress(
-                            size = 32.dp,
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(top = 16.dp)
-                        )
+                    if (state.isNetworkError == isConnect) {
+                        NoInternetScreen()
                     } else {
-                        // Show content based on selected tab
-                        if (state.selectedTab == SearchTab.ACTORS) {
-                            if (actors.itemCount != 0) {
-                                ActorsSection(
-                                    actors = actors,
-                                    navigateToCastDetails = navigateToCastDetails
+
+                        if (posters.loadState.refresh is LoadState.Loading) {
+                            Progress(
+                                size = 32.dp,
+                                modifier = Modifier
+                                    .align(Alignment.TopCenter)
+                                    .padding(top = 16.dp)
+                            )
+                        } else {
+                            // Show content based on selected tab
+                            if (state.selectedTab == SearchTab.ACTORS) {
+                                if (actors.itemCount != 0) {
+                                    ActorsSection(
+                                        actors = actors,
+                                        navigateToCastDetails = navigateToCastDetails
+                                    )
+                                } else {
+                                    NothingFound(
+                                        modifier = Modifier
+                                            .padding(horizontal = 60.dp)
+                                            .padding(top = 195.dp)
+                                    )
+                                }
+                            } else if (posters.itemCount != 0) {
+                                TransitionLazyColumnToGrid(
+                                    posters = posters,
+                                    isListSelected = !state.isGridSelected,
+                                    onPosterClicked = { id ->
+                                        when (state.selectedTab) {
+                                            SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                            SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                            SearchTab.ACTORS -> navigateToCastDetails(id)
+                                        }
+                                    }
                                 )
                             } else {
                                 NothingFound(
@@ -126,24 +153,6 @@ fun SearchResultContent(
                                         .padding(top = 195.dp)
                                 )
                             }
-                        } else if (posters.itemCount != 0) {
-                            TransitionLazyColumnToGrid(
-                                posters = posters,
-                                isListSelected = !state.isGridSelected,
-                                onPosterClicked = { id ->
-                                    when (state.selectedTab) {
-                                        SearchTab.MOVIES -> navigateToMovieDetails(id)
-                                        SearchTab.SERIES -> navigateToSeriesDetails(id)
-                                        SearchTab.ACTORS -> navigateToCastDetails(id)
-                                    }
-                                }
-                            )
-                        } else {
-                            NothingFound(
-                                modifier = Modifier
-                                    .padding(horizontal = 60.dp)
-                                    .padding(top = 195.dp)
-                            )
                         }
                     }
                 }
@@ -151,7 +160,6 @@ fun SearchResultContent(
         }
     }
 }
-
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,

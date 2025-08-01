@@ -3,11 +3,14 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import com.giraffe.media.exception.NoInternetDataException
+import dagger.hilt.android.qualifiers.ApplicationContext
+import jakarta.inject.Inject
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-class NetworkInterceptor(private val context: Context): Interceptor {
+class NetworkInterceptor @Inject constructor(@ApplicationContext private val context: Context): Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         if (!isNetworkAvailable()) {

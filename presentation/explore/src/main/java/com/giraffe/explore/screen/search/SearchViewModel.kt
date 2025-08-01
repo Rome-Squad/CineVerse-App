@@ -42,10 +42,12 @@ class SearchViewModel @Inject constructor(
         getRecentViewed()
     }
 
-    private fun onFail(errorMsgRes: Int) = updateState { it.copy(errorMsgRes = errorMsgRes) }
+    private fun onFail(errorMsgRes: Int, isConnected: Boolean) =
+        updateState { it.copy(errorMsgRes = errorMsgRes, isConnected = isConnected) }
 
     private fun getRecentViewed() {
         viewModelScope.launch(Dispatchers.IO) {
+            updateState { it.copy(isConnected = true) }
             safeExecute(
                 onSuccess = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
@@ -73,6 +75,7 @@ class SearchViewModel @Inject constructor(
 
     private var searchJob: Job? = null
     override fun onQueryChange(query: String) {
+        updateState { it.copy(isConnected = true) }
         searchJob?.cancel()
         searchJob = safeExecute {
             updateState { it.copy(query) }

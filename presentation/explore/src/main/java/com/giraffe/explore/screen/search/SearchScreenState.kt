@@ -1,7 +1,6 @@
 package com.giraffe.explore.screen.search
 
 import com.giraffe.designsystem.uimodel.Poster
-
 data class SearchScreenState(
     val query: String = "",
     val errorMessageRes: Int = 0,
@@ -10,5 +9,6 @@ data class SearchScreenState(
     val recentPosters: List<Poster> = emptyList(),
     val isVoiceRecording: Boolean = false,
     val isPermissionGranted: Boolean = false,
-    val errorMsgRes: Int? = null
+    val errorMsgRes: Int? = null,
+    val isConnected: Boolean = true
 )
