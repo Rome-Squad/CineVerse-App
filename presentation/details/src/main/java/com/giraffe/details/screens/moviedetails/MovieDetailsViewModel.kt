@@ -80,9 +80,9 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoadingMovieDetails = false,
-                error = mapExceptionToStringRes(error)
             )
         }
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMovieGenres(genresIds: List<Int>) {
@@ -104,12 +104,8 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private fun loadMovieGenresError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoadingMovieDetails = false,
-                error = mapExceptionToStringRes(error)
-            )
-        }
+
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadRecommendedMovie(movieId: Int, page: Int) {
@@ -140,11 +136,10 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadRecommendedMovieError(error: Throwable) {
         updateState {
             it.copy(
-                isLoadingMovieDetails = false,
                 isLoadingRecommendedMovies = false,
-                error = mapExceptionToStringRes(error)
             )
         }
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMoviePeople(movieId: Int) {
@@ -172,11 +167,10 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMoviePeopleError(error: Throwable) {
         updateState {
             it.copy(
-                isLoadingMovieDetails = false,
                 isLoadingCast = false,
-                error = mapExceptionToStringRes(error)
             )
         }
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMovieReviews(movieId: Int) {
@@ -214,10 +208,9 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoadingReviews = false,
-                isLoadingMovieDetails = false,
-                error = mapExceptionToStringRes(error)
             )
         }
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     //user interaction listeners
@@ -302,8 +295,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun navigateToReviews(movieId: Int) {
-        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))
-    }
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))    }
 
     override fun onRateChange(rate: Int) {
         safeExecute {

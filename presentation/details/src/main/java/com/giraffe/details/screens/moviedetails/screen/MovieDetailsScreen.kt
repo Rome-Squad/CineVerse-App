@@ -1,6 +1,6 @@
 package com.giraffe.details.screens.moviedetails.screen
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -28,7 +27,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
@@ -38,7 +36,6 @@ import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
-import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 import com.giraffe.details.components.CollectionBottomSheetContent
@@ -49,6 +46,7 @@ import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
@@ -81,6 +79,7 @@ fun MovieDetailsScreen(
                     navigateToReviews(effect.movieId)
                 }
 
+                is MovieDetailsEffect.Error -> {}
                 is MovieDetailsEffect.NavigateToCollection -> {}
                 is MovieDetailsEffect.NavigateToLogin -> {}
                 is MovieDetailsEffect.NavigateToCastDetails -> navigateToCastDetails(effect.personId)
@@ -93,61 +92,29 @@ fun MovieDetailsScreen(
         }
     }
 
-    AnimatedContent(
-        state.isLoadingMovieDetails
-    ) { isLoading ->
-        when (isLoading) {
-            true -> Box(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(Theme.color.background.screen)
-                    .systemBarsPadding(),
-                contentAlignment = Alignment.Center
-            ) {
-                Progress(modifier = Modifier.size(40.dp))
-            }
 
-            false -> AnimatedContent(
-                state.error == null
-            ) { hasError ->
-                when (hasError) {
-                    true -> MovieDetailsContent(
-                        modifier = Modifier.fillMaxSize(),
-                        state = state,
-                        interaction = viewModel,
-                        onBackButtonClick = onBackButtonClick,
-                        onClickPlay = onClickPlay,
-                        onClickPoster = onClickPoster,
-                        navigateToLogIn = navigateToLogin
-                    )
-
-                    false ->
-                        Column(
-                            modifier = modifier
-                                .fillMaxSize()
-                                .background(Theme.color.background.screen)
-                                .systemBarsPadding(),
-                        ) {
-                            AppBar(
-                                showBackButton = true,
-                                onBackButtonClick = onBackButtonClick,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
-                            state.error?.let {
-                                Text(
-                                    text = stringResource(it),
-                                    color = Theme.color.additional.primary.red,
-                                    textAlign = TextAlign.Center,
-                                    style = Theme.textStyle.label.md.regular,
-                                    modifier = Modifier.fillMaxSize().wrapContentSize()
-                                )
-                            }
-                        }
-                }
-            }
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .systemBarsPadding(),
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedVisibility(state.isLoadingMovieDetails) {
+            Progress(modifier = Modifier.size(40.dp))
         }
     }
-
+    AnimatedVisibility(!state.isLoadingMovieDetails) {
+        MovieDetailsContent(
+            modifier = Modifier.fillMaxSize(),
+            state = state,
+            interaction = viewModel,
+            onBackButtonClick = onBackButtonClick,
+            onClickPlay = onClickPlay,
+            onClickPoster = onClickPoster,
+            navigateToLogIn = navigateToLogin
+        )
+    }
 
 }
 
@@ -244,10 +211,7 @@ private fun MovieDetailsContent(
                     endText = stringResource(R.string.show_more),
                     posters = state.recommendedMovies,
                     onClickEndText = {
-                        interaction.navigateToMovieRecommendation(
-                            state.movie.id,
-                            state.movie.title
-                        )
+                        interaction.navigateToMovieRecommendation(state.movie.id, state.movie.title)
                     },
                     onClickPoster = { onClickPoster(it.id) }
                 )
@@ -272,7 +236,7 @@ private fun MovieDetailsContent(
                         modifier = Modifier,
                         title = stringResource(R.string.top_reviews),
                         clickableText = if (state.movieReviews.size > 3) stringResource(R.string.show_more) else null,
-                        onClickableText = { interaction.navigateToReviews(state.movie.id) }
+                        onClickableText = {interaction.navigateToReviews(state.movie.id)}
                     )
 
                     val reviewsToShow = state.movieReviews.take(3)

@@ -5,7 +5,4 @@
     سجّل الدخول لحفظ الأفلام، وإنشاء المجموعات، والحصول على توصيات مخصصة.</string>
     <string name="not_now">ليس الآن</string>
     <string name="log_in">تسجيل الدخول</string>
-    <string name="error_not_found">العنصر المطلوب غير موجود.</string>
-    <string name="error_access_denied">تم رفض الوصول. ليس لديك صلاحية.</string>
-    <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
 </resources>

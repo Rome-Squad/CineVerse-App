@@ -57,6 +57,5 @@
     <string name="no_collections_yet">لا توجد مجموعات بعد</string>
     <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">أنشئ مجموعة جديدة لبدء حفظ أفلامك ومسلسلاتك المفضلة.</string>
     <string name="create_collection">انشاء مجموعة</string>
-    <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
 
 </resources>
