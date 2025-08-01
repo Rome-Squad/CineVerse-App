@@ -25,15 +25,33 @@ class CastDetailsViewModel @Inject constructor(
     }
 
     override fun onActorYoutubeLinkClicked() {
-        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorYouTubeLink))
+        state.value.socialMediaLinks?.youtubeLink?.let {
+            sendEffect(CastDetailsEffect.OpenUrl(it))
+        }
     }
 
     override fun onActorFacebookLinkClicked() {
-        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorFacebookLink))
+        state.value.socialMediaLinks?.facebookLink?.let {
+            sendEffect(CastDetailsEffect.OpenUrl(it))
+        }
     }
 
     override fun onActorInstagramLinkClicked() {
-        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorInstagramLink))
+        state.value.socialMediaLinks?.instagramLink?.let {
+            sendEffect(CastDetailsEffect.OpenUrl(it))
+        }
+    }
+
+    override fun onActorTwitterLinkClicked() {
+        state.value.socialMediaLinks?.twitterLink?.let {
+            sendEffect(CastDetailsEffect.OpenUrl(it))
+        }
+    }
+
+    override fun onActorTikTokLinkClicked() {
+        state.value.socialMediaLinks?.tiktokLink?.let {
+            sendEffect(CastDetailsEffect.OpenUrl(it))
+        }
     }
 
     override fun navigateToActorGalleryScreen() {
@@ -84,9 +102,7 @@ class CastDetailsViewModel @Inject constructor(
                 actorPlace = person.placeOfBirth.orEmpty(),
                 actorGalleryImageUrls = person.images,
                 biographyInfo = person.biography.orEmpty(),
-                actorFacebookLink = person.socialMedia?.facebookLink.orEmpty(),
-                actorInstagramLink = person.socialMedia?.instagramLink.orEmpty(),
-                actorYouTubeLink = person.socialMedia?.youtubeLink.orEmpty(),
+                socialMediaLinks = person.socialMedia?.toUiState(),
                 posters = person.personCredits.map { personCredit ->
                     Poster(
                         id = personCredit.id,
