@@ -9,18 +9,14 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-internal data class ReviewRoute(val reviews: List<ReviewUI>?)
+internal data class ReviewRoute(val movieId: Int?, val seriesId: Int?)
 
-fun NavController.navigateToReviews(reviews: List<ReviewUI>) {
-    navigate(ReviewRoute(reviews))
+fun NavController.navigateToReviews(movieId: Int? = null, seriesId: Int? = null) {
+    navigate(ReviewRoute(movieId, seriesId))
 }
-
 fun NavGraphBuilder.reviewRoute(navController: NavController) {
-    composable<ReviewRoute> {
-        val reviews = it.toRoute<ReviewRoute>().reviews
-
+    composable<ReviewRoute> { backStackEntry ->
         ReviewsScreen(
-            reviewsList = reviews,
             navController = navController
         )
     }

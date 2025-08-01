@@ -238,12 +238,9 @@ class MovieDetailsViewModel @Inject constructor(
         sendEffect(MovieDetailsEffect.NavigateToLogin)
     }
 
-    override fun onShowMoreMoviesClick() {
-        sendEffect(MovieDetailsEffect.NavigateToMovies)
-    }
 
     override fun onShowMoreReviewsClick() {
-        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movieReviews))
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))
     }
 
     override fun onMovieClick(movieId: Int) {
@@ -296,6 +293,9 @@ class MovieDetailsViewModel @Inject constructor(
     override fun navigateToMovieRecommendation(movieId: Int, title: String) {
         sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
     }
+
+    override fun navigateToReviews(movieId: Int) {
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))    }
 
     override fun onRateChange(rate: Int) {
         safeExecute {

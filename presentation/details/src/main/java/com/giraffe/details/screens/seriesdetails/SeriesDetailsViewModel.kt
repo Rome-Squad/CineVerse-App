@@ -150,6 +150,12 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
+    override fun navigateToReviews(seriesId: Int) {
+        sendEffect(
+            SeriesDetailsEffect.NavigateToReviews(seriesId)
+        )
+    }
+
     private fun loadError(error: Throwable) {
         updateState {
             it.copy(
@@ -292,7 +298,9 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 seriesReviews = reviews.map { it.toReviewUI() },
+
             )
+
         }
     }
 }

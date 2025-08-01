@@ -57,7 +57,7 @@ import com.giraffe.details.utils.TypeOfScreen
 @Composable
 fun MovieDetailsScreen(
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
+    navigateToReviews: (Int) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
     onClickPlay: (String) -> Unit,
     onClickPoster: (Int) -> Unit,
@@ -76,7 +76,7 @@ fun MovieDetailsScreen(
                 }
 
                 is MovieDetailsEffect.NavigateToReviews -> {
-                    navigateToReviews(effect.reviews)
+                    navigateToReviews(effect.movieId)
                 }
 
                 is MovieDetailsEffect.Error -> {}
@@ -235,7 +235,8 @@ private fun MovieDetailsContent(
                     SectionTitle(
                         modifier = Modifier,
                         title = stringResource(R.string.top_reviews),
-                        clickableText = stringResource(R.string.show_more),
+                        clickableText = if (state.movieReviews.size > 3) stringResource(R.string.show_more) else null,
+                        onClickableText = {interaction.navigateToReviews(state.movie.id)}
                     )
 
                     val reviewsToShow = state.movieReviews.take(3)

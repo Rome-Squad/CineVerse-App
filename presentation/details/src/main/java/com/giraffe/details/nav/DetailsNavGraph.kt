@@ -15,6 +15,7 @@ import com.giraffe.details.screens.moviedetails.screen.navigateToMovieDetails
 import com.giraffe.details.screens.recommended.movie.recommendedMoviesRoute
 import com.giraffe.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.details.screens.reviewScreen.navigateToReviews
+import com.giraffe.details.screens.reviewScreen.reviewRoute
 import com.giraffe.details.screens.seasons.screen.seasonsRoute
 import com.giraffe.details.screens.seriesdetails.screen.navigateToSeriesDetails
 import com.giraffe.details.screens.seriesdetails.screen.seriesDetailsRoute
@@ -78,7 +79,7 @@ internal fun DetailsNavGraph(
         youTubePlayerRouteRoute(
             onBackClick = { navController.navigateUp() }
         )
-//        reviewRoute(navController)
+        reviewRoute(navController)
         loginRoute(authApi)
     }
 }

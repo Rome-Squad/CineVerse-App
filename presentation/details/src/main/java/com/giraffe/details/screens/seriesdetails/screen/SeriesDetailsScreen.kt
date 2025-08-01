@@ -28,6 +28,7 @@ fun SeriesDetailsScreen(
     onClickPlay: (String) -> Unit,
     navigateToLogIn: () -> Unit,
     modifier: Modifier = Modifier,
+    navigateToReviews: (Int) -> Unit ,
     viewModel: SeriesDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -44,6 +45,7 @@ fun SeriesDetailsScreen(
                 it.seriesId,
                 it.title
             )
+            is SeriesDetailsEffect.NavigateToReviews->navigateToReviews(it.seriesId)
         }
     }
 
