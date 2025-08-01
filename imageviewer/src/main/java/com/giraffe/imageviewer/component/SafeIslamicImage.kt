@@ -36,7 +36,8 @@ fun SafeIslamicImage(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.FillBounds,
     alignment: Alignment = Alignment.Center,
-    placeHolder: @Composable (modifier: Modifier) -> Unit = { modifier ->
+    hasSensitiveText: Boolean = false,
+    placeHolder: @Composable (modifier: Modifier) -> Unit = {
         Image(
             painter = painterResource(id = R.drawable.placeholder),
             contentDescription = stringResource(id = R.string.placeholder),
@@ -60,13 +61,13 @@ fun SafeIslamicImage(
             placeHolder(modifier)
 
         } else {
-        AsyncImage(
-            model = host.imageState,
-            contentDescription = contentDescription,
-            contentScale = contentScale,
-            alignment = alignment,
-            modifier = Modifier.fillMaxSize()
-        )
+            AsyncImage(
+                model = host.imageState,
+                contentDescription = contentDescription,
+                contentScale = contentScale,
+                alignment = alignment,
+                modifier = Modifier.fillMaxSize()
+            )
             if (host.isBlurState) {
                 Column(
                     Modifier
@@ -81,22 +82,23 @@ fun SafeIslamicImage(
                         contentScale = ContentScale.FillBounds,
                         colorFilter = ColorFilter.tint(Color(0xFFE1E1E3))
                     )
-                    val finalStyle = TextStyle(
-                        color = Color(0xFFE1E1E3),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight(500),
-                        lineHeight = 12.sp,
-                        letterSpacing = 0.sp
-                    )
-                    BasicText(
-                        text = stringResource(R.string.sensitive_content),
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        style = finalStyle
-                    )
+                    if (hasSensitiveText) {
+                        val finalStyle = TextStyle(
+                            color = Color(0xFFE1E1E3),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(500),
+                            lineHeight = 12.sp,
+                            letterSpacing = 0.sp
+                        )
+                        BasicText(
+                            text = stringResource(R.string.sensitive_content),
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            style = finalStyle
+                        )
 
+                    }
                 }
-
             }
+        }
     }
-}
 }
