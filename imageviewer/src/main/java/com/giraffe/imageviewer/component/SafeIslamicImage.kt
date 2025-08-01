@@ -37,7 +37,7 @@ fun SafeIslamicImage(
     contentScale: ContentScale = ContentScale.FillBounds,
     alignment: Alignment = Alignment.Center,
     hasSensitiveText: Boolean = false,
-    placeHolder: @Composable (modifier: Modifier) -> Unit = { modifier ->
+    placeHolder: @Composable (modifier: Modifier) -> Unit = {
         Image(
             painter = painterResource(id = R.drawable.placeholder),
             contentDescription = stringResource(id = R.string.placeholder),
