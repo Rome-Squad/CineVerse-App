@@ -11,11 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
 import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.models.ReviewUI
@@ -56,11 +58,11 @@ private fun ReviewsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item {
+        stickyHeader {
             AppBar(
                 showBackButton = true,
-                title = "Reviews",
-                modifier = Modifier.padding(8.dp),
+                title = stringResource(R.string.reviews),
+                modifier = Modifier.padding(horizontal = 8.dp),
                 onBackButtonClick = onBackArrowClick
             )
         }
