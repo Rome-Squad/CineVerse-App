@@ -9,7 +9,9 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalTime::class)
 fun ReviewDto.toEntity() = Review(
     id = id,
-    authorImageUrl = BASE_IMAGE_URL + authorDetails.avatarPath.toString(),
+    authorImageUrl =  authorDetails.avatarPath?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    }.orEmpty(),
     authorName = authorDetails.name?.takeIf { it.isNotBlank() } ?: author,
     authorUserName = authorDetails.username,
     content = content,

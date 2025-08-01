@@ -4,34 +4,44 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.movies.repository.MoviesRepository
+import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.series.repository.SeriesRepository
+import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
 class ReviewsViewModel @Inject constructor(
-    private val moviesRepository: MoviesRepository,
-    private val seriesRepository: SeriesRepository
-) : ViewModel() {
+    private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+    private val getSeriesDetailsUseCase: GetSeriesDetailsUseCase
+) : BaseViewModel<List<ReviewUI>, ReviewEffect>(initialState = emptyList()) {
 
-    private val _reviewsState = mutableStateOf<List<ReviewUI>>(emptyList())
-    val reviewsState: State<List<ReviewUI>> get() = _reviewsState
-
-    fun fetchReviews(movieId: Int? = null, seriesId: Int? = null) {
-        viewModelScope.launch {
-            _reviewsState.value = when {
-                movieId != null -> {
-                    moviesRepository.getMovieReviews(movieId).map { it.toReviewUI() }
-                }
-                seriesId != null -> {
-                    seriesRepository.getSeriesReviews(seriesId).map { it.toReviewUI() }
-                }
-                else -> emptyList()
-            }
+    fun fetchMovieReviews(movieId: Int) {
+        safeExecute(
+            onError = {},
+            onSuccess = {}
+        ) {
+            getMovieDetailsUseCase(movieId)
         }
+
+    }
+
+    fun fetchSeriesReviews(seriesId: Int) {
+        safeExecute(
+            onError = {},
+            onSuccess = {}
+        ){
+            getSeriesDetailsUseCase(seriesId)
+        }
+
+    }
+
+    // Error handling, send an effect to notify the UI
+    private fun handleError(throwable: Throwable) {
+        sendEffect(ReviewEffect.ShowError(throwable.message ?: "Unknown error"))
     }
 }

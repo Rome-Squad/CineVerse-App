@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,11 +27,10 @@ fun ReviewsScreen(
     navController: NavController,
     reviewsViewModel: ReviewsViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(movieId, seriesId) {
-        reviewsViewModel.fetchReviews(movieId, seriesId)
-    }
+    movieId?.let { reviewsViewModel.fetchMovieReviews(it) }
+    seriesId?.let { reviewsViewModel.fetchSeriesReviews(it) }
 
-    val reviews = reviewsViewModel.reviewsState.value
+    val reviews = reviewsViewModel.state.collectAsState().value
 
     ReviewsContent(
         reviewsList = reviews ?: emptyList(),
