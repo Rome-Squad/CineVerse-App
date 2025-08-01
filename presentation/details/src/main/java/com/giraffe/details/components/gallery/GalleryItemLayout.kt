@@ -1,14 +1,17 @@
 package com.giraffe.details.components.gallery
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun GalleryItemLayoutLTR(
@@ -28,12 +31,20 @@ fun GalleryItemLayoutLTR(
             GalleryItem(
                 imageUrl = imageUrls.getOrNull(1),
                 modifier = Modifier
+                    .background(
+                        Theme.color.background.card,
+                        shape = RoundedCornerShape(Theme.radius.lg)
+                    )
                     .fillMaxHeight(0.475f)
                     .fillMaxWidth()
             )
             GalleryItem(
                 imageUrl = imageUrls.getOrNull(2),
                 modifier = Modifier
+                    .background(
+                        Theme.color.background.card,
+                        shape = RoundedCornerShape(Theme.radius.lg)
+                    )
                     .weight(1f)
                     .fillMaxHeight(0.5f)
                     .fillMaxWidth()
@@ -42,6 +53,10 @@ fun GalleryItemLayoutLTR(
         GalleryItem(
             imageUrl = imageUrls.getOrNull(0),
             modifier = Modifier
+                .background(
+                    Theme.color.background.card,
+                    shape = RoundedCornerShape(Theme.radius.lg)
+                )
                 .weight(1f)
                 .fillMaxHeight()
         )
@@ -61,6 +76,10 @@ fun GalleryItemLayoutRTL(
         GalleryItem(
             imageUrl = imageUrls.getOrNull(0),
             modifier = Modifier
+                .background(
+                    Theme.color.background.card,
+                    shape = RoundedCornerShape(Theme.radius.lg)
+                )
                 .weight(1f)
                 .fillMaxHeight()
         )
@@ -73,12 +92,20 @@ fun GalleryItemLayoutRTL(
             GalleryItem(
                 imageUrl = imageUrls.getOrNull(1),
                 modifier = Modifier
+                    .background(
+                        Theme.color.background.card,
+                        shape = RoundedCornerShape(Theme.radius.lg)
+                    )
                     .fillMaxHeight(0.475f)
                     .fillMaxWidth()
             )
             GalleryItem(
                 imageUrl = imageUrls.getOrNull(2),
                 modifier = Modifier
+                    .background(
+                        Theme.color.background.card,
+                        shape = RoundedCornerShape(Theme.radius.lg)
+                    )
                     .weight(1f)
                     .fillMaxHeight(0.5f)
                     .fillMaxWidth()

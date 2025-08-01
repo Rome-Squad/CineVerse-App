@@ -11,10 +11,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -60,11 +64,15 @@ fun MainDetails(
     onYoutubeClick: () -> Unit,
     onFacebookClick: () -> Unit,
     onInstagramClick: () -> Unit,
+    onTwitterClick: () -> Unit,
+    onTiktokClick: () -> Unit,
     actorImageUrl: String?,
     modifier: Modifier = Modifier,
     hasYoutube: Boolean = false,
     hasFacebook: Boolean = false,
     hasInstagram: Boolean = false,
+    hasTwitter: Boolean = false,
+    hasTiktok: Boolean = false,
 ) {
     val singleSpace = " "
     val key = "_KEY"
@@ -75,12 +83,13 @@ fun MainDetails(
                 .wrapContentHeight()
                 .clip(shape = RoundedCornerShape(Theme.radius.xxl))
                 .background(Theme.color.background.card)
-                .padding(16.dp),
+                .padding(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 actorImageUrl?.let {
                     val shapeImage = RoundedCornerShape(
@@ -90,7 +99,7 @@ fun MainDetails(
                         bottomEnd = Theme.radius.xl
                     )
                     SafeIslamicImage(
-                        imageUrl = it,
+                        imageUrl = "it",
                         contentDescription = actorName,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -102,22 +111,22 @@ fun MainDetails(
                             .clip(shape = shapeImage)
                             .fillMaxHeight(),
                     )
-//                    {
-//                        Icon(
-//                            painter = painterResource(Theme.icons.dueTone.image),
-//                            contentDescription = actorName,
-//                            tint = Theme.color.brand.secondary,
-//                            modifier = Modifier
-//                                .size(height = 80.dp, width = 64.dp)
-//                                .border(
-//                                    width = 1.dp,
-//                                    color = Theme.color.stroke.primary,
-//                                    shape = shapeImage
-//                                )
-//                                .clip(shape = shapeImage)
-//                                .wrapContentSize()
-//                        )
-//                    }
+                    {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.image),
+                            contentDescription = actorName,
+                            tint = Theme.color.brand.secondary,
+                            modifier = Modifier
+                                .size(height = 80.dp, width = 64.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Theme.color.stroke.primary,
+                                    shape = shapeImage
+                                )
+                                .clip(shape = shapeImage)
+                                .wrapContentSize()
+                        )
+                    }
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
@@ -147,36 +156,59 @@ fun MainDetails(
 
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
                 if (hasYoutube) {
-                    SocialMediaComponent(
-                        modifier = Modifier
-                            .weight(1f),
-                        image = painterResource(Theme.icons.colored.youtube),
-                        name = stringResource(R.string.youtube),
-                        contentDescription = stringResource(R.string.youtube_icon),
-                        onClick = onYoutubeClick
-                    )
+                    item {
+                        SocialMediaComponent(
+                            image = painterResource(Theme.icons.colored.youtube),
+                            name = stringResource(R.string.youtube),
+                            contentDescription = stringResource(R.string.youtube_icon),
+                            onClick = onYoutubeClick
+                        )
+                    }
                 }
                 if (hasFacebook) {
-                    SocialMediaComponent(
-                        modifier = Modifier
-                            .weight(1f),
-                        image = painterResource(Theme.icons.colored.facebook),
-                        name = stringResource(R.string.facebook),
-                        contentDescription = stringResource(R.string.facebook_icon),
-                        onClick = onFacebookClick
-                    )
+                    item {
+                        SocialMediaComponent(
+                            image = painterResource(Theme.icons.colored.facebook),
+                            name = stringResource(R.string.facebook),
+                            contentDescription = stringResource(R.string.facebook_icon),
+                            onClick = onFacebookClick
+                        )
+                    }
                 }
                 if (hasInstagram) {
-                    SocialMediaComponent(
-                        modifier = Modifier
-                            .weight(1f),
-                        image = painterResource(Theme.icons.colored.instagram),
-                        name = stringResource(R.string.instagram),
-                        contentDescription = stringResource(R.string.instagram_icon),
-                        onClick = onInstagramClick
-                    )
+                    item {
+                        SocialMediaComponent(
+                            image = painterResource(Theme.icons.colored.instagram),
+                            name = stringResource(R.string.instagram),
+                            contentDescription = stringResource(R.string.instagram_icon),
+                            onClick = onInstagramClick
+                        )
+                    }
+                }
+                if (hasTwitter) {
+                    item {
+                        SocialMediaComponent(
+                            image = painterResource(Theme.icons.colored.x),
+                            name = stringResource(R.string.twitter),
+                            contentDescription = stringResource(R.string.twitter_icon),
+                            onClick = onTwitterClick
+                        )
+                    }
+                }
+                if (hasTiktok) {
+                    item {
+                        SocialMediaComponent(
+                            image = painterResource(Theme.icons.colored.tiktok),
+                            name = stringResource(R.string.tiktok),
+                            contentDescription = stringResource(R.string.tiktok_icon),
+                            onClick = onTiktokClick
+                        )
+                    }
                 }
             }
         }
@@ -245,7 +277,7 @@ fun MainDetailsHeader(
             ) {
                 actorImageUrl?.let {
                     SafeIslamicImage(
-                        imageUrl = it,
+                        imageUrl = "it",
                         contentDescription = actorName,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -256,21 +288,21 @@ fun MainDetailsHeader(
                             .size(40.dp)
                             .clip(CircleShape)
                     )
-//                    {
-//                        Icon(
-//                            painter = painterResource(Theme.icons.dueTone.image),
-//                            contentDescription = actorName,
-//                            tint = Theme.color.brand.secondary,
-//                            modifier = Modifier
-//                                .size(40.dp)
-//                                .background(
-//                                    Theme.color.background.card,
-//                                    shape = CircleShape
-//                                )
-//                                .padding(12.dp)
-//                                .wrapContentSize(),
-//                        )
-//                    }
+                    {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.image),
+                            contentDescription = actorName,
+                            tint = Theme.color.brand.secondary,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(
+                                    Theme.color.background.card,
+                                    shape = CircleShape
+                                )
+                                .padding(12.dp)
+                                .wrapContentSize(),
+                        )
+                    }
                 }
                 Text(
                     style = Theme.textStyle.title.md,
@@ -348,11 +380,15 @@ fun MainDetailsPreview() {
                             onYoutubeClick = {},
                             onFacebookClick = {},
                             onInstagramClick = {},
+                            onTiktokClick = {},
+                            onTwitterClick = {},
                             actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             modifier = Modifier.padding(top = 72.dp),
                             hasYoutube = true,
                             hasFacebook = true,
-                            hasInstagram = true
+                            hasInstagram = true,
+                            hasTiktok = true,
+                            hasTwitter = true
                         )
                     }
                 }

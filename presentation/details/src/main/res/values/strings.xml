@@ -18,6 +18,10 @@
     <string name="facebook_icon">facebook icon</string>
     <string name="instagram">Instagram</string>
     <string name="instagram_icon">instagram icon</string>
+    <string name="twitter">Twitter</string>
+    <string name="twitter_icon">Twitter icon</string>
+    <string name="tiktok">TikTok</string>
+    <string name="tiktok_icon">tiktok icon</string>
     <string name="folder_icon">folder icon</string>
     <string name="rating">Rating</string>
     <string name="episodes">Episodes</string>

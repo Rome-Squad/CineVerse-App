@@ -18,6 +18,10 @@
     <string name="facebook_icon">أيقونة فيسبوك</string>
     <string name="instagram">إنستغرام</string>
     <string name="instagram_icon">أيقونة إنستغرام</string>
+    <string name="twitter">تويتر</string>
+    <string name="twitter_icon">أيقونة تويتر</string>
+    <string name="tiktok">تيك توك</string>
+    <string name="tiktok_icon">أيقونة تيك توك</string>
     <string name="folder_icon">أيقونة المجلد</string>
     <string name="authentication_error">خطأ في المصادقة!</string>
     <string name="network_error">خطأ في الشبكة، يرجى التحقق من الاتصال</string>

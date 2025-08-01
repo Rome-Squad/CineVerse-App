@@ -119,7 +119,6 @@ fun CastDetailsScreen(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CastDetailsContent(
     state: CastDetailsUiState,
@@ -154,9 +153,13 @@ fun CastDetailsContent(
                 onYoutubeClick = interaction::onActorYoutubeLinkClicked,
                 onFacebookClick = interaction::onActorFacebookLinkClicked,
                 onInstagramClick = interaction::onActorInstagramLinkClicked,
-                hasYoutube = state.actorYouTubeLink.isNotBlank(),
-                hasFacebook = state.actorFacebookLink.isNotBlank(),
-                hasInstagram = state.actorInstagramLink.isNotBlank()
+                onTwitterClick = interaction::onActorTwitterLinkClicked,
+                onTiktokClick = interaction::onActorTikTokLinkClicked,
+                hasYoutube = state.socialMediaLinks?.youtubeLink.isNullOrBlank().not(),
+                hasFacebook = state.socialMediaLinks?.facebookLink.isNullOrBlank().not(),
+                hasInstagram = state.socialMediaLinks?.instagramLink.isNullOrBlank().not(),
+                hasTwitter = state.socialMediaLinks?.twitterLink.isNullOrBlank().not(),
+                hasTiktok = state.socialMediaLinks?.tiktokLink.isNullOrBlank().not(),
             )
             AppBar(
                 showBackButton = true,
@@ -223,9 +226,13 @@ private fun MainDetailsAnimatedContent(
     onYoutubeClick: () -> Unit,
     onFacebookClick: () -> Unit,
     onInstagramClick: () -> Unit,
+    onTwitterClick: () -> Unit,
+    onTiktokClick: () -> Unit,
     hasYoutube: Boolean = false,
     hasFacebook: Boolean = false,
     hasInstagram: Boolean = false,
+    hasTwitter: Boolean = false,
+    hasTiktok: Boolean = false,
 ) {
     val horizontalPadding = 16.dp
     val duration = 400
@@ -263,13 +270,17 @@ private fun MainDetailsAnimatedContent(
                         onYoutubeClick = onYoutubeClick,
                         onFacebookClick = onFacebookClick,
                         onInstagramClick = onInstagramClick,
+                        onTwitterClick = onTwitterClick,
+                        onTiktokClick = onTiktokClick,
                         actorImageUrl = actorImageUrl,
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
                             .padding(top = topPadding),
                         hasYoutube = hasYoutube,
                         hasFacebook = hasFacebook,
-                        hasInstagram = hasInstagram
+                        hasInstagram = hasInstagram,
+                        hasTwitter = hasTwitter,
+                        hasTiktok = hasTiktok,
                     )
                 }
             }
