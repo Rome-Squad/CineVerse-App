@@ -44,7 +44,7 @@ fun VODItem(
                     shape = RoundedCornerShape(Theme.radius.xl)
                 )
                 .align(Alignment.TopCenter),
-            imageUrl = movieCard.posterUrl,
+            imageUrl = movieCard.backdropUrl,
             contentDescription = "cover",
             contentScale = ContentScale.Crop
         )
