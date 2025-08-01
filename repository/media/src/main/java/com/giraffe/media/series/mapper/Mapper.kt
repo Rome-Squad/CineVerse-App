@@ -26,6 +26,7 @@ fun SeriesCacheDto.toEntity(
     overview = overview,
     rating = rate,
     posterUrl = posterUrl,
+    backdropUrl = backdropUrl,
     genreIDs = genresID,
     releaseYear = releaseYear,
     seasons = seasons
@@ -37,6 +38,7 @@ fun Series.toCacheDto() = SeriesCacheDto(
     overview = overview,
     rate = rating,
     posterUrl = posterUrl,
+    backdropUrl = backdropUrl,
     genresID = genreIDs,
     releaseYear = releaseYear,
 )
@@ -67,12 +69,13 @@ fun Genre.toCacheDto() = SeriesGenreCacheDto(
 
 fun SeriesDto.toEntity() = Series(
     id = id,
-    name = name,
-    overview = overview,
-    rating = voteAverage.toFloat(),
+    name = name ?: "",
+    overview = overview ?: "",
+    rating = voteAverage?.toFloat() ?: 0f,
     posterUrl = BASE_IMAGE_URL + posterPath,
+    backdropUrl = BASE_IMAGE_URL + backdropPath,
     genreIDs = genreIds,
-    releaseYear = firstAirDate.toFormattedDate(),
+    releaseYear = firstAirDate?.toFormattedDate() ?: "",
     seasons = emptyList()
 )
 
@@ -95,11 +98,12 @@ fun SeasonDto.toEntity() = Season(
 fun SeriesDetailsDto.toEntity() = Series(
     id = id,
     posterUrl = BASE_IMAGE_URL + posterPath,
-    name = name,
+    backdropUrl = BASE_IMAGE_URL + backdropPath,
+    name = name ?: "",
     genreIDs = genres.map { it.id },
-    rating = voteAverage.toFloat(),
-    releaseYear = firstAirDate.toFormattedDate(),
-    overview = overview,
+    rating = voteAverage?.toFloat() ?: 0f,
+    releaseYear = firstAirDate?.toFormattedDate() ?: "",
+    overview = overview ?: "",
     seasons = seasons.map { it.toEntity() },
     youtubeVideoId = youtubeVideoId.orEmpty()
 )
