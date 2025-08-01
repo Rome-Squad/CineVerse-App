@@ -60,6 +60,7 @@ fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
         id = id,
         title = title,
         posterUrl = posterUrl ?: "",
+        backdropUrl = backdropUrl ?: "",
         genres = genres,
         rating = rating,
         mediaType = MediaType.MOVIE
