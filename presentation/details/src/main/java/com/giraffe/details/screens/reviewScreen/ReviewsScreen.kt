@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.reviewScreen
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,26 +16,29 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.models.ReviewUI
 
 
 @Composable
 fun ReviewsScreen(
-    movieId: Int?,
-    seriesId: Int?,
     navController: NavController,
     reviewsViewModel: ReviewsViewModel = hiltViewModel()
 ) {
-    movieId?.let { reviewsViewModel.fetchMovieReviews(it) }
-    seriesId?.let { reviewsViewModel.fetchSeriesReviews(it) }
+    val state = reviewsViewModel.state.collectAsState().value
 
-    val reviews = reviewsViewModel.state.collectAsState().value
-
-    ReviewsContent(
-        reviewsList = reviews ?: emptyList(),
-        onBackArrowClick = { navController.navigateUp() }
-    )
+    AnimatedContent(
+        state.isLoading
+    ) {
+        when (it) {
+            true -> LoadingView()
+            false -> ReviewsContent(
+                reviewsList = state.reviews,
+                onBackArrowClick = { navController.navigateUp() }
+            )
+        }
+    }
 }
 
 @Composable
