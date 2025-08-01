@@ -3,6 +3,7 @@ package com.giraffe.imageviewer.mlmodel
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.get
+import androidx.core.graphics.scale
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -77,7 +78,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
     ): Float {
 
         // rescale the image to be suitable for the model's expected input
-        val resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, 224, 224)
+        val resizedBitmap = bitmap.scale(224, 224)
 
         // convert the bitmap to byte buffer
         val inputBuffer = convertBitmapToByteBuffer(resizedBitmap)

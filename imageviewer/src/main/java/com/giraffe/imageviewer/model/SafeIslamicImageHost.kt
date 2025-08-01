@@ -30,7 +30,7 @@ class SafeIslamicImageHost(
     var imageState by mutableStateOf<Bitmap?>(null)
         private set
 
-    private var isBlurState by mutableStateOf(false)
+    var isBlurState by mutableStateOf(false)
 
 
     suspend fun loadImage(imageUrl: String, context: Context) {
