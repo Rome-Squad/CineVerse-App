@@ -44,7 +44,7 @@ class SeriesRepositoryImpl @Inject constructor(
                 seriesPages = listOf(page)
             )
             localExploreDataSource.insertSearchKeyword(updatedKeyword)
-            local.saveSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
+            local.insertSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
             remoteSeries
         }
     }
@@ -68,8 +68,8 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun storeRecentSeries(series: Series) = SafeCall {
-        local.storeRecentSeries(series.id)
+    override suspend fun addRecentSeries(series: Series) = SafeCall {
+        local.insertRecentSeries(series.id)
     }
 
     override suspend fun clearRecentSeries() = SafeCall {
@@ -115,7 +115,7 @@ class SeriesRepositoryImpl @Inject constructor(
         remote.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
 
-    override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {
+    override suspend fun getRecommendedSeries(seriesId: Int, page: Int): List<Series> {
         return SafeCall {
             remote.getSeriesRecommendations(seriesId, page)
                 .map(SeriesDto::toEntity)

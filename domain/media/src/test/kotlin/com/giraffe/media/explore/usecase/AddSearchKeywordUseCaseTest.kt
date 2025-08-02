@@ -7,15 +7,15 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class InsertSearchKeywordUseCaseTest {
+class AddSearchKeywordUseCaseTest {
 
     private lateinit var repository: ExploreRepository
-    private lateinit var useCase: InsertSearchKeywordUseCase
+    private lateinit var useCase: AddSearchKeywordUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
-        useCase = InsertSearchKeywordUseCase(repository)
+        useCase = AddSearchKeywordUseCase(repository)
     }
 
     @Test
@@ -25,6 +25,6 @@ class InsertSearchKeywordUseCaseTest {
         useCase("sci-fi")
 
         // Then
-        coVerify { repository.insertSearchKeyword("sci-fi") }
+        coVerify { repository.addSearchKeyword("sci-fi") }
     }
 }

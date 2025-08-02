@@ -9,24 +9,24 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class StorePersonUseCaseTest {
+class AddPersonUseCaseTest {
     private lateinit var repository: PersonRepository
-    private lateinit var storeRecentPersonUseCase: StoreRecentPersonUseCase
+    private lateinit var addRecentPersonUseCase: AddRecentPersonUseCase
 
     val personToStore = Person(1, "Tarek", "Acting")
 
     @BeforeEach
     fun setup() {
         repository = mockk()
-        storeRecentPersonUseCase = StoreRecentPersonUseCase(repository)
+        addRecentPersonUseCase = AddRecentPersonUseCase(repository)
     }
 
     @Test
     fun `invoke should call storePerson on repository with correct data`() = runTest {
-        coEvery { repository.storeRecentPerson(any()) } returns Unit
+        coEvery { repository.addRecentPerson(any()) } returns Unit
 
-        storeRecentPersonUseCase(personToStore)
+        addRecentPersonUseCase(personToStore)
 
-        coVerify(exactly = 1) { repository.storeRecentPerson(personToStore) }
+        coVerify(exactly = 1) { repository.addRecentPerson(personToStore) }
     }
 }

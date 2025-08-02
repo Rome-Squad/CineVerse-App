@@ -170,7 +170,7 @@ class HomeViewModel @Inject constructor(
                 onSuccess = ::onGetRecommendedSeriesSuccess,
                 onError = ::onFail,
             ) {
-                getRecommendedSeriesUseCase(series.id.toLong(), 1)
+                getRecommendedSeriesUseCase(series.id, 1)
             }
         }
     }

@@ -45,15 +45,15 @@ class PersonRepositoryImpl @Inject constructor(
                     actorsPages = listOf(page)
                 )
                 localExploreDataSource.insertSearchKeyword(updatedKeyword)
-                localDataSource.storePeople(remoteActors.map { it.toCacheDto().copy(page = page) })
+                localDataSource.insertPeople(remoteActors.map { it.toCacheDto().copy(page = page) })
                 remoteActors
             }
         }
 
     }
 
-    override suspend fun storeRecentPerson(person: Person) =
-        SafeCall { localDataSource.storePerson(person.toCacheDto().copy(isRecent = true)) }
+    override suspend fun addRecentPerson(person: Person) =
+        SafeCall { localDataSource.insertPerson(person.toCacheDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {
         localDataSource.getRecentPeople().map(PersonCacheDto::toEntity)
@@ -88,7 +88,7 @@ class PersonRepositoryImpl @Inject constructor(
 
         val dtos = people.map { content.toCacheDto(it) }
 
-        localDataSource.storePeople(dtos)
+        localDataSource.insertPeople(dtos)
 
         people
     }

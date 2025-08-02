@@ -52,7 +52,7 @@ class ExploreRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun insertSearchKeyword(searchKeyword: String) = SafeCall {
+    override suspend fun addSearchKeyword(searchKeyword: String) = SafeCall {
         val cachedKeyword =
             local.getSearchKeyword(searchKeyword)?.copy(searchedAt = System.currentTimeMillis())
                 ?: SearchKeywordCacheDto(searchKeyword)

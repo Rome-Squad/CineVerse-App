@@ -5,9 +5,11 @@ import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.screens.castCredit.MediaType
+import com.giraffe.details.screens.castDetails.state.CastDetailsUiState
+import com.giraffe.details.screens.castDetails.state.toUiState
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
-import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
+import com.giraffe.media.person.usecase.AddRecentPersonUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,7 +17,7 @@ import javax.inject.Inject
 class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase,
-    private val storeRecentSeriesUseCase: StoreRecentPersonUseCase
+    private val storeRecentSeriesUseCase: AddRecentPersonUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
     CastDetailsInteractionListener {
     private val personId: Int = savedStateHandle.toRoute<CastDetailsRoute>().id
@@ -24,34 +26,8 @@ class CastDetailsViewModel @Inject constructor(
         getPersonDetails(personId)
     }
 
-    override fun onActorYoutubeLinkClicked() {
-        state.value.socialMediaLinks?.youtubeLink?.let {
-            sendEffect(CastDetailsEffect.OpenUrl(it))
-        }
-    }
-
-    override fun onActorFacebookLinkClicked() {
-        state.value.socialMediaLinks?.facebookLink?.let {
-            sendEffect(CastDetailsEffect.OpenUrl(it))
-        }
-    }
-
-    override fun onActorInstagramLinkClicked() {
-        state.value.socialMediaLinks?.instagramLink?.let {
-            sendEffect(CastDetailsEffect.OpenUrl(it))
-        }
-    }
-
-    override fun onActorTwitterLinkClicked() {
-        state.value.socialMediaLinks?.twitterLink?.let {
-            sendEffect(CastDetailsEffect.OpenUrl(it))
-        }
-    }
-
-    override fun onActorTikTokLinkClicked() {
-        state.value.socialMediaLinks?.tiktokLink?.let {
-            sendEffect(CastDetailsEffect.OpenUrl(it))
-        }
+    override fun navigateToActorMediaLink(url: String) {
+        sendEffect(CastDetailsEffect.OpenUrl(url))
     }
 
     override fun navigateToActorGalleryScreen() {
@@ -102,7 +78,7 @@ class CastDetailsViewModel @Inject constructor(
                 actorPlace = person.placeOfBirth.orEmpty(),
                 actorGalleryImageUrls = person.images,
                 biographyInfo = person.biography.orEmpty(),
-                socialMediaLinks = person.socialMedia?.toUiState(),
+                socialMediaUiList = person.socialMedia?.toUiState() ?: emptyList(),
                 posters = person.personCredits.map { personCredit ->
                     Poster(
                         id = personCredit.id,

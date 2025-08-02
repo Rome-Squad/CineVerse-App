@@ -50,6 +50,8 @@ import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
+import com.giraffe.details.screens.castDetails.state.CastDetailsUiState
+import com.giraffe.details.screens.castDetails.state.SocialMediaUi
 import com.giraffe.details.utils.EventListener
 
 @Composable
@@ -150,16 +152,8 @@ fun CastDetailsContent(
                 actorName = state.actorName,
                 actorBirthday = state.actorBirth,
                 actorPlaceOfBirth = state.actorPlace,
-                onYoutubeClick = interaction::onActorYoutubeLinkClicked,
-                onFacebookClick = interaction::onActorFacebookLinkClicked,
-                onInstagramClick = interaction::onActorInstagramLinkClicked,
-                onTwitterClick = interaction::onActorTwitterLinkClicked,
-                onTiktokClick = interaction::onActorTikTokLinkClicked,
-                hasYoutube = state.socialMediaLinks?.youtubeLink.isNullOrBlank().not(),
-                hasFacebook = state.socialMediaLinks?.facebookLink.isNullOrBlank().not(),
-                hasInstagram = state.socialMediaLinks?.instagramLink.isNullOrBlank().not(),
-                hasTwitter = state.socialMediaLinks?.twitterLink.isNullOrBlank().not(),
-                hasTiktok = state.socialMediaLinks?.tiktokLink.isNullOrBlank().not(),
+                socialMediaUiList = state.socialMediaUiList,
+                onLinkClick = interaction::navigateToActorMediaLink
             )
             AppBar(
                 showBackButton = true,
@@ -223,16 +217,8 @@ private fun MainDetailsAnimatedContent(
     actorBirthday: String,
     actorPlaceOfBirth: String,
     actorImageUrl: String?,
-    onYoutubeClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onInstagramClick: () -> Unit,
-    onTwitterClick: () -> Unit,
-    onTiktokClick: () -> Unit,
-    hasYoutube: Boolean = false,
-    hasFacebook: Boolean = false,
-    hasInstagram: Boolean = false,
-    hasTwitter: Boolean = false,
-    hasTiktok: Boolean = false,
+    socialMediaUiList: List<SocialMediaUi>,
+    onLinkClick: (String) -> Unit,
 ) {
     val horizontalPadding = 16.dp
     val duration = 400
@@ -267,20 +253,12 @@ private fun MainDetailsAnimatedContent(
                         actorPlaceOfBirth = actorPlaceOfBirth,
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,
-                        onYoutubeClick = onYoutubeClick,
-                        onFacebookClick = onFacebookClick,
-                        onInstagramClick = onInstagramClick,
-                        onTwitterClick = onTwitterClick,
-                        onTiktokClick = onTiktokClick,
+                        socialMediaUiList = socialMediaUiList,
+                        onLinkClick = onLinkClick,
                         actorImageUrl = actorImageUrl,
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
                             .padding(top = topPadding),
-                        hasYoutube = hasYoutube,
-                        hasFacebook = hasFacebook,
-                        hasInstagram = hasInstagram,
-                        hasTwitter = hasTwitter,
-                        hasTiktok = hasTiktok,
                     )
                 }
             }

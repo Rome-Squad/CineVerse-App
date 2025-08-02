@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface SeriesLocalDateSource {
     suspend fun getCachedSeriesForName(name: String, page: Int): List<SeriesCacheDto>
-    suspend fun saveSearchResult(seriesList: List<SeriesCacheDto>)
+    suspend fun insertSearchResult(seriesList: List<SeriesCacheDto>)
     suspend fun getCachedGenres(): List<SeriesGenreCacheDto>
     suspend fun saveGenres(genres: List<SeriesGenreCacheDto>)
     suspend fun getRecentSeries(): Flow<List<SeriesCacheDto>>
-    suspend fun storeRecentSeries(seriesId: Int)
+    suspend fun insertRecentSeries(seriesId: Int)
     suspend fun clearRecentSeries()
     suspend fun getSeasonsForSeries(seriesId: Int): List<SeasonCacheDto>
     suspend fun clearAllData()
