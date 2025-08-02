@@ -88,7 +88,7 @@ fun SeasonDto.toEntity() = Season(
     rating = voteAverage,
     posterUrl = BASE_IMAGE_URL + posterPath,
     seasonNumber = seasonNumber,
-    releaseYear = airDate ?: "",
+    releaseYear = airDate .orEmpty(),
     episodeCount = episodeCount
 )
 
@@ -120,7 +120,7 @@ fun SeriesDetailsDto.toSeasonEntity() = seasons.map {
         id = it.id,
         posterUrl = BASE_IMAGE_URL + it.posterPath,
         rating = it.voteAverage,
-        releaseYear = it.airDate ?: "",
+        releaseYear = it.airDate .orEmpty(),
         overview = it.overview,
         episodeCount = it.episodeCount,
         seasonNumber = it.seasonNumber
