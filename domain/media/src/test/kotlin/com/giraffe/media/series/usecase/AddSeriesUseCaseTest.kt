@@ -10,7 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class StoreSeriesUseCaseTest {
+class AddSeriesUseCaseTest {
     private lateinit var seriesRepository: SeriesRepository
     private lateinit var storeRecentSeriesUseCase: AddRecentSeriesUseCase
 

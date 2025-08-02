@@ -30,7 +30,7 @@ fun Movie.toMovieUi() = MovieUi(
     backdropUrl = backdropUrl,
     genresID = genresID,
     releaseYear = if (releaseYear != null) releaseYear.toString().toFormattedDate() else null,
-    youtubeVideoId = youtubeVideoId
+    youtubeVideoId = youtubeVideoId.orEmpty()
 
 )
 
@@ -38,7 +38,7 @@ fun MovieUi.toPoster(): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl ?: "",
+        imageUri = posterUrl .orEmpty(),
         rating = rating,
         genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
         time = duration,

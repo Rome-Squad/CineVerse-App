@@ -165,7 +165,7 @@ private fun MovieDetailsContent(
                     imageUrl = state.movie.posterUrl,
                     genres = state.movieGenres,
                     duration = state.movie.duration,
-                    releaseYear = state.movie.releaseYear ?: "",
+                    releaseYear = state.movie.releaseYear .orEmpty(),
                     onClickAdd = interaction::onAddToCollectionClick,
                     onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
                     isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),
