@@ -211,7 +211,7 @@ fun DefaultTextField(
             exit = slideOutVertically(tween(0)) { it }
         ) {
             Text(
-                text = errorMessage ?: "",
+                text = errorMessage .orEmpty(),
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.additional.primary.red
             )

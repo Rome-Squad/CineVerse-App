@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,6 +52,8 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
+import com.giraffe.details.screens.castDetails.state.SocialMediaUi
+import com.giraffe.details.screens.castDetails.state.getIcon
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -59,20 +62,12 @@ fun MainDetails(
     actorName: String,
     actorBirthday: String,
     actorPlaceOfBirth: String,
+    socialMediaUiList: List<SocialMediaUi>,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    onYoutubeClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onInstagramClick: () -> Unit,
-    onTwitterClick: () -> Unit,
-    onTiktokClick: () -> Unit,
+    onLinkClick: (String) -> Unit,
     actorImageUrl: String?,
     modifier: Modifier = Modifier,
-    hasYoutube: Boolean = false,
-    hasFacebook: Boolean = false,
-    hasInstagram: Boolean = false,
-    hasTwitter: Boolean = false,
-    hasTiktok: Boolean = false,
 ) {
     val singleSpace = " "
     val key = "_KEY"
@@ -99,7 +94,7 @@ fun MainDetails(
                         bottomEnd = Theme.radius.xl
                     )
                     SafeIslamicImage(
-                        imageUrl = "it",
+                        imageUrl = it,
                         contentDescription = actorName,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -156,57 +151,17 @@ fun MainDetails(
 
                 }
             }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp)
-            ) {
-                if (hasYoutube) {
-                    item {
+            if(socialMediaUiList.isNotEmpty()) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    items(socialMediaUiList) {
                         SocialMediaComponent(
-                            image = painterResource(Theme.icons.colored.youtube),
-                            name = stringResource(R.string.youtube),
-                            contentDescription = stringResource(R.string.youtube_icon),
-                            onClick = onYoutubeClick
-                        )
-                    }
-                }
-                if (hasFacebook) {
-                    item {
-                        SocialMediaComponent(
-                            image = painterResource(Theme.icons.colored.facebook),
-                            name = stringResource(R.string.facebook),
-                            contentDescription = stringResource(R.string.facebook_icon),
-                            onClick = onFacebookClick
-                        )
-                    }
-                }
-                if (hasInstagram) {
-                    item {
-                        SocialMediaComponent(
-                            image = painterResource(Theme.icons.colored.instagram),
-                            name = stringResource(R.string.instagram),
-                            contentDescription = stringResource(R.string.instagram_icon),
-                            onClick = onInstagramClick
-                        )
-                    }
-                }
-                if (hasTwitter) {
-                    item {
-                        SocialMediaComponent(
-                            image = painterResource(Theme.icons.colored.x),
-                            name = stringResource(R.string.twitter),
-                            contentDescription = stringResource(R.string.twitter_icon),
-                            onClick = onTwitterClick
-                        )
-                    }
-                }
-                if (hasTiktok) {
-                    item {
-                        SocialMediaComponent(
-                            image = painterResource(Theme.icons.colored.tiktok),
-                            name = stringResource(R.string.tiktok),
-                            contentDescription = stringResource(R.string.tiktok_icon),
-                            onClick = onTiktokClick
+                            image = it.platform.getIcon(),
+                            name = stringResource(it.name),
+                            contentDescription = stringResource(it.contentDescription),
+                            onClick = { onLinkClick(it.url) }
                         )
                     }
                 }
@@ -277,7 +232,7 @@ fun MainDetailsHeader(
             ) {
                 actorImageUrl?.let {
                     SafeIslamicImage(
-                        imageUrl = "it",
+                        imageUrl = it,
                         contentDescription = actorName,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -377,18 +332,10 @@ fun MainDetailsPreview() {
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
                             sharedTransitionScope = this@SharedTransitionLayout,
                             animatedVisibilityScope = this@AnimatedContent,
-                            onYoutubeClick = {},
-                            onFacebookClick = {},
-                            onInstagramClick = {},
-                            onTiktokClick = {},
-                            onTwitterClick = {},
                             actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
+                            socialMediaUiList = emptyList(),
+                            onLinkClick = {},
                             modifier = Modifier.padding(top = 72.dp),
-                            hasYoutube = true,
-                            hasFacebook = true,
-                            hasInstagram = true,
-                            hasTiktok = true,
-                            hasTwitter = true
                         )
                     }
                 }

@@ -31,7 +31,7 @@ class RecommendedMoviesViewModel @Inject constructor(
 ) : ViewModel(), RecommendedInteractionListener {
 
     private val movieId: Int = checkNotNull(savedStateHandle["movieId"])
-    val title: String = savedStateHandle["title"] ?: ""
+    val title: String = savedStateHandle.get<String>("title").orEmpty()
     private val _effect = Channel<RecommendedEffectMovie>()
     val effect = _effect.receiveAsFlow()
     val recommendationScreenState = Pager(config = PagingConfig(20)) {

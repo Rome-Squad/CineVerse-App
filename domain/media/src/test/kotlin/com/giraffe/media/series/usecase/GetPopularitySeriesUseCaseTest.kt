@@ -33,6 +33,7 @@ class GetPopularitySeriesUseCaseTest {
                 overview = "High school teacher turns to crime",
                 rating = 9.5f,
                 posterUrl = "https://example.com/breakingbad.jpg",
+                backdropUrl = "https://example.com/breakingbad.jpg",
                 genreIDs = listOf(1, 2),
                 releaseYear = "2008",
                 seasons = listOf(

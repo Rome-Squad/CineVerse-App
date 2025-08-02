@@ -4,10 +4,10 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
-class StoreRecentSeriesUseCase @Inject constructor(
+class AddRecentSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(series: Series) {
-        seriesRepository.storeRecentSeries(series)
+        seriesRepository.addRecentSeries(series)
     }
 }

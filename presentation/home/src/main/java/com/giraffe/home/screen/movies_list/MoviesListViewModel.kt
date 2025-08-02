@@ -167,7 +167,7 @@ class MoviesListViewModel @Inject constructor(
                 onError = ::onFail,
                 block = {
                     getRecentlySeriesUseCase().first().firstOrNull()?.id?.let { seriesId ->
-                        getRecommendedSeriesUseCase(seriesId = seriesId.toLong(), page = 1)
+                        getRecommendedSeriesUseCase(seriesId = seriesId, page = 1)
                     } ?: emptyList()
                 }
             )

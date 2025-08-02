@@ -24,7 +24,7 @@ import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
-import com.giraffe.media.series.usecase.StoreRecentSeriesUseCase
+import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
-    private val storeRecentSeriesUseCase: StoreRecentSeriesUseCase,
+    private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
     savedStateHandle: SavedStateHandle
@@ -265,7 +265,7 @@ class SeriesDetailsViewModel @Inject constructor(
             onSuccess = ::loadRecommendedSeriesSuccess,
             onError = ::loadError
         ) {
-            getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
+            getRecommendedSeries(seriesId = seriesId, page = page)
         }
     }
 

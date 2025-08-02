@@ -66,7 +66,7 @@ fun LoginForm(
             exit = slideOutVertically(tween(0)) { it }
         ) {
             Text(
-                text = state.screenErrorMessage?.let { stringResource(it) } ?: "",
+                text = state.screenErrorMessage?.let { stringResource(it) } .orEmpty(),
                 style = Theme.textStyle.body.sm.regular,
                 fontSize = 12.sp,
                 lineHeight = 12.sp,

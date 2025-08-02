@@ -9,6 +9,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -20,10 +22,28 @@ class SeriesRoomLocalDateSourceTest {
     private lateinit var dataSource: SeriesRoomLocalDateSource
 
     private val sampleSeries = listOf(
-        SeriesCacheDto(1, "Vikings", "desc", 8.0f, "poster", listOf(1), "2015")
+        SeriesCacheDto(
+            1,
+            "Vikings",
+            "desc",
+            8.0f,
+            "poster",
+            "backdrop",
+            listOf(1),
+            "2015"
+        )
     )
     private val sampleSeasons = listOf(
-        SeasonCacheDto(1, 1, "S1", "desc", 8.0f, "poster", 1, "2015", 10)
+        SeasonCacheDto(
+            1,
+            1,
+            "S1",
+            "desc",
+            8.0f,
+            "poster",
+            1,
+            "2015",
+            10)
     )
     private val sampleGenres = listOf(
         SeriesGenreCacheDto(id = 1, name = "Action", count = 1)
@@ -39,7 +59,7 @@ class SeriesRoomLocalDateSourceTest {
     fun `saveSearchResult inserts series only and preserves recent flag`() = runTest {
         coEvery { dao.getSeriesByIds(listOf(1)) } returns listOf(sampleSeries[0].copy(isRecent = true))
 
-        dataSource.saveSearchResult(sampleSeries)
+        dataSource.insertSearchResult(sampleSeries)
 
         coVerify {
             dao.insertSeries(match {
@@ -68,9 +88,9 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `getCachedSeriesForName returns full data if cache valid`() = runTest {
-        coEvery { dao.getSeriesByKeyword("vikings") } returns sampleSeries
+        coEvery { dao.getSeriesByKeyword("vikings", 1) } returns sampleSeries
 
-        val result = dataSource.getCachedSeriesForName("vikings")
+        val result = dataSource.getCachedSeriesForName("vikings", 1)
 
         assertThat(result).hasSize(1)
         assertThat(result[0].name).isEqualTo("Vikings")
@@ -78,9 +98,9 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `getCachedSeriesForName returns empty if cache expired`() = runTest {
-        coEvery { dao.getSeriesByKeyword("vikings") } returns emptyList()
+        coEvery { dao.getSeriesByKeyword("vikings", 1) } returns emptyList()
 
-        val result = dataSource.getCachedSeriesForName("vikings")
+        val result = dataSource.getCachedSeriesForName("vikings", 1)
 
         assertThat(result).isEmpty()
     }
@@ -105,7 +125,7 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `storeRecentSeries marks as viewed`() = runTest {
-        dataSource.storeRecentSeries(1)
+        dataSource.insertRecentSeries(1)
 
         coVerify { dao.markSeriesAsViewed(1) }
     }
@@ -119,9 +139,9 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `getRecentSeries returns series marked as recent`() = runTest {
-        coEvery { dao.getRecentSeries() } returns sampleSeries
+        coEvery { dao.getRecentSeries() } returns flowOf(sampleSeries)
 
-        val result = dataSource.getRecentSeries()
+        val result = dataSource.getRecentSeries().first()
 
         coVerify { dao.getRecentSeries() }
         assertThat(result).isEqualTo(sampleSeries)
@@ -141,7 +161,7 @@ class SeriesRoomLocalDateSourceTest {
     fun `saveSearchResult does not insert when merged list is empty`() = runTest {
         coEvery { dao.getSeriesByIds(emptyList()) } returns emptyList()
 
-        dataSource.saveSearchResult(emptyList())
+        dataSource.insertSearchResult(emptyList())
 
         coVerify(exactly = 0) { dao.insertSeries(any()) }
     }
@@ -155,6 +175,7 @@ class SeriesRoomLocalDateSourceTest {
                 "desc",
                 9.0f,
                 "poster",
+                "backdrop",
                 listOf(2),
                 "2021",
                 isRecent = true
@@ -163,7 +184,7 @@ class SeriesRoomLocalDateSourceTest {
 
         coEvery { dao.getSeriesByIds(listOf(2)) } returns emptyList()
 
-        dataSource.saveSearchResult(series)
+        dataSource.insertSearchResult(series)
 
         coVerify {
             dao.insertSeries(match {

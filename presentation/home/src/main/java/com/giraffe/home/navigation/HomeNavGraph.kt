@@ -163,7 +163,7 @@ fun HomeNavGraph(
             onTabSelected = { tab ->
                 Log.d("Tab", "Tab: ${tab.route}")
                 navController.navigate(tab.route) {
-                    popUpTo(navController.graph.startDestinationRoute ?: "") {
+                    popUpTo(navController.graph.startDestinationRoute .orEmpty()) {
                         saveState = true
                     }
                     launchSingleTop = true

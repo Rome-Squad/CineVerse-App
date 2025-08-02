@@ -14,6 +14,7 @@ data class SeriesCacheDto(
     val overview: String,
     val rate: Float,
     val posterUrl: String,
+    val backdropUrl: String,
     val genresID: List<Int>,
     val releaseYear: String,
     val isRecent: Boolean = false,

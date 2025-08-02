@@ -71,7 +71,7 @@ class MoviesRepositoryImpl @Inject constructor(
             .ifEmpty {
                 remote.getMovieGenres()
                     .map(MovieGenreDto::toEntity)
-                    .also { insertGenres(it) }
+                    .also { addGenres(it) }
             }
     }
 
@@ -80,11 +80,11 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getMoviesByGenre(genreId, page).map(MovieDto::toEntity)
     }
 
-    override suspend fun insertMovies(movie: List<Movie>) = SafeCall {
+    override suspend fun addMovies(movie: List<Movie>) = SafeCall {
         local.insertMovies(movie.map(Movie::toCacheDto))
     }
 
-    override suspend fun insertGenres(genres: List<Genre>) = SafeCall {
+    override suspend fun addGenres(genres: List<Genre>) = SafeCall {
         local.insertMovieGenres(genres.map(Genre::toDto))
     }
 

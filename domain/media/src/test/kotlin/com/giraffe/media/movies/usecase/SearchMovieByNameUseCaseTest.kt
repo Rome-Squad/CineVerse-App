@@ -18,13 +18,27 @@ class SearchMovieByNameUseCaseTest {
     private lateinit var useCase: SearchMovieByNameUseCase
 
     private val movieAction = Movie(
-        id = 1, title = "Action Movie", description = "", rating = 7.0f,
-        duration = 120, posterUrl = "", genresID = listOf(28),
+        id = 1,
+        title = "Action Movie",
+        description = "",
+        rating = 7.0f,
+        duration = 120,
+        posterUrl = "",
+        backdropUrl = "",
+        youtubeVideoId = "",
+        genresID = listOf(28),
         releaseYear = LocalDate(2022, 1, 1)
     )
     private val movieSciFi = Movie(
-        id = 2, title = "Sci-Fi Movie", description = "", rating = 8.0f,
-        duration = 130, posterUrl = "", genresID = listOf(878),
+        id = 2,
+        title = "Sci-Fi Movie",
+        description = "",
+        rating = 8.0f,
+        duration = 130,
+        posterUrl = "",
+        backdropUrl = "",
+        youtubeVideoId = "",
+        genresID = listOf(878),
         releaseYear = LocalDate(2023, 1, 1)
     )
 

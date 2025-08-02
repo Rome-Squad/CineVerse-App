@@ -42,7 +42,7 @@ interface SeriesApiServiceRetrofit {
 
     @GET("$TV/{$SERIES_ID}/$RECOMMENDATIONS")
     suspend fun getSeriesRecommendations(
-        @Path(SERIES_ID) seriesId: Long,
+        @Path(SERIES_ID) seriesId: Int,
         @Query(PAGE) page: Int = 1
     ): Response<SeriesResponse<SeriesDto>>
 

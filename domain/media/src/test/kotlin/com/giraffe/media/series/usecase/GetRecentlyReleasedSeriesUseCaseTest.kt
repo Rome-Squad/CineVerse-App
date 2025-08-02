@@ -31,6 +31,7 @@ class GetRecentlyReleasedSeriesUseCaseTest {
                 overview = "Survival in a post-apocalyptic world",
                 rating = 8.8f,
                 posterUrl = "https://example.com/tlou.jpg",
+                backdropUrl = "https://example.com/tlou.jpg",
                 genreIDs = listOf(3, 6),
                 releaseYear = "2023",
                 seasons = listOf(

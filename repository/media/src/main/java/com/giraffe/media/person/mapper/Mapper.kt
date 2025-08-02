@@ -107,7 +107,7 @@ fun PersonCreditDto.toEntity() = PersonCredit(
 private fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(
     facebookLink = facebookId.prependIfNotBlank(FACEBOOK_URL),
     instagramLink = instagramId.prependIfNotBlank(INSTAGRAM_URL),
-    youtubeLink = youtubeId.prependIfNotBlank(YOUTUBE_URL + AT_SYMBOLS_URL),
+    youtubeLink = youtubeId.prependIfNotBlank(YOUTUBE_URL),
     tiktokLink = tiktokId.prependIfNotBlank(TIKTOK_URL + AT_SYMBOLS_URL),
     twitterLink = twitterId.prependIfNotBlank(X_URL),
 )

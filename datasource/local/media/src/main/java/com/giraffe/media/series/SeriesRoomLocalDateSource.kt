@@ -14,7 +14,7 @@ class SeriesRoomLocalDateSource @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
-    override suspend fun saveSearchResult(
+    override suspend fun insertSearchResult(
         seriesList: List<SeriesCacheDto>
     ) = safeCall {
         val existingSeries = seriesDao.getSeriesByIds(seriesList.map { it.id })
@@ -67,7 +67,7 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
 
-    override suspend fun storeRecentSeries(seriesId: Int) = safeCall {
+    override suspend fun insertRecentSeries(seriesId: Int) = safeCall {
         seriesDao.markSeriesAsViewed(seriesId)
     }
 
