@@ -41,7 +41,7 @@ fun ProfileContent(
     ) {
         AppBar(
             modifier = modifier.padding(horizontal = 16.dp),
-            title = "My Profile",
+            title = stringResource(R.string.My_Profile),
         )
         UserProfileSection(
             modifier = Modifier
