@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
 
 class SetOnBoardingFirstTimeUseCaseTest {
-
     private lateinit var onboardingRepository: OnboardingRepository
     private lateinit var setOnBoardingFirstTimeUseCase: SetOnBoardingFirstTimeUseCase
 

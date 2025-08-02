@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class IsOnBoardingFirstTimeUseCaseTest {
-
     private lateinit var onboardingRepository: OnboardingRepository
     private lateinit var isOnBoardingFirstTimeUseCase: IsOnBoardingFirstTimeUseCase
 
