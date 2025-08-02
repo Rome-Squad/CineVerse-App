@@ -34,6 +34,7 @@ class GetRecentSeriesGenresTest {
                         overview = "",
                         rating = 8.5f,
                         posterUrl = "",
+                        backdropUrl = "",
                         genreIDs = listOf(1, 2),
                         releaseYear = "2021",
                         seasons = emptyList()
@@ -44,6 +45,7 @@ class GetRecentSeriesGenresTest {
                         overview = "",
                         rating = 8.2f,
                         posterUrl = "",
+                        backdropUrl = "",
                         genreIDs = listOf(3),
                         releaseYear = "2022",
                         seasons = emptyList()
