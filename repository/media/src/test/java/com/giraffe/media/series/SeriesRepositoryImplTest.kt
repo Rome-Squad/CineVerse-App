@@ -163,7 +163,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `storeRecentSeries should call local storage`() = runTest {
-        repository.storeRecentSeries(sampleSeries[0])
+        repository.addRecentSeries(sampleSeries[0])
         coVerify { local.storeRecentSeries(1) }
     }
 

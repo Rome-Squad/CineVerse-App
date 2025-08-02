@@ -1,6 +1,7 @@
 package com.giraffe.media.person
 
 import com.giraffe.media.exception.MediaException
+import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
 import com.giraffe.media.person.entity.Person
@@ -23,6 +24,7 @@ class PersonRepositoryImplTest {
     private lateinit var repository: PersonRepository
     private val remoteDataSource: PersonRemoteDataSource = mockk(relaxed = true)
     private val localDataSource: PersonLocalDataSource = mockk(relaxed = true)
+    private val localExploreDataSource: LocalExploreDataSource = mockk(relaxed = true)
     private val keyword = "Mohannad"
     private val dummyPersonCacheDto = PersonCacheDto(
         id = 5,
@@ -47,30 +49,34 @@ class PersonRepositoryImplTest {
 
     @Before
     fun setup() {
-        repository = PersonRepositoryImpl(remoteDataSource, localDataSource)
+        repository = PersonRepositoryImpl(
+            remoteDataSource,
+            localDataSource,
+            localExploreDataSource
+        )
     }
 
     @Test
     fun `should get cached result first when search by name`() = runTest {
         //given
-        coEvery { localDataSource.searchByName(keyword) } returns dummyPeopleDto
+        coEvery { localDataSource.searchByName(keyword, 1) } returns dummyPeopleDto
         //when
-        val result = repository.searchByName(keyword)
+        val result = repository.searchByName(keyword, 1)
         //then
         assertThat(result.size).isEqualTo(3)
         assertThat(result.first()).isInstanceOf(Person::class.java)
-        coVerify(exactly = 1) { localDataSource.searchByName(match { it == keyword }) }
-        coVerify(exactly = 0) { remoteDataSource.searchByName(any()) }
+        coVerify(exactly = 1) { localDataSource.searchByName(match { it == keyword }, 1) }
+        coVerify(exactly = 0) { remoteDataSource.searchByName(any(), 1) }
     }
 
     @Test
     fun `should get result from remote and cache it as not recent when cached result not found`() =
         runTest {
             //given
-            coEvery { localDataSource.searchByName(keyword) } returns emptyList()
-            coEvery { remoteDataSource.searchByName(keyword) } returns dummyPeopleResponse
+            coEvery { localDataSource.searchByName(keyword, 1) } returns emptyList()
+            coEvery { remoteDataSource.searchByName(keyword, 1) } returns dummyPeopleResponse
             //when
-            val result = repository.searchByName(keyword)
+            val result = repository.searchByName(keyword, 1)
             //then
             assertThat(result.size).isEqualTo(2)
             assertThat(result.first()).isInstanceOf(Person::class.java)
@@ -84,32 +90,32 @@ class PersonRepositoryImplTest {
     @Test
     fun `should throw MediaDomainException when local search throw any exception`() = runTest {
         //given
-        coEvery { localDataSource.searchByName(keyword) } throws Exception()
+        coEvery { localDataSource.searchByName(keyword, 1) } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.searchByName(keyword) }
-        coVerify(exactly = 0) { remoteDataSource.searchByName(any()) }
+        assertThrows<MediaException> { repository.searchByName(keyword, 1) }
+        coVerify(exactly = 0) { remoteDataSource.searchByName(any(), 1) }
         coVerify(exactly = 0) { localDataSource.storePerson(any()) }
     }
 
     @Test
     fun `should throw MediaDomainException when remote search throw any exception`() = runTest {
         //given
-        coEvery { localDataSource.searchByName(keyword) } returns emptyList()
-        coEvery { remoteDataSource.searchByName(keyword) } throws Exception()
+        coEvery { localDataSource.searchByName(keyword, 1) } returns emptyList()
+        coEvery { remoteDataSource.searchByName(keyword, 1) } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.searchByName(keyword) }
+        assertThrows<MediaException> { repository.searchByName(keyword, 1) }
         coVerify(exactly = 0) { localDataSource.storePerson(any()) }
     }
 
     @Test
     fun `should throw MediaDomainException when local store throw any exception`() = runTest {
         //given
-        coEvery { localDataSource.searchByName(keyword) } returns emptyList()
-        coEvery { remoteDataSource.searchByName(keyword) } returns dummyPeopleResponse
+        coEvery { localDataSource.searchByName(keyword, 1) } returns emptyList()
+        coEvery { remoteDataSource.searchByName(keyword, 1) } returns dummyPeopleResponse
         coEvery { localDataSource.storePeople(any()) } throws Exception("Test Exception")
 
         //when && then
-        assertThrows<MediaException> { repository.searchByName(keyword) }
+        assertThrows<MediaException> { repository.searchByName(keyword, 1) }
     }
 
 
