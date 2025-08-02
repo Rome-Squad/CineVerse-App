@@ -25,8 +25,16 @@ fun SeriesCacheDto.toEntity(
     name = name,
     overview = overview,
     rating = rate,
-    posterUrl = posterUrl,
-    backdropUrl = backdropUrl,
+    posterUrl = posterUrl.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    },
+    backdropUrl = backdropUrl.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    },
     genreIDs = genresID,
     releaseYear = releaseYear,
     seasons = seasons
@@ -37,8 +45,16 @@ fun Series.toCacheDto() = SeriesCacheDto(
     name = name,
     overview = overview,
     rate = rating,
-    posterUrl = posterUrl,
-    backdropUrl = backdropUrl,
+    posterUrl = posterUrl.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    },
+    backdropUrl = backdropUrl.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    },
     genresID = genreIDs,
     releaseYear = releaseYear,
 )
@@ -48,7 +64,11 @@ fun SeasonCacheDto.toEntity() = Season(
     id = id,
     overview = overview,
     rating = rate,
-    posterUrl = posterUrl,
+    posterUrl = posterUrl.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    },
     seasonNumber = seasonNumber,
     releaseYear = releaseYear,
     episodeCount = numberOfEpisodes
@@ -72,8 +92,16 @@ fun SeriesDto.toEntity() = Series(
     name = name ?: "",
     overview = overview ?: "",
     rating = voteAverage?.toFloat() ?: 0f,
-    posterUrl = BASE_IMAGE_URL + posterPath,
-    backdropUrl = BASE_IMAGE_URL + backdropPath,
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
     genreIDs = genreIds,
     releaseYear = firstAirDate?.toFormattedDate() ?: "",
     seasons = emptyList()
@@ -89,16 +117,28 @@ fun SeasonDto.toEntity() = Season(
     id = id,
     overview = overview,
     rating = voteAverage,
-    posterUrl = BASE_IMAGE_URL + posterPath,
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
     seasonNumber = seasonNumber,
-    releaseYear = airDate ?: "",
+    releaseYear = airDate.orEmpty(),
     episodeCount = episodeCount
 )
 
 fun SeriesDetailsDto.toEntity() = Series(
     id = id,
-    posterUrl = BASE_IMAGE_URL + posterPath,
-    backdropUrl = BASE_IMAGE_URL + backdropPath,
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
     name = name ?: "",
     genreIDs = genres.map { it.id },
     rating = voteAverage?.toFloat() ?: 0f,
@@ -122,9 +162,13 @@ fun parseData(dateString: String): LocalDateTime? {
 fun SeriesDetailsDto.toSeasonEntity() = seasons.map {
     Season(
         id = it.id,
-        posterUrl = BASE_IMAGE_URL + it.posterPath,
+        posterUrl = it.posterPath?.let { url ->
+            if (url.contains(BASE_IMAGE_URL))
+                url
+            else BASE_IMAGE_URL + url
+        }.orEmpty(),
         rating = it.voteAverage,
-        releaseYear = it.airDate ?: "",
+        releaseYear = it.airDate.orEmpty(),
         overview = it.overview,
         episodeCount = it.episodeCount,
         seasonNumber = it.seasonNumber

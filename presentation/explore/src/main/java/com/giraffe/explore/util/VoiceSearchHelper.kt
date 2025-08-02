@@ -43,7 +43,7 @@ class VoiceSearchHelper(
 
             override fun onResults(results: Bundle?) {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                val result = matches?.firstOrNull() ?: ""
+                val result = matches?.firstOrNull() .orEmpty()
                 onResult(result)
             }
 
