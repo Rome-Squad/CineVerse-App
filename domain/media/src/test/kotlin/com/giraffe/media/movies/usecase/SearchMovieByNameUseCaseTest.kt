@@ -25,6 +25,7 @@ class SearchMovieByNameUseCaseTest {
         duration = 120,
         posterUrl = "",
         backdropUrl = "",
+        youtubeVideoId = "",
         genresID = listOf(28),
         releaseYear = LocalDate(2022, 1, 1)
     )
@@ -36,6 +37,7 @@ class SearchMovieByNameUseCaseTest {
         duration = 130,
         posterUrl = "",
         backdropUrl = "",
+        youtubeVideoId = "",
         genresID = listOf(878),
         releaseYear = LocalDate(2023, 1, 1)
     )

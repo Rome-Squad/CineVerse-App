@@ -37,7 +37,7 @@ class SearchResultViewModel @Inject constructor(
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SearchResultScreenState>(
-    SearchResultScreenState(query = savedStateHandle["query"] ?: "")
+    SearchResultScreenState(query = savedStateHandle["query"] .orEmpty())
 ),
     SearchResultInteractionListener {
 
