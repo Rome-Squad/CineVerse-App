@@ -6,7 +6,7 @@ import com.giraffe.explore.util.toPoster
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
-import com.giraffe.media.explore.usecase.InsertSearchKeywordUseCase
+import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
@@ -27,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getSearchKeywords: GetSearchKeywordsUseCase,
-    private val insertSearchKeyword: InsertSearchKeywordUseCase,
+    private val insertSearchKeyword: AddSearchKeywordUseCase,
     private val deleteKeywordUseCase: DeleteKeywordUseCase,
     private val clearSearchHistory: ClearSearchHistoryUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,

@@ -10,6 +10,7 @@ fun fakeSeries(id: Int, name: String,genreIDs: List<Int> = emptyList()) = Series
     overview = "",
     rating = 0f,
     posterUrl = "",
+    backdropUrl = "",
     genreIDs = genreIDs,
     releaseYear = "",
 )

@@ -10,15 +10,15 @@ import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class InsertMoviesUseCaseTest {
+class AddMoviesUseCaseTest {
 
     private lateinit var repository: MoviesRepository
-    private lateinit var useCase: InsertMoviesUseCase
+    private lateinit var useCase: AddMoviesUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
-        useCase = InsertMoviesUseCase(repository)
+        useCase = AddMoviesUseCase(repository)
     }
 
     @Test
@@ -43,6 +43,6 @@ class InsertMoviesUseCaseTest {
         useCase(movies)
 
         // Then
-        coVerify { repository.insertMovies(movies) }
+        coVerify { repository.addMovies(movies) }
     }
 }

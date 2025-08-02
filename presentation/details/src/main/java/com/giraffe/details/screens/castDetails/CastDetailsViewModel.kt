@@ -9,7 +9,7 @@ import com.giraffe.details.screens.castDetails.state.CastDetailsUiState
 import com.giraffe.details.screens.castDetails.state.toUiState
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
-import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
+import com.giraffe.media.person.usecase.AddRecentPersonUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase,
-    private val storeRecentSeriesUseCase: StoreRecentPersonUseCase
+    private val storeRecentSeriesUseCase: AddRecentPersonUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
     CastDetailsInteractionListener {
     private val personId: Int = savedStateHandle.toRoute<CastDetailsRoute>().id
