@@ -33,6 +33,7 @@ class GetPopularityMoviesUseCaseTest {
                 rating = 8.8f,
                 duration = 148,
                 posterUrl = "https://example.com/inception.jpg",
+                backdropUrl = "https://example.com/inception.jpg",
                 genresID = listOf(1, 2),
                 releaseYear = LocalDate(2024, 4, 10)
             ),
@@ -43,6 +44,7 @@ class GetPopularityMoviesUseCaseTest {
                 rating = 8.6f,
                 duration = 169,
                 posterUrl = "https://example.com/interstellar.jpg",
+                backdropUrl = "https://example.com/inception.jpg",
                 genresID = listOf(2, 3),
                 releaseYear = LocalDate(2023, 4, 5)
             )

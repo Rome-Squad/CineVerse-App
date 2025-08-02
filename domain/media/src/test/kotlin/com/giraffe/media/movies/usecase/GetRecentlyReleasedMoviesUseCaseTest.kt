@@ -35,6 +35,7 @@ class GetRecentlyReleasedMoviesUseCaseTest {
                     rating = 8.9f,
                     duration = 155,
                     posterUrl = "https://example.com/dune2.jpg",
+                    backdropUrl = "https://example.com/dune2.jpg",
                     genresID = listOf(4, 5),
                     releaseYear = LocalDate(2024, 3, 1)
                 )
