@@ -6,7 +6,7 @@ class Converters {
 
     @TypeConverter
     fun fromList(value: List<Int>?): String {
-        return value?.joinToString(",") ?: ""
+        return value?.joinToString(",") .orEmpty()
     }
 
     @TypeConverter

@@ -41,7 +41,7 @@ internal fun ExploreNavGraph(
     val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
         navDestination.route?.let { route ->
             bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName ?: "")
+                route.contains(klass.simpleName .orEmpty())
             }
         } == true
     } == true
