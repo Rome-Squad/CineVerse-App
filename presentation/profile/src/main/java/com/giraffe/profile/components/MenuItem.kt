@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Switch
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.icon.CineVerseIcons
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -39,7 +39,7 @@ fun MenuItem(
 ) {
     Column(
         modifier = modifier
-            .background(Theme.color.shade.quaternary)
+            .background(Theme.color.background.card)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -98,8 +98,9 @@ fun MenuItem(
             Box(
                 modifier = modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
                     .height(1.dp)
-                    .background(Theme.color.shade.tertiary)
+                    .background(Theme.color.shade.quaternary)
             )
         }
     }

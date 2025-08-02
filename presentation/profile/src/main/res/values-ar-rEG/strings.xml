@@ -15,7 +15,7 @@
     <string name="my_ratings">تقييماتي</string>
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
-
+    <string name="settings_text">الأعدادات</string>
     <string name="cancel">الغاء</string>
     <string name="create">انشاء</string>
     <string name="profile_screen">جهة الملف الشخصيوا</string>

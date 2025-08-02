@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
@@ -36,7 +36,6 @@ fun UserProfileSection(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.Start
     ) {
 
@@ -65,7 +64,7 @@ fun UserProfileSection(
                 SafeIslamicImage(
                     imageUrl = userProfileImage.toString(),
                     contentDescription = userProfileImage.toString(),
-                    modifier = modifier
+                    modifier = Modifier
                         .clip(CircleShape)
                         .size(56.dp),
                     contentScale = ContentScale.Crop
@@ -103,88 +102,6 @@ fun UserProfileSection(
                         onArrowButtonClick()
                     }
             )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconTextBox(
-                modifier = Modifier
-                    .clip(
-                        shape = RoundedCornerShape(
-                            size = Theme.radius.full
-                        )
-                    )
-                    .background(
-                        color = Theme.color.background.card
-                    )
-                    .padding(
-                        horizontal = 12.dp,
-                        vertical = 8.dp
-                    ),
-                text = stringResource(R.string.history)
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = R.drawable.outline_history
-                    ),
-                    contentDescription = stringResource(R.string.history),
-                    tint = Theme.color.brand.primary
-                )
-            }
-
-            IconTextBox(
-                modifier = Modifier
-                    .clip(
-                        shape = RoundedCornerShape(
-                            size = Theme.radius.full
-                        )
-                    )
-                    .background(
-                        color = Theme.color.background.card
-                    )
-                    .padding(
-                        horizontal = 12.dp,
-                        vertical = 8.dp
-                    ),
-                text = stringResource(R.string.my_collections)
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = R.drawable.due_tone_video_library
-                    ),
-                    contentDescription = stringResource(R.string.my_collections),
-                    tint = Theme.color.brand.primary
-                )
-            }
-
-            IconTextBox(
-                modifier = Modifier
-                    .clip(
-                        shape = RoundedCornerShape(
-                            size = Theme.radius.full
-                        )
-                    )
-                    .background(
-                        color = Theme.color.background.card
-                    )
-                    .padding(
-                        horizontal = 12.dp,
-                        vertical = 8.dp
-                    ),
-                text = stringResource(R.string.my_ratings)
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = R.drawable.due_tone_star
-                    ),
-                    contentDescription = stringResource(R.string.my_ratings),
-                    tint = Theme.color.brand.primary
-                )
-            }
         }
     }
 }
