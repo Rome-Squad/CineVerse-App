@@ -113,7 +113,7 @@ fun ReviewCard(
                 starSpace = 4.dp
             )
             Text(
-                text = reviewDate?.formatAsMonthDayYear() ?: "",
+                text = reviewDate?.formatAsMonthDayYear() .orEmpty(),
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.shade.secondary
             )

@@ -10,7 +10,7 @@ import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class InsertMoviesUseCaseTest {
+class AddMoviesUseCaseTest {
 
     private lateinit var repository: MoviesRepository
     private lateinit var useCase: AddMoviesUseCase
@@ -33,6 +33,7 @@ class InsertMoviesUseCaseTest {
                 duration = 120,
                 posterUrl = "https://example.com/movie1.jpg",
                 backdropUrl = "https://example.com/movie1.jpg",
+                youtubeVideoId = "abc123",
                 genresID = listOf(1, 2),
                 releaseYear = LocalDate(2022, 1, 1)
             )

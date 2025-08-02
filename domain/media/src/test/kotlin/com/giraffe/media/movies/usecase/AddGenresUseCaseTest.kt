@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class InsertGenresUseCaseTest {
+class AddGenresUseCaseTest {
 
     private lateinit var repository: MoviesRepository
     private lateinit var useCase: AddGenresUseCase

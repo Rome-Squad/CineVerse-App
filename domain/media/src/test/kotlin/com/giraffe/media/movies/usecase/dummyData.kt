@@ -12,6 +12,7 @@ fun fakeMovie(id: Int, title: String): Movie {
         duration = 120,
         posterUrl = "https://example.com/poster.jpg",
         backdropUrl = "https://example.com/backdrop.jpg",
+        youtubeVideoId = "abc123",
         genresID = listOf(28, 878),
         releaseYear = LocalDate(2024, 1, 1)
     )

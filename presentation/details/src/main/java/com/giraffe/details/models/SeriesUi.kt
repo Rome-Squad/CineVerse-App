@@ -30,7 +30,7 @@ data class SeriesUi(
 fun SeriesUi.toPoster(): Poster = Poster(
     id = id,
     name = name,
-    imageUri = posterUrl ?: "",
+    imageUri = posterUrl .orEmpty(),
     rating = rating,
     genres = genres.joinToString(", "),
     date = releaseYear
