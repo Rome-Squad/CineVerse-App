@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test
 class InsertGenresUseCaseTest {
 
     private lateinit var repository: MoviesRepository
-    private lateinit var useCase: InsertGenresUseCase
+    private lateinit var useCase: AddGenresUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
-        useCase = InsertGenresUseCase(repository)
+        useCase = AddGenresUseCase(repository)
     }
 
     @Test
@@ -37,6 +37,6 @@ class InsertGenresUseCaseTest {
         useCase(genres)
 
         // Then
-        coVerify { repository.insertGenres(genres) }
+        coVerify { repository.addGenres(genres) }
     }
 }

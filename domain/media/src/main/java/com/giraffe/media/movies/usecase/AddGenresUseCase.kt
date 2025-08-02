@@ -4,10 +4,10 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.repository.MoviesRepository
 import javax.inject.Inject
 
-class InsertGenresUseCase @Inject constructor(
+class AddGenresUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(genres: List<Genre>) {
-        repository.insertGenres(genres)
+        repository.addGenres(genres)
     }
 }
