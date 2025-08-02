@@ -14,18 +14,6 @@ class DataStorePreferences(private val context: Context) {
         name = DATA_STORE_NAME
     )
 
-    suspend fun setFirstTimeStatus() {
-        context.dataStore.edit { preferences ->
-            preferences[booleanPreferencesKey(
-                IS_FIRST_TIME
-            )] = false
-        }
-    }
-
-    suspend fun isFirstTime() = context.dataStore.data.map { preferences ->
-        preferences[booleanPreferencesKey(IS_FIRST_TIME)] != false
-    }.first()
-
     suspend fun setDarkThemeStatus(isDark: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[booleanPreferencesKey(
@@ -41,7 +29,6 @@ class DataStorePreferences(private val context: Context) {
     companion object {
 
         private const val DATA_STORE_NAME = "CineVerseDataStore"
-        const val IS_FIRST_TIME = "IS_FIRST_TIME"
         const val IS_DARK_THEME = "IS_DARK_THEME"
     }
 }
