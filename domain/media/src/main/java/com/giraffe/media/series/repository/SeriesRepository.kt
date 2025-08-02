@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SeriesRepository {
     suspend fun searchSeriesByName(seriesName: String, page: Int): List<Series>
-    suspend fun storeRecentSeries(series: Series)
+    suspend fun addRecentSeries(series: Series)
     suspend fun getSeriesGenres(): List<Genre>
     suspend fun getRecentSeries(): Flow<List<Series>>
     suspend fun clearRecentSeries()

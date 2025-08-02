@@ -68,7 +68,7 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun storeRecentSeries(series: Series) = SafeCall {
+    override suspend fun addRecentSeries(series: Series) = SafeCall {
         local.storeRecentSeries(series.id)
     }
 
