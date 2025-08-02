@@ -18,8 +18,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.giraffe.authentication.R
-import com.giraffe.authentication.screen.LoginInteractionListener
-import com.giraffe.authentication.screen.LoginScreenState
+import com.giraffe.authentication.login.LoginInteractionListener
+import com.giraffe.authentication.login.LoginScreenState
 import com.giraffe.designsystem.composable.DefaultTextField
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.button_type.SecondaryButton

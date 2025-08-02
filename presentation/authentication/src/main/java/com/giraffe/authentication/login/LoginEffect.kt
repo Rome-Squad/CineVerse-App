@@ -1,4 +1,4 @@
-package com.giraffe.authentication.screen
+package com.giraffe.authentication.login
 
 sealed class LoginEffect {
 
