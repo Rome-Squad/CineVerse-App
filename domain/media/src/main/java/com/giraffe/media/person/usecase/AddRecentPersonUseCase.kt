@@ -4,8 +4,8 @@ import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.repository.PersonRepository
 import javax.inject.Inject
 
-class StoreRecentPersonUseCase @Inject constructor(
+class AddRecentPersonUseCase @Inject constructor(
     private val repository: PersonRepository
 ) {
-    suspend operator fun invoke(person: Person) = repository.storeRecentPerson(person)
+    suspend operator fun invoke(person: Person) = repository.addRecentPerson(person)
 }

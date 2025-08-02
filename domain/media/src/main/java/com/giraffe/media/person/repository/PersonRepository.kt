@@ -5,7 +5,7 @@ import com.giraffe.media.person.entity.PersonCredit
 
 interface PersonRepository {
     suspend fun searchByName(personName: String, page: Int): List<Person>
-    suspend fun storeRecentPerson(person: Person)
+    suspend fun addRecentPerson(person: Person)
     suspend fun getRecentPeople(): List<Person>
     suspend fun clearRecentPeople()
     suspend fun getPeopleByMovieId(movieId: Int): List<Person>

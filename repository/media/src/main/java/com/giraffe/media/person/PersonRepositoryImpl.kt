@@ -52,7 +52,7 @@ class PersonRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun storeRecentPerson(person: Person) =
+    override suspend fun addRecentPerson(person: Person) =
         SafeCall { localDataSource.storePerson(person.toCacheDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {

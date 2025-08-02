@@ -118,7 +118,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(dummyPersonCacheDto) } just Runs
         //when
-        repository.storeRecentPerson(dummyPersonCacheDto.toEntity())
+        repository.addRecentPerson(dummyPersonCacheDto.toEntity())
         //then
         coVerify(exactly = 1) { localDataSource.storePerson(match { it.isRecent }) }
     }
@@ -128,7 +128,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.storePerson(any()) } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.storeRecentPerson(dummyPersonCacheDto.toEntity()) }
+        assertThrows<MediaException> { repository.addRecentPerson(dummyPersonCacheDto.toEntity()) }
     }
 
 
