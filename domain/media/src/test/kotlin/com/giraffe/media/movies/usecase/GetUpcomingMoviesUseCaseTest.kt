@@ -34,6 +34,7 @@ class GetUpcomingMoviesUseCaseTest {
                 duration = null,
                 posterUrl = "https://example.com/avatar3.jpg",
                 backdropUrl = "https://example.com/avatar3.jpg",
+                youtubeVideoId = "abc123",
                 genresID = listOf(1, 4),
                 releaseYear = LocalDate(2025, 12, 20)
             )

@@ -25,6 +25,7 @@ class SetMovieRecentUseCaseTest {
                 duration = 148,
                 posterUrl = "https://example.com/inception.jpg",
                 backdropUrl = "https://example.com/inception.jpg",
+                youtubeVideoId = "abc123",
                 genresID = listOf(1, 2, 3),
                 releaseYear = LocalDate(2010, 7, 16)
             )

@@ -36,6 +36,7 @@ class GetRecentlyReleasedMoviesUseCaseTest {
                     duration = 155,
                     posterUrl = "https://example.com/dune2.jpg",
                     backdropUrl = "https://example.com/dune2.jpg",
+                    youtubeVideoId = "abc123",
                     genresID = listOf(4, 5),
                     releaseYear = LocalDate(2024, 3, 1)
                 )
