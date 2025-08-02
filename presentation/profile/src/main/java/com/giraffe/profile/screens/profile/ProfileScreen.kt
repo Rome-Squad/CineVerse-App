@@ -74,7 +74,7 @@ fun ProfileContent(
         ) {
             MenuItem(
                 icon = Theme.icons.dueTone.moon,
-                title = "Dark Mode",
+                title = stringResource(R.string.Dark_Mode),
                 hasSwitch = true,
                 onSwitchChange = {},
                 hasButton = false,
@@ -84,7 +84,7 @@ fun ProfileContent(
             )
             MenuItem(
                 icon = Theme.icons.dueTone.language,
-                title = "Language",
+                title = stringResource(R.string.Language),
                 hasSwitch = false,
                 onSwitchChange = {},
                 hasButton = true,
@@ -94,7 +94,7 @@ fun ProfileContent(
             )
             MenuItem(
                 icon = Theme.icons.dueTone.logout,
-                title = "Logout",
+                title = stringResource(R.string.Logout),
                 hasSwitch = false,
                 onSwitchChange = {},
                 hasButton = true,
@@ -106,7 +106,7 @@ fun ProfileContent(
         Text(
             modifier = Modifier
                 .padding(top = 24.dp),
-            text = "Version 1.0.1",
+            text = stringResource(R.string.Version),
             color = Theme.color.shade.tertiary,
             style = Theme.textStyle.body.sm.regular
         )

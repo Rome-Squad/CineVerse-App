@@ -12,6 +12,10 @@
     <string name="settings_text">Settings</string>
     <string name="user_name">\@%1$s</string>
     <string name="history">History</string>
+    <string name="Dark_Mode">Dark Mode</string>
+    <string name="Language">Language</string>
+    <string name="Logout">Logout</string>
+    <string name="Version">Version 1.0.1</string>
     <string name="my_collections">My Collections</string>
     <string name="my_ratings">My Ratings</string>
     <string name="arabic">Arabic</string>

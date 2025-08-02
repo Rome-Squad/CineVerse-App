@@ -15,6 +15,10 @@
     <string name="my_ratings">تقييماتي</string>
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
+    <string name="Dark_Mode">الوضع المظلم</string>
+    <string name="Language">اللغه</string>
+    <string name="Logout">تسجيل الخروج</string>
+    <string name="Version">الاصدار 1.0.1</string>
     <string name="settings_text">الأعدادات</string>
     <string name="cancel">الغاء</string>
     <string name="create">انشاء</string>
