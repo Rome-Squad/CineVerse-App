@@ -5,18 +5,18 @@ import com.giraffe.user.datastore.AuthenticationDatastore
 import com.giraffe.user.util.safeCall
 import javax.inject.Inject
 
-class AuthenticationLocalDataSourceImp @Inject constructor(
-    private val dataStore: AuthenticationDatastore
+class AuthenticationLocalDataSourceImpl @Inject constructor(
+    private val authenticationDatastore: AuthenticationDatastore
 ) : AuthenticationLocalDataSource {
     override suspend fun saveSessionId(sessionId: String) = safeCall {
-        dataStore.saveSessionId(sessionId)
+        authenticationDatastore.saveSessionId(sessionId)
     }
 
     override suspend fun getSessionId(): String? = safeCall {
-        dataStore.getSessionId()
+        authenticationDatastore.getSessionId()
     }
 
     override suspend fun isLoggedIn(): Boolean = safeCall {
-        dataStore.getSessionId() != null
+        authenticationDatastore.getSessionId() != null
     }
 }

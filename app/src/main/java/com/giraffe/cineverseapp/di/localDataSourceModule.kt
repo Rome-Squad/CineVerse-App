@@ -12,7 +12,7 @@ import com.giraffe.media.series.SeriesRoomLocalDateSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.repository.datasource.local.OnboardingLocalDataSource
 import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
-import com.giraffe.user.AuthenticationLocalDataSourceImp
+import com.giraffe.user.AuthenticationLocalDataSourceImpl
 import com.giraffe.user.OnboardingLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -50,6 +50,6 @@ abstract class LocalDataSourceBindModule {
 
     @Binds
     @Singleton
-    abstract fun bindAuthenticationLocalDataSource(impl: AuthenticationLocalDataSourceImp): AuthenticationLocalDataSource
+    abstract fun bindAuthenticationLocalDataSource(impl: AuthenticationLocalDataSourceImpl): AuthenticationLocalDataSource
 }
 
