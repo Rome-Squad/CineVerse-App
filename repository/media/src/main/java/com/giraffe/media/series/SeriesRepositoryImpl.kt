@@ -115,7 +115,7 @@ class SeriesRepositoryImpl @Inject constructor(
         remote.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
 
-    override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {
+    override suspend fun getRecommendedSeries(seriesId: Int, page: Int): List<Series> {
         return SafeCall {
             remote.getSeriesRecommendations(seriesId, page)
                 .map(SeriesDto::toEntity)

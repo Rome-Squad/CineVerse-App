@@ -37,7 +37,7 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
     override suspend fun getTopRatedSeries(page: Int): List<SeriesDto> =
         retrofitRequestBuilder.get { getTopRatedSeries(page) }.results
 
-    override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
+    override suspend fun getSeriesRecommendations(seriesId: Int, page: Int) =
         retrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results
 
     override suspend fun getSeriesTrailerUrl(seriesId: Int): String {
