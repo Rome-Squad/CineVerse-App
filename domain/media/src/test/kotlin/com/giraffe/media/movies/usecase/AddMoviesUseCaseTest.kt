@@ -10,7 +10,7 @@ import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class InsertMoviesUseCaseTest {
+class AddMoviesUseCaseTest {
 
     private lateinit var repository: MoviesRepository
     private lateinit var useCase: AddMoviesUseCase
