@@ -33,10 +33,10 @@ fun BaseBottomSheet(
     title: String? = null,
 ) {
 
-    AnimatedVisibility(isVisible) {
+    if (isVisible) {
         ModalBottomSheet(
             onDismissRequest = onDismiss,
-            sheetState = rememberModalBottomSheetState(),
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             modifier = modifier.navigationBarsPadding(),
             shape = RoundedCornerShape(Theme.radius.xl),
             contentColor = Theme.color.background.bottomSheet,

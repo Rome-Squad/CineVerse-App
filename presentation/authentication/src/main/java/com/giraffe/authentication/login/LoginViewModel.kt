@@ -1,14 +1,11 @@
 package com.giraffe.authentication.login
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.giraffe.authentication.R
 import com.giraffe.authentication.base.BaseViewModel
 import com.giraffe.user.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -104,10 +101,7 @@ class LoginViewModel @Inject constructor(
                 isVisibleCreateNewAccountBottomSheet = false,
             )
         }
-        viewModelScope.launch {
-            delay(300)
-            sendEffect(LoginEffect.NavigateToWebViewScreen)
-        }
+        sendEffect(LoginEffect.NavigateToWebViewScreen)
     }
 
     override fun onForgotPasswordClick() {
