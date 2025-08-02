@@ -120,7 +120,7 @@ class SeriesRepositoryImplTest {
         assertThat(result.first().name).isEqualTo("Vikings")
         coVerify { remote.getSeriesByName("vikings") }
         coVerify {
-            local.saveSearchResult(
+            local.insertSearchResult(
                 seriesList = match { it.first().id == 1 }
             )
         }
@@ -164,7 +164,7 @@ class SeriesRepositoryImplTest {
     @Test
     fun `storeRecentSeries should call local storage`() = runTest {
         repository.addRecentSeries(sampleSeries[0])
-        coVerify { local.storeRecentSeries(1) }
+        coVerify { local.insertRecentSeries(1) }
     }
 
     @Test

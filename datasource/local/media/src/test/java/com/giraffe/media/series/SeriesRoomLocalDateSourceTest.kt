@@ -39,7 +39,7 @@ class SeriesRoomLocalDateSourceTest {
     fun `saveSearchResult inserts series only and preserves recent flag`() = runTest {
         coEvery { dao.getSeriesByIds(listOf(1)) } returns listOf(sampleSeries[0].copy(isRecent = true))
 
-        dataSource.saveSearchResult(sampleSeries)
+        dataSource.insertSearchResult(sampleSeries)
 
         coVerify {
             dao.insertSeries(match {
@@ -105,7 +105,7 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `storeRecentSeries marks as viewed`() = runTest {
-        dataSource.storeRecentSeries(1)
+        dataSource.insertRecentSeries(1)
 
         coVerify { dao.markSeriesAsViewed(1) }
     }
@@ -141,7 +141,7 @@ class SeriesRoomLocalDateSourceTest {
     fun `saveSearchResult does not insert when merged list is empty`() = runTest {
         coEvery { dao.getSeriesByIds(emptyList()) } returns emptyList()
 
-        dataSource.saveSearchResult(emptyList())
+        dataSource.insertSearchResult(emptyList())
 
         coVerify(exactly = 0) { dao.insertSeries(any()) }
     }
@@ -163,7 +163,7 @@ class SeriesRoomLocalDateSourceTest {
 
         coEvery { dao.getSeriesByIds(listOf(2)) } returns emptyList()
 
-        dataSource.saveSearchResult(series)
+        dataSource.insertSearchResult(series)
 
         coVerify {
             dao.insertSeries(match {

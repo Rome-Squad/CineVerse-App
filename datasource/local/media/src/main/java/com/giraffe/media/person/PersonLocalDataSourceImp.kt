@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class PersonLocalDataSourceImp @Inject constructor(private val dao: PersonDao) :
     PersonLocalDataSource {
-    override suspend fun storePerson(person: PersonCacheDto) = safeCall {
-        dao.storePerson(person)
+    override suspend fun insertPerson(person: PersonCacheDto) = safeCall {
+        dao.insertPerson(person)
     }
 
     override suspend fun searchByName(personName: String, page: Int) = safeCall {
@@ -36,7 +36,7 @@ class PersonLocalDataSourceImp @Inject constructor(private val dao: PersonDao) :
         dao.getPeopleByMovieId(movieId)
     }
 
-    override suspend fun storePeople(people: List<PersonCacheDto>) = safeCall {
+    override suspend fun insertPeople(people: List<PersonCacheDto>) = safeCall {
         dao.insertPeople(people)
     }
 

@@ -13,7 +13,7 @@ import com.giraffe.media.utils.DatabaseConstants.PERSONS_TABLE
 @Dao
 interface PersonDao {
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun storePerson(person: PersonCacheDto)
+    suspend fun insertPerson(person: PersonCacheDto)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPeople(people: List<PersonCacheDto>)

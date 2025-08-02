@@ -44,7 +44,7 @@ class SeriesRepositoryImpl @Inject constructor(
                 seriesPages = listOf(page)
             )
             localExploreDataSource.insertSearchKeyword(updatedKeyword)
-            local.saveSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
+            local.insertSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
             remoteSeries
         }
     }
@@ -69,7 +69,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addRecentSeries(series: Series) = SafeCall {
-        local.storeRecentSeries(series.id)
+        local.insertRecentSeries(series.id)
     }
 
     override suspend fun clearRecentSeries() = SafeCall {

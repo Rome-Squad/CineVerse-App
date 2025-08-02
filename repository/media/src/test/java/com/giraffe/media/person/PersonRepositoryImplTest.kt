@@ -81,7 +81,7 @@ class PersonRepositoryImplTest {
             assertThat(result.size).isEqualTo(2)
             assertThat(result.first()).isInstanceOf(Person::class.java)
             coVerify(exactly = 1) {
-                localDataSource.storePeople(match { list ->
+                localDataSource.insertPeople(match { list ->
                     list.size == result.size && list.all { !it.isRecent }
                 })
             }
@@ -94,7 +94,7 @@ class PersonRepositoryImplTest {
         //when && then
         assertThrows<MediaException> { repository.searchByName(keyword, 1) }
         coVerify(exactly = 0) { remoteDataSource.searchByName(any(), 1) }
-        coVerify(exactly = 0) { localDataSource.storePerson(any()) }
+        coVerify(exactly = 0) { localDataSource.insertPerson(any()) }
     }
 
     @Test
@@ -104,7 +104,7 @@ class PersonRepositoryImplTest {
         coEvery { remoteDataSource.searchByName(keyword, 1) } throws Exception()
         //when && then
         assertThrows<MediaException> { repository.searchByName(keyword, 1) }
-        coVerify(exactly = 0) { localDataSource.storePerson(any()) }
+        coVerify(exactly = 0) { localDataSource.insertPerson(any()) }
     }
 
     @Test
@@ -112,7 +112,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.searchByName(keyword, 1) } returns emptyList()
         coEvery { remoteDataSource.searchByName(keyword, 1) } returns dummyPeopleResponse
-        coEvery { localDataSource.storePeople(any()) } throws Exception("Test Exception")
+        coEvery { localDataSource.insertPeople(any()) } throws Exception("Test Exception")
 
         //when && then
         assertThrows<MediaException> { repository.searchByName(keyword, 1) }
@@ -122,17 +122,17 @@ class PersonRepositoryImplTest {
     @Test
     fun `should cache person as recent when call storeRecentPerson`() = runTest {
         //given
-        coEvery { localDataSource.storePerson(dummyPersonCacheDto) } just Runs
+        coEvery { localDataSource.insertPerson(dummyPersonCacheDto) } just Runs
         //when
         repository.addRecentPerson(dummyPersonCacheDto.toEntity())
         //then
-        coVerify(exactly = 1) { localDataSource.storePerson(match { it.isRecent }) }
+        coVerify(exactly = 1) { localDataSource.insertPerson(match { it.isRecent }) }
     }
 
     @Test
     fun `should throw MediaDomainException when local data source throw any exception`() = runTest {
         //given
-        coEvery { localDataSource.storePerson(any()) } throws Exception()
+        coEvery { localDataSource.insertPerson(any()) } throws Exception()
         //when && then
         assertThrows<MediaException> { repository.addRecentPerson(dummyPersonCacheDto.toEntity()) }
     }
