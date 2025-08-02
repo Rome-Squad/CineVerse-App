@@ -9,7 +9,9 @@ import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.repository.AuthenticationRepositoryImpl
+import com.giraffe.repository.OnboardingRepositoryImpl
 import com.giraffe.user.repository.AuthRepository
+import com.giraffe.user.repository.OnboardingRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,4 +41,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindAuthRepository(impl: AuthenticationRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOnboardingRepository(impl: OnboardingRepositoryImpl): OnboardingRepository
 }
