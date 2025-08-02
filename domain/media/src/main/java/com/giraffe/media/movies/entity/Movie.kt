@@ -10,7 +10,8 @@ data class Movie(
     val rating: Float,
     val duration: Int?,
     val posterUrl: String?,
+    val backdropUrl: String?,
     val genresID: List<Int>,
     val releaseYear: LocalDate?,
-    val youtubeVideoId: String = ""
+    val youtubeVideoId: String?
 )

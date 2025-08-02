@@ -12,6 +12,8 @@ data class MovieCacheDto(
     val title: String,
     val overview: String,
     val posterPath: String?,
+    val backdropPath: String?,
+    val youtubeVideoId: String?,
     val voteAverage: Float,
     val genresID: List<Int>,
     val releaseDate: String?,

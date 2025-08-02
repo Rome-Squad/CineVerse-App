@@ -25,9 +25,22 @@ fun MovieCacheDto.toEntity() = Movie(
     description = overview,
     rating = voteAverage,
     duration = duration,
-    posterUrl = posterPath,
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    },
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
+    youtubeVideoId = youtubeVideoId.orEmpty(),
     genresID = genresID,
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate)
+    releaseYear = if (releaseDate.isNullOrEmpty())
+        null
+    else
+        LocalDate.parse(releaseDate)
 )
 
 fun Movie.toCacheDto() = MovieCacheDto(
@@ -35,7 +48,15 @@ fun Movie.toCacheDto() = MovieCacheDto(
     title = title,
     overview = description,
     voteAverage = rating,
-    posterPath = posterUrl,
+    posterPath = posterUrl?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    },
+    backdropPath = backdropUrl?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
+    youtubeVideoId = youtubeVideoId.orEmpty(),
     genresID = genresID,
     releaseDate = releaseYear?.toString(),
     duration = duration,
@@ -44,11 +65,20 @@ fun Movie.toCacheDto() = MovieCacheDto(
 
 fun MovieDto.toEntity() = Movie(
     id = id,
-    title = title,
-    description = overview,
-    rating = voteAverage,
+    title = title.orEmpty(),
+    description = overview.orEmpty(),
+    rating = voteAverage ?: 0f,
     duration = runtime,
-    posterUrl = BASE_IMAGE_URL + posterPath,
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
     genresID = genresID.ifEmpty { genres.map { it.id } },
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
     youtubeVideoId = youtubeVideoId.orEmpty()
