@@ -48,7 +48,7 @@ class RecommendedSeriesViewModel @Inject constructor(
     val titleSeries = savedStateHandle.toRoute<RecommendedSeriesRoute>().titleSeries
 
     val recommendationScreenState = Pager(config = PagingConfig(20)) {
-        BasePagingSource { page -> getRecommendedSeries(seriesId.toLong(), page) }
+        BasePagingSource { page -> getRecommendedSeries(seriesId, page) }
     }
         .flow
         .cachedIn(viewModelScope)

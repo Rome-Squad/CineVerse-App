@@ -265,7 +265,7 @@ class SeriesDetailsViewModel @Inject constructor(
             onSuccess = ::loadRecommendedSeriesSuccess,
             onError = ::loadError
         ) {
-            getRecommendedSeries(seriesId = seriesId.toLong(), page = page)
+            getRecommendedSeries(seriesId = seriesId, page = page)
         }
     }
 
