@@ -1,4 +1,4 @@
-package com.giraffe.authentication.login
+package com.giraffe.authentication.signup
 
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -47,6 +47,8 @@ fun AuthWebViewScreen(onBack: () -> Unit) {
                     request?.url?.let {
                         if (it.toString().contains("themoviedb.org/login")) {
                             onBack()
+                            return true
+                        } else if (it.toString() != signUpUrl) {
                             return true
                         }
                     }
