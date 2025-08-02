@@ -30,7 +30,7 @@ fun Movie.toMovieUi() = MovieUi(
     backdropUrl = backdropUrl,
     genresID = genresID,
     releaseYear = if (releaseYear != null) releaseYear.toString().toFormattedDate() else null,
-    youtubeVideoId = youtubeVideoId
+    youtubeVideoId = youtubeVideoId.orEmpty()
 
 )
 
