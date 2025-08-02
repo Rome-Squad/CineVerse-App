@@ -123,14 +123,22 @@ fun SeasonDto.toEntity() = Season(
         else BASE_IMAGE_URL + it
     }.orEmpty(),
     seasonNumber = seasonNumber,
-    releaseYear = airDate .orEmpty(),
+    releaseYear = airDate.orEmpty(),
     episodeCount = episodeCount
 )
 
 fun SeriesDetailsDto.toEntity() = Series(
     id = id,
-    posterUrl = BASE_IMAGE_URL + posterPath,
-    backdropUrl = BASE_IMAGE_URL + backdropPath,
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
     name = name ?: "",
     genreIDs = genres.map { it.id },
     rating = voteAverage?.toFloat() ?: 0f,
@@ -154,9 +162,13 @@ fun parseData(dateString: String): LocalDateTime? {
 fun SeriesDetailsDto.toSeasonEntity() = seasons.map {
     Season(
         id = it.id,
-        posterUrl = BASE_IMAGE_URL + it.posterPath,
+        posterUrl = it.posterPath?.let { url ->
+            if (url.contains(BASE_IMAGE_URL))
+                url
+            else BASE_IMAGE_URL + url
+        }.orEmpty(),
         rating = it.voteAverage,
-        releaseYear = it.airDate .orEmpty(),
+        releaseYear = it.airDate.orEmpty(),
         overview = it.overview,
         episodeCount = it.episodeCount,
         seasonNumber = it.seasonNumber
