@@ -27,7 +27,8 @@ class SetMovieRecentUseCaseTest {
                 backdropUrl = "https://example.com/inception.jpg",
                 youtubeVideoId = "abc123",
                 genresID = listOf(1, 2, 3),
-                releaseYear = LocalDate(2010, 7, 16)
+                releaseYear = LocalDate(2010, 7, 16),
+                popularity = 0f
             )
             val isRecent = true
 

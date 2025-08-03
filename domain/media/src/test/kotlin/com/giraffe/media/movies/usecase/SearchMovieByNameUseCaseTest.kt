@@ -1,7 +1,7 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -27,7 +27,8 @@ class SearchMovieByNameUseCaseTest {
         backdropUrl = "",
         youtubeVideoId = "",
         genresID = listOf(28),
-        releaseYear = LocalDate(2022, 1, 1)
+        releaseYear = LocalDate(2022, 1, 1),
+        popularity = 0f
     )
     private val movieSciFi = Movie(
         id = 2,
@@ -39,7 +40,8 @@ class SearchMovieByNameUseCaseTest {
         backdropUrl = "",
         youtubeVideoId = "",
         genresID = listOf(878),
-        releaseYear = LocalDate(2023, 1, 1)
+        releaseYear = LocalDate(2023, 1, 1),
+        popularity = 0f
     )
 
     @BeforeEach

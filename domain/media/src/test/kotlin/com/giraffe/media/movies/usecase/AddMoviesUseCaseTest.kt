@@ -35,7 +35,8 @@ class AddMoviesUseCaseTest {
                 backdropUrl = "https://example.com/movie1.jpg",
                 youtubeVideoId = "abc123",
                 genresID = listOf(1, 2),
-                releaseYear = LocalDate(2022, 1, 1)
+                releaseYear = LocalDate(2022, 1, 1),
+                popularity = 0f
             )
         )
 

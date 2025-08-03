@@ -37,7 +37,8 @@ class GetRecentlyMoviesUseCaseTest {
                         backdropUrl = "https://example.com/action1.jpg",
                         youtubeVideoId = "abc123",
                         genresID = listOf(28),
-                        releaseYear = LocalDate(2020, 6, 15)
+                        releaseYear = LocalDate(2020, 6, 15),
+                        popularity = 0f
                     ),
                     Movie(
                         id = 2,
@@ -49,7 +50,8 @@ class GetRecentlyMoviesUseCaseTest {
                         backdropUrl = "https://example.com/action1.jpg",
                         youtubeVideoId = "abc123",
                         genresID = listOf(28),
-                        releaseYear = LocalDate(2021, 9, 5)
+                        releaseYear = LocalDate(2021, 9, 5),
+                        popularity = 0f
                     )
                 )
             )

@@ -6,7 +6,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
@@ -22,18 +21,19 @@ class GetRecommendedMovieUseCaseTest {
     }
 
     @Test
-    fun `invoke should call getRecommendedMovie on repository with correct id and page`() = runTest {
-        // given
-        val movieId = 1
-        val page = 2
-        coEvery { repository.getRecommendedMovie(movieId, page) } returns emptyList()
+    fun `invoke should call getRecommendedMovie on repository with correct id and page`() =
+        runTest {
+            // given
+            val movieId = 1
+            val page = 2
+            coEvery { repository.getRecommendedMovie(movieId, page) } returns emptyList()
 
-        // when
-        getRecommendedMovieUseCase(movieId, page)
+            // when
+            getRecommendedMovieUseCase(movieId, page)
 
-        // then
-        coVerify(exactly = 1) { repository.getRecommendedMovie(movieId, page) }
-    }
+            // then
+            coVerify(exactly = 1) { repository.getRecommendedMovie(movieId, page) }
+        }
 
     @Test
     fun `invoke should return list of recommended movies from repository`() = runTest {
