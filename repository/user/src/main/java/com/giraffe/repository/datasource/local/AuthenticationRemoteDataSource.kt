@@ -1,5 +1,7 @@
 package com.giraffe.repository.datasource.local
 
+import com.giraffe.repository.dto.AccountDetailsDto
+
 interface AuthenticationRemoteDataSource {
 
     suspend fun createRequestToken(): String
@@ -7,5 +9,7 @@ interface AuthenticationRemoteDataSource {
     suspend fun validateTokenWithLogin(token: String, user: String, pass: String): String
 
     suspend fun createSession(token: String): String
+
+    suspend fun getAccountDetails(sessionId: String): AccountDetailsDto
 
 }
