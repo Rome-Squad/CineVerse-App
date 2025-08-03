@@ -1,4 +1,4 @@
-package com.giraffe.authentication.screen
+package com.giraffe.authentication.login
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
@@ -25,7 +25,6 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
-
 
     override fun onPasswordChanged(password: String) {
         updateState {
@@ -89,13 +88,15 @@ class LoginViewModel @Inject constructor(
                 )
             }
         }
-
-        
-        sendEffect(LoginEffect.Error(throwable))
     }
 
     override fun onGoToWebsiteClick() {
         clearErrorMessages()
+        updateState {
+            it.copy(
+                isVisibleCreateNewAccountBottomSheet = false,
+            )
+        }
         sendEffect(LoginEffect.NavigateToWebViewScreen)
     }
 
@@ -121,7 +122,7 @@ class LoginViewModel @Inject constructor(
     override fun onDismissCreateNewAccountBottomSheet() {
         updateState {
             it.copy(
-                isVisibleCreateNewAccountBottomSheet = false
+                isVisibleCreateNewAccountBottomSheet = false,
             )
         }
     }
@@ -146,5 +147,4 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
-
 }
