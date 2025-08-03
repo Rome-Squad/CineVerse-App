@@ -26,21 +26,14 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val isOnBoardingFirstTimeUseCase: IsOnBoardingFirstTimeUseCase,
     private val setOnBoardingFirstTimeUseCase: SetOnBoardingFirstTimeUseCase
-) : ViewModel() {
+) : ViewModel(), OnboardingInteractionListener {
     private val _state = MutableStateFlow(OnboardingUiState())
     val state: StateFlow<OnboardingUiState> = _state.asStateFlow()
 
     private val _effect = Channel<OnboardingEffect>()
     val effect = _effect.receiveAsFlow()
 
-    fun onAction(action: OnboardingAction) {
-        when (action) {
-            OnboardingAction.CheckIfFirstTime -> checkIfFirstTime()
-            OnboardingAction.MarkOnboardingComplete -> markOnboardingComplete()
-        }
-    }
-
-    private fun checkIfFirstTime() {
+    override fun checkIfFirstTime() {
         safeExecute(
             onSuccess = { result ->
                 _state.value = _state.value.copy(
@@ -57,7 +50,7 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private fun markOnboardingComplete() {
+    override fun markOnboardingComplete() {
         safeExecute(
             onSuccess = {
                 _state.value = _state.value.copy(isError = false)
@@ -72,12 +65,12 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private fun <T> safeExecute(
+    private inline fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        onSuccess: suspend (T) -> Unit,
-        onError: suspend (OnboardingEffect) -> Unit,
-        block: suspend CoroutineScope.() -> T
+        crossinline onSuccess: suspend (T) -> Unit,
+        noinline onError: suspend (OnboardingEffect) -> Unit,
+        crossinline block: suspend CoroutineScope.() -> T
     ): Job {
         return coroutineScope.launch(dispatcher + handler(onError)) {
             val result = block()
