@@ -17,6 +17,9 @@
     <string name="english">English</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+    <string name="back">Back Icon</string>
+    <string name="error_network">Please check your internet connection.</string>
+    <string name="error_unknown">Something went wrong. Please try again later.</string>
     <string name="profile_screen">Profile Screen</string>
 
 

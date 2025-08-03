@@ -15,8 +15,11 @@
     <string name="my_ratings">تقييماتي</string>
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
-
+    <string name="back">رجوع للنافذة السابقة</string>
     <string name="cancel">الغاء</string>
     <string name="create">انشاء</string>
     <string name="profile_screen">جهة الملف الشخصيوا</string>
+    <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
+    <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
+
 </resources>
