@@ -4,13 +4,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.authentication.R
 import com.giraffe.authentication.base.BaseViewModel
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import com.giraffe.user.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
+    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle,
+    private val isLoggedInUseCase: IsLoggedInUseCase
 ) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
 
@@ -88,6 +90,10 @@ class LoginViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    suspend fun isLoggedInChecking(): Boolean {
+        return isLoggedInUseCase()
     }
 
     override fun onGoToWebsiteClick() {
