@@ -8,12 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,20 +19,20 @@ import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.profile.components.HistoryListItem
 import com.giraffe.profile.components.HistoryTitleSection
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HistoryScreen(
     onBackClicked: () -> Unit = {},
     onExitClicked: () -> Unit = {},
-historyScreenUiStateUiState: HistoryScreenUiStateUiState
+    viewModel: HistoryViewModel= hiltViewModel()
 ) {
 
-
+val state by viewModel.state.collectAsState()
     HistoryContent(
-        state = historyScreenUiStateUiState,
+        state = state,
         onClosedClicked = onExitClicked,
-        onBackClicked = onBackClicked
+        onBackClicked = onBackClicked,
+        historyInteractionListener = viewModel
     )
 }
 
@@ -44,6 +41,7 @@ fun HistoryContent(
     state: HistoryScreenUiStateUiState,
     onClosedClicked: () -> Unit = {},
     onBackClicked: () -> Unit,
+    historyInteractionListener: HistoryInteractionListener
 
     ) {
     Box {
@@ -64,7 +62,7 @@ fun HistoryContent(
                     .height(55.dp)
                     .padding(start = 16.dp, end = 16.dp)
                  ,
-                onClickExit = onClosedClicked,
+                onClickExit = historyInteractionListener::onExitClicked,
             )
 
             Box(
@@ -74,7 +72,7 @@ fun HistoryContent(
                 HistoryListItem(
                     poster = state.mediaList,
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp),
-                    onSwipedToLeft = {},
+                    onSwipedToLeft = historyInteractionListener::onSwipedToLeft,
                 )
             }
 
@@ -86,6 +84,12 @@ fun HistoryContent(
 @Preview(showSystemUi = false, showBackground = true)
 @Composable
 fun HistoryContentPreview() {
+    val historyInteractionListener = object : HistoryInteractionListener {
+        override fun onSwipedToLeft() {}
+
+        override fun onExitClicked() {}
+
+    }
     HistoryContent(
         state = HistoryScreenUiStateUiState(
             historyListTitle = "History",
@@ -126,6 +130,7 @@ fun HistoryContentPreview() {
         ),
         onClosedClicked = {},
         onBackClicked = {},
+        historyInteractionListener = historyInteractionListener
     )
 }
 
