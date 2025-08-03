@@ -9,69 +9,91 @@ import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toEntity
+import com.giraffe.media.utils.SafeCall
 
 class CollectionsRepositoryImp(
     private val collectionsRemoteDataSource: CollectionsRemoteDataSource
 ) : CollectionsRepository {
-    override suspend fun getCollections(): List<Collection> =
+
+    override suspend fun getCollections(): List<Collection> = SafeCall {
         collectionsRemoteDataSource.getCollections().map { it.toEntity() }
+    }
+
 
     override suspend fun getCollectionDetails(
         collectionId: Int
-    ): Collection = collectionsRemoteDataSource.getCollectionDetails(collectionId).toEntity()
+    ): Collection = SafeCall {
+        collectionsRemoteDataSource.getCollectionDetails(collectionId).toEntity()
+    }
 
     override suspend fun addCollection(
         collection: Collection
-    ) = collectionsRemoteDataSource.addCollection(collection.toDto())
+    ) = SafeCall {
+        collectionsRemoteDataSource.addCollection(collection.toDto())
+    }
 
     override suspend fun removeCollection(
         collectionId: Int
-    ) = collectionsRemoteDataSource.removeCollection(collectionId)
+    ) = SafeCall {
+        collectionsRemoteDataSource.removeCollection(collectionId)
+    }
 
     override suspend fun clearCollection(
         collectionId: Int
-    ) = collectionsRemoteDataSource.clearCollection(collectionId)
+    ) = SafeCall {
+        collectionsRemoteDataSource.clearCollection(collectionId)
+    }
 
     override suspend fun addMovieToCollection(
         collectionId: Int,
         movieId: Int
-    ) = collectionsRemoteDataSource.addMovieToCollection(
-        collectionId,
-        movieId
-    )
+    ) = SafeCall {
+        collectionsRemoteDataSource.addMovieToCollection(
+            collectionId,
+            movieId
+        )
+    }
 
     override suspend fun removeMovieFromCollection(
         collectionId: Int,
         movieId: Int
-    ) = collectionsRemoteDataSource.removeMovieFromCollection(
-        collectionId,
-        movieId
-    )
+    ) = SafeCall {
+        collectionsRemoteDataSource.removeMovieFromCollection(
+            collectionId,
+            movieId
+        )
+    }
 
     override suspend fun getCollectionMovies(
         collectionId: Int
-    ): List<Movie> =
+    ): List<Movie> = SafeCall {
         collectionsRemoteDataSource.getCollectionMovies(collectionId).map { it.toEntity() }
+    }
 
     override suspend fun addSeriesToCollection(
         collectionId: Int,
         seriesId: Int
-    ) = collectionsRemoteDataSource.addSeriesToCollection(
-        collectionId,
-        seriesId
-    )
+    ) = SafeCall {
+        collectionsRemoteDataSource.addSeriesToCollection(
+            collectionId,
+            seriesId
+        )
+    }
 
     override suspend fun removeSeriesFromCollection(
         collectionId: Int,
         seriesId: Int
-    ) = collectionsRemoteDataSource.removeSeriesFromCollection(
-        collectionId,
-        seriesId
-    )
+    ) = SafeCall {
+        collectionsRemoteDataSource.removeSeriesFromCollection(
+            collectionId,
+            seriesId
+        )
+    }
 
     override suspend fun getCollectionSeries(
         collectionId: Int
-    ): List<Series> =
+    ): List<Series> = SafeCall {
         collectionsRemoteDataSource.getCollectionSeries(collectionId).map { it.toEntity() }
+    }
 
 }
