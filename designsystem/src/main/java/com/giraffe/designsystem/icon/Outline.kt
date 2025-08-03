@@ -26,7 +26,8 @@ data class Outline(
     val search: Int,
     val star: Int,
     val user: Int,
-    val userSquare: Int
+    val userSquare: Int,
+    val eye_slash: Int
 )
 
 val outlineIcons = Outline(
@@ -53,5 +54,6 @@ val outlineIcons = Outline(
     search = R.drawable.outline_search,
     star = R.drawable.outline_star,
     user = R.drawable.outline_user,
-    userSquare = R.drawable.outline_user_square
+    userSquare = R.drawable.outline_user_square,
+    eye_slash = R.drawable.outline_eye_slash
 )

@@ -11,6 +11,7 @@ import java.util.Locale
 class VoiceSearchHelper(
     private val context: Context,
     private val onResult: (String) -> Unit,
+    private val onRmsChanged: ((Float) -> Unit)? = null,
     private val onError: ((String) -> Unit)? = null
 ) {
 
@@ -26,13 +27,15 @@ class VoiceSearchHelper(
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
         }
 
+
         val listener = object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {}
             override fun onBeginningOfSpeech() {}
-            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onRmsChanged(rmsdB: Float) {
+                onRmsChanged?.invoke(rmsdB)
+            }
             override fun onBufferReceived(buffer: ByteArray?) {}
             override fun onEndOfSpeech() {}
-
             override fun onError(error: Int) {
                 val errorMsg = getErrorMessage(error)
                 onError?.invoke(errorMsg)
@@ -40,7 +43,7 @@ class VoiceSearchHelper(
 
             override fun onResults(results: Bundle?) {
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                val result = matches?.firstOrNull() ?: ""
+                val result = matches?.firstOrNull() .orEmpty()
                 onResult(result)
             }
 
@@ -68,6 +71,7 @@ class VoiceSearchHelper(
         speechRecognizer?.destroy()
         speechRecognizer = null
     }
+
 
     private fun getErrorMessage(errorCode: Int): String {
         return when (errorCode) {

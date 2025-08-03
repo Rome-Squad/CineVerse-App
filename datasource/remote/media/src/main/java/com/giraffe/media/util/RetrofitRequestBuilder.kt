@@ -1,5 +1,6 @@
 package com.giraffe.media.util
 
+import android.util.Log
 import com.giraffe.media.exception.ApiDataException
 import com.giraffe.media.exception.InvalidIdDataException
 import com.giraffe.media.exception.MediaDataException
@@ -39,6 +40,7 @@ class RetrofitRequestBuilder<API>(
                     throw ApiDataException(response.code())
                 }
             } catch (e: Throwable) {
+                Log.e("RetrofitRequestBuilder", "Error during API call: ${e}", e)
                 throw mapToMediaException(e)
             }
         }

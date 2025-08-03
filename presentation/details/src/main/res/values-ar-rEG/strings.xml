@@ -5,6 +5,9 @@
     <string name="gallery">المعرض</string>
     <string name="show_more">عرض المزيد</string>
     <string name="actor_image">صورة الممثل</string>
+    <string name="type_movie">فيلم</string>
+    <string name="type_series">مسلسل</string>
+    <string name="type_cast">طاقم العمل</string>
     <string name="birthday_cake_icon">أيقونة كعكة عيد الميلاد</string>
     <string name="actor_birthday">تاريخ الميلاد</string>
     <string name="location_icon">أيقونة الموقع</string>
@@ -15,6 +18,10 @@
     <string name="facebook_icon">أيقونة فيسبوك</string>
     <string name="instagram">إنستغرام</string>
     <string name="instagram_icon">أيقونة إنستغرام</string>
+    <string name="twitter">تويتر</string>
+    <string name="twitter_icon">أيقونة تويتر</string>
+    <string name="tiktok">تيك توك</string>
+    <string name="tiktok_icon">أيقونة تيك توك</string>
     <string name="folder_icon">أيقونة المجلد</string>
     <string name="authentication_error">خطأ في المصادقة!</string>
     <string name="network_error">خطأ في الشبكة، يرجى التحقق من الاتصال</string>
@@ -49,5 +56,10 @@
     <string name="season">الموسم %1$s</string>
     <string name="split">، </string>
     <string name="best_of_">أفضل ما في %1$s</string>
-    <string name="viewtoggleanimation">عرض تبديل الرسوم المتحركة</string>
+    <string name="view_toggle_animation">عرض تبديل الرسوم المتحركة</string>
+    <string name="video_library_icon">أيقونة مكتبة الفيديو</string>
+    <string name="no_collections_yet">لا توجد مجموعات بعد</string>
+    <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">أنشئ مجموعة جديدة لبدء حفظ أفلامك ومسلسلاتك المفضلة.</string>
+    <string name="create_collection">انشاء مجموعة</string>
+
 </resources>

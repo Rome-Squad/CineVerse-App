@@ -1,4 +1,4 @@
-package com.giraffe.details.screens.recommended.movies
+package com.giraffe.details.screens.recommended.movie
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,26 +11,27 @@ import androidx.paging.map
 import com.giraffe.details.base.BasePagingSource
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.toMovieUi
-import com.giraffe.details.screens.recommended.movie.RecommendedEffectMovie
-import com.giraffe.details.screens.recommended.movie.RecommendedInteractionListener
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecommendedMoviesViewModel(
+@HiltViewModel
+class RecommendedMoviesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getRecommendedMovies: GetRecommendedMovieUseCase,
     private val getMovieGenres: GetMovieGenresUseCase
 ) : ViewModel(), RecommendedInteractionListener {
 
     private val movieId: Int = checkNotNull(savedStateHandle["movieId"])
-    val title: String = savedStateHandle["title"] ?: ""
+    val title: String = savedStateHandle.get<String>("title").orEmpty()
     private val _effect = Channel<RecommendedEffectMovie>()
     val effect = _effect.receiveAsFlow()
     val recommendationScreenState = Pager(config = PagingConfig(20)) {
@@ -50,12 +51,12 @@ class RecommendedMoviesViewModel(
     }
 
 
-
     override fun navigateToMovieDetailsScreen(movieId: Int) {
         viewModelScope.launch {
             _effect.send(
                 RecommendedEffectMovie.NavigateToMovieDetails(movieId)
             )
-        }    }
+        }
+    }
 
 }

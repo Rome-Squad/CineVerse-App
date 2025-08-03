@@ -5,9 +5,11 @@ import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.util.safeCall
+import com.giraffe.media.util.safeFlow
+import javax.inject.Inject
 
 
-class MovieLocalDataSourceImp(
+class MovieLocalDataSourceImp @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
     override suspend fun getMovieById(movieId: Int): MovieCacheDto? = safeCall {
@@ -60,7 +62,7 @@ class MovieLocalDataSourceImp(
         movieDao.clearRecentlyMovies()
     }
 
-    override suspend fun getRecentlyMovies(): List<MovieCacheDto> = safeCall {
+    override fun getRecentlyMovies() = safeFlow {
         movieDao.getRecentlyMovies()
     }
 

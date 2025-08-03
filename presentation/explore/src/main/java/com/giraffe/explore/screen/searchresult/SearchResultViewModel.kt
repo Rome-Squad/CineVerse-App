@@ -1,5 +1,6 @@
 package com.giraffe.explore.screen.searchresult
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -18,18 +19,26 @@ import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class SearchResultViewModel(
-    private val query: String,
+@HiltViewModel
+class SearchResultViewModel @Inject constructor(
     private val searchMovieByName: SearchMovieByNameUseCase,
     private val searchSeriesByName: SearchSeriesByNameUseCase,
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
-) : BaseViewModel<SearchResultScreenState>(SearchResultScreenState(query = query)),
+    savedStateHandle: SavedStateHandle
+) : BaseViewModel<SearchResultScreenState>(
+    SearchResultScreenState(query = savedStateHandle.get<String>("query").orEmpty()),
+),
     SearchResultInteractionListener {
+
+
     init {
+
         getMoviesGenres()
         getSeriesGenres()
         getMovies()
@@ -52,49 +61,79 @@ class SearchResultViewModel(
         safeExecute { updateState { it.copy(isGridSelected = isGrid) } }
     }
 
+
     private fun getMoviesGenres() {
-        safeExecute {
-            getMoviesGenresUseCase().let { genres ->
+        safeExecute(
+            onSuccess = { genres ->
                 updateState { it.copy(moviesGenres = genres.map { genre -> genre.toUi() }) }
-            }
+            },
+            onError = ::onFail
+        ) {
+            getMoviesGenresUseCase()
         }
     }
 
     private fun getSeriesGenres() {
-        safeExecute {
-            getSeriesGenresUseCase().let { genres ->
+        safeExecute(
+            onSuccess = { genres ->
                 updateState { it.copy(seriesGenres = genres.map { genre -> genre.toUi() }) }
-            }
+            },
+            onError = ::onFail
+        ) {
+            getSeriesGenresUseCase()
         }
     }
 
     private fun getMovies() {
-        safeExecute {
-            val moviesFlow =
-                Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                    BasePagingSource { page -> searchMovieByName(query, page) }
-                }.flow.cachedIn(viewModelScope).map { it.map(Movie::toPoster) }
-            updateState { it.copy(selectedPosters = moviesFlow, moviesPosters = moviesFlow) }
+        safeExecute(
+            onSuccess = { flow ->
+                val moviesFlow = flow
+                    .map { it.map(Movie::toPoster) }
+                updateState { it.copy(selectedPosters = moviesFlow, moviesPosters = moviesFlow) }
+            },
+            onError = ::onFail
+        ) {
+            val moviesFlow = Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
+                BasePagingSource { page -> searchMovieByName(state.value.query, page) }
+            }.flow.cachedIn(viewModelScope)
+            moviesFlow
         }
     }
 
     private fun getSeries() {
-        safeExecute {
-            val seriesFlow =
-                Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                    BasePagingSource { page -> searchSeriesByName(query, page) }
-                }.flow.cachedIn(viewModelScope).map { it.map(Series::toPoster) }
-            updateState { it.copy(seriesPosters = seriesFlow) }
+        safeExecute(
+            onSuccess = { flow ->
+                val seriesFlow = flow
+                    .map { it.map(Series::toPoster) }
+                updateState { it.copy(seriesPosters = seriesFlow) }
+            },
+            onError = ::onFail
+        ) {
+            val seriesFlow = Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
+                BasePagingSource { page -> searchSeriesByName(state.value.query, page) }
+            }.flow.cachedIn(viewModelScope)
+            seriesFlow
         }
     }
 
     private fun getActors() {
-        safeExecute {
-            val actorsFlow =
-                Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                    BasePagingSource { page -> searchPeopleByName(query, page) }
-                }.flow.cachedIn(viewModelScope).map { it.map(Person::toUi) }
-            updateState { it.copy(actors = actorsFlow) }
+        safeExecute(
+            onSuccess = { flow ->
+                val actorsFlow = flow
+                    .map { it.map(Person::toUi) }
+                updateState { it.copy(actors = actorsFlow, errorMessage = null, isNetworkError = true) }
+            },
+            onError = ::onFail
+        ) {
+            val actorsFlow = Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
+                BasePagingSource { page -> searchPeopleByName(state.value.query, page) }
+            }.flow.cachedIn(viewModelScope)
+            actorsFlow
         }
     }
+
+
+    private fun onFail(errorMsgRes: Int, isConnected: Boolean) =
+        updateState { it.copy(errorMessage = errorMsgRes, isNetworkError = isConnected) }
+
 }

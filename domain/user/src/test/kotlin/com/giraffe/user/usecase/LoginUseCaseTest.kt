@@ -2,7 +2,7 @@ package com.giraffe.user.usecase
 
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
-import com.giraffe.user.exception.InvalidUsernameOrPasswordException
+import com.giraffe.user.exception.InvalidUsernameMatchException
 import com.giraffe.user.repository.AuthRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -39,7 +39,7 @@ class LoginUseCaseTest {
         val username = "user name"
         val password = "validPass123"
 
-        assertThrows<InvalidUsernameOrPasswordException> {
+        assertThrows<InvalidUsernameMatchException> {
             loginUseCase(username, password)
         }
     }
@@ -49,7 +49,7 @@ class LoginUseCaseTest {
         val username = "user@exam!ple"
         val password = "validPass123"
 
-        assertThrows<InvalidUsernameOrPasswordException> {
+        assertThrows<InvalidUsernameMatchException> {
             loginUseCase(username, password)
         }
     }

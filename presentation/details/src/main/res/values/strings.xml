@@ -4,6 +4,9 @@
     <string name="galley_image">galley image</string>
     <string name="gallery">Gallery</string>
     <string name="show_more">Show More</string>
+    <string name="type_movie">Movie</string>
+    <string name="type_series">Series</string>
+    <string name="type_cast">Cast</string>
     <string name="actor_image">actor image</string>
     <string name="birthday_cake_icon">birthday cake icon</string>
     <string name="actor_birthday">Born on</string>
@@ -15,6 +18,10 @@
     <string name="facebook_icon">facebook icon</string>
     <string name="instagram">Instagram</string>
     <string name="instagram_icon">instagram icon</string>
+    <string name="twitter">Twitter</string>
+    <string name="twitter_icon">Twitter icon</string>
+    <string name="tiktok">TikTok</string>
+    <string name="tiktok_icon">tiktok icon</string>
     <string name="folder_icon">folder icon</string>
     <string name="rating">Rating</string>
     <string name="episodes">Episodes</string>
@@ -48,6 +55,15 @@
     <string name="try_again">Try Again</string>
     <string name="animated_content">Animated Content</string>
     <string name="season">Season %1$s</string>
-    <string name="viewtoggleanimation">View Toggle Animation</string>
+    <string name="view_toggle_animation">View Toggle Animation</string>
     <string name="split">, </string>
+    <string name="video_library_icon">Video library icon</string>
+    <string name="no_collections_yet">No Collections Yet</string>
+    <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">Create a new collection to start saving your favorite movies and series.</string>
+    <string name="create_collection">Create collection</string>
+    <string name="you_re_almost_there">You\'re Almost There!</string>
+    <string name="log_in_to_save_movies_create_collections_and_get_personalized_recommendations">Log in to save movies, create collections, and get personalized recommendations.</string>
+    <string name="not_now">Not Now</string>
+    <string name="log_in">Log In</string>
+    <string name="reviews">Reviews</string>
 </resources>

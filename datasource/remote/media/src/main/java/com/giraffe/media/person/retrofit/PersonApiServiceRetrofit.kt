@@ -30,7 +30,6 @@ interface PersonApiServiceRetrofit {
     @GET(ENDPOINT_PERSON_EXTERNAL_IDS)
     suspend fun getPersonSocialMedia(
         @Path(PATH_ID) personId: Int,
-        @Query(PARAM_LANGUAGE) language: String = "en-US"
     ): Response<PersonSocialMediaDto>
 
 

@@ -5,18 +5,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecommendedSeriesScreen(
-    titleSeries: String,
     navigateToSeriesDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RecommendedSeriesViewModel = koinViewModel()
+    viewModel: RecommendedSeriesViewModel = hiltViewModel()
 ) {
     EventListener(
         events = viewModel.effect,
@@ -30,7 +29,7 @@ fun RecommendedSeriesScreen(
 
     val lazyPagingItems = viewModel.recommendationScreenState.collectAsLazyPagingItems()
     RecommendedSeriesContent(
-        title = titleSeries,
+        title = viewModel.titleSeries,
         lazyPagingItems = lazyPagingItems,
         onBackButtonClick = onBackClick,
         interaction = viewModel,

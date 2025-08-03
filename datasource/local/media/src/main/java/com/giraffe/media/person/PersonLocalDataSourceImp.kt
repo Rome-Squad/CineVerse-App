@@ -4,10 +4,12 @@ import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.util.safeCall
+import javax.inject.Inject
 
-class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSource {
-    override suspend fun storePerson(person: PersonCacheDto) = safeCall {
-        dao.storePerson(person)
+class PersonLocalDataSourceImp @Inject constructor(private val dao: PersonDao) :
+    PersonLocalDataSource {
+    override suspend fun insertPerson(person: PersonCacheDto) = safeCall {
+        dao.insertPerson(person)
     }
 
     override suspend fun searchByName(personName: String, page: Int) = safeCall {
@@ -34,7 +36,7 @@ class PersonLocalDataSourceImp(private val dao: PersonDao) : PersonLocalDataSour
         dao.getPeopleByMovieId(movieId)
     }
 
-    override suspend fun storePeople(people: List<PersonCacheDto>) = safeCall {
+    override suspend fun insertPeople(people: List<PersonCacheDto>) = safeCall {
         dao.insertPeople(people)
     }
 

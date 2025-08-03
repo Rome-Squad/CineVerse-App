@@ -1,14 +1,15 @@
 package com.giraffe.media.series
 
+import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
+import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
-import com.giraffe.media.series.datasource.remote.dto.ReviewDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
@@ -17,8 +18,13 @@ import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 
-class SeriesRepositoryImpl(
+class SeriesRepositoryImpl @Inject constructor(
     private val remote: SeriesRemoteDataSource,
     private val local: SeriesLocalDateSource,
     private val localExploreDataSource: LocalExploreDataSource
@@ -38,7 +44,7 @@ class SeriesRepositoryImpl(
                 seriesPages = listOf(page)
             )
             localExploreDataSource.insertSearchKeyword(updatedKeyword)
-            local.saveSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
+            local.insertSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
             remoteSeries
         }
     }
@@ -53,15 +59,17 @@ class SeriesRepositoryImpl(
             }
     }
 
-    override suspend fun getRecentSeries(): List<Series> = SafeCall {
-        local.getRecentSeries().map { dto ->
-            val seasons = local.getSeasonsForSeries(dto.id).map { it.toEntity() }
-            dto.toEntity(seasons)
+    override suspend fun getRecentSeries() = SafeCall {
+        local.getRecentSeries().map { seriesList ->
+            seriesList.map { series ->
+                val seasons = local.getSeasonsForSeries(series.id).map { it.toEntity() }
+                series.toEntity(seasons)
+            }
         }
     }
 
-    override suspend fun storeRecentSeries(series: Series) = SafeCall {
-        local.storeRecentSeries(series.id)
+    override suspend fun addRecentSeries(series: Series) = SafeCall {
+        local.insertRecentSeries(series.id)
     }
 
     override suspend fun clearRecentSeries() = SafeCall {
@@ -69,7 +77,12 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
-        remote.getSeriesDetails(seriesId).toEntity()
+        withContext(Dispatchers.IO) {
+            val youtubeVideoId = async { remote.getSeriesTrailerUrl(seriesId) }
+            val seriesDetails = async { remote.getSeriesDetails(seriesId) }
+            seriesDetails.await().youtubeVideoId = youtubeVideoId.await()
+            seriesDetails.await().toEntity()
+        }
     }
 
     override suspend fun getSeasonOfSeries(seriesId: Int): List<Season> = SafeCall {
@@ -102,7 +115,7 @@ class SeriesRepositoryImpl(
         remote.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
 
-    override suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series> {
+    override suspend fun getRecommendedSeries(seriesId: Int, page: Int): List<Series> {
         return SafeCall {
             remote.getSeriesRecommendations(seriesId, page)
                 .map(SeriesDto::toEntity)

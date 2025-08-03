@@ -3,6 +3,7 @@ package com.giraffe.details.screens.recommended.series
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -13,6 +14,7 @@ import com.giraffe.details.models.SeriesUi
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,8 +22,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecommendedSeriesViewModel(
+@HiltViewModel
+class RecommendedSeriesViewModel @Inject constructor(
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesGenres: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
@@ -40,10 +44,11 @@ class RecommendedSeriesViewModel(
         }
     }
 
-    val seriesId = savedStateHandle.get<Int>("seriesID") ?: 0
+    val seriesId = savedStateHandle.toRoute<RecommendedSeriesRoute>().seriesID
+    val titleSeries = savedStateHandle.toRoute<RecommendedSeriesRoute>().titleSeries
 
     val recommendationScreenState = Pager(config = PagingConfig(20)) {
-        BasePagingSource { page -> getRecommendedSeries(seriesId.toLong(), page) }
+        BasePagingSource { page -> getRecommendedSeries(seriesId, page) }
     }
         .flow
         .cachedIn(viewModelScope)

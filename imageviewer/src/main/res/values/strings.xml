@@ -2,4 +2,5 @@
 <resources>
     <string name="image_viewer">Image Viewer</string>
     <string name="placeholder">Placeholder</string>
+    <string name="sensitive_content">Sensitive Content</string>
 </resources>

@@ -4,8 +4,9 @@ import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.util.RetrofitRequestBuilder
+import javax.inject.Inject
 
-class SeriesRemoteRetrofitDataSourceImp(
+class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
     private val retrofitRequestBuilder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>
 ) : SeriesRemoteDataSource {
 
@@ -36,6 +37,11 @@ class SeriesRemoteRetrofitDataSourceImp(
     override suspend fun getTopRatedSeries(page: Int): List<SeriesDto> =
         retrofitRequestBuilder.get { getTopRatedSeries(page) }.results
 
-    override suspend fun getSeriesRecommendations(seriesId: Long, page: Int) =
+    override suspend fun getSeriesRecommendations(seriesId: Int, page: Int) =
         retrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results
+
+    override suspend fun getSeriesTrailerUrl(seriesId: Int): String {
+        val results = retrofitRequestBuilder.get { getSeriesTrailerUrl(seriesId) }.results
+        return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
+    }
 }

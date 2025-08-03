@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.recommended.movie
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.Progress
@@ -22,17 +24,15 @@ import com.giraffe.designsystem.composable.custom.Button
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.screens.recommended.movies.RecommendedMoviesViewModel
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RecommendedMoviesScreen(
     onBackClick: () -> Unit,
-    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: RecommendedMoviesViewModel = koinViewModel()
+    val viewModel: RecommendedMoviesViewModel = hiltViewModel()
 
     val lazyPagingItems = viewModel.recommendationScreenState.collectAsLazyPagingItems()
     EventListener(
@@ -40,7 +40,12 @@ fun RecommendedMoviesScreen(
     ) { effect ->
         when (effect) {
             is RecommendedEffectMovie.NavigateToMovieDetails -> {
-                navigateToSeriesDetails(effect.MovieId)
+                val movieId = effect.MovieId
+                if (movieId != null) {
+                    navigateToMovieDetails(movieId)
+                } else {
+                    Log.e("RecommendedMovies", "Invalid movie ID received: $movieId")
+                }
             }
         }
     }
@@ -110,8 +115,8 @@ private fun ErrorContent(
             containerColor = Theme.color.brand.primary,
             contentColor = Theme.color.button.onPrimary,
             contentPadding = PaddingValues(
-                horizontal =  16.dp,
-                vertical =  12.dp
+                horizontal = 16.dp,
+                vertical = 12.dp
             )
         ) {
             Text(

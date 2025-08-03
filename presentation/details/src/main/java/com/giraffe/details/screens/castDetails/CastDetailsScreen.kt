@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
@@ -49,8 +50,9 @@ import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.MainDetails
 import com.giraffe.details.components.MainDetailsHeader
 import com.giraffe.details.components.gallery.GallerySection
+import com.giraffe.details.screens.castDetails.state.CastDetailsUiState
+import com.giraffe.details.screens.castDetails.state.SocialMediaUi
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CastDetailsScreen(
@@ -60,7 +62,7 @@ fun CastDetailsScreen(
     navigateToSeriesDetails: (Int) -> Unit,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    castDetailsViewModel: CastDetailsViewModel = koinViewModel()
+    castDetailsViewModel: CastDetailsViewModel = hiltViewModel()
 ) {
     val state by castDetailsViewModel.state.collectAsState()
     val context = LocalContext.current
@@ -119,7 +121,6 @@ fun CastDetailsScreen(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CastDetailsContent(
     state: CastDetailsUiState,
@@ -151,18 +152,14 @@ fun CastDetailsContent(
                 actorName = state.actorName,
                 actorBirthday = state.actorBirth,
                 actorPlaceOfBirth = state.actorPlace,
-                onYoutubeClick = interaction::onActorYoutubeLinkClicked,
-                onFacebookClick = interaction::onActorFacebookLinkClicked,
-                onInstagramClick = interaction::onActorInstagramLinkClicked,
-                hasYoutube = state.actorYouTubeLink.isNotBlank(),
-                hasFacebook = state.actorFacebookLink.isNotBlank(),
-                hasInstagram = state.actorInstagramLink.isNotBlank()
+                socialMediaUiList = state.socialMediaUiList,
+                onLinkClick = interaction::navigateToActorMediaLink
             )
             AppBar(
                 showBackButton = true,
                 hasBackground = false,
                 onBackButtonClick = onBackArrowClick,
-                modifier = Modifier.padding(horizontal = padding16)
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
         Column(
@@ -220,12 +217,8 @@ private fun MainDetailsAnimatedContent(
     actorBirthday: String,
     actorPlaceOfBirth: String,
     actorImageUrl: String?,
-    onYoutubeClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onInstagramClick: () -> Unit,
-    hasYoutube: Boolean = false,
-    hasFacebook: Boolean = false,
-    hasInstagram: Boolean = false,
+    socialMediaUiList: List<SocialMediaUi>,
+    onLinkClick: (String) -> Unit,
 ) {
     val horizontalPadding = 16.dp
     val duration = 400
@@ -260,16 +253,12 @@ private fun MainDetailsAnimatedContent(
                         actorPlaceOfBirth = actorPlaceOfBirth,
                         sharedTransitionScope = this@SharedTransitionLayout,
                         animatedVisibilityScope = this@AnimatedContent,
-                        onYoutubeClick = onYoutubeClick,
-                        onFacebookClick = onFacebookClick,
-                        onInstagramClick = onInstagramClick,
+                        socialMediaUiList = socialMediaUiList,
+                        onLinkClick = onLinkClick,
                         actorImageUrl = actorImageUrl,
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
                             .padding(top = topPadding),
-                        hasYoutube = hasYoutube,
-                        hasFacebook = hasFacebook,
-                        hasInstagram = hasInstagram
                     )
                 }
             }

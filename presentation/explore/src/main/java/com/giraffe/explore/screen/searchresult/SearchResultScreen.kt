@@ -1,32 +1,32 @@
 package com.giraffe.explore.screen.searchresult
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.Tabs
-import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
@@ -34,32 +34,39 @@ import com.giraffe.explore.components.NothingFound
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.toTitle
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SearchResultScreen(
-    query: String,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
     onBackClick: () -> Unit,
-    viewModel: SearchResultViewModel = koinViewModel { parametersOf(query) },
+    viewModel: SearchResultViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    SearchResultContent(
-        state = state,
-        interactions = viewModel,
-        navigateToMovieDetails = navigateToMovieDetails,
-        navigateToSeriesDetails = navigateToSeriesDetails,
-        navigateToCastDetails = navigateToCastDetails,
-        onBackClick = onBackClick
-    )
-}
+
+    val isConnect = viewModel.isConnect.collectAsState()
+
+
+    LaunchedEffect (isConnect.value){ Log.e("IsInternet","${isConnect.value}") }
+
+
+        SearchResultContent(
+            state = state,
+            interactions = viewModel,
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails,
+            navigateToCastDetails = navigateToCastDetails,
+            onBackClick = onBackClick,
+            isConnect = isConnect.value
+        )
+    }
+
 
 @Composable
 fun SearchResultContent(
     state: SearchResultScreenState,
+    isConnect:Boolean,
     interactions: SearchResultInteractionListener,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
@@ -99,23 +106,45 @@ fun SearchResultContent(
 
             item {
                 Box(
-                    modifier = Modifier
-                        .fillParentMaxSize(),
+                    modifier = Modifier.fillParentMaxSize(),
                 ) {
-                    if (posters.loadState.refresh is LoadState.Loading) {
-                        Progress(
-                            size = 32.dp,
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .padding(top = 16.dp)
-                        )
+                    if (state.isNetworkError == isConnect) {
+                        NoInternetScreen()
                     } else {
 
-                        if (state.selectedTab == SearchTab.ACTORS) {
-                            if (actors.itemCount != 0) {
-                                ActorsSection(
-                                    actors = actors,
-                                    navigateToCastDetails = navigateToCastDetails
+                        if (posters.loadState.refresh is LoadState.Loading) {
+                            Progress(
+                                size = 32.dp,
+                                modifier = Modifier
+                                    .align(Alignment.TopCenter)
+                                    .padding(top = 16.dp)
+                            )
+                        } else {
+                            // Show content based on selected tab
+                            if (state.selectedTab == SearchTab.ACTORS) {
+                                if (actors.itemCount != 0) {
+                                    ActorsSection(
+                                        actors = actors,
+                                        navigateToCastDetails = navigateToCastDetails
+                                    )
+                                } else {
+                                    NothingFound(
+                                        modifier = Modifier
+                                            .padding(horizontal = 60.dp)
+                                            .padding(top = 195.dp)
+                                    )
+                                }
+                            } else if (posters.itemCount != 0) {
+                                TransitionLazyColumnToGrid(
+                                    posters = posters,
+                                    isListSelected = !state.isGridSelected,
+                                    onPosterClicked = { id ->
+                                        when (state.selectedTab) {
+                                            SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                            SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                            SearchTab.ACTORS -> navigateToCastDetails(id)
+                                        }
+                                    }
                                 )
                             } else {
                                 NothingFound(
@@ -124,46 +153,13 @@ fun SearchResultContent(
                                         .padding(top = 195.dp)
                                 )
                             }
-                        } else if (posters.itemCount != 0) {
-                            TransitionLazyColumnToGrid(
-                                posters = posters,
-                                isListSelected = !state.isGridSelected,
-                                onPosterClicked = { id ->
-                                    when (state.selectedTab) {
-                                        SearchTab.MOVIES -> navigateToMovieDetails(id)
-                                        SearchTab.SERIES -> navigateToSeriesDetails(id)
-                                        SearchTab.ACTORS -> navigateToCastDetails(id)
-                                    }
-                                }
-                            )
-                        } else {
-                            NothingFound(
-                                modifier = Modifier
-                                    .padding(horizontal = 60.dp)
-                                    .padding(top = 195.dp)
-                            )
                         }
                     }
                 }
             }
         }
-        AnimatedVisibility(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .navigationBarsPadding()
-                .padding(bottom = 16.dp, end = 16.dp),
-            visible = state.selectedTab != SearchTab.ACTORS,
-            enter = slideInHorizontally { it * 2 },
-            exit = slideOutHorizontally { it * 2 }
-        ) {
-            ViewToggle(
-                isListSelected = !state.isGridSelected,
-                onGridSelected = interactions::changeView,
-            )
-        }
     }
 }
-
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
@@ -189,3 +185,4 @@ fun ActorsSection(
     }
 
 }
+

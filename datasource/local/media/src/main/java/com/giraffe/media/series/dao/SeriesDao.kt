@@ -67,7 +67,7 @@ interface SeriesDao {
     suspend fun clearRecentSeries()
 
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecent = 1")
-    suspend fun getRecentSeries(): List<SeriesCacheDto>
+    fun getRecentSeries(): Flow<List<SeriesCacheDto>>
 
     @Query(
         """

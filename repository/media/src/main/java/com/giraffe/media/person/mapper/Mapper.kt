@@ -16,6 +16,8 @@ import com.giraffe.media.utils.AT_SYMBOLS_URL
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.FACEBOOK_URL
 import com.giraffe.media.utils.INSTAGRAM_URL
+import com.giraffe.media.utils.TIKTOK_URL
+import com.giraffe.media.utils.X_URL
 import com.giraffe.media.utils.YOUTUBE_URL
 import com.giraffe.media.utils.toFormattedDate
 
@@ -102,14 +104,16 @@ fun PersonCreditDto.toEntity() = PersonCredit(
     releaseYear = if (releaseDate.isNullOrEmpty()) null else releaseDate.toFormattedDate(),
 )
 
-fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(
+private fun PersonSocialMediaDto.toEntity(): PersonSocialMediaLinks = PersonSocialMediaLinks(
     facebookLink = facebookId.prependIfNotBlank(FACEBOOK_URL),
     instagramLink = instagramId.prependIfNotBlank(INSTAGRAM_URL),
-    youtubeLink = youtubeId.prependIfNotBlank(YOUTUBE_URL + AT_SYMBOLS_URL),
+    youtubeLink = youtubeId.prependIfNotBlank(YOUTUBE_URL),
+    tiktokLink = tiktokId.prependIfNotBlank(TIKTOK_URL + AT_SYMBOLS_URL),
+    twitterLink = twitterId.prependIfNotBlank(X_URL),
 )
 
 fun ProfileDto.toImageUrl(): String = BASE_IMAGE_URL + filePath
 
-fun String?.prependIfNotBlank(prefix: String): String? = if (!this.isNullOrBlank()) {
+private fun String?.prependIfNotBlank(prefix: String): String? = if (!this.isNullOrBlank()) {
     prefix + this
 } else null

@@ -4,16 +4,17 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
+import kotlinx.coroutines.flow.Flow
 
 
 interface SeriesRepository {
     suspend fun searchSeriesByName(seriesName: String, page: Int): List<Series>
-    suspend fun storeRecentSeries(series: Series)
+    suspend fun addRecentSeries(series: Series)
     suspend fun getSeriesGenres(): List<Genre>
-    suspend fun getRecentSeries(): List<Series>
+    suspend fun getRecentSeries(): Flow<List<Series>>
     suspend fun clearRecentSeries()
     suspend fun getSeriesDetails(seriesId: Int): Series
-    suspend fun getRecommendedSeries(seriesId: Long, page: Int): List<Series>
+    suspend fun getRecommendedSeries(seriesId: Int, page: Int): List<Series>
     suspend fun getSeriesReviews(seriesId: Int, page: Int = 1): List<Review>
     suspend fun getSeasonOfSeries(seriesId: Int): List<Season>
     suspend fun getSeriesByGenre(genreId: Int, page: Int): List<Series>

@@ -6,7 +6,11 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MoviesListRoute(val sectionType: String, val sectionTitle: String)
+data class MoviesListRoute(
+    val collectionId: Int? = null,
+    val sectionType: String? = null,
+    val sectionTitle: String
+)
 
 object MovieSectionType {
     const val RECENTLY_RELEASED = "recently_released"
@@ -21,6 +25,15 @@ fun NavController.navigateToMoviesList(sectionType: String, sectionTitle: String
         MoviesListRoute(
             sectionType = sectionType,
             sectionTitle = sectionTitle,
+        )
+    )
+}
+
+fun NavController.navigateToCollectionList(collectionId: Int, collectionTitle: String) {
+    navigate(
+        MoviesListRoute(
+            collectionId = collectionId,
+            sectionTitle = collectionTitle,
         )
     )
 }

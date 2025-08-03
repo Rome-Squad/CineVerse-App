@@ -34,6 +34,8 @@ class GetMoviesByGenreUseCaseTest {
                 rating = 7.8f,
                 duration = 120,
                 posterUrl = "https://example.com/action1.jpg",
+                backdropUrl = "https://example.com/action1.jpg",
+                youtubeVideoId = "abc123",
                 genresID = listOf(28),
                 releaseYear = LocalDate(2020, 6, 15)
             ),
@@ -44,6 +46,8 @@ class GetMoviesByGenreUseCaseTest {
                 rating = 8.1f,
                 duration = 110,
                 posterUrl = "https://example.com/action2.jpg",
+                backdropUrl = "https://example.com/action1.jpg",
+                youtubeVideoId = "abc123",
                 genresID = listOf(28),
                 releaseYear = LocalDate(2021, 9, 5)
             )

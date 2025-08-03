@@ -3,11 +3,11 @@ package com.giraffe.media.util
 import android.database.CursorIndexOutOfBoundsException
 import android.database.StaleDataException
 import android.database.sqlite.SQLiteException
-import android.util.Log
 import com.giraffe.media.exception.CorruptDatabaseDataException
 import com.giraffe.media.exception.DiskAccessDataException
 import com.giraffe.media.exception.InvalidIdDataException
 import com.giraffe.media.exception.MediaDataException
+import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.exception.UnknownNetworkDataException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -20,7 +20,6 @@ suspend fun <T> safeCall(block: suspend () -> T): T {
     return try {
         block()
     } catch (e: Exception) {
-        Log.d("messi", "searchByName-3: $e")
         throw mapToMediaException(e)
     }
 }
@@ -42,7 +41,7 @@ private fun mapToMediaException(throwable: Throwable): MediaDataException = when
     is StaleDataException -> CorruptDatabaseDataException()
 
     is IOException -> DiskAccessDataException()
-
+    is NoInternetDataException -> NoInternetDataException()
     is IllegalArgumentException,
     is IllegalStateException -> InvalidIdDataException()
 

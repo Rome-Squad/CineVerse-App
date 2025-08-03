@@ -11,13 +11,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsEffect
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsViewModel
 import com.giraffe.details.utils.EventListener
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SeriesDetailsScreen(
@@ -26,9 +25,11 @@ fun SeriesDetailsScreen(
     navigateToSeason: (seriesId: Int) -> Unit,
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
     onBackButtonClick: () -> Unit,
+    onClickPlay: (String) -> Unit,
+    navigateToLogIn: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToReviews: (reviews: List<ReviewUI>) -> Unit = {},
-    viewModel: SeriesDetailsViewModel = koinViewModel()
+    navigateToReviews: (Int) -> Unit ,
+    viewModel: SeriesDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
     EventListener(events = viewModel.effect) {
@@ -44,6 +45,7 @@ fun SeriesDetailsScreen(
                 it.seriesId,
                 it.title
             )
+            is SeriesDetailsEffect.NavigateToReviews->navigateToReviews(it.seriesId)
         }
     }
 
@@ -62,6 +64,8 @@ fun SeriesDetailsScreen(
                 state = state,
                 interaction = viewModel,
                 onBackButtonClick = onBackButtonClick,
+                onClickPlay = onClickPlay,
+                navigateToLogIn = navigateToLogIn,
                 modifier = Modifier.fillMaxSize()
             )
         }

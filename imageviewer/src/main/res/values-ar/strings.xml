@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_viewer">عارض الصورة</string>
+    <string name="placeholder">صورة افتراضية</string>
+    <string name="sensitive_content">صورة غير لائقة</string>
+</resources>

@@ -1,5 +1,6 @@
 package com.giraffe.details.screens.reviewScreen
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,25 +8,39 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.details.R
+import com.giraffe.details.components.LoadingView
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.models.ReviewUI
 
 
 @Composable
 fun ReviewsScreen(
-    reviewsList: List<ReviewUI>?,
-    navController: NavController
+    navController: NavController,
+    reviewsViewModel: ReviewsViewModel = hiltViewModel()
 ) {
-    ReviewsContent(
-        reviewsList = reviewsList ?: emptyList(),
-        onBackArrowClick = { navController.navigateUp() }
-    )
+    val state = reviewsViewModel.state.collectAsState().value
+
+    AnimatedContent(
+        state.isLoading
+    ) {
+        when (it) {
+            true -> LoadingView()
+            false -> ReviewsContent(
+                reviewsList = state.reviews,
+                onBackArrowClick = { navController.navigateUp() }
+            )
+        }
+    }
 }
 
 @Composable
@@ -43,11 +58,11 @@ private fun ReviewsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item {
+        stickyHeader {
             AppBar(
                 showBackButton = true,
-                title = "Reviews",
-                modifier = Modifier.padding(16.dp),
+                title = stringResource(R.string.reviews),
+                modifier = Modifier.padding(horizontal = 8.dp),
                 onBackButtonClick = onBackArrowClick
             )
         }

@@ -1,12 +1,14 @@
 package com.giraffe.details.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -14,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
@@ -24,6 +27,7 @@ import com.giraffe.details.utils.formatAsMonthDayYear
 import com.giraffe.details.utils.getCurrentLocalDateTime
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import kotlinx.datetime.LocalDateTime
+import com.giraffe.designsystem.composable.custom.Icon
 
 
 @Composable
@@ -64,7 +68,21 @@ fun ReviewCard(
                 imageUrl = reviewerImageUrl.toString(),
                 contentDescription = reviewerImageUrl.toString(),
                 contentScale = ContentScale.Crop
-            )
+            ) {
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = reviewerImageUrl.toString(),
+                    tint = Theme.color.brand.secondary,
+                    modifier = Modifier
+                        .border(
+                            width = 1.dp,
+                            color = Theme.color.stroke.primary,
+                            shape = CircleShape
+                        )
+                        .size(40.dp)
+                        .wrapContentSize(),
+                )
+            }
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalAlignment = Alignment.Start
@@ -95,7 +113,7 @@ fun ReviewCard(
                 starSpace = 4.dp
             )
             Text(
-                text = reviewDate?.formatAsMonthDayYear() ?: "",
+                text = reviewDate?.formatAsMonthDayYear() .orEmpty(),
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.shade.secondary
             )

@@ -81,18 +81,17 @@ fun AppBar(
 @Composable
 private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
     if (showBackButton) {
-        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-        val rotationAngle = if (isRtl) 180f else 0f
         Icon(
             painter = painterResource(Theme.icons.outline.arrowLeft),
-            contentDescription = "",
+            contentDescription = "arrow back",
             tint = Theme.color.shade.primary,
             modifier = Modifier
                 .size(40.dp)
-                .padding(8.dp)
+                .clip(shape = CircleShape)
                 .clickable(
                     onClick = onBackButtonClick
-                ).graphicsLayer(rotationZ = rotationAngle)
+                )
+                .padding(8.dp)
         )
     }
 }
@@ -149,11 +148,11 @@ private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit,modifier: Modi
             tint = Theme.color.shade.primary,
             modifier = modifier
                 .size(40.dp)
-                .padding(8.dp)
                 .clickable(
                     enabled = true,
                     onClick = onEndIconClick
-                ).graphicsLayer(rotationZ = rotationAngle)
+                )
+                .graphicsLayer(rotationZ = rotationAngle)
         )
     }
 }

@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+
 }
 
 android {
@@ -35,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(":repository:media"))
+
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
     implementation(libs.retrofit)
@@ -43,4 +46,8 @@ dependencies {
     // OkHttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 }

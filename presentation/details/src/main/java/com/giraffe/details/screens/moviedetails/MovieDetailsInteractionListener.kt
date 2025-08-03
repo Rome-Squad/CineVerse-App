@@ -12,8 +12,6 @@ interface MovieDetailsInteractionListener {
 
     fun onPersonClick(personId: Int)
 
-    fun onShowMoreMoviesClick()
-
     fun onShowMoreReviewsClick()
 
     fun onMovieClick(movieId: Int)
@@ -31,5 +29,12 @@ interface MovieDetailsInteractionListener {
     fun navigateToCastDetailsScreen(personId: Int)
 
     fun navigateToMovieRecommendation(movieId: Int, title: String)
+    fun navigateToReviews(movieId: Int)
 
+    fun onRateChange(rate: Int)
 }
+
+
+
+
+

@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,8 +25,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
+import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
@@ -43,102 +45,111 @@ fun PosterHorizontal(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
-    Row(
-        modifier = modifier
-            .height(IntrinsicSize.Min)
-            .clip(RoundedCornerShape(Theme.radius.lg))
-            .background(Theme.color.background.card)
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        with(sharedTransitionScope) {
+    AnimatedVisibility(poster.name.isNotBlank()) {
+        Row(
+            modifier = modifier
+                .height(IntrinsicSize.Min)
+                .clip(RoundedCornerShape(Theme.radius.lg))
+                .background(Theme.color.background.card)
+                .clickable(onClick = onClick),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            with(sharedTransitionScope) {
 
-            SafeIslamicImage(
-                imageUrl = poster.imageUri,
-                contentDescription = poster.name,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(64.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg
-                        )
-                    )
-                    .sharedElement(
-                        sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
-                        animatedVisibilityScope = animatedVisibilityScope
-                    )
-            ) {
-                Icon(
-                    painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = stringResource(R.string.loading_image),
+                SafeIslamicImage(
+                    imageUrl = poster.imageUri,
+                    contentDescription = poster.name,
                     modifier = Modifier
-                        .fillMaxHeight()
+                        .height(88.dp)
                         .width(64.dp)
-                        .padding(16.dp),
-                    tint = Theme.color.brand.secondary
-                )
-
-            }
-
-
-            Column(
-                modifier = Modifier.padding(vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = poster.name,
-                            style = Theme.textStyle.body.md.medium,
-                            color = Theme.color.shade.primary,
-                            maxLines = 1,
-                            modifier = Modifier
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
-                                    animatedVisibilityScope = animatedVisibilityScope
-                                )
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = Theme.radius.lg,
+                                bottomStart = Theme.radius.lg,
+                                topEnd = Theme.radius.lg
+                            )
                         )
-                        AnimatedVisibility(!poster.genres.isNullOrBlank()) {
+                        .sharedElement(
+                            sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                ) {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = stringResource(R.string.loading_image),
+                        modifier = Modifier
+                            .heightIn(min = 88.dp)
+                            .width(64.dp)
+                            .padding(16.dp),
+                        tint = Theme.color.brand.secondary
+                    )
+
+                }
+
+                Column(
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+
                             Text(
-                                text = poster.genres.toString(),
-                                style = Theme.textStyle.body.sm.regular,
-                                color = Theme.color.shade.secondary,
+                                text = poster.name,
+                                style = Theme.textStyle.body.md.medium,
+                                color = Theme.color.shade.primary,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                modifier = Modifier
+                                    .sharedElement(
+                                        sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
+                                        animatedVisibilityScope = animatedVisibilityScope
+                                    )
+                            )
+
+                            AnimatedVisibility(!poster.genres.isNullOrBlank()) {
+                                Text(
+                                    text = poster.genres.toString(),
+                                    style = Theme.textStyle.body.sm.regular,
+                                    color = Theme.color.shade.secondary,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+
+                        AnimatedVisibility(poster.rating != 0f) {
+                            Rating(
+                                value = poster.rating,
+                                modifier = Modifier
+                                    .sharedElement(
+                                        sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
+                                        animatedVisibilityScope = animatedVisibilityScope
+                                    )
                             )
                         }
                     }
-                    Rating(
-                        value = poster.rating,
-                        modifier = Modifier
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            )
-                    )
-                }
 
-                AnimatedVisibility(!poster.time.isNullOrBlank()) {
-                    IconWithText(
-                        icon = painterResource(Theme.icons.dueTone.clock),
-                        text = poster.time.toString()
-                    )
-                }
-                AnimatedVisibility(!poster.date.isNullOrBlank()) {
-                    IconWithText(
-                        icon = painterResource(Theme.icons.dueTone.calendar),
-                        text = poster.date.toString()
-                    )
+                    AnimatedVisibility(!poster.time.isNullOrBlank()) {
+                        IconWithText(
+                            modifier = Modifier.padding(top = 8.dp),
+                            icon = painterResource(Theme.icons.dueTone.clock),
+                            text = poster.time.toString()
+                        )
+                    }
+
+                    AnimatedVisibility(!poster.date.isNullOrBlank()) {
+                        IconWithText(
+                            modifier = Modifier.padding(top = 8.dp),
+                            icon = painterResource(Theme.icons.dueTone.calendar),
+                            text = poster.date.toString()
+                        )
+                    }
                 }
             }
         }
@@ -146,8 +157,15 @@ fun PosterHorizontal(
 }
 
 @Composable
-private fun IconWithText(icon: Painter, text: String) {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+private fun IconWithText(
+    icon: Painter,
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.clock_icon),
@@ -160,4 +178,20 @@ private fun IconWithText(icon: Painter, text: String) {
             color = Theme.color.shade.secondary
         )
     }
+}
+
+@Preview
+@Composable
+private fun PosterHorizontal() {
+    PosterItemHorizontal(
+        movie = Poster(
+            id = 1,
+            name = "The Flash",
+            imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
+            rating = 0f,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(88.dp)
+    )
 }

@@ -1,12 +1,13 @@
 package com.giraffe.media.movie.retrofit
 
+import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import com.giraffe.media.movie.datasource.remote.dto.MovieReviewDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.util.RetrofitRequestBuilder
+import javax.inject.Inject
 
-class MoviesRemoteDataSourceImplRetrofit(
+class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
     private val retrofitRequestBuilder: RetrofitRequestBuilder<MoviesApiServiceRetrofit>
 ) : MoviesRemoteDataSource {
 
@@ -27,17 +28,20 @@ class MoviesRemoteDataSourceImplRetrofit(
         }.results
 
 
-    override suspend fun getMovieReviews(movieId: Int): List<MovieReviewDto> =
+    override suspend fun getMovieReviews(movieId: Int): List<ReviewDto> =
         retrofitRequestBuilder.get { getMovieReviews(movieId) }.results
 
     override suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getRecommendations(movieId, page) }.results
 
-    override suspend fun addRating(movieId: Int, sessionId: String, request: RatingRequest) =
-        retrofitRequestBuilder.post { rateMovie(movieId, sessionId, request) }
+    override suspend fun addRating(
+        movieId: Int,
+        request: RatingRequest
+    ) =
+        retrofitRequestBuilder.post { rateMovie(movieId, request) }
 
-    override suspend fun getUserMovieRating(movieId: Int, guestSessionId: String) =
-        retrofitRequestBuilder.get { getMovieRating(movieId, guestSessionId) }
+    override suspend fun getUserMovieRating(movieId: Int) =
+        retrofitRequestBuilder.get { getMovieRating(movieId) }
             .results.firstOrNull { it.id == movieId }?.rating?.toFloat() ?: 0f
 
     override suspend fun getPopularityMovies(page: Int): List<MovieDto> =
@@ -48,4 +52,9 @@ class MoviesRemoteDataSourceImplRetrofit(
 
     override suspend fun getUpcomingMovies(page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getUpcomingMovies(page) }.results
+
+    override suspend fun getMovieTrailerUrl(movieId: Int): String {
+        val results = retrofitRequestBuilder.get { getMovieTrailerUrl(movieId) }.results
+        return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
+    }
 }

@@ -31,6 +31,7 @@ class GetTopRatedSeriesUseCaseTest {
                 overview = "A high school chemistry teacher turned methamphetamine producer...",
                 rating = 9.5f,
                 posterUrl = "https://example.com/breakingbad.jpg",
+                backdropUrl = "https://example.com/breakingbad.jpg",
                 genreIDs = listOf(18, 80),
                 releaseYear = "2008",
                 seasons = listOf(

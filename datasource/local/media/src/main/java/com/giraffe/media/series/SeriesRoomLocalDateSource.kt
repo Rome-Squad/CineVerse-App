@@ -6,13 +6,15 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.util.safeCall
+import com.giraffe.media.util.safeFlow
 import com.giraffe.media.utils.SafeCall
+import javax.inject.Inject
 
-class SeriesRoomLocalDateSource(
+class SeriesRoomLocalDateSource @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
-    override suspend fun saveSearchResult(
+    override suspend fun insertSearchResult(
         seriesList: List<SeriesCacheDto>
     ) = safeCall {
         val existingSeries = seriesDao.getSeriesByIds(seriesList.map { it.id })
@@ -60,12 +62,12 @@ class SeriesRoomLocalDateSource(
             seriesDao.getAllGenres().filter { it.id in genreIds }
         }
 
-    override suspend fun getRecentSeries(): List<SeriesCacheDto> = safeCall {
+    override suspend fun getRecentSeries() = safeFlow {
         seriesDao.getRecentSeries()
     }
 
 
-    override suspend fun storeRecentSeries(seriesId: Int) = safeCall {
+    override suspend fun insertRecentSeries(seriesId: Int) = safeCall {
         seriesDao.markSeriesAsViewed(seriesId)
     }
 

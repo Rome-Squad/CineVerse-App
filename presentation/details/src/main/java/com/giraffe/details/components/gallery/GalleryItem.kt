@@ -1,7 +1,6 @@
 package com.giraffe.details.components.gallery
 
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,16 +29,13 @@ fun GalleryItem(
         contentScale = ContentScale.Crop,
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
-    ) {
+    )
+    {
         Icon(
             painter = painterResource(Theme.icons.dueTone.image),
             contentDescription = imageUrl,
             tint = Theme.color.brand.secondary,
             modifier = modifier
-                .background(
-                    Theme.color.background.card,
-                    shape = RoundedCornerShape(Theme.radius.lg)
-                )
                 .wrapContentSize()
                 .size(28.dp)
         )

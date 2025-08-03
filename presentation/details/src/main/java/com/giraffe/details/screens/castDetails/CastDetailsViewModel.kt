@@ -5,14 +5,19 @@ import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.screens.castCredit.MediaType
+import com.giraffe.details.screens.castDetails.state.CastDetailsUiState
+import com.giraffe.details.screens.castDetails.state.toUiState
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
-import com.giraffe.media.person.usecase.StoreRecentPersonUseCase
+import com.giraffe.media.person.usecase.AddRecentPersonUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class CastDetailsViewModel(
+@HiltViewModel
+class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase,
-    private val storeRecentSeriesUseCase: StoreRecentPersonUseCase
+    private val storeRecentSeriesUseCase: AddRecentPersonUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
     CastDetailsInteractionListener {
     private val personId: Int = savedStateHandle.toRoute<CastDetailsRoute>().id
@@ -21,16 +26,8 @@ class CastDetailsViewModel(
         getPersonDetails(personId)
     }
 
-    override fun onActorYoutubeLinkClicked() {
-        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorYouTubeLink))
-    }
-
-    override fun onActorFacebookLinkClicked() {
-        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorFacebookLink))
-    }
-
-    override fun onActorInstagramLinkClicked() {
-        sendEffect(CastDetailsEffect.OpenUrl(state.value.actorInstagramLink))
+    override fun navigateToActorMediaLink(url: String) {
+        sendEffect(CastDetailsEffect.OpenUrl(url))
     }
 
     override fun navigateToActorGalleryScreen() {
@@ -81,9 +78,7 @@ class CastDetailsViewModel(
                 actorPlace = person.placeOfBirth.orEmpty(),
                 actorGalleryImageUrls = person.images,
                 biographyInfo = person.biography.orEmpty(),
-                actorFacebookLink = person.socialMedia?.facebookLink.orEmpty(),
-                actorInstagramLink = person.socialMedia?.instagramLink.orEmpty(),
-                actorYouTubeLink = person.socialMedia?.youtubeLink.orEmpty(),
+                socialMediaUiList = person.socialMedia?.toUiState() ?: emptyList(),
                 posters = person.personCredits.map { personCredit ->
                     Poster(
                         id = personCredit.id,

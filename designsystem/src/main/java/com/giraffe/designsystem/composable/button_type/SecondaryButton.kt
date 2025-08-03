@@ -1,7 +1,12 @@
 package com.giraffe.designsystem.composable.button_type
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -16,32 +21,43 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun SecondaryButton(
-    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     isLoading: Boolean = false,
 ) {
 
     Button(
-        modifier = modifier,
         shape = RoundedCornerShape(Theme.radius.lg),
         onClick = if (enabled) onClick else ({}),
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) Theme.color.button.secondary else Theme.color.button.disabled,
-            contentColor = if (enabled) Theme.color.button.onSecondary else Theme.color.button.onDisabled,
+            containerColor = Theme.color.button.secondary,
+            disabledContainerColor = Theme.color.button.disabled,
+            contentColor = Theme.color.button.onSecondary,
+            disabledContentColor = Theme.color.button.onDisabled
         ),
-        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp)
+        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
+        modifier = modifier
     ) {
-        if (isLoading)
-            CircularProgressIndicator(
-                color = Theme.color.button.onPrimary
-            )
-        else
-            Text(
-                text = text,
-                style = Theme.textStyle.body.md.medium,
-            )
+        AnimatedContent(
+            targetState = isLoading,
+            label = "SecondaryButton",
+            transitionSpec = {
+                slideInVertically(tween(250, easing = LinearEasing)) { 2 * it } togetherWith
+                        slideOutVertically(tween(250, easing = LinearEasing)) { 2 * -it }
+            }
+        ) { loadingState ->
+            if (loadingState) {
+                CircularProgressIndicator(color = Theme.color.button.onPrimary)
+            } else {
+                Text(
+                    text = text,
+                    style = Theme.textStyle.body.md.medium
+                )
+            }
+        }
     }
 }
 

@@ -1,6 +1,12 @@
 package com.giraffe.designsystem.composable
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,18 +45,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.giraffe.designsystem.R
-import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -74,29 +76,25 @@ fun DefaultTextField(
     onStartIconClick: ((String) -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    onForgotPasswordClick: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
     onClick: () -> Unit = {},
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
-    LaunchedEffect(isFocused) {
-        onFocusChanged(isFocused)
-        if (isFocused && readOnly) {
-            focusManager.clearFocus()
-        }
-    }
     val hasError = errorMessage != null
     var showPassword by remember { mutableStateOf(false) }
     val borderColor by animateColorAsState(
-        targetValue = if (isFocused)
-            Theme.color.brand.primary
-        else if (hasError)
-            Theme.color.additional.primary.red
-        else
-            Theme.color.stroke.primary
+        targetValue = if (hasError) Theme.color.additional.primary.red
+        else if (isFocused) Theme.color.brand.primary
+        else Theme.color.stroke.primary
     )
+
+    LaunchedEffect(isFocused) {
+        onFocusChanged(isFocused)
+        if (isFocused && readOnly) focusManager.clearFocus()
+    }
+
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -108,6 +106,7 @@ fun DefaultTextField(
                 color = Theme.color.shade.secondary
             )
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -125,6 +124,7 @@ fun DefaultTextField(
         ) {
             val checkLeftIcon = if (isPassword) painterResource(Theme.icons.outline.lock)
             else startIcon
+
             Icon(
                 modifier = Modifier.then(
                     if (onStartIconClick != null) Modifier.clickable { onStartIconClick(value) }
@@ -134,6 +134,7 @@ fun DefaultTextField(
                 contentDescription = "User_Icon",
                 tint = Theme.color.shade.tertiary
             )
+
             TextField(
                 modifier = Modifier
                     .weight(1f)
@@ -151,21 +152,15 @@ fun DefaultTextField(
                 onValueChange = { newValue ->
                     if (newValue.length <= maxCharacters) {
                         if (newValue.contains("\n")) onValueChange(
-                            newValue.replace(
-                                "\n",
-                                " "
-                            )
+                            newValue.replace("\n", " ")
                         )
                         else onValueChange(newValue)
                     }
                 },
                 textStyle = Theme.textStyle.body.md.medium,
-                visualTransformation = if (!isPassword)
-                    VisualTransformation.None
-                else if (showPassword)
-                    VisualTransformation.None
-                else
-                    PasswordVisualTransformation(),
+                visualTransformation = if (!isPassword) VisualTransformation.None
+                else if (showPassword) VisualTransformation.None
+                else PasswordVisualTransformation(),
                 placeholder = {
                     Text(
                         text = placeholder,
@@ -183,49 +178,42 @@ fun DefaultTextField(
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions
             )
-            if (hasError && !isFocused && !isPassword) {
+
+            AnimatedVisibility(
+                visible = hasError && !isPassword,
+                enter = fadeIn(tween(300, easing = LinearEasing)),
+                exit = slideOutVertically(tween(0)) { it }
+            ) {
                 Icon(
                     painter = painterResource(Theme.icons.outline.dangerTriangle),
                     contentDescription = "Danger_Triangle_Icon",
                     tint = Theme.color.additional.primary.red
                 )
             }
+
             if (isPassword) {
                 Icon(
-                    if (showPassword) {
-                        painterResource(Theme.icons.outline.eyeOpened)
-                    } else {
-                        painterResource(Theme.icons.outline.eyeClosed)
-                    },
+                    painter = if (showPassword) painterResource(Theme.icons.outline.eyeOpened)
+                    else painterResource(Theme.icons.outline.eyeClosed),
                     tint = Theme.color.shade.secondary,
                     contentDescription = "password visibility icon",
                     modifier = Modifier
                         .clickable { showPassword = !showPassword }
                 )
-            } else {
-                if (endIcon != null) {
-                    endIcon()
-                }
+            } else if (endIcon != null) {
+                endIcon()
             }
         }
-        if (hasError && !isFocused) {
+
+        AnimatedVisibility(
+            visible = hasError,
+            enter = slideInVertically(tween(250, easing = LinearEasing)) { -it },
+            exit = slideOutVertically(tween(0)) { it }
+        ) {
             Text(
-                text = errorMessage ?: "",
+                text = errorMessage .orEmpty(),
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.additional.primary.red
-            )
-        }
-        if (isPassword) {
-            Text(
-                text = stringResource(R.string.forgot_password),
-                style = Theme.textStyle.body.md.regular,
-                color = Theme.color.shade.secondary,
-                textDecoration = TextDecoration.Underline,
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .noHoverClickable(
-                        onClick = onForgotPasswordClick
-                    )
             )
         }
     }

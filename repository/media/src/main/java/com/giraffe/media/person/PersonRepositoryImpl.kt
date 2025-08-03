@@ -20,8 +20,9 @@ import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PersonRepositoryImpl(
+class PersonRepositoryImpl @Inject constructor(
     private val remoteDataSource: PersonRemoteDataSource,
     private val localDataSource: PersonLocalDataSource,
     private val localExploreDataSource: LocalExploreDataSource,
@@ -34,7 +35,8 @@ class PersonRepositoryImpl(
             if (isPageCached) {
                 localDataSource.searchByName(personName, page).map(PersonCacheDto::toEntity)
             } else {
-                val remoteActors = remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
+                val remoteActors =
+                    remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
                 val updatedKeyword = keywordData?.copy(
                     actorsPages = keywordData.actorsPages + page,
                     searchedAt = System.currentTimeMillis()
@@ -43,14 +45,15 @@ class PersonRepositoryImpl(
                     actorsPages = listOf(page)
                 )
                 localExploreDataSource.insertSearchKeyword(updatedKeyword)
-                localDataSource.storePeople(remoteActors.map { it.toCacheDto().copy(page = page) })
+                localDataSource.insertPeople(remoteActors.map { it.toCacheDto().copy(page = page) })
                 remoteActors
             }
         }
+
     }
 
-    override suspend fun storeRecentPerson(person: Person) =
-        SafeCall { localDataSource.storePerson(person.toCacheDto().copy(isRecent = true)) }
+    override suspend fun addRecentPerson(person: Person) =
+        SafeCall { localDataSource.insertPerson(person.toCacheDto().copy(isRecent = true)) }
 
     override suspend fun getRecentPeople() = SafeCall {
         localDataSource.getRecentPeople().map(PersonCacheDto::toEntity)
@@ -71,12 +74,12 @@ class PersonRepositoryImpl(
         getPeopleForContent(content)
     }
 
-    private suspend fun getPeopleForContent(content: ContentType): List<Person> {
+    private suspend fun getPeopleForContent(content: ContentType) = SafeCall {
         val cachedPeople = loadPeopleFromCache(content)
-        return cachedPeople.ifEmpty { fetchAndCachePeople(content) }
+        cachedPeople.ifEmpty { fetchAndCachePeople(content) }
     }
 
-    private suspend fun fetchAndCachePeople(content: ContentType): List<Person> {
+    private suspend fun fetchAndCachePeople(content: ContentType) = SafeCall {
         val credits = content.fetchCredits()
 
         val cast = credits.cast.map { it.toEntity(PersonType.CAST) }
@@ -85,19 +88,19 @@ class PersonRepositoryImpl(
 
         val dtos = people.map { content.toCacheDto(it) }
 
-        localDataSource.storePeople(dtos)
+        localDataSource.insertPeople(dtos)
 
-        return people
+        people
     }
 
     private suspend fun loadPeopleFromCache(
         content: ContentType
-    ): List<Person> {
+    ) = SafeCall {
         val cachedDtos = when (content) {
             is ContentType.Movie -> localDataSource.getPeopleByMovieId(content.id)
             is ContentType.Series -> localDataSource.getPeopleBySeriesId(content.id)
         }
-        return cachedDtos.map(PersonCacheDto::toEntity)
+        cachedDtos.map(PersonCacheDto::toEntity)
     }
 
     override suspend fun getPersonDetails(personId: Int) = SafeCall {

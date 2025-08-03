@@ -8,16 +8,41 @@ import com.giraffe.media.person.PersonRepositoryImpl
 import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
-import com.giraffe.repository.AuthRepositoryImpl
+import com.giraffe.repository.AuthenticationRepositoryImpl
+import com.giraffe.repository.OnboardingRepositoryImpl
 import com.giraffe.user.repository.AuthRepository
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import com.giraffe.user.repository.OnboardingRepository
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-val repositoryModule = module {
-    singleOf(::ExploreRepositoryImpl) bind ExploreRepository::class
-    singleOf(::SeriesRepositoryImpl) bind SeriesRepository::class
-    singleOf(::MoviesRepositoryImpl) bind MoviesRepository::class
-    singleOf(::PersonRepositoryImpl) bind PersonRepository::class
-    singleOf(::AuthRepositoryImpl) bind AuthRepository::class
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindExploreRepository(impl: ExploreRepositoryImpl): ExploreRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSeriesRepository(impl: SeriesRepositoryImpl): SeriesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMoviesRepository(impl: MoviesRepositoryImpl): MoviesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPersonRepository(impl: PersonRepositoryImpl): PersonRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(impl: AuthenticationRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOnboardingRepository(impl: OnboardingRepositoryImpl): OnboardingRepository
 }
