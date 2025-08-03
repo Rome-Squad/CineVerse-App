@@ -12,13 +12,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -121,7 +127,7 @@ fun HomeContent(
     state: HomeScreenUiState,
     interactionListener: HomeInteractionListener
 ) {
-    if (state.isGenricError && state.isNetworkError) {
+    if (state.isGenericError && state.isNetworkError) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -144,19 +150,168 @@ fun HomeContent(
             )
         }
     } else {
-        LazyColumn(
+        var topAppBarHeight by remember { mutableStateOf(0.dp) }
+        val density = LocalDensity.current
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Theme.color.background.screen)
                 .statusBarsPadding()
         ) {
-            stickyHeader {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(top = topAppBarHeight)
+            ) {
+
+                if (state.popularity.isNotEmpty()) {
+                    Carousel(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        movieCards = state.popularity,
+                        onClickItem = interactionListener::onMediaClicked
+                    )
+                }
+
+                if (state.recentlyReleased.isNotEmpty()) {
+                    val recentlyReleased = stringResource(R.string.recently_released)
+                    HomeUiListSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        title = stringResource(R.string.recently_released),
+                        endText = stringResource(R.string.show_more),
+                        uiModels = state.recentlyReleased,
+                        onClickItem = interactionListener::onMediaClicked,
+                        onClickEndText = {
+                            interactionListener.onSeeAllRecentlyReleasedClicked(
+                                sectionTitle = recentlyReleased,
+                                sectionType = MovieSectionType.RECENTLY_RELEASED
+                            )
+                        }
+                    )
+                }
+
+                AdvertisementSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+                    title = stringResource(R.string.what_should_i_watch),
+                    cardTitle = stringResource(R.string.let_us_choose_for_you),
+                    caption =
+                        stringResource(R.string.we_ll_help_you_skip_the_scroll_and_go_straight_to_the_good_stuff),
+                    onCardClick = {},
+                )
+
+                if (state.upcomingMovies.isNotEmpty()) {
+                    val upcomingMovies = stringResource(R.string.upcoming_movies)
+                    HomeUiListSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        title = stringResource(R.string.upcoming_movies),
+                        endText = stringResource(R.string.show_more),
+                        uiModels = state.upcomingMovies,
+                        onClickItem = interactionListener::onMediaClicked,
+                        onClickEndText = {
+                            interactionListener.onSeeAllUpcomingClicked(
+                                sectionTitle = upcomingMovies,
+                                sectionType = MovieSectionType.UPCOMING_MOVIES
+                            )
+                        }
+                    )
+                }
+                if (state.matchVibes.isNotEmpty()) {
+                    val matchVibes = stringResource(R.string.matches_your_vibe)
+                    HomeUiListSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        title = stringResource(R.string.matches_your_vibe),
+                        endText = stringResource(R.string.show_more),
+                        uiModels = state.matchVibes,
+                        onClickItem = interactionListener::onMediaClicked,
+                        onClickEndText = {
+                            interactionListener.onWhatShouldIWatchClicked(
+                                sectionTitle = matchVibes,
+                                sectionType = MovieSectionType.MATCHES_YOUR_VIBES
+                            )
+                        }
+                    )
+                }
+                if (state.featuredCollections.isNotEmpty()) {
+                    CollectionListSection(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        collectionItems = state.featuredCollections,
+                        onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,
+                    )
+                }
+
+                if (state.topRated.isNotEmpty()) {
+                    val topRated = stringResource(R.string.top_rated_tv_shows)
+                    HomeUiListSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        title = stringResource(R.string.top_rated_tv_shows),
+                        endText = stringResource(R.string.show_more),
+                        uiModels = state.topRated,
+                        onClickItem = interactionListener::onMediaClicked,
+                        onClickEndText = {
+                            interactionListener.onSeeAllTopRatedClicked(
+                                sectionTitle = topRated,
+                                sectionType = MovieSectionType.TOP_RATED_TV_SHOWS
+                            )
+                        },
+                    )
+                }
+                if (state.recentlyViewed.isNotEmpty()) {
+                    val recentlyReleasedTitle = stringResource(R.string.you_recent_viewed)
+                    HomeUiListSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        endText = stringResource(R.string.show_more),
+                        title = stringResource(R.string.you_recent_viewed),
+                        uiModels = state.recentlyViewed,
+                        onClickItem = interactionListener::onMediaClicked,
+                        onClickEndText = {
+                            interactionListener.onSeeAllRecentlyViewedClicked(
+                                sectionTitle = recentlyReleasedTitle,
+                                sectionType = MovieSectionType.RECENTLY_VIEWED
+                            )
+                        }
+                    )
+                }
+                if (yourCollections.isNotEmpty()) {
+                    YourCollectionsSections(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        collectionItems = yourCollections
+                    )
+                }
+                AdvertisementSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 50.dp, top = 16.dp),
+                    title = stringResource(R.string.need_more_to_watch),
+                    cardTitle = stringResource(R.string.browse_everything),
+                    caption = stringResource(R.string.explore_all_movies_and_series),
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .onGloballyPositioned { coordinates ->
+                        topAppBarHeight = with(density) {
+                            coordinates.size.height.toDp()
+                        }
+                    },
+            ) {
                 TopAppBar(
                     userName = state.userName
                 )
-            }
-
-            item {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -164,141 +319,8 @@ fun HomeContent(
                         .background(Theme.color.stroke.primary)
                 )
             }
-            item {
-                Carousel(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 32.dp),
-                    movieCards = state.popularity,
-                    onClickItem = interactionListener::onMediaClicked
-                )
-            }
-            item {
-                val recentlyReleased = stringResource(R.string.recently_released)
-                HomeUiListSection(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    title = stringResource(R.string.recently_released),
-                    endText = stringResource(R.string.show_more),
-                    uiModels = state.recentlyReleased,
-                    onClickItem = interactionListener::onMediaClicked,
-                    onClickEndText = {
-                        interactionListener.onSeeAllRecentlyReleasedClicked(
-                            sectionTitle = recentlyReleased,
-                            sectionType = MovieSectionType.RECENTLY_RELEASED
-                        )
-                    }
-                )
-            }
-            item {
-                AdvertisementSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 32.dp),
-                    title = stringResource(R.string.what_should_i_watch),
-                    cardTitle = stringResource(R.string.let_us_choose_for_you),
-                    caption = stringResource(R.string.we_ll_help_you_skip_the_scroll_and_go_straight_to_the_good_stuff),
-                    onCardClick = {},
-                )
-            }
-            item {
-                val upcomingMovies = stringResource(R.string.upcoming_movies)
-                HomeUiListSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp),
-                    title = stringResource(R.string.upcoming_movies),
-                    endText = stringResource(R.string.show_more),
-                    uiModels = state.upcomingMovies,
-                    onClickItem = interactionListener::onMediaClicked,
-                    onClickEndText = {
-                        interactionListener.onSeeAllUpcomingClicked(
-                            sectionTitle = upcomingMovies,
-                            sectionType = MovieSectionType.UPCOMING_MOVIES
-                        )
-                    }
-                )
-            }
-            item {
-                val matchVibes = stringResource(R.string.matches_your_vibe)
-                HomeUiListSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp),
-                    title = stringResource(R.string.matches_your_vibe),
-                    endText = stringResource(R.string.show_more),
-                    uiModels = state.matchVibes,
-                    onClickItem = interactionListener::onMediaClicked,
-                    onClickEndText = {
-                        interactionListener.onWhatShouldIWatchClicked(
-                            sectionTitle = matchVibes,
-                            sectionType = MovieSectionType.MATCHES_YOUR_VIBES
-                        )
-                    }
-                )
-            }
-            item {
-                CollectionListSection(
-                    modifier = Modifier.padding(bottom = 32.dp),
-                    collectionItems = state.featuredCollections,
-                    onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,                )
-            }
-            item {
-                val topRated = stringResource(R.string.top_rated_tv_shows)
-                HomeUiListSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp),
-                    title = stringResource(R.string.top_rated_tv_shows),
-                    endText = stringResource(R.string.show_more),
-                    uiModels = state.topRated,
-                    onClickItem = interactionListener::onMediaClicked,
-                    onClickEndText = {
-                        interactionListener.onSeeAllTopRatedClicked(
-                            sectionTitle = topRated,
-                            sectionType = MovieSectionType.TOP_RATED_TV_SHOWS
-                        )
-                    },
-                )
-            }
-            item {
-                val recentlyReleasedTitle = stringResource(R.string.you_recent_viewed)
-                HomeUiListSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp),
-                    endText = stringResource(R.string.show_more),
-                    title = stringResource(R.string.you_recent_viewed),
-                    uiModels = state.recentlyViewed,
-                    onClickItem = interactionListener::onMediaClicked,
-                    onClickEndText = {
-                        interactionListener.onSeeAllRecentlyViewedClicked(
-                            sectionTitle = recentlyReleasedTitle,
-                            sectionType = MovieSectionType.RECENTLY_VIEWED
-                        )
-                    }
-                )
-            }
-            item {
-                YourCollectionsSections(
-                    modifier = Modifier.padding(bottom = 32.dp),
-                    collectionItems = yourCollections
-                )
-            }
-            item {
-                AdvertisementSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, bottom = 50.dp),
-                    title = stringResource(R.string.need_more_to_watch),
-                    cardTitle = stringResource(R.string.browse_everything),
-                    caption = stringResource(R.string.explore_all_movies_and_series),
-                )
-            }
         }
-
     }
-
 }
 
 val yourCollections = listOf(
