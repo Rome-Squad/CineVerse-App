@@ -94,6 +94,7 @@ fun CastCard(
             SafeIslamicImage(
                 imageUrl = actorImage,
                 contentDescription = "$actorName image",
+                hasSensitiveText = false,
                 modifier = Modifier
                     .size(64.dp)
                     .clip(

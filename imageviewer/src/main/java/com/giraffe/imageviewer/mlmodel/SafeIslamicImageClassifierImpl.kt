@@ -93,7 +93,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         val unsafeNsfwModel = outputNsfwModel[0][0]
         val unsafeNsfwModelTmdbData = outputNsfwModelTmdbData[0][0]
 
-        val finalUnsafe = maxOf(unsafeNsfwModel, unsafeNsfwModelTmdbData)
+        val finalUnsafe = (unsafeNsfwModel + unsafeNsfwModelTmdbData) / 2
 
         return finalUnsafe
     }
@@ -122,7 +122,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
     override suspend fun isUnsafe(bitmap: Bitmap, imageUrl: String): Boolean {
         return getResultFromCache(imageUrl) ?: withContext(Dispatchers.Default) {
             val unsafeScore = classify(bitmap)
-            val isSafe = unsafeScore > 0.5f  // Threshold
+            val isSafe = unsafeScore > 0.35f  // Threshold
             cachedImages[imageUrl] = isSafe
             isSafe
         }
