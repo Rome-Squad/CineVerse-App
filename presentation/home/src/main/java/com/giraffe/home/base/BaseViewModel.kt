@@ -1,5 +1,6 @@
 package com.giraffe.home.base
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -67,8 +68,22 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         }
     }
 
+    protected fun <T> safeLaunch(
+        coroutineScope: CoroutineScope = viewModelScope,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        onSuccess: suspend (T) -> Unit,
+        onError: (Int) -> Unit,
+        block: suspend CoroutineScope.() -> T
+    ): Job {
+        return coroutineScope.launch(dispatcher + handler(onError)) {
+            val data = block()
+            onSuccess(data)
+        }
+    }
+
     private fun handler(onError: (Int) -> Unit = {}): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->
+            Log.d("TAG", "handler: $throwable")
             onError(mapExceptionToStringRes(throwable))
         }
     }
