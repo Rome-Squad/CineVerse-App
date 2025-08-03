@@ -24,6 +24,9 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_TABLE WHERE title LIKE '%' || :movieName || '%' AND page = :page")
     suspend fun getMovieByName(movieName: String, page: Int): List<MovieCacheDto>
 
+    @Query("SELECT * FROM $MOVIE_TABLE ORDER BY popularity DESC LIMIT :limit")
+    suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
+
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id =:movieId")
     suspend fun getMovieById(movieId: Int): MovieCacheDto?
 

@@ -34,6 +34,10 @@ class MovieLocalDataSourceImp @Inject constructor(
             movieDao.getMovieByName(movieName, page)
         }
 
+    override suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto> = safeCall {
+        movieDao.getPopularityMovies(limit = limit)
+    }
+
     override suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto> = safeCall {
         movieDao.getMoviesByGenre(genreId)
     }

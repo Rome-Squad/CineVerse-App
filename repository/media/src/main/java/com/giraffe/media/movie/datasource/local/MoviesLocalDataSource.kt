@@ -17,6 +17,8 @@ interface MoviesLocalDataSource {
 
     suspend fun getMoviesByName(movieName: String, page: Int): List<MovieCacheDto>
 
+    suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
+
     suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
 
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>

@@ -33,7 +33,6 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getMoviesByName(movieName, page).map(MovieDto::toEntity)
     }
 
-
     override suspend fun getMovieGenres(genreIds: List<Int>) = SafeCall {
         if (genreIds.isNotEmpty()) {
             local.incrementInteractionCountForGenres(genreIds)
@@ -115,8 +114,12 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getUserMovieRating(movieId)
     }
 
-    override suspend fun getPopularityMovies(page: Int): List<Movie> = SafeCall {
-        remote.getPopularityMovies(page).map(MovieDto::toEntity)
+    override suspend fun getPopularityMovies(page: Int, limit: Int): List<Movie> = SafeCall {
+        local.getPopularityMovies(limit = limit).map(MovieCacheDto::toEntity).ifEmpty {
+            remote.getPopularityMovies(page).take(limit).map(MovieDto::toEntity).also {
+                local.insertMovies(it.map(Movie::toCacheDto))
+            }
+        }
     }
 
     override suspend fun getRecentlyReleasedMovies(page: Int): List<Movie> = SafeCall {

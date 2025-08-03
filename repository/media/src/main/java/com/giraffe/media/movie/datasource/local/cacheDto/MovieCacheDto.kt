@@ -20,7 +20,8 @@ data class MovieCacheDto(
     val duration: Int?,
     val isRecent: Boolean,
     val cachedAt: Long = System.currentTimeMillis(),
-    val page: Int = 0
+    val page: Int = 0,
+    val popularity: Float,
 )
 
 

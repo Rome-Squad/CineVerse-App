@@ -13,5 +13,6 @@ data class Movie(
     val backdropUrl: String?,
     val genresID: List<Int>,
     val releaseYear: LocalDate?,
-    val youtubeVideoId: String?
+    val youtubeVideoId: String?,
+    val popularity: Float
 )
