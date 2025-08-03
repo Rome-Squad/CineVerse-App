@@ -65,6 +65,14 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
+    override fun navigateToHomeScreen() {
+        sendEffect(OnboardingEffect.NavigateToHome)
+    }
+
+    override fun navigateToLoginScreen() {
+        sendEffect(OnboardingEffect.NavigateToLogin)
+    }
+
     private inline fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
