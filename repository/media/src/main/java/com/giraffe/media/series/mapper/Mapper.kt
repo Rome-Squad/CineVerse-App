@@ -37,6 +37,7 @@ fun SeriesCacheDto.toEntity(
     },
     genreIDs = genresID,
     releaseYear = releaseYear,
+    popularity = popularity,
     seasons = seasons
 )
 
@@ -57,6 +58,7 @@ fun Series.toCacheDto() = SeriesCacheDto(
     },
     genresID = genreIDs,
     releaseYear = releaseYear,
+    popularity = popularity
 )
 
 
@@ -104,6 +106,7 @@ fun SeriesDto.toEntity() = Series(
     }.orEmpty(),
     genreIDs = genreIds,
     releaseYear = firstAirDate?.toFormattedDate() ?: "",
+    popularity = popularity ?: 0.0,
     seasons = emptyList()
 )
 
