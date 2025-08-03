@@ -1,7 +1,5 @@
 package com.giraffe.media.person
 
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
@@ -25,31 +23,10 @@ import javax.inject.Inject
 class PersonRepositoryImpl @Inject constructor(
     private val remoteDataSource: PersonRemoteDataSource,
     private val localDataSource: PersonLocalDataSource,
-    private val localExploreDataSource: LocalExploreDataSource,
 ) : PersonRepository {
 
     override suspend fun searchByName(personName: String, page: Int) = SafeCall {
-        withContext(Dispatchers.IO) {
-            val keywordData = localExploreDataSource.getSearchKeyword(query = personName)
-            val isPageCached = keywordData?.actorsPages?.contains(page) == true
-            if (isPageCached) {
-                localDataSource.searchByName(personName, page).map(PersonCacheDto::toEntity)
-            } else {
-                val remoteActors =
-                    remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
-                val updatedKeyword = keywordData?.copy(
-                    actorsPages = keywordData.actorsPages + page,
-                    searchedAt = System.currentTimeMillis()
-                ) ?: SearchKeywordCacheDto(
-                    keyword = personName,
-                    actorsPages = listOf(page)
-                )
-                localExploreDataSource.insertSearchKeyword(updatedKeyword)
-                localDataSource.insertPeople(remoteActors.map { it.toCacheDto().copy(page = page) })
-                remoteActors
-            }
-        }
-
+        remoteDataSource.searchByName(personName, page).map(PersonDto::toEntity)
     }
 
     override suspend fun addRecentPerson(person: Person) =

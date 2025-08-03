@@ -1,18 +1,16 @@
 package com.giraffe.explore.screen.searchresult
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +26,7 @@ import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.CastItem
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.NothingFound
@@ -44,29 +43,19 @@ fun SearchResultScreen(
     viewModel: SearchResultViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    val isConnect = viewModel.isConnect.collectAsState()
-
-
-    LaunchedEffect (isConnect.value){ Log.e("IsInternet","${isConnect.value}") }
-
-
-        SearchResultContent(
-            state = state,
-            interactions = viewModel,
-            navigateToMovieDetails = navigateToMovieDetails,
-            navigateToSeriesDetails = navigateToSeriesDetails,
-            navigateToCastDetails = navigateToCastDetails,
-            onBackClick = onBackClick,
-            isConnect = isConnect.value
-        )
-    }
-
+    SearchResultContent(
+        state = state,
+        interactions = viewModel,
+        navigateToMovieDetails = navigateToMovieDetails,
+        navigateToSeriesDetails = navigateToSeriesDetails,
+        navigateToCastDetails = navigateToCastDetails,
+        onBackClick = onBackClick,
+    )
+}
 
 @Composable
-fun SearchResultContent(
+private fun SearchResultContent(
     state: SearchResultScreenState,
-    isConnect:Boolean,
     interactions: SearchResultInteractionListener,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
@@ -74,7 +63,6 @@ fun SearchResultContent(
     onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
-    val actors = state.actors.collectAsLazyPagingItems()
     val posters = state.selectedPosters.collectAsLazyPagingItems()
     Box {
         LazyColumn(
@@ -103,56 +91,37 @@ fun SearchResultContent(
                     onTabSelected = interactions::selectTap
                 )
             }
-
             item {
                 Box(
                     modifier = Modifier.fillParentMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    if (state.isNetworkError == isConnect) {
-                        NoInternetScreen()
-                    } else {
+                    when {
+                        posters.loadState.refresh is LoadState.Loading -> Progress(size = 32.dp)
+                        posters.loadState.hasError && posters.itemCount == 0 -> NoInternetScreen(
+                            onRetryClick = interactions::retry
+                        )
 
-                        if (posters.loadState.refresh is LoadState.Loading) {
-                            Progress(
-                                size = 32.dp,
-                                modifier = Modifier
-                                    .align(Alignment.TopCenter)
-                                    .padding(top = 16.dp)
+                        posters.itemCount == 0 -> NothingFound()
+                        else -> if (state.selectedTab == SearchTab.ACTORS) {
+                            ActorsSection(
+                                modifier = Modifier.fillMaxSize(),
+                                actors = posters,
+                                navigateToCastDetails = navigateToCastDetails
                             )
                         } else {
-                            // Show content based on selected tab
-                            if (state.selectedTab == SearchTab.ACTORS) {
-                                if (actors.itemCount != 0) {
-                                    ActorsSection(
-                                        actors = actors,
-                                        navigateToCastDetails = navigateToCastDetails
-                                    )
-                                } else {
-                                    NothingFound(
-                                        modifier = Modifier
-                                            .padding(horizontal = 60.dp)
-                                            .padding(top = 195.dp)
-                                    )
-                                }
-                            } else if (posters.itemCount != 0) {
-                                TransitionLazyColumnToGrid(
-                                    posters = posters,
-                                    isListSelected = !state.isGridSelected,
-                                    onPosterClicked = { id ->
-                                        when (state.selectedTab) {
-                                            SearchTab.MOVIES -> navigateToMovieDetails(id)
-                                            SearchTab.SERIES -> navigateToSeriesDetails(id)
-                                            SearchTab.ACTORS -> navigateToCastDetails(id)
-                                        }
+                            TransitionLazyColumnToGrid(
+                                modifier = Modifier.fillMaxSize(),
+                                posters = posters,
+                                isListSelected = !state.isGridSelected,
+                                onPosterClicked = { id ->
+                                    when (state.selectedTab) {
+                                        SearchTab.MOVIES -> navigateToMovieDetails(id)
+                                        SearchTab.SERIES -> navigateToSeriesDetails(id)
+                                        SearchTab.ACTORS -> navigateToCastDetails(id)
                                     }
-                                )
-                            } else {
-                                NothingFound(
-                                    modifier = Modifier
-                                        .padding(horizontal = 60.dp)
-                                        .padding(top = 195.dp)
-                                )
-                            }
+                                }
+                            )
                         }
                     }
                 }
@@ -160,10 +129,11 @@ fun SearchResultContent(
         }
     }
 }
+
 @Composable
-fun ActorsSection(
+private fun ActorsSection(
     modifier: Modifier = Modifier,
-    actors: LazyPagingItems<ActorUi>,
+    actors: LazyPagingItems<Poster>,
     navigateToCastDetails: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -176,13 +146,12 @@ fun ActorsSection(
         items(actors.itemCount) { actorIndex ->
             CastItem(
                 name = actors[actorIndex]?.name.toString(),
-                imageUrl = actors[actorIndex]?.imageUrl.toString(),
+                imageUrl = actors[actorIndex]?.imageUri.toString(),
                 onClick = {
                     navigateToCastDetails(actors[actorIndex]?.id ?: 0)
                 }
             )
         }
     }
-
 }
 
