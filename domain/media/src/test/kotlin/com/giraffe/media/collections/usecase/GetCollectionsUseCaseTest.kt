@@ -22,7 +22,7 @@ class GetCollectionsUseCaseTest {
     }
 
     @Test
-    fun `should return list of collections when invoked`() = runTest {
+    fun `should return list of collections when GetCollectionsUseCase invoked`() = runTest {
         // Given
         val expectedCollections = listOf(
             createFakeCollection(id = 1, name = "Favorites"),

@@ -23,7 +23,7 @@ class AddCollectionUseCaseTest {
     }
 
     @Test
-    fun `should call repository with collection when collection is valid`() = runTest {
+    fun `should add collection successfully when collection name is valid`() = runTest {
         // Given
         val collection = createFakeCollection(name = "Action")
 
