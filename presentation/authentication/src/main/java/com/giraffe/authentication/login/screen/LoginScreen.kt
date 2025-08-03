@@ -14,9 +14,9 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToHomeScreen: () -> Unit,
-    navigateToWebViewScreen: () -> Unit = {},
-    navigateToResetPasswordScreen: () -> Unit = {},
-    popBack: () -> Unit = {}
+    navigateToWebViewScreen: () -> Unit,
+    navigateToResetPasswordScreen: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val effectFlow = viewModel.effect
@@ -30,9 +30,8 @@ fun LoginScreen(
 
                 is LoginEffect.NavigateToResetPasswordScreen -> navigateToResetPasswordScreen()
 
-                is LoginEffect.PopBack -> popBack()
+                is LoginEffect.PopBack -> onBackClick()
 
-                is LoginEffect.Error -> {}
             }
         }
     }

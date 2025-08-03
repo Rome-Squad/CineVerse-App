@@ -26,7 +26,6 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-
     override fun onPasswordChanged(password: String) {
         updateState {
             it.copy(
@@ -89,9 +88,6 @@ class LoginViewModel @Inject constructor(
                 )
             }
         }
-
-
-        sendEffect(LoginEffect.Error(throwable))
     }
 
     override fun onGoToWebsiteClick() {
@@ -151,5 +147,4 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
-
 }
