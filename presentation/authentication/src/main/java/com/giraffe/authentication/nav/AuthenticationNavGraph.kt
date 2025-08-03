@@ -35,7 +35,7 @@ internal fun AuthenticationNavGraph(
         navController = navController,
         startDestination =
             when (isLoggedIn) {
-                true -> HomeRoute()
+                true -> HomeRoute
                 false -> LoginRoute()
             }
     ) {
