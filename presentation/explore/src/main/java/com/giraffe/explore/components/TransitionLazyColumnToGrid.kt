@@ -29,6 +29,7 @@ import com.giraffe.designsystem.uimodel.Poster
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TransitionLazyColumnToGrid(
+    modifier: Modifier = Modifier,
     posters: LazyPagingItems<Poster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
@@ -84,6 +85,7 @@ fun TransitionLazyColumnToGrid(
         ) {
             if (it) {
                 LazyColumn(
+                    modifier = modifier,
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = contentPadding
@@ -104,6 +106,7 @@ fun TransitionLazyColumnToGrid(
                 }
             } else {
                 LazyVerticalGrid(
+                    modifier = modifier,
                     state = gridState,
                     columns = GridCells.Fixed(2),
                     verticalArrangement = Arrangement.spacedBy(16.dp),

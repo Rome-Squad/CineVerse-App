@@ -26,7 +26,7 @@ fun NavGraphBuilder.loginRoute(
             navigateToWebViewScreen = navController::navigateToWebView,
             navigateToHomeScreen = navController::navigateHomeScreen,
             navigateToResetPasswordScreen = navController::navigateToResetPassword,
-            popBack = navController::popBackStack
+            onBackClick = navController::popBackStack
         )
     }
 }

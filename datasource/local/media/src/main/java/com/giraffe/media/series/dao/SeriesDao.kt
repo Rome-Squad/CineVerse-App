@@ -55,7 +55,7 @@ interface SeriesDao {
     suspend fun insertGenres(genres: List<SeriesGenreCacheDto>)
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
-    fun getAllGenres(): List<SeriesGenreCacheDto>
+    suspend fun getAllGenres(): List<SeriesGenreCacheDto>
 
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
     suspend fun clearAllGenres()

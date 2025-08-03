@@ -8,7 +8,6 @@ import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
 import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.MediaException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
@@ -87,51 +86,58 @@ class HomeViewModel @Inject constructor(
 
     override fun loadHomeContent() {
         updateState { it.copy(isLoading = true, isError = false) }
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
-                val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
-                val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
-                val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
+        safeLaunch(
+            onError = ::onLoadHomeContentError,
+            onSuccess = ::onLoadHomeContentSuccess
+        ) {
+            val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
+            val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
+            val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
+            val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
 
-                val popularMovies = popularMoviesDeferred.await()
-                val popularSeries = popularSeriesDeferred.await()
-                val recentMovies = recentMoviesDeferred.await()
-                val recentSeries = recentSeriesDeferred.await()
-                val topRated = getTopRatedSeriesUseCase(page = 1)
-                val upcoming = getUpcomingMoviesUseCase(page = 1)
+            val popularMovies = popularMoviesDeferred.await()
+            val popularSeries = popularSeriesDeferred.await()
+            val recentMovies = recentMoviesDeferred.await()
+            val recentSeries = recentSeriesDeferred.await()
+            val topRated = getTopRatedSeriesUseCase(page = 1)
+            val upcoming = getUpcomingMoviesUseCase(page = 1)
 
-                val popularMovieUi = popularMovies.map { movie ->
-                    val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                    movie.toPopularMediaUiModel(genres)
-                }
-
-                val popularSeriesUi = popularSeries.map { series ->
-                    val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                    series.toPopularMediaUiModel(genres)
-                }
-
-                val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
-                val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
-                val topRatedUi = topRated.map { it.toHomeUiModel() }
-                val upcomingUi = upcoming.map { it.toHomeUiModel() }
-
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        isError = false,
-                        popularity = popularMovieUi + popularSeriesUi,
-                        recentlyReleased = recentMovieUi + recentSeriesUi,
-                        topRated = topRatedUi,
-                        upcomingMovies = upcomingUi
-                    )
-                }
-
-            } catch (e: MediaException) {
-                val errorResId = mapExceptionToStringRes(e)
-                updateState { it.copy(isLoading = false, isError = true) }
-                sendEffect(HomeEffect.ShowError(errorResId))
+            val popularMovieUi = popularMovies.map { movie ->
+                val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                movie.toPopularMediaUiModel(genres)
             }
+
+            val popularSeriesUi = popularSeries.map { series ->
+                val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+                series.toPopularMediaUiModel(genres)
+            }
+
+            val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
+            val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
+            val topRatedUi = topRated.map { it.toHomeUiModel() }
+            val upcomingUi = upcoming.map { it.toHomeUiModel() }
+            updateState {
+                it.copy(
+                    popularity = popularMovieUi + popularSeriesUi,
+                    recentlyReleased = recentMovieUi + recentSeriesUi,
+                    topRated = topRatedUi,
+                    upcomingMovies = upcomingUi
+                )
+            }
+        }
+    }
+
+    private fun onLoadHomeContentError(errorResId: Int) {
+        updateState { it.copy(isLoading = false, isError = true) }
+        sendEffect(HomeEffect.ShowError(errorResId))
+    }
+
+    private fun onLoadHomeContentSuccess(result: Unit) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                isError = false
+            )
         }
     }
 

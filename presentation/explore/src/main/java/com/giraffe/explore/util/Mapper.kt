@@ -2,17 +2,24 @@ package com.giraffe.explore.util
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.screen.discover.GenreUi
-import com.giraffe.explore.screen.searchresult.ActorUi
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.series.entity.Series
+
 
 fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
     val genreTitles = allGenres
         .filter { it.id in genresID }
         .joinToString(", ") { it.title }
         .ifBlank { null }
+
+
+    val date = releaseYear?.let {
+        "${it.year}, ${
+            it.month.name.lowercase().replaceFirstChar { char -> char.uppercase() }.take(3)
+        } ${it.day}"
+    } ?: ""
 
     return Poster(
         id = id,
@@ -21,10 +28,11 @@ fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         rating = rating,
         genres = genreTitles,
         time = duration.toString(),
-        date = releaseYear?.toString(),
+        date = date,
         mediaTypeOfPoster = Poster.Type.MOVIE.value
     )
 }
+
 
 fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
     val genreTitles = allGenres
@@ -51,5 +59,4 @@ fun Person.toPoster() = Poster(
     mediaTypeOfPoster = Poster.Type.PERSON.value
 )
 
-fun Person.toUi() = ActorUi(id, name, imageUrl.toString())
 fun Genre.toUi() = GenreUi(id, title)

@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
+import com.giraffe.authentication.signup.utils.WebViewConstants.LOGIN_PATH
+import com.giraffe.authentication.signup.utils.WebViewConstants.SIGN_UP_URL
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
@@ -24,8 +26,7 @@ import com.google.accompanist.web.rememberWebViewState
 
 @Composable
 fun AuthWebViewScreen(onBack: () -> Unit) {
-    val signUpUrl = "https://www.themoviedb.org/signup"
-    var webViewState = rememberWebViewState(url = signUpUrl)
+    var webViewState = rememberWebViewState(url = SIGN_UP_URL)
     val isLoading = webViewState.loadingState is LoadingState.Loading
 
     Box(
@@ -42,7 +43,6 @@ fun AuthWebViewScreen(onBack: () -> Unit) {
                 onBackButtonClick = { onBack() },
             )
 
-            // WebView Content
             WebView(
                 state = webViewState,
                 onCreated = {
@@ -52,7 +52,7 @@ fun AuthWebViewScreen(onBack: () -> Unit) {
                 client = object : AccompanistWebViewClient() {
                     override fun onPageFinished(view: WebView, url: String?) {
                         super.onPageFinished(view, url)
-                        if (url?.contains("themoviedb.org/login") == true) {
+                        if (url?.contains(LOGIN_PATH) == true) {
                             onBack()
                         }
                     }
@@ -62,10 +62,10 @@ fun AuthWebViewScreen(onBack: () -> Unit) {
                         request: WebResourceRequest?
                     ): Boolean {
                         request?.url?.let {
-                            if (it.toString().contains("themoviedb.org/login")) {
+                            if (it.toString().contains(LOGIN_PATH)) {
                                 onBack()
                                 return true
-                            } else if (it.toString() != signUpUrl) {
+                            } else if (it.toString() != SIGN_UP_URL) {
                                 return true
                             }
                         }

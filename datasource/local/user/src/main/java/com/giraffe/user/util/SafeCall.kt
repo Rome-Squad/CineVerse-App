@@ -1,14 +1,14 @@
-package com.giraffe.media.util
+package com.giraffe.user.util
 
 import android.database.CursorIndexOutOfBoundsException
 import android.database.StaleDataException
 import android.database.sqlite.SQLiteException
-import com.giraffe.media.exception.CorruptDatabaseDataException
-import com.giraffe.media.exception.DiskAccessDataException
-import com.giraffe.media.exception.InvalidIdDataException
-import com.giraffe.media.exception.MediaDataException
-import com.giraffe.media.exception.NoInternetDataException
-import com.giraffe.media.exception.UnknownNetworkDataException
+import com.giraffe.repository.exceptions.CorruptDatabaseDataException
+import com.giraffe.repository.exceptions.DiskAccessDataException
+import com.giraffe.repository.exceptions.InvalidIdDataException
+import com.giraffe.repository.exceptions.NoInternetDataException
+import com.giraffe.repository.exceptions.UnknownNetworkDataException
+import com.giraffe.repository.exceptions.UserDataException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
@@ -20,7 +20,7 @@ suspend fun <T> safeCall(block: suspend () -> T): T {
     return try {
         block()
     } catch (e: Exception) {
-        throw mapToMediaException(e)
+        throw mapToUserException(e)
     }
 }
 
@@ -28,12 +28,12 @@ fun <T> safeFlow(block: () -> Flow<T>): Flow<T> {
     return flow {
         emitAll(block())
     }.catch { e ->
-        throw mapToMediaException(e)
+        throw mapToUserException(e)
     }
 }
 
 
-private fun mapToMediaException(throwable: Throwable): MediaDataException = when (throwable) {
+private fun mapToUserException(throwable: Throwable): UserDataException = when (throwable) {
 
     is SQLiteException,
     is SQLException,
@@ -41,7 +41,7 @@ private fun mapToMediaException(throwable: Throwable): MediaDataException = when
     is StaleDataException -> CorruptDatabaseDataException()
 
     is IOException -> DiskAccessDataException()
-    is NoInternetDataException -> NoInternetDataException()
+    is NoInternetDataException -> UserDataException()
     is IllegalArgumentException,
     is IllegalStateException -> InvalidIdDataException()
 
