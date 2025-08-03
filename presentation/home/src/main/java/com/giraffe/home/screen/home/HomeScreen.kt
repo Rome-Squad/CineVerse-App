@@ -121,7 +121,7 @@ fun HomeContent(
     state: HomeScreenUiState,
     interactionListener: HomeInteractionListener
 ) {
-    if (state.isGenricError && state.isNetworkError) {
+    if (state.isGenericError && state.isNetworkError) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
