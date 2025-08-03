@@ -27,13 +27,15 @@ import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
 import com.giraffe.home.screen.movies_list.navigateToCollectionList
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
+import com.giraffe.profile.ProfileApi
 
 
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
-    exploreApi: ExploreApi
+    exploreApi: ExploreApi,
+    profileApi: ProfileApi
 ) {
 
     val homeTab = HomeTab(
@@ -152,7 +154,9 @@ fun HomeNavGraph(
             }
 
             composable<ProfileRoute> {
-                ProfileScreen { isBottomBarVisible = it }
+                profileApi.ProfileContainer {
+                    isBottomBarVisible = it
+                }
             }
         }
 
