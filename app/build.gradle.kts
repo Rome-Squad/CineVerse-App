@@ -112,6 +112,8 @@ dependencies {
     implementation(project(":api:match"))
     implementation(project(":api:profile"))
     implementation(project(":api:authentication"))
+    implementation(project(":api:onboarding"))
+
 
 
 

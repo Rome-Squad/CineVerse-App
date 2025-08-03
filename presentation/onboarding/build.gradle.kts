@@ -39,6 +39,10 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
     implementation(project(":domain:user"))
+    implementation(project(":api:onboarding"))
+    implementation(project(":api:authentication"))
+    implementation(project(":api:home"))
+
     implementation(libs.kotlinx.datetime)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
