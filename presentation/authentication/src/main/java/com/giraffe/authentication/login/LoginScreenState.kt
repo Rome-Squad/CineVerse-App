@@ -1,4 +1,4 @@
-package com.giraffe.authentication.screen
+package com.giraffe.authentication.login
 
 import androidx.compose.runtime.Stable
 

@@ -3,8 +3,9 @@ package com.giraffe.media.collections.usecase
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.exception.ValidationException
+import javax.inject.Inject
 
-class AddCollectionUseCase(
+class AddCollectionUseCase @Inject constructor(
     private val collectionsRepository: CollectionsRepository
 ) {
     suspend operator fun invoke(

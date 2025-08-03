@@ -1,6 +1,8 @@
 package com.giraffe.home.navigation
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -172,4 +174,9 @@ fun HomeNavGraph(
             }
         )
     }
+
+    val activity = LocalActivity.current
+    val isAtRoot =
+        navController.currentDestination?.route == navController.graph.startDestinationRoute
+    BackHandler(isAtRoot) { activity?.finish() }
 }

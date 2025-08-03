@@ -11,7 +11,7 @@ import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.series.SeriesRoomLocalDateSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.repository.datasource.local.OnboardingLocalDataSource
-import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
+import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.user.AuthenticationLocalDataSourceImpl
 import com.giraffe.user.OnboardingLocalDataSourceImpl
 import dagger.Binds
