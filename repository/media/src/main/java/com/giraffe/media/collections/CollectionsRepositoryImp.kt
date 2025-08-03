@@ -10,8 +10,9 @@ import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.utils.SafeCall
+import javax.inject.Inject
 
-class CollectionsRepositoryImp(
+class CollectionsRepositoryImp @Inject constructor(
     private val collectionsRemoteDataSource: CollectionsRemoteDataSource
 ) : CollectionsRepository {
 
