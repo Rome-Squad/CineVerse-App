@@ -1,6 +1,6 @@
 package com.giraffe.user.retrofit
 
-import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
+import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.dto.AccountDetailsDto
 import com.giraffe.user.dto.SessionRequestBody
 import com.giraffe.user.dto.TokenValidationBody

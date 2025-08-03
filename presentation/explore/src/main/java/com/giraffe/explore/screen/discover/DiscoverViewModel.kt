@@ -9,10 +9,8 @@ import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.util.BasePagingSource
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
-import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,7 +50,8 @@ class DiscoverViewModel @Inject constructor(
             val moviesFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                     BasePagingSource { page -> getMoviesByGenresUseCase(genreId, page) }
-                }.flow.cachedIn(viewModelScope).map { it.map(Movie::toPoster) }
+                }.flow.cachedIn(viewModelScope)
+                    .map { it.map { movie -> movie.toPoster(state.value.moviesGenres) } }
             updateState { it.copy(moviesPosters = moviesFlow) }
             if (state.value.selectedTab == SearchTab.MOVIES) updateState { it.copy(selectedPosters = moviesFlow) }
         }
@@ -63,7 +62,8 @@ class DiscoverViewModel @Inject constructor(
             val seriesFlow =
                 Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                     BasePagingSource { page -> getSeriesByGenresUseCase(genreId, page) }
-                }.flow.cachedIn(viewModelScope).map { it.map(Series::toPoster) }
+                }.flow.cachedIn(viewModelScope)
+                    .map { it.map { series -> series.toPoster(state.value.seriesGenres) } }
             updateState { it.copy(seriesPosters = seriesFlow) }
             if (state.value.selectedTab == SearchTab.SERIES) updateState { it.copy(selectedPosters = seriesFlow) }
         }

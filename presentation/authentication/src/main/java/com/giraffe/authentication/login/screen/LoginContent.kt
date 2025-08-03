@@ -1,69 +1,32 @@
-package com.giraffe.authentication.screen
+package com.giraffe.authentication.login.screen
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.authentication.R
 import com.giraffe.authentication.composable.LoginForm
 import com.giraffe.authentication.composable.LogoSection
+import com.giraffe.authentication.login.LoginInteractionListener
+import com.giraffe.authentication.login.LoginScreenState
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
-fun LoginScreen(
-    modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = hiltViewModel(),
-    navigateToHomeScreen: () -> Unit,
-    navigateToWebViewScreen: () -> Unit = {},
-    navigateToResetPasswordScreen: () -> Unit = {},
-    popBack: () -> Unit = {}
-) {
-    val state by viewModel.state.collectAsState()
-    val effectFlow = viewModel.effect
-
-    LaunchedEffect(Unit) {
-        effectFlow.collect { effect ->
-            when (effect) {
-                is LoginEffect.NavigateToWebViewScreen -> navigateToWebViewScreen()
-
-                is LoginEffect.NavigateToHomeScreen -> navigateToHomeScreen()
-
-                is LoginEffect.NavigateToResetPasswordScreen -> navigateToResetPasswordScreen()
-
-                is LoginEffect.PopBack -> popBack()
-
-                is LoginEffect.Error -> {}
-            }
-        }
-    }
-
-
-    LoginContent(
-        modifier = modifier,
-        state = state,
-        interaction = viewModel
-    )
-}
-
-@Composable
-private fun LoginContent(
+fun LoginContent(
     state: LoginScreenState,
     interaction: LoginInteractionListener,
     modifier: Modifier,
@@ -79,20 +42,12 @@ private fun LoginContent(
     ) {
 
         LogoSection(
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 16.dp
-                )
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
         )
 
-        LoginForm(
-            modifier = Modifier
-                .padding(bottom = 96.dp),
-            state = state,
-            interaction = interaction
-        )
+        LoginForm(state = state, interaction = interaction)
+
+        Spacer(Modifier.weight(1f))
 
         SecondaryButton(
             modifier = Modifier.padding(bottom = 24.dp),
