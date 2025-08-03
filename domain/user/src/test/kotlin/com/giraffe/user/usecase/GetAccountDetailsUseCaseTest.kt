@@ -1,7 +1,7 @@
 package com.giraffe.user.usecase
 
-import com.giraffe.user.entity.AccountDetails
-import com.giraffe.user.repository.AuthRepository
+import com.giraffe.user.entity.User
+import com.giraffe.user.repository.UserRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -10,12 +10,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class GetAccountDetailsUseCaseTest {
+class GetUserCaseTest {
 
-    private lateinit var authRepository: AuthRepository
-    private lateinit var getAccountDetailsUseCase: GetAccountDetailsUseCase
+    private lateinit var authRepository: UserRepository
+    private lateinit var getUserUseCase: GetUserUseCase
 
-    val expectedDetails = AccountDetails(
+    val expectedDetails = User(
         id = 1,
         displayName = "Test User",
         username = "testuser",
@@ -25,28 +25,28 @@ class GetAccountDetailsUseCaseTest {
     @BeforeEach
     fun setUp() {
         authRepository = mockk()
-        getAccountDetailsUseCase = GetAccountDetailsUseCase(authRepository)
+        getUserUseCase = GetUserUseCase()
     }
 
     @Test
     fun `invoke should call getAccountDetails on repository`() = runTest {
         // given
-        coEvery { authRepository.getAccountDetails() } returns expectedDetails
+        coEvery { authRepository.getUser() } returns expectedDetails
 
         // when
-        getAccountDetailsUseCase()
+        getUserUseCase()
 
         // then
-        coVerify(exactly = 1) { authRepository.getAccountDetails() }
+        coVerify(exactly = 1) { authRepository.getUser() }
     }
 
     @Test
     fun `invoke() should return account details from repository`() = runTest {
         // given
-        coEvery { authRepository.getAccountDetails() } returns expectedDetails
+        coEvery { authRepository.getUser() } returns expectedDetails
 
         // when
-        val result = getAccountDetailsUseCase()
+        val result = getUserUseCase()
 
         // then
         assertThat(result).isEqualTo(expectedDetails)

@@ -1,6 +1,6 @@
 package com.giraffe.user.retrofit
 
-import com.giraffe.repository.dto.AccountDetailsDto
+import com.giraffe.repository.dto.UserDto
 import com.giraffe.user.dto.RequestTokenResponse
 import com.giraffe.user.dto.SessionRequestBody
 import com.giraffe.user.dto.SessionResponse
@@ -23,7 +23,7 @@ interface UserApiServiceRetrofit {
     suspend fun createSession(@Body requestBody: SessionRequestBody): Response<SessionResponse>
 
     @GET("account")
-    suspend fun getAccountDetails(@Query("session_id") sessionId: String): Response<AccountDetailsDto>
+    suspend fun getUser(@Query("session_id") sessionId: String): Response<UserDto>
 
     companion object {
         private const val AUTHENTICATION = "authentication"

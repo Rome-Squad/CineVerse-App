@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AccountDetailsDto(
+data class UserDto(
     val id: Int,
     val name: String,
     val username: String,

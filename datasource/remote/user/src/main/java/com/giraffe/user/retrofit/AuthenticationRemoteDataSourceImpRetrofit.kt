@@ -1,7 +1,6 @@
 package com.giraffe.user.retrofit
 
 import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
-import com.giraffe.repository.dto.AccountDetailsDto
 import com.giraffe.user.dto.SessionRequestBody
 import com.giraffe.user.dto.TokenValidationBody
 import com.giraffe.user.util.RetrofitUserRequestBuilder
@@ -22,10 +21,6 @@ class AuthenticationRemoteDataSourceImpRetrofit @Inject constructor(
     override suspend fun createSession(token: String): String {
         val request = SessionRequestBody(requestToken = token)
         return retrofitRequestBuilder.post { createSession(request) }.sessionId
-    }
-
-    override suspend fun getAccountDetails(sessionId: String): AccountDetailsDto {
-        return retrofitRequestBuilder.get { getAccountDetails(sessionId) }
     }
 
 }
