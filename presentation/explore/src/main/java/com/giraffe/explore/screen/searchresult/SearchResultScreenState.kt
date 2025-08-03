@@ -19,18 +19,10 @@ data class SearchResultScreenState(
     @Transient
     val seriesPosters: Flow<PagingData<Poster>> = flowOf(),
     @Transient
-    val actors: Flow<PagingData<ActorUi>> = flowOf(),
+    val actorsPosters: Flow<PagingData<Poster>> = flowOf(),
     val moviesGenres: List<GenreUi> = emptyList(),
     val seriesGenres: List<GenreUi> = emptyList(),
     val errorMessage: Int? = null,
     val isNetworkError: Boolean = false,
-    val isLoading:Boolean=false,
-
-
-)
-
-data class ActorUi(
-    val id: Int,
-    val name: String,
-    val imageUrl: String
+    val isLoading: Boolean = false,
 )

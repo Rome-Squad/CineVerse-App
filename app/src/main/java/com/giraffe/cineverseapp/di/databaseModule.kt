@@ -15,6 +15,7 @@ import com.giraffe.media.series.cleaner.SeriesCacheCleaner
 import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.user.datastore.AuthenticationDatastore
+import com.giraffe.user.datastore.OnboardingDatastore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -51,6 +52,11 @@ abstract class DatabaseModule {
         fun provideAuthenticationDatastore(@ApplicationContext context: Context): AuthenticationDatastore =
             AuthenticationDatastore(context)
 
+
+        @Provides
+        @Singleton
+        fun provideOnboardingDatastore(@ApplicationContext context: Context): OnboardingDatastore =
+            OnboardingDatastore(context)
 
         @Provides
         @Singleton

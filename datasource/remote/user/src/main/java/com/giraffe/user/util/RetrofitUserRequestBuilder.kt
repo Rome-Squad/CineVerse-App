@@ -1,7 +1,7 @@
 package com.giraffe.user.util
 
 import com.giraffe.repository.exceptions.ApiDataException
-import com.giraffe.repository.exceptions.AuthDataException
+import com.giraffe.repository.exceptions.UserDataException
 import com.giraffe.repository.exceptions.InvalidIdDataException
 import com.giraffe.repository.exceptions.NoInternetDataException
 import com.giraffe.repository.exceptions.RequestTimeoutDataException
@@ -51,8 +51,8 @@ class RetrofitUserRequestBuilder<API>(
             }
         }
 
-        fun mapToMediaException(e: Throwable): AuthDataException = when (e) {
-            is AuthDataException -> e
+        fun mapToMediaException(e: Throwable): UserDataException = when (e) {
+            is UserDataException -> e
             is SocketTimeoutException -> RequestTimeoutDataException()
             is IOException -> NoInternetDataException()
             is IllegalArgumentException -> InvalidIdDataException()

@@ -2,6 +2,8 @@ package com.giraffe.media.utils
 
 import com.giraffe.media.exception.AccessDeniedException
 import com.giraffe.media.exception.ApiDataException
+import com.giraffe.media.exception.CorruptDatabaseDataException
+import com.giraffe.media.exception.DiskAccessDataException
 import com.giraffe.media.exception.ForbiddenAccessDataException
 import com.giraffe.media.exception.InvalidIdDataException
 import com.giraffe.media.exception.MediaException
@@ -24,10 +26,8 @@ object SafeCall {
         return try {
             execute()
         } catch (e: Exception) {
-            val mappedException = mapToDomainException(e)
-            throw mappedException
+            throw  mapToDomainException(e)
         }
-
     }
 
     fun mapToDomainException(e: Throwable): MediaException = when (e) {
@@ -51,6 +51,9 @@ object SafeCall {
         is RateLimitExceededDataException -> AccessDeniedException()
 
         is NotFoundDataException -> NotFoundException()
+
+        is CorruptDatabaseDataException,
+        is DiskAccessDataException -> AccessDeniedException()
 
         is InvalidIdDataException,
         is IllegalArgumentException -> ValidationException()

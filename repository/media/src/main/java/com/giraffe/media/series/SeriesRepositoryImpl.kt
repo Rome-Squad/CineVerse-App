@@ -2,11 +2,8 @@ package com.giraffe.media.series
 
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
@@ -20,33 +17,16 @@ import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlinx.coroutines.flow.map
 
 class SeriesRepositoryImpl @Inject constructor(
     private val remote: SeriesRemoteDataSource,
     private val local: SeriesLocalDateSource,
-    private val localExploreDataSource: LocalExploreDataSource
 ) : SeriesRepository {
     override suspend fun searchSeriesByName(seriesName: String, page: Int) = SafeCall {
-        val keywordData = localExploreDataSource.getSearchKeyword(query = seriesName)
-        val isPageCached = keywordData?.seriesPages?.contains(page) == true
-        if (isPageCached) {
-            local.getCachedSeriesForName(seriesName, page).map(SeriesCacheDto::toEntity)
-        } else {
-            val remoteSeries = remote.getSeriesByName(seriesName, page).map(SeriesDto::toEntity)
-            val updatedKeyword = keywordData?.copy(
-                seriesPages = keywordData.seriesPages + page,
-                searchedAt = System.currentTimeMillis()
-            ) ?: SearchKeywordCacheDto(
-                keyword = seriesName,
-                seriesPages = listOf(page)
-            )
-            localExploreDataSource.insertSearchKeyword(updatedKeyword)
-            local.insertSearchResult(remoteSeries.map { it.toCacheDto().copy(page = page) })
-            remoteSeries
-        }
+        remote.getSeriesByName(seriesName, page).map(SeriesDto::toEntity)
     }
 
     override suspend fun getSeriesGenres(): List<Genre> = SafeCall {
