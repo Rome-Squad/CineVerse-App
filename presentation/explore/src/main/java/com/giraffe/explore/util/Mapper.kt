@@ -2,7 +2,6 @@ package com.giraffe.explore.util
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.screen.discover.GenreUi
-import com.giraffe.explore.screen.searchresult.ActorUi
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.person.entity.Person
@@ -51,5 +50,4 @@ fun Person.toPoster() = Poster(
     mediaTypeOfPoster = Poster.Type.PERSON.value
 )
 
-fun Person.toUi() = ActorUi(id, name, imageUrl.toString())
 fun Genre.toUi() = GenreUi(id, title)

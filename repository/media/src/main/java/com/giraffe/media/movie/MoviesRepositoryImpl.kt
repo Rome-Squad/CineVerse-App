@@ -2,8 +2,6 @@ package com.giraffe.media.movie
 
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
-import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
@@ -29,29 +27,10 @@ import javax.inject.Inject
 class MoviesRepositoryImpl @Inject constructor(
     private val local: MoviesLocalDataSource,
     private val remote: MoviesRemoteDataSource,
-    private val localExploreDataSource: LocalExploreDataSource
 ) : MoviesRepository {
 
     override suspend fun searchMovieByName(movieName: String, page: Int) = SafeCall {
-        withContext(Dispatchers.IO) {
-            val keywordData = localExploreDataSource.getSearchKeyword(query = movieName)
-            val isPageCached = keywordData?.moviesPages?.contains(page) == true
-            if (isPageCached) {
-                local.getMoviesByName(movieName, page).map(MovieCacheDto::toEntity)
-            } else {
-                val remoteMovies = remote.getMoviesByName(movieName, page).map(MovieDto::toEntity)
-                val updatedKeyword = keywordData?.copy(
-                    moviesPages = keywordData.moviesPages + page,
-                    searchedAt = System.currentTimeMillis()
-                ) ?: SearchKeywordCacheDto(
-                    keyword = movieName,
-                    moviesPages = listOf(page)
-                )
-                localExploreDataSource.insertSearchKeyword(updatedKeyword)
-                local.insertMovies(remoteMovies.map { it.toCacheDto().copy(page = page) })
-                remoteMovies
-            }
-        }
+        remote.getMoviesByName(movieName, page).map(MovieDto::toEntity)
     }
 
 
