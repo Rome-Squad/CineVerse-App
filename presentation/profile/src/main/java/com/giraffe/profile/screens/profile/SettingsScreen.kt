@@ -24,13 +24,15 @@ import com.giraffe.profile.components.SettingsSection
 import com.giraffe.profile.components.UserProfileSection
 
 @Composable
-fun ProfileScreen() {
-    ProfileContent()
+fun SettingsScreen() {
+    SettingsContent(
+        modifier = Modifier
+    )
 }
 
 @Composable
-fun ProfileContent(
-    modifier: Modifier = Modifier,
+fun SettingsContent(
+    modifier: Modifier,
 ) {
     Column(
         modifier = modifier
@@ -40,7 +42,7 @@ fun ProfileContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AppBar(
-            modifier = modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             title = stringResource(R.string.My_Profile),
         )
         UserProfileSection(
@@ -117,6 +119,6 @@ fun ProfileContent(
 @Composable
 fun ProfileScreenPreview() {
     CineVerseTheme(isDarkTheme = false) {
-        ProfileScreen()
+        SettingsScreen()
     }
 }

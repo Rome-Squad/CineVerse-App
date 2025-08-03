@@ -110,7 +110,7 @@ fun MenuItem(
 @Preview
 @Composable
 fun MenuItemPreview() {
-    CineVerseTheme(isDarkTheme = true) {
+    CineVerseTheme(isDarkTheme = false) {
         MenuItem(
             modifier = Modifier.width(800.dp),
             icon = Theme.icons.dueTone.moon,
