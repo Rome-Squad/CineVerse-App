@@ -3,11 +3,11 @@ package com.giraffe.authentication.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.giraffe.authentication.login.webViewRoute
+import com.giraffe.authentication.login.LoginRoute
+import com.giraffe.authentication.login.loginRoute
 import com.giraffe.authentication.nav.route.homeRoute
 import com.giraffe.authentication.resetpassword.resetPasswordRoute
-import com.giraffe.authentication.screen.LoginRoute
-import com.giraffe.authentication.screen.loginRoute
+import com.giraffe.authentication.signup.webViewRoute
 import com.giraffe.home.HomeApi
 
 @Composable
