@@ -5,10 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.onboarding.OnBoardingApi
+import com.giraffe.onboarding.screen.OnBoardingContent
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 
@@ -16,6 +19,9 @@ import jakarta.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var authenticationApi: AuthenticationApi
+
+    @Inject
+    lateinit var onBoardingApi: OnBoardingApi
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +36,21 @@ class MainActivity : ComponentActivity() {
                 Color.Transparent.toArgb()
             )
         )
+
+
         setContent {
             CineVerseTheme {
-                authenticationApi.LoginContainer { }
+                val images: List<Int> = listOf(
+                    R.drawable.onboard1,
+                    R.drawable.onboard2,
+                    R.drawable.onboard3
+                )
+                OnBoardingContent(
+                    modifier = Modifier,
+                    onBoardingImageList = images
+                )
+                //  onBoardingApi.OnBoardingContainer()
+                // authenticationApi.LoginContainer { }
             }
         }
     }
