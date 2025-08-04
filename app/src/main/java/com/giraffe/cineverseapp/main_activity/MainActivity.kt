@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.home.HomeApi
@@ -28,6 +29,14 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen().setKeepOnScreenCondition {
+            val state = mainViewModel.state.value
+            val notReady = state.isLoggedIn == null || state.isOnBoardingFirstTime == null
+            notReady
+        }
+
+
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.Companion.auto(
                 Color.Companion.Transparent.toArgb(),
@@ -38,6 +47,8 @@ class MainActivity : ComponentActivity() {
                 Color.Companion.Transparent.toArgb()
             )
         )
+
+
         setContent {
             CineVerseTheme {
                 val state by mainViewModel.state.collectAsState()
