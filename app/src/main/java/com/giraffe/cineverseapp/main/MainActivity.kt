@@ -57,7 +57,6 @@ class MainActivity : ComponentActivity() {
             )
         )
 
-
         setContent {
             CineVerseTheme {
                 val state by mainViewModel.state.collectAsState()
