@@ -1,8 +1,6 @@
-package com.giraffe.authentication.screen
+package com.giraffe.authentication.login
 
 sealed class LoginEffect {
-
-    data class Error(val error: Throwable) : LoginEffect()
 
     object NavigateToHomeScreen : LoginEffect()
 

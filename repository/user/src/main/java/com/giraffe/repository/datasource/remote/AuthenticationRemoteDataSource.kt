@@ -1,4 +1,4 @@
-package com.giraffe.repository.datasource.local
+package com.giraffe.repository.datasource.remote
 
 interface AuthenticationRemoteDataSource {
 

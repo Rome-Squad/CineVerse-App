@@ -1,9 +1,9 @@
-package com.giraffe.authentication.login
+package com.giraffe.authentication.signup
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.authentication.screen.navigateLoginScreen
+import com.giraffe.authentication.login.navigateLoginScreen
 import kotlinx.serialization.Serializable
 
 

@@ -1,7 +1,7 @@
 package com.giraffe.repository
 
-import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
-import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
+import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
+import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.repository.utils.SafeCall
 import com.giraffe.user.repository.AuthRepository
 import javax.inject.Inject

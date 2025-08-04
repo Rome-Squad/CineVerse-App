@@ -16,7 +16,7 @@ import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.NetworkInterceptor
 import com.giraffe.media.util.RetrofitRequestBuilder
-import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
+import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
 import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpRetrofit
