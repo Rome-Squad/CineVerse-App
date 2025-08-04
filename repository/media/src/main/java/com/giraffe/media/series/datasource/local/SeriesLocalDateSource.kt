@@ -6,8 +6,6 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import kotlinx.coroutines.flow.Flow
 
 interface SeriesLocalDateSource {
-    suspend fun getCachedSeriesForName(name: String, page: Int): List<SeriesCacheDto>
-    suspend fun insertSearchResult(seriesList: List<SeriesCacheDto>)
     suspend fun getCachedGenres(): List<SeriesGenreCacheDto>
     suspend fun insertGenres(genres: List<SeriesGenreCacheDto>)
     suspend fun getRecentSeries(): Flow<List<SeriesCacheDto>>

@@ -14,29 +14,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
-    override suspend fun insertSearchResult(
-        seriesList: List<SeriesCacheDto>
-    ) = safeCall {
-        val existingSeries = seriesDao.getSeriesByIds(seriesList.map { it.id })
-        val isRecentMap = existingSeries.associateBy({ it.id }, { it.isRecent })
-
-        val mergedSeries = seriesList.map { remote ->
-            val wasRecent = isRecentMap[remote.id] ?: false
-            remote.copy(isRecent = wasRecent)
-        }
-
-        if (mergedSeries.isNotEmpty()) {
-            seriesDao.insertSeries(mergedSeries)
-        }
-    }
-
-
-    override suspend fun getCachedSeriesForName(name: String, page: Int): List<SeriesCacheDto> =
-        safeCall {
-            seriesDao.getSeriesByKeyword(name, page)
-        }
-
-
     override suspend fun getCachedGenres(): List<SeriesGenreCacheDto> = safeCall {
         seriesDao.getAllGenres()
     }
