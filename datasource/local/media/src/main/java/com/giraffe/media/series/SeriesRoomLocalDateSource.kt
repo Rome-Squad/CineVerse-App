@@ -62,21 +62,31 @@ class SeriesRoomLocalDateSource @Inject constructor(
             seriesDao.getAllGenres().filter { it.id in genreIds }
         }
 
-    override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
-        val existingSeries = seriesDao.getSeriesByIds(series.map { it.id })
-        val existingMap = existingSeries.associateBy { it.id }
-
-        val mergedSeries = series.map { remote ->
-            val existing = existingMap[remote.id]
-            existing?.copy(popularity = remote.popularity) ?: remote
-        }
-        if (mergedSeries.isNotEmpty()) {
-            seriesDao.insertSeries(mergedSeries)
+    override suspend fun insertSeries(series: List<SeriesCacheDto>) = safeCall {
+        if (series.isNotEmpty()) {
+            seriesDao.upsertSeries(series.map { seriesCacheDto ->
+                seriesCacheDto.copy(cachedAt = System.currentTimeMillis())
+            })
         }
     }
 
     override suspend fun getPopularitySeries(limit: Int) = safeCall {
         seriesDao.getPopularitySeries(limit)
+    }
+
+    override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) {
+        if (series.isNotEmpty()) {
+            seriesDao.upsertSeries(series.map { seriesCacheDto ->
+                seriesCacheDto.copy(
+                    recentlyReleased = System.currentTimeMillis(),
+                    cachedAt = System.currentTimeMillis()
+                )
+            })
+        }
+    }
+
+    override suspend fun getRecentlyReleasedSeries(limit: Int) = safeCall {
+        seriesDao.getRecentlyReleasedSeries(limit)
     }
 
     override suspend fun getRecentSeries() = safeFlow {

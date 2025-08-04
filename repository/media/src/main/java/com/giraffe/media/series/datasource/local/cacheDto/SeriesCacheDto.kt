@@ -19,8 +19,9 @@ data class SeriesCacheDto(
     val releaseYear: String,
     val isRecent: Boolean = false,
     val popularity: Double = 0.0,
+    val recentlyReleased: Long = 0,
     val cachedAt: Long = System.currentTimeMillis(),
-    val page:Int = 0
+    val page: Int = 0
 )
 
 
