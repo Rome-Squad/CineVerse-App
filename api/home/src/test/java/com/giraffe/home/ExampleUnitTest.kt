@@ -1,4 +1,4 @@
-package com.giraffee.home
+package com.giraffe.home
 
 import org.junit.Test
 

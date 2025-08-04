@@ -18,7 +18,7 @@ fun NavGraphBuilder.onBoardingRoute(
 ) {
     composable<OnBoardingRoute> {
         OnBoardingScreen(
-            navigateToLoginScreen = navController::navigateLoginScreen,
+            navigateToLoginScreen = navController::navigateLoginScreen
         )
     }
 }

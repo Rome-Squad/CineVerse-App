@@ -1,4 +1,4 @@
-package com.giraffee.home
+package com.giraffe.home
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
