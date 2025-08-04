@@ -1,24 +1,23 @@
 package com.giraffe.repository
 
-import android.util.Log
-import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
+import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.utils.SafeCall
 import com.giraffe.user.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
-    private val remoteDataSource: AuthenticationRemoteDataSource,
-    private val localDataSource: AuthenticationLocalDataSource
+    private val authRemoteDataSource: AuthenticationRemoteDataSource,
+    private val localDataSource: AuthenticationLocalDataSource,
 ) : AuthRepository {
     override suspend fun login(username: String, password: String) = SafeCall {
-        val requestToken = remoteDataSource.createRequestToken()
+        val requestToken = authRemoteDataSource.createRequestToken()
         val validatedToken =
-            remoteDataSource.validateTokenWithLogin(requestToken, username, password)
-        val sessionId = remoteDataSource.createSession(validatedToken)
-        Log.d("TAG", "login: $sessionId")
+            authRemoteDataSource.validateTokenWithLogin(requestToken, username, password)
+        val sessionId = authRemoteDataSource.createSession(validatedToken)
         localDataSource.saveSessionId(sessionId)
     }
 
     override suspend fun isLoggedIn() = SafeCall { localDataSource.isLoggedIn() }
+
 }
