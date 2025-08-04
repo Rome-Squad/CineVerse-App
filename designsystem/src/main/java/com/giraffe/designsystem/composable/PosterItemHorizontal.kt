@@ -35,7 +35,7 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 fun PosterItemHorizontal(
     movie: Poster,
     modifier: Modifier = Modifier,
-    onClickPoster: () -> Unit = {}
+    onClickPoster: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -49,6 +49,7 @@ fun PosterItemHorizontal(
         SafeIslamicImage(
             imageUrl = movie.imageUri,
             contentDescription = movie.name,
+            hasSensitiveText = false,
             modifier = Modifier
                 .fillMaxHeight()
                 .width(64.dp)

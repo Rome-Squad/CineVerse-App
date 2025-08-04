@@ -4,12 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -21,8 +21,7 @@ fun SettingsSection(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 12.dp),
-        modifier = modifier
-            .background(Theme.color.background.card),
+        modifier = modifier,
     ) {
         Text(
             text = title,
@@ -32,7 +31,7 @@ fun SettingsSection(
         Column(
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(Theme.radius.lg))
-                .background(Theme.color.shade.quaternary)
+                .background(Theme.color.background.card)
         ) {
             content()
         }
@@ -54,7 +53,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = true,
                     onSwitchChange = {},
                     hasButton = false,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = false,
                     hasBottomDivider = true,
                 )
@@ -64,7 +63,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = false,
                     onSwitchChange = {},
                     hasButton = true,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = false,
                     hasBottomDivider = true,
                 )
@@ -74,7 +73,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = false,
                     onSwitchChange = {},
                     hasButton = true,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = false,
                     hasBottomDivider = true,
                 )
@@ -84,7 +83,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = false,
                     onSwitchChange = {},
                     hasButton = true,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = true,
                     hasBottomDivider = false,
                 )

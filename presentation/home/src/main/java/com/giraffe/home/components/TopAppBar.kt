@@ -28,7 +28,7 @@ fun TopAppBar(
             modifier = Modifier.padding(start = 16.dp),
             image = painterResource(Theme.icons.colored.logo),
             caption = stringResource(R.string.welcome),
-            title = userName
+            title = if (userName.isEmpty()) null else userName
         )
     }
 }
