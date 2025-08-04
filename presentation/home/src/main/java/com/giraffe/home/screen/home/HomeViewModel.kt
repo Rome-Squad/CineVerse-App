@@ -122,7 +122,7 @@ class HomeViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
                 onError = ::onFail,
-                block = { getRecentlyReleasedSeriesUseCase(page = 1) }
+                block = { getRecentlyReleasedSeriesUseCase(page = 1, limit = 10) }
             )
         }
     }
@@ -151,7 +151,7 @@ class HomeViewModel @Inject constructor(
         safeExecute(
             onSuccess = ::onGetTopRatedSeriesSuccess,
             onError = ::onFail,
-            block = { getTopRatedSeriesUseCase(page = 1) }
+            block = { getTopRatedSeriesUseCase(page = 1, limit = 10) }
         )
     }
 
