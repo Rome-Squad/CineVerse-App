@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.home.HomeApi
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 
@@ -20,9 +19,6 @@ import jakarta.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var authenticationApi: AuthenticationApi
-
-    @Inject
-    lateinit var homeApi: HomeApi
 
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -41,10 +37,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             CineVerseTheme {
                 val state by mainViewModel.state.collectAsState()
-                when {
-                    state.isLoggedIn == true -> homeApi.HomeContainer()
-                    else -> authenticationApi.LoginContainer { }
-                }
+
+                authenticationApi.LoginContainer(
+                    onBack = {},
+                    isOnboardingFirstTime = state.isOnBoardingFirstTime == true,
+                    isLoggedIn = state.isLoggedIn == true
+                )
             }
         }
     }

@@ -1,9 +1,9 @@
-package com.giraffe.onboarding.screen
+package com.giraffe.authentication.onboarding.screen
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.onboarding.nav.navigateLoginScreen
+import com.giraffe.authentication.login.navigateLoginScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

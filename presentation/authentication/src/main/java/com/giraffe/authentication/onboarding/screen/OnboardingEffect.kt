@@ -1,4 +1,4 @@
-package com.giraffe.onboarding.screen
+package com.giraffe.authentication.onboarding.screen
 
 import androidx.annotation.StringRes
 
