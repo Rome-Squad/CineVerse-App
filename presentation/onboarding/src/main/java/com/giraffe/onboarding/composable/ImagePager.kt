@@ -1,8 +1,13 @@
 package com.giraffe.onboarding.composable
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
@@ -38,10 +44,9 @@ fun ImagePager(
     val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
     val horizontalPadding = screenWidthDp * 0.1f
 
-
     HorizontalPager(
         state = pagerState,
-        pageSpacing = 16.dp,
+        pageSpacing = 32.dp,
         contentPadding = PaddingValues(horizontal = horizontalPadding),
         modifier = modifier
     ) { page ->
@@ -58,8 +63,13 @@ fun ImagePager(
 
         val animatedRotationZ by animateFloatAsState(
             targetValue = rotationZ,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            ),
             label = "rotationAnim"
         )
+
         val scale = lerp(1f, 0.8f, pageOffsetAbsolute)
 
         val shape = animatedCornerShape(
@@ -70,7 +80,7 @@ fun ImagePager(
         Image(
             painter = painterResource(id = images[page]),
             contentDescription = "Image ${page + 1}",
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .graphicsLayer {
                     this.rotationZ = animatedRotationZ
@@ -91,7 +101,8 @@ fun ImagePager(
 @Composable
 private fun animatedCornerShape(
     pageOffsetAbsolute: Float,
-    pageIndexDiff: Int
+    pageIndexDiff: Int,
+    animationSpec: AnimationSpec<Dp> = tween(durationMillis = 300, easing = FastOutSlowInEasing)
 ): RoundedCornerShape {
     val isCurrentPage = pageOffsetAbsolute < 0.1f
 
@@ -107,12 +118,14 @@ private fun animatedCornerShape(
 
     val animatedTopRadius by animateDpAsState(
         targetValue = targetTopRadius,
-        label = "topAnim"
+        animationSpec = animationSpec,
+        label = "topRadiusAnim"
     )
 
     val animatedBottomRadius by animateDpAsState(
         targetValue = targetBottomRadius,
-        label = "bottomAnim"
+        animationSpec = animationSpec,
+        label = "bottomRadiusAnim"
     )
 
     return RoundedCornerShape(
