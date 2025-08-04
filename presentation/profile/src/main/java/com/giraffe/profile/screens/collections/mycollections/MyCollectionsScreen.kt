@@ -2,11 +2,14 @@ package com.giraffe.profile.screens.collections.mycollections
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -63,7 +66,10 @@ fun MyCollectionsScreen(
         }
     }
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .systemBarsPadding()
     ) {
         AppBar(
             title = stringResource(R.string.my_collections),
@@ -111,7 +117,9 @@ private fun MyCollectionsScreenContent(
                     ),
                 contentPadding = PaddingValues(
                     all = 16.dp
-                )
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(state.collections) { collection ->
                     CollectionItem(
@@ -132,6 +140,7 @@ private fun MyCollectionsScreenContent(
 
         Box(
             modifier = Modifier
+                .padding(24.dp)
                 .size(56.dp)
                 .align(Alignment.BottomEnd)
                 .background(Theme.color.brand.primary)
@@ -142,7 +151,8 @@ private fun MyCollectionsScreenContent(
                 )
                 .clip(
                     shape = RoundedCornerShape(Theme.radius.lg)
-                )
+                ),
+            contentAlignment = Alignment.Center
 
         ) {
             Icon(
