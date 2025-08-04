@@ -25,7 +25,7 @@ import com.giraffe.designsystem.theme.Theme
 fun InfoCard(
     description: String,
     modifier: Modifier = Modifier,
-    onClickExit: () -> Unit = {},
+    onClosedClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -58,7 +58,7 @@ fun InfoCard(
             tint = Theme.color.shade.secondary,
             modifier = Modifier
                 .size(16.dp)
-                .clickable(onClick = onClickExit)
+                .clickable(onClick = onClosedClick)
         )
 
     }

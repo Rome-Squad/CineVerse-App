@@ -1,18 +1,12 @@
 package com.giraffe.profile.history.composable
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,27 +14,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
+import com.giraffe.profile.components.SwappableItem
 
 @Composable
 fun RatedMovie(
@@ -58,7 +43,7 @@ fun RatedMovie(
             rate = poster.rating.toDouble(),
             date = poster.date ?: "--- --, 20--"
         )
-        SwipableItem(
+        SwappableItem(
             actionButton = { DeleteButton(onDeleteClick = onDeleteClick) },
         ) {
             PosterItemHorizontal(
@@ -70,7 +55,7 @@ fun RatedMovie(
 }
 
 @Composable
-private fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) {
+fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) {
     Box(
         modifier = modifier
             .padding(horizontal = 20.dp)
@@ -90,7 +75,7 @@ private fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Uni
         )
     }
 }
-
+/*
 @Composable
 private fun SwipableItem(
     modifier: Modifier = Modifier,
@@ -153,7 +138,7 @@ private fun SwipableItem(
         }
     }
 }
-
+*/
 @Composable
 private fun RateSection(modifier: Modifier = Modifier, rate: Double, date: String) {
     Row(

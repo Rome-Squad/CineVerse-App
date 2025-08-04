@@ -1,13 +1,14 @@
 package com.giraffe.profile.screens.history
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,68 +16,69 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoCard
+import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.profile.components.HistoryListItem
-import com.giraffe.profile.components.HistoryTitleSection
+import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.profile.components.SwappableItem
+import com.giraffe.profile.history.composable.DeleteButton
 
 @Composable
 fun HistoryScreen(
     onBackClicked: () -> Unit = {},
-    onExitClicked: () -> Unit = {},
     viewModel: HistoryViewModel= hiltViewModel()
 ) {
 
 val state by viewModel.state.collectAsState()
     HistoryContent(
         state = state,
-        onClosedClicked = onExitClicked,
         onBackClicked = onBackClicked,
-        historyInteractionListener = viewModel
+        historyInteractionListener = viewModel,
+
     )
 }
 
 @Composable
 fun HistoryContent(
-    state: HistoryScreenUiStateUiState,
-    onClosedClicked: () -> Unit = {},
+    state: HistoryUiState,
     onBackClicked: () -> Unit,
     historyInteractionListener: HistoryInteractionListener
-
+) {
+    LazyColumn (
+        modifier = Modifier
+            .background(Theme.color.background.screen)
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-    Box {
-        Column(
-            modifier = Modifier
-                .background(Theme.color.background.screen)
-                .fillMaxSize()
-        ) {
-            HistoryTitleSection(
+        item {
+            AppBar(
                 title = state.historyListTitle,
-                onBackClicked = onBackClicked,
+                showBackButton = true,
+                onBackButtonClick = onBackClicked
             )
+        }
 
+        item {
             InfoCard(
                 description = "Tip: Swipe left to remove movies from your history.",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp)
-                    .padding(start = 16.dp, end = 16.dp)
-                 ,
-                onClickExit = historyInteractionListener::onExitClicked,
+                    .height(55.dp),
+                onClosedClick = historyInteractionListener::onCloseClicked
             )
+        }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+        items(state.mediaList) { poster ->
+            SwappableItem(
+                actionButton = { DeleteButton(onDeleteClick = historyInteractionListener.onDeleteClicked()) },
             ) {
-                HistoryListItem(
-                    poster = state.mediaList,
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp),
-                    onSwipedToLeft = historyInteractionListener::onSwipedToLeft,
+                PosterItemHorizontal(
+                    modifier = Modifier.fillMaxWidth(),
+                    movie = poster,
                 )
             }
-
-
         }
     }
 }
@@ -85,52 +87,51 @@ fun HistoryContent(
 @Composable
 fun HistoryContentPreview() {
     val historyInteractionListener = object : HistoryInteractionListener {
-        override fun onSwipedToLeft() {}
+        override fun onDeleteClicked(): () -> Unit = { /* Handle delete action */ }
 
-        override fun onExitClicked() {}
+        override fun onCloseClicked() {}
 
     }
     HistoryContent(
-        state = HistoryScreenUiStateUiState(
+        state = HistoryUiState(
             historyListTitle = "History",
             mediaList = listOf(
-                PosterUiState(
+                Poster(
                     id = 1,
                     name = "Movie 1",
                     imageUri = "https://example.com/movie1.jpg",
-                    rating = 2f, mediaType = MediaType.MOVIE,
+                    rating = 2f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
                 ),
-                PosterUiState(
+                Poster(
                     id = 2,
                     name = "Movie 2",
                     imageUri = "https://example.com/movie2.jpg",
-                    rating = 3f, mediaType = MediaType.MOVIE,
+                    rating = 3f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
                 ),
-                PosterUiState(
+                Poster(
                     id = 3,
                     name = "Movie 1",
                     imageUri = "https://example.com/movie1.jpg",
-                    rating = 2f, mediaType = MediaType.MOVIE,
+                    rating = 2f,  mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
                 ),
-                PosterUiState(
+                Poster(
                     id = 4,
                     name = "Movie 2",
                     imageUri = "https://example.com/movie2.jpg",
-                    rating = 3f, mediaType = MediaType.MOVIE,
+                    rating = 3f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
                 )
             )
         ),
-        onClosedClicked = {},
         onBackClicked = {},
-        historyInteractionListener = historyInteractionListener
+        historyInteractionListener = historyInteractionListener,
     )
 }
 
