@@ -89,6 +89,10 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getRecentlyReleasedSeries(limit)
     }
 
+    override suspend fun getTopRatedSeries(limit: Int) = safeCall {
+        seriesDao.getTopRatedSeries(limit)
+    }
+
     override suspend fun getRecentSeries() = safeFlow {
         seriesDao.getRecentSeries()
     }

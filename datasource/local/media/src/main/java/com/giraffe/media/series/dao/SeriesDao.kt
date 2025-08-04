@@ -81,11 +81,14 @@ interface SeriesDao {
     @Query("UPDATE series_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
-    @Query("SELECT * FROM $SERIES_TABLE ORDER BY popularity DESC LIMIT :limit")
+    @Query("SELECT * FROM $SERIES_TABLE WHERE isPopularity = 1 ORDER BY popularity DESC LIMIT :limit")
     fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
 
-    @Query("SELECT * FROM $SERIES_TABLE ORDER BY recentlyReleased LIMIT :limit")
+    @Query("SELECT * FROM $SERIES_TABLE ORDER BY recentlyReleased DESC LIMIT :limit")
     fun getRecentlyReleasedSeries(limit: Int): List<SeriesCacheDto>
+
+    @Query("SELECT * FROM $SERIES_TABLE WHERE isTopRated = 1 ORDER BY rate DESC LIMIT :limit")
+    fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
 
     @Upsert
     suspend fun upsertSeries(series: List<SeriesCacheDto>)
