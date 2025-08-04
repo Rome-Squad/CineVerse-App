@@ -1,5 +1,7 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.media.collections.CollectionsRepositoryImp
+import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.explore.ExploreRepositoryImpl
 import com.giraffe.media.explore.repository.ExploreRepository
 import com.giraffe.media.movie.MoviesRepositoryImpl
@@ -51,4 +53,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindOnboardingRepository(impl: OnboardingRepositoryImpl): OnboardingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCollectionsRepositoryRepository(impl: CollectionsRepositoryImp): CollectionsRepository
 }

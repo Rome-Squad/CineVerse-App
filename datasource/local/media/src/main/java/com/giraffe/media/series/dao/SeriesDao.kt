@@ -80,4 +80,7 @@ interface SeriesDao {
 
     @Query("UPDATE series_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
+
+    @Query("SELECT * FROM $SERIES_TABLE ORDER BY popularity DESC LIMIT :limit")
+    fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
 }

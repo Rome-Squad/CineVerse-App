@@ -1,8 +1,6 @@
 package com.giraffe.details.components
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,13 +9,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,7 +37,6 @@ import com.giraffe.details.R
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainMovieOrSeriesDetails(
     type: String,
@@ -46,33 +47,31 @@ fun MainMovieOrSeriesDetails(
     duration: String?,
     releaseDate: String,
     isPlayButtonEnabled: Boolean,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope,
     onClickPlay: () -> Unit,
     onClickAdd: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    animationProgress: Float = 0f
 ) {
-    val key = "_KEY"
     val playButtonBackground by animateColorAsState(
         if (isPlayButtonEnabled) Theme.color.button.primary else Theme.color.button.onDisabled
     )
-    with(sharedTransitionScope) {
-        Column(
-            modifier = modifier.background(Theme.color.background.screen),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
+
+    val imageClipRadius = Theme.radius.xl
+
+    Box(Modifier.fillMaxWidth()) {
+        Box(modifier.fillMaxWidth()) {
             posterUrl?.let {
                 SafeIslamicImage(
                     imageUrl = it,
                     contentDescription = stringResource(R.string.poster_image),
                     modifier = Modifier
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = posterUrl.toString() + key),
-                            animatedVisibilityScope = animatedVisibilityScope
+                        .align(BiasAlignment(animationProgress * -1, -1f))
+                        .padding(bottom = 16.dp - (16 - 9).dp * (animationProgress))
+                        .size(
+                            width = 216.dp - (216 - 40).dp * (animationProgress),
+                            height = 289.dp - (289 - 40).dp * (animationProgress)
                         )
-                        .size(width = 216.dp, height = 289.dp)
-                        .clip(RoundedCornerShape(Theme.radius.xl)),
+                        .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * animationProgress)),
                     contentScale = ContentScale.Crop
                 )
                 {
@@ -91,38 +90,54 @@ fun MainMovieOrSeriesDetails(
                     )
                 }
 
-                Box(
+                Row(
                     modifier = Modifier
+                        .padding(top = (289.dp + 16.dp) * ((1f - animationProgress)))
                         .fillMaxWidth()
+                        .heightIn(min = 52.dp)
                         .clip(RoundedCornerShape(Theme.radius.lg))
-                        .background(Theme.color.background.card)
-                        .padding(16.dp),
+                        .background(Theme.color.background.card.copy(1f - animationProgress))
+                        .padding(
+                            start = 16.dp - (16 - 12).dp * (1f - animationProgress),
+                            bottom = 16.dp - (16 - 12).dp * (1f - animationProgress),
+                            end = 16.dp * (1f - animationProgress)
+                        )
+                        .align(Alignment.TopEnd)
                 ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 36.dp * animationProgress)
+                    ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(end = 48.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                                .padding(end = 48.dp)
                         ) {
-                            Text(
-                                text = type.uppercase(),
-                                style = Theme.textStyle.label.md.medium,
-                                color = Theme.color.brand.primary
-                            )
+                            if (animationProgress == 0f) {
+                                Text(
+                                    text = type.uppercase(),
+                                    style = Theme.textStyle.label.md.medium,
+                                    color = Theme.color.brand.primary,
+                                    modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                                )
+                            }
 
                             Text(
                                 text = name,
                                 style = Theme.textStyle.title.md,
                                 color = Theme.color.shade.primary,
-                                modifier = Modifier.sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = name + key),
-                                    animatedVisibilityScope = animatedVisibilityScope
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.then(
+                                    if (animationProgress == 1f) Modifier.padding(top = 9.dp)
+                                    else Modifier
                                 )
                             )
 
-                            if (genres.isNotEmpty()) {
+                            if (genres.isNotEmpty() && animationProgress == 0f) {
                                 Text(
+                                    modifier = Modifier.padding(top = 4.dp),
                                     text = genres.joinToString(", "),
                                     style = Theme.textStyle.body.sm.medium,
                                     color = Theme.color.shade.secondary,
@@ -131,8 +146,15 @@ fun MainMovieOrSeriesDetails(
                                 )
                             }
                         }
-                        if (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty()) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+
+                        if (
+                            (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty())
+                            && animationProgress == 0f
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(top = 12.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
                                 if (rating != 0f) {
                                     IconWithText(
                                         icon = painterResource(Theme.icons.dueTone.star),
@@ -160,50 +182,66 @@ fun MainMovieOrSeriesDetails(
                         }
                     }
 
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(11.5.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.align(Alignment.CenterEnd)
+
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 17.dp * (1f - animationProgress))
+                            .width(40.dp + (88.dp - 40.dp) * animationProgress)
+                            .height(92.dp - (92.dp - 40.dp) * animationProgress)
                     ) {
                         Icon(
                             painter = painterResource(Theme.icons.dueTone.play),
                             contentDescription = stringResource(R.string.play_icon),
                             tint = Theme.color.brand.tertiary,
                             modifier = Modifier
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = Theme.icons.dueTone.play.toString() + key),
-                                    animatedVisibilityScope = animatedVisibilityScope
-                                )
                                 .size(40.dp)
                                 .clip(RoundedCornerShape(Theme.radius.md))
-                                .background(playButtonBackground)
+                                .background(
+                                    color = playButtonBackground,
+                                    shape = RoundedCornerShape(Theme.radius.md)
+                                )
                                 .clickable(
                                     enabled = isPlayButtonEnabled,
                                     onClick = onClickPlay
                                 )
                                 .padding(10.dp)
+                                .align(Alignment.TopEnd)
                         )
+
                         Icon(
                             painter = painterResource(Theme.icons.dueTone.add),
                             contentDescription = stringResource(R.string.save_Icon),
                             tint = Theme.color.shade.primary,
                             modifier = Modifier
-                                .sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = Theme.icons.dueTone.add.toString() + key),
-                                    animatedVisibilityScope = animatedVisibilityScope
-                                )
                                 .size(40.dp)
                                 .clip(RoundedCornerShape(Theme.radius.md))
-                                .background(Theme.color.button.secondary)
+                                .background(
+                                    color = Theme.color.button.secondary,
+                                    shape = RoundedCornerShape(Theme.radius.md)
+                                )
                                 .clickable(onClick = onClickAdd)
                                 .padding(10.dp)
+                                .align(Alignment.BottomStart)
                         )
                     }
                 }
             }
         }
+
+        AnimatedVisibility(
+            visible = animationProgress == 1f,
+            modifier = Modifier.align(Alignment.BottomStart)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Theme.color.brand.tertiary)
+            )
+        }
     }
 }
+
 
 @Composable
 private fun IconWithText(
