@@ -3,7 +3,6 @@ package com.giraffe.media.util
 import android.database.CursorIndexOutOfBoundsException
 import android.database.StaleDataException
 import android.database.sqlite.SQLiteException
-import android.util.Log
 import com.giraffe.media.exception.CorruptDatabaseDataException
 import com.giraffe.media.exception.DiskAccessDataException
 import com.giraffe.media.exception.InvalidIdDataException
@@ -21,7 +20,6 @@ suspend fun <T> safeCall(block: suspend () -> T): T {
     return try {
         block()
     } catch (e: Exception) {
-        Log.d("messi", "searchByName-3: $e")
         throw mapToMediaException(e)
     }
 }
@@ -43,7 +41,7 @@ private fun mapToMediaException(throwable: Throwable): MediaDataException = when
     is StaleDataException -> CorruptDatabaseDataException()
 
     is IOException -> DiskAccessDataException()
-    is NoInternetDataException -> MediaDataException()
+    is NoInternetDataException -> NoInternetDataException()
     is IllegalArgumentException,
     is IllegalStateException -> InvalidIdDataException()
 

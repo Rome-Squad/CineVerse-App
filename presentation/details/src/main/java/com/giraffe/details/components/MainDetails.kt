@@ -97,6 +97,7 @@ fun MainDetails(
                         imageUrl = it,
                         contentDescription = actorName,
                         contentScale = ContentScale.Crop,
+                        hasSensitiveText = false,
                         modifier = Modifier
                             .sharedElement(
                                 sharedContentState = rememberSharedContentState(key = actorImageUrl + key),

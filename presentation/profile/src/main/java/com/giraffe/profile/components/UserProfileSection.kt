@@ -61,6 +61,7 @@ fun UserProfileSection(
         ) {
             SafeIslamicImage(
                 imageUrl = userProfileImage.toString(),
+                hasSensitiveText = false,
                 contentDescription = userProfileImage.toString(),
                 modifier = Modifier
                     .clip(CircleShape)

@@ -1,5 +1,7 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.media.collections.CollectionsRepositoryImp
+import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.explore.ExploreRepositoryImpl
 import com.giraffe.media.explore.repository.ExploreRepository
 import com.giraffe.media.movie.MoviesRepositoryImpl
@@ -9,7 +11,9 @@ import com.giraffe.media.person.repository.PersonRepository
 import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.repository.AuthenticationRepositoryImpl
+import com.giraffe.repository.OnboardingRepositoryImpl
 import com.giraffe.user.repository.AuthRepository
+import com.giraffe.user.repository.OnboardingRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,4 +43,12 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindAuthRepository(impl: AuthenticationRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOnboardingRepository(impl: OnboardingRepositoryImpl): OnboardingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCollectionsRepositoryRepository(impl: CollectionsRepositoryImp): CollectionsRepository
 }
