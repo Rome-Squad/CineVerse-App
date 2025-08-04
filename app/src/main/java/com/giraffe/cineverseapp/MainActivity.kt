@@ -12,8 +12,8 @@ import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.onboarding.OnBoardingApi
 import com.giraffe.onboarding.R
-import com.giraffe.onboarding.screen.OnBoardingContent
 import com.giraffe.onboarding.screen.OnBoardingPage
+import com.giraffe.onboarding.screen.OnBoardingScreen
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 
@@ -59,9 +59,9 @@ class MainActivity : ComponentActivity() {
                         subtitle = "Answer fun questions to get handpicked recommendations."
                     )
                 )
-                OnBoardingContent(
+                OnBoardingScreen(
                     modifier = Modifier,
-                    pages = pages
+                    navigateToLoginScreen = {},
                 )
                 //  onBoardingApi.OnBoardingContainer()
                 // authenticationApi.LoginContainer { }
