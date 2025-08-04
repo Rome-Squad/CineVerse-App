@@ -1,14 +1,13 @@
 package com.giraffe.media.series
 
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
-import com.giraffe.media.series.datasource.remote.dto.SeriesDto
-import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
+import com.giraffe.media.series.datasource.remote.dto.SeriesDto
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -24,7 +23,6 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class SeriesRepositoryImplTest {
     private lateinit var local: SeriesLocalDateSource
-    private lateinit var localExplore: LocalExploreDataSource
     private lateinit var remote: SeriesRemoteDataSource
     private lateinit var repository: SeriesRepository
     private val remoteSeriesDto = listOf(
@@ -95,7 +93,7 @@ class SeriesRepositoryImplTest {
     fun setup() {
         local = mockk(relaxed = true)
         remote = mockk(relaxed = true)
-        repository = SeriesRepositoryImpl(remote, local, localExplore)
+        repository = SeriesRepositoryImpl(remote, local)
     }
 
     @Test
