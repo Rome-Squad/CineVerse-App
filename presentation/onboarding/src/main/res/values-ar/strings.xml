@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="error_access_denied">تم رفض الوصول. يرجى المحاولة لاحقًا.</string>
-    <string name="error_unknown">حدث خطأ غير معروف. يرجى المحاولة مرة أخرى.</string>
+    <string name="error_unknown">حدث خطأ غير معروف.</string>
+    <string name="animatedwidth">العرض المتحرك</string>
+    <string name="footertextanimation">تحريك نص التذييل</string>
+    <string name="back">رجوع</string>
+    <string name="nextorgetstarted">التالي أو البدء</string>
+    <string name="get_started">ابدأ الآن</string>
+    <string name="next">التالي</string>
+    <string name="welcome_to_your_movie_universe">مرحبًا بك في عالم الأفلام الخاص بك</string>
+    <string name="discover_track_and_rate_your_favorite_movies_series">اكتشف، وتابع، وقيم أفلامك ومسلسلاتك المفضلة.</string>
+    <string name="your_watchlist_your_ratings_all_in_one_place">قائمة المشاهدة والتقييمات الخاصة بك، كلها في مكان واحد.</string>
+    <string name="track_everything">تابع كل شيء</string>
+    <string name="personalized_recommendations">توصيات مخصصة لك</string>
+    <string name="answer_fun_questions_to_get_handpicked_recommendations">أجب عن أسئلة ممتعة لتحصل على توصيات مختارة بعناية.</string>
+    <string name="topradiusanim">تحريك نصف القطر العلوي</string>
+    <string name="bottomradiusanim">تحريك نصف القطر السفلي</string>
+    <string name="image">صورة %1$s</string>
+    <string name="rotationanim">تحريك الدوران</string>
+
 </resources>
