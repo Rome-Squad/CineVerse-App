@@ -3,7 +3,6 @@ package com.giraffe.details.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -19,11 +18,7 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
     duration: String? = null,
-    topPadding: Dp = 0.dp,
-    textTopPadding: Dp,
-    imageWidth: Dp,
-    imageHeight: Dp,
-    startAndBottomPadding: Dp,
+    animationProgress: Float,
 ) {
     if (name.isNotBlank()) {
         MainMovieOrSeriesDetails(
@@ -37,11 +32,8 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
             onClickAdd = onClickAdd,
             onClickPlay = onClickPlay,
             isPlayButtonEnabled = isPlayButtonEnabled,
-            textTopPadding = textTopPadding,
-            imageWidth = imageWidth,
-            imageHeight = imageHeight,
-            startAndBottomPadding = startAndBottomPadding,
-            modifier = modifier.padding(top = topPadding)
+            animationProgress = animationProgress,
+            modifier = modifier.padding(top = 16.dp * (1f - animationProgress))
         )
     }
 }

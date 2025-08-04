@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -58,13 +59,11 @@ fun SeriesDetailsContent(
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberLazyListState()
-    var topPadding by remember { mutableIntStateOf(16) }
-    var textTopPadding by remember { mutableIntStateOf(16) }
     var imageWidth by remember { mutableIntStateOf(216) }
     var imageHeight by remember { mutableIntStateOf(288) }
-    var startAndBottomPadding by remember { mutableIntStateOf(16) }
     var consumedX by remember { mutableIntStateOf(0) }
     var consumedY by remember { mutableIntStateOf(0) }
+    var animationProgress by remember { mutableFloatStateOf(0f) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -83,12 +82,7 @@ fun SeriesDetailsContent(
                 val newImageHeight = imageHeight + delta
                 val previousImageHeight = imageHeight
                 imageHeight = newImageHeight.coerceIn(40, 288)
-                val newTopPadding = topPadding + delta / 16f
-                topPadding = newTopPadding.coerceIn(0f, 16f).toInt()
-                val newTextTopPadding = textTopPadding + delta / 16f
-                textTopPadding = newTextTopPadding.coerceIn(9f, 16f).toInt()
-                val newStartAndBottomPadding = startAndBottomPadding + delta / 16f
-                startAndBottomPadding = newStartAndBottomPadding.coerceIn(12f, 16f).toInt()
+                animationProgress = 1f - (imageHeight - 40) / 248f
                 consumedX = imageWidth - previousImageWidth
                 consumedY = imageHeight - previousImageHeight
                 return Offset(consumedX.toFloat(), consumedY.toFloat())
@@ -103,7 +97,9 @@ fun SeriesDetailsContent(
             .systemBarsPadding()
     ) {
         AnimatedVisibility(state.isLoading) {
-            Progress(modifier = Modifier.size(40.dp))
+            Progress(modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.Center))
         }
 
         Column(
@@ -129,11 +125,7 @@ fun SeriesDetailsContent(
                 onClickAdd = interaction::onClickAddToCollection,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
-                topPadding = topPadding.dp,
-                textTopPadding = textTopPadding.dp,
-                imageWidth = imageWidth.dp,
-                imageHeight = imageHeight.dp,
-                startAndBottomPadding = startAndBottomPadding.dp
+                animationProgress = animationProgress
             )
 
             LazyColumn(
@@ -141,6 +133,7 @@ fun SeriesDetailsContent(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .padding(top = 24.dp)
                     .background(Theme.color.background.screen)
                     .fillMaxSize()
                     .systemBarsPadding()

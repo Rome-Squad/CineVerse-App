@@ -8,14 +8,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,7 +33,6 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
@@ -54,7 +54,6 @@ import com.giraffe.details.utils.TypeOfScreen
 
 @Composable
 fun MovieDetailsScreen(
-    modifier: Modifier = Modifier,
     navigateToReviews: (Int) -> Unit = {},
     onBackButtonClick: () -> Unit = {},
     onClickPlay: (String) -> Unit,
@@ -115,37 +114,31 @@ private fun MovieDetailsContent(
     navigateToLogIn: () -> Unit
 ) {
     val scrollState = rememberLazyListState()
-    var topPadding by remember { mutableIntStateOf(16) }
-    var textTopPadding by remember { mutableIntStateOf(16) }
-    var startAndBottomPadding by remember { mutableIntStateOf(16) }
     var imageWidth by remember { mutableIntStateOf(216) }
     var imageHeight by remember { mutableIntStateOf(288) }
     var consumedX by remember { mutableIntStateOf(0) }
     var consumedY by remember { mutableIntStateOf(0) }
+    var animationProgress by remember { mutableFloatStateOf(0f) }
+    var isScrollingUp by remember { mutableStateOf(false) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y.toInt()
+                isScrollingUp = delta <= 0
                 if (
                     (scrollState.firstVisibleItemIndex != 0 || scrollState.firstVisibleItemScrollOffset != 0)
                     && delta > 0
-                ) return Offset(
-                    consumedX.toFloat(),
-                    consumedY.toFloat()
-                )
+                ) {
+                    return Offset(consumedX.toFloat(), consumedY.toFloat())
+                }
                 val newImageWidth = imageWidth + delta
                 val previousImageWidth = imageWidth
                 imageWidth = newImageWidth.coerceIn(40, 216)
                 val newImageHeight = imageHeight + delta
                 val previousImageHeight = imageHeight
                 imageHeight = newImageHeight.coerceIn(40, 288)
-                val newTopPadding = topPadding + delta / 16f
-                topPadding = newTopPadding.coerceIn(0f, 16f).toInt()
-                val newTextTopPadding = textTopPadding + delta / 16f
-                textTopPadding = newTextTopPadding.coerceIn(9f, 16f).toInt()
-                val newStartAndBottomPadding = startAndBottomPadding + delta / 16f
-                startAndBottomPadding = newStartAndBottomPadding.coerceIn(12f, 16f).toInt()
+                animationProgress = 1f - (imageHeight - 40) / 248f
                 consumedX = imageWidth - previousImageWidth
                 consumedY = imageHeight - previousImageHeight
                 return Offset(consumedX.toFloat(), consumedY.toFloat())
@@ -173,20 +166,16 @@ private fun MovieDetailsContent(
             MainMovieOrSeriesDetailsAnimatedContent(
                 type = stringResource(id = TypeOfScreen.MOVIE.titleResId),
                 name = state.movie.title,
-                rating = state.movie.rating,
                 imageUrl = state.movie.posterUrl,
+                rating = state.movie.rating,
                 genres = state.movieGenres,
-                duration = state.movie.duration,
                 releaseYear = state.movie.releaseYear.orEmpty(),
-                onClickAdd = interaction::onAddToCollectionClick,
-                onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
                 isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),
-                topPadding = topPadding.dp,
-                textTopPadding = textTopPadding.dp,
-                imageWidth = imageWidth.dp,
-                imageHeight = imageHeight.dp,
-                startAndBottomPadding = startAndBottomPadding.dp,
+                onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
+                onClickAdd = interaction::onAddToCollectionClick,
                 modifier = Modifier.padding(horizontal = 16.dp),
+                duration = state.movie.duration,
+                animationProgress = animationProgress
             )
 
             AnimatedVisibility(!state.isLoadingMovieDetails) {
@@ -197,6 +186,7 @@ private fun MovieDetailsContent(
                     modifier = Modifier
                         .background(Theme.color.background.screen)
                         .fillMaxSize()
+                        .padding(top = 24.dp)
                 ) {
                     if (state.movie.description.isNotBlank()) {
                         item {
@@ -285,9 +275,6 @@ private fun MovieDetailsContent(
             }
         }
 
-        AnimatedVisibility(state.isLoadingMovieDetails) {
-            Progress(modifier = Modifier.size(40.dp))
-        }
 
         BaseBottomSheet(
             isVisible = state.isVisibleAddToCollectionBottomSheet,

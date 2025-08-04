@@ -1,5 +1,6 @@
 package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -50,192 +50,196 @@ fun MainMovieOrSeriesDetails(
     onClickPlay: () -> Unit,
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
-    textTopPadding: Dp = 16.dp,
-    imageWidth: Dp = 216.dp,
-    imageHeight: Dp = 289.dp,
-    startAndBottomPadding: Dp
+    animationProgress: Float = 0f
 ) {
     val playButtonBackground by animateColorAsState(
         if (isPlayButtonEnabled) Theme.color.button.primary else Theme.color.button.onDisabled
     )
 
-    val imageAnimationProgress = remember(imageHeight) {
-        -1f + (imageHeight - 40.dp) / (249.dp)
-    }
-
     val imageClipRadius = Theme.radius.xl
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        posterUrl?.let {
-            SafeIslamicImage(
-                imageUrl = it,
-                contentDescription = stringResource(R.string.poster_image),
-                modifier = Modifier
-                    .align(BiasAlignment(imageAnimationProgress, -1f))
-                    .padding(bottom = textTopPadding)
-                    .size(width = imageWidth, height = imageHeight)
-                    .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * (imageAnimationProgress * -1))),
-                contentScale = ContentScale.Crop
-            )
-            {
-                Icon(
-                    painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = null,
-                    tint = Theme.color.brand.secondary,
+    Box(Modifier.fillMaxWidth()) {
+        Box(modifier.fillMaxWidth()) {
+            posterUrl?.let {
+                SafeIslamicImage(
+                    imageUrl = it,
+                    contentDescription = stringResource(R.string.poster_image),
                     modifier = Modifier
-                        .size(width = 216.dp, height = 289.dp)
-                        .clip(RoundedCornerShape(Theme.radius.xl))
-                        .background(
-                            Theme.color.background.card,
+                        .align(BiasAlignment(animationProgress * -1, -1f))
+                        .padding(bottom = 16.dp - (16 - 9).dp * (animationProgress))
+                        .size(
+                            width = 216.dp - (216 - 40).dp * (animationProgress),
+                            height = 289.dp - (289 - 40).dp * (animationProgress)
                         )
-                        .padding(horizontal = 92.dp, vertical = 128.5.dp)
-                        .wrapContentSize(),
+                        .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * animationProgress)),
+                    contentScale = ContentScale.Crop
                 )
-            }
-
-            Row(
-                modifier = Modifier
-                    .padding(top = (289.dp + textTopPadding) * (1f + imageAnimationProgress))
-                    .fillMaxWidth()
-                    .heightIn(min = 52.dp)
-                    .clip(RoundedCornerShape(Theme.radius.lg))
-                    .background(Theme.color.background.card.copy(1f + imageAnimationProgress))
-                    .padding(
-                        start = startAndBottomPadding,
-                        bottom = startAndBottomPadding,
-                        end = 16.dp * (1f + imageAnimationProgress)
+                {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = null,
+                        tint = Theme.color.brand.secondary,
+                        modifier = Modifier
+                            .size(width = 216.dp, height = 289.dp)
+                            .clip(RoundedCornerShape(Theme.radius.xl))
+                            .background(
+                                Theme.color.background.card,
+                            )
+                            .padding(horizontal = 92.dp, vertical = 128.5.dp)
+                            .wrapContentSize(),
                     )
-                    .align(Alignment.TopEnd)
-            ) {
-                Column(
+                }
+
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 36.dp * imageAnimationProgress * -1f)
+                        .padding(top = (289.dp + 16.dp) * ((1f - animationProgress)))
+                        .fillMaxWidth()
+                        .heightIn(min = 52.dp)
+                        .clip(RoundedCornerShape(Theme.radius.lg))
+                        .background(Theme.color.background.card.copy(1f - animationProgress))
+                        .padding(
+                            start = 16.dp - (16 - 12).dp * (1f - animationProgress),
+                            bottom = 16.dp - (16 - 12).dp * (1f - animationProgress),
+                            end = 16.dp * (1f - animationProgress)
+                        )
+                        .align(Alignment.TopEnd)
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 48.dp)
+                            .weight(1f)
+                            .padding(start = 36.dp * animationProgress)
                     ) {
-                        if (textTopPadding == 16.dp) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 48.dp)
+                        ) {
+                            if (animationProgress == 0f) {
+                                Text(
+                                    text = type.uppercase(),
+                                    style = Theme.textStyle.label.md.medium,
+                                    color = Theme.color.brand.primary,
+                                    modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                                )
+                            }
+
                             Text(
-                                text = type.uppercase(),
-                                style = Theme.textStyle.label.md.medium,
-                                color = Theme.color.brand.primary,
-                                modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                                text = name,
+                                style = Theme.textStyle.title.md,
+                                color = Theme.color.shade.primary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.then(
+                                    if (animationProgress == 1f) Modifier.padding(top = 9.dp)
+                                    else Modifier
+                                )
                             )
+
+                            if (genres.isNotEmpty() && animationProgress == 0f) {
+                                Text(
+                                    modifier = Modifier.padding(top = 4.dp),
+                                    text = genres.joinToString(", "),
+                                    style = Theme.textStyle.body.sm.medium,
+                                    color = Theme.color.shade.secondary,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
                         }
 
-                        Text(
-                            text = name,
-                            style = Theme.textStyle.title.md,
-                            color = Theme.color.shade.primary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.then(
-                                if (imageHeight == 40.dp) Modifier.padding(top = 9.dp)
-                                else Modifier
-                            )
+                        if (
+                            (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty())
+                            && animationProgress == 0f
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(top = 12.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                if (rating != 0f) {
+                                    IconWithText(
+                                        icon = painterResource(Theme.icons.dueTone.star),
+                                        text = "%.1f".format(rating),
+                                        colorOfIcon = Theme.color.additional.primary.yellow
+                                    )
+                                }
+
+                                if (!duration.isNullOrEmpty()) {
+                                    IconWithText(
+                                        icon = painterResource(Theme.icons.dueTone.clock),
+                                        text = duration.toString(),
+                                        colorOfIcon = Theme.color.shade.secondary
+                                    )
+                                }
+
+                                if (releaseDate.isNotEmpty()) {
+                                    IconWithText(
+                                        icon = painterResource(Theme.icons.dueTone.calendar),
+                                        text = releaseDate,
+                                        colorOfIcon = Theme.color.shade.secondary
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 17.dp * (1f - animationProgress))
+                            .width(40.dp + (88.dp - 40.dp) * animationProgress)
+                            .height(92.dp - (92.dp - 40.dp) * animationProgress)
+                    ) {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.play),
+                            contentDescription = stringResource(R.string.play_icon),
+                            tint = Theme.color.brand.tertiary,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(RoundedCornerShape(Theme.radius.md))
+                                .background(
+                                    color = playButtonBackground,
+                                    shape = RoundedCornerShape(Theme.radius.md)
+                                )
+                                .clickable(
+                                    enabled = isPlayButtonEnabled,
+                                    onClick = onClickPlay
+                                )
+                                .padding(10.dp)
+                                .align(Alignment.TopEnd)
                         )
 
-                        if (genres.isNotEmpty() && textTopPadding == 16.dp) {
-                            Text(
-                                modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
-                                text = genres.joinToString(", "),
-                                style = Theme.textStyle.body.sm.medium,
-                                color = Theme.color.shade.secondary,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.add),
+                            contentDescription = stringResource(R.string.save_Icon),
+                            tint = Theme.color.shade.primary,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(RoundedCornerShape(Theme.radius.md))
+                                .background(
+                                    color = Theme.color.button.secondary,
+                                    shape = RoundedCornerShape(Theme.radius.md)
+                                )
+                                .clickable(onClick = onClickAdd)
+                                .padding(10.dp)
+                                .align(Alignment.BottomStart)
+                        )
                     }
-
-                    if (
-                        (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty())
-                        && textTopPadding == 16.dp
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            if (rating != 0f && textTopPadding == 16.dp) {
-                                IconWithText(
-                                    icon = painterResource(Theme.icons.dueTone.star),
-                                    text = "%.1f".format(rating),
-                                    colorOfIcon = Theme.color.additional.primary.yellow
-                                )
-                            }
-
-                            if (!duration.isNullOrEmpty() && textTopPadding == 16.dp) {
-                                IconWithText(
-                                    icon = painterResource(Theme.icons.dueTone.clock),
-                                    text = duration.toString(),
-                                    colorOfIcon = Theme.color.shade.secondary
-                                )
-                            }
-
-                            if (releaseDate.isNotEmpty() && textTopPadding == 16.dp) {
-                                IconWithText(
-                                    icon = painterResource(Theme.icons.dueTone.calendar),
-                                    text = releaseDate,
-                                    colorOfIcon = Theme.color.shade.secondary
-                                )
-                            }
-                        }
-                    }
-                }
-
-
-                Box(
-                    modifier = Modifier
-//                        .padding(top = if (imageHeight != 40.dp) 17.dp else 0.dp)
-//                        .align(Alignment.CenterEnd)
-                        .width(40.dp + (88.dp - 40.dp) * imageAnimationProgress * -1)
-                        .height(88.dp - (88.dp - 40.dp) * imageAnimationProgress * -1)
-                ) {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.play),
-                        contentDescription = stringResource(R.string.play_icon),
-                        tint = Theme.color.brand.tertiary,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(Theme.radius.md))
-                            .background(
-                                color = playButtonBackground,
-                                shape = RoundedCornerShape(Theme.radius.md)
-                            )
-                            .clickable(
-                                enabled = isPlayButtonEnabled,
-                                onClick = onClickPlay
-                            )
-                            .padding(10.dp)
-                            .align(Alignment.TopEnd)
-                    )
-
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.add),
-                        contentDescription = stringResource(R.string.save_Icon),
-                        tint = Theme.color.shade.primary,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(Theme.radius.md))
-                            .background(
-                                color = Theme.color.button.secondary,
-                                shape = RoundedCornerShape(Theme.radius.md)
-                            )
-                            .clickable(onClick = onClickAdd)
-                            .padding(10.dp)
-                            .align(Alignment.BottomStart)
-                    )
                 }
             }
-//            }
         }
 
+        AnimatedVisibility(
+            visible = animationProgress == 1f,
+            modifier = Modifier.align(Alignment.BottomStart)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Theme.color.brand.tertiary)
+            )
+        }
     }
-
 }
 
 
