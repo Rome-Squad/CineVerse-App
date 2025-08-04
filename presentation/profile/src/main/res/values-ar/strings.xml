@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rating_emoji_animation">تقييم الإيموجي المتحرك</string>
+    <string name="rate">قيّم</string>
+    <string name="add_rating">أضف تقييمًا</string>
+    <string name="right_arrow">سهم لليمين</string>
+    <string name="you_rated_it">لقد قمت بتقييمه</string>
+    <string name="give_it_start">أعطه نجومًا!</string>
+    <string name="tab_to_change_your_rating">اضغط لتغيير تقييمك</string>
+    <string name="rate_it">دع العالم يعرف رأيك.</string>
+    <string name="did_you_watch_it">هل شاهدته؟</string>
+    <string name="user_name">"اسم المستخدم"</string>
+    <string name="history">السجل</string>
+    <string name="my_collections">مجموعاتي</string>
+    <string name="my_ratings">تقييماتي</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+    <string name="Dark_Mode">الوضع الداكن</string>
+    <string name="Language">اللغه</string>
+    <string name="Logout">تسجيل الخروج</string>
+    <string name="Version">الاصدار ١.٠.١</string>
+    <string name="My_Profile">حسابى</string>
+    <string name="settings_text">الأعدادات</string>
+    <string name="cancel">الغاء</string>
+    <string name="create">انشاء</string>
+    <string name="profile_screen">جهه الملف الشخصية</string>
+</resources>

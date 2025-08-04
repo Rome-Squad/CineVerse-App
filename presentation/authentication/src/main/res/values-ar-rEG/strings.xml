@@ -19,6 +19,9 @@
     <string name="guest_auth_error">فشل ف الدخول كضيف , حاول مرة اخر لاحقا</string>
     <string name="invalid_username_or_password">خطأ ف اسم المستخدم او كلمه المرور</string>
     <string name="invalid_username_format">اسم المستخدم يجب ان يحتوي على حروف و ارقام فقط</string>
+    <string name="sign_up">انشاء حساب</string>
+    <string name="reset_password">اعادة تعيين كلمة المرور</string>
+    <string name="check_your_email_to_reset_password">تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور</string>
 
 
 </resources>
