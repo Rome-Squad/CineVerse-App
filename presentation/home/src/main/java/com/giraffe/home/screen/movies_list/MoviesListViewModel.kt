@@ -88,7 +88,7 @@ class MoviesListViewModel @Inject constructor(
             val media = when (sectionType) {
                 MovieSectionType.RECENTLY_RELEASED -> {
                     val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
-                    val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1)
+                    val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1, limit = 10)
                     recentMovies.map { it.toPosterUi() } + recentSeries.map { it.toPosterUi() }
                 }
 
