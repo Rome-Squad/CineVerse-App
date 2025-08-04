@@ -1,4 +1,4 @@
-package com.giraffe.cineverseapp.main_activity
+package com.giraffe.cineverseapp.main
 
 data class MainUiState(
     val isLoggedIn: Boolean? = null,

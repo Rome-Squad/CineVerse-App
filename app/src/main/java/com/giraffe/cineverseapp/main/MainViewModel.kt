@@ -1,4 +1,4 @@
-package com.giraffe.cineverseapp.main_activity
+package com.giraffe.cineverseapp.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,31 +29,33 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun checkIfOnBoardingFirstTime() {
+    private fun checkIfOnBoardingFirstTime() {
         safeExecute(
-            onSuccess = { result ->
-                _state.value = _state.value.copy(
-                    isOnBoardingFirstTime = result,
-                )
-            }
+            onSuccess = ::onCheckOnBoardingFirstTimeSuccess
         ) {
             isOnBoardingFirstTimeUseCase()
         }
     }
 
+    private fun onCheckOnBoardingFirstTimeSuccess(result: Boolean) {
+        _state.value = _state.value.copy(
+            isOnBoardingFirstTime = result,
+        )
+    }
 
-    fun checkIsLoggedIn() {
+    private fun checkIsLoggedIn() {
         safeExecute(
-            onSuccess = { result ->
-                _state.value = _state.value.copy(
-                    isLoggedIn = result,
-                )
-            }
+            onSuccess = ::onCheckLoginSuccess
         ) {
             isLoggedInUseCase()
         }
     }
 
+    private fun onCheckLoginSuccess(result: Boolean) {
+        _state.value = _state.value.copy(
+            isLoggedIn = result,
+        )
+    }
 
     private inline fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
