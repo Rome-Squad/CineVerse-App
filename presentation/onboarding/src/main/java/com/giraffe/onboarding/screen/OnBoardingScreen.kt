@@ -60,7 +60,6 @@ fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToLoginScreen: () -> Unit,
-    navigateToHomeScreen: () -> Unit
 ) {
     val pages = listOf(
         OnBoardingPage(

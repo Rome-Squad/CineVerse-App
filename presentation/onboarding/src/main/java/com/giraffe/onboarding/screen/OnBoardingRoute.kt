@@ -3,8 +3,7 @@ package com.giraffe.onboarding.screen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.onboarding.nav.routes.navigateHomeScreen
-import com.giraffe.onboarding.nav.routes.navigateLoginScreen
+import com.giraffe.onboarding.nav.navigateLoginScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,7 +19,6 @@ fun NavGraphBuilder.onBoardingRoute(
     composable<OnBoardingRoute> {
         OnBoardingScreen(
             navigateToLoginScreen = navController::navigateLoginScreen,
-            navigateToHomeScreen = navController::navigateHomeScreen
         )
     }
 }

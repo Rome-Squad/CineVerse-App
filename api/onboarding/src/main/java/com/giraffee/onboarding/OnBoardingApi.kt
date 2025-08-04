@@ -1,4 +1,4 @@
-package com.giraffe.onboarding
+package com.giraffee.onboarding
 
 import androidx.compose.runtime.Composable
 
