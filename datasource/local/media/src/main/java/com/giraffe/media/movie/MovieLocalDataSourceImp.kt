@@ -16,12 +16,29 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.insertMovieGenres(movieGenres)
     }
 
-    override suspend fun upsertMovies(movies: List<MovieCacheDto>) = safeCall {
-        movieDao.upsertMovies(movies)
+    override suspend fun upsertMovie(
+        movie: MovieCacheDto,
+        transformer: ((MovieCacheDto) -> MovieCacheDto)?
+    ) = safeCall {
+        val movieDb = movieDao.getMovieById(movie.id)
+        val newMovie = movieDb ?: movie
+        val finalMovie = transformer?.invoke(newMovie) ?: newMovie
+        movieDao.upsertMovie(finalMovie)
     }
 
-    override suspend fun upsertMovie(movie: MovieCacheDto) = safeCall {
-        movieDao.upsertMovie(movie)
+    override suspend fun upsertMovies(
+        movies: List<MovieCacheDto>,
+        transformer: ((MovieCacheDto) -> MovieCacheDto)?
+    ) {
+        if (movies.isEmpty()) return
+        val newMovieIds = movies.map { it.id }
+        val moviesDb = movieDao.getMoviesByIds(newMovieIds)
+        val movieIdsDb = moviesDb.map { it.id }
+        val newMovies = movies.filterNot { it.id in movieIdsDb }
+        val combinedMovies = (newMovies + moviesDb)
+        val finalMovies = transformer?.let { transformFunc -> combinedMovies.map(transformFunc) }
+            ?: combinedMovies
+        movieDao.upsertMovies(finalMovies)
     }
 
     override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = safeCall {
@@ -64,6 +81,10 @@ class MovieLocalDataSourceImp @Inject constructor(
 
     override suspend fun getMovieGenres(genreIds: List<Int>) = safeCall {
         movieDao.getMovieGenres(genreIds)
+    }
+
+    override suspend fun getUpcomingMovies(limit: Int) = safeCall {
+        movieDao.getUpcomingMovies(limit)
     }
 
     override fun getRecentlyViewedMovies() = safeFlow {

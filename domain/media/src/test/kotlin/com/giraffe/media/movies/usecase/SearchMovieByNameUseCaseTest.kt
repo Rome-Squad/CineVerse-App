@@ -1,14 +1,12 @@
 package com.giraffe.media.movies.usecase
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -17,30 +15,16 @@ class SearchMovieByNameUseCaseTest {
     private lateinit var repository: MoviesRepository
     private lateinit var useCase: SearchMovieByNameUseCase
 
-    private val movieAction = Movie(
+    private val movieAction = fakeMovie(
         id = 1,
         title = "Action Movie",
-        description = "",
-        rating = 7.0f,
-        duration = 120,
-        posterUrl = "",
-        backdropUrl = "",
-        youtubeVideoId = "",
         genresID = listOf(28),
-        releaseYear = LocalDate(2022, 1, 1),
         popularity = 0f
     )
-    private val movieSciFi = Movie(
+    private val movieSciFi = fakeMovie(
         id = 2,
         title = "Sci-Fi Movie",
-        description = "",
-        rating = 8.0f,
-        duration = 130,
-        posterUrl = "",
-        backdropUrl = "",
-        youtubeVideoId = "",
         genresID = listOf(878),
-        releaseYear = LocalDate(2023, 1, 1),
         popularity = 0f
     )
 

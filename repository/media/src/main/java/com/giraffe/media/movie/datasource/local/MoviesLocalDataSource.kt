@@ -7,10 +7,15 @@ import kotlinx.coroutines.flow.Flow
 interface MoviesLocalDataSource {
 
     suspend fun insertMovieGenres(movieGenres: List<MovieGenreCacheDto>)
+    suspend fun upsertMovies(
+        movies: List<MovieCacheDto>,
+        transformer: ((MovieCacheDto) -> MovieCacheDto)? = null
+    )
 
-    suspend fun upsertMovies(movies: List<MovieCacheDto>)
-
-    suspend fun upsertMovie(movie: MovieCacheDto)
+    suspend fun upsertMovie(
+        movie: MovieCacheDto,
+        transformer: ((MovieCacheDto) -> MovieCacheDto)? = null
+    )
 
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
@@ -31,6 +36,8 @@ interface MoviesLocalDataSource {
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
     suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenreCacheDto>
+
+    suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
 
     fun getRecentlyViewedMovies(): Flow<List<MovieCacheDto>>
 

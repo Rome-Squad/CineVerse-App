@@ -41,8 +41,10 @@ class MoviesRepositoryImpl @Inject constructor(
         local.insertMovieGenres(genres.map(Genre::toDto))
     }
 
-    override suspend fun setMovieRecent(movie: Movie, isRecentViewed: Long) = SafeCall {
-        local.upsertMovie(movie.toCacheDto().copy(isRecentViewed = isRecentViewed))
+    override suspend fun setMovieRecent(movie: Movie, recentViewedAt: Long) = SafeCall {
+        local.upsertMovie(
+            movie.toCacheDto(),
+            transformer = { it.copy(recentViewedAt = recentViewedAt) })
     }
 
     override suspend fun searchMovieByName(movieName: String, page: Int) = SafeCall {
@@ -97,10 +99,10 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getUserMovieRating(movieId)
     }
 
-    override suspend fun getPopularityMovies(page: Int, limit: Int, useRemoteOnly: Boolean) =
+    override suspend fun getPopularityMovies(page: Int, limit: Int) =
         SafeCall {
             when {
-                useRemoteOnly -> getPopularityMoviesFromRemote(page, limit)
+                page > 1 -> getPopularityMoviesFromRemote(page, limit)
                 else -> {
                     local.getPopularityMovies(limit = limit).map(MovieCacheDto::toEntity).ifEmpty {
                         getPopularityMoviesFromRemote(page, limit).also {
@@ -114,18 +116,17 @@ class MoviesRepositoryImpl @Inject constructor(
     private suspend fun getPopularityMoviesFromRemote(page: Int, limit: Int) =
         remote.getPopularityMovies(page).take(limit).map(MovieDto::toEntity)
 
-    override suspend fun getRecentlyReleasedMovies(page: Int, limit: Int, useRemoteOnly: Boolean) =
+    override suspend fun getRecentlyReleasedMovies(page: Int, limit: Int) =
         SafeCall {
             when {
-                useRemoteOnly -> getRecentlyReleasedMoviesFromRemote(page, limit)
+                page > 1 -> getRecentlyReleasedMoviesFromRemote(page, limit)
                 else -> {
                     local.getRecentlyReleasedMovies(limit = limit).map(MovieCacheDto::toEntity)
                         .ifEmpty {
                             getRecentlyReleasedMoviesFromRemote(page, limit).also { movies ->
                                 local.upsertMovies(
-                                    movies.map { movie ->
-                                        movie.toCacheDto().copy(recentReleasedAt = System.currentTimeMillis())
-                                    }
+                                    movies = movies.map(Movie::toCacheDto),
+                                    transformer = { it.copy(recentReleasedAt = System.currentTimeMillis()) }
                                 )
                             }
                         }
@@ -136,9 +137,26 @@ class MoviesRepositoryImpl @Inject constructor(
     private suspend fun getRecentlyReleasedMoviesFromRemote(page: Int, limit: Int) =
         remote.getRecentlyReleasedMovies(page).take(limit).map(MovieDto::toEntity)
 
-    override suspend fun getUpcomingMovies(page: Int): List<Movie> = SafeCall {
-        remote.getUpcomingMovies(page).map(MovieDto::toEntity)
-    }
+    override suspend fun getUpcomingMovies(page: Int, limit: Int) =
+        SafeCall {
+            when {
+                page > 1 -> getUpcomingMoviesFromRemote(page, limit)
+                else -> {
+                    local.getUpcomingMovies(limit = limit).map(MovieCacheDto::toEntity)
+                        .ifEmpty {
+                            getUpcomingMoviesFromRemote(page, limit).also { movies ->
+                                local.upsertMovies(
+                                    movies = movies.map(Movie::toCacheDto),
+                                    transformer = { it.copy(upcomingAt = System.currentTimeMillis()) }
+                                )
+                            }
+                        }
+                }
+            }
+        }
+
+    private suspend fun getUpcomingMoviesFromRemote(page: Int, limit: Int) =
+        remote.getUpcomingMovies(page).take(limit).map(MovieDto::toEntity)
 
     override suspend fun clearCache() = SafeCall {
         local.clearMovieCache()

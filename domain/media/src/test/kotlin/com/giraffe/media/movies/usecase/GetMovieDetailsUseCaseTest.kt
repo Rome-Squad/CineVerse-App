@@ -1,6 +1,5 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -15,18 +14,9 @@ class GetMovieDetailsUseCaseTest {
     private lateinit var repository: MoviesRepository
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
 
-    private val fakeMovie = Movie(
+    private val fakeMovie = fakeMovie(
         id = 1,
         title = "Test Movie",
-        description = "",
-        rating = 0.0f,
-        duration = null,
-        posterUrl = null,
-        backdropUrl = null,
-        genresID = listOf(1, 2),
-        releaseYear = null,
-        youtubeVideoId = "",
-        popularity = 0f
     )
 
     @BeforeEach

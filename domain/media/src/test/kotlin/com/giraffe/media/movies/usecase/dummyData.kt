@@ -3,7 +3,15 @@ package com.giraffe.media.movies.usecase
 import com.giraffe.media.movies.entity.Movie
 import kotlinx.datetime.LocalDate
 
-fun fakeMovie(id: Int, title: String, popularity: Float = 0f): Movie {
+fun fakeMovie(
+    id: Int,
+    title: String,
+    popularity: Float = 0f,
+    recentViewedAt: Long? = null,
+    recentReleasedAt: Long? = null,
+    upcomingAt: Long? = null,
+    genresID: List<Int> = listOf(28, 878),
+): Movie {
     return Movie(
         id = id,
         title = title,
@@ -13,9 +21,12 @@ fun fakeMovie(id: Int, title: String, popularity: Float = 0f): Movie {
         posterUrl = "https://example.com/poster.jpg",
         backdropUrl = "https://example.com/backdrop.jpg",
         youtubeVideoId = "abc123",
-        genresID = listOf(28, 878),
+        genresID = genresID,
         releaseYear = LocalDate(2024, 1, 1),
-        popularity = popularity
+        popularity = popularity,
+        recentViewedAt = recentViewedAt,
+        recentReleasedAt = recentReleasedAt,
+        upcomingAt = upcomingAt,
     )
 }
 
@@ -25,8 +36,8 @@ val fakeMovies: List<Movie> = listOf(
     fakeMovie(id = 3, title = "title 3", popularity = 333f),
     fakeMovie(id = 4, title = "title 4", popularity = 50f),
     fakeMovie(id = 5, title = "title 5", popularity = 1f),
-    fakeMovie(id = 6, title = "title 6", popularity = 1000333f),
-    fakeMovie(id = 7, title = "title 7"),
-    fakeMovie(id = 8, title = "title 8"),
+    fakeMovie(id = 6, title = "title 6", popularity = 1000333f, upcomingAt = 1234),
+    fakeMovie(id = 7, title = "title 7", recentViewedAt = 1234),
+    fakeMovie(id = 8, title = "title 8", recentReleasedAt = 1234),
     fakeMovie(id = 9, title = "title 9"),
 )

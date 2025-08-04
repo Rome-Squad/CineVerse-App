@@ -27,6 +27,10 @@ interface MovieDao {
     @Query("UPDATE movie_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE id IN (:ids)")
+    suspend fun getMoviesByIds(ids: List<Int>): List<MovieCacheDto>
+
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id =:movieId")
     suspend fun getMovieById(movieId: Int): MovieCacheDto?
 
@@ -36,7 +40,7 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_TABLE ORDER BY popularity DESC LIMIT :limit")
     suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
 
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE recentReleasedAt > 0 ORDER BY recentReleasedAt DESC LIMIT :limit")
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE recentReleasedAt IS NOT NULL AND recentReleasedAt > 0 ORDER BY recentReleasedAt DESC LIMIT :limit")
     suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
@@ -54,7 +58,10 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_TABLE WHERE genresID =:genreId")
     suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
 
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE isRecentViewed > 0 ORDER BY isRecentViewed DESC")
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE upcomingAt IS NOT NULL AND upcomingAt > 0 ORDER BY upcomingAt DESC LIMIT :limit")
+    fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE recentViewedAt > 0 ORDER BY recentReleasedAt DESC")
     fun getRecentlyViewedMovies(): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $MOVIE_TABLE")
@@ -63,13 +70,13 @@ interface MovieDao {
     @Query("DELETE FROM $MOVIE_GENRE_TABLE")
     suspend fun clearMovieGenreCache()
 
-    @Query("DELETE FROM $MOVIE_TABLE WHERE isRecentViewed > 0")
+    @Query("DELETE FROM $MOVIE_TABLE WHERE recentReleasedAt > 0")
     suspend fun clearRecentlyMovies()
 
     @Query(
         """
     DELETE FROM $MOVIE_TABLE 
-    WHERE isRecentViewed = 0 
+    WHERE recentReleasedAt = 0 
     AND cachedAt <= :currentTime - 3600000
 """
     )

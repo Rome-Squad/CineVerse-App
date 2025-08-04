@@ -25,20 +25,19 @@ class GetRecentlyReleasedMoviesUseCaseTest {
     fun `given recently released movies, when invoke is called, then return movie list`() =
         runTest {
             // Given
-            val expectedRecentlyReleased = fakeMovies
+            val expectedRecentlyReleased = fakeMovies.filter { it.recentReleasedAt != null }
             val page = 1
             val limit = 10
-            val useRemoteOnly = false
             coEvery {
-                repository.getRecentlyReleasedMovies(page, limit, useRemoteOnly)
+                repository.getRecentlyReleasedMovies(page, limit)
             } returns expectedRecentlyReleased
 
             // When
-            val actualMovies = useCase(page, limit, useRemoteOnly)
+            val actualMovies = useCase(page, limit)
 
             // Then
             coVerify(exactly = 1) {
-                repository.getRecentlyReleasedMovies(page, limit, useRemoteOnly)
+                repository.getRecentlyReleasedMovies(page, limit)
             }
             assertThat(actualMovies).isEqualTo(expectedRecentlyReleased)
         }

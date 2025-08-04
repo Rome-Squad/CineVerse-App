@@ -26,14 +26,13 @@ class GetPopularityMoviesUseCaseTest {
         val expectedPopularityMovies = fakeMovies.filter { it.popularity > 0 }
         val page = 1
         val limit = 10
-        val useRemoteOnly = false
-        coEvery { repository.getPopularityMovies(page, limit, useRemoteOnly) } returns expectedPopularityMovies
+        coEvery { repository.getPopularityMovies(page, limit) } returns expectedPopularityMovies
 
         // When
         val actualMovies = useCase(page,limit)
 
         // Then
-        coVerify(exactly = 1) { repository.getPopularityMovies(page, limit, useRemoteOnly) }
+        coVerify(exactly = 1) { repository.getPopularityMovies(page, limit) }
         assertThat(actualMovies).isEqualTo(expectedPopularityMovies)
     }
 }

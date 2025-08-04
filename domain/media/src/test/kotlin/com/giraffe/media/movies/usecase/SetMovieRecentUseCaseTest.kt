@@ -16,14 +16,14 @@ class SetMovieRecentUseCaseTest {
         runTest {
             // Given
             val movie = fakeMovie(id = 1, title = "Inception")
-            val isRecentViewed = System.currentTimeMillis()
+            val recentViewedAt = System.currentTimeMillis()
 
             // When
-            useCase(movie, isRecentViewed)
+            useCase(movie, recentViewedAt)
 
             // Then
             coVerify(exactly = 1) {
-                repository.setMovieRecent(movie = movie, isRecentViewed = isRecentViewed)
+                repository.setMovieRecent(movie = movie, recentViewedAt = recentViewedAt)
             }
         }
 }

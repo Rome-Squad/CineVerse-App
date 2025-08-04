@@ -1,13 +1,11 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -25,29 +23,17 @@ class GetUpcomingMoviesUseCaseTest {
     @Test
     fun `given upcoming movies, when invoke is called, then return movie list`() = runTest {
         // Given
-        val expectedMovies = listOf(
-            Movie(
-                id = 4,
-                title = "Avatar 3",
-                description = "The next Pandora adventure",
-                rating = 0.0f,
-                duration = null,
-                posterUrl = "https://example.com/avatar3.jpg",
-                backdropUrl = "https://example.com/avatar3.jpg",
-                youtubeVideoId = "abc123",
-                genresID = listOf(1, 4),
-                releaseYear = LocalDate(2025, 12, 20),
-                popularity = 0f
-            )
-        )
+        val expectedMovies = fakeMovies.filter { it.upcomingAt != null}
+        val page = 1
+        val limit = 1
 
-        coEvery { repository.getUpcomingMovies(1) } returns expectedMovies
+        coEvery { repository.getUpcomingMovies(page, limit) } returns expectedMovies
 
         // When
-        val actualMovies = useCase(1)
+        val actualMovies = useCase(page)
 
         // Then
-        coVerify(exactly = 1) { repository.getUpcomingMovies(1) }
+        coVerify(exactly = 1) { repository.getUpcomingMovies(page, limit) }
         assertThat(actualMovies).isEqualTo(expectedMovies)
     }
 }

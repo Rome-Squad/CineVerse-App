@@ -13,10 +13,7 @@ interface MoviesRepository {
 
     suspend fun addGenres(genres: List<Genre>)
 
-    suspend fun setMovieRecent(
-        movie: Movie,
-        isRecentViewed: Long
-    )
+    suspend fun setMovieRecent(movie: Movie, recentViewedAt: Long)
 
     suspend fun searchMovieByName(movieName: String, page: Int): List<Movie>
 
@@ -36,11 +33,11 @@ interface MoviesRepository {
 
     suspend fun getUserMovieRating(movieId: Int): Float
 
-    suspend fun getPopularityMovies(page: Int, limit: Int, useRemoteOnly: Boolean): List<Movie>
+    suspend fun getPopularityMovies(page: Int, limit: Int): List<Movie>
 
-    suspend fun getRecentlyReleasedMovies(page: Int, limit: Int, useRemoteOnly: Boolean): List<Movie>
+    suspend fun getRecentlyReleasedMovies(page: Int, limit: Int): List<Movie>
 
-    suspend fun getUpcomingMovies(page: Int): List<Movie>
+    suspend fun getUpcomingMovies(page: Int, limit: Int): List<Movie>
 
     suspend fun clearCache()
 

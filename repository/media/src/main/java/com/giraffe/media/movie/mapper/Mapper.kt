@@ -19,30 +19,34 @@ fun MovieGenreDto.toEntity() = Genre(
     rank = 0
 )
 
-fun MovieCacheDto.toEntity() = Movie(
-    id = id,
-    title = title,
-    description = overview,
-    rating = voteAverage,
-    duration = duration,
-    posterUrl = posterPath?.let {
-        if (it.contains(BASE_IMAGE_URL))
-            it
-        else BASE_IMAGE_URL + it
-    },
-    backdropUrl = backdropPath?.let {
-        if (it.contains(BASE_IMAGE_URL))
-            it else
-            BASE_IMAGE_URL + it
-    },
-    youtubeVideoId = youtubeVideoId.orEmpty(),
-    genresID = genresID,
-    popularity = popularity,
-    releaseYear = if (releaseDate.isNullOrEmpty())
-        null
-    else
-        LocalDate.parse(releaseDate)
-)
+fun MovieCacheDto.toEntity() =
+    Movie(
+        id = id,
+        title = title,
+        description = overview,
+        rating = voteAverage,
+        duration = duration,
+        posterUrl = posterPath?.let {
+            if (it.contains(BASE_IMAGE_URL))
+                it
+            else BASE_IMAGE_URL + it
+        },
+        backdropUrl = backdropPath?.let {
+            if (it.contains(BASE_IMAGE_URL))
+                it else
+                BASE_IMAGE_URL + it
+        },
+        youtubeVideoId = youtubeVideoId.orEmpty(),
+        genresID = genresID,
+        recentViewedAt = recentViewedAt,
+        recentReleasedAt = recentReleasedAt,
+        upcomingAt = upcomingAt,
+        popularity = popularity,
+        releaseYear = if (releaseDate.isNullOrEmpty())
+            null
+        else
+            LocalDate.parse(releaseDate)
+    )
 
 fun Movie.toCacheDto() = MovieCacheDto(
     id = id,
@@ -62,9 +66,16 @@ fun Movie.toCacheDto() = MovieCacheDto(
     releaseDate = releaseYear?.toString(),
     duration = duration,
     popularity = popularity,
+//    recentViewedAt = recentViewedAt,
+//    recentReleasedAt = recentReleasedAt,
+//    upcomingAt = upcomingAt,
 )
 
-fun MovieDto.toEntity() = Movie(
+fun MovieDto.toEntity(
+    recentViewedAt: Long? = null,
+    recentReleasedAt: Long? = null,
+    upcomingAt: Long? = null
+) = Movie(
     id = id,
     title = title.orEmpty(),
     description = overview.orEmpty(),
@@ -83,5 +94,8 @@ fun MovieDto.toEntity() = Movie(
     genresID = genresID.ifEmpty { genres.map { it.id } },
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
     youtubeVideoId = youtubeVideoId.orEmpty(),
+    recentViewedAt = recentViewedAt,
+    recentReleasedAt = recentReleasedAt,
+    upcomingAt = upcomingAt,
     popularity = popularity ?: 0f
 )
