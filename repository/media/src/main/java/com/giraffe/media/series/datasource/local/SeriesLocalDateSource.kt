@@ -17,10 +17,11 @@ interface SeriesLocalDateSource {
     suspend fun clearAllData()
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
     suspend fun getGenresByIDs(genreIds: List<Int>): List<SeriesGenreCacheDto>
-    suspend fun insertSeries(series: List<SeriesCacheDto>)
+    suspend fun insertPopularitySeries(series: List<SeriesCacheDto>)
     suspend fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
     suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>)
     suspend fun getRecentlyReleasedSeries(limit: Int): List<SeriesCacheDto>
+    suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>)
     suspend fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
     suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>)
     suspend fun getRecommendedSeries(limit: Int): List<SeriesCacheDto>

@@ -61,11 +61,9 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getGenresByIds(genreIds)
     }
 
-    override suspend fun insertSeries(series: List<SeriesCacheDto>) = safeCall {
-        if (series.isNotEmpty()) {
-            seriesDao.upsertSeries(series.map { seriesCacheDto ->
-                seriesCacheDto.copy(cachedAt = System.currentTimeMillis())
-            })
+    override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
+        upsertWithMerge(series) { old, new ->
+            old.copy(popularity = new.popularity)
         }
     }
 
@@ -73,14 +71,9 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getPopularitySeries(limit)
     }
 
-    override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) {
-        if (series.isNotEmpty()) {
-            seriesDao.upsertSeries(series.map { seriesCacheDto ->
-                seriesCacheDto.copy(
-                    recentlyReleased = System.currentTimeMillis(),
-                    cachedAt = System.currentTimeMillis()
-                )
-            })
+    override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) = safeCall {
+        upsertWithMerge(series) { old, _ ->
+            old.copy(recentlyReleased = System.currentTimeMillis())
         }
     }
 
@@ -88,18 +81,19 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getRecentlyReleasedSeries(limit)
     }
 
+    override suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>) = safeCall {
+        upsertWithMerge(series.map { it.copy(isTopRated = true) }) { old, _ ->
+            old.copy(isTopRated = true)
+        }
+    }
+
     override suspend fun getTopRatedSeries(limit: Int) = safeCall {
         seriesDao.getTopRatedSeries(limit)
     }
 
-    override suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>) {
-        if (series.isNotEmpty()) {
-            seriesDao.upsertSeries(series.map { seriesCacheDto ->
-                seriesCacheDto.copy(
-                    recommended = System.currentTimeMillis(),
-                    cachedAt = System.currentTimeMillis()
-                )
-            })
+    override suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>) = safeCall {
+        upsertWithMerge(series) { old, _ ->
+            old.copy(recommended = System.currentTimeMillis())
         }
     }
 
@@ -124,5 +118,21 @@ class SeriesRoomLocalDateSource @Inject constructor(
 
     override suspend fun getSeasonsForSeries(seriesId: Int): List<SeasonCacheDto> = safeCall {
         seriesDao.getSeasonsForSeries(seriesId)
+    }
+
+    private suspend fun upsertWithMerge(
+        series: List<SeriesCacheDto>,
+        merge: (old: SeriesCacheDto, new: SeriesCacheDto) -> SeriesCacheDto
+    ) {
+        if (series.isEmpty()) return
+
+        val existingMap = seriesDao.getSeriesByIds(series.map { it.id }).associateBy { it.id }
+
+        val merged = series.map { new ->
+            val old = existingMap[new.id]
+            if (old != null) merge(old, new) else new
+        }
+
+        seriesDao.upsertSeries(merged)
     }
 }

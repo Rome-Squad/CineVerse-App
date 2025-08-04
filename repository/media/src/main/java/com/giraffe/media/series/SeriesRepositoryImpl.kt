@@ -90,15 +90,13 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesLocalDateSource.insertGenres(genres.map(Genre::toCacheDto))
     }
 
-    override suspend fun addSeries(series: List<Series>) {
-        seriesLocalDateSource.insertSeries(series.map { it.toCacheDto() })
-    }
-
     override suspend fun getPopularitySeries(page: Int, limit: Int) = SafeCall {
         seriesLocalDateSource.getPopularitySeries(limit).map { it.toEntity() }.ifEmpty {
             seriesRemoteDataSource.getPopularitySeries(page).take(limit)
                 .map(SeriesDto::toEntity)
-                .also { addSeries(it) }
+                .also { series ->
+                    seriesLocalDateSource.insertPopularitySeries(series.map { it.toCacheDto() })
+                }
         }
     }
 
@@ -125,10 +123,8 @@ class SeriesRepositoryImpl @Inject constructor(
             seriesLocalDateSource.getTopRatedSeries(limit).map { it.toEntity() }.ifEmpty {
                 seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
                     .map(SeriesDto::toEntity)
-                    .also {
-                        seriesLocalDateSource.insertSeries(it.map {
-                            it.toCacheDto().copy(isTopRated = true)
-                        })
+                    .also { series ->
+                        seriesLocalDateSource.insertTopRatedSeries(series.map { it.toCacheDto() })
                     }
             }
         }
@@ -147,9 +143,7 @@ class SeriesRepositoryImpl @Inject constructor(
                 seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).take(limit)
                     .map(SeriesDto::toEntity)
                     .also { series ->
-                        seriesLocalDateSource.insertRecommendedSeries(series.map {
-                            it.toCacheDto()
-                        })
+                        seriesLocalDateSource.insertRecommendedSeries(series.map { it.toCacheDto() })
                     }
             }
         }

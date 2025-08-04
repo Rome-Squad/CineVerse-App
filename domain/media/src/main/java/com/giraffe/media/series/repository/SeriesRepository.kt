@@ -20,7 +20,6 @@ interface SeriesRepository {
     suspend fun getSeriesByGenre(genreId: Int, page: Int): List<Series>
     suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre>
     suspend fun addGenres(genres: List<Genre>)
-    suspend fun addSeries(series: List<Series>)
     suspend fun getPopularitySeries(page: Int, limit: Int): List<Series>
     suspend fun getRecentlyReleasedSeries(page: Int, limit: Int): List<Series>
     suspend fun getTopRatedSeries(page: Int, limit: Int): List<Series>
