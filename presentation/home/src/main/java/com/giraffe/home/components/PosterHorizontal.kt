@@ -56,6 +56,7 @@ fun PosterHorizontal(
             SafeIslamicImage(
                 imageUrl = poster.imageUri,
                 contentDescription = poster.name,
+                hasSensitiveText = false,
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(64.dp)
@@ -71,16 +72,16 @@ fun PosterHorizontal(
                         animatedVisibilityScope = animatedVisibilityScope
                     )
             )
-//            {
-//
-//                Icon(
-//                    painter = painterResource(Theme.icons.dueTone.image),
-//                    contentDescription = stringResource(R.string.loading_image),
-//                    modifier = Modifier.size(32.dp),
-//                    tint = Theme.color.brand.secondary
-//                )
-//
-//            }
+            {
+
+                Icon(
+                    painter = painterResource(Theme.icons.dueTone.image),
+                    contentDescription = stringResource(R.string.loading_image),
+                    modifier = Modifier.size(32.dp),
+                    tint = Theme.color.brand.secondary
+                )
+
+            }
 
 
             Column(
