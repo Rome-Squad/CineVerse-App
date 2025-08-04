@@ -7,10 +7,10 @@ import javax.inject.Inject
 class SetMovieRecentUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
-    suspend operator fun invoke(movie: Movie, isRecent: Boolean = true) {
+    suspend operator fun invoke(movie: Movie, isRecent: Long = System.currentTimeMillis()) {
         repository.setMovieRecent(
             movie = movie,
-            isRecent = isRecent
+            isRecentViewed = isRecent
         )
     }
 }

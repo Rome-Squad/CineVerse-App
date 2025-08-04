@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class GetRecentlyMoviesUseCaseTest {
+class GetRecentlyViewedMoviesUseCaseTest {
     private lateinit var repository: MoviesRepository
 
     @BeforeEach
@@ -57,13 +57,13 @@ class GetRecentlyMoviesUseCaseTest {
             )
         }
 
-        coEvery { repository.getRecentlyMovies() } returns expectedMovies
+        coEvery { repository.getRecentlyViewedMovies() } returns expectedMovies
 
-        val useCase = GetRecentlyMoviesUseCase(repository)
+        val useCase = GetRecentlyViewedMoviesUseCase(repository)
 
         val result = useCase()
 
-        coVerify { repository.getRecentlyMovies() }
+        coVerify { repository.getRecentlyViewedMovies() }
         assertThat(result).isEqualTo(expectedMovies)
 
     }

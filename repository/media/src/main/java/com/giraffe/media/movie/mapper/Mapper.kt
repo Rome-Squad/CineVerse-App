@@ -61,8 +61,7 @@ fun Movie.toCacheDto() = MovieCacheDto(
     genresID = genresID,
     releaseDate = releaseYear?.toString(),
     duration = duration,
-    isRecent = false,
-    popularity = popularity
+    popularity = popularity,
 )
 
 fun MovieDto.toEntity() = Movie(

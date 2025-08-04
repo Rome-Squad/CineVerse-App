@@ -2,13 +2,13 @@ package com.giraffe.media.movies.usecase
 
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetRecentlyMoviesUseCase @Inject constructor(
+class GetRecentlyViewedMoviesUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     operator fun invoke(): Flow<List<Movie>> {
-        return repository.getRecentlyMovies()
+        return repository.getRecentlyViewedMovies()
     }
 }

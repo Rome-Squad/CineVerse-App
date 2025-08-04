@@ -18,9 +18,9 @@ data class MovieCacheDto(
     val genresID: List<Int>,
     val releaseDate: String?,
     val duration: Int?,
-    val isRecent: Boolean,
+    val isRecentViewed: Long = 0L,
+    val recentReleasedAt: Long = 0L,
     val cachedAt: Long = System.currentTimeMillis(),
-    val page: Int = 0,
     val popularity: Float,
 )
 

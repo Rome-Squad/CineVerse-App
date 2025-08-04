@@ -7,6 +7,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {
 
+    suspend fun addRating(movieId: Int, ratingValue: Float)
+
+    suspend fun addMovies(movie: List<Movie>)
+
+    suspend fun addGenres(genres: List<Genre>)
+
+    suspend fun setMovieRecent(
+        movie: Movie,
+        isRecentViewed: Long
+    )
+
     suspend fun searchMovieByName(movieName: String, page: Int): List<Movie>
 
     suspend fun getMovieGenres(genreIds: List<Int>): List<Genre>
@@ -15,20 +26,7 @@ interface MoviesRepository {
 
     suspend fun getMoviesByGenre(genreId: Int, page: Int): List<Movie>
 
-    suspend fun addMovies(movie: List<Movie>)
-
-    suspend fun addGenres(genres: List<Genre>)
-
-    suspend fun setMovieRecent(
-        movie: Movie,
-        isRecent: Boolean
-    )
-
-    suspend fun clearCache()
-
-    fun getRecentlyMovies(): Flow<List<Movie>>
-
-    suspend fun clearRecentlyMovies()
+    fun getRecentlyViewedMovies(): Flow<List<Movie>>
 
     suspend fun getMovieDetails(movieId: Int): Movie
 
@@ -36,14 +34,16 @@ interface MoviesRepository {
 
     suspend fun getMovieReviews(movieId: Int): List<Review>
 
-    suspend fun addRating(movieId: Int, ratingValue: Float)
-
     suspend fun getUserMovieRating(movieId: Int): Float
 
-    suspend fun getPopularityMovies(page: Int, limit: Int): List<Movie>
+    suspend fun getPopularityMovies(page: Int, limit: Int, useRemoteOnly: Boolean): List<Movie>
 
-    suspend fun getRecentlyReleasedMovies(page: Int): List<Movie>
+    suspend fun getRecentlyReleasedMovies(page: Int, limit: Int, useRemoteOnly: Boolean): List<Movie>
 
     suspend fun getUpcomingMovies(page: Int): List<Movie>
+
+    suspend fun clearCache()
+
+    suspend fun clearRecentlyMovies()
 
 }

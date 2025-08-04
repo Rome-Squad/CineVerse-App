@@ -9,7 +9,7 @@ import com.giraffe.home.utils.toPosterUi
 import com.giraffe.media.exception.MediaException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
@@ -32,7 +32,7 @@ class MoviesListViewModel @Inject constructor(
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
@@ -117,7 +117,7 @@ class MoviesListViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetRecentMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyMoviesUseCase::invoke
+                block = getRecentlyViewedMoviesUseCase::invoke
             ).join()
             safeExecute(
                 onSuccess = ::onGetRecentSeriesSuccess,
@@ -157,7 +157,7 @@ class MoviesListViewModel @Inject constructor(
                 onSuccess = ::onGetRecommendedMoviesSuccess,
                 onError = ::onFail,
                 block = {
-                    getRecentlyMoviesUseCase().first().firstOrNull()?.id?.let { movieId ->
+                    getRecentlyViewedMoviesUseCase().first().firstOrNull()?.id?.let { movieId ->
                         getRecommendedMovieUseCase(movieId = movieId, page = 1)
                     } ?: emptyList()
                 }

@@ -9,7 +9,7 @@ import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.ClearRecentlyMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
@@ -30,7 +30,7 @@ class SearchViewModel @Inject constructor(
     private val insertSearchKeyword: AddSearchKeywordUseCase,
     private val deleteKeywordUseCase: DeleteKeywordUseCase,
     private val clearSearchHistory: ClearSearchHistoryUseCase,
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentSeriesUseCase: GetRecentSeriesUseCase,
     private val clearRecentSeriesUseCase: ClearRecentSeriesUseCase,
     private val clearRecentlyMoviesUseCase: ClearRecentlyMoviesUseCase,
@@ -51,7 +51,7 @@ class SearchViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyMoviesUseCase::invoke
+                block = getRecentlyViewedMoviesUseCase::invoke
             ).join()
             safeExecute(
                 onSuccess = ::onGetRecentlySeriesSuccess,
