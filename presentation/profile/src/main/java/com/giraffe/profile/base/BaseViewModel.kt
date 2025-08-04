@@ -2,6 +2,8 @@ package com.giraffe.profile.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.profile.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -83,6 +85,14 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
             _snackBar.emit(null)
         }
     }
+
+    protected fun mapErrorToResource(error: Throwable): Int {
+        return when (error) {
+            is NoInternetException -> R.string.error_network
+            else -> R.string.error_unknown
+        }
+    }
+
 
     companion object {
         const val SNACK_BAR_DURATION = 3000L

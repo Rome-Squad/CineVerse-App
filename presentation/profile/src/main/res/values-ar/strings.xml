@@ -21,7 +21,12 @@
     <string name="Version">الاصدار ١.٠.١</string>
     <string name="My_Profile">حسابى</string>
     <string name="settings_text">الأعدادات</string>
+    <string name="back">رجوع للنافذة السابقة</string>
     <string name="cancel">الغاء</string>
     <string name="create">انشاء</string>
-    <string name="profile_screen">جهه الملف الشخصية</string>
+    <string name="profile_screen">جهة الملف الشخصيوا</string>
+    <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
+    <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
+    <string name="screen_info">اسحب العنصر جهه اليسار ليتم حذفه</string>
+
 </resources>
