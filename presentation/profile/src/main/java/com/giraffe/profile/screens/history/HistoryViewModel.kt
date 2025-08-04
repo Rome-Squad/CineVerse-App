@@ -61,7 +61,7 @@ class HistoryViewModel @Inject constructor(
 
 
 
-    override fun onDeleteClicked(): () -> Unit = {
+    override fun onDeleteClicked(){
         val updatedList = state.value.mediaList.filter { poster ->
             poster.id != state.value.mediaList.firstOrNull()?.id
         }
@@ -77,5 +77,13 @@ class HistoryViewModel @Inject constructor(
     override fun onCloseClicked() {
         updateState { it.copy(isVisible = false) }    }
 
+    override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
+        when (mediaType) {
+            MediaType.MOVIE -> sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
+            MediaType.SERIES -> sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+        }
+    }
 
-}
+    }
+
+

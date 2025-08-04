@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -28,10 +29,38 @@ import com.giraffe.profile.history.composable.DeleteButton
 @Composable
 fun HistoryScreen(
     onBackClicked: () -> Unit = {},
+    navigateToMoviesDetailsScreen: (Int) -> Unit,
+    navigateToSeriesDetailsScreen: (Int) -> Unit,
+    navigateToExploreScreen: (Int) -> Unit,
+
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
 
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is HistoryEffect.NavigateToMovieDetails -> {
+                    navigateToMoviesDetailsScreen(effect.movieId)
+                }
+
+                is HistoryEffect.NavigateToSeriesDetails -> {
+                    navigateToSeriesDetailsScreen(effect.seriesId)
+                }
+
+
+                is HistoryEffect.navigateToExploreScreen -> {
+                    navigateToExploreScreen(effect.id)
+                }
+                is HistoryEffect.navigateToProfileScreen -> {
+                    onBackClicked()
+                }
+
+                is HistoryEffect.ShowError -> {}
+            }
+        }
+    }
     HistoryContent(
         state = state,
         onBackClicked = onBackClicked,
@@ -95,6 +124,7 @@ fun HistoryContentPreview() {
         override fun onDeleteClicked(): Unit = Unit
 
         override fun onCloseClicked() {}
+        override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
 
     }
     HistoryContent(
