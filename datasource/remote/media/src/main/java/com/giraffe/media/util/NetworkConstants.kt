@@ -20,4 +20,18 @@ object NetworkConstants {
     const val NEEDS_SESSION = "need_session_id"
     const val SESSION_ID = "session_id"
     const val VIDEOS_END_POINT = "videos"
+
+    //collections
+    const val COLLECTIONS_END_POINT = "lists"
+    const val COLLECTION_END_POINT = "list"
+    const val ADD_MOVIE_TO_COLLECTION = "add_item"
+    const val CLEAR_COLLECTION = "clear"
+    const val REMOVE_MOVIE_FROM_COLLECTION = "remove_item"
+    const val COLLECTION_ID_PATH = "collection_id"
+    const val CONFIRM_CLEAR_COLLECTION = "confirm"
+
+    //user
+    const val USER_END_POINT = "account"
+    const val ACCOUNT_ID_PATH = "account_id"
 }
+

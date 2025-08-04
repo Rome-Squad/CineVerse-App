@@ -22,38 +22,43 @@ class GetRecentlyReleasedSeriesUseCaseTest {
     }
 
     @Test
-    fun `given recently released series, when invoke is called, then return series list`() = runTest {
-        // Given
-        val expectedSeries = listOf(
-            Series(
-                id = 2,
-                name = "The Last of Us",
-                overview = "Survival in a post-apocalyptic world",
-                rating = 8.8f,
-                posterUrl = "https://example.com/tlou.jpg",
-                backdropUrl = "https://example.com/tlou.jpg",
-                genreIDs = listOf(3, 6),
-                releaseYear = "2023",
-                seasons = listOf(
-                    Season(
-                        id = 201,
-                        overview = "Joel and Ellie start their journey",
-                        rating = 8.7f,
-                        posterUrl = "https://example.com/s1tlou.jpg",
-                        seasonNumber = 1,
-                        releaseYear = "2023",
-                        episodeCount = 9
+    fun `given recently released series, when invoke is called, then return series list`() =
+        runTest {
+            val expectedSeries = listOf(
+                Series(
+                    id = 2,
+                    name = "The Last of Us",
+                    overview = "Survival in a post-apocalyptic world",
+                    rating = 8.8f,
+                    posterUrl = "https://example.com/tlou.jpg",
+                    backdropUrl = "https://example.com/tlou.jpg",
+                    genreIDs = listOf(3, 6),
+                    releaseYear = "2023",
+                    seasons = listOf(
+                        Season(
+                            id = 201,
+                            overview = "Joel and Ellie start their journey",
+                            rating = 8.7f,
+                            posterUrl = "https://example.com/s1tlou.jpg",
+                            seasonNumber = 1,
+                            releaseYear = "2023",
+                            episodeCount = 9
+                        )
                     )
                 )
             )
-        )
+            val page = 1
+            val limit = 10
 
-        coEvery { repository.getRecentlyReleasedSeries(1) } returns expectedSeries
+            coEvery {
+                repository.getRecentlyReleasedSeries(
+                    page = page,
+                    limit = limit
+                )
+            } returns expectedSeries
 
-        // When
-        val actualSeries = useCase(1)
+            val actualSeries = useCase(page = page, limit = limit)
 
-        // Then
-        assertThat(actualSeries).isEqualTo(expectedSeries)
-    }
+            assertThat(actualSeries).isEqualTo(expectedSeries)
+        }
 }

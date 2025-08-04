@@ -2,6 +2,9 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.createRetrofitClient
+import com.giraffe.media.collections.datasource.remote.CollectionsRemoteDataSource
+import com.giraffe.media.collections.retrofit.CollectionsApiServiceRetrofit
+import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImp
 import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
 import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.ExploreRemoteDataSourceImplRetrofit
@@ -16,7 +19,7 @@ import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
 import com.giraffe.media.util.NetworkInterceptor
 import com.giraffe.media.util.RetrofitRequestBuilder
-import com.giraffe.repository.datasource.local.AuthenticationRemoteDataSource
+import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
 import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpRetrofit
@@ -112,6 +115,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideCollectionsApi(retrofit: Retrofit): CollectionsApiServiceRetrofit =
+        retrofit.create(CollectionsApiServiceRetrofit::class.java)
+
+    @Provides
+    @Singleton
     fun provideMoviesRequestBuilder(api: MoviesApiServiceRetrofit): RetrofitRequestBuilder<MoviesApiServiceRetrofit> =
         RetrofitRequestBuilder(api)
 
@@ -134,6 +142,11 @@ object NetworkModule {
     @Singleton
     fun provideUserRequestBuilder(api: UserApiServiceRetrofit): RetrofitUserRequestBuilder<UserApiServiceRetrofit> =
         RetrofitUserRequestBuilder(api)
+
+    @Provides
+    @Singleton
+    fun provideCollectionsRequestBuilder(api: CollectionsApiServiceRetrofit): RetrofitRequestBuilder<CollectionsApiServiceRetrofit> =
+        RetrofitRequestBuilder(api)
 
     @Provides
     @Singleton
@@ -162,8 +175,14 @@ object NetworkModule {
     ): AuthenticationRemoteDataSource {
         return AuthenticationRemoteDataSourceImpRetrofit(builder)
     }
+
     @Provides
     @Singleton
     fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>): UserRemoteDataSource =
         UserRemoteDataSourceImplRetrofit(builder)
+
+    @Provides
+    @Singleton
+    fun provideCollectionsRemoteDataSource(builder: RetrofitRequestBuilder<CollectionsApiServiceRetrofit>): CollectionsRemoteDataSource =
+        CollectionsRemoteDataSourceImp(builder)
 }

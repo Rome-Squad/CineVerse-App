@@ -1,4 +1,5 @@
-package com.giraffe.repository.datasource.local
+package com.giraffe.repository.datasource.remote
+
 
 interface AuthenticationRemoteDataSource {
 
@@ -7,5 +8,6 @@ interface AuthenticationRemoteDataSource {
     suspend fun validateTokenWithLogin(token: String, user: String, pass: String): String
 
     suspend fun createSession(token: String): String
+
 
 }
