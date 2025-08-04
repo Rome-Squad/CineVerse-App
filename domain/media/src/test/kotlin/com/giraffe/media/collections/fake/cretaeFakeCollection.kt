@@ -7,12 +7,14 @@ fun createFakeCollection(
     id: Int = 1,
     name: String = "Favorites",
     description: String = "My favorite movies",
+    itemsCount: Int = 0,
     type: CollectionMediaType = CollectionMediaType.MOVIE
 ): Collection {
     return Collection(
         id = id,
         name = name,
         description = description,
+        itemsCount = itemsCount,
         type = type
     )
 }

@@ -12,6 +12,7 @@ fun CollectionDto.toEntity() = Collection(
     id = id,
     name = name,
     description = description,
+    itemsCount = itemsCount,
     type = type.toCollectionType()
 )
 

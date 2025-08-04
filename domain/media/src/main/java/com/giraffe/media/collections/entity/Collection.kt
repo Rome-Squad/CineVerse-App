@@ -4,6 +4,7 @@ data class Collection(
     val id: Int,
     val name: String,
     val description: String,
+    val itemsCount: Int,
     val type: CollectionMediaType = CollectionMediaType.MOVIE
 
 )
