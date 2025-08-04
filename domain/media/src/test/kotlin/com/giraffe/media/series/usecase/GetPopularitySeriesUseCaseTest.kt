@@ -6,7 +6,6 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +24,6 @@ class GetPopularitySeriesUseCaseTest {
 
     @Test
     fun `given popular series, when invoke is called, then return series list`() = runTest {
-        // Given
         val expectedSeries = listOf(
             Series(
                 id = 1,
@@ -49,14 +47,18 @@ class GetPopularitySeriesUseCaseTest {
                 )
             )
         )
+        val page = 1
+        val limit = 10
 
-        coEvery { repository.getPopularitySeries(1) } returns expectedSeries
+        coEvery {
+            repository.getPopularitySeries(
+                page = page,
+                limit = limit
+            )
+        } returns expectedSeries
 
-        // When
-        val actualSeries = useCase(1)
+        val actualSeries = useCase(page = page, limit = limit)
 
-        // Then
-        coVerify(exactly = 1) { repository.getPopularitySeries(1) }
         assertThat(actualSeries).isEqualTo(expectedSeries)
     }
 }

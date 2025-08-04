@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,9 +52,12 @@ fun CollectionItem(
                 imageUrl = collectionItemData.backgroundImageUrl,
                 contentDescription = stringResource(R.string.collection_item_image),
                 contentScale = ContentScale.Crop,
+                hasSensitiveText = false,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(Theme.radius.s))
+                    .offset(y = (-8).dp)
+                    .clip(RoundedCornerShape(Theme.radius.s)),
+                alignment = Alignment.TopCenter
             )
             Box(
                 modifier = Modifier

@@ -41,6 +41,7 @@ fun CastItem(
             imageUrl = imageUrl,
             contentDescription = name,
             contentScale = ContentScale.Crop,
+            hasSensitiveText = false,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
