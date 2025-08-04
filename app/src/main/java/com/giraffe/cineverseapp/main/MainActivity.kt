@@ -1,4 +1,4 @@
-package com.giraffe.cineverseapp.main_activity
+package com.giraffe.cineverseapp.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
