@@ -27,9 +27,10 @@
     <string name="collection_name_cannot_be_blank">اسم المجموعة لا يمكن أن يكون فارغ!</string>
     <string name="validation_error">خطأ: بيانات غير مسموحة!</string>
     <string name="collection_not_found">خطأ: لم نجد المجموعة!</string>
-    <string name="no_collections">No Collections</string>
-    <string name="no_collections_yet">No Collections Yet</string>
-    <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">Start building your personal library by saving movies or series you want to remember.</string>
-    <string name="start_collecting">Start collecting</string>
-    <string name="create_new_collection">Create new collection</string>
+    <string name="no_collections">لا يوجد مجموعات</string>
+    <string name="no_collections_yet">لا يوجد مجموعات بعد</string>
+    <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">ابدأ ببناء مكتبتك و حفظ الأفلام اللتي تريد تذكرها</string>
+    <string name="start_collecting">ابدأ بالتصفح</string>
+    <string name="create_new_collection">انشاء مجموعة جديدة</string>
+    <string name="collection_name">اسم المجموعة</string>
 </resources>

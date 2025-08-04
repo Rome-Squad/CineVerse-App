@@ -18,5 +18,6 @@ fun Collection.toUi() = CollectionUi(
 fun CollectionUi.toEntity() = Collection(
     id = id,
     name = name,
+    itemsCount = itemCount,
     description = description
 )

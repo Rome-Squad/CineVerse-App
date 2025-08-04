@@ -59,6 +59,14 @@ class MyCollectionsViewModel @Inject constructor(
         sendEffect(MyCollectionsEffect.NavigateToCollection(collection.toEntity()))
     }
 
+    override fun onNewCollectionNameChange(newCollectionName: String) {
+        updateState {
+            it.copy(
+                newCollectionName = newCollectionName
+            )
+        }
+    }
+
     override fun onCreateNewCollectionClick() {
         updateState {
             it.copy(

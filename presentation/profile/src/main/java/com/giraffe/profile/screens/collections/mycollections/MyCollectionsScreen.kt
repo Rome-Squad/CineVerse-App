@@ -26,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.CollectionItem
 import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.media.collections.entity.Collection
+import com.giraffe.profile.createcollection.CreateCollectionContent
 import com.giraffe.profile.screens.collections.mycollections.components.NoCollectionsPlaceholder
 import com.giraffe.profile.utils.EffectListener
 
@@ -50,16 +52,19 @@ fun MyCollectionsScreen(
     EffectListener(
         events = viewModel.effect
     ) { effect ->
-        when(effect) {
+        when (effect) {
             MyCollectionsEffect.NavigateBack -> {
                 navigateBack()
             }
+
             is MyCollectionsEffect.NavigateToCollection -> {
                 navigateToCollection(effect.collection)
             }
+
             MyCollectionsEffect.NavigateToExplore -> {
                 navigateToExploreScreen()
             }
+
             is MyCollectionsEffect.ShowError -> {
                 //TODO
             }
@@ -130,7 +135,7 @@ private fun MyCollectionsScreenContent(
                                 }
                             ),
                         text = collection.name,
-                        description = collection.description,
+                        description = "collection.description",
                         icon = R.drawable.due_tone_folder
                     )
                 }
@@ -143,17 +148,16 @@ private fun MyCollectionsScreenContent(
                 .padding(24.dp)
                 .size(56.dp)
                 .align(Alignment.BottomEnd)
-                .background(Theme.color.brand.primary)
+                .clip(
+                    shape = RoundedCornerShape(Theme.radius.lg)
+                )
                 .clickable(
                     onClick = {
                         interactions.onCreateNewCollectionClick()
                     }
                 )
-                .clip(
-                    shape = RoundedCornerShape(Theme.radius.lg)
-                ),
+                .background(Theme.color.brand.primary),
             contentAlignment = Alignment.Center
-
         ) {
             Icon(
                 painter = painterResource(Theme.icons.outline.add),
@@ -163,6 +167,27 @@ private fun MyCollectionsScreenContent(
                 tint = Theme.color.button.onPrimary
             )
         }
+
+        // add bottom sheet
+        BaseBottomSheet(
+            isVisible = state.isCreateNewCollectionBottomSheetVisible,
+            onDismiss = interactions::onDismissCreateNewCollectionBottomSheet,
+            content = {
+                CreateCollectionContent(
+                    startIcon = R.drawable.outline_folder,
+                    hintText = stringResource(
+                        id = com.giraffe.profile.R.string.collection_name
+                    ),
+                    value = state.newCollectionName,
+                    title = stringResource(
+                        id = com.giraffe.profile.R.string.collection_name
+                    ),
+                    onValueChange = interactions::onNewCollectionNameChange,
+                    createButtonClick = interactions::onConfirmCreateNewCollectionClick,
+                    cancelButtonClick = interactions::onDismissCreateNewCollectionBottomSheet
+                )
+            }
+        )
     }
 
 
