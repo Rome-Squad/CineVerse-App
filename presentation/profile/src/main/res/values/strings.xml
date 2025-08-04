@@ -21,6 +21,7 @@
     <string name="error_network">Please check your internet connection.</string>
     <string name="error_unknown">Something went wrong. Please try again later.</string>
     <string name="profile_screen">Profile Screen</string>
+    <string name="screen_info">Tip: Swipe left to remove movies from your history.</string>
 
 
 </resources>

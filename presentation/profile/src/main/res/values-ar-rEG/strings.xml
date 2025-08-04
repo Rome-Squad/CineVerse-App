@@ -21,5 +21,6 @@
     <string name="profile_screen">جهة الملف الشخصيوا</string>
     <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
     <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
+    <string name="screen_info">اسحب العنصر جهه اليسار ليتم حذفه</string>
 
 </resources>

@@ -24,7 +24,7 @@ import kotlin.math.roundToInt
 
 
 @Composable
- fun SwappableItem(
+ fun SwipableItem(
     modifier: Modifier = Modifier,
     actionButton: @Composable BoxScope.() -> Unit,
     onExpanded: () -> Unit = {},

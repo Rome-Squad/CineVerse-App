@@ -25,7 +25,7 @@ import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.profile.components.SwappableItem
+import com.giraffe.profile.components.SwipableItem
 
 @Composable
 fun RatedMovie(
@@ -43,7 +43,7 @@ fun RatedMovie(
             rate = poster.rating.toDouble(),
             date = poster.date ?: "--- --, 20--"
         )
-        SwappableItem(
+        SwipableItem(
             actionButton = { DeleteButton(onDeleteClick = onDeleteClick) },
         ) {
             PosterItemHorizontal(
@@ -75,70 +75,6 @@ fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) 
         )
     }
 }
-/*
-@Composable
-private fun SwipableItem(
-    modifier: Modifier = Modifier,
-    actionButton: @Composable BoxScope.() -> Unit,
-    onExpanded: () -> Unit = {},
-    onCollapsed: () -> Unit = {},
-    content: @Composable () -> Unit,
-) {
-    var cardWidth by remember { mutableFloatStateOf(0f) }
-    val offset = remember { Animatable(0f) }
-    val scope = rememberCoroutineScope()
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-    ) {
-        Box(
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .onSizeChanged {
-                    cardWidth = it.width.toFloat()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            actionButton()
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset { IntOffset(-offset.value.roundToInt(), 0) }
-                .pointerInput(true) {
-                    detectHorizontalDragGestures(
-                        onHorizontalDrag = { _, dragAmount ->
-                            scope.launch {
-                                val newOffset = (offset.value - dragAmount).coerceIn(0f, cardWidth)
-                                offset.snapTo(newOffset)
-                            }
-                        },
-                        onDragEnd = {
-                            when {
-                                offset.value >= cardWidth / 2f -> {
-                                    scope.launch {
-                                        offset.animateTo(cardWidth)
-                                        onExpanded()
-                                    }
-                                }
-
-                                else -> {
-                                    scope.launch {
-                                        offset.animateTo(0f)
-                                        onCollapsed()
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
-        ) {
-            content()
-        }
-    }
-}
-*/
 @Composable
 private fun RateSection(modifier: Modifier = Modifier, rate: Double, date: String) {
     Row(

@@ -2,7 +2,6 @@ package com.giraffe.profile.screens.history
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,22 +21,23 @@ import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.profile.components.SwappableItem
+import com.giraffe.profile.R
+import com.giraffe.profile.components.SwipableItem
 import com.giraffe.profile.history.composable.DeleteButton
 
 @Composable
 fun HistoryScreen(
     onBackClicked: () -> Unit = {},
-    viewModel: HistoryViewModel= hiltViewModel()
+    viewModel: HistoryViewModel = hiltViewModel()
 ) {
 
-val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
     HistoryContent(
         state = state,
         onBackClicked = onBackClicked,
         historyInteractionListener = viewModel,
 
-    )
+        )
 }
 
 @Composable
@@ -45,14 +46,14 @@ fun HistoryContent(
     onBackClicked: () -> Unit,
     historyInteractionListener: HistoryInteractionListener
 ) {
-    LazyColumn (
+    LazyColumn(
         modifier = Modifier
             .background(Theme.color.background.screen)
             .fillMaxSize()
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        item {
+        stickyHeader {
             AppBar(
                 title = state.historyListTitle,
                 showBackButton = true,
@@ -62,7 +63,7 @@ fun HistoryContent(
 
         item {
             InfoCard(
-                description = "Tip: Swipe left to remove movies from your history.",
+                description = stringResource(R.string.screen_info),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp),
@@ -71,8 +72,12 @@ fun HistoryContent(
         }
 
         items(state.mediaList) { poster ->
-            SwappableItem(
-                actionButton = { DeleteButton(onDeleteClick = historyInteractionListener.onDeleteClicked()) },
+            SwipableItem(
+                actionButton = {
+                    DeleteButton(
+                        onDeleteClick = historyInteractionListener::onDeleteClicked
+                    )
+                },
             ) {
                 PosterItemHorizontal(
                     modifier = Modifier.fillMaxWidth(),
@@ -87,7 +92,7 @@ fun HistoryContent(
 @Composable
 fun HistoryContentPreview() {
     val historyInteractionListener = object : HistoryInteractionListener {
-        override fun onDeleteClicked(): () -> Unit = { /* Handle delete action */ }
+        override fun onDeleteClicked(): Unit = Unit
 
         override fun onCloseClicked() {}
 
@@ -116,7 +121,7 @@ fun HistoryContentPreview() {
                     id = 3,
                     name = "Movie 1",
                     imageUri = "https://example.com/movie1.jpg",
-                    rating = 2f,  mediaTypeOfPoster = "Movie",
+                    rating = 2f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
                 ),
