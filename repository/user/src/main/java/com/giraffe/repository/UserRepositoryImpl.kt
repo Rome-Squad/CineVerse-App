@@ -1,9 +1,9 @@
 package com.giraffe.repository
 
-import android.util.Log
 import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.repository.datasource.mapper.toEntity
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
+import com.giraffe.repository.exceptions.InvalidIdDataException
 import com.giraffe.repository.utils.SafeCall
 import com.giraffe.user.entity.User
 import com.giraffe.user.repository.UserRepository
@@ -15,8 +15,11 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override suspend fun getUser(): User = SafeCall {
         val sessionId = localDataSource.getSessionId()
-        val userDto = userRemoteDataSource.getUser(sessionId.toString())
-        Log.d("AccountDetails", "Account Details DTO received: $userDto")
-        userDto.toEntity()
+        if (!localDataSource.isLoggedIn()) {
+            throw InvalidIdDataException()
+        }
+        val userResponse = userRemoteDataSource.getUser(sessionId.toString())
+        localDataSource.saveAccountId(userResponse.id)
+        userResponse.toEntity()
     }
 }
