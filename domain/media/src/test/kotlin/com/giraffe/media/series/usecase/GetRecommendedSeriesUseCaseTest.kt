@@ -26,7 +26,13 @@ class GetRecommendedSeriesUseCaseTest {
             fakeSeries(id = 3, name = "Series 3")
         )
 
-        coEvery { seriesRepository.getRecommendedSeries(any(), any()) } returns recommendedSeries
+        coEvery {
+            seriesRepository.getRecommendedSeries(
+                any(),
+                any(),
+                any()
+            )
+        } returns recommendedSeries
 
         val result = getRecommendedSeriesUseCase(1, 1)
         assertThat(result).isEqualTo(recommendedSeries)

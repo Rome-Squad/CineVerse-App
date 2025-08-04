@@ -2,13 +2,13 @@ package com.giraffe.media.series
 
 import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
-import com.giraffe.media.series.datasource.remote.dto.SeriesDto
-import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
+import com.giraffe.media.series.datasource.remote.dto.SeriesDto
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -146,7 +146,7 @@ class SeriesRepositoryImplTest {
 
         assertThat(result).hasSize(1)
         assertThat(result.first().title).isEqualTo("Action")
-        coVerify { local.saveGenres(match { it.first().id == 1 }) }
+        coVerify { local.insertGenres(match { it.first().id == 1 }) }
     }
 
     @Test
