@@ -91,7 +91,7 @@ class HomeViewModel @Inject constructor(
             onSuccess = ::onLoadHomeContentSuccess
         ) {
             val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
-            val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1) }
+            val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1, limit = 10) }
             val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
             val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
 

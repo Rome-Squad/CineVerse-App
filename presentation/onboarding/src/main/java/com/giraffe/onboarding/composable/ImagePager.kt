@@ -1,4 +1,4 @@
-package com.giraffe.onboarding
+package com.giraffe.onboarding.composable
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateDpAsState
