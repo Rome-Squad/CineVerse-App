@@ -9,6 +9,7 @@ data class HistoryUiState(
     val mediaList: List<Poster> = emptyList(),
     val historyListTitle: String = "",
     val isSwiped: Boolean = false,
-    val errorMsgRes:Int? = null
+    val errorMsgRes:Int? = null,
+    val isVisible: Boolean = false
 )
 

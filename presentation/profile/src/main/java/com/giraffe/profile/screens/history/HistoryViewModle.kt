@@ -1,36 +1,36 @@
 package com.giraffe.profile.screens.history
 
-import androidx.lifecycle.viewModelScope
-import com.giraffe.media.exception.NoInternetException
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
-import com.giraffe.profile.R
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.utils.toPosterUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
-class HistoryViewModel @Inject constructor(private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
-                                           private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
-):
-    BaseViewModel<HistoryScreenUiStateUiState, HistoryEffect>(initialState = HistoryScreenUiStateUiState()),HistoryInteractionListener{
+class HistoryViewModel @Inject constructor(
+    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+) :
+    BaseViewModel<HistoryUiState, HistoryEffect>(initialState = HistoryUiState()),
+    HistoryInteractionListener {
 
     init {
-        getRecentViewed()
+        getRecentViewedMovies()
+        getRecentViewedSeries()
     }
 
-    private fun getRecentViewed() {
+    private fun getRecentViewedMovies() {
         safeCollect(
             onEmitNewValue = ::onGetRecentMoviesSuccess,
             onError = ::onFail
         ) { getRecentlyMoviesUseCase.invoke() }
+    }
 
+    private fun getRecentViewedSeries() {
         safeCollect(
             onEmitNewValue = ::onGetRecentSeriesSuccess,
             onError = ::onFail
@@ -45,7 +45,7 @@ class HistoryViewModel @Inject constructor(private val getRecentlyMoviesUseCase:
         updateMediaList(seriesList.map(Series::toPosterUi))
     }
 
-    private fun updateMediaList(newMediaList: List<PosterUiState>) {
+    private fun updateMediaList(newMediaList: List<Poster>) {
         updateState {
             it.copy(
                 isLoading = false,
@@ -59,21 +59,23 @@ class HistoryViewModel @Inject constructor(private val getRecentlyMoviesUseCase:
         updateState { it.copy(isLoading = false, errorMsgRes = mapErrorToResource(error)) }
     }
 
-    private fun mapErrorToResource(error: Throwable): Int {
-        return when (error) {
-            is NoInternetException -> com.giraffe.profile.R.string.error_network
-            else -> com.giraffe.profile.R.string.error_unknown
+
+
+    override fun onDeleteClicked(): () -> Unit = {
+        val updatedList = state.value.mediaList.filter { poster ->
+            poster.id != state.value.mediaList.firstOrNull()?.id
+        }
+
+        updateState {
+            it.copy(
+                mediaList = updatedList,
+                isSwiped = false
+            )
         }
     }
 
-
-    override fun onSwipedToLeft() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onExitClicked() {
-        TODO("Not yet implemented")
-    }
+    override fun onCloseClicked() {
+        updateState { it.copy(isVisible = false) }    }
 
 
 }
