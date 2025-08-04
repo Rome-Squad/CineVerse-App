@@ -22,6 +22,7 @@ object NetworkConstants {
     const val VIDEOS_END_POINT = "videos"
 
     //collections
+    const val COLLECTIONS_END_POINT = "lists"
     const val COLLECTION_END_POINT = "list"
     const val ADD_MOVIE_TO_COLLECTION = "add_item"
     const val CLEAR_COLLECTION = "clear"

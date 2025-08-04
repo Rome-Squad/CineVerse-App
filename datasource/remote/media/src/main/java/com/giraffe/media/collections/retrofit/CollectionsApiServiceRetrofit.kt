@@ -9,6 +9,7 @@ import com.giraffe.media.collections.response.DefaultResponse
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
 import com.giraffe.media.util.NetworkConstants.ADD_MOVIE_TO_COLLECTION
 import com.giraffe.media.util.NetworkConstants.CLEAR_COLLECTION
+import com.giraffe.media.util.NetworkConstants.COLLECTIONS_END_POINT
 import com.giraffe.media.util.NetworkConstants.COLLECTION_END_POINT
 import com.giraffe.media.util.NetworkConstants.COLLECTION_ID_PATH
 import com.giraffe.media.util.NetworkConstants.CONFIRM_CLEAR_COLLECTION
@@ -25,7 +26,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CollectionsApiServiceRetrofit {
-    @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$COLLECTION_END_POINT")
+    @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$COLLECTIONS_END_POINT")
     suspend fun getCollections(
         @Path(ACCOUNT_ID_PATH) accountId: Int
     ): Response<CollectionsResponse>
