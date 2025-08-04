@@ -2,7 +2,7 @@ package com.giraffe.home.screen.home
 
 
 data class HomeScreenUiState(
-    val userName: String = "Guest",
+    val userName: String = "",
     val matchVibes: List<HomeUiModel> = emptyList(),
     val popularity: List<PopularMediaUiModel> = emptyList(),
     val recentlyReleased: List<HomeUiModel> = emptyList(),
