@@ -83,4 +83,10 @@ interface SeriesDao {
 
     @Query("SELECT * FROM $SERIES_TABLE ORDER BY popularity DESC LIMIT :limit")
     fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
+
+    @Query("SELECT * FROM $SERIES_TABLE ORDER BY recentlyReleased LIMIT :limit")
+    fun getRecentlyReleasedSeries(limit: Int): List<SeriesCacheDto>
+
+    @Upsert
+    suspend fun upsertSeries(series: List<SeriesCacheDto>)
 }
