@@ -1,4 +1,4 @@
-package com.giraffe.onboarding.composable
+package com.giraffe.authentication.onboarding.composable
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,9 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.giraffe.authentication.onboarding.screen.OnBoardingPage
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.onboarding.screen.OnBoardingPage
 
 @Composable
 fun AnimatedPageText(page: OnBoardingPage) {

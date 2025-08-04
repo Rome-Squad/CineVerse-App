@@ -1,9 +1,9 @@
-package com.giraffe.onboarding.screen
+package com.giraffe.authentication.onboarding.screen
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.onboarding.R
+import com.giraffe.authentication.R
 import com.giraffe.user.exception.UnknownException
 import com.giraffe.user.exception.UserException
 import com.giraffe.user.usecase.SetOnBoardingFirstTimeUseCase

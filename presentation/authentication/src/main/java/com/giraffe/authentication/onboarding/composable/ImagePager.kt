@@ -1,4 +1,4 @@
-package com.giraffe.onboarding.composable
+package com.giraffe.authentication.onboarding.composable
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.AnimationSpec
@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
+import com.giraffe.authentication.R
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.onboarding.R
 import kotlin.math.absoluteValue
 
 @SuppressLint("ConfigurationScreenWidthHeight")

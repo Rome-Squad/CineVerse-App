@@ -1,4 +1,4 @@
-package com.giraffe.onboarding.screen
+package com.giraffe.authentication.onboarding.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.giraffe.authentication.R
+import com.giraffe.authentication.onboarding.composable.ImagePager
+import com.giraffe.authentication.onboarding.composable.OnBoardingFooter
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.onboarding.R
-import com.giraffe.onboarding.composable.ImagePager
-import com.giraffe.onboarding.composable.OnBoardingFooter
 
 @Composable
 fun OnBoardingScreen(

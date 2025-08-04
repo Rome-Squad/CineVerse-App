@@ -1,4 +1,4 @@
-package com.giraffe.onboarding.composable
+package com.giraffe.authentication.onboarding.composable
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -27,10 +27,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.giraffe.authentication.R
+import com.giraffe.authentication.onboarding.screen.OnBoardingPage
+import com.giraffe.authentication.onboarding.screen.OnboardingInteractionListener
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.onboarding.R
-import com.giraffe.onboarding.screen.OnBoardingPage
-import com.giraffe.onboarding.screen.OnboardingInteractionListener
+
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
