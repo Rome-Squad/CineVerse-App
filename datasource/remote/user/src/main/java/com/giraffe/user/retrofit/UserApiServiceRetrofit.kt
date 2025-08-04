@@ -22,12 +22,14 @@ interface UserApiServiceRetrofit {
     @POST(SESSION_NEW)
     suspend fun createSession(@Body requestBody: SessionRequestBody): Response<SessionResponse>
 
-    @GET("account")
-    suspend fun getUser(@Query("session_id") sessionId: String): Response<UserDto>
+    @GET(ACCOUNT)
+    suspend fun getUser(@Query(SESSION_ID) sessionId: String): Response<UserDto>
 
     companion object {
         private const val AUTHENTICATION = "authentication"
         const val TOKEN_NEW = "$AUTHENTICATION/token/new"
+        const val ACCOUNT = "account"
+        const val SESSION_ID = "session_id"
         const val VALIDATE_WITH_LOGIN = "$AUTHENTICATION/token/validate_with_login"
         const val SESSION_NEW = "$AUTHENTICATION/session/new"
     }
