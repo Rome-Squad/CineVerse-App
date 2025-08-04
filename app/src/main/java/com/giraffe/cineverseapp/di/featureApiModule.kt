@@ -13,7 +13,7 @@ import com.giraffe.match.navigation.MatchApiImp
 import com.giraffe.onboarding.nav.OnBoardingApiImp
 import com.giraffe.profile.ProfileApi
 import com.giraffe.profile.navigation.ProfileApiImp
-import com.giraffee.onboarding.OnBoardingApi
+import com.giraffe.onboarding.OnBoardingApi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

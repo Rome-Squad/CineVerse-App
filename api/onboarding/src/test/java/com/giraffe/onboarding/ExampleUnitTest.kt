@@ -1,4 +1,4 @@
-package com.giraffee.onboarding
+package com.giraffe.onboarding
 
 import org.junit.Test
 

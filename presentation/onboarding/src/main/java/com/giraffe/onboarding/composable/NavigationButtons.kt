@@ -110,7 +110,7 @@ fun NavigationButtons(
                     coroutineScope.launch {
                         if (!isLastPage) {
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                        } else {
+                        }else{
                             interaction.markOnboardingComplete()
                         }
                     }
