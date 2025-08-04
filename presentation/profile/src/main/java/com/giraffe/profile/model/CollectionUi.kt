@@ -5,7 +5,8 @@ import com.giraffe.media.collections.entity.Collection
 data class CollectionUi(
     val id: Int = 0,
     val name: String = "",
-    val description: String = ""
+    val itemCount: Int = 0,
+    val description: String = "",
 )
 
 fun Collection.toUi() = CollectionUi(

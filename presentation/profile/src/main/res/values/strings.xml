@@ -25,5 +25,10 @@
     <string name="collection_name_cannot_be_blank">Collection name cannot be blank</string>
     <string name="validation_error">Validation Error!</string>
     <string name="collection_not_found">Collection not found!</string>
+    <string name="no_collections">No Collections</string>
+    <string name="no_collections_yet">No Collections Yet</string>
+    <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">Start building your personal library by saving movies or series you want to remember.</string>
+    <string name="start_collecting">Start collecting</string>
+    <string name="create_new_collection">Create new collection</string>
 
 </resources>
