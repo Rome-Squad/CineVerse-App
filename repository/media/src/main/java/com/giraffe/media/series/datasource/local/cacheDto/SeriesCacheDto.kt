@@ -21,7 +21,7 @@ data class SeriesCacheDto(
     val popularity: Double = 0.0,
     val recentlyReleased: Long = 0,
     val isTopRated: Boolean = false,
-    val isPopularity: Boolean = false,
+    val recommended: Long = 0,
     val cachedAt: Long = System.currentTimeMillis(),
     val page: Int = 0
 )

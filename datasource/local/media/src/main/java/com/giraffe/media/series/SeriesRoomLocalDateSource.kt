@@ -92,6 +92,22 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getTopRatedSeries(limit)
     }
 
+    override suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>) {
+        if (series.isNotEmpty()) {
+            seriesDao.upsertSeries(series.map { seriesCacheDto ->
+                seriesCacheDto.copy(
+                    recommended = System.currentTimeMillis(),
+                    cachedAt = System.currentTimeMillis()
+                )
+            })
+        }
+    }
+
+    override suspend fun getRecommendedSeries(limit: Int) = safeCall {
+        seriesDao.getRecommendedSeries(limit)
+    }
+
+
     override suspend fun getRecentSeries() = safeFlow {
         seriesDao.getRecentSeries()
     }

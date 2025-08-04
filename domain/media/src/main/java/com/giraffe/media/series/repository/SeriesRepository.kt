@@ -14,7 +14,7 @@ interface SeriesRepository {
     suspend fun getRecentSeries(): Flow<List<Series>>
     suspend fun clearRecentSeries()
     suspend fun getSeriesDetails(seriesId: Int): Series
-    suspend fun getRecommendedSeries(seriesId: Int, page: Int): List<Series>
+    suspend fun getRecommendedSeries(seriesId: Int, page: Int, limit: Int): List<Series>
     suspend fun getSeriesReviews(seriesId: Int, page: Int = 1): List<Review>
     suspend fun getSeasonOfSeries(seriesId: Int): List<Season>
     suspend fun getSeriesByGenre(genreId: Int, page: Int): List<Series>
