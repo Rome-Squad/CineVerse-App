@@ -53,7 +53,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = true,
                     onSwitchChange = {},
                     hasButton = false,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = false,
                     hasBottomDivider = true,
                 )
@@ -63,7 +63,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = false,
                     onSwitchChange = {},
                     hasButton = true,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = false,
                     hasBottomDivider = true,
                 )
@@ -73,7 +73,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = false,
                     onSwitchChange = {},
                     hasButton = true,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = false,
                     hasBottomDivider = true,
                 )
@@ -83,7 +83,7 @@ fun SettingsSectionPreview() {
                     hasSwitch = false,
                     onSwitchChange = {},
                     hasButton = true,
-                    onButtonClick = {},
+                    onRowItemClick = {},
                     isDanger = true,
                     hasBottomDivider = false,
                 )

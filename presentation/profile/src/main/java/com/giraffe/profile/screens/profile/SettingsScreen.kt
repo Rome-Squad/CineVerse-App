@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +38,7 @@ fun SettingsContent(
         modifier = modifier
             .fillMaxSize()
             .background(color = Theme.color.background.screen)
-            .systemBarsPadding(),
+            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AppBar(
@@ -57,7 +57,7 @@ fun SettingsContent(
                 .background(
                     color = Theme.color.background.screen
                 ),
-            userProfileImage = "",
+            userProfileImage = R.drawable.reviewr_image,
             userDisplayName = "hamada rayyan",
             username = "hamada_rayyan"
         ) {
@@ -80,7 +80,7 @@ fun SettingsContent(
                 hasSwitch = true,
                 onSwitchChange = {},
                 hasButton = false,
-                onButtonClick = {},
+                onRowItemClick = {},
                 isDanger = false,
                 hasBottomDivider = true,
             )
@@ -90,7 +90,7 @@ fun SettingsContent(
                 hasSwitch = false,
                 onSwitchChange = {},
                 hasButton = true,
-                onButtonClick = {},
+                onRowItemClick = {},
                 isDanger = false,
                 hasBottomDivider = true,
             )
@@ -100,7 +100,7 @@ fun SettingsContent(
                 hasSwitch = false,
                 onSwitchChange = {},
                 hasButton = true,
-                onButtonClick = {},
+                onRowItemClick = {},
                 isDanger = true,
                 hasBottomDivider = false,
             )
