@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.giraffe.onboarding.R
 import com.giraffe.user.exception.UnknownException
 import com.giraffe.user.exception.UserException
-import com.giraffe.user.usecase.IsOnBoardingFirstTimeUseCase
 import com.giraffe.user.usecase.SetOnBoardingFirstTimeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +23,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val isOnBoardingFirstTimeUseCase: IsOnBoardingFirstTimeUseCase,
     private val setOnBoardingFirstTimeUseCase: SetOnBoardingFirstTimeUseCase
 ) : ViewModel(), OnboardingInteractionListener {
     private val _state = MutableStateFlow(OnboardingUiState())
@@ -33,41 +31,25 @@ class OnboardingViewModel @Inject constructor(
     private val _effect = Channel<OnboardingEffect>()
     val effect = _effect.receiveAsFlow()
 
-    override fun checkIfFirstTime() {
-        safeExecute(
-            onSuccess = { result ->
-                _state.value = _state.value.copy(
-                    isFirstTime = result,
-                    isError = false
-                )
-            },
-            onError = { effect ->
-                _state.value = _state.value.copy(isError = true)
-                sendEffect(effect)
-            }
-        ) {
-            isOnBoardingFirstTimeUseCase()
-        }
-    }
 
     override fun markOnboardingComplete() {
         safeExecute(
-            onSuccess = {
-                _state.value = _state.value.copy(isError = false)
-                sendEffect(OnboardingEffect.NavigateToLogin)
-            },
-            onError = { effect ->
-                _state.value = _state.value.copy(isError = true)
-                sendEffect(effect)
-            }
+            onSuccess = completeOnboardingSuccess,
+            onError = completeOnboardingError
         ) {
             setOnBoardingFirstTimeUseCase()
         }
     }
 
-    override fun navigateToLoginScreen() {
+    private val completeOnboardingError: suspend (OnboardingEffect) -> Unit = { effect ->
+        _state.value = _state.value.copy(isError = true)
+        sendEffect(effect)
+    }
+    private val completeOnboardingSuccess: suspend (Unit) -> Unit = {
+        _state.value = _state.value.copy(isError = false)
         sendEffect(OnboardingEffect.NavigateToLogin)
     }
+
 
     private inline fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,
