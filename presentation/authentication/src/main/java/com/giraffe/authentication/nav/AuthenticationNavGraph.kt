@@ -10,14 +10,15 @@ import com.giraffe.authentication.resetpassword.resetPasswordRoute
 import com.giraffe.authentication.signup.webViewRoute
 import com.giraffe.home.HomeApi
 
+
 @Composable
 internal fun AuthenticationNavGraph(
     navController: NavHostController,
-    homeApi: HomeApi
+    homeApi: HomeApi,
 ) {
     NavHost(
         navController = navController,
-        startDestination = LoginRoute(),
+        startDestination = LoginRoute()
     ) {
         webViewRoute(navController)
 

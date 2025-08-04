@@ -23,6 +23,7 @@
     <string name="english">English</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+    <string name="back">Back Icon</string>
     <string name="profile_screen">Profile Screen</string>
     <string name="screen_info">Tip: Swipe left to remove movies from your history.</string>
     <string name="error_network">Please check your internet connection.</string>
