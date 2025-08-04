@@ -57,6 +57,9 @@ interface SeriesDao {
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
     suspend fun getAllGenres(): List<SeriesGenreCacheDto>
 
+    @Query("SELECT * FROM $SERIES_GENRE_TABLE  WHERE id IN (:genreIds)")
+    suspend fun getGenresByIds(genreIds: List<Int>): List<SeriesGenreCacheDto>
+
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
     suspend fun clearAllGenres()
 

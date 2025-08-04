@@ -42,7 +42,7 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
 
-    override suspend fun saveGenres(genres: List<SeriesGenreCacheDto>) = safeCall {
+    override suspend fun insertGenres(genres: List<SeriesGenreCacheDto>) = safeCall {
         seriesDao.insertGenres(genres)
     }
 
@@ -57,10 +57,9 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.incrementInteractionCountForGenres(genreIds)
     }
 
-    override suspend fun getCachedGenresByIds(genreIds: List<Int>): List<SeriesGenreCacheDto> =
-        SafeCall {
-            seriesDao.getAllGenres().filter { it.id in genreIds }
-        }
+    override suspend fun getGenresByIDs(genreIds: List<Int>) = SafeCall {
+        seriesDao.getGenresByIds(genreIds)
+    }
 
     override suspend fun insertSeries(series: List<SeriesCacheDto>) = safeCall {
         if (series.isNotEmpty()) {

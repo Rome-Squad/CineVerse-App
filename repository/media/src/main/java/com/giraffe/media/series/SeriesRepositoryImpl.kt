@@ -2,6 +2,7 @@ package com.giraffe.media.series
 
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class SeriesRepositoryImpl @Inject constructor(
     private val seriesRemoteDataSource: SeriesRemoteDataSource,
     private val seriesLocalDateSource: SeriesLocalDateSource,
+    localExplore: LocalExploreDataSource,
 ) : SeriesRepository {
     override suspend fun searchSeriesByName(seriesName: String, page: Int) = SafeCall {
         seriesRemoteDataSource.getSeriesByName(seriesName, page).map(SeriesDto::toEntity)
@@ -35,7 +37,7 @@ class SeriesRepositoryImpl @Inject constructor(
             .ifEmpty {
                 seriesRemoteDataSource.getGenres()
                     .map(GenreDto::toEntity)
-                    .also { seriesLocalDateSource.saveGenres(it.map(Genre::toCacheDto)) }
+                    .also { addGenres(it) }
             }
     }
 
@@ -78,21 +80,31 @@ class SeriesRepositoryImpl @Inject constructor(
         if (genreIDs.isNotEmpty()) {
             seriesLocalDateSource.incrementInteractionCountForGenres(genreIDs)
         }
-        seriesLocalDateSource.getCachedGenres().filter { it.id in genreIDs }.map { it.toEntity() }
+        seriesLocalDateSource.getGenresByIDs(genreIDs).map { it.toEntity() }
             .ifEmpty {
                 seriesRemoteDataSource.getGenres().filter { it.id in genreIDs }
                     .map(GenreDto::toEntity)
+                    .also { addGenres(it) }
             }
+    }
+
+    override suspend fun addGenres(genres: List<Genre>) {
+        seriesLocalDateSource.insertGenres(genres.map(Genre::toCacheDto))
+    }
+
+    override suspend fun addSeries(series: List<Series>) {
+        seriesLocalDateSource.insertRecentlyReleasedSeries(series.map { it.toCacheDto() })
     }
 
     override suspend fun getPopularitySeries(page: Int, limit: Int) = SafeCall {
         seriesLocalDateSource.getPopularitySeries(limit).map { it.toEntity() }.ifEmpty {
-            val seriesRemoteResult = seriesRemoteDataSource.getPopularitySeries(page).take(limit)
+            seriesRemoteDataSource.getPopularitySeries(page).take(limit)
                 .map(SeriesDto::toEntity)
-            seriesLocalDateSource.insertSeries(seriesRemoteResult.map {
-                it.toCacheDto().copy(isPopularity = true)
-            })
-            seriesRemoteResult
+                .also {
+                    seriesLocalDateSource.insertSeries(it.map {
+                        it.toCacheDto().copy(isPopularity = true)
+                    })
+                }
         }
     }
 
@@ -102,11 +114,9 @@ class SeriesRepositoryImpl @Inject constructor(
                 .map(SeriesDto::toEntity)
         } else {
             seriesLocalDateSource.getRecentlyReleasedSeries(limit).map { it.toEntity() }.ifEmpty {
-                val seriesRemoteResult =
-                    seriesRemoteDataSource.getRecentlyReleasedSeries(page).take(limit)
-                        .map(SeriesDto::toEntity)
-                seriesLocalDateSource.insertRecentlyReleasedSeries(seriesRemoteResult.map { it.toCacheDto() })
-                seriesRemoteResult
+                seriesRemoteDataSource.getRecentlyReleasedSeries(page).take(limit)
+                    .map(SeriesDto::toEntity)
+                    .also { addSeries(it) }
             }
         }
     }
@@ -117,13 +127,13 @@ class SeriesRepositoryImpl @Inject constructor(
                 .map(SeriesDto::toEntity)
         } else {
             seriesLocalDateSource.getTopRatedSeries(limit).map { it.toEntity() }.ifEmpty {
-                val seriesRemoteResult =
-                    seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
-                        .map(SeriesDto::toEntity)
-                seriesLocalDateSource.insertSeries(seriesRemoteResult.map {
-                    it.toCacheDto().copy(isTopRated = true)
-                })
-                seriesRemoteResult
+                seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
+                    .map(SeriesDto::toEntity)
+                    .also {
+                        seriesLocalDateSource.insertSeries(it.map {
+                            it.toCacheDto().copy(isTopRated = true)
+                        })
+                    }
             }
         }
     }
