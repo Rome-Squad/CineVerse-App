@@ -25,12 +25,9 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
+
     private val _effect = Channel<E>()
     val effect = _effect.receiveAsFlow()
-
-    private val _error = MutableStateFlow<Int?>(null)
-    val error = _error.asStateFlow()
-
 
     protected fun updateState(updater: (S) -> S) {
         _state.update(updater)
@@ -68,18 +65,6 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         }
     }
 
-    protected fun <T> safeLaunch(
-        coroutineScope: CoroutineScope = viewModelScope,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        onSuccess: suspend (T) -> Unit,
-        onError: (Int) -> Unit,
-        block: suspend CoroutineScope.() -> T
-    ): Job {
-        return coroutineScope.launch(dispatcher + handler(onError)) {
-            val data = block()
-            onSuccess(data)
-        }
-    }
 
     private fun handler(onError: (Int) -> Unit = {}): CoroutineExceptionHandler {
         return CoroutineExceptionHandler { _, throwable ->

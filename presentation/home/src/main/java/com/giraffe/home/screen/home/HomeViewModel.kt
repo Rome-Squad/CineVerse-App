@@ -1,16 +1,11 @@
 package com.giraffe.home.screen.home
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
-import com.giraffe.home.R
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
-import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.UnknownException
-import com.giraffe.media.exception.ValidationException
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
@@ -28,7 +23,6 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -53,9 +47,138 @@ class HomeViewModel @Inject constructor(
     HomeInteractionListener {
 
     init {
-        getFeaturedCollection()
         loadHomeContent()
+    }
+
+    override fun loadHomeContent() {
+        getFeaturedCollection()
         getRecentViewed()
+        getPopularity()
+        getRecentlyReleased()
+        getTopRatedSeries()
+        getUpcomingMovies()
+    }
+
+    private fun getFeaturedCollection() {
+        safeExecute(
+            onSuccess = ::onGetFeaturedCollectionSuccess,
+            onError = ::onFail,
+            block = { getMoviesGenresUseCase() })
+    }
+
+    private fun onGetFeaturedCollectionSuccess(genres: List<Genre>) {
+        val featuredCollection = genres.map { it.toUiModel() }
+        updateState { it.copy(featuredCollections = featuredCollection) }
+    }
+
+    private fun getPopularity() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetPopularityMoviesSuccess,
+                onError = ::onFail,
+                block = { getPopularityMoviesUseCase(page = 1) }
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetPopularitySeriesSuccess,
+                onError = ::onFail,
+                block = { getPopularitySeriesUseCase(page = 1, limit = 10) }
+            )
+        }
+    }
+
+    private suspend fun onGetPopularityMoviesSuccess(movies: List<Movie>) {
+        val popularMoviesUi = movies.map { movie ->
+            val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+            movie.toPopularMediaUiModel(genres)
+        }
+        updateState { currentState ->
+            currentState.copy(
+                popularity =
+                    currentState.popularity + popularMoviesUi
+            )
+        }
+    }
+
+    private suspend fun onGetPopularitySeriesSuccess(series: List<Series>) {
+        val popularSeriesUi = series.map { series ->
+            val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+            series.toPopularMediaUiModel(genres)
+        }
+        updateState { currentState ->
+            currentState.copy(
+                popularity =
+                    currentState.popularity + popularSeriesUi
+            )
+        }
+    }
+
+    private fun getRecentlyReleased() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::onGetRecentlyReleasedMoviesSuccess,
+                onError = ::onFail,
+                block = { getRecentlyReleasedMoviesUseCase(page = 1) }
+            ).join()
+            safeExecute(
+                onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
+                onError = ::onFail,
+                block = { getRecentlyReleasedSeriesUseCase(page = 1) }
+            )
+        }
+    }
+
+    private fun onGetRecentlyReleasedMoviesSuccess(movies: List<Movie>) {
+        val recentMoviesUi = movies.map { it.toHomeUiModel() }
+        updateState { currentState ->
+            currentState.copy(
+                recentlyReleased =
+                    currentState.recentlyReleased + recentMoviesUi
+            )
+        }
+    }
+
+    private fun onGetRecentlyReleasedSeriesSuccess(series: List<Series>) {
+        val recentSeriesUi = series.map { it.toHomeUiModel() }
+        updateState { currentState ->
+            currentState.copy(
+                recentlyReleased =
+                    currentState.recentlyReleased + recentSeriesUi
+            )
+        }
+    }
+
+    private fun getTopRatedSeries() {
+        safeExecute(
+            onSuccess = ::onGetTopRatedSeriesSuccess,
+            onError = ::onFail,
+            block = { getTopRatedSeriesUseCase(page = 1) }
+        )
+    }
+
+    private fun onGetTopRatedSeriesSuccess(series: List<Series>) {
+        val topRatedUi = series.map { it.toHomeUiModel() }
+        updateState { currentState ->
+            currentState.copy(
+                topRated = currentState.topRated + topRatedUi
+            )
+        }
+    }
+
+    private fun getUpcomingMovies() {
+        safeExecute(
+            onSuccess = ::onGetUpcomingMoviesSuccess,
+            onError = ::onFail,
+            block = { getUpcomingMoviesUseCase(page = 1) }
+        )
+    }
+
+    private fun onGetUpcomingMoviesSuccess(movies: List<Movie>) {
+        val upcomingUi = movies.map { it.toHomeUiModel() }
+        updateState { currentState ->
+            currentState.copy(
+                upcomingMovies = currentState.upcomingMovies + upcomingUi
+            )
+        }
     }
 
     private fun getRecentViewed() {
@@ -66,77 +189,9 @@ class HomeViewModel @Inject constructor(
                 block = getRecentlyMoviesUseCase::invoke
             ).join()
             safeExecute(
-                onSuccess = ::onGetRecentlySeresSuccess,
+                onSuccess = ::onGetRecentlySeriesSuccess,
                 onError = ::onFail,
                 block = getRecentlySeriesUseCase::invoke
-            )
-        }
-    }
-
-    private fun getFeaturedCollection() {
-        safeExecute {
-            val featuredCollection = getMoviesGenresUseCase().map { it.toUiModel() }
-            updateState {
-                it.copy(
-                    featuredCollections = featuredCollection
-                )
-            }
-        }
-    }
-
-    override fun loadHomeContent() {
-        updateState { it.copy(isLoading = true, isError = false) }
-        safeLaunch(
-            onError = ::onLoadHomeContentError,
-            onSuccess = ::onLoadHomeContentSuccess
-        ) {
-            val popularMoviesDeferred = async { getPopularityMoviesUseCase(page = 1) }
-            val popularSeriesDeferred = async { getPopularitySeriesUseCase(page = 1, limit = 10) }
-            val recentMoviesDeferred = async { getRecentlyReleasedMoviesUseCase(page = 1) }
-            val recentSeriesDeferred = async { getRecentlyReleasedSeriesUseCase(page = 1) }
-
-            val popularMovies = popularMoviesDeferred.await()
-            val popularSeries = popularSeriesDeferred.await()
-            val recentMovies = recentMoviesDeferred.await()
-            val recentSeries = recentSeriesDeferred.await()
-            val topRated = getTopRatedSeriesUseCase(page = 1)
-            val upcoming = getUpcomingMoviesUseCase(page = 1)
-
-            val popularMovieUi = popularMovies.map { movie ->
-                val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                movie.toPopularMediaUiModel(genres)
-            }
-
-            val popularSeriesUi = popularSeries.map { series ->
-                val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                series.toPopularMediaUiModel(genres)
-            }
-
-            val recentMovieUi = recentMovies.map { it.toHomeUiModel() }
-            val recentSeriesUi = recentSeries.map { it.toHomeUiModel() }
-            val topRatedUi = topRated.map { it.toHomeUiModel() }
-            val upcomingUi = upcoming.map { it.toHomeUiModel() }
-            updateState {
-                it.copy(
-                    popularity = popularMovieUi + popularSeriesUi,
-                    recentlyReleased = recentMovieUi + recentSeriesUi,
-                    topRated = topRatedUi,
-                    upcomingMovies = upcomingUi
-                )
-            }
-        }
-    }
-
-    private fun onLoadHomeContentError(errorResId: Int) {
-        updateState { it.copy(isLoading = false, isError = true) }
-        sendEffect(HomeEffect.ShowError(errorResId))
-    }
-
-    private fun onLoadHomeContentSuccess(result: Unit) {
-        updateState {
-            it.copy(
-                isLoading = false,
-                isError = false
             )
         }
     }
@@ -148,7 +203,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onGetRecentlySeresSuccess(seriesFlow: Flow<List<Series>>) {
+    private suspend fun onGetRecentlySeriesSuccess(seriesFlow: Flow<List<Series>>) {
         seriesFlow.collectLatest { series ->
             updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
             getRecommendedSeries(series)
@@ -183,6 +238,14 @@ class HomeViewModel @Inject constructor(
 
     private fun onGetRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
         updateState { it.copy(matchVibes = (it.matchVibes + recommendedSeries.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
+    }
+
+    private fun onFail(errorMesRes: Int) = updateState {
+        it.copy(
+            isLoading = false,
+            isError = true,
+            errorMsgRes = errorMesRes
+        )
     }
 
     override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
@@ -235,19 +298,6 @@ class HomeViewModel @Inject constructor(
                 sectionType = sectionType
             )
         )
-    }
-
-    private fun onFail(errorMesRes: Int) = updateState { it.copy(errorMsgRes = errorMesRes) }
-
-    @StringRes
-    private fun mapExceptionToStringRes(throwable: Throwable): Int {
-        return when (throwable) {
-            is AccessDeniedException -> R.string.error_access_denied
-            is ValidationException -> R.string.error_validation
-            is NotFoundException -> R.string.error_not_found
-            is UnknownException -> R.string.error_unknown
-            else -> R.string.error_unknown
-        }
     }
 
     override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
