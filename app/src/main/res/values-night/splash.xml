@@ -3,8 +3,8 @@
 
     <style name="Theme.CineVerseApp.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/primary_dark</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
-        <item name="windowSplashScreenAnimationDuration">2000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/cineverse_logo</item>
+        <item name="windowSplashScreenAnimationDuration">500</item>
         <item name="postSplashScreenTheme">@style/Theme.CineVerseApp</item>
     </style>
 </resources>
