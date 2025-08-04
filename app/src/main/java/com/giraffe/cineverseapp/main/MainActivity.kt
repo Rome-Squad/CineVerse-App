@@ -11,11 +11,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.home.HomeApi
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -28,14 +32,19 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
-        installSplashScreen().setKeepOnScreenCondition {
-            val state = mainViewModel.state.value
-            val notReady = state.isLoggedIn == null || state.isOnBoardingFirstTime == null
-            notReady
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.state.collect { state ->
+                    splashScreen.setKeepOnScreenCondition {
+                        state.isLoggedIn == null || state.isOnBoardingFirstTime == null
+                    }
+                }
+            }
         }
-
 
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.Companion.auto(
