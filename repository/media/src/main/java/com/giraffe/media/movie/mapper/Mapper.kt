@@ -66,6 +66,9 @@ fun Movie.toCacheDto() = MovieCacheDto(
     releaseDate = releaseYear?.toString(),
     duration = duration,
     popularity = popularity,
+    recentViewedAt = recentViewedAt,
+    recentReleasedAt = recentReleasedAt,
+    upcomingAt = upcomingAt,
 )
 
 fun MovieDto.toEntity(
