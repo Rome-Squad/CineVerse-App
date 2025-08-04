@@ -18,7 +18,6 @@ fun OnBoardingScreen(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToLoginScreen: () -> Unit,
-    navigateToHomeScreen: () -> Unit
 ) {
     // val state by viewModel.state.collectAsState()
 

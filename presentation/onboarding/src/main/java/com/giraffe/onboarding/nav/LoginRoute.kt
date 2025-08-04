@@ -1,4 +1,4 @@
-package com.giraffe.onboarding.nav.routes
+package com.giraffe.onboarding.nav
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
