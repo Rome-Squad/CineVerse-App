@@ -25,12 +25,12 @@ class GetUpcomingMoviesUseCaseTest {
         // Given
         val expectedMovies = fakeMovies.filter { it.upcomingAt != null}
         val page = 1
-        val limit = 1
+        val limit = 10
 
         coEvery { repository.getUpcomingMovies(page, limit) } returns expectedMovies
 
         // When
-        val actualMovies = useCase(page)
+        val actualMovies = useCase(page, limit)
 
         // Then
         coVerify(exactly = 1) { repository.getUpcomingMovies(page, limit) }
