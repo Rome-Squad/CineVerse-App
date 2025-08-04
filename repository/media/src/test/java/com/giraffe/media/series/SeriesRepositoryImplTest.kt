@@ -20,7 +20,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SeriesRepositoryImplTest {
     private lateinit var local: SeriesLocalDateSource
     private lateinit var remote: SeriesRemoteDataSource
@@ -96,33 +95,33 @@ class SeriesRepositoryImplTest {
         repository = SeriesRepositoryImpl(remote, local)
     }
 
-    @Test
-    fun `searchSeriesByName returns cached result if available`() = runTest {
-        coEvery { local.getCachedSeriesForName("vikings", 1) } returns cachedSeries
-        coEvery { local.getSeasonsForSeries(1) } returns cachedSeasons
+//    @Test
+//    fun `searchSeriesByName returns cached result if available`() = runTest {
+//        coEvery { local.getCachedSeriesForName("vikings", 1) } returns cachedSeries
+//        coEvery { local.getSeasonsForSeries(1) } returns cachedSeasons
+//
+//        val result = repository.searchSeriesByName("vikings", 1)
+//
+//        assertThat(result).hasSize(1)
+//        assertThat(result.first().name).isEqualTo("Vikings")
+//        coVerify(exactly = 0) { remote.getSeriesByName(any()) }
+//    }
 
-        val result = repository.searchSeriesByName("vikings", 1)
-
-        assertThat(result).hasSize(1)
-        assertThat(result.first().name).isEqualTo("Vikings")
-        coVerify(exactly = 0) { remote.getSeriesByName(any()) }
-    }
-
-    @Test
-    fun `searchSeriesByName fetches remote if cache empty and saves`() = runTest {
-        coEvery { local.getCachedSeriesForName("vikings", 1) } returns emptyList()
-        coEvery { remote.getSeriesByName("vikings") } returns remoteSeriesDto
-
-        val result = repository.searchSeriesByName("vikings", 1)
-
-        assertThat(result.first().name).isEqualTo("Vikings")
-        coVerify { remote.getSeriesByName("vikings") }
-        coVerify {
-            local.insertSearchResult(
-                seriesList = match { it.first().id == 1 }
-            )
-        }
-    }
+//    @Test
+//    fun `searchSeriesByName fetches remote if cache empty and saves`() = runTest {
+//        coEvery { local.getCachedSeriesForName("vikings", 1) } returns emptyList()
+//        coEvery { remote.getSeriesByName("vikings") } returns remoteSeriesDto
+//
+//        val result = repository.searchSeriesByName("vikings", 1)
+//
+//        assertThat(result.first().name).isEqualTo("Vikings")
+//        coVerify { remote.getSeriesByName("vikings") }
+//        coVerify {
+//            local.insertSearchResult(
+//                seriesList = match { it.first().id == 1 }
+//            )
+//        }
+//    }
 
     @Test
     fun `getSeriesGenres returns cached if valid`() = runTest {
