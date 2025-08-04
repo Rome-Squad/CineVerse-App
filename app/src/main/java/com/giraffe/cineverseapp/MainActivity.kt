@@ -5,10 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.onboarding.screen.OnBoardingContent
 import com.giraffee.onboarding.OnBoardingApi
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
@@ -43,11 +45,11 @@ class MainActivity : ComponentActivity() {
                     R.drawable.onboard2,
                     R.drawable.onboard3
                 )
-//                OnBoardingContent(
-//                    modifier = Modifier,
-//                    onBoardingImageList = images
-//                )
-                onBoardingApi.OnBoardingContainer()
+                OnBoardingContent(
+                    modifier = Modifier,
+                    onBoardingImageList = images
+                )
+                //  onBoardingApi.OnBoardingContainer()
                 // authenticationApi.LoginContainer { }
             }
         }
