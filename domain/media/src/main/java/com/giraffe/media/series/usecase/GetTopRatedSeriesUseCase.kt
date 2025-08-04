@@ -5,5 +5,6 @@ import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
 class GetTopRatedSeriesUseCase @Inject constructor(private val repository: SeriesRepository) {
-    suspend operator fun invoke(page:Int): List<Series> = repository.getTopRatedSeries(page)
+    suspend operator fun invoke(page: Int, limit: Int): List<Series> =
+        repository.getTopRatedSeries(page, limit)
 }

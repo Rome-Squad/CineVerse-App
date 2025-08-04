@@ -89,12 +89,14 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesLocalDateSource.getPopularitySeries(limit).map { it.toEntity() }.ifEmpty {
             val seriesRemoteResult = seriesRemoteDataSource.getPopularitySeries(page).take(limit)
                 .map(SeriesDto::toEntity)
-            seriesLocalDateSource.insertSeries(seriesRemoteResult.map { it.toCacheDto() })
+            seriesLocalDateSource.insertSeries(seriesRemoteResult.map {
+                it.toCacheDto().copy(isPopularity = true)
+            })
             seriesRemoteResult
         }
     }
 
-    override suspend fun getRecentlyReleasedSeries(page: Int, limit: Int): List<Series> = SafeCall {
+    override suspend fun getRecentlyReleasedSeries(page: Int, limit: Int) = SafeCall {
         if (page > 1) {
             seriesRemoteDataSource.getRecentlyReleasedSeries(page).take(limit)
                 .map(SeriesDto::toEntity)
@@ -109,8 +111,22 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTopRatedSeries(page: Int): List<Series> =
-        SafeCall { seriesRemoteDataSource.getTopRatedSeries(page).map(SeriesDto::toEntity) }
+    override suspend fun getTopRatedSeries(page: Int, limit: Int) = SafeCall {
+        if (page > 1) {
+            seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
+                .map(SeriesDto::toEntity)
+        } else {
+            seriesLocalDateSource.getTopRatedSeries(limit).map { it.toEntity() }.ifEmpty {
+                val seriesRemoteResult =
+                    seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
+                        .map(SeriesDto::toEntity)
+                seriesLocalDateSource.insertSeries(seriesRemoteResult.map {
+                    it.toCacheDto().copy(isTopRated = true)
+                })
+                seriesRemoteResult
+            }
+        }
+    }
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {
         seriesRemoteDataSource.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)

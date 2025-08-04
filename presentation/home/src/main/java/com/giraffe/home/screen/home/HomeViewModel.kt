@@ -100,7 +100,7 @@ class HomeViewModel @Inject constructor(
             val popularSeries = popularSeriesDeferred.await()
             val recentMovies = recentMoviesDeferred.await()
             val recentSeries = recentSeriesDeferred.await()
-            val topRated = getTopRatedSeriesUseCase(page = 1)
+            val topRated = getTopRatedSeriesUseCase(page = 1, limit = 10)
             val upcoming = getUpcomingMoviesUseCase(page = 1)
 
             val popularMovieUi = popularMovies.map { movie ->

@@ -93,7 +93,7 @@ class MoviesListViewModel @Inject constructor(
                 }
 
                 MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                    getTopRatedSeriesUseCase(page = 1).map { it.toPosterUi() }
+                    getTopRatedSeriesUseCase(page = 1, limit = 10).map { it.toPosterUi() }
                 }
 
                 MovieSectionType.UPCOMING_MOVIES -> {
