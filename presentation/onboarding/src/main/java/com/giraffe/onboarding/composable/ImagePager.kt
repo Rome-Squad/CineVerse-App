@@ -25,12 +25,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.onboarding.R
 import kotlin.math.absoluteValue
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -67,7 +69,7 @@ fun ImagePager(
                 dampingRatio = Spring.DampingRatioMediumBouncy,
                 stiffness = Spring.StiffnessLow
             ),
-            label = "rotationAnim"
+            label = stringResource(R.string.rotationanim)
         )
 
         val scale = lerp(1f, 0.8f, pageOffsetAbsolute)
@@ -79,7 +81,7 @@ fun ImagePager(
 
         Image(
             painter = painterResource(id = images[page]),
-            contentDescription = "Image ${page + 1}",
+            contentDescription = stringResource(R.string.image, page + 1),
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .graphicsLayer {
@@ -119,13 +121,13 @@ private fun animatedCornerShape(
     val animatedTopRadius by animateDpAsState(
         targetValue = targetTopRadius,
         animationSpec = animationSpec,
-        label = "topRadiusAnim"
+        label = stringResource(R.string.topradiusanim)
     )
 
     val animatedBottomRadius by animateDpAsState(
         targetValue = targetBottomRadius,
         animationSpec = animationSpec,
-        label = "bottomRadiusAnim"
+        label = stringResource(R.string.bottomradiusanim)
     )
 
     return RoundedCornerShape(
