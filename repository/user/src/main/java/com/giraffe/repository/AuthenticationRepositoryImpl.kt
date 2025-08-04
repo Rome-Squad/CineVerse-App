@@ -1,5 +1,6 @@
 package com.giraffe.repository
 
+import android.util.Log
 import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.repository.utils.SafeCall
@@ -15,6 +16,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         val validatedToken =
             remoteDataSource.validateTokenWithLogin(requestToken, username, password)
         val sessionId = remoteDataSource.createSession(validatedToken)
+        Log.d("TAG", "login: $sessionId")
         localDataSource.saveSessionId(sessionId)
     }
 
