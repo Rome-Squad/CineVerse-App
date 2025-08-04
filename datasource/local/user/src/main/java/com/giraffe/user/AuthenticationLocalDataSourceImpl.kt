@@ -16,6 +16,14 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
         authenticationDatastore.getSessionId()
     }
 
+    override suspend fun saveAccountId(accountId: Int) = safeCall {
+        authenticationDatastore.saveAccountId(accountId)
+    }
+
+    override suspend fun getAccountId(): Int? = safeCall {
+        authenticationDatastore.getAccountId()
+    }
+
     override suspend fun isLoggedIn(): Boolean = safeCall {
         authenticationDatastore.getSessionId() != null
     }

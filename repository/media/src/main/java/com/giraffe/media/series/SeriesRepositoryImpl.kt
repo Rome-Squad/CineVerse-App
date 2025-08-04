@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class SeriesRepositoryImpl @Inject constructor(
     private val seriesRemoteDataSource: SeriesRemoteDataSource,
-    private val seriesLocalDateSource: SeriesLocalDateSource,
+    private val seriesLocalDateSource: SeriesLocalDateSource
 ) : SeriesRepository {
     override suspend fun searchSeriesByName(seriesName: String, page: Int) = SafeCall {
         seriesRemoteDataSource.getSeriesByName(seriesName, page).map(SeriesDto::toEntity)
@@ -35,7 +35,7 @@ class SeriesRepositoryImpl @Inject constructor(
             .ifEmpty {
                 seriesRemoteDataSource.getGenres()
                     .map(GenreDto::toEntity)
-                    .also { seriesLocalDateSource.saveGenres(it.map(Genre::toCacheDto)) }
+                    .also { addGenres(it) }
             }
     }
 
@@ -78,36 +78,74 @@ class SeriesRepositoryImpl @Inject constructor(
         if (genreIDs.isNotEmpty()) {
             seriesLocalDateSource.incrementInteractionCountForGenres(genreIDs)
         }
-        seriesLocalDateSource.getCachedGenres().filter { it.id in genreIDs }.map { it.toEntity() }
+        seriesLocalDateSource.getGenresByIDs(genreIDs).map { it.toEntity() }
             .ifEmpty {
                 seriesRemoteDataSource.getGenres().filter { it.id in genreIDs }
                     .map(GenreDto::toEntity)
+                    .also { addGenres(it) }
             }
+    }
+
+    override suspend fun addGenres(genres: List<Genre>) {
+        seriesLocalDateSource.insertGenres(genres.map(Genre::toCacheDto))
     }
 
     override suspend fun getPopularitySeries(page: Int, limit: Int) = SafeCall {
         seriesLocalDateSource.getPopularitySeries(limit).map { it.toEntity() }.ifEmpty {
-            val seriesRemote = seriesRemoteDataSource.getPopularitySeries(page).take(limit)
+            seriesRemoteDataSource.getPopularitySeries(page).take(limit)
                 .map(SeriesDto::toEntity)
-            seriesLocalDateSource.insertPopularitySeries(seriesRemote.map { it.toCacheDto() })
-            seriesRemote
+                .also { series ->
+                    seriesLocalDateSource.insertPopularitySeries(series.map { it.toCacheDto() })
+                }
         }
     }
 
-    override suspend fun getRecentlyReleasedSeries(page: Int): List<Series> =
-        SafeCall { seriesRemoteDataSource.getRecentlyReleasedSeries(page).map(SeriesDto::toEntity) }
+    override suspend fun getRecentlyReleasedSeries(page: Int, limit: Int) = SafeCall {
+        if (page > 1) {
+            seriesRemoteDataSource.getRecentlyReleasedSeries(page).take(limit)
+                .map(SeriesDto::toEntity)
+        } else {
+            seriesLocalDateSource.getRecentlyReleasedSeries(limit).map { it.toEntity() }.ifEmpty {
+                seriesRemoteDataSource.getRecentlyReleasedSeries(page).take(limit)
+                    .map(SeriesDto::toEntity)
+                    .also { series ->
+                        seriesLocalDateSource.insertRecentlyReleasedSeries(series.map { it.toCacheDto() })
+                    }
+            }
+        }
+    }
 
-    override suspend fun getTopRatedSeries(page: Int): List<Series> =
-        SafeCall { seriesRemoteDataSource.getTopRatedSeries(page).map(SeriesDto::toEntity) }
+    override suspend fun getTopRatedSeries(page: Int, limit: Int) = SafeCall {
+        if (page > 1) {
+            seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
+                .map(SeriesDto::toEntity)
+        } else {
+            seriesLocalDateSource.getTopRatedSeries(limit).map { it.toEntity() }.ifEmpty {
+                seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
+                    .map(SeriesDto::toEntity)
+                    .also { series ->
+                        seriesLocalDateSource.insertTopRatedSeries(series.map { it.toCacheDto() })
+                    }
+            }
+        }
+    }
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {
         seriesRemoteDataSource.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
 
-    override suspend fun getRecommendedSeries(seriesId: Int, page: Int): List<Series> {
-        return SafeCall {
-            seriesRemoteDataSource.getSeriesRecommendations(seriesId, page)
+    override suspend fun getRecommendedSeries(seriesId: Int, page: Int, limit: Int) = SafeCall {
+        if (page > 1) {
+            seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).take(limit)
                 .map(SeriesDto::toEntity)
+        } else {
+            seriesLocalDateSource.getRecommendedSeries(limit).map { it.toEntity() }.ifEmpty {
+                seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).take(limit)
+                    .map(SeriesDto::toEntity)
+                    .also { series ->
+                        seriesLocalDateSource.insertRecommendedSeries(series.map { it.toCacheDto() })
+                    }
+            }
         }
     }
 }

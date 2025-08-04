@@ -9,8 +9,14 @@
     <string name="tab_to_change_your_rating">Tab to change your rating</string>
     <string name="rate_it">Let the world know how you felt.</string>
     <string name="did_you_watch_it">Did You Watch it?</string>
+    <string name="settings_text">Settings</string>
     <string name="user_name">\@%1$s</string>
     <string name="history">History</string>
+    <string name="Dark_Mode">Dark Mode</string>
+    <string name="Language">Language</string>
+    <string name="Logout">Logout</string>
+    <string name="Version">Version 1.0.1</string>
+    <string name="My_Profile">My Profile</string>
     <string name="my_collections">My Collections</string>
     <string name="my_ratings">My Ratings</string>
     <string name="arabic">Arabic</string>

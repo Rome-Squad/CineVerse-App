@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
+    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
 

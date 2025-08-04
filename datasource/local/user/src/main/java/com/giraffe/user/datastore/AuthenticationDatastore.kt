@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
@@ -29,13 +30,27 @@ class AuthenticationDatastore @Inject constructor(
         }.first()
     }
 
+    suspend fun saveAccountId(accountId: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.ACCOUNT_ID] = accountId
+        }
+    }
+
+    suspend fun getAccountId(): Int? {
+        return context.dataStore.data.map { preferences ->
+            preferences[PreferencesKeys.ACCOUNT_ID]
+        }.first()
+    }
+
     companion object {
         private const val DATA_STORE_NAME = "CineVerseAuthenticationDatastore"
         const val SESSION_ID_KEY = "session_id"
+        const val ACCOUNT_ID_KEY = "account_id"
     }
 
     private object PreferencesKeys {
         val SESSION_ID = stringPreferencesKey(SESSION_ID_KEY)
+        val ACCOUNT_ID = intPreferencesKey(ACCOUNT_ID_KEY)
     }
 
 }
