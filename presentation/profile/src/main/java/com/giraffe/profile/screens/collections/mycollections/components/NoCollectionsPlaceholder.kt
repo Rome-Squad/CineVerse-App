@@ -35,16 +35,20 @@ fun NoCollectionsPlaceholder(
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
-                .background(Theme.color.brand.tertiary)
-                .clip(CircleShape)
+                .size(
+                    width = 64.dp,
+                    height = 80.dp
+                )
                 .padding(
                     bottom = 16.dp
-                ),
+                )
+                .clip(CircleShape)
+                .background(Theme.color.brand.tertiary),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.video_library),
+                painter = painterResource(Theme.icons.dueTone.videoLibrary),
+                tint = Theme.color.shade.primary,
                 contentDescription = stringResource(R.string.no_collections),
             )
         }

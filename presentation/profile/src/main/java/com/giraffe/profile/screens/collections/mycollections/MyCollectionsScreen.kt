@@ -110,6 +110,9 @@ private fun MyCollectionsScreenContent(
 
         if (state.collections.isEmpty()) {
             NoCollectionsPlaceholder(
+                modifier = Modifier
+                    .padding(60.dp)
+                    .align(Alignment.Center),
                 onStartCollectingClick = interactions::onStartCollectingClick
             )
         } else {
@@ -135,7 +138,10 @@ private fun MyCollectionsScreenContent(
                                 }
                             ),
                         text = collection.name,
-                        description = "collection.description",
+                        description = if (collection.itemCount > 0)
+                            stringResource(id = R.string.movies, collection.itemCount)
+                        else
+                            "",
                         icon = R.drawable.due_tone_folder
                     )
                 }
@@ -145,7 +151,7 @@ private fun MyCollectionsScreenContent(
 
         Box(
             modifier = Modifier
-                .padding(24.dp)
+                .padding(end = 24.dp, bottom = 36.dp)
                 .size(56.dp)
                 .align(Alignment.BottomEnd)
                 .clip(
@@ -170,6 +176,10 @@ private fun MyCollectionsScreenContent(
 
         // add bottom sheet
         BaseBottomSheet(
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .padding(bottom = 36.dp),
+            title = stringResource(com.giraffe.profile.R.string.create_new_collection),
             isVisible = state.isCreateNewCollectionBottomSheetVisible,
             onDismiss = interactions::onDismissCreateNewCollectionBottomSheet,
             content = {
