@@ -17,7 +17,7 @@ import javax.inject.Inject
 class CollectionViewModel @Inject constructor(
     private val getCollectionMoviesUseCase: GetCollectionMoviesUseCase,
     private val removeMovieFromCollectionUseCase: RemoveMovieFromCollectionUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     savedStateHandle: SavedStateHandle
 
 ) : BaseViewModel<CollectionScreenState, CollectionEffect>(
