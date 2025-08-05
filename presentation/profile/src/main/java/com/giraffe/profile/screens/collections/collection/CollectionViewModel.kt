@@ -1,9 +1,12 @@
 package com.giraffe.profile.screens.collections.collection
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.model.toSwipeablePoster
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,13 +17,14 @@ import javax.inject.Inject
 class CollectionViewModel @Inject constructor(
     private val getCollectionMoviesUseCase: GetCollectionMoviesUseCase,
     private val removeMovieFromCollectionUseCase: RemoveMovieFromCollectionUseCase,
-    //savedStateHandle: SavedStateHandle
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase
+    savedStateHandle: SavedStateHandle
 
 ) : BaseViewModel<CollectionScreenState, CollectionEffect>(
     CollectionScreenState()
 ), CollectionInteractionListener {
 
-    init {/*
+    init {
         savedStateHandle.get<String>("collectionName")?.let { collectionName ->
             updateState {
                 it.copy(
@@ -35,18 +39,39 @@ class CollectionViewModel @Inject constructor(
                     collectionId = collectionId
                 )
             }
-        }*/
-
-        updateState {
-            it.copy(
-                collectionName = "Action Movies",
-                collectionId = 8547864
-            )
         }
 
+        getMoviesGenres()
         getCollectionItems()
     }
 
+    private fun getMoviesGenres() {
+        safeExecute(
+            onSuccess = ::onGetMoviesGenresSuccess,
+            onError = ::onGetMoviesGenresFailure
+        ) {
+            getMoviesGenresUseCase()
+        }
+    }
+
+    private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                movieGenres = genres
+            )
+        }
+    }
+
+    private fun onGetMoviesGenresFailure(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+
+        sendEffect(CollectionEffect.ShowError(mapErrorToResource(error)))
+    }
     private fun getCollectionItems(
     ) {
         safeExecute(
@@ -61,9 +86,12 @@ class CollectionViewModel @Inject constructor(
 
     private fun onGetCollectionItemsSuccess(moviesList: List<Movie>) {
         val swipeablePosters = moviesList.map { movie ->
-            movie.toSwipeablePoster()
+            movie.toSwipeablePoster(
+                genres = state.value.movieGenres
+            )
         }
-
+        Log.d("VMTAG", "onGetCollectionItemsSuccess: $moviesList")
+        Log.d("VMTAG", "posters: $swipeablePosters")
         updateState {
             it.copy(
                 isLoading = false,
@@ -103,7 +131,7 @@ class CollectionViewModel @Inject constructor(
     }
 
     private fun onRemoveMovieFromCollectionSuccess(isRemoved: Boolean) {
-        if (!isRemoved)
+        if (isRemoved)
             getCollectionItems()
     }
 
