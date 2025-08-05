@@ -2,6 +2,10 @@ package com.giraffe.profile.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.exception.NotFoundException
+import com.giraffe.media.exception.ValidationException
+import com.giraffe.profile.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +20,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
+abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
+
+    private var _isNoInternet = MutableStateFlow(false)
+    val isNoInternet = _isNoInternet.asStateFlow()
 
     private val _effect = Channel<E>()
     val effect = _effect.receiveAsFlow()
@@ -36,8 +43,14 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
         coroutineScope.launch(dispatcher) {
             try {
                 onSuccess(block())
+                _isNoInternet.update { false }
             } catch (e: Throwable) {
-                onError(e)
+                if (e is NoInternetException) {
+                    _isNoInternet.update { true }
+                } else {
+                    _isNoInternet.update { false }
+                    onError(e)
+                }
             }
         }
     }
@@ -56,6 +69,7 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
                     onError(it)
                 }.collect {
                     onEmitNewValue(it)
+                    _isNoInternet.update { false }
                 }
         }
     }
@@ -81,6 +95,20 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
             _snackBar.emit(message)
             delay(SNACK_BAR_DURATION)
             _snackBar.emit(null)
+        }
+    }
+
+    protected fun mapErrorToResource(error: Throwable): Int {
+        return when (error) {
+            is NoInternetException -> R.string.error_network
+            is AccessDeniedException -> R.string.access_denied_error
+            is ValidationException -> if (error.message == "Collection name cannot be blank")
+                R.string.collection_name_cannot_be_blank
+            else
+                R.string.validation_error
+
+            is NotFoundException -> R.string.collection_not_found
+            else -> R.string.error_unknown
         }
     }
 

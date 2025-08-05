@@ -17,9 +17,9 @@
         android:theme="@style/Theme.CineVerseApp"
         tools:targetApi="33">
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.CineVerseApp">
+            android:theme="@style/Theme.CineVerseApp.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

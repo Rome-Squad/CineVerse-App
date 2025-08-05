@@ -1,34 +1,27 @@
 package com.giraffe.media.collections.datasource.remote
 
 import com.giraffe.media.collections.datasource.remote.dto.CollectionDto
-import com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import com.giraffe.media.series.datasource.remote.dto.SeriesDto
+import com.giraffe.media.collections.datasource.remote.dto.CollectionItemDto
 
 interface CollectionsRemoteDataSource {
 
 
-    suspend fun getCollections(): List<CollectionDto>
+    suspend fun getCollections(accountId: Int): List<CollectionDto>
 
 
     suspend fun getCollectionDetails(collectionId: Int): CollectionDto
 
-    suspend fun addCollection(collection: CollectionDto)
+    suspend fun addCollection(collection: CollectionDto): Int?
 
-    suspend fun removeCollection(collectionId: Int)
+    suspend fun removeCollection(collectionId: Int): Boolean
 
-    suspend fun clearCollection(collectionId: Int)
-
-
-    suspend fun addMovieToCollection(collectionId: Int, movieId: Int)
-
-    suspend fun removeMovieFromCollection(collectionId: Int, movieId: Int)
-
-    suspend fun getCollectionMovies(collectionId: Int): List<MovieDto>
+    suspend fun clearCollection(collectionId: Int): Boolean
 
 
-    suspend fun addSeriesToCollection(collectionId: Int, seriesId: Int)
+    suspend fun addMovieToCollection(collectionId: Int, movieId: Int): Boolean
 
-    suspend fun removeSeriesFromCollection(collectionId: Int, seriesId: Int)
+    suspend fun removeMovieFromCollection(collectionId: Int, movieId: Int): Boolean
 
-    suspend fun getCollectionSeries(collectionId: Int): List<SeriesDto>
+    suspend fun getCollectionMovies(collectionId: Int): List<CollectionItemDto>
+
 }

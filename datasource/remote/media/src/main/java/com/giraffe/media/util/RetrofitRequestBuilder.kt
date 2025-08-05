@@ -27,6 +27,12 @@ class RetrofitRequestBuilder<API>(
         return safeCall { api.call() }
     }
 
+    suspend inline fun <reified T> delete(
+        crossinline call: suspend API.() -> Response<T>
+    ): T {
+        return safeCall { api.call() }
+    }
+
     companion object {
         suspend inline fun <reified T> safeCall(
             crossinline execute: suspend () -> Response<T>

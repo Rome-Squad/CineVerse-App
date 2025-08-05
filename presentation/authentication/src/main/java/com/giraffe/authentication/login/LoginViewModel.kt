@@ -2,15 +2,15 @@ package com.giraffe.authentication.login
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.authentication.R
 import com.giraffe.authentication.base.BaseViewModel
+import com.giraffe.presentation.authentication.R
 import com.giraffe.user.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle
+    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
 

@@ -88,7 +88,6 @@ dependencies {
     implementation(project(":presentation:explore"))
     implementation(project(":presentation:match"))
     implementation(project(":presentation:profile"))
-    implementation(project(":presentation:onboarding"))
 
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
@@ -112,6 +111,8 @@ dependencies {
     implementation(project(":api:match"))
     implementation(project(":api:profile"))
     implementation(project(":api:authentication"))
+
+    implementation(libs.androidx.core.splashscreen)
 
 
 

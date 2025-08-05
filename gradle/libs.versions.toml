@@ -4,6 +4,7 @@ agp = "8.10.1"
 coilCompose = "3.2.0"
 coilComposeVersion = "2.4.0"
 core = "12.1.2"
+coreSplashscreenVersion = "1.0.1"
 coreTesting = "2.2.0"
 dagger = "2.57"
 daggerCompiler = "2.57"
@@ -63,6 +64,7 @@ hiltNavigationCompose = "1.2.0"
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanistWebview" }
 androidx-compose-foundation-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreenVersion" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-hilt-lifecycle-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "hiltLifecycleViewmodel" }
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltWork" }

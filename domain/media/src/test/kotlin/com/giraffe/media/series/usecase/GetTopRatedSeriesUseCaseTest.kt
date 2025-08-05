@@ -23,7 +23,6 @@ class GetTopRatedSeriesUseCaseTest {
 
     @Test
     fun `given top rated series, when invoke is called, then return series list`() = runTest {
-        // Given
         val expectedSeries = listOf(
             Series(
                 id = 101,
@@ -47,13 +46,13 @@ class GetTopRatedSeriesUseCaseTest {
                 )
             )
         )
+        val page = 1
+        val limit = 10
 
-        coEvery { repository.getTopRatedSeries(1) } returns expectedSeries
+        coEvery { repository.getTopRatedSeries(page = page, limit = limit) } returns expectedSeries
 
-        // When
-        val actualSeries = useCase(1)
+        val actualSeries = useCase(page = page, limit = limit)
 
-        // Then
         assertThat(actualSeries).isEqualTo(expectedSeries)
     }
 }
