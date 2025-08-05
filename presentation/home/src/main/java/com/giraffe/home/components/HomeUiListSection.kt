@@ -25,6 +25,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.screen.home.HomeUiModel
 import com.giraffe.home.screen.home.MediaType
+import com.giraffe.home.utils.multipleEventsCutter
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
@@ -37,8 +38,6 @@ fun HomeUiListSection(
     onClickEndText: () -> Unit = {},
     onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
 ) {
-//    if (uiModels.isEmpty()) return
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -70,47 +69,42 @@ fun HomeItemVertically(
     modifier: Modifier = Modifier,
     onClick: (id: Int, type: MediaType) -> Unit
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(Theme.radius.lg))
-                .background(Theme.color.background.card)
-                .aspectRatio(0.74f),
-            contentAlignment = Alignment.Center
+    multipleEventsCutter { manager ->
+        Column(
+            modifier = modifier
+                .clickable {
+                    manager.processEvent { onClick(item.id, item.mediaType) }
+                },
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            SafeIslamicImage(
-                imageUrl = item.posterUrl,
-                contentDescription = item.title,
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clickable { onClick(item.id, item.mediaType) }
-            )
-//            {
-//                Icon(
-//                    painter = painterResource(Theme.icons.dueTone.image),
-//                    contentDescription = stringResource(R.string.loading_image),
-//                    modifier = Modifier.size(32.dp),
-//                    tint = Theme.color.brand.secondary
-//                )
-//            }
+                    .clip(RoundedCornerShape(Theme.radius.lg))
+                    .background(Theme.color.background.card)
+                    .aspectRatio(0.74f),
+                contentAlignment = Alignment.Center
+            ) {
+                SafeIslamicImage(
+                    imageUrl = item.posterUrl,
+                    contentDescription = item.title,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+                Rating(
+                    value = item.rating,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(end = 8.dp, top = 8.dp)
+                )
+            }
 
-            Rating(
-                value = item.rating,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(end = 8.dp, top = 8.dp)
+            Text(
+                text = item.title,
+                style = Theme.textStyle.body.md.medium,
+                color = Theme.color.shade.secondary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
-
-        Text(
-            text = item.title,
-            style = Theme.textStyle.body.md.medium,
-            color = Theme.color.shade.secondary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
     }
 }
