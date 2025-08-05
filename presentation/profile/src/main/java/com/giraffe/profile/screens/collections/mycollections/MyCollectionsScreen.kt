@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.CollectionItem
@@ -37,6 +36,8 @@ import com.giraffe.media.collections.entity.Collection
 import com.giraffe.profile.createcollection.CreateCollectionContent
 import com.giraffe.profile.screens.collections.mycollections.components.NoCollectionsPlaceholder
 import com.giraffe.profile.utils.EffectListener
+import com.giraffe.designsystem.R as RDesignSystem
+import com.giraffe.profile.R as RProfile
 
 @Composable
 fun MyCollectionsScreen(
@@ -81,7 +82,7 @@ fun MyCollectionsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            title = stringResource(R.string.my_collections),
+            title = stringResource(RProfile.string.my_collections),
             showBackButton = true,
             onBackButtonClick = interactions::onBackClick
         )
@@ -138,9 +139,9 @@ private fun MyCollectionsScreenContent(
                         modifier = Modifier,
                         text = collection.name,
                         description = "${collection.itemCount} " + stringResource(
-                            id = R.string.movies
+                            id = RProfile.string.movies
                         ),
-                        icon = R.drawable.due_tone_folder,
+                        icon = RDesignSystem.drawable.due_tone_folder,
                         onClick = {
                             interactions.onCollectionClick(collection)
                         }
@@ -169,7 +170,7 @@ private fun MyCollectionsScreenContent(
             Icon(
                 painter = painterResource(Theme.icons.outline.add),
                 contentDescription = stringResource(
-                    id = R.string.create_new_collection
+                    id = RProfile.string.create_new_collection
                 ),
                 tint = Theme.color.button.onPrimary
             )
@@ -180,18 +181,18 @@ private fun MyCollectionsScreenContent(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 36.dp),
-            title = stringResource(R.string.create_new_collection),
+            title = stringResource(RProfile.string.create_new_collection),
             isVisible = state.isCreateNewCollectionBottomSheetVisible,
             onDismiss = interactions::onDismissCreateNewCollectionBottomSheet,
             content = {
                 CreateCollectionContent(
-                    startIcon = R.drawable.outline_folder,
+                    startIcon = RDesignSystem.drawable.outline_folder,
                     hintText = stringResource(
-                        id = R.string.collection_name
+                        id = RProfile.string.collection_name
                     ),
                     value = state.newCollectionName,
                     title = stringResource(
-                        id = R.string.collection_name
+                        id = RProfile.string.collection_name
                     ),
                     onValueChange = interactions::onNewCollectionNameChange,
                     createButtonClick = interactions::onConfirmCreateNewCollectionClick,
