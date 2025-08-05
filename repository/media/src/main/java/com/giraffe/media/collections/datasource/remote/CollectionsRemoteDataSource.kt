@@ -6,7 +6,7 @@ import com.giraffe.media.collections.datasource.remote.dto.CollectionItemDto
 interface CollectionsRemoteDataSource {
 
 
-    suspend fun getCollections(): List<CollectionDto>
+    suspend fun getCollections(accountId: Int): List<CollectionDto>
 
 
     suspend fun getCollectionDetails(collectionId: Int): CollectionDto

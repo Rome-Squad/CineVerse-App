@@ -13,12 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.giraffe.authentication.R
 import com.giraffe.authentication.utils.WebViewConstants.LOGIN_PATH
 import com.giraffe.authentication.utils.WebViewConstants.SIGN_UP_URL
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.authentication.R
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView

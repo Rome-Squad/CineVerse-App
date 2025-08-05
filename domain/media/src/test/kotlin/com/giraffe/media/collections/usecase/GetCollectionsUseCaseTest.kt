@@ -3,6 +3,7 @@ package com.giraffe.media.collections.usecase
 import com.giraffe.media.collections.fake.createFakeCollection
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.collections.entity.Collection
+import com.giraffe.user.usecase.GetUserUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -13,12 +14,14 @@ import org.junit.jupiter.api.Test
 class GetCollectionsUseCaseTest {
 
     private lateinit var collectionsRepository: CollectionsRepository
+    private lateinit var getUserUseCase: GetUserUseCase
     private lateinit var getCollectionsUseCase: GetCollectionsUseCase
 
     @BeforeEach
     fun setUp() {
         collectionsRepository = mockk()
-        getCollectionsUseCase = GetCollectionsUseCase(collectionsRepository)
+        getUserUseCase = mockk()
+        getCollectionsUseCase = GetCollectionsUseCase(collectionsRepository, getUserUseCase)
     }
 
     @Test
@@ -28,7 +31,9 @@ class GetCollectionsUseCaseTest {
             createFakeCollection(id = 1, name = "Favorites"),
             createFakeCollection(id = 2, name = "Watch Later")
         )
-        coEvery { collectionsRepository.getCollections() } returns expectedCollections
+
+        coEvery { getUserUseCase().id } returns 111
+        coEvery { collectionsRepository.getCollections(111) } returns expectedCollections
 
         // When
         val result: List<Collection> = getCollectionsUseCase()
