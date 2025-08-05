@@ -18,7 +18,9 @@ fun NavGraphBuilder.loginRoute(
 ) {
     composable<LoginRoute> {
         authApi.LoginContainer(
-            onBack = { }
+            onBack = {},
+            isOnboardingFirstTime = true,
+            isLoggedIn = false
         )
     }
 }

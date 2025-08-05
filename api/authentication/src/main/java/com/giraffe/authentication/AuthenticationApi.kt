@@ -6,7 +6,7 @@ interface AuthenticationApi {
     @Composable
     fun LoginContainer(
         onBack: () -> Unit,
-        isOnboardingFirstTime: Boolean = false,
-        isLoggedIn: Boolean = false
+        isOnboardingFirstTime: Boolean,
+        isLoggedIn: Boolean
     )
 }

@@ -24,12 +24,8 @@ internal fun AuthenticationNavGraph(
     val startDestination = when {
         isOnboardingFirstTime -> OnBoardingRoute
         isLoggedIn -> HomeRoute
-        else -> LoginRoute
+        else -> LoginRoute()
     }
-
-//        if(isOnboardingFirstTime)OnBoardingRoute
-//        else if(isLoggedIn) HomeRoute
-//        else LoginRoute
 
     NavHost(
         navController = navController,

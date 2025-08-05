@@ -9,10 +9,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 object OnBoardingRoute
 
-fun NavController.navigateOnBoardingScreen() {
-    navigate(OnBoardingRoute)
-}
-
 fun NavGraphBuilder.onBoardingRoute(
     navController: NavController
 ) {
