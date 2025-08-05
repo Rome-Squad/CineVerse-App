@@ -38,7 +38,7 @@
     <string name="start_collecting">Start collecting</string>
     <string name="create_new_collection">Create new collection</string>
     <string name="collection_name">Collection Name</string>
-    <string name="movies">%1$d movies</string>
+    <string name="movies">movies</string>
     <string name="close">Close</string>
 
 </resources>

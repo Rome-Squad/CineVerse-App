@@ -137,10 +137,9 @@ private fun MyCollectionsScreenContent(
                     CollectionItem(
                         modifier = Modifier,
                         text = collection.name,
-                        description = if (collection.itemCount > 0)
-                            stringResource(id = R.string.movies, collection.itemCount)
-                        else
-                            stringResource(id = R.string.movies, 0),
+                        description = "${collection.itemCount} " + stringResource(
+                            id = com.giraffe.profile.R.string.movies
+                        ),
                         icon = R.drawable.due_tone_folder,
                         onClick = {
                             interactions.onCollectionClick(collection)

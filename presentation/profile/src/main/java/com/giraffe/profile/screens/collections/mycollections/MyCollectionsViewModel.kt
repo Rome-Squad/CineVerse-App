@@ -98,7 +98,8 @@ class MyCollectionsViewModel @Inject constructor(
     private fun onCreateCollectionSuccess(result: Unit) {
         updateState {
             it.copy(
-                isLoading = false
+                isLoading = false,
+                newCollectionName = "",
             )
         }
 
@@ -108,7 +109,8 @@ class MyCollectionsViewModel @Inject constructor(
     private fun onCreateCollectionFailure(error: Throwable) {
         updateState {
             it.copy(
-                isLoading = false
+                isLoading = false,
+                newCollectionName = ""
             )
         }
         sendEffect(MyCollectionsEffect.ShowError(mapErrorToResource(error)))

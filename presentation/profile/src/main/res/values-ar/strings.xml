@@ -39,6 +39,6 @@
     <string name="start_collecting">ابدأ بالتصفح</string>
     <string name="create_new_collection">انشاء مجموعة جديدة</string>
     <string name="collection_name">اسم المجموعة</string>
-    <string name="movies">%1$d أفلام</string>
+    <string name="movies">أفلام</string>
     <string name="close">غلق</string>
 </resources>
