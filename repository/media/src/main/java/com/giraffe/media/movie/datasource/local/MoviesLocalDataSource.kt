@@ -19,10 +19,6 @@ interface MoviesLocalDataSource {
 
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
-    suspend fun getMovieById(movieId: Int): MovieCacheDto?
-
-    suspend fun getMoviesByName(movieName: String): List<MovieCacheDto>
-
     suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
 
     suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
@@ -30,10 +26,6 @@ interface MoviesLocalDataSource {
     suspend fun getRecommendedMovies(movieId: Int, limit: Int): List<MovieCacheDto>
 
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
-
-    suspend fun getMovieGenreById(genreId: Int): MovieGenreCacheDto
-
-    suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
 
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
@@ -43,7 +35,7 @@ interface MoviesLocalDataSource {
 
     suspend fun clearMovieCache()
 
-    suspend fun clearRecentlyMovies()
+    suspend fun clearMovieCacheWithOutRecentViewed()
 
-    suspend fun clearMovieGenreCache()
+    suspend fun clearRecentlyViewedMovies()
 }

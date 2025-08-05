@@ -27,7 +27,6 @@ interface MovieDao {
     @Query("UPDATE movie_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
-
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id IN (:ids)")
     suspend fun getMoviesByIds(ids: List<Int>): List<MovieCacheDto>
 
@@ -49,14 +48,8 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
 
-    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE ID =:id")
-    suspend fun getMovieGenreById(id: Int): MovieGenreCacheDto
-
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY count DESC")
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
-
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE genresID =:genreId")
-    suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE upcomingAt IS NOT NULL AND upcomingAt > 0 ORDER BY upcomingAt DESC LIMIT :limit")
     fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
@@ -67,19 +60,9 @@ interface MovieDao {
     @Query("DELETE FROM $MOVIE_TABLE")
     suspend fun clearMovieCache()
 
-    @Query("DELETE FROM $MOVIE_GENRE_TABLE")
-    suspend fun clearMovieGenreCache()
+    @Query("DELETE FROM $MOVIE_TABLE WHERE recentViewedAt IS NULL")
+    suspend fun clearMovieCacheWithOutRecentViewed()
 
-    @Query("DELETE FROM $MOVIE_TABLE WHERE recentReleasedAt > 0")
-    suspend fun clearRecentlyMovies()
-
-    @Query(
-        """
-    DELETE FROM $MOVIE_TABLE 
-    WHERE recentReleasedAt = 0 
-    AND cachedAt <= :currentTime - 3600000
-"""
-    )
-    suspend fun clearMovieCache(currentTime: Long)
-
+    @Query("DELETE FROM $MOVIE_TABLE WHERE recentViewedAt > 0")
+    suspend fun clearRecentlyViewedMovies()
 }

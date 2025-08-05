@@ -55,9 +55,10 @@ class MoviesRepositoryImpl @Inject constructor(
         if (genreIds.isNotEmpty()) {
             local.incrementInteractionCountForGenres(genreIds)
         }
-        local.getMovieGenresByIds(genreIds).filter { it.id in genreIds }.map { it.toEntity() }.ifEmpty {
-            remote.getMovieGenres().filter { it.id in genreIds }.map(MovieGenreDto::toEntity)
-        }
+        local.getMovieGenresByIds(genreIds).filter { it.id in genreIds }.map { it.toEntity() }
+            .ifEmpty {
+                remote.getMovieGenres().filter { it.id in genreIds }.map(MovieGenreDto::toEntity)
+            }
     }
 
     override suspend fun getMoviesGenres() = SafeCall {
@@ -175,9 +176,15 @@ class MoviesRepositoryImpl @Inject constructor(
     private suspend fun getUpcomingMoviesFromRemote(page: Int, limit: Int) =
         remote.getUpcomingMovies(page).take(limit).map(MovieDto::toEntity)
 
-    override suspend fun clearCache() = SafeCall {
+    override suspend fun clearMovieCache() = SafeCall {
         local.clearMovieCache()
     }
 
-    override suspend fun clearRecentlyMovies() = SafeCall { local.clearRecentlyMovies() }
+    override suspend fun clearMovieCacheWithOutRecentViewed() = SafeCall {
+        local.clearMovieCacheWithOutRecentViewed()
+    }
+
+    override suspend fun clearRecentlyViewedMovies() = SafeCall {
+        local.clearRecentlyViewedMovies()
+    }
 }

@@ -5,8 +5,6 @@ import androidx.room.Room
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.cineverseapp.data.preference.DataStorePreferences
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
-import com.giraffe.media.movie.cleaner.MovieCacheCleaner
-import com.giraffe.media.movie.cleaner.MovieCacheCleanerImp
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.person.cleaner.PersonCacheCleaner
 import com.giraffe.media.person.cleaner.PersonCacheCleanerImp
@@ -35,11 +33,6 @@ abstract class DatabaseModule {
     @Binds
     @Singleton
     abstract fun bindSeriesCacheCleaner(imp: SeriesCacheCleanerImp): SeriesCacheCleaner
-
-    @Binds
-    @Singleton
-    abstract fun bindMovieCacheCleaner(imp: MovieCacheCleanerImp): MovieCacheCleaner
-
 
     companion object {
         @Provides

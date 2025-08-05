@@ -7,23 +7,23 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class ClearRecentlyMoviesUseCaseTest {
+class ClearMoviesCacheUseCaseTest {
 
     private lateinit var repository: MoviesRepository
+    private lateinit var useCase: ClearMoviesCacheUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
+        useCase = ClearMoviesCacheUseCase(repository)
     }
 
-
     @Test
-    fun `should call repository clear method`() = runTest {
-
-        val useCase = ClearRecentlyMoviesUseCase(repository)
-
+    fun `should call repository to clear cache`() = runTest {
+        // When
         useCase()
 
-        coVerify(exactly = 1) { repository.clearRecentlyViewedMovies() }
+        // Then
+        coVerify { repository.clearMovieCache() }
     }
 }

@@ -65,14 +65,6 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.incrementInteractionCountForGenres(genreIds)
     }
 
-    override suspend fun getMovieById(movieId: Int) = safeCall {
-        movieDao.getMovieById(movieId)
-    }
-
-    override suspend fun getMoviesByName(movieName: String) = safeCall {
-        movieDao.getMovieByName(movieName)
-    }
-
     override suspend fun getPopularityMovies(limit: Int) = safeCall {
         movieDao.getPopularityMovies(limit = limit)
     }
@@ -87,14 +79,6 @@ class MovieLocalDataSourceImp @Inject constructor(
 
     override suspend fun getMovieGenresByIds(ids: List<Int>) = safeCall {
         movieDao.getMovieGenresByIds(ids)
-    }
-
-    override suspend fun getMovieGenreById(genreId: Int) = safeCall {
-        movieDao.getMovieGenreById(genreId)
-    }
-
-    override suspend fun getMoviesByGenre(genreId: Int) = safeCall {
-        movieDao.getMoviesByGenre(genreId)
     }
 
     override suspend fun getMoviesGenres() = safeCall {
@@ -113,11 +97,11 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.clearMovieCache()
     }
 
-    override suspend fun clearRecentlyMovies() = safeCall {
-        movieDao.clearRecentlyMovies()
+    override suspend fun clearMovieCacheWithOutRecentViewed() {
+        movieDao.clearMovieCacheWithOutRecentViewed()
     }
 
-    override suspend fun clearMovieGenreCache() = safeCall {
-        movieDao.clearMovieGenreCache()
+    override suspend fun clearRecentlyViewedMovies() = safeCall {
+        movieDao.clearRecentlyViewedMovies()
     }
 }
