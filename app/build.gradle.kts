@@ -113,6 +113,7 @@ dependencies {
     implementation(project(":api:profile"))
     implementation(project(":api:authentication"))
 
+    implementation(libs.androidx.core.splashscreen)
 
 
     implementation(libs.androidx.core.ktx)
