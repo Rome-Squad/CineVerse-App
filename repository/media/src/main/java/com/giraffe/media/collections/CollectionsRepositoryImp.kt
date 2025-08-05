@@ -14,8 +14,10 @@ class CollectionsRepositoryImp @Inject constructor(
     private val collectionsRemoteDataSource: CollectionsRemoteDataSource
 ) : CollectionsRepository {
 
-    override suspend fun getCollections(): List<Collection> = SafeCall {
-        collectionsRemoteDataSource.getCollections().map { it.toEntity() }
+    override suspend fun getCollections(
+        accountId: Int
+    ): List<Collection> = SafeCall {
+        collectionsRemoteDataSource.getCollections(accountId).map { it.toEntity() }
     }
 
 

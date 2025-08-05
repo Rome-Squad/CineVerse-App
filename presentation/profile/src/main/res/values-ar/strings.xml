@@ -24,9 +24,21 @@
     <string name="back">رجوع للنافذة السابقة</string>
     <string name="cancel">الغاء</string>
     <string name="create">انشاء</string>
-    <string name="profile_screen">جهة الملف الشخصيوا</string>
+    <string name="profile_screen">واجهة الملف الشخصي</string>
+
     <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
     <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
     <string name="screen_info">اسحب العنصر جهه اليسار ليتم حذفه</string>
-
+    <string name="access_denied_error">خطأ : تم رفض الوصول!</string>
+    <string name="collection_name_cannot_be_blank">اسم المجموعة لا يمكن أن يكون فارغ!</string>
+    <string name="validation_error">خطأ: بيانات غير مسموحة!</string>
+    <string name="collection_not_found">خطأ: لم نجد المجموعة!</string>
+    <string name="no_collections">لا يوجد مجموعات</string>
+    <string name="no_collections_yet">لا يوجد مجموعات بعد</string>
+    <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">ابدأ ببناء مكتبتك و حفظ الأفلام اللتي تريد تذكرها</string>
+    <string name="start_collecting">ابدأ بالتصفح</string>
+    <string name="create_new_collection">انشاء مجموعة جديدة</string>
+    <string name="collection_name">اسم المجموعة</string>
+    <string name="movies">أفلام</string>
+    <string name="close">غلق</string>
 </resources>

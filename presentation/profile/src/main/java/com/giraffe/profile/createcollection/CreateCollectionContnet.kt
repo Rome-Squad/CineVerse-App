@@ -2,7 +2,6 @@ package com.giraffe.profile.createcollection
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -14,17 +13,16 @@ import com.giraffe.designsystem.composable.DefaultTextField
 @Composable
 fun CreateCollectionContent(
     modifier: Modifier = Modifier,
-    startIcon : Int,
-    hintText : String,
-    value : String,
-    title : String,
-    onValueChange : (String) -> Unit,
-    createButtonClick :() -> Unit,
-    cancelButtonClick : ()-> Unit
-){
-    Column (
-        modifier = modifier
-            .fillMaxWidth(),
+    startIcon: Int,
+    hintText: String,
+    value: String,
+    title: String,
+    onValueChange: (String) -> Unit,
+    createButtonClick: () -> Unit,
+    cancelButtonClick: () -> Unit
+) {
+    Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
 
@@ -42,11 +40,15 @@ fun CreateCollectionContent(
             cancelButtonClick = cancelButtonClick,
             enableCreate = true
         )
+
+
     }
+
 }
+
 @Preview(showBackground = true)
 @Composable
-private fun Preview(){
+private fun Preview() {
     CreateCollectionContent(
         startIcon = R.drawable.outline_folder,
         hintText = "e.g. My Watchlist",
@@ -55,5 +57,5 @@ private fun Preview(){
         onValueChange = {},
         createButtonClick = {},
         cancelButtonClick = {}
-    ) 
+    )
 }

@@ -45,5 +45,4 @@ abstract class FeatureApiBindModule {
     @Binds
     @Singleton
     abstract fun bindMatchApi(impl: MatchApiImp): MatchApi
-
 }

@@ -156,129 +156,122 @@ private fun MovieDetailsContent(
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .systemBarsPadding()
+            .nestedScroll(nestedScrollConnection)
     ) {
-        Column(
-            modifier = modifier
-                .background(Theme.color.background.screen)
-                .nestedScroll(nestedScrollConnection)
-        ) {
-            AppBar(
-                showBackButton = true,
-                onBackButtonClick = onBackButtonClick,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
 
-            MainMovieOrSeriesDetailsAnimatedContent(
-                type = stringResource(id = TypeOfScreen.MOVIE.titleResId),
-                name = state.movie.title,
-                imageUrl = state.movie.posterUrl,
-                rating = state.movie.rating,
-                genres = state.movieGenres,
-                releaseYear = state.movie.releaseYear.orEmpty(),
-                isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),
-                onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
-                onClickAdd = interaction::onAddToCollectionClick,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                duration = state.movie.duration,
-                animationProgress = animationProgress
-            )
-
-            AnimatedVisibility(
-                visible = !state.isLoadingMovieDetails,
-                enter = slideInVertically(
-                    animationSpec = tween(durationMillis = 300, easing = EaseOut)
-                ) { it },
-                exit = fadeOut()
+        AnimatedVisibility(!state.isLoadingMovieDetails) {
+            LazyColumn(
+                state = scrollState,
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .background(Theme.color.background.screen)
+                    .fillMaxSize()
             ) {
-                LazyColumn(
-                    state = scrollState,
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .background(Theme.color.background.screen)
-                        .fillMaxSize()
-                        .padding(top = 24.dp)
-                ) {
-                    if (state.movie.description.isNotBlank()) {
-                        item {
-                            InfoSection(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                title = stringResource(R.string.storyline),
-                                description = state.movie.description
-                            )
-                        }
-                    }
+                stickyHeader {
+                    Column(Modifier.background(Theme.color.background.screen)) {
+                        AppBar(
+                            showBackButton = true,
+                            onBackButtonClick = onBackButtonClick,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
 
-                    if (state.cast.isNotEmpty()) {
-                        item {
-                            StarCastSection(
-                                title = stringResource(R.string.star_cast),
-                                onCastClick = { interaction.navigateToCastDetailsScreen(it) },
-                                castList = state.cast
-                            )
-                        }
-                    }
-                    if (state.crew.isNotEmpty()) {
-                        item {
-                            StaffInfoSection(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                title = stringResource(R.string.behind_the_scenes),
-                                staffList = state.crew
-                            )
-                        }
-                    }
-
-                    if (state.recommendedMovies.isNotEmpty()) {
-                        item {
-                            PosterListSection(
-                                title = stringResource(R.string.you_might_also_like),
-                                endText = stringResource(R.string.show_more),
-                                posters = state.recommendedMovies,
-                                onClickEndText = {
-                                    interaction.navigateToMovieRecommendation(
-                                        state.movie.id,
-                                        state.movie.title
-                                    )
-                                },
-                                onClickPoster = { onClickPoster(it.id) }
-                            )
-                        }
-                    }
-                    item {
-                        RatingSection(
+                        MainMovieOrSeriesDetailsAnimatedContent(
+                            type = stringResource(id = TypeOfScreen.MOVIE.titleResId),
+                            name = state.movie.title,
+                            imageUrl = state.movie.posterUrl,
+                            rating = state.movie.rating,
+                            genres = state.movieGenres,
+                            releaseYear = state.movie.releaseYear.orEmpty(),
+                            isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),
+                            onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
+                            onClickAdd = interaction::onAddToCollectionClick,
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            onClickCard = interaction::onGiveStarsClick
+                            duration = state.movie.duration,
+                            animationProgress = animationProgress
                         )
                     }
+                }
 
-                    if (state.movieReviews.isNotEmpty()) {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .padding(bottom = 24.dp),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                SectionTitle(
-                                    modifier = Modifier,
-                                    title = stringResource(R.string.top_reviews),
-                                    clickableText = if (state.movieReviews.size > 3) stringResource(
-                                        R.string.show_more
-                                    ) else null,
-                                    onClickableText = { interaction.navigateToReviews(state.movie.id) }
+                if (state.movie.description.isNotBlank()) {
+                    item {
+                        InfoSection(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            title = stringResource(R.string.storyline),
+                            description = state.movie.description
+                        )
+                    }
+                }
+
+                if (state.cast.isNotEmpty()) {
+                    item {
+                        StarCastSection(
+                            title = stringResource(R.string.star_cast),
+                            onCastClick = { interaction.navigateToCastDetailsScreen(it) },
+                            castList = state.cast
+                        )
+                    }
+                }
+                if (state.crew.isNotEmpty()) {
+                    item {
+                        StaffInfoSection(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            title = stringResource(R.string.behind_the_scenes),
+                            staffList = state.crew
+                        )
+                    }
+                }
+
+                if (state.recommendedMovies.isNotEmpty()) {
+                    item {
+                        PosterListSection(
+                            title = stringResource(R.string.you_might_also_like),
+                            endText = stringResource(R.string.show_more),
+                            posters = state.recommendedMovies,
+                            onClickEndText = {
+                                interaction.navigateToMovieRecommendation(
+                                    state.movie.id,
+                                    state.movie.title
                                 )
+                            },
+                            onClickPoster = { onClickPoster(it.id) }
+                        )
+                    }
+                }
+                item {
+                    RatingSection(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        onClickCard = interaction::onGiveStarsClick
+                    )
+                }
 
-                                val reviewsToShow = state.movieReviews.take(3)
-                                reviewsToShow.fastForEach { review ->
-                                    ReviewCard(
-                                        rate = review.rating,
-                                        reviewText = review.content,
-                                        reviewDate = review.createdAt,
-                                        reviewerImageUrl = review.authorImageUrl,
-                                        reviewerName = review.authorName,
-                                        reviewerUsername = review.authorUserName
-                                    )
-                                }
+                if (state.movieReviews.isNotEmpty()) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 24.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            SectionTitle(
+                                modifier = Modifier,
+                                title = stringResource(R.string.top_reviews),
+                                clickableText = if (state.movieReviews.size > 3) stringResource(
+                                    R.string.show_more
+                                ) else null,
+                                onClickableText = { interaction.navigateToReviews(state.movie.id) }
+                            )
+
+                            val reviewsToShow = state.movieReviews.take(3)
+                            reviewsToShow.fastForEach { review ->
+                                ReviewCard(
+                                    rate = review.rating,
+                                    reviewText = review.content,
+                                    reviewDate = review.createdAt,
+                                    reviewerImageUrl = review.authorImageUrl,
+                                    reviewerName = review.authorName,
+                                    reviewerUsername = review.authorUserName
+                                )
                             }
                         }
                     }

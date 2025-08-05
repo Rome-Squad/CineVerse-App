@@ -2,8 +2,8 @@ package com.giraffe.authentication.login
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.authentication.R
 import com.giraffe.authentication.base.BaseViewModel
+import com.giraffe.presentation.authentication.R
 import com.giraffe.user.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
