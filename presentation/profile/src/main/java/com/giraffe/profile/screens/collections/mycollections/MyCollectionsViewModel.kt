@@ -25,7 +25,7 @@ class MyCollectionsViewModel @Inject constructor(
         getCollections()
     }
 
-    fun getCollections() {
+    private fun getCollections() {
         safeExecute(
             onError = ::onGetCollectionsFailure,
             onSuccess = ::onGetCollectionsSuccess
