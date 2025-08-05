@@ -20,9 +20,9 @@ class MovieLocalDataSourceImp @Inject constructor(
         movie: MovieCacheDto,
         transformer: ((MovieCacheDto) -> MovieCacheDto)?
     ) = safeCall {
-        val movieDb = movieDao.getMovieById(movie.id)
-        val newMovie = movieDb ?: movie
-        val finalMovie = transformer?.invoke(newMovie) ?: newMovie
+        val existingMovie = movieDao.getMovieById(movie.id)
+        val mergedMovie = movie.mergeWith(existingMovie)
+        val finalMovie = transformer?.invoke(mergedMovie) ?: mergedMovie
         movieDao.upsertMovie(finalMovie)
     }
 
@@ -31,14 +31,34 @@ class MovieLocalDataSourceImp @Inject constructor(
         transformer: ((MovieCacheDto) -> MovieCacheDto)?
     ) {
         if (movies.isEmpty()) return
-        val newMovieIds = movies.map { it.id }
-        val moviesDb = movieDao.getMoviesByIds(newMovieIds)
-        val movieIdsDb = moviesDb.map { it.id }
-        val newMovies = movies.filterNot { it.id in movieIdsDb }
-        val combinedMovies = (newMovies + moviesDb)
-        val finalMovies = transformer?.let { transformFunc -> combinedMovies.map(transformFunc) }
-            ?: combinedMovies
+        val incomingMovieIds = movies.map { it.id }
+        val existingMoviesById = movieDao.getMoviesByIds(incomingMovieIds).associateBy { it.id }
+        val mergedMovies = if (existingMoviesById.isEmpty()) {
+            movies
+        } else {
+            movies.map { incomingMovie ->
+                existingMoviesById[incomingMovie.id]?.let { existingMovie ->
+                    incomingMovie.mergeWith(existingMovie)
+                } ?: incomingMovie
+            }
+        }
+        val finalMovies = transformer?.let { mergedMovies.map(it) } ?: mergedMovies
         movieDao.upsertMovies(finalMovies)
+    }
+
+    // need description to understand function
+    private fun MovieCacheDto.mergeWith(existing: MovieCacheDto?): MovieCacheDto {
+        if (existing == null) return this
+        return this.copy(
+            posterPath = this.posterPath ?: existing.posterPath,
+            backdropPath = this.backdropPath ?: existing.backdropPath,
+            youtubeVideoId = this.youtubeVideoId ?: existing.youtubeVideoId,
+            releaseDate = this.releaseDate ?: existing.releaseDate,
+            duration = this.duration ?: existing.duration,
+            recentViewedAt = existing.recentViewedAt,
+            recentReleasedAt = existing.recentReleasedAt,
+            upcomingAt = existing.upcomingAt
+        )
     }
 
     override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = safeCall {
