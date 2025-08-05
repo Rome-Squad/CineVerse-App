@@ -6,11 +6,5 @@ import jakarta.inject.Inject
 class GetUserNameUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(): String {
-        return try {
-            userRepository.getUser().username
-        } catch (e: Exception) {
-            ""
-        }
-    }
+    suspend operator fun invoke(): String = userRepository.getUser().username
 }
