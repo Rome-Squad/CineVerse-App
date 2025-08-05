@@ -11,7 +11,7 @@ class GetUserNameUseCase @Inject constructor(
             val user = userRepository.getUser()
             user.username
         } catch (e: Exception) {
-            "Guest"
+            ""
         }
     }
 }
