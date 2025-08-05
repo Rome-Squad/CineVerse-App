@@ -1,4 +1,4 @@
-package com.giraffe.authentication.composable
+package com.giraffe.authentication.login.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

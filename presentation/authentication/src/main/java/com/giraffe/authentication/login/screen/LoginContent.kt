@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.authentication.R
-import com.giraffe.authentication.composable.LoginForm
-import com.giraffe.authentication.composable.LogoSection
+import com.giraffe.authentication.login.composable.LoginForm
+import com.giraffe.authentication.login.composable.LogoSection
 import com.giraffe.authentication.login.LoginInteractionListener
 import com.giraffe.authentication.login.LoginScreenState
 import com.giraffe.designsystem.composable.BaseBottomSheet
