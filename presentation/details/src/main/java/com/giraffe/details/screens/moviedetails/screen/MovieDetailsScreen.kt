@@ -1,10 +1,8 @@
 package com.giraffe.details.screens.moviedetails.screen
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -159,7 +157,11 @@ private fun MovieDetailsContent(
             .nestedScroll(nestedScrollConnection)
     ) {
 
-        AnimatedVisibility(!state.isLoadingMovieDetails) {
+        AnimatedVisibility(
+            visible = !state.isLoadingMovieDetails,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
             LazyColumn(
                 state = scrollState,
                 verticalArrangement = Arrangement.spacedBy(24.dp),
