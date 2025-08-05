@@ -95,173 +95,173 @@ fun SeriesDetailsContent(
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .systemBarsPadding()
+            .nestedScroll(nestedScrollConnection)
     ) {
         AnimatedVisibility(state.isLoading) {
-            Progress(modifier = Modifier
-                .size(40.dp)
-                .align(Alignment.Center))
+            Progress(
+                modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.Center)
+            )
         }
 
-        Column(
-            modifier = modifier
+        LazyColumn(
+            state = scrollState,
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
                 .background(Theme.color.background.screen)
-                .nestedScroll(nestedScrollConnection)
+                .fillMaxSize()
         ) {
-            AppBar(
-                showBackButton = true,
-                onBackButtonClick = onBackButtonClick,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
+            stickyHeader {
+                Column(modifier.background(Theme.color.background.screen)) {
+                    AppBar(
+                        showBackButton = true,
+                        onBackButtonClick = onBackButtonClick,
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
 
-            MainMovieOrSeriesDetailsAnimatedContent(
-                type = stringResource(id = TypeOfScreen.SERIES.titleResId),
-                name = state.seriesDetails.name,
-                imageUrl = state.seriesDetails.posterUrl,
-                rating = state.seriesDetails.rating,
-                genres = state.genres,
-                releaseYear = state.seriesDetails.releaseYear,
-                isPlayButtonEnabled = state.seriesDetails.youtubeVideoId.isNotBlank(),
-                onClickPlay = { onClickPlay(state.seriesDetails.youtubeVideoId) },
-                onClickAdd = interaction::onClickAddToCollection,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
-                animationProgress = animationProgress
-            )
-
-            LazyColumn(
-                state = scrollState,
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(top = 24.dp)
-                    .background(Theme.color.background.screen)
-                    .fillMaxSize()
-                    .systemBarsPadding()
-            ) {
-                if (state.seriesDetails.overview.isNotBlank()) {
-                    item {
-                        InfoSection(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            title = stringResource(R.string.storyline),
-                            description = state.seriesDetails.overview
-                        )
-                    }
+                    MainMovieOrSeriesDetailsAnimatedContent(
+                        type = stringResource(id = TypeOfScreen.SERIES.titleResId),
+                        name = state.seriesDetails.name,
+                        imageUrl = state.seriesDetails.posterUrl,
+                        rating = state.seriesDetails.rating,
+                        genres = state.genres,
+                        releaseYear = state.seriesDetails.releaseYear,
+                        isPlayButtonEnabled = state.seriesDetails.youtubeVideoId.isNotBlank(),
+                        onClickPlay = { onClickPlay(state.seriesDetails.youtubeVideoId) },
+                        onClickAdd = interaction::onClickAddToCollection,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
+                        animationProgress = animationProgress
+                    )
                 }
+            }
 
-                if (state.seasons.isNotEmpty()) {
-                    item {
-                        SectionTitle(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            title = stringResource(R.string.latest_seasons),
-                            clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
-                            onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
-                        )
-                    }
+            if (state.seriesDetails.overview.isNotBlank()) {
+                item {
+                    InfoSection(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        title = stringResource(R.string.storyline),
+                        description = state.seriesDetails.overview
+                    )
                 }
-                if (state.seasons.isNotEmpty()) {
-                    item {
-                        Column(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            for (i in 0..min(2, state.seasons.size - 1)) {
-                                SeasonCard(
-                                    posterUrl = state.seasons[i].posterUrl,
-                                    title = stringResource(
-                                        R.string.season,
-                                        state.seasons[i].seasonNumber + 1
-                                    ),
-                                    overview = state.seasons[i].overview,
-                                    rating = state.seasons[i].rating,
-                                    episodes = state.seasons[i].episodeCount,
-                                    year = state.seasons[i].releaseYear
-                                        .takeIf { it.isNotBlank() && it.contains("-") }
-                                        ?.split("-")
-                                        ?.firstOrNull()
-                                        ?.toIntOrNull()
-                                )
-                            }
+            }
+
+            if (state.seasons.isNotEmpty()) {
+                item {
+                    SectionTitle(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        title = stringResource(R.string.latest_seasons),
+                        clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
+                        onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
+                    )
+                }
+            }
+            if (state.seasons.isNotEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        for (i in 0..min(2, state.seasons.size - 1)) {
+                            SeasonCard(
+                                posterUrl = state.seasons[i].posterUrl,
+                                title = stringResource(
+                                    R.string.season,
+                                    state.seasons[i].seasonNumber + 1
+                                ),
+                                overview = state.seasons[i].overview,
+                                rating = state.seasons[i].rating,
+                                episodes = state.seasons[i].episodeCount,
+                                year = state.seasons[i].releaseYear
+                                    .takeIf { it.isNotBlank() && it.contains("-") }
+                                    ?.split("-")
+                                    ?.firstOrNull()
+                                    ?.toIntOrNull()
+                            )
                         }
                     }
                 }
+            }
 
-                if (state.cast.isNotEmpty()) {
-                    item {
-                        StarCastSection(
-                            title = stringResource(R.string.star_cast),
-                            castList = state.cast,
-                            onCastClick = interaction::navigateToCastDetailsScreen
-                        )
-                    }
-                }
-
-                if (state.crew.isNotEmpty()) {
-                    item {
-                        StaffInfoSection(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            title = stringResource(R.string.behind_the_scenes),
-                            staffList = state.crew
-                        )
-                    }
-                }
-
-                if (state.recommendedSeries.isNotEmpty()) {
-                    item {
-                        PosterListSection(
-                            title = stringResource(R.string.you_might_also_like),
-                            endText = stringResource(R.string.show_more),
-                            posters = state.recommendedSeries,
-                            onClickEndText = {
-                                interaction.navigateToRecommendedSeriesScreen(
-                                    seriesId = state.seriesDetails.id,
-                                    title = state.seriesDetails.name
-                                )
-                            },
-                            onClickPoster = {
-                                interaction.navigateToSeriesDetails(it.id)
-                            }
-                        )
-                    }
-                }
-
+            if (state.cast.isNotEmpty()) {
                 item {
-                    RatingSection(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        onClickCard = interaction::onClickGiveStars
+                    StarCastSection(
+                        title = stringResource(R.string.star_cast),
+                        castList = state.cast,
+                        onCastClick = interaction::navigateToCastDetailsScreen
                     )
                 }
+            }
 
-                if (state.seriesReviews.isNotEmpty()) {
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 24.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            SectionTitle(
-                                modifier = Modifier,
-                                title = stringResource(R.string.top_reviews),
-                                clickableText = if (state.seriesReviews.size > 3) stringResource(R.string.show_more) else null,
-                                onClickableText = { interaction.navigateToReviews(state.seriesDetails.id) }
+            if (state.crew.isNotEmpty()) {
+                item {
+                    StaffInfoSection(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        title = stringResource(R.string.behind_the_scenes),
+                        staffList = state.crew
+                    )
+                }
+            }
+
+            if (state.recommendedSeries.isNotEmpty()) {
+                item {
+                    PosterListSection(
+                        title = stringResource(R.string.you_might_also_like),
+                        endText = stringResource(R.string.show_more),
+                        posters = state.recommendedSeries,
+                        onClickEndText = {
+                            interaction.navigateToRecommendedSeriesScreen(
+                                seriesId = state.seriesDetails.id,
+                                title = state.seriesDetails.name
                             )
+                        },
+                        onClickPoster = {
+                            interaction.navigateToSeriesDetails(it.id)
+                        }
+                    )
+                }
+            }
 
-                            val reviewsToShow = state.seriesReviews.take(3)
-                            reviewsToShow.forEach { review ->
-                                ReviewCard(
-                                    rate = review.rating,
-                                    reviewText = review.content,
-                                    reviewDate = review.createdAt,
-                                    reviewerImageUrl = review.authorImageUrl,
-                                    reviewerName = review.authorName,
-                                    reviewerUsername = review.authorUserName
-                                )
-                            }
+            item {
+                RatingSection(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    onClickCard = interaction::onClickGiveStars
+                )
+            }
+
+            if (state.seriesReviews.isNotEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        SectionTitle(
+                            modifier = Modifier,
+                            title = stringResource(R.string.top_reviews),
+                            clickableText = if (state.seriesReviews.size > 3) stringResource(R.string.show_more) else null,
+                            onClickableText = { interaction.navigateToReviews(state.seriesDetails.id) }
+                        )
+
+                        val reviewsToShow = state.seriesReviews.take(3)
+                        reviewsToShow.forEach { review ->
+                            ReviewCard(
+                                rate = review.rating,
+                                reviewText = review.content,
+                                reviewDate = review.createdAt,
+                                reviewerImageUrl = review.authorImageUrl,
+                                reviewerName = review.authorName,
+                                reviewerUsername = review.authorUserName
+                            )
                         }
                     }
                 }
             }
         }
+
 
         BaseBottomSheet(
             isVisible = state.isVisibleAddToCollectionBottomSheet,
