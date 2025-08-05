@@ -49,13 +49,13 @@ class HomeViewModel @Inject constructor(
     HomeInteractionListener {
 
     init {
+        getUserName()
         loadHomeContent()
     }
 
     override fun loadHomeContent() {
         getFeaturedCollection()
         getRecentViewed()
-        getUserName()
     }
 
     private fun getUserName() {
