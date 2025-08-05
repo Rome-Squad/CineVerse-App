@@ -74,10 +74,12 @@ fun MyCollectionsScreen(
         modifier = modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
-            .padding(horizontal = 16.dp)
             .systemBarsPadding()
     ) {
         AppBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             title = stringResource(R.string.my_collections),
             showBackButton = true,
             onBackButtonClick = interactions::onBackClick
