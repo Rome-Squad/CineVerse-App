@@ -5,7 +5,7 @@ import com.giraffe.media.movies.entity.Movie
 
 interface CollectionsRepository {
 
-    suspend fun getCollections(): List<Collection>
+    suspend fun getCollections(accountId: Int): List<Collection>
 
 
     suspend fun getCollectionDetails(collectionId: Int): Collection
