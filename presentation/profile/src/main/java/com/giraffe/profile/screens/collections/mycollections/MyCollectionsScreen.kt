@@ -131,18 +131,16 @@ private fun MyCollectionsScreenContent(
             ) {
                 items(state.collections) { collection ->
                     CollectionItem(
-                        modifier = Modifier
-                            .clickable(
-                                onClick = {
-                                    interactions.onCollectionClick(collection)
-                                }
-                            ),
+                        modifier = Modifier,
                         text = collection.name,
                         description = if (collection.itemCount > 0)
                             stringResource(id = R.string.movies, collection.itemCount)
                         else
                             "",
-                        icon = R.drawable.due_tone_folder
+                        icon = R.drawable.due_tone_folder,
+                        onClick = {
+                            interactions.onCollectionClick(collection)
+                        }
                     )
                 }
             }

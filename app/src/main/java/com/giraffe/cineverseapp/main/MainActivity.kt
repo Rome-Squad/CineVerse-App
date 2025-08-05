@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.home.HomeApi
+import com.giraffe.profile.screens.collections.mycollections.MyCollectionsScreen
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 
@@ -40,11 +41,7 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             CineVerseTheme {
-                val state by mainViewModel.state.collectAsState()
-                when {
-                    state.isLoggedIn == true -> homeApi.HomeContainer()
-                    else -> authenticationApi.LoginContainer { }
-                }
+                MyCollectionsScreen()
             }
         }
     }
