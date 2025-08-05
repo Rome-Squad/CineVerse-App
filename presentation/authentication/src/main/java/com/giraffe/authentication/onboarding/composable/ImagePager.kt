@@ -10,7 +10,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -18,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
@@ -48,7 +51,7 @@ fun ImagePager(
 
     HorizontalPager(
         state = pagerState,
-        pageSpacing = 32.dp,
+        pageSpacing = 24.dp,
         contentPadding = PaddingValues(horizontal = horizontalPadding),
         modifier = modifier
     ) { page ->
@@ -79,24 +82,30 @@ fun ImagePager(
             pageIndexDiff = pageIndexDiff
         )
 
-        Image(
-            painter = painterResource(id = images[page]),
-            contentDescription = stringResource(R.string.image, page + 1),
-            contentScale = ContentScale.FillBounds,
+        Box(
             modifier = Modifier
-                .graphicsLayer {
-                    this.rotationZ = animatedRotationZ
-                    this.scaleX = scale
-                    this.scaleY = scale
-                }
-                .fillMaxSize()
-                .clip(shape)
-                .border(
-                    width = 1.dp,
-                    brush = Theme.color.stroke.glow,
-                    shape = shape
-                )
-        )
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = images[page]),
+                contentDescription = stringResource(R.string.image, page + 1),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .graphicsLayer {
+                        this.rotationZ = animatedRotationZ
+                        this.scaleX = scale
+                        this.scaleY = scale
+                    }
+                    .aspectRatio(3f / 4f)
+                    .clip(shape)
+                    .border(
+                        width = 1.dp,
+                        brush = Theme.color.stroke.glow,
+                        shape = shape
+                    )
+            )
+        }
     }
 }
 

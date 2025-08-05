@@ -60,7 +60,7 @@ private fun OnBoardingContent(
     ) {
         Column(
             modifier = modifier
-                .padding(top = 56.dp)
+                .padding(top = 69.dp)
                 .verticalScroll(scrollState)
                 .background(Theme.color.background.screen)
                 .systemBarsPadding()
