@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.composable.navbar.BottomTab
@@ -25,11 +24,6 @@ class MatchTab(
 ) : BottomTab<MatchRoute> {
     override val route = MatchRoute
 }
-
-internal fun NavController.navigateToMatch() {
-    navigate(MatchRoute)
-}
-
 
 @Composable
 fun MatchScreen(
