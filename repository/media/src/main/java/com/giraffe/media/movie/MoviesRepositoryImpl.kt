@@ -51,11 +51,11 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getMoviesByName(movieName, page).map(MovieDto::toEntity)
     }
 
-    override suspend fun getMovieGenres(genreIds: List<Int>) = SafeCall {
+    override suspend fun getMovieGenresByIds(genreIds: List<Int>) = SafeCall {
         if (genreIds.isNotEmpty()) {
             local.incrementInteractionCountForGenres(genreIds)
         }
-        local.getMovieGenres(genreIds).filter { it.id in genreIds }.map { it.toEntity() }.ifEmpty {
+        local.getMovieGenresByIds(genreIds).filter { it.id in genreIds }.map { it.toEntity() }.ifEmpty {
             remote.getMovieGenres().filter { it.id in genreIds }.map(MovieGenreDto::toEntity)
         }
     }

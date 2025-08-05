@@ -66,8 +66,7 @@ class MovieLocalDataSourceImp @Inject constructor(
     }
 
     override suspend fun getMovieById(movieId: Int) = safeCall {
-        val movie = movieDao.getMovieById(movieId)
-        movie
+        movieDao.getMovieById(movieId)
     }
 
     override suspend fun getMoviesByName(movieName: String) = safeCall {
@@ -86,7 +85,7 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.getRecommendedMovies(movieId, limit)
     }
 
-    override suspend fun getMovieGenresById(ids: List<Int>) = safeCall {
+    override suspend fun getMovieGenresByIds(ids: List<Int>) = safeCall {
         movieDao.getMovieGenresByIds(ids)
     }
 
@@ -100,10 +99,6 @@ class MovieLocalDataSourceImp @Inject constructor(
 
     override suspend fun getMoviesGenres() = safeCall {
         movieDao.getMoviesGenres()
-    }
-
-    override suspend fun getMovieGenres(genreIds: List<Int>) = safeCall {
-        movieDao.getMovieGenres(genreIds)
     }
 
     override suspend fun getUpcomingMovies(limit: Int) = safeCall {

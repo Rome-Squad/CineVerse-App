@@ -16,8 +16,8 @@ import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
@@ -30,7 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     val getMovieDetails: GetMovieDetailsUseCase,
-    val getMovieGenres: GetMovieGenresUseCase,
+    val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
@@ -90,7 +90,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieGenresSuccess,
             onError = ::loadMovieGenresError
         ) {
-            getMovieGenres(genresIds)
+            getMoviesGenresByIds(genresIds)
         }
     }
 

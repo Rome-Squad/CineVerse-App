@@ -55,9 +55,6 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY count DESC")
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
-    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:genreIds)")
-    suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenreCacheDto>
-
     @Query("SELECT * FROM $MOVIE_TABLE WHERE genresID =:genreId")
     suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
 
