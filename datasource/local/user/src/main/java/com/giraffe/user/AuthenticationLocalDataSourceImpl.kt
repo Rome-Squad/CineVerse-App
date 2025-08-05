@@ -1,6 +1,6 @@
 package com.giraffe.user
 
-import com.giraffe.repository.datasource.remote.AuthenticationLocalDataSource
+import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
 import com.giraffe.user.util.safeCall
 import javax.inject.Inject
@@ -14,6 +14,14 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getSessionId(): String? = safeCall {
         authenticationDatastore.getSessionId()
+    }
+
+    override suspend fun saveAccountId(accountId: Int) = safeCall {
+        authenticationDatastore.saveAccountId(accountId)
+    }
+
+    override suspend fun getAccountId(): Int? = safeCall {
+        authenticationDatastore.getAccountId()
     }
 
     override suspend fun isLoggedIn(): Boolean = safeCall {

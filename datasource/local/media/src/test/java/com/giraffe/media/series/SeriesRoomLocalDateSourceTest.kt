@@ -2,20 +2,18 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
-import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SeriesRoomLocalDateSourceTest {
 
     private lateinit var dao: SeriesDao
@@ -56,19 +54,6 @@ class SeriesRoomLocalDateSourceTest {
     }
 
     @Test
-    fun `saveSearchResult inserts series only and preserves recent flag`() = runTest {
-        coEvery { dao.getSeriesByIds(listOf(1)) } returns listOf(sampleSeries[0].copy(isRecent = true))
-
-        dataSource.insertSearchResult(sampleSeries)
-
-        coVerify {
-            dao.insertSeries(match {
-                it[0].id == 1 && it[0].isRecent
-            })
-        }
-    }
-
-    @Test
     fun `getCachedGenres returns genres if cache is valid`() = runTest {
         coEvery { dao.getAllGenres() } returns sampleGenres
 
@@ -87,29 +72,10 @@ class SeriesRoomLocalDateSourceTest {
     }
 
     @Test
-    fun `getCachedSeriesForName returns full data if cache valid`() = runTest {
-        coEvery { dao.getSeriesByKeyword("vikings", 1) } returns sampleSeries
-
-        val result = dataSource.getCachedSeriesForName("vikings", 1)
-
-        assertThat(result).hasSize(1)
-        assertThat(result[0].name).isEqualTo("Vikings")
-    }
-
-    @Test
-    fun `getCachedSeriesForName returns empty if cache expired`() = runTest {
-        coEvery { dao.getSeriesByKeyword("vikings", 1) } returns emptyList()
-
-        val result = dataSource.getCachedSeriesForName("vikings", 1)
-
-        assertThat(result).isEmpty()
-    }
-
-    @Test
     fun `saveGenres inserts genres`() = runTest {
         val genres = listOf(SeriesGenreCacheDto(id = 2, name = "Drama", count = 2))
 
-        dataSource.saveGenres(genres)
+        dataSource.insertGenres(genres)
 
         coVerify { dao.insertGenres(genres) }
     }
@@ -155,42 +121,6 @@ class SeriesRoomLocalDateSourceTest {
 
         coVerify { dao.getSeasonsForSeries(1) }
         assertThat(result).isEqualTo(sampleSeasons)
-    }
-
-    @Test
-    fun `saveSearchResult does not insert when merged list is empty`() = runTest {
-        coEvery { dao.getSeriesByIds(emptyList()) } returns emptyList()
-
-        dataSource.insertSearchResult(emptyList())
-
-        coVerify(exactly = 0) { dao.insertSeries(any()) }
-    }
-
-    @Test
-    fun `saveSearchResult sets isRecent to false if series not in DB`() = runTest {
-        val series = listOf(
-            SeriesCacheDto(
-                2,
-                "Loki",
-                "desc",
-                9.0f,
-                "poster",
-                "backdrop",
-                listOf(2),
-                "2021",
-                isRecent = true
-            )
-        )
-
-        coEvery { dao.getSeriesByIds(listOf(2)) } returns emptyList()
-
-        dataSource.insertSearchResult(series)
-
-        coVerify {
-            dao.insertSeries(match {
-                it.size == 1 && it[0].id == 2 && !it[0].isRecent
-            })
-        }
     }
 
 }

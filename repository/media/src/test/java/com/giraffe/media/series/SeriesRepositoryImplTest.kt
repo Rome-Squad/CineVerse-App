@@ -13,7 +13,6 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -143,7 +142,7 @@ class SeriesRepositoryImplTest {
 
         assertThat(result).hasSize(1)
         assertThat(result.first().title).isEqualTo("Action")
-        coVerify { local.saveGenres(match { it.first().id == 1 }) }
+        coVerify { local.insertGenres(match { it.first().id == 1 }) }
     }
 
     @Test
@@ -172,7 +171,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `SeriesRepository should return Series`() = runTest {
-        repository.getRecommendedSeries(1, 1)
+        repository.getRecommendedSeries(1, 1, 10)
         coVerify { remote.getSeriesRecommendations(1, 1) }
     }
 }

@@ -56,6 +56,7 @@ fun PosterHorizontal(
             SafeIslamicImage(
                 imageUrl = poster.imageUri,
                 contentDescription = poster.name,
+                hasSensitiveText = false,
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(64.dp)

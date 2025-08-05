@@ -2,7 +2,7 @@ package com.giraffe.home.screen.home
 
 
 data class HomeScreenUiState(
-    val userName: String = "Ashraf",
+    val userName: String = "",
     val matchVibes: List<HomeUiModel> = emptyList(),
     val popularity: List<PopularMediaUiModel> = emptyList(),
     val recentlyReleased: List<HomeUiModel> = emptyList(),
@@ -14,6 +14,6 @@ data class HomeScreenUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val errorMsgRes: Int? = null,
-    val isGenricError: Boolean = false,
+    val isGenericError: Boolean = false,
     val isNetworkError: Boolean = false
 )
