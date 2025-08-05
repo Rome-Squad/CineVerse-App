@@ -6,8 +6,8 @@ import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.screen.home.PopularMediaUiModel
 import com.giraffe.home.screen.home.YourCollectionUiModel
 import com.giraffe.home.screen.movies_list.PosterUiState
+import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.home.entity.YourCollection
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.entity.Series
 
@@ -16,7 +16,7 @@ fun Movie.toHomeUiModel(): HomeUiModel {
     return HomeUiModel(
         id = id,
         title = title,
-        posterUrl = posterUrl .orEmpty(),
+        posterUrl = posterUrl.orEmpty(),
         rating = rating,
         mediaType = MediaType.MOVIE
     )
@@ -47,7 +47,7 @@ fun Movie.toPosterUi(): PosterUiState {
     return PosterUiState(
         id = id,
         name = title,
-        imageUri = posterUrl .orEmpty(),
+        imageUri = posterUrl.orEmpty(),
         rating = rating,
         date = releaseYear.toString(),
         mediaType = MediaType.MOVIE
@@ -59,8 +59,8 @@ fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
     return PopularMediaUiModel(
         id = id,
         title = title,
-        posterUrl = posterUrl .orEmpty(),
-        backdropUrl = backdropUrl .orEmpty(),
+        posterUrl = posterUrl.orEmpty(),
+        backdropUrl = backdropUrl.orEmpty(),
         genres = genres,
         rating = rating,
         mediaType = MediaType.MOVIE
@@ -78,12 +78,11 @@ fun Series.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
     )
 }
 
-
-fun YourCollection.toUiModel(): YourCollectionUiModel {
+fun Collection.toUiModel(): YourCollectionUiModel {
     return YourCollectionUiModel(
         id = id,
-        title = title,
-        numberOfItems = numberOfShows.toIntOrNull() ?: 0
+        title = name,
+        numberOfItems = itemsCount
     )
 }
 

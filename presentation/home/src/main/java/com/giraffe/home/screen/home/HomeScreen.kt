@@ -42,7 +42,6 @@ import com.giraffe.home.components.Carousel
 import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
 import com.giraffe.home.components.TopAppBar
-import com.giraffe.home.components.UserCollection
 import com.giraffe.home.components.YourCollectionsSections
 import com.giraffe.home.screen.movies_list.MovieSectionType
 
@@ -287,11 +286,13 @@ fun HomeContent(
                         }
                     )
                 }
-                if (yourCollections.isNotEmpty()) {
-                    YourCollectionsSections(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        collectionItems = yourCollections
-                    )
+                if (state.yourCollections.isNotEmpty()) {
+                YourCollectionsSections(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    collectionItems = state.yourCollections
+                )
                 }
                 AdvertisementSection(
                     modifier = Modifier
@@ -328,13 +329,6 @@ fun HomeContent(
         }
     }
 }
-
-val yourCollections = listOf(
-    UserCollection("My Favorite TV Shows", "5 shows"),
-    UserCollection("Animated Series", "4 shows"),
-    UserCollection("My Watchlist", "10 movies"),
-    UserCollection("Documentaries", "6 movies"),
-)
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable

@@ -5,6 +5,8 @@ import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
+import com.giraffe.media.collections.entity.Collection
+import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
@@ -43,6 +45,7 @@ class HomeViewModel @Inject constructor(
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getCollectionsUseCase: GetCollectionsUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
@@ -57,6 +60,24 @@ class HomeViewModel @Inject constructor(
         getRecentlyReleased()
         getTopRatedSeries()
         getUpcomingMovies()
+        getYourCollections()
+    }
+
+    private fun getYourCollections() {
+        safeExecute(
+            onSuccess = ::onGetYourCollectionsSuccess,
+            onError = ::onFail,
+            block = { getCollectionsUseCase() }
+        )
+    }
+
+    private fun onGetYourCollectionsSuccess(collections: List<Collection>) {
+        val yourCollections = collections.map { it.toUiModel() }
+        updateState { currentState ->
+            currentState.copy(
+                yourCollections = yourCollections
+            )
+        }
     }
 
     private fun getFeaturedCollection() {

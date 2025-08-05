@@ -13,18 +13,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.CinePreview
 import com.giraffe.designsystem.composable.CollectionItem
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
+import com.giraffe.home.screen.home.YourCollectionUiModel
 
 @Composable
 fun YourCollectionsSections(
     modifier: Modifier = Modifier,
-    collectionItems: List<UserCollection>,
+    collectionItems: List<YourCollectionUiModel>,
     onShowMoreClick: () -> Unit = {}
 ) {
     Column(
@@ -61,31 +60,12 @@ fun YourCollectionsSections(
                         CollectionItem(
                             modifier = Modifier.width(280.dp),
                             text = item.title,
-                            description = item.description,
+                            description = item.numberOfItems.toString(),
                             icon = Theme.icons.dueTone.folder
                         )
                     }
                 }
             }
         }
-    }
-}
-
-data class UserCollection(
-    val title: String,
-    val description: String
-)
-
-@CinePreview
-@Composable
-private fun Preview() {
-    CineVerseTheme {
-        val collections = listOf(
-            UserCollection("My Favorite TV Shows", "5 shows"),
-            UserCollection("Animated Series", "4 shows"),
-            UserCollection("My Watchlist", "10 movies"),
-            UserCollection("Documentaries", "6 movies"),
-        )
-        YourCollectionsSections(collectionItems = collections)
     }
 }

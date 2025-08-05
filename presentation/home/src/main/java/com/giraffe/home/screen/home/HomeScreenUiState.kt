@@ -9,7 +9,7 @@ data class HomeScreenUiState(
     val topRated: List<HomeUiModel> = emptyList(),
     val upcomingMovies: List<HomeUiModel> = emptyList(),
     val recentlyViewed: List<HomeUiModel> = emptyList(),
-    val collections: List<YourCollectionUiModel> = emptyList(),
+    val yourCollections: List<YourCollectionUiModel> = emptyList(),
     val featuredCollections: List<FeaturedCollectionUiModel> = emptyList(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,

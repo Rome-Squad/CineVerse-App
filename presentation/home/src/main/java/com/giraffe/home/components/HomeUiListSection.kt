@@ -37,8 +37,6 @@ fun HomeUiListSection(
     onClickEndText: () -> Unit = {},
     onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
 ) {
-//    if (uiModels.isEmpty()) return
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -88,14 +86,6 @@ fun HomeItemVertically(
                     .fillMaxSize()
                     .clickable { onClick(item.id, item.mediaType) }
             )
-//            {
-//                Icon(
-//                    painter = painterResource(Theme.icons.dueTone.image),
-//                    contentDescription = stringResource(R.string.loading_image),
-//                    modifier = Modifier.size(32.dp),
-//                    tint = Theme.color.brand.secondary
-//                )
-//            }
 
             Rating(
                 value = item.rating,
