@@ -27,10 +27,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.giraffe.authentication.R
 import com.giraffe.authentication.onboarding.screen.OnBoardingPage
 import com.giraffe.authentication.onboarding.screen.OnboardingInteractionListener
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.authentication.R
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -39,7 +39,6 @@ fun OnBoardingFooter(
     pagerState: PagerState,
     pages: List<OnBoardingPage>,
     modifier: Modifier = Modifier,
-    navigateToLogin: () -> Unit,
     interaction: OnboardingInteractionListener
 ) {
     val isLastPage = pagerState.currentPage == pagerState.pageCount - 1

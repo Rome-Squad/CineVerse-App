@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
-import com.giraffe.authentication.R
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.authentication.R
 import kotlin.math.absoluteValue
 
 @SuppressLint("ConfigurationScreenWidthHeight")

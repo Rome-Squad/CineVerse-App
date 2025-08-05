@@ -34,11 +34,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.giraffe.authentication.R
 import com.giraffe.authentication.onboarding.screen.OnboardingInteractionListener
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.authentication.R
 import kotlinx.coroutines.launch
 
 
@@ -110,7 +110,7 @@ fun NavigationButtons(
                     coroutineScope.launch {
                         if (!isLastPage) {
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                        }else{
+                        } else {
                             interaction.markOnboardingComplete()
                         }
                     }
