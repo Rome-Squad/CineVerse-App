@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.pager.rememberPagerState
@@ -56,20 +57,20 @@ private fun OnBoardingContent(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .systemBarsPadding()
+            .navigationBarsPadding()
             .background(Theme.color.background.screen)
     ) {
         Column(
             modifier = modifier
-                .padding(top = 69.dp)
+                .padding(top = 16.dp)
                 .verticalScroll(scrollState)
                 .background(Theme.color.background.screen)
-                .systemBarsPadding()
         ) {
             ImagePager(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 53.dp),
                 pagerState = pagerState,
-                images = pages.map { it.imageRes }
-            )
+                images = pages.map { it.imageRes })
 
             OnBoardingFooter(
                 pagerState = pagerState,
