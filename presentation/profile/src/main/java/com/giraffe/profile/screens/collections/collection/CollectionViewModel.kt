@@ -90,8 +90,7 @@ class CollectionViewModel @Inject constructor(
                 genres = state.value.movieGenres
             )
         }
-        Log.d("VMTAG", "onGetCollectionItemsSuccess: $moviesList")
-        Log.d("VMTAG", "posters: $swipeablePosters")
+
         updateState {
             it.copy(
                 isLoading = false,
