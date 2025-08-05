@@ -8,8 +8,7 @@ class GetUserNameUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): String {
         return try {
-            val user = userRepository.getUser()
-            user.username
+            userRepository.getUser().username
         } catch (e: Exception) {
             ""
         }
