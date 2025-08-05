@@ -6,11 +6,12 @@ interface MyCollectionsInteractionListener {
 
     fun onCollectionClick(collection: CollectionUi)
 
-    //create new collection bottom sheet
+
     fun onNewCollectionNameChange(newCollectionName: String)
     fun onCreateNewCollectionClick()
     fun onConfirmCreateNewCollectionClick()
     fun onDismissCreateNewCollectionBottomSheet()
+
 
     fun onStartCollectingClick()
 

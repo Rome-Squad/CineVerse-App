@@ -24,7 +24,7 @@
     <string name="back">رجوع للنافذة السابقة</string>
     <string name="cancel">الغاء</string>
     <string name="create">انشاء</string>
-    <string name="profile_screen">جهة الملف الشخصيوا</string>
+    <string name="profile_screen">واجهة الملف الشخصي</string>
 
     <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
     <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
@@ -40,5 +40,5 @@
     <string name="create_new_collection">انشاء مجموعة جديدة</string>
     <string name="collection_name">اسم المجموعة</string>
     <string name="movies">%1$d أفلام</string>
-    <string name="close">أغلق</string>
+    <string name="close">غلق</string>
 </resources>

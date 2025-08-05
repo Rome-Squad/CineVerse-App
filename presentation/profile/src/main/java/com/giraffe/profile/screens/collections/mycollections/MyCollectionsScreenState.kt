@@ -7,6 +7,5 @@ data class MyCollectionsScreenState(
     val isLoading: Boolean = true,
     val isCreateNewCollectionBottomSheetVisible: Boolean = false,
 
-    //Create New Collection Bottom Sheet
     val newCollectionName: String = ""
 )
