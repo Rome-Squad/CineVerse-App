@@ -1,6 +1,5 @@
 package com.giraffe.profile.screens.collections.collection
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
