@@ -89,13 +89,9 @@ fun MainDetails(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 12.dp - 4.dp * animationProgress
-                )
+                .padding(start = 16.dp)
                 .animateContentSize()
         ) {
             actorImageUrl?.let {
@@ -108,7 +104,7 @@ fun MainDetails(
                         .padding(
                             top = 8.dp * animationProgress,
                             bottom = 8.dp * animationProgress,
-                            end = 8.dp * animationProgress,
+                            end = 12.dp - 4.dp * animationProgress,
                             start = 16.dp * animationProgress
                         )
                         .size(
