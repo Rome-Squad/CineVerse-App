@@ -59,13 +59,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getUserName() {
-        viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::getUserNameSuccess,
-                onError = ::getUserNameError
-            ) {
-                getUserNameUseCase()
-            }
+        safeExecute(
+            onSuccess = ::getUserNameSuccess,
+            onError = ::getUserNameError
+        ) {
+            getUserNameUseCase()
         }
     }
 
