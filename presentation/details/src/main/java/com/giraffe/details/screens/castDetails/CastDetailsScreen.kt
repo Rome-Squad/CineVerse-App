@@ -186,12 +186,21 @@ fun CastDetailsContent(
                         onLinkClick = interaction::navigateToActorMediaLink,
                         animationProgress = animationProgress
                     )
+
+                    if (animationProgress == 1f) {
+                        Box(
+                            modifier = Modifier
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .background(Theme.color.stroke.primary)
+                                .align(Alignment.BottomStart)
+                        )
+                    }
                 }
             }
 
             item {
                 PosterListSection(
-                    modifier = Modifier.padding(top = innerColumnSpacing),
                     title = stringResource(R.string.best_of) + " " + state.actorName,
                     endText = stringResource(R.string.show_more),
                     posters = state.posters,
@@ -220,7 +229,6 @@ fun CastDetailsContent(
                     onShowMoreClick = interaction::navigateToActorGalleryScreen
                 )
             }
-
 
             item {
                 InfoSection(
@@ -255,6 +263,6 @@ private fun MainDetailsAnimatedContent(
         animationProgress = animationProgress,
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .padding(top = 72.dp - 72.dp * animationProgress),
+            .padding(top = 72.dp - 72.dp * animationProgress)
     )
 }
