@@ -26,6 +26,7 @@ import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.user.usecase.GetUserNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -49,6 +50,7 @@ class HomeViewModel @Inject constructor(
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getUserNameUseCase: GetUserNameUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
@@ -56,6 +58,33 @@ class HomeViewModel @Inject constructor(
         getFeaturedCollection()
         loadHomeContent()
         getRecentViewed()
+        getUserName()
+    }
+
+    private fun getUserName() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeExecute(
+                onSuccess = ::getUserNameSuccess,
+                onError = ::getUserNameError
+            ) {
+                getUserNameUseCase()
+            }
+        }
+    }
+
+    private fun getUserNameSuccess(username: String) {
+        updateState {
+            it.copy(
+                userName = username
+            )
+        }
+    }
+
+    private fun getUserNameError(errorResId: Int) {
+        updateState {
+            it.copy(isError = true)
+        }
+        sendEffect(HomeEffect.ShowError(errorResId))
     }
 
     private fun getRecentViewed() {
