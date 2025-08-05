@@ -11,4 +11,6 @@ interface AuthenticationLocalDataSource {
     suspend fun getAccountId(): Int?
 
     suspend fun isLoggedIn(): Boolean
+
+    suspend fun clearSessionId()
 }
