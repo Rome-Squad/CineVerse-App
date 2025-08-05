@@ -3,7 +3,7 @@ package com.giraffe.authentication.base
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.authentication.R
+import com.giraffe.presentation.authentication.R
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
 import com.giraffe.user.exception.InvalidUsernameMatchException

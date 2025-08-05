@@ -11,12 +11,18 @@ class AuthenticationApiImp @Inject constructor(
 ) : AuthenticationApi {
 
     @Composable
-    override fun LoginContainer(onBack: () -> Unit) {
+    override fun LoginContainer(
+        onBack: () -> Unit,
+        isOnboardingFirstTime: Boolean,
+        isLoggedIn: Boolean
+    ) {
         val navController = rememberNavController()
 
         AuthenticationNavGraph(
             navController = navController,
             homeApi = homeApi,
+            isOnboardingFirstTime = isOnboardingFirstTime,
+            isLoggedIn = isLoggedIn,
         )
     }
 }
