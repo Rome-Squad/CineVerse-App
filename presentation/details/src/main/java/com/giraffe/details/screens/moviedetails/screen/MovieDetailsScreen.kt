@@ -1,6 +1,10 @@
 package com.giraffe.details.screens.moviedetails.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +31,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.AppBar
@@ -178,7 +183,13 @@ private fun MovieDetailsContent(
                 animationProgress = animationProgress
             )
 
-            AnimatedVisibility(!state.isLoadingMovieDetails) {
+            AnimatedVisibility(
+                visible = !state.isLoadingMovieDetails,
+                enter = slideInVertically(
+                    animationSpec = tween(durationMillis = 300, easing = EaseOut)
+                ) { it },
+                exit = fadeOut()
+            ) {
                 LazyColumn(
                     state = scrollState,
                     verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -258,7 +269,7 @@ private fun MovieDetailsContent(
                                 )
 
                                 val reviewsToShow = state.movieReviews.take(3)
-                                reviewsToShow.forEach { review ->
+                                reviewsToShow.fastForEach { review ->
                                     ReviewCard(
                                         rate = review.rating,
                                         reviewText = review.content,

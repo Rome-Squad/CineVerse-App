@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -56,119 +56,129 @@ import com.giraffe.details.screens.castDetails.state.SocialMediaUi
 import com.giraffe.details.screens.castDetails.state.getIcon
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainDetails(
     actorName: String,
     actorBirthday: String,
     actorPlaceOfBirth: String,
     socialMediaUiList: List<SocialMediaUi>,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope,
     onLinkClick: (String) -> Unit,
     actorImageUrl: String?,
     modifier: Modifier = Modifier,
+    animationProgress: Float = 0f
 ) {
-    val singleSpace = " "
-    val key = "_KEY"
-    with(sharedTransitionScope) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .clip(shape = RoundedCornerShape(Theme.radius.xxl))
-                .background(Theme.color.background.card)
-                .padding(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                actorImageUrl?.let {
-                    val shapeImage = RoundedCornerShape(
-                        topStart = Theme.radius.xl,
-                        topEnd = Theme.radius.s,
-                        bottomStart = Theme.radius.s,
-                        bottomEnd = Theme.radius.xl
-                    )
-                    SafeIslamicImage(
-                        imageUrl = it,
-                        contentDescription = actorName,
-                        contentScale = ContentScale.Crop,
-                        hasSensitiveText = false,
-                        modifier = Modifier
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = actorImageUrl + key),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            )
-                            .size(height = 80.dp, width = 64.dp)
-                            .clip(shape = shapeImage)
-                            .fillMaxHeight(),
-                    )
-                    {
-                        Icon(
-                            painter = painterResource(Theme.icons.dueTone.image),
-                            contentDescription = actorName,
-                            tint = Theme.color.brand.secondary,
-                            modifier = Modifier
-                                .size(height = 80.dp, width = 64.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = Theme.color.stroke.primary,
-                                    shape = shapeImage
-                                )
-                                .clip(shape = shapeImage)
-                                .wrapContentSize()
-                        )
-                    }
-                }
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        style = Theme.textStyle.title.md,
-                        color = Theme.color.shade.primary,
-                        text = actorName,
-                        modifier = Modifier
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(key = actorName + key),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            )
-                    )
-                    if (actorBirthday.isNotBlank()) {
-                        IconTextBox(
-                            icon = painterResource(Theme.icons.outline.cake),
-                            contentDescription = stringResource(R.string.birthday_cake_icon),
-                            text = stringResource(R.string.actor_birthday) + singleSpace + actorBirthday,
-                        )
-                    }
-                    if (actorPlaceOfBirth.isNotBlank()) {
-                        IconTextBox(
-                            icon = painterResource(Theme.icons.outline.location),
-                            contentDescription = stringResource(R.string.location_icon),
-                            text = stringResource(R.string.place_of_birth) + singleSpace + actorPlaceOfBirth,
-                        )
-                    }
+    val radiusXl = Theme.radius.xl
+    val radiusS = Theme.radius.s
+    val shapeImage = remember(animationProgress) {
+        RoundedCornerShape(
+            topStart = radiusXl + (4.dp * animationProgress),
+            topEnd = radiusS + (12.dp * animationProgress),
+            bottomStart = radiusS + (12.dp * animationProgress),
+            bottomEnd = radiusXl + (4.dp * animationProgress)
+        )
+    }
+    val singleSpace = remember { " " }
 
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .clip(shape = RoundedCornerShape(Theme.radius.xxl))
+            .background(Theme.color.background.card.copy(1f - animationProgress))
+            .padding(vertical = 16.dp * (1 - animationProgress)),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(
+                    start = 16.dp,
+                    end = 12.dp - 4.dp * animationProgress
+                )
+                .animateContentSize()
+        ) {
+            actorImageUrl?.let {
+                SafeIslamicImage(
+                    imageUrl = it,
+                    contentDescription = actorName,
+                    contentScale = ContentScale.Crop,
+                    hasSensitiveText = false,
+                    modifier = Modifier
+                        .padding(
+                            top = 8.dp * animationProgress,
+                            bottom = 8.dp * animationProgress,
+                            end = 8.dp * animationProgress,
+                            start = 16.dp * animationProgress
+                        )
+                        .size(
+                            height = 80.dp - (40.dp * animationProgress),
+                            width = 64.dp - (24.dp * animationProgress)
+                        )
+                        .clip(shape = shapeImage)
+                ) {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.image),
+                        contentDescription = actorName,
+                        tint = Theme.color.brand.secondary,
+                        modifier = Modifier
+                            .padding(8.dp * animationProgress)
+                            .size(
+                                height = 80.dp - (40.dp * animationProgress),
+                                width = 64.dp - (24.dp * animationProgress)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = Theme.color.stroke.primary,
+                                shape = shapeImage
+                            )
+                            .clip(shape = shapeImage)
+                    )
                 }
             }
-            if(socialMediaUiList.isNotEmpty()) {
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(socialMediaUiList) {
-                        SocialMediaComponent(
-                            image = it.platform.getIcon(),
-                            name = stringResource(it.name),
-                            contentDescription = stringResource(it.contentDescription),
-                            onClick = { onLinkClick(it.url) }
-                        )
-                    }
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    style = Theme.textStyle.title.md,
+                    color = Theme.color.shade.primary,
+                    text = actorName
+                )
+
+                if (actorBirthday.isNotBlank() && animationProgress == 0f) {
+                    IconTextBox(
+                        icon = painterResource(Theme.icons.outline.cake),
+                        contentDescription = stringResource(R.string.birthday_cake_icon),
+                        text = stringResource(R.string.actor_birthday) + singleSpace + actorBirthday,
+                    )
+                }
+
+                if (actorPlaceOfBirth.isNotBlank() && animationProgress == 0f) {
+                    IconTextBox(
+                        icon = painterResource(Theme.icons.outline.location),
+                        contentDescription = stringResource(R.string.location_icon),
+                        text = stringResource(R.string.place_of_birth) + singleSpace + actorPlaceOfBirth,
+                    )
+                }
+            }
+        }
+
+        if (socialMediaUiList.isNotEmpty() && animationProgress == 0f) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+                items(socialMediaUiList) {
+                    SocialMediaComponent(
+                        image = it.platform.getIcon(),
+                        name = stringResource(it.name),
+                        contentDescription = stringResource(it.contentDescription),
+                        onClick = { onLinkClick(it.url) }
+                    )
                 }
             }
         }
     }
+//    }
 }
 
 
@@ -331,8 +341,6 @@ fun MainDetailsPreview() {
                             actorName = "Christian Bale",
                             actorBirthday = "Jan 30, 1974",
                             actorPlaceOfBirth = "Cardiff, Wales, UK",
-                            sharedTransitionScope = this@SharedTransitionLayout,
-                            animatedVisibilityScope = this@AnimatedContent,
                             actorImageUrl = "https://image.tmdb.org/t/p/w500/8Xr2d1b6k3Z5a4c7e9z0j5f8f8f8f8f8.jpg",
                             socialMediaUiList = emptyList(),
                             onLinkClick = {},

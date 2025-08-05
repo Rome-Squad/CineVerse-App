@@ -1,12 +1,8 @@
 package com.giraffe.designsystem.composable
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,11 +35,7 @@ fun PosterListSection(
 ) {
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Ltr
 
-    AnimatedVisibility(
-        visible = posters.isNotEmpty(),
-        enter = fadeIn(fadeAnimationSpec),
-        exit = fadeOut(fadeAnimationSpec) + slideOutHorizontally(slideAnimationSpec) { if (isRtl) -it else it }
-    ) {
+    if (posters.isNotEmpty()) {
         Column(
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(12.dp),

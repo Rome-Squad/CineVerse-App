@@ -1,6 +1,5 @@
 package com.giraffe.details.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,7 +38,7 @@ fun StarCastSection(
 ) {
     val sizeOfChunkedList = if (castList.size > 2) 2 else 1
     val chunkedList = castList.chunked(sizeOfChunkedList)
-    AnimatedVisibility(castList.isNotEmpty()) {
+    if (castList.isNotEmpty()) {
         Column(
             modifier = modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
