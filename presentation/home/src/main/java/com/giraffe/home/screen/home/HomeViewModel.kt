@@ -1,6 +1,5 @@
 package com.giraffe.home.screen.home
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
