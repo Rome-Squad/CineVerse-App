@@ -136,7 +136,7 @@ private fun MyCollectionsScreenContent(
                         description = if (collection.itemCount > 0)
                             stringResource(id = R.string.movies, collection.itemCount)
                         else
-                            "",
+                            stringResource(id = R.string.movies, 0),
                         icon = R.drawable.due_tone_folder,
                         onClick = {
                             interactions.onCollectionClick(collection)
