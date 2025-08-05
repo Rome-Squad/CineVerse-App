@@ -33,7 +33,7 @@ fun HistoryScreen(
     onBackClicked: () -> Unit = {},
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
-    navigateToExploreScreen: (Int) -> Unit,
+    navigateToExploreScreen: () -> Unit,
 
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
@@ -53,7 +53,7 @@ fun HistoryScreen(
 
 
                 is HistoryEffect.navigateToExploreScreen -> {
-                    navigateToExploreScreen(effect.id)
+                    navigateToExploreScreen()
                 }
                 is HistoryEffect.navigateToProfileScreen -> {
                     onBackClicked()
@@ -116,7 +116,7 @@ fun HistoryContent(
                     titlePrimaryButton = stringResource(R.string.find_something_to_watch),
                     isButtonsVisible = true,
                     isSecondaryButtonVisible = false,
-                    onClickPrimaryButton ={historyInteractionListener.navigateToExploreScreen(id= 0) },
+                    onClickPrimaryButton ={historyInteractionListener.navigateToExploreScreen() },
                 )
             }
         }
@@ -146,7 +146,7 @@ fun HistoryContentPreview() {
         override fun onDeleteClicked(): Unit = Unit
         override fun onCloseClicked() {}
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
-        override fun navigateToExploreScreen(id: Int) {}
+        override fun navigateToExploreScreen() {}
     }
     HistoryContent(
         state = HistoryUiState(

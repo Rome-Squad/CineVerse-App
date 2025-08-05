@@ -84,8 +84,8 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    override fun navigateToExploreScreen(id: Int) {
-        sendEffect(HistoryEffect.navigateToExploreScreen(id))
+    override fun navigateToExploreScreen() {
+        sendEffect(HistoryEffect.navigateToExploreScreen)
     }
 
 }
