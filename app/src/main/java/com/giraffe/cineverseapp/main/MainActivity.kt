@@ -1,11 +1,12 @@
 package com.giraffe.cineverseapp.main
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
@@ -16,12 +17,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.profile.utils.LanguageHelper
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var authenticationApi: AuthenticationApi
 
@@ -57,6 +59,17 @@ class MainActivity : ComponentActivity() {
             CineVerseTheme {
                 val state by mainViewModel.state.collectAsState()
 
+                CineVerseTheme(isDarkTheme = state.isDarkMode) {
+
+                    LaunchedEffect(state.language) {
+                        LanguageHelper.updateAppLocale(state.language)
+                    }
+
+//                    SettingsScreen(
+//                        onNavigateToEditProfileWebView = {},
+//                        onNavigateToLogin = {}
+//                    )
+
                 authenticationApi.LoginContainer(
                     onBack = {},
                     isOnboardingFirstTime = state.isOnBoardingFirstTime == true,
@@ -65,4 +78,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
 }

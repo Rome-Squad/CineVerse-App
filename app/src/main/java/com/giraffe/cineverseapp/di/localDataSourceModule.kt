@@ -10,10 +10,12 @@ import com.giraffe.media.person.PersonLocalDataSourceImp
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.series.SeriesRoomLocalDateSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.repository.datasource.local.OnboardingLocalDataSource
 import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
+import com.giraffe.repository.datasource.local.OnboardingLocalDataSource
+import com.giraffe.repository.datasource.local.SettingsLocalDataSource
 import com.giraffe.user.AuthenticationLocalDataSourceImpl
 import com.giraffe.user.OnboardingLocalDataSourceImpl
+import com.giraffe.user.SettingsLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -27,6 +29,10 @@ abstract class LocalDataSourceBindModule {
     @Binds
     @Singleton
     abstract fun bindKeywordsCacheCleaner(impl: KeywordsCacheCleanerImp): KeywordsCacheCleaner
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingsLocalDataSource(impl: SettingsLocalDataSourceImpl): SettingsLocalDataSource
 
     @Binds
     @Singleton

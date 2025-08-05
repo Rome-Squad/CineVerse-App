@@ -12,9 +12,11 @@ import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.repository.AuthenticationRepositoryImpl
 import com.giraffe.repository.OnboardingRepositoryImpl
+import com.giraffe.repository.SettingsRepositoryImpl
 import com.giraffe.repository.UserRepositoryImpl
 import com.giraffe.user.repository.AuthRepository
 import com.giraffe.user.repository.OnboardingRepository
+import com.giraffe.user.repository.SettingsRepository
 import com.giraffe.user.repository.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -37,6 +39,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMoviesRepository(impl: MoviesRepositoryImpl): MoviesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingsRepository(settingsRepositoryImpl: SettingsRepositoryImpl): SettingsRepository
 
     @Binds
     @Singleton
