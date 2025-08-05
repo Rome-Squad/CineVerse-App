@@ -16,6 +16,6 @@ fun NavGraphBuilder.editProfileWebViewRoute(
     navController: NavController
 ) {
     composable<EditProfileWebViewRoute> {
-        EditProfileWebViewScreen(onBack = { navController.popBackStack() })
+        EditProfileWebViewScreen(onBack = navController::popBackStack)
     }
 }

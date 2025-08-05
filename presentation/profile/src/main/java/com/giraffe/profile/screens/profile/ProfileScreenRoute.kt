@@ -11,14 +11,14 @@ data object ProfileScreenRoute
 
 fun NavGraphBuilder.profileScreenRoute(
     navController: NavController,
-    onNavigateToAuth: () -> Unit
+    onNavigateToLogin: () -> Unit
 ) {
     composable<ProfileScreenRoute> {
         SettingsScreen(
             onNavigateToEditProfileWebView = {
                 navController.navigateToEditProfileWebView()
             },
-            onNavigateToLogin = onNavigateToAuth
+            onNavigateToLogin = onNavigateToLogin
         )
     }
 }

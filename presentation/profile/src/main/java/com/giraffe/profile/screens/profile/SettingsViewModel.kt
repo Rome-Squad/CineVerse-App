@@ -5,6 +5,7 @@ import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.screens.profile.model.toUserUiModel
 import com.giraffe.profile.utils.Language
 import com.giraffe.profile.utils.LanguageHelper
+import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
@@ -35,14 +36,20 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun checkLoginStatus() {
-        viewModelScope.launch {
-            val isLoggedIn = isLoggedInUseCase()
-            updateState { it.copy(isLoggedIn = isLoggedIn) }
-            if (isLoggedIn) {
-                getUserProfile()
-            } else {
-                updateState { it.copy(isLoading = false) }
-            }
+        safeExecute(
+            onSuccess = ::handleLoginStatusSuccess,
+            onError = { updateState { it.copy(isLoading = false) } }
+        ) {
+            isLoggedInUseCase()
+        }
+    }
+
+    private fun handleLoginStatusSuccess(isLoggedIn: Boolean) {
+        updateState { it.copy(isLoggedIn = isLoggedIn) }
+        if (isLoggedIn) {
+            getUserProfile()
+        } else {
+            updateState { it.copy(isLoading = false) }
         }
     }
 
@@ -59,21 +66,20 @@ class SettingsViewModel @Inject constructor(
 
     private fun getUserProfile() {
         safeExecute(
-            onSuccess = { user ->
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        user = user.toUserUiModel()
-                    )
-                }
-            },
-            onError = { error ->
-                updateState { it.copy(isLoading = false) }
-                sendEffect(SettingsScreenEffect.ShowError(error.message.toString()))
-            }
+            onSuccess = ::handleGetUserProfileSuccess,
+            onError = ::handleGetUserProfileError
         ) {
             getUserUseCase()
         }
+    }
+
+    private fun handleGetUserProfileSuccess(user: User) {
+        updateState { it.copy(isLoading = false, user = user.toUserUiModel()) }
+    }
+
+    private fun handleGetUserProfileError(error: Throwable) {
+        updateState { it.copy(isLoading = false) }
+        sendEffect(SettingsScreenEffect.ShowError(error.message.toString()))
     }
 
     override fun onLoginClick() {

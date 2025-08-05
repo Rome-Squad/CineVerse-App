@@ -28,7 +28,7 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
         authenticationDatastore.getSessionId() != null
     }
 
-    override suspend fun clearSessionId() {
+    override suspend fun clearSessionId() = safeCall {
         authenticationDatastore.clearSessionId()
     }
 }

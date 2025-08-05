@@ -10,7 +10,7 @@ import com.giraffe.profile.screens.profile.profileScreenRoute
 @Composable
 internal fun ProfileNavGraph(
     navController: NavHostController,
-    onNavigateToAuth: () -> Unit
+    onNavigateToLogin: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -18,7 +18,7 @@ internal fun ProfileNavGraph(
     ) {
         profileScreenRoute(
             navController = navController,
-            onNavigateToAuth = onNavigateToAuth
+            onNavigateToLogin = onNavigateToLogin
         )
         editProfileWebViewRoute(navController)
     }

@@ -23,11 +23,10 @@ class SettingsDataStore @Inject constructor(
         val APP_LANGUAGE = stringPreferencesKey(APP_LANGUAGE_S)
     }
 
-    fun isDarkMode(): Flow<Boolean> {
-        return context.dataStore.data.map { preferences ->
+    fun isDarkMode(): Flow<Boolean> =
+        context.dataStore.data.map { preferences ->
             preferences[PreferencesKeys.IS_DARK_MODE] ?: false
         }
-    }
 
     suspend fun setDarkMode(isDark: Boolean) {
         context.dataStore.edit { preferences ->
@@ -35,11 +34,10 @@ class SettingsDataStore @Inject constructor(
         }
     }
 
-    fun getLanguage(): Flow<String> {
-        return context.dataStore.data.map { preferences ->
+    fun getLanguage(): Flow<String> =
+        context.dataStore.data.map { preferences ->
             preferences[PreferencesKeys.APP_LANGUAGE] ?: "en"
         }
-    }
 
     suspend fun setLanguage(languageCode: String) {
         context.dataStore.edit { preferences ->

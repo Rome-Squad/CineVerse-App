@@ -45,7 +45,7 @@ fun SettingsScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is SettingsScreenEffect.NavigateToLogin -> onNavigateToLogin()
-                is SettingsScreenEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
+                is SettingsScreenEffect.NavigateToEditProfileWebsite -> onNavigateToEditProfileWebView()
                 else -> {}
             }
         }
