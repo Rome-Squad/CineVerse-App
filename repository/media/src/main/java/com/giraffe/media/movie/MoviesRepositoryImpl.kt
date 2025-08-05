@@ -88,9 +88,26 @@ class MoviesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRecommendedMovie(movieId: Int, page: Int) = SafeCall {
-        remote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
-    }
+    override suspend fun getRecommendedMovie(movieId: Int, page: Int, limit: Int) =
+        SafeCall {
+            when {
+                page > 1 -> getRecommendedFromRemote(movieId, page, limit)
+                else -> {
+                    local.getRecommendedMovies(movieId, limit).map(MovieCacheDto::toEntity)
+                        .ifEmpty {
+                            getRecommendedFromRemote(movieId, page, limit).also { movies ->
+                                local.upsertMovies(
+                                    movies = movies.map(Movie::toCacheDto),
+                                    transformer = { it.copy(recommendedId = movieId) }
+                                )
+                            }
+                        }
+                }
+            }
+        }
+
+    private suspend fun getRecommendedFromRemote(movieId: Int, page: Int, limit: Int) =
+        remote.getMovieRecommendations(movieId, page).take(limit).map(MovieDto::toEntity)
 
     override suspend fun getMovieReviews(movieId: Int) =
         SafeCall { remote.getMovieReviews(movieId).map(ReviewDto::toEntity) }

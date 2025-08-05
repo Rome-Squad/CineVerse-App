@@ -27,6 +27,8 @@ interface MoviesLocalDataSource {
 
     suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
 
+    suspend fun getRecommendedMovies(movieId: Int, limit: Int): List<MovieCacheDto>
+
     suspend fun getMovieGenresById(ids: List<Int>): List<MovieGenreCacheDto>
 
     suspend fun getMovieGenreById(genreId: Int): MovieGenreCacheDto

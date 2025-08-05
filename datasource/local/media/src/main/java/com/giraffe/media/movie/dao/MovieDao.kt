@@ -43,6 +43,9 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_TABLE WHERE recentReleasedAt IS NOT NULL AND recentReleasedAt > 0 ORDER BY recentReleasedAt DESC LIMIT :limit")
     suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
 
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE recommendedId IS NOT NULL AND recommendedId = :movieId LIMIT :limit")
+    suspend fun getRecommendedMovies(movieId: Int, limit: Int): List<MovieCacheDto>
+
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
 
