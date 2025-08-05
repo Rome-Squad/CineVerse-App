@@ -74,6 +74,7 @@ fun MyCollectionsScreen(
         modifier = modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
+            .padding(horizontal = 16.dp)
             .systemBarsPadding()
     ) {
         AppBar(
