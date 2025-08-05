@@ -72,7 +72,6 @@ class HomeViewModel @Inject constructor(
 
     private fun getUseNameSuccess(userName: String) {
         updateState { it.copy(userName = userName) }
-        Log.d("user", "getUseNameSuccess: $userName")
     }
 
     private fun getFeaturedCollection() {
