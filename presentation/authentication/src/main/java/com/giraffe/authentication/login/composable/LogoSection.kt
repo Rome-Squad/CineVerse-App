@@ -11,9 +11,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.authentication.R
 
 @Composable
 fun LogoSection(
@@ -25,14 +25,14 @@ fun LogoSection(
 
         Image(
             painter = painterResource(R.drawable.colored_cineverse_logo),
-            contentDescription = stringResource(com.giraffe.authentication.R.string.logo),
+            contentDescription = stringResource(R.string.logo),
             modifier = Modifier
                 .padding(top = 48.dp, bottom = 8.dp)
                 .size(104.dp)
         )
 
         Text(
-            text = stringResource(com.giraffe.authentication.R.string.welcome_back_to_cineverse),
+            text = stringResource(R.string.welcome_back_to_cineverse),
             style = Theme.textStyle.title.lg,
             color = Theme.color.shade.primary,
             modifier = Modifier.padding(bottom = 48.dp)

@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.giraffe.authentication.R
 import com.giraffe.authentication.login.LoginInteractionListener
 import com.giraffe.authentication.login.LoginScreenState
 import com.giraffe.designsystem.composable.DefaultTextField
@@ -26,6 +25,7 @@ import com.giraffe.designsystem.composable.button_type.SecondaryButton
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.authentication.R
 
 @Composable
 fun LoginForm(
