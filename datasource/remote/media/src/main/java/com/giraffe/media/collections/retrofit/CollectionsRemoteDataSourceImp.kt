@@ -10,9 +10,10 @@ import javax.inject.Inject
 class CollectionsRemoteDataSourceImp @Inject constructor(
     private val requestBuilder: RetrofitRequestBuilder<CollectionsApiServiceRetrofit>
 ) : CollectionsRemoteDataSource {
-    override suspend fun getCollections(): List<CollectionDto> = requestBuilder.get {
-        //temp account id until the account id is ready
-        getCollections(22128475)
+    override suspend fun getCollections(
+        accountId: Int
+    ): List<CollectionDto> = requestBuilder.get {
+        getCollections(accountId)
     }.results
 
     override suspend fun getCollectionDetails(collectionId: Int): CollectionDto =
