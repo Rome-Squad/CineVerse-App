@@ -116,7 +116,7 @@ fun HistoryContent(
                     titlePrimaryButton = stringResource(R.string.find_something_to_watch),
                     isButtonsVisible = true,
                     isSecondaryButtonVisible = false,
-                    onClickPrimaryButton ={historyInteractionListener.navigateToExploreScreen()}
+                    onClickPrimaryButton ={historyInteractionListener.navigateToExploreScreen(id= 0) },
                 )
             }
         }
@@ -146,7 +146,7 @@ fun HistoryContentPreview() {
         override fun onDeleteClicked(): Unit = Unit
         override fun onCloseClicked() {}
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
-        override fun navigateToExploreScreen() {}
+        override fun navigateToExploreScreen(id: Int) {}
     }
     HistoryContent(
         state = HistoryUiState(
