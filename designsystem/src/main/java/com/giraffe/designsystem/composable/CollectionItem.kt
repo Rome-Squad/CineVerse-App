@@ -1,6 +1,7 @@
 package com.giraffe.designsystem.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,11 +27,14 @@ fun CollectionItem(
     text: String,
     description: String,
     icon: Int,
+    onClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
+            .clip(RoundedCornerShape(Theme.radius.lg))
+            .clickable(onClick = onClick)
             .background(
-                color = Theme.color.background.bottomSheetCard,
+                color = Theme.color.background.card,
                 shape = RoundedCornerShape(Theme.radius.lg)
             )
             .padding(12.dp),
