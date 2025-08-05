@@ -83,7 +83,10 @@ class MyCollectionsViewModel @Inject constructor(
             )
         }
 
-        safeExecute {
+        safeExecute(
+            onSuccess = ::onCreateCollectionSuccess,
+            onError = ::onCreateCollectionFailure
+        ) {
             addCollectionUseCase(
                 collection = CollectionUi(
                     name = state.value.newCollectionName
@@ -92,7 +95,7 @@ class MyCollectionsViewModel @Inject constructor(
         }
     }
 
-    private fun onCreateCollectionSuccess() {
+    private fun onCreateCollectionSuccess(result: Unit) {
         updateState {
             it.copy(
                 isLoading = false
@@ -100,6 +103,15 @@ class MyCollectionsViewModel @Inject constructor(
         }
 
         getCollections()
+    }
+
+    private fun onCreateCollectionFailure(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+        sendEffect(MyCollectionsEffect.ShowError(mapErrorToResource(error)))
     }
 
     override fun onDismissCreateNewCollectionBottomSheet() {
