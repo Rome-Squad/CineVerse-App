@@ -119,7 +119,14 @@ fun HomeNavGraph(
                     )
                 },
                 navigateToExploreScreen = {
-                    navController.navigateToExplore()
+                    navController.navigate(ExploreRoute) {
+                        popUpTo(0) {
+                            saveState = true
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 navigateToMatchScreen = {
                     navController.navigateToMatch()
@@ -170,11 +177,8 @@ fun HomeNavGraph(
             isBottomBarVisible = isBottomBarVisible,
             onTabSelected = { tab ->
                 Log.d("Tab", "Tapping tab: ${tab.route}, current route: $currentRoute")
-                val route =
-                    navBackStackEntry?.destination?.route ?: return@BottomNavigationBar
                 navController.navigate(tab.route) {
-//                    popUpTo(navController.graph.startDestinationRoute.orEmpty()) {
-                    popUpTo(route) {
+                    popUpTo(navController.graph.startDestinationRoute.orEmpty()) {
                         saveState = true
                     }
                     launchSingleTop = true
