@@ -90,14 +90,14 @@ fun ImagePager(
             Image(
                 painter = painterResource(id = images[page]),
                 contentDescription = stringResource(R.string.image, page + 1),
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .graphicsLayer {
                         this.rotationZ = animatedRotationZ
                         this.scaleX = scale
                         this.scaleY = scale
                     }
-                    .aspectRatio(3f / 4f)
+                    .aspectRatio(3f / 4.5f)
                     .clip(shape)
                     .border(
                         width = 1.dp,
