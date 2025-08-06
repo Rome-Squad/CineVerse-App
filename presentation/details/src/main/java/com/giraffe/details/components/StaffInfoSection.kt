@@ -1,6 +1,5 @@
 package com.giraffe.details.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,7 +29,7 @@ fun StaffInfoSection(
     staffList: Map<String, List<String>>,
     modifier: Modifier = Modifier
 ) {
-    AnimatedVisibility(staffList.isNotEmpty()) {
+    if (staffList.isNotEmpty()) {
         Column(
             modifier = modifier
         ) {

@@ -1,6 +1,5 @@
 package com.giraffe.profile.screens.collections.mycollections
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable

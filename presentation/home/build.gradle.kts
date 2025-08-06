@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
     implementation(project(":domain:media"))
+    implementation(project(":domain:user"))
     implementation(project(":api:details"))
     implementation(project(":api:home"))
     implementation(project(":api:explore"))
@@ -72,4 +73,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    //coil
+    implementation(libs.coil.compose)
 }
