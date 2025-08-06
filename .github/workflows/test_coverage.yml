@@ -90,8 +90,12 @@ jobs:
           check_changed "domain/media" "media_changed"
           check_changed "domain/user" "user_changed"
           check_changed "imageviewer" "imageviewer_changed"
-          check_changed "presentation" "presentation_changed"
-          check_changed "repository" "repository_changed"
+          check_changed "presentation/authentication" "presentation_authentication_changed"
+          check_changed "presentation/details" "presentation_details_changed"
+          check_changed "presentation/explore" "presentation_explore_changed"
+          check_changed "presentation/home" "presentation_home_changed"
+          check_changed "presentation/match" "presentation_match_changed"
+          check_changed "presentation/profile" "presentation_profile_changed"          
           
       - name: 🏗️ Build API - Authentication (if changed)
         if: steps.changes.outputs.api_authentication_changed == 'true'
@@ -134,27 +138,27 @@ jobs:
         run: ./gradlew :imageviewer:assembleDebug
 
       - name: 🏗️ Build Presentation - Authentication
-        if: steps.changes.outputs.presentation_changed == 'true'
+        if: steps.changes.outputs.presentation_authentication_changed == 'true'
         run: ./gradlew :presentation:authentication:assembleDebug
 
       - name: 🏗️ Build Presentation - Details
-        if: steps.changes.outputs.presentation_changed == 'true'
+        if: steps.changes.outputs.presentation_details_changed == 'true'
         run: ./gradlew :presentation:details:assembleDebug
 
       - name: 🏗️ Build Presentation - Explore
-        if: steps.changes.outputs.presentation_changed == 'true'
+        if: steps.changes.outputs.presentation_explore_changed == 'true'
         run: ./gradlew :presentation:explore:assembleDebug
 
       - name: 🏗️ Build Presentation - Home
-        if: steps.changes.outputs.presentation_changed == 'true'
+        if: steps.changes.outputs.presentation_home_changed == 'true'
         run: ./gradlew :presentation:home:assembleDebug
 
       - name: 🏗️ Build Presentation - Match
-        if: steps.changes.outputs.presentation_changed == 'true'
+        if: steps.changes.outputs.presentation_match_changed == 'true'
         run: ./gradlew :presentation:match:assembleDebug
 
       - name: 🏗️ Build Presentation - Profile
-        if: steps.changes.outputs.presentation_changed == 'true'
+        if: steps.changes.outputs.presentation_profile_changed == 'true'
         run: ./gradlew :presentation:profile:assembleDebug
 
       - name: 🏗️ Build Repository (if changed)
