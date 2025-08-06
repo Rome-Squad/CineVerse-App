@@ -16,7 +16,7 @@ class ProfileApiImp @Inject constructor(
 ) : ProfileApi {
 
     @Composable
-    fun MyCollectionsContainer(
+    override fun MyCollectionsContainer(
         onShowBottomBarChange: (Boolean) -> Unit
     ) {
         val navController: NavHostController = rememberNavController()
