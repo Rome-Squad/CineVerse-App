@@ -1,6 +1,8 @@
 package com.giraffe.details.screens.seriesdetails.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,8 +29,8 @@ fun SeriesDetailsScreen(
     onBackButtonClick: () -> Unit,
     onClickPlay: (String) -> Unit,
     navigateToLogIn: () -> Unit,
+    navigateToReviews: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToReviews: (Int) -> Unit ,
     viewModel: SeriesDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -45,7 +47,8 @@ fun SeriesDetailsScreen(
                 it.seriesId,
                 it.title
             )
-            is SeriesDetailsEffect.NavigateToReviews->navigateToReviews(it.seriesId)
+
+            is SeriesDetailsEffect.NavigateToReviews -> navigateToReviews(it.seriesId)
         }
     }
 
@@ -59,7 +62,11 @@ fun SeriesDetailsScreen(
         AnimatedVisibility(state.isLoading) {
             Progress(modifier = Modifier.size(40.dp))
         }
-        AnimatedVisibility(!state.isLoading) {
+        AnimatedVisibility(
+            visible = !state.isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
             SeriesDetailsContent(
                 state = state,
                 interaction = viewModel,

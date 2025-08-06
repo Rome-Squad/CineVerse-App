@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +19,7 @@ fun InfoSection(
     descriptionLimits: Int = 100,
     spaceBetween: Int = 8
 ) {
-    AnimatedVisibility(description.isNotBlank()) {
+    if (description.isNotBlank()) {
         Column(
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(spaceBetween.dp)

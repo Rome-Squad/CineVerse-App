@@ -3,10 +3,6 @@ package com.giraffe.details.screens.seriesdetails.screen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.details.models.ReviewUI
-import com.giraffe.details.screens.castDetails.navigateToCastDetails
-import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
-import com.giraffe.details.screens.seasons.screen.navigateToSeasons
 import com.giraffe.details.nav.route.navigateLoginScreen
 import com.giraffe.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.details.screens.recommended.series.navigateToRecommendedSeries
@@ -45,8 +41,7 @@ fun NavGraphBuilder.seriesDetailsRoute(
             onBackButtonClick = onBackButtonClick,
             onClickPlay = navController::navigateToYouTubePlayer,
             navigateToLogIn = navController::navigateLoginScreen,
-            navigateToReviews =navController::navigateToReviews,
-
-            )
+            navigateToReviews = navController::navigateToReviews
+        )
     }
 }
