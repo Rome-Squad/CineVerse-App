@@ -26,7 +26,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.profile.R
 import com.giraffe.profile.components.SwipableItem
-import com.giraffe.profile.history.composable.DeleteButton
+import com.giraffe.profile.components.DeleteButton
 
 @Composable
 fun HistoryScreen(

@@ -23,7 +23,7 @@ import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.profile.R
-import com.giraffe.profile.history.composable.RatedItem
+import com.giraffe.profile.components.RatedItem
 import com.giraffe.profile.utils.EffectListener
 
 @Composable

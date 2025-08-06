@@ -1,4 +1,4 @@
-package com.giraffe.profile.history.composable
+package com.giraffe.profile.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,7 +22,6 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.profile.components.SwipableItem
 import com.giraffe.profile.model.RatedPoster
 
 @Composable
