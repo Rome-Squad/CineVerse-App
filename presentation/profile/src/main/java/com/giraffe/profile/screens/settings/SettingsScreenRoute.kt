@@ -1,4 +1,4 @@
-package com.giraffe.profile.screens.profile
+package com.giraffe.profile.screens.settings
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -11,14 +11,21 @@ data object SettingsScreenRoute
 
 fun NavGraphBuilder.settingsScreenRoute(
     navController: NavController,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToMyCollections: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    onNavigateToRatings: () -> Unit
 ) {
     composable<SettingsScreenRoute> {
         SettingsScreen(
             onNavigateToEditProfileWebView = {
                 navController.navigateToEditProfileWebView()
             },
-            onNavigateToLogin = onNavigateToLogin
+            onNavigateToLogin = onNavigateToLogin,
+            onNavigateToHistory = onNavigateToHistory,
+            onNavigateToRatings = onNavigateToRatings,
+            onNavigateToMyCollections = onNavigateToMyCollections
+
         )
     }
 }

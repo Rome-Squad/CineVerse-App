@@ -1,8 +1,8 @@
-package com.giraffe.profile.screens.profile
+package com.giraffe.profile.screens.settings
 
 import androidx.lifecycle.viewModelScope
 import com.giraffe.profile.base.BaseViewModel
-import com.giraffe.profile.screens.profile.model.toUserUiModel
+import com.giraffe.profile.screens.settings.model.toUserUiModel
 import com.giraffe.profile.utils.Language
 import com.giraffe.profile.utils.LanguageHelper
 import com.giraffe.user.entity.User

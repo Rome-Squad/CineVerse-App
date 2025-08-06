@@ -1,4 +1,4 @@
-package com.giraffe.profile.screens.profile.model
+package com.giraffe.profile.screens.settings.model
 
 data class UserUiModel(
     val name: String = "",

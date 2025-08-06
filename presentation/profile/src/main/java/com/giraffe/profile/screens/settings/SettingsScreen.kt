@@ -1,4 +1,4 @@
-package com.giraffe.profile.screens.profile
+package com.giraffe.profile.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -37,7 +37,10 @@ import com.giraffe.profile.utils.Language
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateToEditProfileWebView: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToMyCollections: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    onNavigateToRatings: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -55,6 +58,9 @@ fun SettingsScreen(
         state = state,
         interaction = viewModel,
         modifier = Modifier,
+        onNavigateToHistory = onNavigateToHistory,
+        onNavigateToRatings = onNavigateToRatings,
+        onNavigateToMyCollections = onNavigateToMyCollections
     )
 }
 
@@ -63,6 +69,9 @@ fun SettingsContent(
     state: SettingsScreenState,
     interaction: SettingsInteractionListener,
     modifier: Modifier,
+    onNavigateToMyCollections: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    onNavigateToRatings: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -97,7 +106,10 @@ fun SettingsContent(
 
         ProfileLazyRow(
             modifier = Modifier
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
+            onNavigateToHistory = onNavigateToHistory,
+            onNavigateToRatings = onNavigateToRatings,
+            onNavigateToMyCollections = onNavigateToMyCollections
         )
         SettingsSection(
             modifier = Modifier
@@ -228,7 +240,10 @@ fun ProfileScreenPreview() {
     CineVerseTheme(isDarkTheme = false) {
         SettingsScreen(
             onNavigateToEditProfileWebView = {},
-            onNavigateToLogin = {}
+            onNavigateToLogin = {},
+            onNavigateToMyCollections = {  },
+            onNavigateToHistory = {  },
+            onNavigateToRatings = {  },
         )
     }
 }

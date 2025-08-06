@@ -1,6 +1,6 @@
-package com.giraffe.profile.screens.profile
+package com.giraffe.profile.screens.settings
 
-import com.giraffe.profile.screens.profile.model.UserUiModel
+import com.giraffe.profile.screens.settings.model.UserUiModel
 import com.giraffe.profile.utils.Language
 
 
