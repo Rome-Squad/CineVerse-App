@@ -29,8 +29,8 @@ fun SeriesDetailsScreen(
     onBackButtonClick: () -> Unit,
     onClickPlay: (String) -> Unit,
     navigateToLogIn: () -> Unit,
-    modifier: Modifier = Modifier,
     navigateToReviews: (Int) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: SeriesDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
