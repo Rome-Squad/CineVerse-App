@@ -55,6 +55,11 @@ fun LanguageSelector(
                     width = 146.dp,
                     height = 87.dp
                 )
+                .clip(
+                    shape = RoundedCornerShape(
+                        size = Theme.radius.lg
+                    )
+                )
                 .clickable {
                     onLanguageChange(Language.ARABIC)
                 },
