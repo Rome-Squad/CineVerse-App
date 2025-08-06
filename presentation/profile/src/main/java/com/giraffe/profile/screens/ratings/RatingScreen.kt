@@ -2,6 +2,7 @@ package com.giraffe.profile.screens.ratings
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -72,6 +73,8 @@ private fun RatingContent(
             .background(Theme.color.background.screen)
             .fillMaxSize()
             .systemBarsPadding()
+            .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 12.dp)
     ) {
         stickyHeader {
             AppBar(
