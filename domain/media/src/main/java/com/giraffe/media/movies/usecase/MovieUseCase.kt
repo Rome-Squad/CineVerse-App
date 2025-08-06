@@ -19,5 +19,4 @@ class MovieUseCase @Inject constructor(
     val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     val getUserMovieRatingUseCase: GetUserMovieRatingUseCase,
     val searchMovieByNameUseCase: SearchMovieByNameUseCase,
-    val setMovieRecentUseCase: SetMovieRecentUseCase,
 )

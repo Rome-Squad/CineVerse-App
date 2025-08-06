@@ -13,8 +13,6 @@ interface MoviesRepository {
 
     suspend fun addGenres(genres: List<Genre>)
 
-    suspend fun setMovieRecent(movie: Movie, recentViewedAt: Long)
-
     suspend fun searchMovieByName(movieName: String, page: Int): List<Movie>
 
     suspend fun getMovieGenresByIds(genreIds: List<Int>): List<Genre>

@@ -19,7 +19,6 @@ import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
@@ -34,7 +33,6 @@ class MovieDetailsViewModel @Inject constructor(
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
-    val setMovieRecentUseCase: SetMovieRecentUseCase,
     val isLoggedInUseCase: IsLoggedInUseCase,
     savedStateHandle: SavedStateHandle,
     val addRatingUseCase: AddMovieRatingUseCase
@@ -72,7 +70,6 @@ class MovieDetailsViewModel @Inject constructor(
         loadMovieGenres(movie.genresID)
         loadMoviePeople(movie.id)
         loadMovieReviews(movie.id)
-        saveToRecentViewed(movie)
     }
 
     private fun loadMovieDetailsError(error: Throwable) {
@@ -187,12 +184,6 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun saveToRecentViewed(movie: Movie) {
-        safeExecute {
-            setMovieRecentUseCase(movie)
-        }
-    }
-
     private fun loadMovieReviewsSuccess(reviews: List<Review>) {
         Log.d("TAG", "loadMovieReviewsSuccess: $reviews")
         updateState {
@@ -295,7 +286,8 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun navigateToReviews(movieId: Int) {
-        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))    }
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))
+    }
 
     override fun onRateChange(rate: Int) {
         safeExecute {

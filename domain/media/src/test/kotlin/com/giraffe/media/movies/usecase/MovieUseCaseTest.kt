@@ -23,7 +23,6 @@ class MovieUseCaseTest {
     private var getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase = mockk()
     private var getUserMovieRatingUseCase: GetUserMovieRatingUseCase = mockk()
     private var searchMovieByNameUseCase: SearchMovieByNameUseCase = mockk()
-    private var setMovieRecentUseCase: SetMovieRecentUseCase = mockk()
 
     private lateinit var movieUseCase: MovieUseCase
 
@@ -46,7 +45,6 @@ class MovieUseCaseTest {
             getUpcomingMoviesUseCase = getUpcomingMoviesUseCase,
             getUserMovieRatingUseCase = getUserMovieRatingUseCase,
             searchMovieByNameUseCase = searchMovieByNameUseCase,
-            setMovieRecentUseCase = setMovieRecentUseCase
         )
     }
 
@@ -137,10 +135,5 @@ class MovieUseCaseTest {
     @Test
     fun `searchMovieByNameUseCase property should return correct instance`() {
         assertThat(movieUseCase.searchMovieByNameUseCase).isEqualTo(searchMovieByNameUseCase)
-    }
-
-    @Test
-    fun `setMovieRecentUseCase property should return correct instance`() {
-        assertThat(movieUseCase.setMovieRecentUseCase).isEqualTo(setMovieRecentUseCase)
     }
 }

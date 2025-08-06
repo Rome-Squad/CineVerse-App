@@ -41,10 +41,10 @@ class MoviesRepositoryImpl @Inject constructor(
         local.insertMovieGenres(genres.map(Genre::toDto))
     }
 
-    override suspend fun setMovieRecent(movie: Movie, recentViewedAt: Long) = SafeCall {
+    private suspend fun setMovieRecent(movie: Movie) {
         local.upsertMovie(
             movie.toCacheDto(),
-            transformer = { it.copy(recentViewedAt = recentViewedAt) })
+            transformer = { it.copy(recentViewedAt = System.currentTimeMillis()) })
     }
 
     override suspend fun searchMovieByName(movieName: String, page: Int) = SafeCall {
@@ -83,9 +83,11 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun getMovieDetails(movieId: Int) = SafeCall {
         withContext(Dispatchers.IO) {
             val youtubeVideoId = async { remote.getMovieTrailerUrl(movieId) }
-            val movieDetails = async { remote.getMovieById(movieId) }
-            movieDetails.await().youtubeVideoId = youtubeVideoId.await()
-            movieDetails.await().toEntity()
+            val movieDetails = async { remote.getMovieById(movieId) }.await()
+            movieDetails.youtubeVideoId = youtubeVideoId.await()
+            val movie = movieDetails.toEntity()
+            setMovieRecent(movie)
+            movie
         }
     }
 
