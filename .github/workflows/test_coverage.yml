@@ -63,15 +63,20 @@ jobs:
       - name: 🔍 Check which modules changed
         id: changes
         run: |
+          if [ -n "${{ github.event.before }}" ]; then
           git fetch origin ${{ github.event.before }}
-          CHANGED=$(git diff --name-only origin/${{ github.event.before }} ${{ github.sha }})
+          else
+          echo "⚠️ No valid 'before' commit. Skipping fetch."
+          fi
+          
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || echo "")
           echo "Changed files:"
           echo "$CHANGED"
-
+          
           check_changed() {
-            echo "$CHANGED" | grep -q "^$1/" && echo "$2=true" >> $GITHUB_OUTPUT || echo "$2=false" >> $GITHUB_OUTPUT
+          echo "$CHANGED" | grep -q "^$1/" && echo "$2=true" >> $GITHUB_OUTPUT || echo "$2=false" >> $GITHUB_OUTPUT
           }
-
+          
           check_changed "api" "api_changed"
           check_changed "app" "app_changed"
           check_changed "datasource" "datasource_changed"
