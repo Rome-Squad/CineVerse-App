@@ -112,7 +112,7 @@ private fun MyCollectionsScreenContent(
             .fillMaxSize()
     ) {
 
-        if (state.collections.isEmpty()) {
+        if (state.collections.isEmpty() && state.isLoading.not()) {
             NoCollectionsPlaceholder(
                 modifier = Modifier
                     .padding(60.dp)

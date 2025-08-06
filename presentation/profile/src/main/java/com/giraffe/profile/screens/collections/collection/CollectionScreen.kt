@@ -135,6 +135,9 @@ fun CollectionScreenContent(
                 PosterItemHorizontal(
                     modifier = Modifier.fillMaxWidth(),
                     movie = swipeablePoster.poster,
+                    onClickPoster = {
+                        interactions.onPosterClick(swipeablePoster.poster.id)
+                    }
                 )
             }
         }

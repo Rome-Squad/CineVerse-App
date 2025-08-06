@@ -59,7 +59,9 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val state by mainViewModel.state.collectAsState()
 
-            CineVerseTheme {
+            CineVerseTheme(
+                isDarkTheme = state.isDarkMode
+            ) {
 
                 RatingScreen(
                 )

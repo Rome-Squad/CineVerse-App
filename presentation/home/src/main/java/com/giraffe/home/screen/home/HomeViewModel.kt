@@ -21,6 +21,8 @@ import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.user.usecase.GetUserNameUseCase
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -43,6 +45,8 @@ class HomeViewModel @Inject constructor(
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getUserNameUseCase: GetUserNameUseCase,
+    private val isLoggedInUseCase: IsLoggedInUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
@@ -57,6 +61,33 @@ class HomeViewModel @Inject constructor(
         getRecentlyReleased()
         getTopRatedSeries()
         getUpcomingMovies()
+        getUserName()
+        isLoggedIn()
+    }
+
+    private fun isLoggedIn() {
+        safeExecute(
+            onSuccess = ::onIsLoggedInSuccess,
+            onError = ::onFail,
+            block = { isLoggedInUseCase() }
+        )
+    }
+
+    private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
+        updateState { it.copy(isLoggedIn = isLoggedIn) }
+    }
+
+
+    private fun getUserName() {
+        safeExecute(
+            onSuccess = ::getUseNameSuccess,
+            onError = ::onFail,
+            block = { getUserNameUseCase() }
+        )
+    }
+
+    private fun getUseNameSuccess(userName: String) {
+        updateState { it.copy(userName = userName) }
     }
 
     private fun getFeaturedCollection() {
