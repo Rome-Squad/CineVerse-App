@@ -316,7 +316,8 @@ fun HomeContent(
                     ) {},
             ) {
                 TopAppBar(
-                    userName = state.userName
+                    userName = state.userName,
+                    isLoggedIn = state.isLoggedIn
                 )
                 Box(
                     modifier = Modifier
