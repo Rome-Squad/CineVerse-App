@@ -1,12 +1,15 @@
 package com.giraffe.profile.screens.ratings
 
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.entity.Genre
+import com.giraffe.profile.model.RatedPoster
 
 data class RatingScreenState(
     val isLoading: Boolean = false,
     val isTipVisible: Boolean = true,
     val selectedTabIndex: Int = 0,
-    val selectedPosters: List<Poster> = emptyList(),
-    val moviesPosters: List<Poster> = emptyList(),
-    val seriesPosters: List<Poster> = emptyList(),
+    val movieGenres: List<Genre> = emptyList(),
+    val seriesGenres: List<Genre> = emptyList(),
+    val selectedPosters: List<RatedPoster> = emptyList(),
+    val moviesPosters: List<RatedPoster> = emptyList(),
+    val seriesPosters: List<RatedPoster> = emptyList(),
 )
