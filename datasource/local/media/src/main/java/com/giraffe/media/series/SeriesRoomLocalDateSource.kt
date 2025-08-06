@@ -2,7 +2,6 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.util.safeCall
@@ -26,7 +25,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
 
     override suspend fun clearAllData() = safeCall {
         seriesDao.clearAllSeries()
-        seriesDao.clearAllSeasons()
         seriesDao.clearAllGenres()
     }
 
@@ -40,7 +38,13 @@ class SeriesRoomLocalDateSource @Inject constructor(
 
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
         upsertWithMerge(series) { old, new ->
-            old.copy(popularity = new.popularity)
+            new.copy(
+                isRecent = old.isRecent,
+                isRecentlyReleased = old.isRecentlyReleased,
+                isRecommended = old.isRecommended,
+                isTopRated = old.isTopRated,
+                isPopularity = true
+            )
         }
     }
 
@@ -49,8 +53,14 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
     override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) = safeCall {
-        upsertWithMerge(series) { old, _ ->
-            old.copy(recentlyReleased = System.currentTimeMillis())
+        upsertWithMerge(series) { old, new ->
+            new.copy(
+                isRecent = old.isRecent,
+                isPopularity = old.isPopularity,
+                isRecommended = old.isRecommended,
+                isTopRated = old.isTopRated,
+                isRecentlyReleased = true
+            )
         }
     }
 
@@ -59,8 +69,14 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
     override suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>) = safeCall {
-        upsertWithMerge(series.map { it.copy(isTopRated = true) }) { old, _ ->
-            old.copy(isTopRated = true)
+        upsertWithMerge(series.map { it.copy(isTopRated = true) }) { old, new ->
+            new.copy(
+                isRecent = old.isRecent,
+                isPopularity = old.isPopularity,
+                isRecommended = old.isRecommended,
+                isTopRated = true,
+                isRecentlyReleased = old.isRecentlyReleased
+            )
         }
     }
 
@@ -69,8 +85,14 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
     override suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>) = safeCall {
-        upsertWithMerge(series) { old, _ ->
-            old.copy(recommended = System.currentTimeMillis())
+        upsertWithMerge(series) { old, new ->
+            new.copy(
+                isRecent = old.isRecent,
+                isPopularity = old.isPopularity,
+                isRecommended = true,
+                isTopRated = old.isTopRated,
+                isRecentlyReleased = old.isRecentlyReleased
+            )
         }
     }
 
@@ -93,9 +115,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.clearRecentSeries()
     }
 
-    override suspend fun getSeasonsForSeries(seriesId: Int): List<SeasonCacheDto> = safeCall {
-        seriesDao.getSeasonsForSeries(seriesId)
-    }
 
     private suspend fun upsertWithMerge(
         series: List<SeriesCacheDto>,
