@@ -5,6 +5,7 @@ on:
     branches: [ fix/enhance-ci-test ]
   pull_request:
     branches: [ fix/enhance-ci-test ]
+
 permissions:
   checks: write
   pull-requests: write
@@ -64,19 +65,19 @@ jobs:
         id: changes
         run: |
           if [ -n "${{ github.event.before }}" ]; then
-          git fetch origin ${{ github.event.before }}
+            git fetch origin ${{ github.event.before }}
           else
-          echo "⚠️ No valid 'before' commit. Skipping fetch."
+            echo "⚠️ No valid 'before' commit. Skipping fetch."
           fi
-          
+
           CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || echo "")
           echo "Changed files:"
           echo "$CHANGED"
-          
+
           check_changed() {
-          echo "$CHANGED" | grep -q "^$1/" && echo "$2=true" >> $GITHUB_OUTPUT || echo "$2=false" >> $GITHUB_OUTPUT
+            echo "$CHANGED" | grep -q "^$1/" && echo "$2=true" >> $GITHUB_OUTPUT || echo "$2=false" >> $GITHUB_OUTPUT
           }
-          
+
           check_changed "api" "api_changed"
           check_changed "app" "app_changed"
           check_changed "datasource" "datasource_changed"
@@ -123,7 +124,6 @@ jobs:
             :domain:media:build \
             :domain:media:test \
             :domain:media:jacocoTestReport \
-            --configuration-cache \
             --build-cache \
             --parallel \
             --warning-mode=all
@@ -136,7 +136,6 @@ jobs:
             :domain:user:build \
             :domain:user:test \
             :domain:user:jacocoTestReport \
-            --configuration-cache \
             --build-cache \
             --parallel \
             --warning-mode=all
@@ -162,7 +161,6 @@ jobs:
           ./gradlew \
             :domain:media:jacocoTestCoverageVerification \
             :domain:user:jacocoTestCoverageVerification \
-            --configuration-cache \
             --build-cache
 
       - name: 📨 Notify on Failure

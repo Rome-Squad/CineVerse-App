@@ -22,7 +22,7 @@ class AddMoviesUseCaseTest {
     }
 
     @Test
-    fun `should call repository to insert movies`() = runTest {
+    fun `should call repository to add movies`() = runTest {
         // Given
         val movies = listOf(
             Movie(
