@@ -29,6 +29,7 @@ import com.giraffe.profile.screens.settings.settingsScreenRoute
 internal fun ProfileNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    startDestinationRoute: Any,
     detailsApi: DetailsApi,
     exploreApi: ExploreApi,
     onShowBottomBarChange: (Boolean) -> Unit
@@ -58,7 +59,7 @@ internal fun ProfileNavGraph(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = SettingsScreenRoute,
+        startDestination = startDestinationRoute,
     ) {
         settingsScreenRoute(
             navController = navController,
