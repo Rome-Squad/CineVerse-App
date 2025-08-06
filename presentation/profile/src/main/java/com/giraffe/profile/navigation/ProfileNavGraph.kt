@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.profile.edit.editProfileWebViewRoute
@@ -30,6 +31,7 @@ internal fun ProfileNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     startDestinationRoute: Any,
+    authenticationApi: AuthenticationApi,
     detailsApi: DetailsApi,
     exploreApi: ExploreApi,
     onShowBottomBarChange: (Boolean) -> Unit
@@ -63,7 +65,7 @@ internal fun ProfileNavGraph(
     ) {
         settingsScreenRoute(
             navController = navController,
-            onNavigateToLogin = {  },
+            onNavigateToLogin = navController::navigateLoginScreen,
             onNavigateToMyCollections = navController::navigateToMyCollections,
             onNavigateToHistory = navController::navigateToHistory,
             onNavigateToRatings = navController::navigateToRatings,
@@ -117,6 +119,8 @@ internal fun ProfileNavGraph(
                 onBackClick = navController::popBackStack
             )
         }
+
+        loginRoute(authenticationApi)
     }
 
 }

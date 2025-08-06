@@ -85,7 +85,6 @@ jobs:
           check_changed "api/match" "api_match_changed"
           check_changed "api/profile" "api_profile_changed"
           check_changed "app" "app_changed"
-          check_changed "datasource" "datasource_changed"
           check_changed "designsystem" "designsystem_changed"
           check_changed "domain/media" "media_changed"
           check_changed "domain/user" "user_changed"
