@@ -16,12 +16,14 @@ internal fun NavController.navigateToMyCollections() {
 }
 
 fun NavGraphBuilder.myCollectionsRoute(
+    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateToCollection: (Collection) -> Unit,
     navigateToExploreScreen: () -> Unit
 ) {
     composable<MyCollectionsRoute> {
         MyCollectionsScreen(
+            modifier = modifier,
             navigateBack = navigateBack,
             navigateToCollection = navigateToCollection,
             navigateToExploreScreen = navigateToExploreScreen
