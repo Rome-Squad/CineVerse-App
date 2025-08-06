@@ -81,8 +81,6 @@ internal fun ProfileNavGraph(
         ratingsRoute()
 
         myCollectionsRoute(
-            modifier = Modifier
-                .fillMaxSize(),
             navigateBack = navController::navigateUp,
             navigateToCollection = {
                 navController.navigateToCollection(
