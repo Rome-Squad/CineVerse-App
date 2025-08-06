@@ -2,6 +2,8 @@ package com.giraffe.details.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -80,13 +81,9 @@ fun MainMovieOrSeriesDetails(
                         contentDescription = null,
                         tint = Theme.color.brand.secondary,
                         modifier = Modifier
-                            .size(width = 216.dp, height = 289.dp)
+                            .size(32.dp)
                             .clip(RoundedCornerShape(Theme.radius.xl))
-                            .background(
-                                Theme.color.background.card,
-                            )
-                            .padding(horizontal = 92.dp, vertical = 128.5.dp)
-                            .wrapContentSize(),
+                            .background(Theme.color.background.card),
                     )
                 }
 
@@ -114,12 +111,16 @@ fun MainMovieOrSeriesDetails(
                                 .fillMaxWidth()
                                 .padding(end = 48.dp)
                         ) {
-                            if (animationProgress == 0f) {
+                            AnimatedVisibility(
+                                visible = animationProgress == 0f,
+                                enter = fadeIn(),
+                                exit = fadeOut(),
+                                modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                            ) {
                                 Text(
                                     text = type.uppercase(),
                                     style = Theme.textStyle.label.md.medium,
-                                    color = Theme.color.brand.primary,
-                                    modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                                    color = Theme.color.brand.primary
                                 )
                             }
 
@@ -135,9 +136,13 @@ fun MainMovieOrSeriesDetails(
                                 )
                             )
 
-                            if (genres.isNotEmpty() && animationProgress == 0f) {
+                            AnimatedVisibility(
+                                visible = genres.isNotEmpty() && animationProgress == 0f,
+                                enter = fadeIn(),
+                                exit = fadeOut(),
+                                modifier = Modifier.padding(top = 4.dp)
+                            ) {
                                 Text(
-                                    modifier = Modifier.padding(top = 4.dp),
                                     text = genres.joinToString(", "),
                                     style = Theme.textStyle.body.sm.medium,
                                     color = Theme.color.shade.secondary,
@@ -147,12 +152,15 @@ fun MainMovieOrSeriesDetails(
                             }
                         }
 
-                        if (
-                            (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty())
-                            && animationProgress == 0f
+                        AnimatedVisibility(
+                            visible = (rating != 0f || !duration.isNullOrEmpty()
+                                    || releaseDate.isNotEmpty())
+                                    && animationProgress == 0f,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                            modifier = Modifier.padding(top = 12.dp)
                         ) {
                             Row(
-                                modifier = Modifier.padding(top = 12.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 if (rating != 0f) {
