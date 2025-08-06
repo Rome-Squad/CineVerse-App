@@ -33,12 +33,12 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.addRating(movieId, requestBody)
     }
 
-    private suspend fun addGenres(genres: List<Genre>) = SafeCall {
-        local.insertMovieGenres(genres.map(Genre::toDto))
+    private suspend fun addMovieGenres(genres: List<Genre>) = SafeCall {
+        local.addMovieGenres(genres.map(Genre::toDto))
     }
 
     private suspend fun setMovieRecent(movie: Movie) {
-        local.upsertMovie(
+        local.setMovie(
             movie.toCacheDto(),
             transformer = { it.copy(recentViewedAt = System.currentTimeMillis()) })
     }
@@ -63,7 +63,7 @@ class MoviesRepositoryImpl @Inject constructor(
             .ifEmpty {
                 remote.getMovieGenres()
                     .map(MovieGenreDto::toEntity)
-                    .also { addGenres(it) }
+                    .also { addMovieGenres(it) }
             }
     }
 
@@ -95,7 +95,7 @@ class MoviesRepositoryImpl @Inject constructor(
                     local.getRecommendedMovies(movieId, limit).map(MovieCacheDto::toEntity)
                         .ifEmpty {
                             getRecommendedFromRemote(movieId, page, limit).also { movies ->
-                                local.upsertMovies(
+                                local.setMovies(
                                     movies = movies.map(Movie::toCacheDto),
                                     transformer = { it.copy(recommendedId = movieId) }
                                 )
@@ -122,7 +122,7 @@ class MoviesRepositoryImpl @Inject constructor(
                 else -> {
                     local.getPopularityMovies(limit = limit).map(MovieCacheDto::toEntity).ifEmpty {
                         getPopularityMoviesFromRemote(page, limit).also {
-                            local.upsertMovies(it.map(Movie::toCacheDto))
+                            local.setMovies(it.map(Movie::toCacheDto))
                         }
                     }
                 }
@@ -140,7 +140,7 @@ class MoviesRepositoryImpl @Inject constructor(
                     local.getRecentlyReleasedMovies(limit = limit).map(MovieCacheDto::toEntity)
                         .ifEmpty {
                             getRecentlyReleasedMoviesFromRemote(page, limit).also { movies ->
-                                local.upsertMovies(
+                                local.setMovies(
                                     movies = movies.map(Movie::toCacheDto),
                                     transformer = { it.copy(recentReleasedAt = System.currentTimeMillis()) }
                                 )
@@ -161,7 +161,7 @@ class MoviesRepositoryImpl @Inject constructor(
                     local.getUpcomingMovies(limit = limit).map(MovieCacheDto::toEntity)
                         .ifEmpty {
                             getUpcomingMoviesFromRemote(page, limit).also { movies ->
-                                local.upsertMovies(
+                                local.setMovies(
                                     movies = movies.map(Movie::toCacheDto),
                                     transformer = { it.copy(upcomingAt = System.currentTimeMillis()) }
                                 )

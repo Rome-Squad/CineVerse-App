@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface MoviesLocalDataSource {
 
-    suspend fun insertMovieGenres(movieGenres: List<MovieGenreCacheDto>)
-    suspend fun upsertMovies(
+    suspend fun addMovieGenres(movieGenres: List<MovieGenreCacheDto>)
+    suspend fun setMovies(
         movies: List<MovieCacheDto>,
         transformer: ((MovieCacheDto) -> MovieCacheDto)? = null
     )
 
-    suspend fun upsertMovie(
+    suspend fun setMovie(
         movie: MovieCacheDto,
         transformer: ((MovieCacheDto) -> MovieCacheDto)? = null
     )

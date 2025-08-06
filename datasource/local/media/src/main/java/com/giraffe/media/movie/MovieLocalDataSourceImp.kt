@@ -12,11 +12,11 @@ import javax.inject.Inject
 class MovieLocalDataSourceImp @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
-    override suspend fun insertMovieGenres(movieGenres: List<MovieGenreCacheDto>) = safeCall {
+    override suspend fun addMovieGenres(movieGenres: List<MovieGenreCacheDto>) = safeCall {
         movieDao.insertMovieGenres(movieGenres)
     }
 
-    override suspend fun upsertMovie(
+    override suspend fun setMovie(
         movie: MovieCacheDto,
         transformer: ((MovieCacheDto) -> MovieCacheDto)?
     ) = safeCall {
@@ -26,7 +26,7 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.upsertMovie(finalMovie)
     }
 
-    override suspend fun upsertMovies(
+    override suspend fun setMovies(
         movies: List<MovieCacheDto>,
         transformer: ((MovieCacheDto) -> MovieCacheDto)?
     ) {
