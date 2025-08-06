@@ -108,6 +108,7 @@ private fun RatingContent(
             )
         }
         items(state.selectedPosters) {
+            Spacer(modifier = Modifier.height(12.dp))
             RatedItem(
                 ratedPoster = it,
                 onItemClick = interaction::onPosterClick,
