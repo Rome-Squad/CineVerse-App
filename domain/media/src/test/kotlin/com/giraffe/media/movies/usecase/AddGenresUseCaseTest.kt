@@ -20,7 +20,7 @@ class AddGenresUseCaseTest {
     }
 
     @Test
-    fun `should call repository to add genres`() = runTest {
+    fun `should call repository to insert genres`() = runTest {
         // Given
         val genres = listOf(
             Genre(
