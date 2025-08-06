@@ -50,7 +50,7 @@ class HistoryViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 errorMsgRes = null,
-                mediaList = (it.mediaList + newMediaList).distinctBy { poster -> poster.id }
+                mediaList = newMediaList.distinctBy { poster -> poster.id }
             )
         }
     }
@@ -61,27 +61,31 @@ class HistoryViewModel @Inject constructor(
 
 
 
-    override fun onDeleteClicked(){
+    override fun onDeleteClicked(id: Int) {
         val updatedList = state.value.mediaList.filter { poster ->
-            poster.id != state.value.mediaList.firstOrNull()?.id
+            poster.id != id
         }
 
         updateState {
             it.copy(
                 mediaList = updatedList,
+                swipedPosterId = null,
                 isSwiped = false
             )
         }
+
     }
+
+
 
     override fun onCloseClicked() {
         updateState { it.copy(isVisible = false) }    }
 
-    override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
-        when (mediaType) {
-            MediaType.MOVIE -> sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
-            MediaType.SERIES -> sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
-        }
+    override fun onMediaClicked(mediaId: Int) {
+
+            sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
+        sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+
     }
 
     override fun navigateToExploreScreen() {

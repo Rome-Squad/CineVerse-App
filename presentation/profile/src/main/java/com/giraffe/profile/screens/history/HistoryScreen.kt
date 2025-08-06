@@ -1,5 +1,6 @@
 package com.giraffe.profile.screens.history
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -89,20 +90,26 @@ fun HistoryContent(
     ) {
         stickyHeader {
             AppBar(
-                title = state.historyListTitle,
+                title = stringResource(R.string.history),
                 showBackButton = true,
                 onBackButtonClick = onBackClicked
             )
         }
 
         item {
-            InfoCard(
-                description = stringResource(R.string.screen_info),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                onClosedClick = historyInteractionListener::onCloseClicked
-            )
+            AnimatedVisibility(
+                visible = state.isVisible
+            ) {
+                InfoCard(
+                    description = stringResource(
+                        id = R.string.screen_info
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClosedClick = historyInteractionListener::onCloseClicked
+                )
+
+            }
         }
 
 
@@ -124,17 +131,18 @@ fun HistoryContent(
         }
 
 
-        items(state.mediaList) { poster ->
+        items(state.mediaList, key = { poster -> poster.id }) { poster ->
             SwipableItem(
                 actionButton = {
                     DeleteButton(
-                        onDeleteClick = historyInteractionListener::onDeleteClicked
+                        onDeleteClick = { historyInteractionListener.onDeleteClicked(poster.id) }
                     )
                 },
             ) {
                 PosterItemHorizontal(
                     modifier = Modifier.fillMaxWidth(),
                     movie = poster,
+                    onClickPoster = { historyInteractionListener.onMediaClicked(poster.id) }
                 )
             }
         }
@@ -145,9 +153,9 @@ fun HistoryContent(
 @Composable
 fun HistoryContentPreview() {
     val historyInteractionListener = object : HistoryInteractionListener {
-        override fun onDeleteClicked(): Unit = Unit
+        override fun onDeleteClicked(id:Int): Unit = Unit
         override fun onCloseClicked() {}
-        override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
+        override fun onMediaClicked(mediaId: Int) {}
         override fun navigateToExploreScreen() {}
     }
     HistoryContent(
