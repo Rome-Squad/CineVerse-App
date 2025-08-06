@@ -78,19 +78,48 @@ jobs:
             echo "$CHANGED" | grep -q "^$1/" && echo "$2=true" >> $GITHUB_OUTPUT || echo "$2=false" >> $GITHUB_OUTPUT
           }
 
-          check_changed "api" "api_changed"
+          check_changed "api/authentication" "api_authentication_changed"
+          check_changed "api/details" "api_details_changed"
+          check_changed "api/explore" "api_explore_changed"
+          check_changed "api/home" "api_home_changed"
+          check_changed "api/match" "api_match_changed"
+          check_changed "api/profile" "api_profile_changed"
           check_changed "app" "app_changed"
           check_changed "datasource" "datasource_changed"
           check_changed "designsystem" "designsystem_changed"
           check_changed "domain/media" "media_changed"
           check_changed "domain/user" "user_changed"
           check_changed "imageviewer" "imageviewer_changed"
-          check_changed "presentation" "presentation_changed"
-          check_changed "repository" "repository_changed"
+          check_changed "presentation/authentication" "presentation_authentication_changed"
+          check_changed "presentation/details" "presentation_details_changed"
+          check_changed "presentation/explore" "presentation_explore_changed"
+          check_changed "presentation/home" "presentation_home_changed"
+          check_changed "presentation/match" "presentation_match_changed"
+          check_changed "presentation/profile" "presentation_profile_changed"          
 
-      - name: 🏗️ Build API (if changed)
-        if: steps.changes.outputs.api_changed == 'true'
-        run: ./gradlew :api:assembleDebug
+      - name: 🏗️ Build API - Authentication (if changed)
+        if: steps.changes.outputs.api_authentication_changed == 'true'
+        run: ./gradlew :api:authentication:assembleDebug
+
+      - name: 🏗️ Build API - Details (if changed)
+        if: steps.changes.outputs.api_details_changed == 'true'
+        run: ./gradlew :api:details:assembleDebug
+
+      - name: 🏗️ Build API - Explore (if changed)
+        if: steps.changes.outputs.api_explore_changed == 'true'
+        run: ./gradlew :api:explore:assembleDebug
+
+      - name: 🏗️ Build API - Home (if changed)
+        if: steps.changes.outputs.api_home_changed == 'true'
+        run: ./gradlew :api:home:assembleDebug
+
+      - name: 🏗️ Build API - Match (if changed)
+        if: steps.changes.outputs.api_match_changed == 'true'
+        run: ./gradlew :api:match:assembleDebug
+
+      - name: 🏗️ Build API - Profile (if changed)
+        if: steps.changes.outputs.api_profile_changed == 'true'
+        run: ./gradlew :api:profile:assembleDebug
 
       - name: 🏗️ Build App (if changed)
         if: steps.changes.outputs.app_changed == 'true'
@@ -108,9 +137,29 @@ jobs:
         if: steps.changes.outputs.imageviewer_changed == 'true'
         run: ./gradlew :imageviewer:assembleDebug
 
-      - name: 🏗️ Build Presentation (if changed)
-        if: steps.changes.outputs.presentation_changed == 'true'
-        run: ./gradlew :presentation:assembleDebug
+      - name: 🏗️ Build Presentation - Authentication
+        if: steps.changes.outputs.presentation_authentication_changed == 'true'
+        run: ./gradlew :presentation:authentication:assembleDebug
+
+      - name: 🏗️ Build Presentation - Details
+        if: steps.changes.outputs.presentation_details_changed == 'true'
+        run: ./gradlew :presentation:details:assembleDebug
+
+      - name: 🏗️ Build Presentation - Explore
+        if: steps.changes.outputs.presentation_explore_changed == 'true'
+        run: ./gradlew :presentation:explore:assembleDebug
+
+      - name: 🏗️ Build Presentation - Home
+        if: steps.changes.outputs.presentation_home_changed == 'true'
+        run: ./gradlew :presentation:home:assembleDebug
+
+      - name: 🏗️ Build Presentation - Match
+        if: steps.changes.outputs.presentation_match_changed == 'true'
+        run: ./gradlew :presentation:match:assembleDebug
+
+      - name: 🏗️ Build Presentation - Profile
+        if: steps.changes.outputs.presentation_profile_changed == 'true'
+        run: ./gradlew :presentation:profile:assembleDebug
 
       - name: 🏗️ Build Repository (if changed)
         if: steps.changes.outputs.repository_changed == 'true'
