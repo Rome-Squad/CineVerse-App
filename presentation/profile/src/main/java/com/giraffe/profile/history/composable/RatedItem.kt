@@ -28,9 +28,10 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.profile.components.SwipableItem
 
 @Composable
-fun RatedMovie(
+fun RatedItem(
     modifier: Modifier = Modifier,
     poster: Poster,
+    onItemClick: (Poster) -> Unit = {},
     onDeleteClick: () -> Unit = {}
 ) {
     Column(
@@ -49,6 +50,7 @@ fun RatedMovie(
             PosterItemHorizontal(
                 modifier = modifier.fillMaxWidth(),
                 movie = poster,
+                onClickPoster = { onItemClick(poster) }
             )
         }
     }
@@ -137,6 +139,6 @@ private fun Preview() {
         date = "2008, Jul 18"
     )
     CineVerseTheme {
-        RatedMovie(modifier = Modifier.width(328.dp), poster)
+        RatedItem(modifier = Modifier.width(328.dp), poster)
     }
 }

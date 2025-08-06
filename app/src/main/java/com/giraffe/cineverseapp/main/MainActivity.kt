@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.profile.screens.ratings.RatingScreen
 import com.giraffe.profile.utils.LanguageHelper
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
@@ -60,15 +61,7 @@ class MainActivity : AppCompatActivity() {
 
             CineVerseTheme {
 
-                LaunchedEffect(state.language) {
-                    LanguageHelper.updateAppLocale(state.language)
-                }
-
-
-                authenticationApi.LoginContainer(
-                    onBack = {},
-                    isOnboardingFirstTime = state.isOnBoardingFirstTime == true,
-                    isLoggedIn = state.isLoggedIn == true
+                RatingScreen(
                 )
             }
         }

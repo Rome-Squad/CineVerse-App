@@ -15,6 +15,7 @@ data class MovieDto(
     val posterPath : String? = null,
     @SerialName("vote_average")
     val voteAverage : Float? = null,
+    val userRating: Float? = null,
     @SerialName("release_date")
     val releaseDate : String? = null,
     @SerialName("backdrop_path")

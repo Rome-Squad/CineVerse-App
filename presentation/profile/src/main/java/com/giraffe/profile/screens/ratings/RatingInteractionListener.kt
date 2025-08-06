@@ -1,7 +1,9 @@
 package com.giraffe.profile.screens.ratings
 
+import com.giraffe.designsystem.uimodel.Poster
+
 interface RatingInteractionListener {
-    fun navigateToDetails(id: Int)
+    fun onPosterClick(poster: Poster)
     fun onCloseTipClick()
     fun onBackClick()
     fun onTabSelected(tabIndex: Int)

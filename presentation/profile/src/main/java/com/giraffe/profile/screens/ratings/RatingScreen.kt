@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,19 +20,34 @@ import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.profile.R
-import com.giraffe.profile.history.composable.RatedMovie
+import com.giraffe.profile.history.composable.RatedItem
+import com.giraffe.profile.utils.EffectListener
 
 @Composable
 fun RatingScreen(
     modifier: Modifier = Modifier,
+    navigateToMoviesDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateBack: () -> Unit,
     viewModel: RatingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is RatingEffect.NavigateToDetails -> {}
-                RatingEffect.NavigateBack -> {}
+
+    EffectListener(
+        events = viewModel.effect
+    ) { effect ->
+        when (effect) {
+            RatingEffect.NavigateBack -> {
+                navigateBack()
+            }
+            is RatingEffect.NavigateToMovieDetails -> {
+                navigateToMoviesDetails(effect.movieId)
+            }
+            is RatingEffect.NavigateToSeriesDetails -> {
+                navigateToSeriesDetails(effect.seriesId)
+            }
+            is RatingEffect.ShowError -> {
+
             }
         }
     }
@@ -86,21 +100,10 @@ private fun RatingContent(
             )
         }
         items(state.selectedPosters) {
-            RatedMovie(poster = it)
+            RatedItem(
+                poster = it,
+                onItemClick = interaction::onPosterClick
+            )
         }
     }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    RatingContent(
-        state = RatingScreenState(),
-        interaction = object : RatingInteractionListener {
-            override fun navigateToDetails(id: Int) {}
-            override fun onCloseTipClick() {}
-            override fun onBackClick() {}
-            override fun onTabSelected(tabIndex: Int) {}
-        }
-    )
 }

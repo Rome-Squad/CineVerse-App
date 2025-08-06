@@ -57,4 +57,8 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         val results = retrofitRequestBuilder.get { getMovieTrailerUrl(movieId) }.results
         return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
     }
+
+    override suspend fun getRatedMovies(
+        accountId: Int
+    ): List<MovieDto> = retrofitRequestBuilder.get { getRatedMovies(accountId) }.results
 }

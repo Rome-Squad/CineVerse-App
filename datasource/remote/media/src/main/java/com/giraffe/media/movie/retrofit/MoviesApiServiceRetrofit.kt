@@ -1,5 +1,6 @@
 package com.giraffe.media.movie.retrofit
 
+import com.giraffe.media.collections.response.CollectionsResponse
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
@@ -7,7 +8,9 @@ import com.giraffe.media.movie.response.GenreResponse
 import com.giraffe.media.movie.response.MoviesListResponse
 import com.giraffe.media.response.AllReviewsResponse
 import com.giraffe.media.response.TrailerResponse
+import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_STATES
+import com.giraffe.media.util.NetworkConstants.COLLECTIONS_END_POINT
 import com.giraffe.media.util.NetworkConstants.GENRES_URL
 import com.giraffe.media.util.NetworkConstants.ID
 import com.giraffe.media.util.NetworkConstants.MOVIES_BY_GENRE_URL
@@ -23,6 +26,7 @@ import com.giraffe.media.util.NetworkConstants.RATING
 import com.giraffe.media.util.NetworkConstants.RECOMMENDATIONS
 import com.giraffe.media.util.NetworkConstants.REVIEWS_END_POINT
 import com.giraffe.media.util.NetworkConstants.UPCOMING_MOVIES_URL
+import com.giraffe.media.util.NetworkConstants.USER_END_POINT
 import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
 import com.giraffe.media.util.NetworkConstants.WITH_GENRES
 import retrofit2.Response
@@ -98,5 +102,10 @@ interface MoviesApiServiceRetrofit {
     suspend fun getMovieTrailerUrl(
         @Path(MOVIE_ID) movieId: Int
     ): Response<MoviesListResponse<TrailerResponse>>
+
+    @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$MOVIE_END_POINT")
+    suspend fun getRatedMovies(
+        @Path(ACCOUNT_ID_PATH) accountId: Int
+    ): Response<MoviesListResponse<MovieDto>>
 
 }
