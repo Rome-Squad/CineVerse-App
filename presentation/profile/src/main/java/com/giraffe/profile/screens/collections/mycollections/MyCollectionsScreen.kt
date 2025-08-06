@@ -34,7 +34,7 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.media.collections.entity.Collection
-import com.giraffe.profile.createcollection.CreateCollectionContent
+import com.giraffe.profile.components.createcollection.CreateCollectionContent
 import com.giraffe.profile.screens.collections.mycollections.components.NoCollectionsPlaceholder
 import com.giraffe.profile.utils.EffectListener
 
@@ -112,7 +112,7 @@ private fun MyCollectionsScreenContent(
             .fillMaxSize()
     ) {
 
-        if (state.collections.isEmpty()) {
+        if (state.collections.isEmpty() && state.isLoading.not()) {
             NoCollectionsPlaceholder(
                 modifier = Modifier
                     .padding(60.dp)

@@ -1,4 +1,4 @@
-package com.giraffe.profile.screens.profile.model
+package com.giraffe.profile.screens.settings.model
 
 import com.giraffe.user.entity.User
 

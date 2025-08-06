@@ -26,7 +26,7 @@ import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.profile.components.SwipableItem
-import com.giraffe.profile.history.composable.DeleteButton
+import com.giraffe.profile.components.DeleteButton
 import com.giraffe.profile.utils.EffectListener
 
 @Composable
@@ -135,6 +135,9 @@ fun CollectionScreenContent(
                 PosterItemHorizontal(
                     modifier = Modifier.fillMaxWidth(),
                     movie = swipeablePoster.poster,
+                    onClickPoster = {
+                        interactions.onPosterClick(swipeablePoster.poster.id)
+                    }
                 )
             }
         }
