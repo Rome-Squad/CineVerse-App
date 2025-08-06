@@ -18,8 +18,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -117,18 +117,16 @@ private fun MovieDetailsContent(
     navigateToLogIn: () -> Unit
 ) {
     val scrollState = rememberLazyListState()
-    var imageWidth by remember { mutableIntStateOf(216) }
-    var imageHeight by remember { mutableIntStateOf(288) }
-    var consumedX by remember { mutableIntStateOf(0) }
-    var consumedY by remember { mutableIntStateOf(0) }
-    var animationProgress by remember { mutableFloatStateOf(0f) }
-    var isScrollingUp by remember { mutableStateOf(false) }
+    var imageWidth by rememberSaveable { mutableIntStateOf(216) }
+    var imageHeight by rememberSaveable { mutableIntStateOf(288) }
+    var consumedX by rememberSaveable { mutableIntStateOf(0) }
+    var consumedY by rememberSaveable { mutableIntStateOf(0) }
+    var animationProgress by rememberSaveable { mutableFloatStateOf(0f) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y.toInt()
-                isScrollingUp = delta <= 0
                 if (
                     (scrollState.firstVisibleItemIndex != 0 || scrollState.firstVisibleItemScrollOffset != 0)
                     && delta > 0
@@ -214,6 +212,7 @@ private fun MovieDetailsContent(
                         )
                     }
                 }
+
                 if (state.crew.isNotEmpty()) {
                     item {
                         StaffInfoSection(
@@ -240,6 +239,7 @@ private fun MovieDetailsContent(
                         )
                     }
                 }
+
                 item {
                     RatingSection(
                         modifier = Modifier.padding(horizontal = 16.dp),
