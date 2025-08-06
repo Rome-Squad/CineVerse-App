@@ -26,9 +26,13 @@ import com.giraffe.explore.ExploreApi
 import com.giraffe.home.screen.home.HomeRoute
 import com.giraffe.home.screen.home.HomeTab
 import com.giraffe.home.screen.home.homeRoute
-import com.giraffe.home.screen.movies_list.moviesListRoute
-import com.giraffe.home.screen.movies_list.navigateToCollectionList
-import com.giraffe.home.screen.movies_list.navigateToMoviesList
+import com.giraffe.home.screen.show_more.moviesListRoute
+import com.giraffe.home.screen.show_more.navigateToCollectionList
+import com.giraffe.home.screen.show_more.navigateToMoviesList
+import com.giraffe.home.screen.show_more.top_rated_tv_shows.navigateToTopRatedTvShows
+import com.giraffe.home.screen.show_more.top_rated_tv_shows.topRatedTvShowsRoute
+import com.giraffe.home.screen.show_more.upcoming_movies.navigateToUpcomingMovies
+import com.giraffe.home.screen.show_more.upcoming_movies.upcomingMoviesRoute
 import com.giraffe.match.MatchApi
 import com.giraffe.profile.ProfileApi
 
@@ -122,6 +126,14 @@ fun HomeNavGraph(
                         collectionTitle = collectionTitle
                     )
                 },
+                navigateToUpcomingMovies = {
+                    navController.navigateToUpcomingMovies()
+                    isBottomBarVisible = false
+                },
+                navigateToTopRatedTvShows = {
+                    navController.navigateToTopRatedTvShows()
+                    isBottomBarVisible = false
+                }
             )
 
             moviesListRoute(
@@ -132,6 +144,17 @@ fun HomeNavGraph(
                 navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
             )
 
+            upcomingMoviesRoute(
+                onBackClick = { navController.popBackStack() },
+                navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
+                navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
+            )
+
+            topRatedTvShowsRoute(
+                onBackClick = { navController.popBackStack() },
+                navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
+                navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
+            )
 
             composable<SeriesDetailsRoute> { backStackEntry ->
                 val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
@@ -169,7 +192,7 @@ fun HomeNavGraph(
             onTabSelected = { tab ->
                 Log.d("Tab", "Tab: ${tab.route}")
                 navController.navigate(tab.route) {
-                    popUpTo(navController.graph.startDestinationRoute .orEmpty()) {
+                    popUpTo(navController.graph.startDestinationRoute.orEmpty()) {
                         saveState = true
                     }
                     launchSingleTop = true

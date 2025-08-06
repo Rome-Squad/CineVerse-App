@@ -7,7 +7,7 @@ import com.giraffe.designsystem.composable.navbar.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeRoute: Route
+object HomeRoute : Route
 
 class HomeTab(
     override val labelRes: Int,
@@ -18,17 +18,21 @@ class HomeTab(
 
 
 fun NavGraphBuilder.homeRoute(
-    navigateToCollectionList:(Int,String)-> Unit,
+    navigateToCollectionList: (Int, String) -> Unit,
     navigateToMoviesScreen: (String, String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
+    navigateToUpcomingMovies: () -> Unit,
+    navigateToTopRatedTvShows: () -> Unit
 ) {
     composable<HomeRoute> {
         HomeScreen(
             navigateToMoviesListScreen = navigateToMoviesScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
-            navigateToCollection = navigateToCollectionList
+            navigateToCollection = navigateToCollectionList,
+            navigateToUpcomingMovies = navigateToUpcomingMovies,
+            navigateToTopRatedTvShows = navigateToTopRatedTvShows,
         )
     }
 }

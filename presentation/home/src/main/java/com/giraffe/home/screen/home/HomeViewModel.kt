@@ -279,22 +279,12 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToTopRatedList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
+    override fun onSeeAllTopRatedClicked() {
+        sendEffect(HomeEffect.NavigateToTopRatedTvShows)
     }
 
-    override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToUpcomingList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
+    override fun onSeeAllUpcomingClicked() {
+        sendEffect(HomeEffect.NavigateToUpcomingMovies)
     }
 
     override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {
@@ -317,7 +307,7 @@ class HomeViewModel @Inject constructor(
 
     override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
         sendEffect(
-            HomeEffect.NavigateToYourCollection(
+            HomeEffect.NavigateToFeaturedCollection(
                 collectionId = collectionId,
                 collectionTitle = collectionTitle
             )

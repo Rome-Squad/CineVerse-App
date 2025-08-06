@@ -5,7 +5,7 @@ import com.giraffe.home.screen.home.HomeUiModel
 import com.giraffe.home.screen.home.MediaType
 import com.giraffe.home.screen.home.PopularMediaUiModel
 import com.giraffe.home.screen.home.YourCollectionUiModel
-import com.giraffe.home.screen.movies_list.PosterUiState
+import com.giraffe.home.screen.show_more.PosterUiState
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.home.entity.YourCollection
 import com.giraffe.media.movies.entity.Movie

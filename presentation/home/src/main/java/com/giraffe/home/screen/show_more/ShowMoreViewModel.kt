@@ -1,4 +1,4 @@
-package com.giraffe.home.screen.movies_list
+package com.giraffe.home.screen.show_more
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,12 +12,10 @@ import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
-import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -27,19 +25,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesListViewModel @Inject constructor(
+class ShowMoreViewModel @Inject constructor(
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
-    private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
-    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     stateSavedStateHandle: SavedStateHandle
-) : BaseViewModel<MoviesListUiState, MoviesListEffect>(initialState = MoviesListUiState()),
-    MoviesListInteractionListener {
+) : BaseViewModel<ShowMoreUiState, ShowMoreEffect>(initialState = ShowMoreUiState()),
+    ShowMoreInteractionListener {
     private val sectionTitle = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionTitle
     private val sectionType = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionType
     private val collectionId = stateSavedStateHandle.toRoute<MoviesListRoute>().collectionId
@@ -48,9 +44,9 @@ class MoviesListViewModel @Inject constructor(
         when (sectionType) {
             MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
             MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
-            MovieSectionType.RECENTLY_RELEASED,
-            MovieSectionType.TOP_RATED_TV_SHOWS,
-            MovieSectionType.UPCOMING_MOVIES -> loadMoviesBySection(sectionType)
+            MovieSectionType.RECENTLY_RELEASED -> loadMoviesBySection(sectionType)
+//            MovieSectionType.TOP_RATED_TV_SHOWS,
+//            MovieSectionType.UPCOMING_MOVIES ->
 
             else -> collectionId?.let { loadMoviesByGenres(it) }
         }
@@ -65,7 +61,7 @@ class MoviesListViewModel @Inject constructor(
                         isLoading = false,
                         errorMessage = null,
                         mediaList = movies.map(Movie::toPosterUi),
-                        moviesListTitle = sectionTitle
+                        title = sectionTitle
                     )
                 }
             } catch (e: MediaException) {
@@ -82,7 +78,7 @@ class MoviesListViewModel @Inject constructor(
                     isLoading = true,
                     errorMessage = null,
                     mediaList = emptyList(),
-                    moviesListTitle = sectionTitle
+                    title = sectionTitle
                 )
             }
             val media = when (sectionType) {
@@ -92,13 +88,13 @@ class MoviesListViewModel @Inject constructor(
                     recentMovies.map { it.toPosterUi() } + recentSeries.map { it.toPosterUi() }
                 }
 
-                MovieSectionType.TOP_RATED_TV_SHOWS -> {
-                    getTopRatedSeriesUseCase(page = 1, limit = 10).map { it.toPosterUi() }
-                }
+//                MovieSectionType.TOP_RATED_TV_SHOWS -> {
+//                    getTopRatedSeriesUseCase(page = 1, limit = 10).map { it.toPosterUi() }
+//                }
 
-                MovieSectionType.UPCOMING_MOVIES -> {
-                    getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
-                }
+//                MovieSectionType.UPCOMING_MOVIES -> {
+//                    getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
+//                }
 
                 else -> emptyList()
             }
@@ -202,8 +198,8 @@ class MoviesListViewModel @Inject constructor(
 
     override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
         when (mediaType) {
-            MediaType.MOVIE -> sendEffect(MoviesListEffect.NavigateToMovieDetails(mediaId))
-            MediaType.SERIES -> sendEffect(MoviesListEffect.NavigateToSeriesDetails(mediaId))
+            MediaType.MOVIE -> sendEffect(ShowMoreEffect.NavigateToMovieDetails(mediaId))
+            MediaType.SERIES -> sendEffect(ShowMoreEffect.NavigateToSeriesDetails(mediaId))
         }
     }
 

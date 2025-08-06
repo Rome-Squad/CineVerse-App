@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
@@ -27,7 +28,7 @@ fun ListTitleSection(onBackClick: () -> Unit, title: String) {
         Icon(
             modifier = Modifier
                 .clip(shape = CircleShape)
-                .clickable(onClick = onBackClick)
+                .clickable(onClick = dropUnlessResumed { onBackClick() })
                 .padding(8.dp),
             painter = painterResource(Theme.icons.outline.arrowLeft),
             contentDescription = stringResource(R.string.back),

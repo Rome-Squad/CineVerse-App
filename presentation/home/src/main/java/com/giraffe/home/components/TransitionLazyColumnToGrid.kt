@@ -26,7 +26,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.home.screen.home.MediaType
-import com.giraffe.home.screen.movies_list.PosterUiState
+import com.giraffe.home.screen.show_more.PosterUiState
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
