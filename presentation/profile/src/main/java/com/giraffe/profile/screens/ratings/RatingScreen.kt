@@ -22,6 +22,7 @@ import com.giraffe.profile.history.composable.RatedMovie
 
 @Composable
 fun RatingScreen(
+    modifier: Modifier = Modifier,
     viewModel: RatingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -33,15 +34,21 @@ fun RatingScreen(
             }
         }
     }
-    RatingContent(state, viewModel)
+    RatingContent(
+        modifier = modifier,
+        state = state,
+        interaction = viewModel)
 }
 
 @Composable
 private fun RatingContent(
+    modifier: Modifier = Modifier,
     state: RatingScreenState,
     interaction: RatingInteractionListener
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier
+    ) {
         stickyHeader {
             AppBar(
                 modifier = Modifier
@@ -83,8 +90,8 @@ private fun RatingContent(
 @Composable
 private fun Preview() {
     RatingContent(
-        RatingScreenState(),
-        object : RatingInteractionListener {
+        state = RatingScreenState(),
+        interaction = object : RatingInteractionListener {
             override fun navigateToDetails(id: Int) {}
             override fun onCloseTipClick() {}
             override fun onBackClick() {}
