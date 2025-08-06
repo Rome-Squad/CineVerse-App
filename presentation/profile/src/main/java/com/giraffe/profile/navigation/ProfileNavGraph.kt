@@ -2,10 +2,14 @@ package com.giraffe.profile.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
@@ -27,7 +31,29 @@ internal fun ProfileNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
     exploreApi: ExploreApi,
+    onShowBottomBarChange: (Boolean) -> Unit
 ) {
+
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination
+    val bottomBarRoutes = listOf(
+        ExploreRoute::class,
+        SettingsScreenRoute::class,
+    )
+    val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
+        navDestination.route?.let { route ->
+            bottomBarRoutes.any { klass ->
+                route.contains(klass.simpleName .orEmpty())
+            }
+        } == true
+    } == true
+
+    LaunchedEffect(currentRoute) {
+        onShowBottomBarChange(isBottomBarVisible)
+    }
+
+
 
     NavHost(
         modifier = modifier,

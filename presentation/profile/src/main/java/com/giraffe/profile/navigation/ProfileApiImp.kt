@@ -21,6 +21,7 @@ class ProfileApiImp @Inject constructor(
             navController = navController,
             detailsApi = detailsApi,
             exploreApi = exploreApi,
+            onShowBottomBarChange = onShowBottomBarChange
         )
     }
 }
