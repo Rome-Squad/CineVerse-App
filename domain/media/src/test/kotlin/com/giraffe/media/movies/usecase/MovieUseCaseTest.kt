@@ -10,10 +10,7 @@ class MovieUseCaseTest {
     private var addGenresUseCase: AddGenresUseCase = mockk()
     private var addMovieRatingUseCase: AddMovieRatingUseCase = mockk()
     private var addMoviesUseCase: AddMoviesUseCase = mockk()
-    private var clearMovieCacheWithOutRecentViewedUseCase: ClearMovieCacheWithOutRecentViewedUseCase =
-        mockk()
     private var clearMoviesCacheUseCase: ClearMoviesCacheUseCase = mockk()
-    private var clearRecentlyMoviesUseCase: ClearRecentlyMoviesUseCase = mockk()
     private var getMovieDetailsUseCase: GetMovieDetailsUseCase = mockk()
     private var getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase = mockk()
     private var getMovieReviewsUseCase: GetMovieReviewsUseCase = mockk()
@@ -36,9 +33,7 @@ class MovieUseCaseTest {
             addGenresUseCase = addGenresUseCase,
             addMovieRatingUseCase = addMovieRatingUseCase,
             addMoviesUseCase = addMoviesUseCase,
-            clearMovieCacheWithOutRecentViewedUseCase = clearMovieCacheWithOutRecentViewedUseCase,
             clearMoviesCacheUseCase = clearMoviesCacheUseCase,
-            clearRecentlyMoviesUseCase = clearRecentlyMoviesUseCase,
             getMovieDetailsUseCase = getMovieDetailsUseCase,
             getMoviesGenresByIdsUseCase = getMoviesGenresByIdsUseCase,
             getMovieReviewsUseCase = getMovieReviewsUseCase,
@@ -76,20 +71,8 @@ class MovieUseCaseTest {
     }
 
     @Test
-    fun `clearMovieCacheWithOutRecentViewedUseCase property should return correct instance`() {
-        assertThat(movieUseCase.clearMovieCacheWithOutRecentViewedUseCase).isEqualTo(
-            clearMovieCacheWithOutRecentViewedUseCase
-        )
-    }
-
-    @Test
     fun `clearMoviesCacheUseCase property should return correct instance`() {
         assertThat(movieUseCase.clearMoviesCacheUseCase).isEqualTo(clearMoviesCacheUseCase)
-    }
-
-    @Test
-    fun `clearRecentlyMoviesUseCase property should return correct instance`() {
-        assertThat(movieUseCase.clearRecentlyMoviesUseCase).isEqualTo(clearRecentlyMoviesUseCase)
     }
 
     @Test

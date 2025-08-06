@@ -176,15 +176,15 @@ class MoviesRepositoryImpl @Inject constructor(
     private suspend fun getUpcomingMoviesFromRemote(page: Int, limit: Int) =
         remote.getUpcomingMovies(page).take(limit).map(MovieDto::toEntity)
 
-    override suspend fun clearMovieCache() = SafeCall {
-        local.clearMovieCache()
-    }
+    override suspend fun clearMovieCache(
+        clearOnlyRecentlyViewed: Boolean,
+        excludeRecentlyViewed: Boolean
+    ) = SafeCall {
+        when {
+            clearOnlyRecentlyViewed -> local.clearRecentlyViewedMovies()
+            excludeRecentlyViewed -> local.clearMovieCacheWithOutRecentViewed()
+            else -> local.clearMovieCache()
+        }
 
-    override suspend fun clearMovieCacheWithOutRecentViewed() = SafeCall {
-        local.clearMovieCacheWithOutRecentViewed()
-    }
-
-    override suspend fun clearRecentlyViewedMovies() = SafeCall {
-        local.clearRecentlyViewedMovies()
     }
 }

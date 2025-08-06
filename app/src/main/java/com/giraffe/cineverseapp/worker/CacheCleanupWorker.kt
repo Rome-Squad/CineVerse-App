@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
-import com.giraffe.media.movies.usecase.ClearMovieCacheWithOutRecentViewedUseCase
+import com.giraffe.media.movies.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.person.cleaner.PersonCacheCleanerImp
 import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
 
@@ -13,7 +13,7 @@ import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
 class CacheCleanupWorker constructor(
     appContext: Context,
     workerParams: WorkerParameters,
-    private val clearMovieCacheWithOutRecentViewed: ClearMovieCacheWithOutRecentViewedUseCase
+    private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val database =
@@ -25,7 +25,7 @@ class CacheCleanupWorker constructor(
         return try {
             personCacheCleaner.clearPersonCache()
             seriesCacheCleaner.clearSeriesCache()
-            clearMovieCacheWithOutRecentViewed.invoke()
+            clearMoviesCacheUseCase.invoke(excludeRecentlyViewed = true)
             Result.success()
         } catch (_: Exception) {
             Result.retry()

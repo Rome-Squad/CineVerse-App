@@ -6,7 +6,13 @@ import javax.inject.Inject
 class ClearMoviesCacheUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
-    suspend operator fun invoke() {
-        repository.clearMovieCache()
-    }
+    suspend operator fun invoke(
+        clearOnlyRecentlyViewed: Boolean = false,
+        excludeRecentlyViewed: Boolean = false
+    ) =
+        repository.clearMovieCache(
+            clearOnlyRecentlyViewed = clearOnlyRecentlyViewed,
+            excludeRecentlyViewed = excludeRecentlyViewed
+        )
+
 }

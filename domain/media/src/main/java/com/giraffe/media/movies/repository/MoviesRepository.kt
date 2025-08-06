@@ -39,10 +39,5 @@ interface MoviesRepository {
 
     suspend fun getUpcomingMovies(page: Int, limit: Int): List<Movie>
 
-    suspend fun clearMovieCache()
-
-    suspend fun clearMovieCacheWithOutRecentViewed()
-
-    suspend fun clearRecentlyViewedMovies()
-
+    suspend fun clearMovieCache(clearOnlyRecentlyViewed: Boolean, excludeRecentlyViewed: Boolean)
 }

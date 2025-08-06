@@ -19,11 +19,53 @@ class ClearMoviesCacheUseCaseTest {
     }
 
     @Test
-    fun `should call repository to clear cache`() = runTest {
+    fun `should call clearMovieCache form repository to clear all movies cache`() = runTest {
         // When
-        useCase()
+        useCase(
+            clearOnlyRecentlyViewed = false,
+            excludeRecentlyViewed = false
+        )
 
         // Then
-        coVerify { repository.clearMovieCache() }
+        coVerify {
+            repository.clearMovieCache(
+                clearOnlyRecentlyViewed = false,
+                excludeRecentlyViewed = false
+            )
+        }
+    }
+
+    @Test
+    fun `should call clearMovieCache form repository to clear only recent viewed movies cache`() = runTest {
+        // When
+        useCase(
+            clearOnlyRecentlyViewed = true,
+            excludeRecentlyViewed = false
+        )
+
+        // Then
+        coVerify {
+            repository.clearMovieCache(
+                clearOnlyRecentlyViewed = true,
+                excludeRecentlyViewed = false
+            )
+        }
+    }
+
+    @Test
+    fun `should call clearMovieCache form repository to clear all movies cache exclude recent viewed`() = runTest {
+        // When
+        useCase(
+            clearOnlyRecentlyViewed = false,
+            excludeRecentlyViewed = true
+        )
+
+        // Then
+        coVerify {
+            repository.clearMovieCache(
+                clearOnlyRecentlyViewed = false,
+                excludeRecentlyViewed = true
+            )
+        }
     }
 }
