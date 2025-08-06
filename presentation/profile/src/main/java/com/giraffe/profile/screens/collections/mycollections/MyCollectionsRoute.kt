@@ -1,6 +1,5 @@
 package com.giraffe.profile.screens.collections.mycollections
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -16,14 +15,12 @@ internal fun NavController.navigateToMyCollections() {
 }
 
 fun NavGraphBuilder.myCollectionsRoute(
-    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateToCollection: (Collection) -> Unit,
     navigateToExploreScreen: () -> Unit
 ) {
     composable<MyCollectionsRoute> {
         MyCollectionsScreen(
-            modifier = modifier,
             navigateBack = navigateBack,
             navigateToCollection = navigateToCollection,
             navigateToExploreScreen = navigateToExploreScreen

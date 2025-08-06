@@ -18,9 +18,7 @@ fun NavGraphBuilder.settingsScreenRoute(
 ) {
     composable<SettingsScreenRoute> {
         SettingsScreen(
-            onNavigateToEditProfileWebView = {
-                navController.navigateToEditProfileWebView()
-            },
+            onNavigateToEditProfileWebView = navController::navigateToEditProfileWebView,
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToHistory = onNavigateToHistory,
             onNavigateToRatings = onNavigateToRatings,
