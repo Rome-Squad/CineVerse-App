@@ -1,5 +1,6 @@
 package com.giraffe.media.series.retrofit
 
+import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
@@ -44,4 +45,9 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
         val results = retrofitRequestBuilder.get { getSeriesTrailerUrl(seriesId) }.results
         return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
     }
+
+    override suspend fun getRatedMovies(
+        accountId: Int
+    ): List<SeriesDto> = retrofitRequestBuilder.get { getRatedSeries(accountId) }.results
+
 }

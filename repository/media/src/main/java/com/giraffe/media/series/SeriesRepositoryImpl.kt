@@ -3,6 +3,8 @@ package com.giraffe.media.series
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.mapper.toEntity
+import com.giraffe.media.movie.mapper.toEntity
+import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
@@ -145,5 +147,11 @@ class SeriesRepositoryImpl @Inject constructor(
                     }
             }
         }
+    }
+
+    override suspend fun getRatedSeries(accountId: Int): Map<Float, Series> = SafeCall {
+        remote.getRatedSeries(accountId)
+            .filter { it.userRating != null }
+            .associate { it.userRating!! to it.toEntity() }
     }
 }

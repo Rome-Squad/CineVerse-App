@@ -33,5 +33,8 @@ object NetworkConstants {
     //user
     const val USER_END_POINT = "account"
     const val ACCOUNT_ID_PATH = "account_id"
+
+    //rated
+    const val RATED = "rated"
 }
 

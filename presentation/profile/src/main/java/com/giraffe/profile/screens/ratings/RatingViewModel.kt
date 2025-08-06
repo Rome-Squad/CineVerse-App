@@ -1,26 +1,120 @@
 package com.giraffe.profile.screens.ratings
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetRatedMoviesUseCase
+import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.GetRatedSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.model.RatedPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 @HiltViewModel
 class RatingViewModel @Inject constructor(
     private val getRatedMoviesUseCase: GetRatedMoviesUseCase,
+    private val getRatedSeriesUseCase: GetRatedSeriesUseCase,
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getSeriesGenresUseCase: GetSeriesGenresUseCase
 ) : BaseViewModel<RatingScreenState, RatingEffect>(RatingScreenState()),
     RatingInteractionListener {
 
     init {
+        safeExecute(
+            onSuccess = {
+                getRatedItems()
+            }
+        ) {
+            coroutineScope {
+                val moviesJob = async { getMoviesGenres() }
+                val seriesJob = async { getSeriesGenres() }
+                moviesJob.await()
+                seriesJob.await()
+            }
+        }
 
         onTabSelected(0)
     }
 
-    private fun getRatedMovies() {
+    private fun getRatedItems() {
         safeExecute {
+            coroutineScope {
+                val ratedMoviesJob = async { getRatedMovies() }
+                val ratedSeriesJob = async { getRatedSeries() }
+                ratedMoviesJob.await()
+                ratedSeriesJob.await()
+            }
+        }
+    }
+
+
+    private fun getMoviesGenres() {
+        safeExecute(
+            onSuccess = ::onGetMoviesGenresSuccess,
+            onError = ::onGetMoviesGenresFailure
+        ) {
+            getMoviesGenresUseCase()
+        }
+    }
+
+    private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                movieGenres = genres
+            )
+        }
+    }
+
+    private fun onGetMoviesGenresFailure(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+
+        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
+    }
+
+
+    private fun getSeriesGenres() {
+        safeExecute(
+            onSuccess = ::onGetSeriesGenresSuccess,
+            onError = ::onGetSeriesGenresFailure
+        ) {
+            getSeriesGenresUseCase()
+        }
+    }
+
+    private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                movieGenres = genres
+            )
+        }
+    }
+
+    private fun onGetSeriesGenresFailure(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+
+        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
+    }
+
+    private fun getRatedMovies() {
+        safeExecute(
+            onSuccess = ::onGetRatedMoviesSuccess,
+            onError = ::onGetRatedMoviesFailure
+        ) {
             getRatedMoviesUseCase()
         }
     }
@@ -45,6 +139,38 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun onGetRatedMoviesFailure(error: Throwable) {
+        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
+    }
+
+    private fun getRatedSeries() {
+        safeExecute(
+            onSuccess = ::onGetRatedSeriesSuccess,
+            onError = ::onGetRatedSeriesFailure
+        ) {
+            getRatedSeriesUseCase()
+        }
+    }
+
+    private fun onGetRatedSeriesSuccess(seriesMap: Map<Float, Series>) {
+        val ratedSeries = seriesMap.entries
+            .map {
+                RatedPoster.fromSeries(
+                    series = it.value,
+                    rating = it.key,
+                    genres = state.value.seriesGenres
+                )
+            }
+
+        if (state.value.selectedTabIndex == 1) {
+            updateState {
+                it.copy(
+                    selectedPosters = ratedSeries,
+                )
+            }
+        }
+    }
+
+    private fun onGetRatedSeriesFailure(error: Throwable) {
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 

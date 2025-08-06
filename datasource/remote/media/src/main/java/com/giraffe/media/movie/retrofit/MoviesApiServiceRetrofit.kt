@@ -27,6 +27,7 @@ import com.giraffe.media.util.NetworkConstants.UPCOMING_MOVIES_URL
 import com.giraffe.media.util.NetworkConstants.USER_END_POINT
 import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
 import com.giraffe.media.util.NetworkConstants.WITH_GENRES
+import com.giraffe.media.util.NetworkConstants.RATED
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -101,7 +102,7 @@ interface MoviesApiServiceRetrofit {
         @Path(MOVIE_ID) movieId: Int
     ): Response<MoviesListResponse<TrailerResponse>>
 
-    @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$MOVIE_END_POINT")
+    @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$RATED/$MOVIE_END_POINT")
     suspend fun getRatedMovies(
         @Path(ACCOUNT_ID_PATH) accountId: Int
     ): Response<MoviesListResponse<MovieDto>>
