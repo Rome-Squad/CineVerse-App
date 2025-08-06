@@ -15,7 +15,18 @@
     <string name="my_ratings">تقييماتي</string>
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
+    <string name="edit_profile_title">تعديل الملف الشخصي</string>
+    <string name="edit_profile_caption">سيتم نقلك إلى موقع الويب لتحديث اسمك أو اسم المستخدم أو صورة ملفك الشخصي.</string>
+    <string name="edit_profile_primary_button">الذهاب إلى الموقع</string>
+    <string name="change_language_title">تغيير اللغة</string>
+    <string name="content_preferences_title">تفضيلات المحتوى</string>
+    <string name="logout_dialog_title">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
+    <string name="logout_dialog_caption">يمكنك دائمًا تسجيل الدخول مرة أخرى بحسابك.</string>
+    <string name="logout_dialog_primary_button">تسجيل الخروج</string>
     <string name="Dark_Mode">الوضع الداكن</string>
+    <string name="content_preferences">تفضيلات المحتوى</string>
+    <string name="login_or_sign_up">سجل دخولك</string>
+    <string name="to_personalize_your_experience">لتحسين تجربتك</string>
     <string name="Language">اللغه</string>
     <string name="Logout">تسجيل الخروج</string>
     <string name="Version">الاصدار ١.٠.١</string>
@@ -41,5 +52,10 @@
     <string name="collection_name">اسم المجموعة</string>
     <string name="movies">أفلام</string>
     <string name="close">غلق</string>
-    <string name="tip_swipe_left_to_remove_movies_from_your_collection">Tip: Swipe left to remove movies from your collection.</string>
+    <string name="tip_swipe_left_to_remove_movies_from_your_collection">ملاحظة: اسحب لليسار لحذف الفيلم من المجموعة</string>
+    <string name="no_history_yet"> لا يوجد مشاهدات الى الان</string>
+    <string name="it_s_quiet_in_here_start_watching_and_we_ll_keep_track_for_you">القائمه فارغه الان… يمكنك البدء بالمشاهده وسنتابع معك للاحتفاظ بمشاهداتك</string>
+    <string name="find_something_to_watch">ابحث عن شئ للمشاهده</string>
+
+
 </resources>

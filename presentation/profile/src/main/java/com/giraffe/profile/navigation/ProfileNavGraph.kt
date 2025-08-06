@@ -1,48 +1,25 @@
 package com.giraffe.profile.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.profile.edit.editProfileWebViewRoute
+import com.giraffe.profile.screens.profile.ProfileScreenRoute
+import com.giraffe.profile.screens.profile.profileScreenRoute
 
 @Composable
-fun ProfileNavGraph(
-    modifier: Modifier = Modifier
+internal fun ProfileNavGraph(
+    navController: NavHostController,
+    onNavigateToLogin: () -> Unit
 ) {
-
-
-}
-
-
-@Composable
-@Preview(
-    showBackground = true,
-    showSystemUi = false
-)
-private fun PreviewProfileNavGraph() {
-
-    CineVerseTheme(
-        isDarkTheme = false
+    NavHost(
+        navController = navController,
+        startDestination = ProfileScreenRoute,
     ) {
-        ProfileNavGraph(
-            modifier = Modifier
+        profileScreenRoute(
+            navController = navController,
+            onNavigateToLogin = onNavigateToLogin
         )
-    }
-}
-
-@Composable
-@Preview(
-    showBackground = true,
-    showSystemUi = false
-)
-private fun PreviewProfileNavGraphDark() {
-
-    CineVerseTheme(
-        isDarkTheme = true
-    ) {
-        ProfileNavGraph(
-            modifier = Modifier
-        )
+        editProfileWebViewRoute(navController)
     }
 }

@@ -1,6 +1,5 @@
 package com.giraffe.profile.screens.collections.collection
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
@@ -90,8 +89,7 @@ class CollectionViewModel @Inject constructor(
                 genres = state.value.movieGenres
             )
         }
-        Log.d("VMTAG", "onGetCollectionItemsSuccess: $moviesList")
-        Log.d("VMTAG", "posters: $swipeablePosters")
+
         updateState {
             it.copy(
                 isLoading = false,

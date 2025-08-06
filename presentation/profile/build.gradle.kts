@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":imageviewer"))
     implementation(project(":domain:media"))
+    implementation(project(":domain:user"))
     implementation(project(":api:profile"))
 
     implementation(libs.androidx.core.ktx)
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
+    implementation(libs.accompanist.webview)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
