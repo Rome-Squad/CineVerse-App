@@ -21,16 +21,14 @@ class GetRecentlyViewedMoviesUseCaseTest {
 
 
     @Test
-    fun `should returns recently watched movies`() = runTest {
+    fun `given recently viewed movies, when invoke is called, then return movie list`() = runTest {
         val expectedMovies = flow {
             emit(fakeMovies)
         }
 
         coEvery { repository.getRecentlyViewedMovies() } returns expectedMovies
 
-        val useCase = GetRecentlyViewedMoviesUseCase(repository)
-
-        val result = useCase()
+        val result = GetRecentlyViewedMoviesUseCase(repository).invoke()
 
         coVerify { repository.getRecentlyViewedMovies() }
         assertThat(result).isEqualTo(expectedMovies)

@@ -19,7 +19,7 @@ class ClearMovieCacheWithOutRecentViewedUseCaseTest {
 
 
     @Test
-    fun `should call repository clear method`() = runTest {
+    fun `should call clear movie cache without recent viewed from repository when invoke method`() = runTest {
 
         val useCase = ClearMovieCacheWithOutRecentViewedUseCase(repository)
 
