@@ -43,7 +43,7 @@ class GetUserNameUseCaseTest {
     @Test
     fun `invoke() when repository succeeds should return user's display name`() = runTest {
         // given
-        val expectedName = "Tarek"
+        val expectedName = "hamada_rayyan"
         coEvery { userRepository.getUser() } returns fakeUser
 
         // when

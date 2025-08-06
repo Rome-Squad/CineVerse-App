@@ -1,6 +1,5 @@
 package com.giraffe.media.series
 
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
@@ -15,8 +14,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +21,6 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class SeriesRepositoryImplTest {
     private lateinit var local: SeriesLocalDateSource
-    private lateinit var localExplore: LocalExploreDataSource
     private lateinit var remote: SeriesRemoteDataSource
     private lateinit var repository: SeriesRepository
     private val remoteSeriesDto = listOf(
@@ -76,7 +72,8 @@ class SeriesRepositoryImplTest {
     )
 
     private val cachedSeasons = listOf(
-        SeasonCacheDto(1,
+        SeasonCacheDto(
+            1,
             1,
             "S1",
             "desc",
@@ -84,7 +81,8 @@ class SeriesRepositoryImplTest {
             "poster",
             1,
             "2015",
-            10)
+            10
+        )
     )
 
     private val cachedGenres = listOf(
@@ -95,36 +93,9 @@ class SeriesRepositoryImplTest {
     fun setup() {
         local = mockk(relaxed = true)
         remote = mockk(relaxed = true)
-        repository = SeriesRepositoryImpl(remote, local, localExplore)
+        repository = SeriesRepositoryImpl(remote, local)
     }
 
-    @Test
-    fun `searchSeriesByName returns cached result if available`() = runTest {
-        coEvery { local.getCachedSeriesForName("vikings", 1) } returns cachedSeries
-        coEvery { local.getSeasonsForSeries(1) } returns cachedSeasons
-
-        val result = repository.searchSeriesByName("vikings", 1)
-
-        assertThat(result).hasSize(1)
-        assertThat(result.first().name).isEqualTo("Vikings")
-        coVerify(exactly = 0) { remote.getSeriesByName(any()) }
-    }
-
-    @Test
-    fun `searchSeriesByName fetches remote if cache empty and saves`() = runTest {
-        coEvery { local.getCachedSeriesForName("vikings", 1) } returns emptyList()
-        coEvery { remote.getSeriesByName("vikings") } returns remoteSeriesDto
-
-        val result = repository.searchSeriesByName("vikings", 1)
-
-        assertThat(result.first().name).isEqualTo("Vikings")
-        coVerify { remote.getSeriesByName("vikings") }
-        coVerify {
-            local.insertSearchResult(
-                seriesList = match { it.first().id == 1 }
-            )
-        }
-    }
 
     @Test
     fun `getSeriesGenres returns cached if valid`() = runTest {
@@ -149,17 +120,6 @@ class SeriesRepositoryImplTest {
         coVerify { local.insertGenres(match { it.first().id == 1 }) }
     }
 
-    @Test
-    fun `getRecentSeries returns correct entities`() = runTest {
-        coEvery { local.getRecentSeries() } returns flowOf(cachedSeries)
-        coEvery { local.getSeasonsForSeries(1) } returns cachedSeasons
-
-        val result = repository.getRecentSeries().first()
-
-        assertThat(result).hasSize(1)
-        assertThat(result.first().name).isEqualTo("Vikings")
-        coVerify { local.getSeasonsForSeries(1) }
-    }
 
     @Test
     fun `storeRecentSeries should call local storage`() = runTest {
@@ -175,7 +135,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `SeriesRepository should return Series`() = runTest {
-        repository.getRecommendedSeries(1, 1)
+        repository.getRecommendedSeries(1, 1, 10)
         coVerify { remote.getSeriesRecommendations(1, 1) }
     }
 }

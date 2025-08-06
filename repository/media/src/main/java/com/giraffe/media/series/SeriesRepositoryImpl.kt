@@ -42,9 +42,7 @@ class SeriesRepositoryImpl @Inject constructor(
     override suspend fun getRecentSeries() = SafeCall {
         seriesLocalDateSource.getRecentSeries().map { seriesList ->
             seriesList.map { series ->
-                val seasons =
-                    seriesLocalDateSource.getSeasonsForSeries(series.id).map { it.toEntity() }
-                series.toEntity(seasons)
+                series.toEntity()
             }
         }
     }

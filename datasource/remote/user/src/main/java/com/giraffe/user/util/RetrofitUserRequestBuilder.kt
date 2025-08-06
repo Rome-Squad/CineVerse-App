@@ -1,12 +1,12 @@
 package com.giraffe.user.util
 
 import com.giraffe.repository.exceptions.ApiDataException
-import com.giraffe.repository.exceptions.UserDataException
 import com.giraffe.repository.exceptions.InvalidIdDataException
 import com.giraffe.repository.exceptions.NoInternetDataException
 import com.giraffe.repository.exceptions.RequestTimeoutDataException
 import com.giraffe.repository.exceptions.SerializationDataException
 import com.giraffe.repository.exceptions.UnknownNetworkDataException
+import com.giraffe.repository.exceptions.UserDataException
 import retrofit2.Response
 import java.io.IOException
 import java.net.SocketTimeoutException
@@ -22,6 +22,12 @@ class RetrofitUserRequestBuilder<API>(
     }
 
     suspend inline fun <reified T> post(
+        crossinline call: suspend API.() -> Response<T>
+    ): T {
+        return safeCall { api.call() }
+    }
+
+    suspend inline fun <reified T> delete(
         crossinline call: suspend API.() -> Response<T>
     ): T {
         return safeCall { api.call() }

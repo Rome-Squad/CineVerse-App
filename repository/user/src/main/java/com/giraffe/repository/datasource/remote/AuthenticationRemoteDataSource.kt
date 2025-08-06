@@ -9,5 +9,6 @@ interface AuthenticationRemoteDataSource {
 
     suspend fun createSession(token: String): String
 
+    suspend fun deleteSession(sessionId: String)
 
 }

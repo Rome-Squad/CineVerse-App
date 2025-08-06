@@ -19,5 +19,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isLoggedIn() = SafeCall { localDataSource.isLoggedIn() }
+    override suspend fun logout() = SafeCall {
+        val sessionId = localDataSource.getSessionId()
+
+        if (sessionId != null) {
+                authRemoteDataSource.deleteSession(sessionId)
+        }
+        localDataSource.clearSessionId()
+    }
 
 }
