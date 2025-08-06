@@ -1,6 +1,9 @@
 package com.giraffe.details.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -119,7 +122,11 @@ fun MainDetails(
                     text = actorName
                 )
 
-                if (actorBirthday.isNotBlank() && animationProgress == 0f) {
+                AnimatedVisibility(
+                    visible = actorBirthday.isNotBlank() && animationProgress == 0f,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     IconTextBox(
                         icon = painterResource(Theme.icons.outline.cake),
                         contentDescription = stringResource(R.string.birthday_cake_icon),
@@ -127,7 +134,11 @@ fun MainDetails(
                     )
                 }
 
-                if (actorPlaceOfBirth.isNotBlank() && animationProgress == 0f) {
+                AnimatedVisibility(
+                    visible = actorPlaceOfBirth.isNotBlank() && animationProgress == 0f,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     IconTextBox(
                         icon = painterResource(Theme.icons.outline.location),
                         contentDescription = stringResource(R.string.location_icon),
@@ -137,7 +148,11 @@ fun MainDetails(
             }
         }
 
-        if (socialMediaUiList.isNotEmpty() && animationProgress == 0f) {
+        AnimatedVisibility(
+            visible = socialMediaUiList.isNotEmpty() && animationProgress == 0f,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp)
