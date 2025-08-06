@@ -22,6 +22,7 @@ import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.user.usecase.GetUserNameUseCase
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -45,6 +46,7 @@ class HomeViewModel @Inject constructor(
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
+    private val isLoggedInUseCase: IsLoggedInUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
@@ -60,7 +62,21 @@ class HomeViewModel @Inject constructor(
         getTopRatedSeries()
         getUpcomingMovies()
         getUserName()
+        isLoggedIn()
     }
+
+    private fun isLoggedIn() {
+        safeExecute(
+            onSuccess = ::onIsLoggedInSuccess,
+            onError = ::onFail,
+            block = { isLoggedInUseCase() }
+        )
+    }
+
+    private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
+        updateState { it.copy(isLoggedIn = isLoggedIn) }
+    }
+
 
     private fun getUserName() {
         safeExecute(

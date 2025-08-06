@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,11 +20,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
+import coil3.compose.AsyncImage
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
 import com.giraffe.home.screen.home.FeaturedCollectionUiModel
-import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
@@ -49,15 +48,12 @@ fun CollectionItem(
                 .height(80.dp),
             contentAlignment = Alignment.Center
         ) {
-            SafeIslamicImage(
-                imageUrl = collectionItemData.backgroundImageUrl,
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize(),
+                model = collectionItemData.backgroundImageUrl,
                 contentDescription = stringResource(R.string.collection_item_image),
                 contentScale = ContentScale.Crop,
-                hasSensitiveText = false,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .offset(y = (-8).dp)
-                    .clip(RoundedCornerShape(Theme.radius.s)),
                 alignment = Alignment.TopCenter
             )
             Box(
