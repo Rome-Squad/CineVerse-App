@@ -53,6 +53,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -111,6 +112,7 @@ fun DefaultTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
+                .noHoverClickable()
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(color = Theme.color.background.card)
                 .border(
@@ -142,7 +144,9 @@ fun DefaultTextField(
                     .focusRequester(focusRequester)
                     .clickable(
                         enabled = !enabled,
-                        onClick = onClick
+                        onClick = onClick,
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
                     ),
                 interactionSource = interactionSource,
                 enabled = enabled,
@@ -198,7 +202,7 @@ fun DefaultTextField(
                     tint = Theme.color.shade.secondary,
                     contentDescription = "password visibility icon",
                     modifier = Modifier
-                        .clickable { showPassword = !showPassword }
+                        .noHoverClickable { showPassword = !showPassword }
                 )
             } else if (endIcon != null) {
                 endIcon()
