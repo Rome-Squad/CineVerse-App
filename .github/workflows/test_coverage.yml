@@ -85,14 +85,38 @@ jobs:
           check_changed "api/match" "api_match_changed"
           check_changed "api/profile" "api_profile_changed"
           check_changed "app" "app_changed"
-          check_changed "datasource" "datasource_changed"
           check_changed "designsystem" "designsystem_changed"
           check_changed "domain/media" "media_changed"
           check_changed "domain/user" "user_changed"
           check_changed "imageviewer" "imageviewer_changed"
-          check_changed "presentation" "presentation_changed"
-          check_changed "repository" "repository_changed"
+          check_changed "datasource/local/media" "datasource_local_media_changed"
+          check_changed "datasource/local/user" "datasource_local_user_changed"
+          check_changed "datasource/remote/media" "datasource_remote_media_changed"
+          check_changed "datasource/remote/user" "datasource_remote_user_changed"
+          check_changed "presentation/authentication" "presentation_authentication_changed"
+          check_changed "presentation/details" "presentation_details_changed"
+          check_changed "presentation/explore" "presentation_explore_changed"
+          check_changed "presentation/home" "presentation_home_changed"
+          check_changed "presentation/match" "presentation_match_changed"
+          check_changed "presentation/profile" "presentation_profile_changed"   
+          check_changed "repository/media" "repository_media_changed"
+          check_changed "repository/user" "repository_user_changed"
 
+      - name: 🏗️ Build Datasource Local - Media (if changed)
+        if: steps.changes.outputs.datasource_local_media_changed == 'true'
+        run: ./gradlew :datasource:local:media:assembleDebug
+
+      - name: 🏗️ Build Datasource Local - User (if changed)
+        if: steps.changes.outputs.datasource_local_user_changed == 'true'
+        run: ./gradlew :datasource:local:user:assembleDebug
+
+      - name: 🏗️ Build Datasource Remote - Media (if changed)
+        if: steps.changes.outputs.datasource_remote_media_changed == 'true'
+        run: ./gradlew :datasource:remote:media:assembleDebug
+
+      - name: 🏗️ Build Datasource Remote - User (if changed)
+        if: steps.changes.outputs.datasource_remote_user_changed == 'true'
+        run: ./gradlew :datasource:remote:user:assembleDebug
       - name: 🏗️ Build API - Authentication (if changed)
         if: steps.changes.outputs.api_authentication_changed == 'true'
         run: ./gradlew :api:authentication:assembleDebug
@@ -133,13 +157,37 @@ jobs:
         if: steps.changes.outputs.imageviewer_changed == 'true'
         run: ./gradlew :imageviewer:assembleDebug
 
-      - name: 🏗️ Build Presentation (if changed)
-        if: steps.changes.outputs.presentation_changed == 'true'
-        run: ./gradlew :presentation:assembleDebug
+      - name: 🏗️ Build Presentation - Authentication
+        if: steps.changes.outputs.presentation_authentication_changed == 'true'
+        run: ./gradlew :presentation:authentication:assembleDebug
 
-      - name: 🏗️ Build Repository (if changed)
-        if: steps.changes.outputs.repository_changed == 'true'
-        run: ./gradlew :repository:assembleDebug
+      - name: 🏗️ Build Presentation - Details
+        if: steps.changes.outputs.presentation_details_changed == 'true'
+        run: ./gradlew :presentation:details:assembleDebug
+
+      - name: 🏗️ Build Presentation - Explore
+        if: steps.changes.outputs.presentation_explore_changed == 'true'
+        run: ./gradlew :presentation:explore:assembleDebug
+
+      - name: 🏗️ Build Presentation - Home
+        if: steps.changes.outputs.presentation_home_changed == 'true'
+        run: ./gradlew :presentation:home:assembleDebug
+
+      - name: 🏗️ Build Presentation - Match
+        if: steps.changes.outputs.presentation_match_changed == 'true'
+        run: ./gradlew :presentation:match:assembleDebug
+
+      - name: 🏗️ Build Presentation - Profile
+        if: steps.changes.outputs.presentation_profile_changed == 'true'
+        run: ./gradlew :presentation:profile:assembleDebug
+
+      - name: 🏗️ Build Repository - Media (if changed)
+        if: steps.changes.outputs.repository_media_changed == 'true'
+        run: ./gradlew :repository:media:assembleDebug
+
+      - name: 🏗️ Build Repository - User (if changed)
+        if: steps.changes.outputs.repository_user_changed == 'true'
+        run: ./gradlew :repository:user:assembleDebug
 
       - name: 🏗️ Build & Test Media Module (if changed)
         if: steps.changes.outputs.media_changed == 'true'
