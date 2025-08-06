@@ -61,4 +61,7 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
     override suspend fun getRatedMovies(
         accountId: Int
     ): List<MovieDto> = retrofitRequestBuilder.get { getRatedMovies(accountId) }.results
+
+    override suspend fun deleteMovieRating(movieId: Int) =
+        retrofitRequestBuilder.delete { deleteMovieRating(movieId) }
 }

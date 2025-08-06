@@ -20,6 +20,7 @@ import com.giraffe.media.util.NetworkConstants.NOW_PLAYING_MOVIES_URL
 import com.giraffe.media.util.NetworkConstants.PAGE
 import com.giraffe.media.util.NetworkConstants.POPULAR_MOVIES_URL
 import com.giraffe.media.util.NetworkConstants.QUERY
+import com.giraffe.media.util.NetworkConstants.RATED_END_POINT
 import com.giraffe.media.util.NetworkConstants.RATING
 import com.giraffe.media.util.NetworkConstants.RECOMMENDATIONS
 import com.giraffe.media.util.NetworkConstants.REVIEWS_END_POINT
@@ -27,9 +28,9 @@ import com.giraffe.media.util.NetworkConstants.UPCOMING_MOVIES_URL
 import com.giraffe.media.util.NetworkConstants.USER_END_POINT
 import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
 import com.giraffe.media.util.NetworkConstants.WITH_GENRES
-import com.giraffe.media.util.NetworkConstants.RATED_END_POINT
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -74,6 +75,11 @@ interface MoviesApiServiceRetrofit {
     suspend fun rateMovie(
         @Path(MOVIE_ID) movieId: Int,
         @Body request: RatingRequest
+    ): Response<Unit>
+
+    @DELETE("$MOVIE_END_POINT/{$MOVIE_ID}/$RATING")
+    suspend fun deleteMovieRating(
+        @Path(MOVIE_ID) movieId: Int,
     ): Response<Unit>
 
     @GET("$MOVIE_END_POINT/{$MOVIE_ID}/$ACCOUNT_STATES")

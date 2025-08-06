@@ -41,4 +41,6 @@ interface MoviesRemoteDataSource {
     suspend fun getRatedMovies(
         accountId: Int
     ): List<MovieDto>
+
+    suspend fun deleteMovieRating(movieId: Int)
 }

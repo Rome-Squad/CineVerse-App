@@ -133,4 +133,8 @@ class MoviesRepositoryImpl @Inject constructor(
             .associate { it.userRating!! to it.toEntity() }
     }
 
+    override suspend fun deleteMovieRating(movieId: Int) = SafeCall {
+        remote.deleteMovieRating(movieId)
+    }
+
 }

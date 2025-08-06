@@ -30,7 +30,7 @@ fun RatedItem(
     modifier: Modifier = Modifier,
     ratedPoster: RatedPoster,
     onItemClick: (Poster) -> Unit = {},
-    onDeleteClick: () -> Unit = {}
+    onDeleteClick: (Poster) -> Unit = {}
 ) {
     Column(
         modifier = Modifier,
@@ -43,7 +43,11 @@ fun RatedItem(
             date = ratedPoster.poster.date ?: "--- --, 20--"
         )
         SwipableItem(
-            actionButton = { DeleteButton(onDeleteClick = onDeleteClick) },
+            actionButton = {
+                DeleteButton(
+                    onDeleteClick = { onDeleteClick(ratedPoster.poster) }
+                )
+            },
         ) {
             PosterItemHorizontal(
                 modifier = modifier.fillMaxWidth(),

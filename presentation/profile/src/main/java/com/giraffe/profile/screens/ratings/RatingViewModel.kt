@@ -3,9 +3,11 @@ package com.giraffe.profile.screens.ratings
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.DeleteMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetRatedMoviesUseCase
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.DeleteSeriesRatingUseCase
 import com.giraffe.media.series.usecase.GetRatedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.profile.base.BaseViewModel
@@ -20,7 +22,9 @@ class RatingViewModel @Inject constructor(
     private val getRatedMoviesUseCase: GetRatedMoviesUseCase,
     private val getRatedSeriesUseCase: GetRatedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
-    private val getSeriesGenresUseCase: GetSeriesGenresUseCase
+    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
+    private val deleteMovieRatingUseCase: DeleteMovieRatingUseCase,
+    private val deleteSeriesRatingUseCase: DeleteSeriesRatingUseCase
 ) : BaseViewModel<RatingScreenState, RatingEffect>(RatingScreenState()),
     RatingInteractionListener {
 
@@ -200,5 +204,50 @@ class RatingViewModel @Inject constructor(
                 selectedPosters = if (tabIndex == 0) it.moviesPosters else it.seriesPosters
             )
         }
+    }
+
+    override fun onDeleteRatedPosterClick(poster: Poster) {
+        if (poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
+            deleteMovieRating(poster.id)
+        }
+
+        if (poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
+            deleteSeriesRating(poster.id)
+        }
+    }
+
+    private fun deleteMovieRating(movieId: Int) {
+        safeExecute(
+            onSuccess = ::onDeleteMovieRatingSuccess,
+            onError = ::onMovieRatingDeleteFailure
+        ) {
+            deleteMovieRatingUseCase(movieId)
+        }
+    }
+
+
+    private fun onDeleteMovieRatingSuccess(result: Unit) {
+        getRatedMovies()
+    }
+
+    private fun onMovieRatingDeleteFailure(error: Throwable) {
+        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
+    }
+
+    private fun deleteSeriesRating(seriesId: Int) {
+        safeExecute(
+            onSuccess = ::onDeleteSeriesRatingSuccess,
+            onError = ::onSeriesRatingDeleteFailure
+        ) {
+            deleteSeriesRatingUseCase(seriesId)
+        }
+    }
+
+    private fun onDeleteSeriesRatingSuccess(result: Unit) {
+        getRatedSeries()
+    }
+
+    private fun onSeriesRatingDeleteFailure(error: Throwable) {
+        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 }

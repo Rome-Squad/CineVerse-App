@@ -154,4 +154,8 @@ class SeriesRepositoryImpl @Inject constructor(
             .filter { it.userRating != null }
             .associate { it.userRating!! to it.toEntity() }
     }
+
+    override suspend fun deleteSeriesRating(seriesId: Int) = SafeCall {
+        seriesRemoteDataSource.deleteSeriesRating(seriesId)
+    }
 }
