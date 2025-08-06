@@ -2,9 +2,13 @@ package com.giraffe.profile.screens.ratings
 
 import com.giraffe.profile.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class RatingViewModel : BaseViewModel<RatingScreenState, RatingEffect>(RatingScreenState()),
+class RatingViewModel @Inject constructor(
+
+):
+    BaseViewModel<RatingScreenState, RatingEffect>(RatingScreenState()),
     RatingInteractionListener {
     override fun navigateToDetails(id: Int) {
         sendEffect(RatingEffect.NavigateToDetails(id))
