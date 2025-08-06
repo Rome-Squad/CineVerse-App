@@ -56,19 +56,14 @@ class MainActivity : AppCompatActivity() {
         )
 
         setContent {
+            val state by mainViewModel.state.collectAsState()
+
             CineVerseTheme {
-                val state by mainViewModel.state.collectAsState()
 
-                CineVerseTheme(isDarkTheme = state.isDarkMode) {
+                LaunchedEffect(state.language) {
+                    LanguageHelper.updateAppLocale(state.language)
+                }
 
-                    LaunchedEffect(state.language) {
-                        LanguageHelper.updateAppLocale(state.language)
-                    }
-
-//                    SettingsScreen(
-//                        onNavigateToEditProfileWebView = {},
-//                        onNavigateToLogin = {}
-//                    )
 
                 authenticationApi.LoginContainer(
                     onBack = {},
@@ -78,5 +73,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
 }
