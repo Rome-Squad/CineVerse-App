@@ -2,9 +2,9 @@ name: Test & Coverage
 
 on:
   push:
-    branches: [ fix/enhance-ci-test ]
+    branches: [ develop, main ]
   pull_request:
-    branches: [ fix/enhance-ci-test ]
+    branches: [ develop, main ]
 
 permissions:
   checks: write
