@@ -112,7 +112,6 @@ fun DefaultTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .noHoverClickable()
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(color = Theme.color.background.card)
                 .border(
