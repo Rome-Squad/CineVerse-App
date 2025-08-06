@@ -27,6 +27,8 @@ class SearchMovieByNameUseCaseTest {
         genresID = listOf(878),
         popularity = 0f
     )
+    private val name = "test"
+    private val page = 1
 
     @BeforeEach
     fun setUp() {
@@ -37,14 +39,14 @@ class SearchMovieByNameUseCaseTest {
     @Test
     fun `invoke() should call search and genres methods on repository`() = runTest {
         // Given
-        coEvery { repository.searchMovieByName(any(), any()) } returns emptyList()
+        coEvery { repository.searchMovieByName(name, page) } returns emptyList()
         coEvery { repository.getMoviesGenres() } returns emptyList()
 
         // When
-        useCase("test", 1)
+        useCase(name, page)
 
         // Then
-        coVerify(exactly = 1) { repository.searchMovieByName("test", 1) }
+        coVerify(exactly = 1) { repository.searchMovieByName(name, page) }
         coVerify(exactly = 1) { repository.getMoviesGenres() }
     }
 
@@ -52,11 +54,11 @@ class SearchMovieByNameUseCaseTest {
     fun `when genres list is empty should return unsorted search results`() = runTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
-        coEvery { repository.searchMovieByName(any(), any()) } returns searchResults
+        coEvery { repository.searchMovieByName(name, page) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns emptyList()
 
         // When
-        val result = useCase("test", 1)
+        val result = useCase(name, page)
 
         // Then
         assertThat(result).isEqualTo(searchResults)
@@ -68,11 +70,11 @@ class SearchMovieByNameUseCaseTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         val genreWithZeroRank = Genre(id = 878, title = "Sci-Fi", rank = 0)
-        coEvery { repository.searchMovieByName(any(), any()) } returns searchResults
+        coEvery { repository.searchMovieByName(name, page) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns listOf(genreWithZeroRank)
 
         // When
-        val result = useCase("test", 1)
+        val result = useCase(name, page)
 
         // Then
         assertThat(result).isEqualTo(searchResults)
@@ -84,13 +86,29 @@ class SearchMovieByNameUseCaseTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         val favoriteGenre = Genre(id = 878, title = "Sci-Fi", rank = 1)
-        coEvery { repository.searchMovieByName(any(), any()) } returns searchResults
+        coEvery { repository.searchMovieByName(name, page) } returns searchResults
         coEvery { repository.getMoviesGenres() } returns listOf(favoriteGenre)
 
         // When
-        val result = useCase("test", 1)
+        val result = useCase(name, page)
 
         // Then
         assertThat(result).containsExactly(movieSciFi, movieAction).inOrder()
+    }
+
+    @Test
+    fun `when top genre exists but no movie matches it should return unsorted list`() = runTest {
+        // Given
+        val searchResults = listOf(movieAction, movieSciFi)
+        val unmatchedGenre = Genre(id = 999, title = "Unknown", rank = 1)
+        coEvery { repository.searchMovieByName(name, page) } returns searchResults
+        coEvery { repository.getMoviesGenres() } returns listOf(unmatchedGenre)
+
+        // When
+        val result = useCase(name, page)
+
+        // Then
+        assertThat(result).isEqualTo(searchResults)
+        assertThat(result).containsExactly(movieAction, movieSciFi).inOrder()
     }
 }
