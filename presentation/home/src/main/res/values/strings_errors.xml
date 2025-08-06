@@ -9,5 +9,6 @@
     <string name="error_invalid_method">Invalid request method. Contact support.</string>
     <string name="error_not_found">Resource not found.</string>
     <string name="error_unknown">Something went wrong. Please try again later.</string>
+    <string name="username_error">Something happen while getting username,please try again</string>
     <string name="error_infrastructure">An internal system error has occurred. Please try again later.</string>
 </resources>
