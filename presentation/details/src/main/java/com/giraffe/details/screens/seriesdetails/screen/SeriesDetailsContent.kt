@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,11 +60,11 @@ fun SeriesDetailsContent(
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberLazyListState()
-    var imageWidth by remember { mutableIntStateOf(216) }
-    var imageHeight by remember { mutableIntStateOf(288) }
-    var consumedX by remember { mutableIntStateOf(0) }
-    var consumedY by remember { mutableIntStateOf(0) }
-    var animationProgress by remember { mutableFloatStateOf(0f) }
+    var imageWidth by rememberSaveable { mutableIntStateOf(216) }
+    var imageHeight by rememberSaveable { mutableIntStateOf(288) }
+    var consumedX by rememberSaveable { mutableIntStateOf(0) }
+    var consumedY by rememberSaveable { mutableIntStateOf(0) }
+    var animationProgress by rememberSaveable { mutableFloatStateOf(0f) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {

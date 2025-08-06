@@ -45,6 +45,8 @@ class MovieDetailsViewModel @Inject constructor(
 
     init {
         loadMovieDetails(movieID)
+        loadMoviePeople(movieID)
+        loadMovieReviews(movieID)
         loadRecommendedMovie(movieID, 1)
     }
 
@@ -54,12 +56,10 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::loadMovieDetailsError
         ) {
-
             val movie = getMovieDetails(movieId)
             Log.d("TAG ViewModel", "loadMovieDetails: $movie")
             movie
         }
-
     }
 
     private fun loadMovieDetailsSuccess(movie: Movie) {
@@ -70,8 +70,6 @@ class MovieDetailsViewModel @Inject constructor(
             )
         }
         loadMovieGenres(movie.genresID)
-        loadMoviePeople(movie.id)
-        loadMovieReviews(movie.id)
         saveToRecentViewed(movie)
     }
 

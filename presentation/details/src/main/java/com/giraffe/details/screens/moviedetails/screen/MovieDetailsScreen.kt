@@ -1,6 +1,8 @@
 package com.giraffe.details.screens.moviedetails.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +18,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +29,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.AppBar
@@ -114,18 +117,16 @@ private fun MovieDetailsContent(
     navigateToLogIn: () -> Unit
 ) {
     val scrollState = rememberLazyListState()
-    var imageWidth by remember { mutableIntStateOf(216) }
-    var imageHeight by remember { mutableIntStateOf(288) }
-    var consumedX by remember { mutableIntStateOf(0) }
-    var consumedY by remember { mutableIntStateOf(0) }
-    var animationProgress by remember { mutableFloatStateOf(0f) }
-    var isScrollingUp by remember { mutableStateOf(false) }
+    var imageWidth by rememberSaveable { mutableIntStateOf(216) }
+    var imageHeight by rememberSaveable { mutableIntStateOf(288) }
+    var consumedX by rememberSaveable { mutableIntStateOf(0) }
+    var consumedY by rememberSaveable { mutableIntStateOf(0) }
+    var animationProgress by rememberSaveable { mutableFloatStateOf(0f) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y.toInt()
-                isScrollingUp = delta <= 0
                 if (
                     (scrollState.firstVisibleItemIndex != 0 || scrollState.firstVisibleItemScrollOffset != 0)
                     && delta > 0
@@ -154,7 +155,11 @@ private fun MovieDetailsContent(
             .nestedScroll(nestedScrollConnection)
     ) {
 
-        AnimatedVisibility(!state.isLoadingMovieDetails) {
+        AnimatedVisibility(
+            visible = !state.isLoadingMovieDetails,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
             LazyColumn(
                 state = scrollState,
                 verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -207,6 +212,7 @@ private fun MovieDetailsContent(
                         )
                     }
                 }
+
                 if (state.crew.isNotEmpty()) {
                     item {
                         StaffInfoSection(
@@ -233,6 +239,7 @@ private fun MovieDetailsContent(
                         )
                     }
                 }
+
                 item {
                     RatingSection(
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -258,7 +265,7 @@ private fun MovieDetailsContent(
                             )
 
                             val reviewsToShow = state.movieReviews.take(3)
-                            reviewsToShow.forEach { review ->
+                            reviewsToShow.fastForEach { review ->
                                 ReviewCard(
                                     rate = review.rating,
                                     reviewText = review.content,

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -21,13 +20,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.ReadMoreText
+import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.formatAsMonthDayYear
 import com.giraffe.details.utils.getCurrentLocalDateTime
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import kotlinx.datetime.LocalDateTime
-import com.giraffe.designsystem.composable.custom.Icon
 
 
 @Composable
@@ -74,15 +73,16 @@ fun ReviewCard(
                     contentDescription = reviewerImageUrl.toString(),
                     tint = Theme.color.brand.secondary,
                     modifier = Modifier
+                        .size(24.dp)
                         .border(
                             width = 1.dp,
                             color = Theme.color.stroke.primary,
                             shape = CircleShape
                         )
-                        .size(40.dp)
-                        .wrapContentSize(),
+                        .clip(CircleShape)
                 )
             }
+
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalAlignment = Alignment.Start
