@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.custom.Text
@@ -37,8 +38,6 @@ fun HomeUiListSection(
     onClickEndText: () -> Unit = {},
     onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
 ) {
-//    if (uiModels.isEmpty()) return
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -71,7 +70,11 @@ fun HomeItemVertically(
     onClick: (id: Int, type: MediaType) -> Unit
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .clickable(
+                onClick = dropUnlessResumed {
+                    onClick(item.id, item.mediaType)
+                }),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
@@ -86,17 +89,7 @@ fun HomeItemVertically(
                 contentDescription = item.title,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clickable { onClick(item.id, item.mediaType) }
             )
-//            {
-//                Icon(
-//                    painter = painterResource(Theme.icons.dueTone.image),
-//                    contentDescription = stringResource(R.string.loading_image),
-//                    modifier = Modifier.size(32.dp),
-//                    tint = Theme.color.brand.secondary
-//                )
-//            }
-
             Rating(
                 value = item.rating,
                 modifier = Modifier

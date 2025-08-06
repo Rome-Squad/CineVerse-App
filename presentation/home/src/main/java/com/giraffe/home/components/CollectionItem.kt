@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
@@ -39,7 +40,7 @@ fun CollectionItem(
     Column(
         modifier = modifier
             .widthIn(min = screenWidth * 0.5f, max = screenWidth * 0.75f)
-            .clickable { onClick() }
+            .clickable(onClick = dropUnlessResumed { onClick() })
     ) {
         Box(
             Modifier
