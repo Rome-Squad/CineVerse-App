@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.profile.ProfileApi
 import com.giraffe.profile.R
@@ -14,17 +16,13 @@ import javax.inject.Inject
 class ProfileApiImp @Inject constructor(): ProfileApi {
     @Composable
     override fun ProfileContainer(onShowBottomBarChange: (Boolean) -> Unit) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
+
+        val navController: NavHostController = rememberNavController()
+
+        ProfileNavGraph(
+            navController = navController,
         ) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center),
-                text = stringResource(
-                    id = R.string.profile_screen
-                ),
-            )
+
         }
     }
 }

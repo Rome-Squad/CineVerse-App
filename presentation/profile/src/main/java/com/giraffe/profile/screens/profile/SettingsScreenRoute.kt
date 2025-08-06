@@ -7,13 +7,13 @@ import com.giraffe.profile.edit.navigateToEditProfileWebView
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ProfileScreenRoute
+data object SettingsScreenRoute
 
-fun NavGraphBuilder.profileScreenRoute(
+fun NavGraphBuilder.settingsScreenRoute(
     navController: NavController,
     onNavigateToLogin: () -> Unit
 ) {
-    composable<ProfileScreenRoute> {
+    composable<SettingsScreenRoute> {
         SettingsScreen(
             onNavigateToEditProfileWebView = {
                 navController.navigateToEditProfileWebView()

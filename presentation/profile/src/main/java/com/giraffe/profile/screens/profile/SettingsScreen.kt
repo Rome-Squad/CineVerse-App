@@ -171,6 +171,7 @@ fun SettingsContent(
                 iconBackgroundColor = Theme.color.brand.tertiary,
                 titlePrimaryButton = stringResource(R.string.edit_profile_primary_button),
                 titleSecondaryButton = stringResource(R.string.cancel),
+                onClickPrimaryButton = interaction::onGoToWebsiteClick,
                 modifier = Modifier.size(304.dp, 214.dp)
             )
         }
