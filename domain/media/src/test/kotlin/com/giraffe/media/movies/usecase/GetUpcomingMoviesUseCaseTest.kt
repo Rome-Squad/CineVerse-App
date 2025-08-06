@@ -16,37 +16,43 @@ class GetUpcomingMoviesUseCaseTest {
     private lateinit var repository: MoviesRepository
     private lateinit var useCase: GetUpcomingMoviesUseCase
 
+    private val expectedMovies = listOf(
+        Movie(
+            id = 4,
+            title = "Avatar 3",
+            description = "The next Pandora adventure",
+            rating = 0.0f,
+            duration = null,
+            posterUrl = "https://example.com/avatar3.jpg",
+            backdropUrl = "https://example.com/avatar3.jpg",
+            youtubeVideoId = "abc123",
+            genresID = listOf(1, 4),
+            releaseYear = LocalDate(2025, 12, 20)
+        )
+    )
+
     @BeforeEach
     fun setUp() {
         repository = mockk()
         useCase = GetUpcomingMoviesUseCase(repository)
+        coEvery { repository.getUpcomingMovies(1) } returns expectedMovies
     }
 
     @Test
-    fun `given upcoming movies, when invoke is called, then return movie list`() = runTest {
-        // Given
-        val expectedMovies = listOf(
-            Movie(
-                id = 4,
-                title = "Avatar 3",
-                description = "The next Pandora adventure",
-                rating = 0.0f,
-                duration = null,
-                posterUrl = "https://example.com/avatar3.jpg",
-                backdropUrl = "https://example.com/avatar3.jpg",
-                youtubeVideoId = "abc123",
-                genresID = listOf(1, 4),
-                releaseYear = LocalDate(2025, 12, 20)
-            )
-        )
+    fun `should call getUpcomingMovies from repository`() = runTest {
+        // When
+        useCase(1)
 
-        coEvery { repository.getUpcomingMovies(1) } returns expectedMovies
+        // Then
+        coVerify(exactly = 1) { repository.getUpcomingMovies(1) }
+    }
 
+    @Test
+    fun `should return expected upcoming movies list`() = runTest {
         // When
         val actualMovies = useCase(1)
 
         // Then
-        coVerify(exactly = 1) { repository.getUpcomingMovies(1) }
         assertThat(actualMovies).isEqualTo(expectedMovies)
     }
 }
