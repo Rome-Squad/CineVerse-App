@@ -133,9 +133,29 @@ jobs:
         if: steps.changes.outputs.imageviewer_changed == 'true'
         run: ./gradlew :imageviewer:assembleDebug
 
-      - name: 🏗️ Build Presentation (if changed)
+      - name: 🏗️ Build Presentation - Authentication
         if: steps.changes.outputs.presentation_changed == 'true'
-        run: ./gradlew :presentation:assembleDebug
+        run: ./gradlew :presentation:authentication:assembleDebug
+
+      - name: 🏗️ Build Presentation - Details
+        if: steps.changes.outputs.presentation_changed == 'true'
+        run: ./gradlew :presentation:details:assembleDebug
+
+      - name: 🏗️ Build Presentation - Explore
+        if: steps.changes.outputs.presentation_changed == 'true'
+        run: ./gradlew :presentation:explore:assembleDebug
+
+      - name: 🏗️ Build Presentation - Home
+        if: steps.changes.outputs.presentation_changed == 'true'
+        run: ./gradlew :presentation:home:assembleDebug
+
+      - name: 🏗️ Build Presentation - Match
+        if: steps.changes.outputs.presentation_changed == 'true'
+        run: ./gradlew :presentation:match:assembleDebug
+
+      - name: 🏗️ Build Presentation - Profile
+        if: steps.changes.outputs.presentation_changed == 'true'
+        run: ./gradlew :presentation:profile:assembleDebug
 
       - name: 🏗️ Build Repository (if changed)
         if: steps.changes.outputs.repository_changed == 'true'
