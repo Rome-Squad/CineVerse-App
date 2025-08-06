@@ -20,6 +20,7 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.profile.utils.LanguageHelper
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,10 +35,15 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        splashScreen.setKeepOnScreenCondition { true }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.splashState.collect { splash ->
-                    splashScreen.setKeepOnScreenCondition { splash.keepSplashVisible }
+                mainViewModel.splashState.collectLatest { splash ->
+                    if (!splash.keepSplashVisible) {
+                        splashScreen.setKeepOnScreenCondition { false }
+                        return@collectLatest
+                    }
                 }
             }
         }
