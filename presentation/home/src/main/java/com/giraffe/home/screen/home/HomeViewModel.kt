@@ -47,9 +47,9 @@ class HomeViewModel @Inject constructor(
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
-    private val getCollectionsUseCase: GetCollectionsUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
     HomeInteractionListener {
 
@@ -354,10 +354,16 @@ class HomeViewModel @Inject constructor(
 
     override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
         sendEffect(
-            HomeEffect.NavigateToYourCollection(
+            HomeEffect.NavigateToFeaturedCollection(
                 collectionId = collectionId,
                 collectionTitle = collectionTitle
             )
+        )
+    }
+
+    override fun onYourCollectionClicked() {
+        sendEffect(
+            HomeEffect.NavigateToYourCollection
         )
     }
 }

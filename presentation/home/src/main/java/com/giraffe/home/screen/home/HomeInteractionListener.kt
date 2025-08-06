@@ -9,4 +9,5 @@ interface HomeInteractionListener {
     fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String)
     fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String)
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)
+    fun onYourCollectionClicked()
 }
