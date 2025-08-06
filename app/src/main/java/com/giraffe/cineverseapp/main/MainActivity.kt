@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             val state by mainViewModel.state.collectAsState()
 
             CineVerseTheme(
-
+                isDarkTheme = state.isDarkMode
             ) {
 
                 LaunchedEffect(state.language) {
