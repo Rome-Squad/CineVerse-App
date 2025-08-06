@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal object LoginRoute
+internal object AuthenticationRoute
 
-internal fun NavController.navigateToLogin() {
-    navigate(LoginRoute)
+internal fun NavController.navigateToAuthentication() {
+    navigate(AuthenticationRoute)
 }
