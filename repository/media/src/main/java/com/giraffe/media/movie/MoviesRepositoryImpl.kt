@@ -127,4 +127,10 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getUpcomingMovies(page).map(MovieDto::toEntity)
     }
 
+    override suspend fun getRatedMovies(accountId: Int): Map<Float, Movie> = SafeCall {
+        remote.getRatedMovies(accountId)
+            .filter { it.userRating != null }
+            .associate { it.userRating!! to it.toEntity() }
+    }
+
 }

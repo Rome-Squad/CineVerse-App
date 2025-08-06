@@ -1,6 +1,5 @@
 package com.giraffe.media.movie.retrofit
 
-import com.giraffe.media.collections.response.CollectionsResponse
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
@@ -10,7 +9,6 @@ import com.giraffe.media.response.AllReviewsResponse
 import com.giraffe.media.response.TrailerResponse
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_STATES
-import com.giraffe.media.util.NetworkConstants.COLLECTIONS_END_POINT
 import com.giraffe.media.util.NetworkConstants.GENRES_URL
 import com.giraffe.media.util.NetworkConstants.ID
 import com.giraffe.media.util.NetworkConstants.MOVIES_BY_GENRE_URL
