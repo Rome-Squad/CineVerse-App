@@ -22,13 +22,15 @@ fun NavGraphBuilder.homeRoute(
     navigateToMoviesScreen: (String, String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
+    navigateToYourCollection: () -> Unit
 ) {
     composable<HomeRoute> {
         HomeScreen(
             navigateToMoviesListScreen = navigateToMoviesScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
-            navigateToCollection = navigateToCollectionList
+            navigateToFeaturedCollection = navigateToCollectionList,
+            navigateToYourCollection = navigateToYourCollection
         )
     }
 }

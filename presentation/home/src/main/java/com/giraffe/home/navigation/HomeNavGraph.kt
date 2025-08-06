@@ -1,6 +1,5 @@
 package com.giraffe.home.navigation
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
@@ -122,6 +121,7 @@ fun HomeNavGraph(
                         collectionTitle = collectionTitle
                     )
                 },
+                navigateToYourCollection = navController::navigateToYourCollection
             )
 
             moviesListRoute(
@@ -160,6 +160,10 @@ fun HomeNavGraph(
             composable<ProfileRoute> {
                 profileApi.ProfileContainer { isBottomBarVisible = it }
             }
+
+            composable<YourCollectionRoute> {
+                profileApi.YourCollectionsContainer { isBottomBarVisible = it }
+            }
         }
 
         BottomNavigationBar(
@@ -167,7 +171,6 @@ fun HomeNavGraph(
             selectedTabRoute = currentRoute,
             isBottomBarVisible = isBottomBarVisible,
             onTabSelected = { tab ->
-                Log.d("Tab", "Tab: ${tab.route}")
                 navController.navigate(tab.route) {
                     popUpTo(navController.graph.startDestinationRoute .orEmpty()) {
                         saveState = true
