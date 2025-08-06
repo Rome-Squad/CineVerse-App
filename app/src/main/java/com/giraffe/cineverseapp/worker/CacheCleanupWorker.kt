@@ -25,7 +25,7 @@ class CacheCleanupWorker constructor(
         return try {
             personCacheCleaner.clearPersonCache()
             seriesCacheCleaner.clearSeriesCache()
-            clearMoviesCacheUseCase.invoke(excludeRecentlyViewed = true)
+            clearMoviesCacheUseCase.clearMovieCacheWithOutRecentViewed()
             Result.success()
         } catch (_: Exception) {
             Result.retry()

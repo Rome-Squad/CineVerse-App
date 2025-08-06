@@ -21,51 +21,35 @@ class ClearMoviesCacheUseCaseTest {
     @Test
     fun `should call clearMovieCache form repository to clear all movies cache`() = runTest {
         // When
-        useCase(
-            clearOnlyRecentlyViewed = false,
-            excludeRecentlyViewed = false
-        )
+        useCase.clearMovieCache()
 
         // Then
-        coVerify {
-            repository.clearMovieCache(
-                clearOnlyRecentlyViewed = false,
-                excludeRecentlyViewed = false
-            )
+        coVerify(exactly = 1) {
+            repository.clearMovieCache()
         }
     }
 
     @Test
-    fun `should call clearMovieCache form repository to clear only recent viewed movies cache`() = runTest {
-        // When
-        useCase(
-            clearOnlyRecentlyViewed = true,
-            excludeRecentlyViewed = false
-        )
+    fun `should call clearMovieCache form repository to clear only recent viewed movies cache`() =
+        runTest {
+            // When
+            useCase.clearRecentlyViewedMovies()
 
-        // Then
-        coVerify {
-            repository.clearMovieCache(
-                clearOnlyRecentlyViewed = true,
-                excludeRecentlyViewed = false
-            )
+            // Then
+            coVerify(exactly = 1) {
+                repository.clearRecentlyViewedMovies()
+            }
         }
-    }
 
     @Test
-    fun `should call clearMovieCache form repository to clear all movies cache exclude recent viewed`() = runTest {
-        // When
-        useCase(
-            clearOnlyRecentlyViewed = false,
-            excludeRecentlyViewed = true
-        )
+    fun `should call clearMovieCache form repository to clear all movies cache exclude recent viewed`() =
+        runTest {
+            // When
+            useCase.clearMovieCacheWithOutRecentViewed()
 
-        // Then
-        coVerify {
-            repository.clearMovieCache(
-                clearOnlyRecentlyViewed = false,
-                excludeRecentlyViewed = true
-            )
+            // Then
+            coVerify(exactly = 1) {
+                repository.clearMovieCacheWithOutRecentViewed()
+            }
         }
-    }
 }
