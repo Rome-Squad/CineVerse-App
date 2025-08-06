@@ -36,10 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.state.collect { state ->
-                    splashScreen.setKeepOnScreenCondition {
-                        state.isLoggedIn == null || state.isOnBoardingFirstTime == null
-                    }
+                mainViewModel.splashState.collect { splash ->
+                    splashScreen.setKeepOnScreenCondition { splash.keepSplashVisible }
                 }
             }
         }
@@ -59,11 +57,9 @@ class MainActivity : AppCompatActivity() {
             val state by mainViewModel.state.collectAsState()
 
             CineVerseTheme {
-
                 LaunchedEffect(state.language) {
                     LanguageHelper.updateAppLocale(state.language)
                 }
-
 
                 authenticationApi.LoginContainer(
                     onBack = {},
