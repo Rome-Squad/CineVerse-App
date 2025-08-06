@@ -9,10 +9,6 @@ interface MoviesRepository {
 
     suspend fun addRating(movieId: Int, ratingValue: Float)
 
-    suspend fun addMovies(movie: List<Movie>)
-
-    suspend fun addGenres(genres: List<Genre>)
-
     suspend fun searchMovieByName(movieName: String, page: Int): List<Movie>
 
     suspend fun getMovieGenresByIds(genreIds: List<Int>): List<Genre>

@@ -33,11 +33,7 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.addRating(movieId, requestBody)
     }
 
-    override suspend fun addMovies(movie: List<Movie>) = SafeCall {
-        local.upsertMovies(movie.map(Movie::toCacheDto))
-    }
-
-    override suspend fun addGenres(genres: List<Genre>) = SafeCall {
+    private suspend fun addGenres(genres: List<Genre>) = SafeCall {
         local.insertMovieGenres(genres.map(Genre::toDto))
     }
 
