@@ -63,7 +63,15 @@ class MainActivity : AppCompatActivity() {
                 isDarkTheme = state.isDarkMode
             ) {
 
-                RatingScreen(
+                LaunchedEffect(state.language) {
+                    LanguageHelper.updateAppLocale(state.language)
+                }
+
+
+                authenticationApi.LoginContainer(
+                    onBack = {},
+                    isOnboardingFirstTime = state.isOnBoardingFirstTime == true,
+                    isLoggedIn = state.isLoggedIn == true
                 )
             }
         }

@@ -29,7 +29,7 @@ import com.giraffe.profile.utils.EffectListener
 @Composable
 fun RatingScreen(
     modifier: Modifier = Modifier,
-    navigateToMoviesDetails: (Int) -> Unit = {},
+    navigateToMovieDetails: (Int) -> Unit = {},
     navigateToSeriesDetails: (Int) -> Unit = {},
     navigateBack: () -> Unit = {},
     viewModel: RatingViewModel = hiltViewModel()
@@ -45,7 +45,7 @@ fun RatingScreen(
             }
 
             is RatingEffect.NavigateToMovieDetails -> {
-                navigateToMoviesDetails(effect.movieId)
+                navigateToMovieDetails(effect.movieId)
             }
 
             is RatingEffect.NavigateToSeriesDetails -> {
@@ -76,7 +76,7 @@ private fun RatingContent(
             .fillMaxSize()
             .systemBarsPadding()
             .padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(vertical = 12.dp)
+        contentPadding = PaddingValues(bottom = 12.dp)
     ) {
         stickyHeader {
             AppBar(
