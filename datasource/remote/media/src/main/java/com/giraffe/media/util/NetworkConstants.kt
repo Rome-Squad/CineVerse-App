@@ -35,6 +35,6 @@ object NetworkConstants {
     const val ACCOUNT_ID_PATH = "account_id"
 
     //rated
-    const val RATED = "rated"
+    const val RATED_END_POINT = "rated/movies"
 }
 

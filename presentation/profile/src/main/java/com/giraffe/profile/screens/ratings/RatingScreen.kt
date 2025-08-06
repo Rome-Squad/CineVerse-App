@@ -2,6 +2,7 @@ package com.giraffe.profile.screens.ratings
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -12,7 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
@@ -26,9 +26,9 @@ import com.giraffe.profile.utils.EffectListener
 @Composable
 fun RatingScreen(
     modifier: Modifier = Modifier,
-    navigateToMoviesDetails: (Int) -> Unit,
-    navigateToSeriesDetails: (Int) -> Unit,
-    navigateBack: () -> Unit,
+    navigateToMoviesDetails: (Int) -> Unit = {},
+    navigateToSeriesDetails: (Int) -> Unit = {},
+    navigateBack: () -> Unit = {},
     viewModel: RatingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -40,12 +40,15 @@ fun RatingScreen(
             RatingEffect.NavigateBack -> {
                 navigateBack()
             }
+
             is RatingEffect.NavigateToMovieDetails -> {
                 navigateToMoviesDetails(effect.movieId)
             }
+
             is RatingEffect.NavigateToSeriesDetails -> {
                 navigateToSeriesDetails(effect.seriesId)
             }
+
             is RatingEffect.ShowError -> {
 
             }
@@ -54,7 +57,8 @@ fun RatingScreen(
     RatingContent(
         modifier = modifier,
         state = state,
-        interaction = viewModel)
+        interaction = viewModel
+    )
 }
 
 @Composable
@@ -66,6 +70,7 @@ private fun RatingContent(
     LazyColumn(
         modifier = modifier
             .background(Theme.color.background.screen)
+            .fillMaxSize()
             .systemBarsPadding()
     ) {
         stickyHeader {
@@ -101,7 +106,7 @@ private fun RatingContent(
         }
         items(state.selectedPosters) {
             RatedItem(
-                poster = it,
+                ratedPoster = it,
                 onItemClick = interaction::onPosterClick
             )
         }

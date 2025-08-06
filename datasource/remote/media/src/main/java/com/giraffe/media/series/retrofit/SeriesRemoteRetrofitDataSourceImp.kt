@@ -46,7 +46,7 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
         return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
     }
 
-    override suspend fun getRatedMovies(
+    override suspend fun getRatedSeries(
         accountId: Int
     ): List<SeriesDto> = retrofitRequestBuilder.get { getRatedSeries(accountId) }.results
 

@@ -150,7 +150,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRatedSeries(accountId: Int): Map<Float, Series> = SafeCall {
-        remote.getRatedSeries(accountId)
+        seriesRemoteDataSource.getRatedSeries(accountId)
             .filter { it.userRating != null }
             .associate { it.userRating!! to it.toEntity() }
     }

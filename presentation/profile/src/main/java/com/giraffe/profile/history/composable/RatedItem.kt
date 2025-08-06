@@ -9,28 +9,26 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.PosterItemHorizontal
-import com.giraffe.designsystem.theme.CineVerseTheme
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.profile.components.SwipableItem
+import com.giraffe.profile.model.RatedPoster
 
 @Composable
 fun RatedItem(
     modifier: Modifier = Modifier,
-    poster: Poster,
+    ratedPoster: RatedPoster,
     onItemClick: (Poster) -> Unit = {},
     onDeleteClick: () -> Unit = {}
 ) {
@@ -41,16 +39,16 @@ fun RatedItem(
     ) {
         RateSection(
             modifier = Modifier.fillMaxWidth(),
-            rate = poster.rating.toDouble(),
-            date = poster.date ?: "--- --, 20--"
+            rate = ratedPoster.rating.toDouble(),
+            date = ratedPoster.poster.date ?: "--- --, 20--"
         )
         SwipableItem(
             actionButton = { DeleteButton(onDeleteClick = onDeleteClick) },
         ) {
             PosterItemHorizontal(
                 modifier = modifier.fillMaxWidth(),
-                movie = poster,
-                onClickPoster = { onItemClick(poster) }
+                movie = ratedPoster.poster,
+                onClickPoster = { onItemClick(ratedPoster.poster) }
             )
         }
     }
@@ -77,6 +75,7 @@ fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) 
         )
     }
 }
+
 @Composable
 private fun RateSection(modifier: Modifier = Modifier, rate: Double, date: String) {
     Row(
@@ -123,22 +122,5 @@ private fun Stars(modifier: Modifier = Modifier, rate: Double) {
             )
             remainRate--
         }
-    }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    val poster = Poster(
-        id = 1,
-        name = "The Flash",
-        imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
-        rating = 7.5f,
-        genres = "Drama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, Thriller",
-        time = "2h 32m",
-        date = "2008, Jul 18"
-    )
-    CineVerseTheme {
-        RatedItem(modifier = Modifier.width(328.dp), poster)
     }
 }
