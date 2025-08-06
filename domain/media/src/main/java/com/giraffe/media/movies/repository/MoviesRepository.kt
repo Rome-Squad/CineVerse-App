@@ -38,4 +38,6 @@ interface MoviesRepository {
     suspend fun clearRecentlyViewedMovies()
 
     suspend fun clearMovieCacheWithOutRecentViewed()
+
+    suspend fun clearMovieGenres()
 }

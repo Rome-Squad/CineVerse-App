@@ -38,4 +38,6 @@ interface MoviesLocalDataSource {
     suspend fun clearMovieCacheWithOutRecentViewed()
 
     suspend fun clearRecentlyViewedMovies()
+
+    suspend fun clearMovieGenres()
 }

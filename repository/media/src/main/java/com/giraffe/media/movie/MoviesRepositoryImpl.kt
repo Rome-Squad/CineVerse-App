@@ -185,4 +185,8 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun clearMovieCacheWithOutRecentViewed() {
         local.clearMovieCacheWithOutRecentViewed()
     }
+
+    override suspend fun clearMovieGenres() {
+        local.clearMovieGenres()
+    }
 }

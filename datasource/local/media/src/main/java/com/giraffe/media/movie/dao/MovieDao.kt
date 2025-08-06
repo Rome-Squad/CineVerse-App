@@ -63,6 +63,12 @@ interface MovieDao {
     @Query("DELETE FROM $MOVIE_TABLE WHERE recentViewedAt IS NULL")
     suspend fun clearMovieCacheWithOutRecentViewed()
 
-    @Query("DELETE FROM $MOVIE_TABLE WHERE recentViewedAt IS NOT NULL")
+    @Query("UPDATE $MOVIE_TABLE SET recentViewedAt = Null")
     suspend fun clearRecentlyViewedMovies()
+
+    @Query("UPDATE $MOVIE_TABLE SET recentReleasedAt = Null And upcomingAt = Null And recommendedId = Null")
+    suspend fun resetMoviesCache()
+
+    @Query("DELETE FROM $MOVIE_GENRE_TABLE")
+    suspend fun clearMovieGenres()
 }
