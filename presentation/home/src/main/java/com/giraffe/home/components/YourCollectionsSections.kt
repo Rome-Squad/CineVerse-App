@@ -24,7 +24,7 @@ import com.giraffe.home.screen.home.YourCollectionUiModel
 fun YourCollectionsSections(
     modifier: Modifier = Modifier,
     collectionItems: List<YourCollectionUiModel>,
-    onShowMoreClick: () -> Unit = {}
+    onShowMoreClick: () -> Unit
 ) {
     Column(
         modifier = modifier,

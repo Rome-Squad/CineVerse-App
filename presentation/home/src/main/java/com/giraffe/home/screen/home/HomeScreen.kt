@@ -49,9 +49,10 @@ import com.giraffe.home.screen.movies_list.MovieSectionType
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
-    navigateToCollection: (collectionId: Int, collectionTitle: String) -> Unit,
+    navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
+    navigateToYourCollection: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -95,15 +96,18 @@ fun HomeScreen(
                 is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
                 is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
                 is HomeEffect.ShowError -> {}
-                is HomeEffect.NavigateToYourCollection -> {
-                    navigateToCollection(
+                is HomeEffect.NavigateToFeaturedCollection -> {
+                    navigateToFeaturedCollection(
                         effect.collectionId,
                         effect.collectionTitle
                     )
                 }
+
+                is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
             }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -287,13 +291,13 @@ fun HomeContent(
                     )
                 }
                 if (state.yourCollections.isNotEmpty()) {
-                YourCollectionsSections(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    collectionItems = state.yourCollections
-                )
+                    YourCollectionsSections(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        collectionItems = state.yourCollections,
+                        onShowMoreClick = interactionListener::onYourCollectionClicked
+                    )
                 }
+
                 AdvertisementSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -343,6 +347,7 @@ fun HomeContentPreview() {
         override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {}
         override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
         override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
+        override fun onYourCollectionClicked() {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(
