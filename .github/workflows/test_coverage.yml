@@ -78,7 +78,12 @@ jobs:
             echo "$CHANGED" | grep -q "^$1/" && echo "$2=true" >> $GITHUB_OUTPUT || echo "$2=false" >> $GITHUB_OUTPUT
           }
 
-          check_changed "api" "api_changed"
+          check_changed "api/authentication" "api_authentication_changed"
+          check_changed "api/details" "api_details_changed"
+          check_changed "api/explore" "api_explore_changed"
+          check_changed "api/home" "api_home_changed"
+          check_changed "api/match" "api_match_changed"
+          check_changed "api/profile" "api_profile_changed"
           check_changed "app" "app_changed"
           check_changed "datasource" "datasource_changed"
           check_changed "designsystem" "designsystem_changed"
@@ -87,10 +92,30 @@ jobs:
           check_changed "imageviewer" "imageviewer_changed"
           check_changed "presentation" "presentation_changed"
           check_changed "repository" "repository_changed"
+          
+      - name: 🏗️ Build API - Authentication (if changed)
+        if: steps.changes.outputs.api_authentication_changed == 'true'
+        run: ./gradlew :api:authentication:assembleDebug
 
-      - name: 🏗️ Build API (if changed)
-        if: steps.changes.outputs.api_changed == 'true'
-        run: ./gradlew :api:assembleDebug
+      - name: 🏗️ Build API - Details (if changed)
+        if: steps.changes.outputs.api_details_changed == 'true'
+        run: ./gradlew :api:details:assembleDebug
+
+      - name: 🏗️ Build API - Explore (if changed)
+        if: steps.changes.outputs.api_explore_changed == 'true'
+        run: ./gradlew :api:explore:assembleDebug
+
+      - name: 🏗️ Build API - Home (if changed)
+        if: steps.changes.outputs.api_home_changed == 'true'
+        run: ./gradlew :api:home:assembleDebug
+
+      - name: 🏗️ Build API - Match (if changed)
+        if: steps.changes.outputs.api_match_changed == 'true'
+        run: ./gradlew :api:match:assembleDebug
+
+      - name: 🏗️ Build API - Profile (if changed)
+        if: steps.changes.outputs.api_profile_changed == 'true'
+        run: ./gradlew :api:profile:assembleDebug
 
       - name: 🏗️ Build App (if changed)
         if: steps.changes.outputs.app_changed == 'true'
