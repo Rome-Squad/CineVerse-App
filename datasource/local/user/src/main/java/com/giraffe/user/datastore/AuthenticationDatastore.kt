@@ -42,6 +42,13 @@ class AuthenticationDatastore @Inject constructor(
         }.first()
     }
 
+    suspend fun clearSessionId() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(PreferencesKeys.SESSION_ID)
+        }
+    }
+
+
     companion object {
         private const val DATA_STORE_NAME = "CineVerseAuthenticationDatastore"
         const val SESSION_ID_KEY = "session_id"

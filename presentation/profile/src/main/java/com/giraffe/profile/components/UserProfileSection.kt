@@ -2,6 +2,7 @@ package com.giraffe.profile.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +30,7 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 @Composable
 fun UserProfileSection(
     modifier: Modifier = Modifier,
-    userProfileImage: Any? = null,
+    userProfileImage: String,
     userDisplayName: String,
     username: String,
     onRowClick: () -> Unit = {}
@@ -60,13 +61,30 @@ fun UserProfileSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             SafeIslamicImage(
-                imageUrl = userProfileImage.toString(),
+                imageUrl = userProfileImage,
                 hasSensitiveText = false,
-                contentDescription = userProfileImage.toString(),
+                contentDescription = userDisplayName,
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(56.dp),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                placeHolder = {
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .background(
+                                shape = CircleShape,
+                                color = Theme.color.shade.quinary
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.profile),
+                            contentDescription = "profile Image",
+                            tint = Theme.color.shade.secondary
+                        )
+                    }
+                }
             )
 
             Column(
@@ -81,7 +99,7 @@ fun UserProfileSection(
 
 
                 Text(
-                    text = "@$username",
+                    text = username,
                     style = Theme.textStyle.body.sm.regular,
                     color = Theme.color.shade.secondary
                 )
@@ -124,7 +142,7 @@ fun PreviewUserProfileSection() {
                 .padding(
                     all = 12.dp
                 ),
-            userProfileImage = R.drawable.reviewer,
+            userProfileImage = "",
             userDisplayName = "Bilal Azzam",
             username = "bilal_azzam"
         )
@@ -154,7 +172,7 @@ fun PreviewUserProfileSectionDark() {
                 .padding(
                     all = 12.dp
                 ),
-            userProfileImage = R.drawable.reviewer,
+            userProfileImage = "",
             userDisplayName = "Bilal Azzam",
             username = "bilal_azzam"
         )

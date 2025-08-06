@@ -1,6 +1,7 @@
 package com.giraffe.user.retrofit
 
 import com.giraffe.repository.dto.UserDto
+import com.giraffe.user.dto.DeleteSessionRequest
 import com.giraffe.user.dto.RequestTokenResponse
 import com.giraffe.user.dto.SessionRequestBody
 import com.giraffe.user.dto.SessionResponse
@@ -8,6 +9,7 @@ import com.giraffe.user.dto.TokenValidationBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -24,6 +26,9 @@ interface UserApiServiceRetrofit {
 
     @GET(ACCOUNT)
     suspend fun getUser(@Query(SESSION_ID) sessionId: String): Response<UserDto>
+
+    @HTTP(method = "DELETE", path = "authentication/session", hasBody = true)
+    suspend fun deleteSession(@Body requestBody: DeleteSessionRequest): Response<Unit>
 
     companion object {
         private const val AUTHENTICATION = "authentication"

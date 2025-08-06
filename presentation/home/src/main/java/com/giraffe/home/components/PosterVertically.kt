@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
@@ -43,7 +44,7 @@ fun PosterVertically(
                 modifier = modifier
                     .clip(RoundedCornerShape(Theme.radius.lg))
                     .background(Theme.color.background.card)
-                    .clickable(onClick = onClick)
+                    .clickable(onClick = dropUnlessResumed { onClick() })
                     .aspectRatio(0.74f),
                 contentAlignment = Alignment.Center
             ) {
@@ -57,17 +58,6 @@ fun PosterVertically(
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                 )
-//                {
-//
-//                    Icon(
-//                        painter = painterResource(Theme.icons.dueTone.image),
-//                        contentDescription = stringResource(R.string.loading_image),
-//                        modifier = Modifier.size(32.dp),
-//                        tint = Theme.color.brand.secondary
-//                    )
-//
-//                }
-
                 Rating(
                     value = poster.rating,
                     modifier = Modifier

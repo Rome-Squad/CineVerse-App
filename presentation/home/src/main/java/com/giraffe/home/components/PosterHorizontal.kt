@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Icon
@@ -47,7 +48,7 @@ fun PosterHorizontal(
             .height(IntrinsicSize.Min)
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.card)
-            .clickable(onClick = onClick),
+            .clickable(onClick = dropUnlessResumed { onClick() }),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -128,7 +129,7 @@ fun PosterHorizontal(
                     if (it.isNotEmpty()) {
                         IconWithText(
                             icon = painterResource(Theme.icons.dueTone.calendar),
-                            text = poster.date ?: stringResource(R.string.unknown_date)
+                            text = poster.date
                         )
                     }
                 }

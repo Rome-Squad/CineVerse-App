@@ -1,4 +1,4 @@
-package com.giraffe.profile.createcollection
+package com.giraffe.profile.components.createcollection
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
