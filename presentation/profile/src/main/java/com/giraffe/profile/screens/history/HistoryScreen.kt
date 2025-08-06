@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -26,7 +27,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.profile.R
 import com.giraffe.profile.components.SwipableItem
-import com.giraffe.profile.history.composable.DeleteButton
+import com.giraffe.profile.components.DeleteButton
 
 @Composable
 fun HistoryScreen(
@@ -82,6 +83,7 @@ fun HistoryContent(
         modifier = Modifier
             .background(Theme.color.background.screen)
             .fillMaxSize()
+            .systemBarsPadding()
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {

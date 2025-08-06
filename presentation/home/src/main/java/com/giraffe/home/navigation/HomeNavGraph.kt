@@ -29,13 +29,17 @@ import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
 import com.giraffe.home.screen.movies_list.navigateToCollectionList
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
+import com.giraffe.match.MatchApi
+import com.giraffe.profile.ProfileApi
 
 
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
-    exploreApi: ExploreApi
+    exploreApi: ExploreApi,
+    profileApi: ProfileApi,
+    matchApi: MatchApi
 ) {
 
     val homeTab = HomeTab(
@@ -150,11 +154,11 @@ fun HomeNavGraph(
             }
 
             composable<MatchRoute> {
-                MatchScreen { isBottomBarVisible = it }
+                matchApi.MatchContainer { isBottomBarVisible = it }
             }
 
             composable<ProfileRoute> {
-                ProfileScreen { isBottomBarVisible = it }
+                profileApi.ProfileContainer { isBottomBarVisible = it }
             }
         }
 
