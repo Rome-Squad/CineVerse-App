@@ -1,4 +1,4 @@
-package com.giraffe.profile.screens.profile
+package com.giraffe.profile.screens.settings
 
 sealed interface SettingsScreenEffect {
     data object NavigateToLogin : SettingsScreenEffect

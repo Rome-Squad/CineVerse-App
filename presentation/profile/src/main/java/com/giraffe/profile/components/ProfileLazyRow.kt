@@ -3,6 +3,7 @@ package com.giraffe.profile.components
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,22 +25,35 @@ import com.giraffe.designsystem.theme.Theme
 
 
 data class ProfileRowItem(
-    @StringRes val textResId: Int,
-    @DrawableRes val iconResId: Int
+    @param:StringRes val textResId: Int,
+    @param:DrawableRes val iconResId: Int,
+    val onClick: () -> Unit
 )
 
 @Composable
 fun ProfileLazyRow(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToMyCollections: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    onNavigateToRatings: () -> Unit
 ) {
 
     val items = listOf(
-        ProfileRowItem(textResId = R.string.history, iconResId = R.drawable.outline_history),
+        ProfileRowItem(
+            textResId = R.string.history,
+            iconResId = R.drawable.outline_history,
+            onClick = onNavigateToHistory
+        ),
         ProfileRowItem(
             textResId = R.string.my_collections,
-            iconResId = R.drawable.due_tone_video_library
+            iconResId = R.drawable.due_tone_video_library,
+            onClick = onNavigateToMyCollections
         ),
-        ProfileRowItem(textResId = R.string.my_ratings, iconResId = R.drawable.due_tone_star)
+        ProfileRowItem(
+            textResId = R.string.my_ratings,
+            iconResId = R.drawable.due_tone_star,
+            onClick = onNavigateToRatings
+        )
     )
 
     LazyRow(
@@ -51,6 +65,9 @@ fun ProfileLazyRow(
         items(items) { item ->
             IconTextBox(
                 modifier = Modifier
+                    .clickable(
+                        onClick = { item.onClick() }
+                    )
                     .clip(shape = RoundedCornerShape(size = Theme.radius.full))
                     .background(color = Theme.color.background.card)
                     .padding(vertical = 8.dp)
@@ -71,6 +88,10 @@ fun ProfileLazyRow(
 @Composable
 fun ProfileLazyRowPreview() {
     CineVerseTheme(isDarkTheme = true) {
-        ProfileLazyRow()
+        ProfileLazyRow(
+            onNavigateToMyCollections = {  },
+            onNavigateToHistory = {  },
+            onNavigateToRatings = {  }
+        )
     }
 }

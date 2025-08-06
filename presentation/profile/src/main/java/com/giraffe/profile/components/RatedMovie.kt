@@ -1,4 +1,4 @@
-package com.giraffe.profile.history.composable
+package com.giraffe.profile.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,7 +25,6 @@ import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.profile.components.SwipableItem
 
 @Composable
 fun RatedMovie(
