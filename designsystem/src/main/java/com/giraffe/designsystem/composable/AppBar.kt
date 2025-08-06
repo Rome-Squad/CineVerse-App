@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -66,12 +67,12 @@ fun AppBar(
             modifier = Modifier.weight(1f)
         ) {
             Caption(
-                caption=caption,
-                modifier= Modifier
+                caption = caption,
+                modifier = Modifier
             )
             Title(
                 title = title,
-                modifier= Modifier
+                modifier = Modifier
             )
         }
         EndIcon(painter = endIcon, onEndIconClick = onEndIconClick)
@@ -89,7 +90,7 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
                 .size(40.dp)
                 .clip(shape = CircleShape)
                 .clickable(
-                    onClick = onBackButtonClick
+                    onClick = dropUnlessResumed { onBackButtonClick() }
                 )
                 .padding(8.dp)
         )
@@ -97,7 +98,7 @@ private fun BackButton(showBackButton: Boolean, onBackButtonClick: () -> Unit) {
 }
 
 @Composable
-private fun DisplayImage(image: Painter?, imageSize: Dp,modifier: Modifier= Modifier) {
+private fun DisplayImage(image: Painter?, imageSize: Dp, modifier: Modifier = Modifier) {
     image?.let {
         Image(
             painter = it,
@@ -110,7 +111,7 @@ private fun DisplayImage(image: Painter?, imageSize: Dp,modifier: Modifier= Modi
 }
 
 @Composable
-private fun Caption(caption: String?,modifier: Modifier = Modifier) {
+private fun Caption(caption: String?, modifier: Modifier = Modifier) {
     caption?.let {
         Text(
             text = it,
@@ -124,7 +125,7 @@ private fun Caption(caption: String?,modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Title(title: String?,modifier: Modifier) {
+private fun Title(title: String?, modifier: Modifier) {
     title?.let {
         Text(
             text = it,
@@ -138,7 +139,7 @@ private fun Title(title: String?,modifier: Modifier) {
 }
 
 @Composable
-private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit,modifier: Modifier = Modifier) {
+private fun EndIcon(painter: Painter?, onEndIconClick: () -> Unit, modifier: Modifier = Modifier) {
     painter?.let {
         val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         val rotationAngle = if (isRtl) 180f else 0f

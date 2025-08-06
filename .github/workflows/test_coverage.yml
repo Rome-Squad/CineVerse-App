@@ -96,7 +96,7 @@ jobs:
           check_changed "presentation/home" "presentation_home_changed"
           check_changed "presentation/match" "presentation_match_changed"
           check_changed "presentation/profile" "presentation_profile_changed"          
-          
+
       - name: 🏗️ Build API - Authentication (if changed)
         if: steps.changes.outputs.api_authentication_changed == 'true'
         run: ./gradlew :api:authentication:assembleDebug

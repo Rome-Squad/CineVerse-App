@@ -8,5 +8,7 @@ class InvalidUsernameMatchException : UserException()
 class InvalidUsernameOrPasswordException : UserException()
 class UnknownException() : UserException()
 
+class FailedToGetUserName() : UserException()
+
 class NoInternetException : UserException()
 class AccessDeniedException : UserException()

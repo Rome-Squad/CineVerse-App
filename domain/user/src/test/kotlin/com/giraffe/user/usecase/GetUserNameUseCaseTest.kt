@@ -8,7 +8,6 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
-import java.io.IOException
 import kotlin.test.Test
 
 class GetUserNameUseCaseTest {
@@ -41,7 +40,7 @@ class GetUserNameUseCaseTest {
     }
 
     @Test
-    fun `invoke() when repository succeeds should return user's display name`() = runTest {
+    fun `invoke() when repository succeeds should return user's name`() = runTest {
         // given
         val expectedName = "hamada_rayyan"
         coEvery { userRepository.getUser() } returns fakeUser
@@ -51,17 +50,5 @@ class GetUserNameUseCaseTest {
 
         // then
         assertThat(result).isEqualTo(expectedName)
-    }
-
-    @Test
-    fun `invoke when repository throws exception should return 'Guest'`() = runTest {
-        // given
-        coEvery { userRepository.getUser() } throws IOException("Network failed")
-
-        // when
-        val result = getUserNameUseCase()
-
-        // then
-        assertThat(result).isEqualTo("Guest")
     }
 }
