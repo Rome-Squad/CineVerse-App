@@ -1,10 +1,12 @@
 package com.giraffe.details.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,11 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.CustomCard
-import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.models.CastUi
@@ -103,15 +103,21 @@ fun CastCard(
                             bottomEnd = 0.dp
                         )
                     ),
-                contentScale = ContentScale.Crop
-            ) {
-                Icon(
-                    painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = "$actorName image",
-                    tint = Theme.color.brand.secondary,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
+                contentScale = ContentScale.Crop,
+                placeHolderTint = Theme.color.brand.secondary,
+                placeholderModifier = Modifier
+                    .fillMaxSize()
+                    .border(
+                        width = 1.dp,
+                        color = Theme.color.stroke.primary,
+                        shape = RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg,
+                            bottomEnd = Theme.radius.lg
+                        )
+                    )
+            )
 
             Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.5.dp)) {
                 Text(
