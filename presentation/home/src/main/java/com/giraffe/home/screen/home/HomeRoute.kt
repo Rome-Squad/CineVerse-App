@@ -23,7 +23,7 @@ fun NavGraphBuilder.homeRoute(
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToExploreScreen: () -> Unit,
-    navigateToMatchScreen: () -> Unit
+    navigateToMatchScreen: () -> Unit,
     navigateToYourCollection: () -> Unit
 ) {
     composable<HomeRoute> {
@@ -31,11 +31,10 @@ fun NavGraphBuilder.homeRoute(
             navigateToMoviesListScreen = navigateToMoviesScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
-            navigateToCollection = navigateToCollectionList,
             navigateToExploreScreen = navigateToExploreScreen,
-            navigateToMatchScreen = navigateToMatchScreen
-            navigateToFeaturedCollection = navigateToCollectionList,
-            navigateToYourCollection = navigateToYourCollection
+            navigateToMatchScreen = navigateToMatchScreen,
+            navigateToYourCollection = navigateToYourCollection,
+            navigateToFeaturedCollection = navigateToCollectionList
         )
     }
 }

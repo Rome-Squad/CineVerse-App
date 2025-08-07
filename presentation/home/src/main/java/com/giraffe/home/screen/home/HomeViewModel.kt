@@ -66,6 +66,7 @@ class HomeViewModel @Inject constructor(
         getUpcomingMovies()
         getUserName()
         isLoggedIn()
+        getYourCollections()
     }
 
     private fun isLoggedIn() {
@@ -91,7 +92,6 @@ class HomeViewModel @Inject constructor(
 
     private fun getUseNameSuccess(userName: String) {
         updateState { it.copy(userName = userName) }
-        getYourCollections()
     }
 
     private fun getYourCollections() {

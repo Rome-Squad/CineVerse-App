@@ -122,7 +122,7 @@ fun HomeNavGraph(
                         collectionTitle = collectionTitle
                     )
                 },
-                navigateToYourCollection = navController::navigateToYourCollection
+                navigateToYourCollection = navController::navigateToYourCollection,
                 navigateToExploreScreen = {
                     navController.navigate(ExploreRoute) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -146,9 +146,7 @@ fun HomeNavGraph(
             )
 
             moviesListRoute(
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = navController::popBackStack,
                 navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
                 navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
             )
