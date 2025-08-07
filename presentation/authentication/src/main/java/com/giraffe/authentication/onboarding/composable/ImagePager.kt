@@ -44,7 +44,6 @@ fun ImagePager(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     images: List<Int>,
-    direction: Int
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
@@ -61,8 +60,11 @@ fun ImagePager(
         val pageOffsetAbsolute = pageOffset.absoluteValue.coerceIn(0f, 1f)
         val pageIndexDiff = page - pagerState.currentPage
 
-        val baseRotation = if (layoutDirection == LayoutDirection.Rtl) -12f else 12f
-        val rotationZ = baseRotation * direction * pageOffsetAbsolute
+        val rotationZ = when {
+            pageIndexDiff > 0 -> if (layoutDirection == LayoutDirection.Rtl) -12f else 12f
+            pageIndexDiff < 0 -> if (layoutDirection == LayoutDirection.Rtl) 12f else -12f
+            else -> 0f
+        } * pageOffsetAbsolute
 
         val animatedRotationZ by animateFloatAsState(
             targetValue = rotationZ,
@@ -72,6 +74,7 @@ fun ImagePager(
             ),
             label = stringResource(R.string.rotationanim)
         )
+
 
         val scale = lerp(1f, 0.8f, pageOffsetAbsolute)
 

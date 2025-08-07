@@ -79,7 +79,6 @@ private fun OnBoardingContent(
                     .padding(top = 69.dp),
                 pagerState = pagerState,
                 images = pages.map { it.imageRes },
-                direction = direction
             )
 
             OnBoardingFooter(
