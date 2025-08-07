@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 import javax.inject.Inject
 
 class SettingsDataStore @Inject constructor(
@@ -37,7 +38,7 @@ class SettingsDataStore @Inject constructor(
 
     fun getLanguage(): Flow<String> =
         context.dataStore.data.map { preferences ->
-            preferences[PreferencesKeys.APP_LANGUAGE] ?: "en"
+            preferences[PreferencesKeys.APP_LANGUAGE] ?: Locale.getDefault().language
         }
 
     suspend fun setLanguage(languageCode: String) {
