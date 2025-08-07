@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -107,6 +108,7 @@ private fun MyCollectionsScreenContent(
     state: MyCollectionsScreenState,
     interactions: MyCollectionsInteractionListener
 ) {
+    val context = LocalContext.current
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -137,8 +139,9 @@ private fun MyCollectionsScreenContent(
                     CollectionItem(
                         modifier = Modifier,
                         text = collection.name,
-                        description = "${collection.itemCount} " + stringResource(
-                            id = com.giraffe.profile.R.string.movies
+                        description = context.getString(
+                            com.giraffe.profile.R.string.movies_count,
+                            collection.itemCount
                         ),
                         icon = R.drawable.due_tone_folder,
                         onClick = {
