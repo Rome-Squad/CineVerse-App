@@ -14,6 +14,13 @@
     <string name="my_collections">مجموعاتي</string>
     <string name="my_ratings">تقييماتي</string>
     <string name="arabic">العربية</string>
+    <string name="hide_explicit_content">إخفاء المحتوى الفاضح</string>
+    <string name="hides_revealing_or_inappropriate_posters">إخفاء الملصقات الكاشفة أو غير اللائقة (مثل العري والمحتوى الجنسي الصريح).</string>
+    <string name="strict_filtering">فلترة مشددة</string>
+    <string name="hides_all_content_that_includes_immodest_clothing">إخفاء كل المحتوى الذي يتضمن ملابس أو سلوكيات غير محتشمة</string>
+    <string name="show_all_content">عرض كل المحتوى</string>
+    <string name="no_filtering_all_images_will_be_displayed">بدون فلترة. سيتم عرض جميع الصور والملصقات</string>
+    <string name="content_preferences_subtitle">اختر كيف تود التعامل مع الصور الحساسة أو الكاشفة في التطبيق.</string>
     <string name="english">الإنجليزية</string>
     <string name="edit_profile_title">تعديل الملف الشخصي</string>
     <string name="edit_profile_caption">سيتم نقلك إلى موقع الويب لتحديث اسمك أو اسم المستخدم أو صورة ملفك الشخصي.</string>

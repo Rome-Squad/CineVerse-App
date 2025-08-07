@@ -24,6 +24,9 @@ data class DueTone(
     val moon: Int,
     val play: Int,
     val profile: Int,
+    val eye: Int,
+    val eyeSlash: Int,
+    val slash: Int,
     val rowVertical: Int,
     val search: Int,
     val star: Int,
@@ -67,5 +70,8 @@ val dueToneIcons = DueTone(
     timeShort = R.drawable.due_tone_time_short,
     trash = R.drawable.due_tone_trash,
     userSquare = R.drawable.due_tone_user_square,
-    videoLibrary = R.drawable.due_tone_video_library
+    videoLibrary = R.drawable.due_tone_video_library,
+    eye = R.drawable.eye,
+    eyeSlash = R.drawable.eye_slash,
+    slash = R.drawable.slash
 )
