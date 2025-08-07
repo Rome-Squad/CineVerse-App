@@ -52,7 +52,7 @@ fun HomeScreen(
     navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
-    navigateToYourCollection: () -> Unit
+    navigateToYourCollection: () -> Unit,
     navigateToExploreScreen: () -> Unit,
     navigateToMatchScreen: () -> Unit,
 ) {
@@ -96,34 +96,18 @@ fun HomeScreen(
 
             is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
             is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
-            is HomeEffect.ShowError -> {}
-            is HomeEffect.NavigateToYourCollection -> {
-                navigateToCollection(
+            is HomeEffect.NavigateToExploreScreen -> navigateToExploreScreen()
+            is HomeEffect.NavigateToFeaturedCollection -> {
+                navigateToFeaturedCollection(
                     effect.collectionId,
                     effect.collectionTitle
                 )
             }
 
-            is HomeEffect.NavigateToExploreScreen -> {
-                navigateToExploreScreen()
-                is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
-                is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
-                is HomeEffect.ShowError -> {}
-                is HomeEffect.NavigateToFeaturedCollection -> {
-                    navigateToFeaturedCollection(
-                        effect.collectionId,
-                        effect.collectionTitle
-                    )
-                }
-
-                is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
-            }
-
-            HomeEffect.NavigateToMatchScreen -> {
-                navigateToMatchScreen()
-            }
+            is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
+            is HomeEffect.NavigateToMatchScreen -> navigateToMatchScreen()
+            is HomeEffect.ShowError -> {}
         }
-
     }
 
     Box(
