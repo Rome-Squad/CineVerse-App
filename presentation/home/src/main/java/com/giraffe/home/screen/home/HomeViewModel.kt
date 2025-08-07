@@ -115,9 +115,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun onGetPopularitySeriesSuccess(series: List<Series>) {
-        val popularSeriesUi = series.map { series ->
-            val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-            series.toPopularMediaUiModel(genres)
+        val popularSeriesUi = series.map { seriesList ->
+            val genres = getSeriesGenresByIdsUseCase(seriesList.genreIDs).map { it.title }
+            seriesList.toPopularMediaUiModel(genres)
         }
         updateState { currentState ->
             currentState.copy(
@@ -241,12 +241,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getRecommendedSeries(series: List<Series>) {
-        series.firstOrNull()?.let { series ->
+        series.firstOrNull()?.let { seriesList ->
             safeExecute(
                 onSuccess = ::onGetRecommendedSeriesSuccess,
                 onError = ::onFail,
             ) {
-                getRecommendedSeriesUseCase(series.id, 1)
+                getRecommendedSeriesUseCase(seriesList.id, 1)
             }
         }
     }
@@ -287,13 +287,8 @@ class HomeViewModel @Inject constructor(
         sendEffect(HomeEffect.NavigateToUpcomingMovies)
     }
 
-    override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToRecentlyViewedList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
+    override fun onSeeAllRecentlyViewedClicked() {
+        sendEffect(HomeEffect.NavigateToRecentlyViewed)
     }
 
     override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {

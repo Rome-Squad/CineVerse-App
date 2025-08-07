@@ -4,11 +4,11 @@ import com.giraffe.home.screen.home.MediaType
 
 data class ShowMoreUiState(
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
+    val errorMessageRes: Int? = null,
     val mediaList: List<PosterUiState> = emptyList(),
     val title: String = "",
     val isListSelected: Boolean = false,
-    val errorMsgRes:Int? = null
+    val errorMsgRes: Int? = null
 )
 
 

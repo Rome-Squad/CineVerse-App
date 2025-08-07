@@ -44,7 +44,7 @@ class ShowMoreViewModel @Inject constructor(
         when (sectionType) {
             MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
             MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
-            MovieSectionType.RECENTLY_RELEASED -> loadMoviesBySection(sectionType)
+//            MovieSectionType.RECENTLY_RELEASED -> loadMoviesBySection(sectionType)
 //            MovieSectionType.TOP_RATED_TV_SHOWS,
 //            MovieSectionType.UPCOMING_MOVIES ->
 
@@ -59,54 +59,54 @@ class ShowMoreViewModel @Inject constructor(
                 updateState {
                     it.copy(
                         isLoading = false,
-                        errorMessage = null,
+                        errorMessageRes = null,
                         mediaList = movies.map(Movie::toPosterUi),
                         title = sectionTitle
                     )
                 }
             } catch (e: MediaException) {
-                updateState { it.copy(isLoading = false, errorMessage = e.message) }
+                updateState { it.copy(isLoading = false, errorMessageRes = null) }
             }
         }
     }
 
 
-    private fun loadMoviesBySection(sectionType: String) {
-        safeExecute {
-            updateState {
-                it.copy(
-                    isLoading = true,
-                    errorMessage = null,
-                    mediaList = emptyList(),
-                    title = sectionTitle
-                )
-            }
-            val media = when (sectionType) {
-                MovieSectionType.RECENTLY_RELEASED -> {
-                    val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
-                    val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1, limit = 10)
-                    recentMovies.map { it.toPosterUi() } + recentSeries.map { it.toPosterUi() }
-                }
-
-//                MovieSectionType.TOP_RATED_TV_SHOWS -> {
-//                    getTopRatedSeriesUseCase(page = 1, limit = 10).map { it.toPosterUi() }
+//    private fun loadMoviesBySection(sectionType: String) {
+//        safeExecute {
+//            updateState {
+//                it.copy(
+//                    isLoading = true,
+//                    errorMessageRes = null,
+//                    mediaList = emptyList(),
+//                    title = sectionTitle
+//                )
+//            }
+//            val media = when (sectionType) {
+//                MovieSectionType.RECENTLY_RELEASED -> {
+//                    val recentMovies = getRecentlyReleasedMoviesUseCase(page = 1)
+//                    val recentSeries = getRecentlyReleasedSeriesUseCase(page = 1, limit = 10)
+//                    recentMovies.map { it.toPosterUi() } + recentSeries.map { it.toPosterUi() }
 //                }
-
-//                MovieSectionType.UPCOMING_MOVIES -> {
-//                    getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
-//                }
-
-                else -> emptyList()
-            }
-            updateState {
-                it.copy(
-                    isLoading = false,
-                    errorMessage = null,
-                    mediaList = media,
-                )
-            }
-        }
-    }
+//
+////                MovieSectionType.TOP_RATED_TV_SHOWS -> {
+////                    getTopRatedSeriesUseCase(page = 1, limit = 10).map { it.toPosterUi() }
+////                }
+//
+////                MovieSectionType.UPCOMING_MOVIES -> {
+////                    getUpcomingMoviesUseCase(page = 1).map { it.toPosterUi() }
+////                }
+//
+//                else -> emptyList()
+//            }
+//            updateState {
+//                it.copy(
+//                    isLoading = false,
+//                    errorMessageRes = null,
+//                    mediaList = media,
+//                )
+//            }
+//        }
+//    }
 
     private fun getRecentViewed() {
         viewModelScope.launch(Dispatchers.IO) {

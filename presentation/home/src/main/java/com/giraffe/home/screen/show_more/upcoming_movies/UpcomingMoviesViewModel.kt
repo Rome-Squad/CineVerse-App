@@ -1,10 +1,7 @@
 package com.giraffe.home.screen.show_more.upcoming_movies
 
-import com.giraffe.home.base.BaseViewModel
-import com.giraffe.home.screen.home.MediaType
-import com.giraffe.home.screen.show_more.ShowMoreEffect
+import com.giraffe.home.screen.show_more.BaseShowMoreViewModel
 import com.giraffe.home.screen.show_more.ShowMoreInteractionListener
-import com.giraffe.home.screen.show_more.ShowMoreUiState
 import com.giraffe.home.utils.toPosterUi
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
@@ -14,14 +11,14 @@ import javax.inject.Inject
 @HiltViewModel
 class UpcomingMoviesViewModel @Inject constructor(
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase
-) : BaseViewModel<ShowMoreUiState, ShowMoreEffect>(initialState = ShowMoreUiState()),
+) : BaseShowMoreViewModel(),
     ShowMoreInteractionListener {
 
     init {
-        getUpcomingMovies()
+        loadData()
     }
 
-    private fun getUpcomingMovies() {
+    override fun loadData() {
         safeExecute(
             onSuccess = ::getUpcomingMoviesSuccess,
             onError = ::onFail,
@@ -40,19 +37,5 @@ class UpcomingMoviesViewModel @Inject constructor(
                 mediaList = upcomingMoviesUi,
             )
         }
-    }
-
-    private fun onFail(errorMsgRes: Int) {
-        updateState { it.copy(isLoading = false, errorMsgRes = errorMsgRes) }
-    }
-
-    override fun onViewChanged(isGrid: Boolean) {
-        updateState {
-            it.copy(isListSelected = !isGrid)
-        }
-    }
-
-    override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
-        sendEffect(ShowMoreEffect.NavigateToMovieDetails(mediaId))
     }
 }

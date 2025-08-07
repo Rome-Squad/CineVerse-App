@@ -9,7 +9,7 @@ sealed interface HomeEffect {
     data class NavigateToRecentlyReleasedList(val sectionTitle: String, val sectionType: String) : HomeEffect
     data object NavigateToTopRatedTvShows : HomeEffect
     data object NavigateToUpcomingMovies : HomeEffect
-    data class NavigateToRecentlyViewedList(val sectionTitle: String, val sectionType: String) : HomeEffect
+    data object NavigateToRecentlyViewed : HomeEffect
     data class NavigateToRecommendedList(val sectionTitle: String, val sectionType: String) : HomeEffect
     data class NavigateToFeaturedCollection(val collectionId: Int, val collectionTitle: String) : HomeEffect
     data class ShowError(@param:StringRes val messageRes: Int) : HomeEffect

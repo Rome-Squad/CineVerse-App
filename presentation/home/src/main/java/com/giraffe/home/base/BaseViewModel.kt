@@ -43,15 +43,15 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         }
     }
 
-    protected fun <T> safeExecute(
-        coroutineScope: CoroutineScope = viewModelScope,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        block: suspend CoroutineScope.() -> T
-    ): Job {
-        return coroutineScope.launch(dispatcher + handler()) {
-            block()
-        }
-    }
+//    protected fun <T> safeExecute(
+//        coroutineScope: CoroutineScope = viewModelScope,
+//        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+//        block: suspend CoroutineScope.() -> T
+//    ): Job {
+//        return coroutineScope.launch(dispatcher + handler()) {
+//            block()
+//        }
+//    }
 
     protected fun <T> safeExecute(
         coroutineScope: CoroutineScope = viewModelScope,

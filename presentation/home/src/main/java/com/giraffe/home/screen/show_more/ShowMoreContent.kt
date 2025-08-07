@@ -12,9 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.home.components.ListTitleSection
+import com.giraffe.home.components.HorizontalDivider
 import com.giraffe.home.components.TransitionLazyColumnToGrid
 
 @Composable
@@ -30,11 +31,14 @@ fun ShowMoreContent(
                 .background(Theme.color.background.screen)
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
         ) {
-            ListTitleSection(
-                title = title,
-                onBackClick = onBackClick
+            AppBar(
+                title = title, showBackButton = true,
+                onBackButtonClick = onBackClick
             )
+            HorizontalDivider()
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -45,7 +49,6 @@ fun ShowMoreContent(
                     onClickItem = showMoreInteractionListener::onMediaClicked,
                 )
             }
-
         }
         ViewToggle(
             modifier = Modifier

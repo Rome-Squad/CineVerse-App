@@ -1,10 +1,6 @@
 package com.giraffe.home.screen.show_more.top_rated_tv_shows
 
-import com.giraffe.home.base.BaseViewModel
-import com.giraffe.home.screen.home.MediaType
-import com.giraffe.home.screen.show_more.ShowMoreEffect
-import com.giraffe.home.screen.show_more.ShowMoreInteractionListener
-import com.giraffe.home.screen.show_more.ShowMoreUiState
+import com.giraffe.home.screen.show_more.BaseShowMoreViewModel
 import com.giraffe.home.utils.toPosterUi
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
@@ -14,45 +10,31 @@ import javax.inject.Inject
 @HiltViewModel
 class TopRatedTvShowsViewModel @Inject constructor(
     private val getTopRatedTvShowsUsaCase: GetTopRatedSeriesUseCase,
-) : BaseViewModel<ShowMoreUiState, ShowMoreEffect>(ShowMoreUiState()), ShowMoreInteractionListener {
+) : BaseShowMoreViewModel() {
 
     init {
-        getTopRatedTvShows()
+        loadData()
     }
 
-    private fun getTopRatedTvShows() {
+    override fun loadData() {
         safeExecute(
-            onSuccess = ::getTopRatedTvShowsSuccess,
+            onSuccess = ::onGetTopRatedTvShowsSuccess,
             onError = ::onFail,
-            block = { getTopRatedTvShowsUsaCase(page = 1, limit = 10) }
+            block = {
+                getTopRatedTvShowsUsaCase(
+                    page = 1,
+                    limit = 10
+                )
+            }
         )
     }
 
-    private fun getTopRatedTvShowsSuccess(tvShows: List<Series>) {
-        val topRatedTvShowsUi = tvShows.map { series ->
-            series.toPosterUi()
-        }
+    private fun onGetTopRatedTvShowsSuccess(series: List<Series>) {
         updateState {
             it.copy(
                 isLoading = false,
                 errorMsgRes = null,
-                mediaList = topRatedTvShowsUi,
-            )
+                mediaList = series.map { it.toPosterUi() })
         }
     }
-
-    private fun onFail(errorMsgRes: Int) {
-        updateState { it.copy(isLoading = false, errorMsgRes = errorMsgRes) }
-    }
-
-    override fun onViewChanged(isGrid: Boolean) {
-        updateState {
-            it.copy(isListSelected = !isGrid)
-        }
-    }
-
-    override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
-        sendEffect(ShowMoreEffect.NavigateToSeriesDetails(mediaId))
-    }
-
 }

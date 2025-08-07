@@ -6,7 +6,7 @@ interface HomeInteractionListener {
     fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String)
     fun onSeeAllTopRatedClicked()
     fun onSeeAllUpcomingClicked()
-    fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String)
+    fun onSeeAllRecentlyViewedClicked()
     fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String)
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)
 }

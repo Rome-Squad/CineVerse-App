@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -41,6 +40,7 @@ import com.giraffe.home.components.AdvertisementSection
 import com.giraffe.home.components.Carousel
 import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
+import com.giraffe.home.components.HorizontalDivider
 import com.giraffe.home.components.TopAppBar
 import com.giraffe.home.components.UserCollection
 import com.giraffe.home.components.YourCollectionsSections
@@ -54,7 +54,8 @@ fun HomeScreen(
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToUpcomingMovies: () -> Unit,
-    navigateToTopRatedTvShows: () -> Unit
+    navigateToTopRatedTvShows: () -> Unit,
+    navigateToRecentlyViewed: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -82,11 +83,8 @@ fun HomeScreen(
                     navigateToTopRatedTvShows()
                 }
 
-                is HomeEffect.NavigateToRecentlyViewedList -> {
-                    navigateToMoviesListScreen(
-                        MovieSectionType.RECENTLY_VIEWED,
-                        effect.sectionTitle
-                    )
+                is HomeEffect.NavigateToRecentlyViewed -> {
+                    navigateToRecentlyViewed()
                 }
 
                 is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
@@ -254,7 +252,6 @@ fun HomeContent(
                     )
                 }
                 if (state.recentlyViewed.isNotEmpty()) {
-                    val recentlyReleasedTitle = stringResource(R.string.you_recent_viewed)
                     HomeUiListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -263,12 +260,7 @@ fun HomeContent(
                         title = stringResource(R.string.you_recent_viewed),
                         uiModels = state.recentlyViewed,
                         onClickItem = interactionListener::onMediaClicked,
-                        onClickEndText = {
-                            interactionListener.onSeeAllRecentlyViewedClicked(
-                                sectionTitle = recentlyReleasedTitle,
-                                sectionType = MovieSectionType.RECENTLY_VIEWED
-                            )
-                        }
+                        onClickEndText = { interactionListener.onSeeAllRecentlyViewedClicked() }
                     )
                 }
                 if (yourCollections.isNotEmpty()) {
@@ -302,12 +294,7 @@ fun HomeContent(
                 TopAppBar(
                     userName = state.userName
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Theme.color.stroke.primary)
-                )
+                HorizontalDivider()
             }
         }
     }
@@ -329,7 +316,7 @@ fun HomeContentPreview() {
         override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {}
         override fun onSeeAllTopRatedClicked() {}
         override fun onSeeAllUpcomingClicked() {}
-        override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {}
+        override fun onSeeAllRecentlyViewedClicked() {}
         override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
         override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
     }

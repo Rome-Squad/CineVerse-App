@@ -16,7 +16,7 @@ fun Movie.toHomeUiModel(): HomeUiModel {
     return HomeUiModel(
         id = id,
         title = title,
-        posterUrl = posterUrl .orEmpty(),
+        posterUrl = posterUrl.orEmpty(),
         rating = rating,
         mediaType = MediaType.MOVIE
     )
@@ -47,7 +47,7 @@ fun Movie.toPosterUi(): PosterUiState {
     return PosterUiState(
         id = id,
         name = title,
-        imageUri = posterUrl .orEmpty(),
+        imageUri = posterUrl.orEmpty(),
         rating = rating,
         date = releaseYear.toString(),
         mediaType = MediaType.MOVIE
@@ -59,8 +59,8 @@ fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
     return PopularMediaUiModel(
         id = id,
         title = title,
-        posterUrl = posterUrl .orEmpty(),
-        backdropUrl = backdropUrl .orEmpty(),
+        posterUrl = posterUrl.orEmpty(),
+        backdropUrl = backdropUrl.orEmpty(),
         genres = genres,
         rating = rating,
         mediaType = MediaType.MOVIE
