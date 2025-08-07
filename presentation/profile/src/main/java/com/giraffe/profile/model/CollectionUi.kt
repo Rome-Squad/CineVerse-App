@@ -12,6 +12,7 @@ data class CollectionUi(
 fun Collection.toUi() = CollectionUi(
     id = id,
     name = name,
+    itemCount = itemsCount,
     description = description
 )
 

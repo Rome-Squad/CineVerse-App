@@ -76,7 +76,8 @@ fun ExploreContent(
                     placeholder = stringResource(R.string.search),
                     enabled = false,
                     readOnly = true,
-                    onTextFieldClicked = navigateToSearch
+                    onTextFieldClicked = navigateToSearch,
+                    onEndIconClick = navigateToSearch
                 )
             }
             stickyHeader {

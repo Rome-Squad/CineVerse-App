@@ -10,6 +10,7 @@ import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.LogoutUseCase
 import com.giraffe.user.usecase.SetDarkModeUseCase
 import com.giraffe.user.usecase.SetLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class SettingsViewModel @Inject constructor(
     private val setDarkModeUseCase: SetDarkModeUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
     private val getLanguageUseCase: GetLanguageUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : BaseViewModel<SettingsScreenState, SettingsScreenEffect>(SettingsScreenState()),
     SettingsInteractionListener {
 
@@ -79,7 +81,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun handleGetUserProfileError(error: Throwable) {
         updateState { it.copy(isLoading = false) }
-        sendEffect(SettingsScreenEffect.ShowError(error.message.toString()))
+        sendEffect(SettingsScreenEffect.ShowError(mapErrorToResource(error)))
     }
 
     override fun onLoginClick() {
@@ -122,6 +124,18 @@ class SettingsViewModel @Inject constructor(
 
     override fun onConfirmLogout() {
         onDismissSheet()
+        safeExecute(
+            onSuccess = {
+                sendEffect(SettingsScreenEffect.NavigateToLogin)
+            },
+            onError = ::onLogoutFailure
+        ) {
+            logoutUseCase()
+        }
+    }
+
+    private fun onLogoutFailure(error: Throwable) {
+        sendEffect(SettingsScreenEffect.ShowError(mapErrorToResource(error)))
     }
 
     override fun onGoToWebsiteClick() {
