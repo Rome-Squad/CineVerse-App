@@ -10,7 +10,8 @@ interface SeriesLocalDateSource {
     suspend fun getRecentSeries(): Flow<List<SeriesCacheDto>>
     suspend fun insertRecentSeries(seriesId: Int)
     suspend fun clearRecentSeries()
-    suspend fun clearAllData()
+    suspend fun clearAllSeriesExceptRecentlyViewed()
+    suspend fun clearAllSeries()
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
     suspend fun getGenresByIDs(genreIds: List<Int>): List<SeriesGenreCacheDto>
     suspend fun insertPopularitySeries(series: List<SeriesCacheDto>)

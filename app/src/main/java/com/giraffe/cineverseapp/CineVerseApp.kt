@@ -30,7 +30,7 @@ class CineVerseApp : Application(), Configuration.Provider {
 
     private fun setupCacheCleanupWorker() {
         val workRequest = PeriodicWorkRequestBuilder<CacheCleanupWorker>(
-            15, TimeUnit.MINUTES // This 15 minute time for testing release, when it works fine, we will change it to 24 hours
+            1, TimeUnit.DAYS
         ).build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "CacheCleanupWork",

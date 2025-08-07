@@ -17,14 +17,14 @@ data class SeriesCacheDto(
     val backdropUrl: String,
     val genresID: List<Int>,
     val releaseYear: String,
-    val isRecent: Boolean = false,
+    val isRecentViewed: Boolean = false,
+    val recentViewedAt: Long? = System.currentTimeMillis(),
     val popularity: Double = 0.0,
     val isPopularity: Boolean = false,
     val isRecentlyReleased: Boolean = false,
     val isRecommended: Boolean = false,
     val isTopRated: Boolean = false,
-    val cachedAt: Long = System.currentTimeMillis(),
-    val page: Int = 0
+    val cachedAt: Long = System.currentTimeMillis()
 )
 
 
