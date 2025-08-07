@@ -6,16 +6,11 @@ import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.cineverseapp.data.preference.DataStorePreferences
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.movie.dao.MovieDao
-import com.giraffe.media.person.cleaner.PersonCacheCleaner
-import com.giraffe.media.person.cleaner.PersonCacheCleanerImp
 import com.giraffe.media.person.dao.PersonDao
-import com.giraffe.media.series.cleaner.SeriesCacheCleaner
-import com.giraffe.media.series.cleaner.SeriesCacheCleanerImp
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.user.datastore.AuthenticationDatastore
 import com.giraffe.user.datastore.OnboardingDatastore
 import com.giraffe.user.datastore.SettingsDataStore
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,14 +21,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DatabaseModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindPersonCacheCleaner(imp: PersonCacheCleanerImp): PersonCacheCleaner
-
-    @Binds
-    @Singleton
-    abstract fun bindSeriesCacheCleaner(imp: SeriesCacheCleanerImp): SeriesCacheCleaner
 
     companion object {
         @Provides
