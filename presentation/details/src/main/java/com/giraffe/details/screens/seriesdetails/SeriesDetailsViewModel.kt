@@ -19,12 +19,12 @@ import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
-import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -48,6 +48,17 @@ class SeriesDetailsViewModel @Inject constructor(
     private val seriesID = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
 
     init {
+        loadSeriesDetailsScreen()
+    }
+
+    fun loadSeriesDetailsScreen() {
+        updateState {
+            it.copy(
+                isLoading = true,
+                isNetworkError = false,
+                errorMessage = null
+            )
+        }
         loadSeriesDetails(seriesID)
         loadSeason(seriesID)
         loadRecommendedSeries(seriesID, 1)
@@ -156,19 +167,11 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    private fun loadError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoading = false,
-            )
-        }
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
 
     private fun loadSeriesDetails(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesDetailsSuccess,
-            onError = ::loadError
+            onError = ::loadSeriesDetailsError
         ) {
             updateState {
                 it.copy(
@@ -191,6 +194,16 @@ class SeriesDetailsViewModel @Inject constructor(
         saveSeriesToRecent(series)
     }
 
+    private fun loadSeriesDetailsError(errorMsgRes: Int, isNetworkError: Boolean) {
+        updateState {
+            it.copy(
+                errorMessage = errorMsgRes,
+                isNetworkError = isNetworkError,
+                isLoading = false
+            )
+        }
+    }
+
     private fun saveSeriesToRecent(series: Series) {
         safeExecute(
             onError = {},
@@ -204,7 +217,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesGenres(genreIDs: List<Int>) {
         safeExecute(
             onSuccess = ::loadSeriesGenresSuccess,
-            onError = ::loadError
+            onError = ::loadSeriesGenresError
         ) {
             getSeriesGenres(genreIDs)
         }
@@ -218,11 +231,21 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
+    private fun loadSeriesGenresError(errorMsgRes: Int, isNetworkError: Boolean) {
+        updateState {
+            it.copy(
+                errorMessage = errorMsgRes,
+                isNetworkError = isNetworkError,
+                isLoading = false
+            )
+        }
+    }
+
 
     private fun loadSeason(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeasonsSuccess,
-            onError = ::loadError
+            onError = ::loadSeasonsError
         ) {
             getLastSeasons(seriesId)
         }
@@ -237,11 +260,21 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
+    private fun loadSeasonsError(errorMsgRes: Int, isNetworkError: Boolean) {
+        updateState {
+            it.copy(
+                errorMessage = errorMsgRes,
+                isNetworkError = isNetworkError,
+                isLoading = false
+            )
+        }
+    }
+
 
     private fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesPeopleSuccess,
-            onError = ::loadError
+            onError = {}
         ) {
             getCastAndCrewOfSeries(seriesId)
         }
@@ -263,7 +296,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadRecommendedSeries(seriesId: Int, page: Int) {
         safeExecute(
             onSuccess = ::loadRecommendedSeriesSuccess,
-            onError = ::loadError
+            onError = {}
         ) {
             getRecommendedSeries(seriesId = seriesId, page = page)
         }
@@ -288,7 +321,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesReviews(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesReviewsSuccess,
-            onError = ::loadError
+            onError = {}
         ) {
             getSeriesReviews(seriesId, 1)
         }
@@ -297,10 +330,8 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
-                seriesReviews = reviews.map { it.toReviewUI() },
-
+                seriesReviews = reviews.map { it.toReviewUI() }
             )
-
         }
     }
 }
