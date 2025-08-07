@@ -17,18 +17,27 @@ import com.giraffe.home.R
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
-    userName: String
+    userName: String,
+    isLoggedIn: Boolean,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(Theme.color.background.screen)
     ) {
-        AppBar(
-            modifier = Modifier.padding(start = 16.dp),
-            image = painterResource(Theme.icons.colored.logo),
-            caption = stringResource(R.string.welcome),
-            title = if (userName.isEmpty()) null else userName
-        )
+        if (isLoggedIn) {
+            AppBar(
+                modifier = Modifier.padding(start = 16.dp),
+                image = painterResource(Theme.icons.colored.logo),
+                caption = stringResource(R.string.welcome),
+                title = userName
+            )
+        } else {
+            AppBar(
+                modifier = Modifier.padding(start = 16.dp),
+                image = painterResource(Theme.icons.colored.logo),
+                title = stringResource(com.giraffe.designsystem.R.string.home)
+            )
+        }
     }
 }

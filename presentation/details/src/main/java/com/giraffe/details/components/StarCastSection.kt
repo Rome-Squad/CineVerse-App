@@ -1,6 +1,5 @@
 package com.giraffe.details.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,7 +37,7 @@ fun StarCastSection(
 ) {
     val sizeOfChunkedList = if (castList.size > 2) 2 else 1
     val chunkedList = castList.chunked(sizeOfChunkedList)
-    AnimatedVisibility(castList.isNotEmpty()) {
+    if (castList.isNotEmpty()) {
         Column(
             modifier = modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -111,10 +109,7 @@ fun CastCard(
                     painter = painterResource(Theme.icons.dueTone.image),
                     contentDescription = "$actorName image",
                     tint = Theme.color.brand.secondary,
-                    modifier = it
-                        .size(64.dp)
-                        .padding(12.dp)
-                        .wrapContentSize()
+                    modifier = Modifier.size(32.dp)
                 )
             }
 

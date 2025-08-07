@@ -1,4 +1,4 @@
-package  com.giraffe.media.movie
+package  com.giraffe.movie
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

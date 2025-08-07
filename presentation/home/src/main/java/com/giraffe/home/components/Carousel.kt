@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.CinePreview
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -88,12 +89,12 @@ fun Carousel(
                     .zIndex(zIndex)
                     .alpha(alpha)
                     .clip(shape = RoundedCornerShape(Theme.radius.lg))
-                    .clickable {
+                    .clickable(onClick = dropUnlessResumed {
                         onClickItem(
                             movieCard.id,
                             movieCard.mediaType
                         )
-                    }
+                    })
                     .align(Alignment.TopCenter),
                 movieCard = movieCard,
                 isSelected = isSelected

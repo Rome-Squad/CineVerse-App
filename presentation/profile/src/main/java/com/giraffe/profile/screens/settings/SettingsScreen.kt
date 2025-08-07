@@ -1,10 +1,9 @@
-package com.giraffe.profile.screens.profile
+package com.giraffe.profile.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -37,7 +36,10 @@ import com.giraffe.profile.utils.Language
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateToEditProfileWebView: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToMyCollections: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    onNavigateToRatings: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -55,6 +57,9 @@ fun SettingsScreen(
         state = state,
         interaction = viewModel,
         modifier = Modifier,
+        onNavigateToHistory = onNavigateToHistory,
+        onNavigateToRatings = onNavigateToRatings,
+        onNavigateToMyCollections = onNavigateToMyCollections
     )
 }
 
@@ -63,6 +68,9 @@ fun SettingsContent(
     state: SettingsScreenState,
     interaction: SettingsInteractionListener,
     modifier: Modifier,
+    onNavigateToMyCollections: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    onNavigateToRatings: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -97,7 +105,10 @@ fun SettingsContent(
 
         ProfileLazyRow(
             modifier = Modifier
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
+            onNavigateToHistory = onNavigateToHistory,
+            onNavigateToRatings = onNavigateToRatings,
+            onNavigateToMyCollections = onNavigateToMyCollections
         )
         SettingsSection(
             modifier = Modifier
@@ -171,7 +182,8 @@ fun SettingsContent(
                 iconBackgroundColor = Theme.color.brand.tertiary,
                 titlePrimaryButton = stringResource(R.string.edit_profile_primary_button),
                 titleSecondaryButton = stringResource(R.string.cancel),
-                modifier = Modifier.size(304.dp, 214.dp)
+                onClickPrimaryButton = interaction::onGoToWebsiteClick,
+                onClickSecondaryButton = interaction::onDismissSheet,
             )
         }
     )
@@ -215,7 +227,8 @@ fun SettingsContent(
                 iconBackgroundColor = Theme.color.additional.secondary.red,
                 titlePrimaryButton = stringResource(R.string.logout_dialog_primary_button),
                 titleSecondaryButton = stringResource(R.string.cancel),
-                modifier = Modifier.size(304.dp, 214.dp)
+                onClickSecondaryButton = interaction::onDismissSheet,
+                onClickPrimaryButton = interaction::onConfirmLogout
             )
         }
     )
@@ -227,7 +240,10 @@ fun ProfileScreenPreview() {
     CineVerseTheme(isDarkTheme = false) {
         SettingsScreen(
             onNavigateToEditProfileWebView = {},
-            onNavigateToLogin = {}
+            onNavigateToLogin = {},
+            onNavigateToMyCollections = {  },
+            onNavigateToHistory = {  },
+            onNavigateToRatings = {  },
         )
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,13 +30,17 @@ import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.moviesListRoute
 import com.giraffe.home.screen.movies_list.navigateToCollectionList
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
+import com.giraffe.match.MatchApi
+import com.giraffe.profile.ProfileApi
 
 
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
-    exploreApi: ExploreApi
+    exploreApi: ExploreApi,
+    profileApi: ProfileApi,
+    matchApi: MatchApi
 ) {
 
     val homeTab = HomeTab(
@@ -118,6 +123,26 @@ fun HomeNavGraph(
                         collectionTitle = collectionTitle
                     )
                 },
+                navigateToExploreScreen = {
+                    navController.navigate(ExploreRoute) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                navigateToMatchScreen = {
+                    navController.navigate(MatchRoute) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
 
             moviesListRoute(
@@ -150,11 +175,11 @@ fun HomeNavGraph(
             }
 
             composable<MatchRoute> {
-                MatchScreen { isBottomBarVisible = it }
+                matchApi.MatchContainer { isBottomBarVisible = it }
             }
 
             composable<ProfileRoute> {
-                ProfileScreen { isBottomBarVisible = it }
+                profileApi.ProfileContainer { isBottomBarVisible = it }
             }
         }
 
@@ -163,10 +188,11 @@ fun HomeNavGraph(
             selectedTabRoute = currentRoute,
             isBottomBarVisible = isBottomBarVisible,
             onTabSelected = { tab ->
-                Log.d("Tab", "Tab: ${tab.route}")
+                Log.d("Tab", "Tapping tab: ${tab.route}, current route: $currentRoute")
                 navController.navigate(tab.route) {
-                    popUpTo(navController.graph.startDestinationRoute .orEmpty()) {
+                    popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
+                        inclusive = true
                     }
                     launchSingleTop = true
                     restoreState = true

@@ -10,6 +10,7 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
+import com.giraffe.user.exception.FailedToGetUserName
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -81,6 +82,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
             is NotFoundException -> R.string.error_not_found
             is UnknownException -> R.string.error_unknown
             is NoInternetException -> R.string.error_network
+            is FailedToGetUserName -> R.string.username_error
             else -> R.string.error_unknown
         }
     }

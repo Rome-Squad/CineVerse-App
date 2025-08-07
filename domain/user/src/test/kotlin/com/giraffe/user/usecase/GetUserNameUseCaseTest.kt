@@ -10,16 +10,17 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import java.io.IOException
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 
 class GetUserNameUseCaseTest {
     private lateinit var userRepository: UserRepository
     private lateinit var getUserNameUseCase: GetUserNameUseCase
 
-    val fakeUser = User(
-        displayName = "Tarek",
-        id = 123456,
+    private val fakeUser = User(
+        id = 1,
+        displayName = "hamada rayyan",
         username = "hamada_rayyan",
-        avatarUrl = ""
+        avatarUrl = null
     )
 
     @BeforeEach
@@ -29,39 +30,54 @@ class GetUserNameUseCaseTest {
     }
 
     @Test
-    fun `invoke() should call getUser on repository`() = runTest {
-        // given
+    fun `invoke should call getUser on repository`() = runTest {
+        // Given
         coEvery { userRepository.getUser() } returns fakeUser
 
-        // when
+        // When
         getUserNameUseCase()
 
-        // then
+        // Then
         coVerify(exactly = 1) { userRepository.getUser() }
     }
 
     @Test
-    fun `invoke() when repository succeeds should return user's display name`() = runTest {
-        // given
-        val expectedName = "hamada_rayyan"
+    fun `invoke when user has non-empty displayName should return displayName`() = runTest {
+        // Given
         coEvery { userRepository.getUser() } returns fakeUser
 
-        // when
+        // When
         val result = getUserNameUseCase()
 
-        // then
-        assertThat(result).isEqualTo(expectedName)
+        // Then
+        assertThat(result).isEqualTo(fakeUser.displayName)
     }
 
     @Test
-    fun `invoke when repository throws exception should return 'Guest'`() = runTest {
-        // given
-        coEvery { userRepository.getUser() } throws IOException("Network failed")
+    fun `invoke when user has empty displayName should return username`() = runTest {
+        // Given
+        val userWithoutDisplayName = fakeUser.copy(displayName = "")
+        coEvery { userRepository.getUser() } returns userWithoutDisplayName
 
-        // when
+        // When
         val result = getUserNameUseCase()
 
-        // then
-        assertThat(result).isEqualTo("Guest")
+        // Then
+        assertThat(result).isEqualTo(fakeUser.username)
+    }
+
+    @Test
+    fun `invoke when repository throws exception should rethrow the exception`() = runTest {
+        // Given
+        val expectedException = IOException("Network failed")
+        coEvery { userRepository.getUser() } throws expectedException
+
+        // When
+        val actualException = assertFailsWith<IOException> {
+            getUserNameUseCase()
+        }
+
+        // Then
+        assertThat(actualException).isEqualTo(expectedException)
     }
 }
