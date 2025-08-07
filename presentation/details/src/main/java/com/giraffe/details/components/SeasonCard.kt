@@ -94,6 +94,7 @@ fun SeasonCard(
                             imageUrl = it,
                             contentDescription = stringResource(R.string.season_image),
                             modifier = Modifier.fillMaxSize(),
+                            hasSensitiveText = false,
                             contentScale = ContentScale.Crop
                         ) {
                             Icon(

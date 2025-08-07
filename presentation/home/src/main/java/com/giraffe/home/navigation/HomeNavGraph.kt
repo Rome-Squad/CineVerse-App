@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -122,6 +123,26 @@ fun HomeNavGraph(
                     )
                 },
                 navigateToYourCollection = navController::navigateToYourCollection
+                navigateToExploreScreen = {
+                    navController.navigate(ExploreRoute) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                navigateToMatchScreen = {
+                    navController.navigate(MatchRoute) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
 
             moviesListRoute(
@@ -172,8 +193,9 @@ fun HomeNavGraph(
             isBottomBarVisible = isBottomBarVisible,
             onTabSelected = { tab ->
                 navController.navigate(tab.route) {
-                    popUpTo(navController.graph.startDestinationRoute .orEmpty()) {
+                    popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
+                        inclusive = true
                     }
                     launchSingleTop = true
                     restoreState = true

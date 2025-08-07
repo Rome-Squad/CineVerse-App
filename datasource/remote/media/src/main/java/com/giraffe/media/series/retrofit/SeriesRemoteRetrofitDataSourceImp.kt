@@ -44,4 +44,12 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
         val results = retrofitRequestBuilder.get { getSeriesTrailerUrl(seriesId) }.results
         return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
     }
+
+    override suspend fun getRatedSeries(
+        accountId: Int
+    ): List<SeriesDto> = retrofitRequestBuilder.get { getRatedSeries(accountId) }.results
+
+
+    override suspend fun deleteSeriesRating(seriesId: Int) =
+        retrofitRequestBuilder.delete { deleteSeriesRating(seriesId) }
 }

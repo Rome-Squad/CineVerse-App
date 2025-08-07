@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -44,6 +43,7 @@ import com.giraffe.home.components.HomeUiListSection
 import com.giraffe.home.components.TopAppBar
 import com.giraffe.home.components.YourCollectionsSections
 import com.giraffe.home.screen.movies_list.MovieSectionType
+import com.giraffe.home.utils.EventListener
 
 @Composable
 fun HomeScreen(
@@ -53,46 +53,59 @@ fun HomeScreen(
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToYourCollection: () -> Unit
+    navigateToExploreScreen: () -> Unit,
+    navigateToMatchScreen: () -> Unit,
 ) {
-    val state by viewModel.state.collectAsState()
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is HomeEffect.NavigateToRecentlyReleasedList -> {
-                    navigateToMoviesListScreen(
-                        MovieSectionType.RECENTLY_RELEASED,
-                        effect.sectionTitle
-                    )
-                }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    EventListener(viewModel.effect) { effect ->
+        when (effect) {
+            is HomeEffect.NavigateToRecentlyReleasedList -> {
+                navigateToMoviesListScreen(
+                    MovieSectionType.RECENTLY_RELEASED,
+                    effect.sectionTitle
+                )
+            }
 
-                is HomeEffect.NavigateToUpcomingList -> {
-                    navigateToMoviesListScreen(
-                        MovieSectionType.UPCOMING_MOVIES,
-                        effect.sectionTitle
-                    )
-                }
+            is HomeEffect.NavigateToUpcomingList -> {
+                navigateToMoviesListScreen(
+                    MovieSectionType.UPCOMING_MOVIES,
+                    effect.sectionTitle
+                )
+            }
 
-                is HomeEffect.NavigateToRecommendedList -> {
-                    navigateToMoviesListScreen(
-                        MovieSectionType.MATCHES_YOUR_VIBES,
-                        effect.sectionTitle
-                    )
-                }
+            is HomeEffect.NavigateToRecommendedList -> {
+                navigateToMoviesListScreen(
+                    MovieSectionType.MATCHES_YOUR_VIBES,
+                    effect.sectionTitle
+                )
+            }
 
-                is HomeEffect.NavigateToTopRatedList -> {
-                    navigateToMoviesListScreen(
-                        MovieSectionType.TOP_RATED_TV_SHOWS,
-                        effect.sectionTitle
-                    )
-                }
+            is HomeEffect.NavigateToTopRatedList -> {
+                navigateToMoviesListScreen(
+                    MovieSectionType.TOP_RATED_TV_SHOWS,
+                    effect.sectionTitle
+                )
+            }
 
-                is HomeEffect.NavigateToRecentlyViewedList -> {
-                    navigateToMoviesListScreen(
-                        MovieSectionType.RECENTLY_VIEWED,
-                        effect.sectionTitle
-                    )
-                }
+            is HomeEffect.NavigateToRecentlyViewedList -> {
+                navigateToMoviesListScreen(
+                    MovieSectionType.RECENTLY_VIEWED,
+                    effect.sectionTitle
+                )
+            }
 
+            is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
+            is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
+            is HomeEffect.ShowError -> {}
+            is HomeEffect.NavigateToYourCollection -> {
+                navigateToCollection(
+                    effect.collectionId,
+                    effect.collectionTitle
+                )
+            }
+
+            is HomeEffect.NavigateToExploreScreen -> {
+                navigateToExploreScreen()
                 is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
                 is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
                 is HomeEffect.ShowError -> {}
@@ -105,7 +118,12 @@ fun HomeScreen(
 
                 is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
             }
+
+            HomeEffect.NavigateToMatchScreen -> {
+                navigateToMatchScreen()
+            }
         }
+
     }
 
     Box(
@@ -207,7 +225,7 @@ fun HomeContent(
                     cardTitle = stringResource(R.string.let_us_choose_for_you),
                     caption =
                         stringResource(R.string.we_ll_help_you_skip_the_scroll_and_go_straight_to_the_good_stuff),
-                    onCardClick = {},
+                    onCardClick = interactionListener::onMatchSectionClicked,
                 )
 
                 if (state.upcomingMovies.isNotEmpty()) {
@@ -305,6 +323,7 @@ fun HomeContent(
                     title = stringResource(R.string.need_more_to_watch),
                     cardTitle = stringResource(R.string.browse_everything),
                     caption = stringResource(R.string.explore_all_movies_and_series),
+                    onCardClick = interactionListener::onExploreSectionClicked
                 )
             }
             Column(
@@ -348,6 +367,8 @@ fun HomeContentPreview() {
         override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
         override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
         override fun onYourCollectionClicked() {}
+        override fun onExploreSectionClicked() {}
+        override fun onMatchSectionClicked() {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(

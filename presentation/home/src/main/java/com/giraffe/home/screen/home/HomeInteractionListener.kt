@@ -10,4 +10,6 @@ interface HomeInteractionListener {
     fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String)
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)
     fun onYourCollectionClicked()
+    fun onExploreSectionClicked()
+    fun onMatchSectionClicked()
 }

@@ -366,4 +366,12 @@ class HomeViewModel @Inject constructor(
             HomeEffect.NavigateToYourCollection
         )
     }
+
+    override fun onExploreSectionClicked() {
+        sendEffect(HomeEffect.NavigateToExploreScreen)
+    }
+
+    override fun onMatchSectionClicked() {
+        sendEffect(HomeEffect.NavigateToMatchScreen)
+    }
 }
