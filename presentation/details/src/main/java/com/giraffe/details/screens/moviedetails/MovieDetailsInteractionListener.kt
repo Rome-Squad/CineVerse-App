@@ -4,7 +4,7 @@ interface MovieDetailsInteractionListener {
 
     fun onShowAddToCollectionBottomSheet()
 
-    fun onAddToCollectionButtonClick()
+    fun onCreateCollectionButtonClick()
 
     fun onCollectionClick(collectionId: Int)
 
@@ -35,4 +35,10 @@ interface MovieDetailsInteractionListener {
     fun onBackButtonClick()
 
     fun onPlayButtonClick(url: String)
+
+    fun onNewCollectionNameChange(name: String)
+
+    fun onConfirmCreateNewCollectionClick()
+
+    fun onCancelCreateNewCollectionClick()
 }

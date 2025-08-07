@@ -66,4 +66,7 @@
     <string name="not_now">Not Now</string>
     <string name="log_in">Log In</string>
     <string name="reviews">Reviews</string>
+    <string name="cancel">cancel</string>
+    <string name="create">create</string>
+    <string name="collection_name">collection name</string>
 </resources>

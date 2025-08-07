@@ -1,4 +1,4 @@
-package com.giraffe.details.components
+package com.giraffe.details.components.collectionBottomSheet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,9 +24,9 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 
 @Composable
-fun CollectionBottomSheetContent(
-    modifier: Modifier = Modifier,
-    onCreateCollectionClick: () -> Unit
+fun NoCollectionsBottomSheetContent(
+    onCreateCollectionClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
@@ -73,7 +73,7 @@ fun CollectionBottomSheetContent(
 @Preview
 @Composable
 private fun Preview() {
-    CollectionBottomSheetContent(
+    NoCollectionsBottomSheetContent(
         onCreateCollectionClick = {}
     )
 }

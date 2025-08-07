@@ -6,4 +6,7 @@
     <string name="not_now">ليس الآن</string>
     <string name="log_in">تسجيل الدخول</string>
     <string name="reviews">تقيمات</string>
+    <string name="cancel">الغاء</string>
+    <string name="create">انشاء مجموعه</string>
+    <string name="collection_name">اسم المجموعه</string>
 </resources>
