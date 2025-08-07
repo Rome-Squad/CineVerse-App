@@ -5,6 +5,8 @@ import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
+import com.giraffe.media.collections.entity.Collection
+import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
@@ -45,6 +47,7 @@ class HomeViewModel @Inject constructor(
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
@@ -63,6 +66,7 @@ class HomeViewModel @Inject constructor(
         getUpcomingMovies()
         getUserName()
         isLoggedIn()
+        getYourCollections()
     }
 
     private fun isLoggedIn() {
@@ -88,6 +92,23 @@ class HomeViewModel @Inject constructor(
 
     private fun getUseNameSuccess(userName: String) {
         updateState { it.copy(userName = userName) }
+    }
+
+    private fun getYourCollections() {
+        safeExecute(
+            onSuccess = ::onGetYourCollectionsSuccess,
+            onError = ::onFail,
+            block = { getCollectionsUseCase() }
+        )
+    }
+
+    private fun onGetYourCollectionsSuccess(collections: List<Collection>) {
+        val yourCollections = collections.map { it.toUiModel() }
+        updateState { currentState ->
+            currentState.copy(
+                yourCollections = yourCollections
+            )
+        }
     }
 
     private fun getFeaturedCollection() {
@@ -333,10 +354,16 @@ class HomeViewModel @Inject constructor(
 
     override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
         sendEffect(
-            HomeEffect.NavigateToYourCollection(
+            HomeEffect.NavigateToFeaturedCollection(
                 collectionId = collectionId,
                 collectionTitle = collectionTitle
             )
+        )
+    }
+
+    override fun onYourCollectionClicked() {
+        sendEffect(
+            HomeEffect.NavigateToYourCollection
         )
     }
 

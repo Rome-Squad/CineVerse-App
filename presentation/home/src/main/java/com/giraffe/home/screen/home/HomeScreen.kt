@@ -41,7 +41,6 @@ import com.giraffe.home.components.Carousel
 import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
 import com.giraffe.home.components.TopAppBar
-import com.giraffe.home.components.UserCollection
 import com.giraffe.home.components.YourCollectionsSections
 import com.giraffe.home.screen.movies_list.MovieSectionType
 import com.giraffe.home.utils.EventListener
@@ -50,9 +49,10 @@ import com.giraffe.home.utils.EventListener
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
-    navigateToCollection: (collectionId: Int, collectionTitle: String) -> Unit,
+    navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
+    navigateToYourCollection: () -> Unit,
     navigateToExploreScreen: () -> Unit,
     navigateToMatchScreen: () -> Unit,
 ) {
@@ -96,24 +96,20 @@ fun HomeScreen(
 
             is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
             is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
-            is HomeEffect.ShowError -> {}
-            is HomeEffect.NavigateToYourCollection -> {
-                navigateToCollection(
+            is HomeEffect.NavigateToExploreScreen -> navigateToExploreScreen()
+            is HomeEffect.NavigateToFeaturedCollection -> {
+                navigateToFeaturedCollection(
                     effect.collectionId,
                     effect.collectionTitle
                 )
             }
 
-            is HomeEffect.NavigateToExploreScreen -> {
-                navigateToExploreScreen()
-            }
-
-            HomeEffect.NavigateToMatchScreen -> {
-                navigateToMatchScreen()
-            }
+            is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
+            is HomeEffect.NavigateToMatchScreen -> navigateToMatchScreen()
+            is HomeEffect.ShowError -> {}
         }
-
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -296,12 +292,14 @@ fun HomeContent(
                         }
                     )
                 }
-                if (yourCollections.isNotEmpty()) {
+                if (state.yourCollections.isNotEmpty()) {
                     YourCollectionsSections(
                         modifier = Modifier.padding(vertical = 16.dp),
-                        collectionItems = yourCollections
+                        collectionItems = state.yourCollections,
+                        onShowMoreClick = interactionListener::onYourCollectionClicked
                     )
                 }
+
                 AdvertisementSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -340,13 +338,6 @@ fun HomeContent(
     }
 }
 
-val yourCollections = listOf(
-    UserCollection("My Favorite TV Shows", "5 shows"),
-    UserCollection("Animated Series", "4 shows"),
-    UserCollection("My Watchlist", "10 movies"),
-    UserCollection("Documentaries", "6 movies"),
-)
-
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun HomeContentPreview() {
@@ -359,6 +350,7 @@ fun HomeContentPreview() {
         override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {}
         override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
         override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
+        override fun onYourCollectionClicked() {}
         override fun onExploreSectionClicked() {}
         override fun onMatchSectionClicked() {}
     }
