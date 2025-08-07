@@ -30,27 +30,9 @@ class AuthenticationDatastore @Inject constructor(
         }.first()
     }
 
-    suspend fun saveAccountId(accountId: Int) {
-        context.dataStore.edit { preferences ->
-            preferences[PreferencesKeys.ACCOUNT_ID] = accountId
-        }
-    }
-
-    suspend fun getAccountId(): Int? {
-        return context.dataStore.data.map { preferences ->
-            preferences[PreferencesKeys.ACCOUNT_ID]
-        }.first()
-    }
-
     suspend fun clearSessionId() {
         context.dataStore.edit { preferences ->
             preferences.remove(PreferencesKeys.SESSION_ID)
-        }
-    }
-
-    suspend fun clearAccountId() {
-        context.dataStore.edit { preferences ->
-            preferences.remove(PreferencesKeys.ACCOUNT_ID)
         }
     }
 
@@ -58,12 +40,10 @@ class AuthenticationDatastore @Inject constructor(
     companion object {
         private const val DATA_STORE_NAME = "CineVerseAuthenticationDatastore"
         const val SESSION_ID_KEY = "session_id"
-        const val ACCOUNT_ID_KEY = "account_id"
     }
 
     private object PreferencesKeys {
         val SESSION_ID = stringPreferencesKey(SESSION_ID_KEY)
-        val ACCOUNT_ID = intPreferencesKey(ACCOUNT_ID_KEY)
     }
 
 }
