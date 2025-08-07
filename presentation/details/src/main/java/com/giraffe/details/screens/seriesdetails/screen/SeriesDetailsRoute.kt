@@ -26,20 +26,12 @@ fun NavGraphBuilder.seriesDetailsRoute(
 ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
         SeriesDetailsScreen(
-            navigateToRecommendedSeries = { seriesID, title ->
-                navController.navigateToRecommendedSeries(seriesID, title)
-            },
-            navigateToCastDetails = {
-                navController.navigateToCastDetails(it)
-            },
-            navigateToSeason = {
-                navController.navigateToSeasons(it)
-            },
-            navigateToSeriesDetails = {
-                navController.navigateToSeriesDetails(it)
-            },
+            navigateToRecommendedSeries = navController::navigateToRecommendedSeries,
+            navigateToCastDetails = navController::navigateToCastDetails,
+            navigateToSeason = navController::navigateToSeasons,
+            navigateToSeriesDetails = navController::navigateToSeriesDetails,
             onBackButtonClick = onBackButtonClick,
-            onClickPlay = navController::navigateToYouTubePlayer,
+            navigateToYouTubePlayer = navController::navigateToYouTubePlayer,
             navigateToLogIn = navController::navigateLoginScreen,
             navigateToReviews = navController::navigateToReviews
         )

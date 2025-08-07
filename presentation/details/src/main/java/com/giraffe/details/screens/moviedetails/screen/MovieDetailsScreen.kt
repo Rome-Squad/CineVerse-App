@@ -54,7 +54,6 @@ import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
 import com.giraffe.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.details.utils.TypeOfScreen
 
-
 @Composable
 fun MovieDetailsScreen(
     navigateToReviews: (Int) -> Unit = {},
@@ -66,55 +65,39 @@ fun MovieDetailsScreen(
     navigateToLogin: () -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state.collectAsStateWithLifecycle().value
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                MovieDetailsEffect.NavigateToMovies -> {
-                    //navController.navigateToMovieDetails(movieID)
-                }
-
-                is MovieDetailsEffect.NavigateToReviews -> {
-                    navigateToReviews(effect.movieId)
-                }
-
-                is MovieDetailsEffect.Error -> {}
+                is MovieDetailsEffect.NavigateToReviews -> navigateToReviews(effect.movieId)
                 is MovieDetailsEffect.NavigateToCollection -> {}
-                is MovieDetailsEffect.NavigateToLogin -> {}
                 is MovieDetailsEffect.NavigateToCastDetails -> navigateToCastDetails(effect.personId)
+                is MovieDetailsEffect.NavigateToMoviesRecommended -> {
+                    navigateToMoviesRecommended(effect.movieId, effect.title)
+                }
 
-                is MovieDetailsEffect.NavigateToMoviesRecommended -> navigateToMoviesRecommended(
-                    effect.movieId,
-                    effect.title
-                )
+                is MovieDetailsEffect.NavigateToLogin -> navigateToLogin()
+                is MovieDetailsEffect.NavigateToYouTubePlayer -> onClickPlay(effect.url)
+                is MovieDetailsEffect.NavigateToMovieDetails -> onClickPoster(effect.id)
+                is MovieDetailsEffect.NavigateUp -> onBackButtonClick()
+                is MovieDetailsEffect.Error -> {}
             }
         }
     }
 
-
-
     MovieDetailsContent(
         modifier = Modifier.fillMaxSize(),
         state = state,
-        interaction = viewModel,
-        onBackButtonClick = onBackButtonClick,
-        onClickPlay = onClickPlay,
-        onClickPoster = onClickPoster,
-        navigateToLogIn = navigateToLogin
+        interaction = viewModel
     )
 }
-
 
 @Composable
 private fun MovieDetailsContent(
     modifier: Modifier,
     state: MovieDetailsScreenState,
-    interaction: MovieDetailsInteractionListener,
-    onBackButtonClick: () -> Unit,
-    onClickPlay: (String) -> Unit,
-    onClickPoster: (Int) -> Unit,
-    navigateToLogIn: () -> Unit
+    interaction: MovieDetailsInteractionListener
 ) {
     val scrollState = rememberLazyListState()
     var imageWidth by rememberSaveable { mutableIntStateOf(216) }
@@ -172,7 +155,7 @@ private fun MovieDetailsContent(
                     Column(Modifier.background(Theme.color.background.screen)) {
                         AppBar(
                             showBackButton = true,
-                            onBackButtonClick = onBackButtonClick,
+                            onBackButtonClick = interaction::onBackButtonClick,
                             modifier = Modifier.padding(horizontal = 8.dp)
                         )
 
@@ -184,8 +167,8 @@ private fun MovieDetailsContent(
                             genres = state.movieGenres,
                             releaseYear = state.movie.releaseYear.orEmpty(),
                             isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),
-                            onClickPlay = { onClickPlay(state.movie.youtubeVideoId) },
-                            onClickAdd = interaction::onAddToCollectionClick,
+                            onClickPlay = { interaction.onPlayButtonClick(state.movie.youtubeVideoId) },
+                            onClickAdd = interaction::onShowAddToCollectionBottomSheet,
                             modifier = Modifier.padding(horizontal = 16.dp),
                             duration = state.movie.duration,
                             animationProgress = animationProgress
@@ -207,7 +190,7 @@ private fun MovieDetailsContent(
                     item {
                         StarCastSection(
                             title = stringResource(R.string.star_cast),
-                            onCastClick = { interaction.navigateToCastDetailsScreen(it) },
+                            onCastClick = { interaction.onCastCardClick(it) },
                             castList = state.cast
                         )
                     }
@@ -230,12 +213,12 @@ private fun MovieDetailsContent(
                             endText = stringResource(R.string.show_more),
                             posters = state.recommendedMovies,
                             onClickEndText = {
-                                interaction.navigateToMovieRecommendation(
+                                interaction.onShowMoreRecommendedMoviesTextClick(
                                     state.movie.id,
                                     state.movie.title
                                 )
                             },
-                            onClickPoster = { onClickPoster(it.id) }
+                            onClickPoster = { interaction.onMoviePosterClick(it.id) }
                         )
                     }
                 }
@@ -243,7 +226,7 @@ private fun MovieDetailsContent(
                 item {
                     RatingSection(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        onClickCard = interaction::onGiveStarsClick
+                        onClickCard = interaction::onGiveStarsCardClick
                     )
                 }
 
@@ -261,7 +244,7 @@ private fun MovieDetailsContent(
                                 clickableText = if (state.movieReviews.size > 3) stringResource(
                                     R.string.show_more
                                 ) else null,
-                                onClickableText = { interaction.navigateToReviews(state.movie.id) }
+                                onClickableText = { interaction.onShowMoreReviewsTextClick(state.movie.id) }
                             )
 
                             val reviewsToShow = state.movieReviews.take(3)
@@ -289,7 +272,7 @@ private fun MovieDetailsContent(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp),
             content = {
                 CollectionBottomSheetContent(
-                    onCreateCollectionClick = interaction::onCreateCollectionClick
+                    onCreateCollectionClick = interaction::onAddToCollectionButtonClick
                 )
             },
         )
@@ -313,7 +296,7 @@ private fun MovieDetailsContent(
                             .padding(top = 24.dp),
                         text = stringResource(R.string.add_to_rate),
                         enabled = state.currentRating > 0,
-                        onClick = interaction::onAddRatingClick
+                        onClick = interaction::onAddRateButtonClick
                     )
                 }
             }

@@ -1,15 +1,16 @@
 package com.giraffe.details.screens.moviedetails
 
-import com.giraffe.details.models.ReviewUI
-
-
 sealed interface MovieDetailsEffect {
 
     object NavigateToCollection : MovieDetailsEffect
 
     object NavigateToLogin : MovieDetailsEffect
 
-    object NavigateToMovies : MovieDetailsEffect
+    object NavigateUp : MovieDetailsEffect
+
+    data class NavigateToYouTubePlayer(val url: String) : MovieDetailsEffect
+
+    data class NavigateToMovieDetails(val id: Int) : MovieDetailsEffect
 
     data class NavigateToReviews(val movieId: Int) : MovieDetailsEffect
 

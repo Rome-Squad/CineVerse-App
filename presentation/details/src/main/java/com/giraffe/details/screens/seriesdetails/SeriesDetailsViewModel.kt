@@ -19,12 +19,12 @@ import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
-import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -55,7 +55,7 @@ class SeriesDetailsViewModel @Inject constructor(
         loadSeriesPeople(seriesID)
     }
 
-    override fun onClickGiveStars() {
+    override fun onGiveStarsCardClick() {
         updateState {
             it.copy(
                 isVisibleGiveStarsBottomSheet = true
@@ -64,7 +64,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
 
-    override fun onClickAddToCollection() {
+    override fun onAddToCollectionButtonClick() {
         updateState {
             it.copy(
                 isVisibleAddToCollectionBottomSheet = true
@@ -72,7 +72,9 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun onClickCreateCollection() {}
+    override fun onClickCreateCollection() {
+        //todo
+    }
 
     override fun onDismissAddToCollectionBottomSheet() {
         updateState {
@@ -99,7 +101,7 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun navigateToCastDetailsScreen(personId: Int) {
+    override fun onCastCardClick(personId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToCastDetails(
                 personId = personId
@@ -107,7 +109,7 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun navigateToSeasonsScreen(seriesId: Int) {
+    override fun onShowMoreSeasonsTextClick(seriesId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToSeasons(
                 seriesId = seriesId
@@ -115,7 +117,7 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun navigateToRecommendedSeriesScreen(seriesId: Int, title: String) {
+    override fun onShowMoreRecommendedSeriesTextClick(seriesId: Int, title: String) {
         sendEffect(
             SeriesDetailsEffect.NavigateToRecommendedSeries(
                 seriesId = seriesId,
@@ -124,13 +126,13 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun navigateToSeriesDetails(seriesId: Int) {
+    override fun onSeriesPosterClick(seriesId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToSeriesDetails(seriesId)
         )
     }
 
-    override fun addRate() {
+    override fun onAddRateButtonClick() {
         safeExecute {
             if (isLoggedInUseCase()) {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
@@ -150,18 +152,26 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun navigateToReviews(seriesId: Int) {
+    override fun onShowMoreReviewsTextClick(seriesId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToReviews(seriesId)
         )
     }
 
+    override fun onPlayButtonClick(url: String) {
+        sendEffect(SeriesDetailsEffect.NavigateToYouTubePlayer(url))
+    }
+
+    override fun onLoginButtonClick() {
+        sendEffect(SeriesDetailsEffect.NavigateToLogIn)
+    }
+
+    override fun onBackButtonClick() {
+        sendEffect(SeriesDetailsEffect.OnBackButtonClick)
+    }
+
     private fun loadError(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoading = false,
-            )
-        }
+        updateState { it.copy(isLoading = false) }
         sendEffect(SeriesDetailsEffect.Error(error))
     }
 
@@ -170,11 +180,7 @@ class SeriesDetailsViewModel @Inject constructor(
             onSuccess = ::loadSeriesDetailsSuccess,
             onError = ::loadError
         ) {
-            updateState {
-                it.copy(
-                    isLoading = true
-                )
-            }
+            updateState { it.copy(isLoading = true) }
             getSeriesDetails(seriesId)
         }
     }
@@ -192,10 +198,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun saveSeriesToRecent(series: Series) {
-        safeExecute(
-            onError = {},
-            onSuccess = {}
-        ) {
+        safeExecute {
             storeRecentSeriesUseCase(series)
         }
     }
@@ -296,10 +299,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
-            it.copy(
-                seriesReviews = reviews.map { it.toReviewUI() },
-
-            )
+            it.copy(seriesReviews = reviews.map { it.toReviewUI() })
 
         }
     }
