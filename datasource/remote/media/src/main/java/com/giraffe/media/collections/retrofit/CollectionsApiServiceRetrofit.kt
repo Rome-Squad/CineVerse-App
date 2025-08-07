@@ -27,6 +27,7 @@ import retrofit2.http.Query
 
 interface CollectionsApiServiceRetrofit {
     @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$COLLECTIONS_END_POINT")
+    @Headers("$NEEDS_SESSION: true")
     suspend fun getCollections(
         @Path(ACCOUNT_ID_PATH) accountId: Int
     ): Response<CollectionsResponse>

@@ -17,11 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -39,18 +34,11 @@ fun OnBoardingFooter(
     pagerState: PagerState,
     pages: List<OnBoardingPage>,
     modifier: Modifier = Modifier,
-    interaction: OnboardingInteractionListener
+    interaction: OnboardingInteractionListener,
+    direction: Int
 ) {
     val isLastPage = pagerState.currentPage == pagerState.pageCount - 1
     val isFirstPage = pagerState.currentPage == 0
-    val currentPage = pages[pagerState.currentPage]
-
-    var previousPage by remember { mutableIntStateOf(pagerState.currentPage) }
-    val direction = if (pagerState.currentPage > previousPage) 1 else -1
-
-    LaunchedEffect(pagerState.currentPage) {
-        previousPage = pagerState.currentPage
-    }
 
     Column(
         modifier = modifier
@@ -61,7 +49,7 @@ fun OnBoardingFooter(
         verticalArrangement = Arrangement.spacedBy(32.dp),
     ) {
         AnimatedContent(
-            targetState = currentPage,
+            targetState = pagerState.currentPage,
             transitionSpec = {
                 val animSpec = spring<IntOffset>(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -77,8 +65,8 @@ fun OnBoardingFooter(
                 }
             },
             label = stringResource(R.string.footertextanimation)
-        ) { page ->
-            AnimatedPageText(page)
+        ) { pageIndex ->
+            AnimatedPageText(pages[pageIndex])
         }
 
         NavigationButtons(

@@ -51,3 +51,13 @@ fun Movie.toPosterUi(): Poster {
     )
 }
 
+
+fun Poster.toHistoryUiModel(): HistoryUiModel {
+    return HistoryUiModel(
+        id = id,
+        title = name,
+        posterUrl = imageUri,
+        rating = rating,
+        mediaType = if (mediaTypeOfPoster == "movie") MediaType.MOVIE else MediaType.SERIES
+    )
+}

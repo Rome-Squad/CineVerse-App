@@ -1,8 +1,8 @@
 package com.giraffe.media.collections.usecase
 
 import com.giraffe.media.collections.repository.CollectionsRepository
-import com.giraffe.media.collections.fake.createFakeMovie
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.fakeMovies
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -25,16 +25,7 @@ class GetCollectionMoviesUseCaseTest {
     fun `should return list of movies when collectionId is valid`() = runTest {
         // Given
         val collectionId = 3
-        val expectedMovies = listOf(
-            createFakeMovie(
-                id = 1,
-                title = "Inception"
-            ),
-            createFakeMovie(
-                id = 2,
-                title = "Interstellar"
-            )
-        )
+        val expectedMovies = fakeMovies
         coEvery { collectionsRepository.getCollectionMovies(collectionId) } returns expectedMovies
 
         // When

@@ -45,6 +45,11 @@ interface SeriesDao {
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecommended = 1 LIMIT :limit")
     fun getRecommendedSeries(limit: Int): List<SeriesCacheDto>
 
+    @Upsert
+    suspend fun upsertSeries(series: List<SeriesCacheDto>)
+
+    @Query("DELETE FROM $SERIES_TABLE WHERE id = :seriesId")
+    suspend fun deleteSeriesById(seriesId: Int)
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
     suspend fun getAllGenres(): List<SeriesGenreCacheDto>

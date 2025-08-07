@@ -5,13 +5,15 @@ import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
+import com.giraffe.media.collections.entity.Collection
+import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
@@ -39,12 +41,13 @@ class HomeViewModel @Inject constructor(
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
-    private val getMoviesGenresByIdsUseCase: GetMovieGenresUseCase,
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
+    private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
@@ -63,6 +66,7 @@ class HomeViewModel @Inject constructor(
         getUpcomingMovies()
         getUserName()
         isLoggedIn()
+        getYourCollections()
     }
 
     private fun isLoggedIn() {
@@ -88,6 +92,23 @@ class HomeViewModel @Inject constructor(
 
     private fun getUseNameSuccess(userName: String) {
         updateState { it.copy(userName = userName) }
+    }
+
+    private fun getYourCollections() {
+        safeExecute(
+            onSuccess = ::onGetYourCollectionsSuccess,
+            onError = ::onFail,
+            block = { getCollectionsUseCase() }
+        )
+    }
+
+    private fun onGetYourCollectionsSuccess(collections: List<Collection>) {
+        val yourCollections = collections.map { it.toUiModel() }
+        updateState { currentState ->
+            currentState.copy(
+                yourCollections = yourCollections
+            )
+        }
     }
 
     private fun getFeaturedCollection() {
@@ -217,7 +238,7 @@ class HomeViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyMoviesUseCase::invoke
+                block = getRecentlyViewedMoviesUseCase::invoke
             ).join()
             safeExecute(
                 onSuccess = ::onGetRecentlySeriesSuccess,
@@ -333,10 +354,16 @@ class HomeViewModel @Inject constructor(
 
     override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
         sendEffect(
-            HomeEffect.NavigateToYourCollection(
+            HomeEffect.NavigateToFeaturedCollection(
                 collectionId = collectionId,
                 collectionTitle = collectionTitle
             )
+        )
+    }
+
+    override fun onYourCollectionClicked() {
+        sendEffect(
+            HomeEffect.NavigateToYourCollection
         )
     }
 

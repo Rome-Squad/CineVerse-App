@@ -13,6 +13,13 @@
     <string name="user_name">\@%1$s</string>
     <string name="history">History</string>
     <string name="Dark_Mode">Dark Mode</string>
+    <string name="hide_explicit_content">Hide Explicit Content</string>
+    <string name="hides_revealing_or_inappropriate_posters">Hides revealing or inappropriate posters (e.g. nudity, strong sexual content).</string>
+    <string name="strict_filtering">Strict Filtering</string>
+    <string name="hides_all_content_that_includes_immodest_clothing">Hides all content that includes immodest clothing or behavior</string>
+    <string name="show_all_content">Show All Content</string>
+    <string name="no_filtering_all_images_will_be_displayed">No filtering. All images and posters will be displayed</string>
+    <string name="content_preferences_subtitle">Choose how you’d like to handle sensitive or revealing images in the app.</string>
     <string name="Language">Language</string>
     <string name="edit_profile_title">Edit Profile</string>
     <string name="edit_profile_caption">You’ll be taken to the website to update your name, username, or profile picture.</string>
@@ -55,6 +62,9 @@
     <string name="no_history_yet">No History Yet</string>
     <string name="it_s_quiet_in_here_start_watching_and_we_ll_keep_track_for_you">It’s quiet in here… Start watching and we’ll keep track for you.</string>
     <string name="find_something_to_watch">Find Something to Watch</string>
+    <string name="movies_count">%1$d movies</string>
+    <string name="tap_an_item_to_see_details_or_update_your_rating">Tap an item to see details or update your rating.</string>
+    <string name="series">Series</string>
 
 
 </resources>

@@ -44,7 +44,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
             context: Context,
             fileName: String = "nsfw_model_tmdb_data.tflite"
         ): Interpreter {
-            return interpreterNsfwModel ?: synchronized(this) {
+            return interpreterNsfwModelTmdbData ?: synchronized(this) {
                 val nsfwModelTmdbData =
                     loadModelFile(context, fileName = fileName)
                 interpreterNsfwModelTmdbData = Interpreter(nsfwModelTmdbData)

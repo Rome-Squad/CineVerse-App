@@ -1,16 +1,19 @@
 package com.giraffe.designsystem.composable
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +24,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun CollectionItem(
     modifier: Modifier = Modifier,
@@ -29,6 +33,9 @@ fun CollectionItem(
     icon: Int,
     onClick: () -> Unit = {}
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
@@ -37,7 +44,8 @@ fun CollectionItem(
                 color = Theme.color.background.card,
                 shape = RoundedCornerShape(Theme.radius.lg)
             )
-            .padding(12.dp),
+            .padding(12.dp)
+            .widthIn(min = screenWidth * 0.5f, max = screenWidth * 0.75f),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

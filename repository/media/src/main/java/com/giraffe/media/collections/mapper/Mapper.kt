@@ -43,6 +43,10 @@ fun CollectionItemDto.toMovie() = Movie(
     youtubeVideoId = null,
     genresID = genreIds,
     releaseYear = LocalDate.parse(releaseDate.orEmpty()),
+    recentViewedAt = null,
+    recentReleasedAt = null,
+    upcomingAt = null,
+    popularity = 0f
 )
 
 fun CollectionMediaTypeString.toCollectionType() = when (this) {

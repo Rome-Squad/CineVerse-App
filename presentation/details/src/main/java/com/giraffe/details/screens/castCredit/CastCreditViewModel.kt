@@ -8,7 +8,7 @@ import com.giraffe.details.screens.castCredit.CastCreditEffect.Error
 import com.giraffe.details.screens.castCredit.CastCreditEffect.NavigateToMovieDetails
 import com.giraffe.details.screens.castCredit.CastCreditEffect.NavigateToSeriesDetails
 import com.giraffe.details.utils.toPoster
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class CastCreditViewModel @Inject constructor(
     private val getPeopleMediaCredits: GetPeopleMediaCreditsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
-    private val getMovieGenres: GetMovieGenresUseCase,
+    private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(initialState = CastCreditScreenState()),
     CastCreditInteractionListener {
@@ -64,7 +64,7 @@ class CastCreditViewModel @Inject constructor(
                 async {
                     val mediaType = MediaType.from(personCredit.mediaType)
                     val genres = when (mediaType) {
-                        MediaType.MOVIE -> getMovieGenres(personCredit.genreIds)
+                        MediaType.MOVIE -> getMoviesGenresByIds(personCredit.genreIds)
                             .map { it.title }
 
                         MediaType.TV -> getSeriesGenres(personCredit.genreIds)

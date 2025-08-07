@@ -1,15 +1,20 @@
 package com.giraffe.profile.screens.settings
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.screens.settings.model.toUserUiModel
 import com.giraffe.profile.utils.Language
 import com.giraffe.profile.utils.LanguageHelper
+import com.giraffe.user.entity.ContentPreference
 import com.giraffe.user.entity.User
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.LogoutUseCase
+import com.giraffe.user.usecase.SetContentPreferenceUseCase
 import com.giraffe.user.usecase.SetDarkModeUseCase
 import com.giraffe.user.usecase.SetLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,12 +32,16 @@ class SettingsViewModel @Inject constructor(
     private val setDarkModeUseCase: SetDarkModeUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
     private val getLanguageUseCase: GetLanguageUseCase,
+    private val logoutUseCase: LogoutUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
+    private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
 ) : BaseViewModel<SettingsScreenState, SettingsScreenEffect>(SettingsScreenState()),
     SettingsInteractionListener {
 
     init {
         checkLoginStatus()
         observeSettings()
+        observeContentPreference()
     }
 
     private fun checkLoginStatus() {
@@ -64,6 +73,13 @@ class SettingsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    private fun observeContentPreference() {
+        getContentPreferenceUseCase().onEach { preference ->
+            updateState { it.copy(contentPreference = preference) }
+            Log.d("PreferenceUseCase", "Current preference is: $preference")
+        }.launchIn(viewModelScope)
+    }
+
     private fun getUserProfile() {
         safeExecute(
             onSuccess = ::handleGetUserProfileSuccess,
@@ -79,7 +95,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun handleGetUserProfileError(error: Throwable) {
         updateState { it.copy(isLoading = false) }
-        sendEffect(SettingsScreenEffect.ShowError(error.message.toString()))
+        sendEffect(SettingsScreenEffect.ShowError(mapErrorToResource(error)))
     }
 
     override fun onLoginClick() {
@@ -106,6 +122,13 @@ class SettingsViewModel @Inject constructor(
         updateState { it.copy(showContentPreferencesSheet = true) }
     }
 
+    override fun onContentPreferenceChange(preference: ContentPreference) {
+        viewModelScope.launch {
+            setContentPreferenceUseCase(preference)
+            onDismissSheet()
+        }
+    }
+
     override fun onLanguageChange(languageCode: String) {
         viewModelScope.launch {
             setLanguageUseCase(languageCode)
@@ -122,6 +145,18 @@ class SettingsViewModel @Inject constructor(
 
     override fun onConfirmLogout() {
         onDismissSheet()
+        safeExecute(
+            onSuccess = {
+                sendEffect(SettingsScreenEffect.NavigateToLogin)
+            },
+            onError = ::onLogoutFailure
+        ) {
+            logoutUseCase()
+        }
+    }
+
+    private fun onLogoutFailure(error: Throwable) {
+        sendEffect(SettingsScreenEffect.ShowError(mapErrorToResource(error)))
     }
 
     override fun onGoToWebsiteClick() {

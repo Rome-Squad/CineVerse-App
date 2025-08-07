@@ -12,6 +12,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -52,6 +54,12 @@ private fun OnBoardingContent(
 ) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scrollState = rememberScrollState()
+    val previousPage = remember { mutableIntStateOf(pagerState.currentPage) }
+    val direction = if (pagerState.currentPage > previousPage.intValue) 1 else -1
+
+    LaunchedEffect(pagerState.currentPage) {
+        previousPage.intValue = pagerState.currentPage
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -70,7 +78,8 @@ private fun OnBoardingContent(
                     .fillMaxSize()
                     .padding(top = 69.dp),
                 pagerState = pagerState,
-                images = pages.map { it.imageRes })
+                images = pages.map { it.imageRes },
+            )
 
             OnBoardingFooter(
                 pagerState = pagerState,
@@ -78,7 +87,8 @@ private fun OnBoardingContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                interaction = interaction
+                interaction = interaction,
+                direction = direction
             )
         }
     }
