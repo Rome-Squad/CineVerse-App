@@ -21,6 +21,7 @@ import com.giraffe.profile.screens.ratings.RatingScreen
 import com.giraffe.profile.utils.LanguageHelper
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,11 +36,14 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        splashScreen.setKeepOnScreenCondition { true }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.state.collect { state ->
-                    splashScreen.setKeepOnScreenCondition {
-                        state.isLoggedIn == null || state.isOnBoardingFirstTime == null
+                mainViewModel.splashState.collectLatest { splash ->
+                    if (!splash.keepSplashVisible) {
+                        splashScreen.setKeepOnScreenCondition { false }
+                        return@collectLatest
                     }
                 }
             }
@@ -66,7 +70,6 @@ class MainActivity : AppCompatActivity() {
                 LaunchedEffect(state.language) {
                     LanguageHelper.updateAppLocale(state.language)
                 }
-
 
                 authenticationApi.LoginContainer(
                     onBack = {},

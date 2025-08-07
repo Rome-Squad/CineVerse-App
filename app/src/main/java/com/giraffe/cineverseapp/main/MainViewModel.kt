@@ -12,10 +12,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +31,28 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(MainUiState())
     val state: StateFlow<MainUiState> = _state.asStateFlow()
+
+    private val _isLoggedIn = MutableStateFlow<Boolean?>(null)
+    val isLoggedIn = _isLoggedIn.asStateFlow()
+
+    private val _isOnBoardingFirstTime = MutableStateFlow<Boolean?>(null)
+    val isOnBoardingFirstTime = _isOnBoardingFirstTime.asStateFlow()
+
+    val splashState: StateFlow<MainUiState> = combine(
+        isLoggedIn,
+        isOnBoardingFirstTime
+    ) { isLoggedIn, isOnBoardingFirstTime ->
+        _state.value.copy(
+            isLoggedIn = isLoggedIn,
+            isOnBoardingFirstTime = isOnBoardingFirstTime,
+            keepSplashVisible = isLoggedIn == null || isOnBoardingFirstTime == null
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = _state.value
+    )
+
 
     init {
         checkIfOnBoardingFirstTime()
@@ -49,6 +74,7 @@ class MainViewModel @Inject constructor(
         _state.value = _state.value.copy(
             isOnBoardingFirstTime = result,
         )
+        _isOnBoardingFirstTime.value = result
     }
 
     private fun checkIsLoggedIn() {
@@ -63,6 +89,7 @@ class MainViewModel @Inject constructor(
         _state.value = _state.value.copy(
             isLoggedIn = result,
         )
+        _isLoggedIn.value = result
     }
 
     private fun observeTheme() {
