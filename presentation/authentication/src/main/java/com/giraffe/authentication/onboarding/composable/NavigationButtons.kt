@@ -58,16 +58,19 @@ fun NavigationButtons(
         label = stringResource(R.string.animatedwidth)
     )
     val animatedButtonOffsetX = remember { Animatable(0f) }
-
-    LaunchedEffect(pagerState.currentPage) {
-        animatedButtonOffsetX.snapTo(if (direction > 0) 40f else -40f)
-        animatedButtonOffsetX.animateTo(
-            targetValue = 0f,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
+    LaunchedEffect(isLastPage, pagerState.currentPage) {
+        if (isLastPage) {
+            animatedButtonOffsetX.snapTo(if (direction > 0) 40f else -40f)
+            animatedButtonOffsetX.animateTo(
+                targetValue = 0f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
             )
-        )
+        } else {
+            animatedButtonOffsetX.snapTo(0f)
+        }
     }
 
     Row(
