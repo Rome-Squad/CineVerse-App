@@ -81,6 +81,10 @@ fun ImagePager(
             pageOffsetAbsolute = pageOffsetAbsolute,
             pageIndexDiff = pageIndexDiff
         )
+        val configuration = LocalConfiguration.current
+        val isPortrait = configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
+
+        val imageAspectRatio = if (isPortrait) 3f / 4.5f else 16f / 9f
 
         Box(
             modifier = Modifier
@@ -97,7 +101,7 @@ fun ImagePager(
                         this.scaleX = scale
                         this.scaleY = scale
                     }
-                    .aspectRatio(3f / 4.5f)
+                    .aspectRatio(imageAspectRatio)
                     .clip(shape)
                     .border(
                         width = 1.dp,
