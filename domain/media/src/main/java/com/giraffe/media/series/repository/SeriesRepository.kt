@@ -23,6 +23,10 @@ interface SeriesRepository {
     suspend fun getPopularitySeries(page: Int, limit: Int): List<Series>
     suspend fun getRecentlyReleasedSeries(page: Int, limit: Int): List<Series>
     suspend fun getTopRatedSeries(page: Int, limit: Int): List<Series>
+
+    suspend fun getRatedSeries(accountId: Int): Map<Float, Series>
+
+    suspend fun deleteSeriesRating(seriesId: Int)
     suspend fun deleteSeriesById(seriesId: Int)
 
 }

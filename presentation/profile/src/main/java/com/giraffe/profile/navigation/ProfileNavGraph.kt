@@ -80,7 +80,11 @@ internal fun ProfileNavGraph(
             navigateToExploreScreen = navController::navigateToExploreScreen
         )
 
-        ratingsRoute()
+        ratingsRoute(
+            navigateBack = navController::navigateUp,
+            navigateToMovieDetails = navController::navigateToMovieDetails,
+            navigateToSeriesDetails = navController::navigateToSeriesDetails
+        )
 
         myCollectionsRoute(
             navigateBack = navController::navigateUp,
