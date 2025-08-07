@@ -10,7 +10,6 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.details.base.BasePagingSource
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.details.models.ReviewUI
 import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
@@ -52,24 +51,12 @@ class ReviewsViewModel @Inject constructor(
             onSuccess = ::onFetchReviewsSuccess,
             onError = ::handleError
         ) {
-            val reviewsPager = Pager(
-                config = PagingConfig(
-                    pageSize = 15,
-                    prefetchDistance = 5,
-                    initialLoadSize = 15
+            fetchPagingReviews { page ->
+                getMovieReviewsUseCase(
+                    movieId = movieId,
+                    pageNumber = page
                 )
-            ) {
-                BasePagingSource { page ->
-                    getMovieReviewsUseCase(
-                        movieId = movieId,
-                        pageNumber = page
-                    )
-                }
             }
-
-            return@safeExecute reviewsPager
-                .flow
-                .cachedIn(viewModelScope)
         }
     }
 
@@ -78,25 +65,33 @@ class ReviewsViewModel @Inject constructor(
             onSuccess = ::onFetchReviewsSuccess,
             onError = ::handleError
         ) {
-            val reviewsPager = Pager(
-                config = PagingConfig(
-                    pageSize = 15,
-                    prefetchDistance = 5,
-                    initialLoadSize = 15
+            fetchPagingReviews { page ->
+                getSeriesReviewsUseCase(
+                    seriesId = seriesId,
+                    page = page
                 )
-            ) {
-                BasePagingSource { page ->
-                    getSeriesReviewsUseCase(
-                        seriesId = seriesId,
-                        page = page
-                    )
-                }
             }
-
-            return@safeExecute reviewsPager
-                .flow
-                .cachedIn(viewModelScope)
         }
+    }
+
+    private fun fetchPagingReviews(
+        pagingSource: suspend (page: Int) -> List<Review>
+    ): Flow<PagingData<Review>> {
+        val reviewsPager = Pager(
+            config = PagingConfig(
+                pageSize = 15,
+                prefetchDistance = 5,
+                initialLoadSize = 15
+            )
+        ) {
+            BasePagingSource { page ->
+                pagingSource(page)
+            }
+        }
+
+        return reviewsPager
+            .flow
+            .cachedIn(viewModelScope)
     }
 
     private fun onFetchReviewsSuccess(reviews: Flow<PagingData<Review>>) {
@@ -112,6 +107,6 @@ class ReviewsViewModel @Inject constructor(
     }
 
     private fun handleError(throwable: Throwable) {
-        sendEffect(ReviewEffect.ShowError(throwable.message ?: "Unknown error"))
+        sendEffect(ReviewEffect.ShowError(mapErrorToResource(throwable)))
     }
 }
