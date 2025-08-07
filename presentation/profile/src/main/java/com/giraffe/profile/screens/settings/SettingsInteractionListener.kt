@@ -1,5 +1,7 @@
 package com.giraffe.profile.screens.settings
 
+import com.giraffe.user.entity.ContentPreference
+
 interface SettingsInteractionListener {
     fun onLoginClick()
     fun onEditProfileClick()
@@ -12,4 +14,5 @@ interface SettingsInteractionListener {
     fun onCancelClick()
     fun onContentPreferencesClick()
     fun onLanguageChange(languageCode: String)
+    fun onContentPreferenceChange(preference: ContentPreference)
 }
