@@ -5,5 +5,5 @@ interface HistoryInteractionListener {
     fun onCloseClicked()
     fun onMediaClicked(mediaId: Int,mediaType: String)
     fun navigateToExploreScreen()
-
+    fun retry()
 }

@@ -113,6 +113,11 @@ class HistoryViewModel @Inject constructor(
         sendEffect(HistoryEffect.navigateToExploreScreen)
     }
 
+    override fun retry() {
+        getRecentViewedMovies()
+        getRecentViewedSeries()
+    }
+
 }
 
 
