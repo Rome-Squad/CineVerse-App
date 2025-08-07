@@ -23,6 +23,7 @@ data class MovieDetailsScreenState(
     val isLoadingCast: Boolean = true,
     val isLoadingRecommendedMovies: Boolean = true,
     val isLoadingReviews: Boolean = true,
+    val isLoadingAddToCollection: Boolean = false,
 
     //bottom sheets visibility
     val isVisibleAddToCollectionBottomSheet: Boolean = false,

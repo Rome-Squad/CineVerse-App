@@ -65,7 +65,7 @@ fun CollectionBottomSheetContent(
             text = stringResource(R.string.create_collection),
             enabled = true,
             isLoading = false,
-            onClick = { onCreateCollectionClick }
+            onClick = onCreateCollectionClick
         )
     }
 }

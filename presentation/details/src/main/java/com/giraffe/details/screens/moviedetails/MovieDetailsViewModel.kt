@@ -11,6 +11,7 @@ import com.giraffe.details.models.toCrewUi
 import com.giraffe.details.models.toMovieUi
 import com.giraffe.details.models.toReviewUI
 import com.giraffe.details.screens.moviedetails.screen.MovieDetailsRoute
+import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
@@ -36,8 +37,9 @@ class MovieDetailsViewModel @Inject constructor(
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
     val setMovieRecentUseCase: SetMovieRecentUseCase,
     val isLoggedInUseCase: IsLoggedInUseCase,
+    val addRatingUseCase: AddMovieRatingUseCase,
+    val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
     savedStateHandle: SavedStateHandle,
-    val addRatingUseCase: AddMovieRatingUseCase
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
@@ -52,21 +54,21 @@ class MovieDetailsViewModel @Inject constructor(
 
     override fun onShowAddToCollectionBottomSheet() {
         updateState {
-            it.copy(
-                isVisibleAddToCollectionBottomSheet = true
-            )
+            it.copy(isVisibleAddToCollectionBottomSheet = true)
         }
     }
 
     override fun onAddToCollectionButtonClick() {
-        if (!state.value.isLoggedIn) {
-            updateState {
-                it.copy(
-                    isVisibleLoginBottomSheet = true
-                )
+        safeExecute {
+            if (isLoggedInUseCase()) {
+                updateState {
+                    it.copy(isVisibleLoginBottomSheet = true)
+                }
+            } else {
+                updateState {
+                    it.copy(isVisibleAddToCollectionBottomSheet = true)
+                }
             }
-        } else {
-            sendEffect(MovieDetailsEffect.NavigateToCollection)
         }
     }
 
@@ -147,8 +149,13 @@ class MovieDetailsViewModel @Inject constructor(
         sendEffect(MovieDetailsEffect.NavigateToYouTubePlayer(url))
     }
 
-    override fun onCollectionClick() {
-        sendEffect(MovieDetailsEffect.NavigateToCollection)
+    override fun onCollectionClick(collectionId: Int) {
+        safeExecute(
+            onSuccess = ::addMovieToCollectionSuccess,
+            onError = ::addMovieToCollectionError
+        ) {
+            addMovieToCollectionUseCase(collectionId, movieID)
+        }
     }
 
     override fun onAddRateButtonClick() {
@@ -163,6 +170,21 @@ class MovieDetailsViewModel @Inject constructor(
                 updateState { it.copy(isVisibleLoginBottomSheet = true) }
             }
         }
+    }
+
+    private fun addMovieToCollectionSuccess(isAdded: Boolean) {
+        //todo handle isAdded
+        updateState {
+            it.copy(isLoadingAddToCollection = false)
+        }
+    }
+
+    private fun addMovieToCollectionError(error: Throwable) {
+        error.printStackTrace()
+        updateState {
+            it.copy(isLoadingAddToCollection = false)
+        }
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMovieDetails(movieId: Int) {

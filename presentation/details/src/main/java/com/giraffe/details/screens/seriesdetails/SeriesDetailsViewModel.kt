@@ -63,19 +63,6 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-
-    override fun onAddToCollectionButtonClick() {
-        updateState {
-            it.copy(
-                isVisibleAddToCollectionBottomSheet = true
-            )
-        }
-    }
-
-    override fun onClickCreateCollection() {
-        //todo
-    }
-
     override fun onDismissAddToCollectionBottomSheet() {
         updateState {
             it.copy(

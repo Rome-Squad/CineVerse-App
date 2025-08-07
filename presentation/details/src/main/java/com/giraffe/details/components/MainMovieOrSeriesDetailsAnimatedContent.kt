@@ -15,8 +15,8 @@ fun MainMovieOrSeriesDetailsAnimatedContent(
     releaseYear: String,
     isPlayButtonEnabled: Boolean,
     onClickPlay: () -> Unit,
-    onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
+    onClickAdd: (() -> Unit)? = null,
     duration: String? = null,
     animationProgress: Float,
 ) {

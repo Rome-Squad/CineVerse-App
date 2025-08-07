@@ -36,7 +36,6 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.CollectionBottomSheetContent
 import com.giraffe.details.components.LoginBottomSheet
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
@@ -128,7 +127,6 @@ fun SeriesDetailsContent(
                         releaseYear = state.seriesDetails.releaseYear,
                         isPlayButtonEnabled = state.seriesDetails.youtubeVideoId.isNotBlank(),
                         onClickPlay = { interaction.onPlayButtonClick(state.seriesDetails.youtubeVideoId) },
-                        onClickAdd = interaction::onAddToCollectionButtonClick,
                         modifier = Modifier.padding(horizontal = 16.dp),
                         duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
                         animationProgress = animationProgress
@@ -259,19 +257,6 @@ fun SeriesDetailsContent(
                 }
             }
         }
-
-
-        BaseBottomSheet(
-            isVisible = state.isVisibleAddToCollectionBottomSheet,
-            onDismiss = interaction::onDismissAddToCollectionBottomSheet,
-            title = stringResource(R.string.add_to_collection),
-            modifier = Modifier.padding(vertical = 28.dp, horizontal = 12.dp),
-            content = {
-                CollectionBottomSheetContent(
-                    onCreateCollectionClick = interaction::onAddToCollectionButtonClick
-                )
-            }
-        )
 
         BaseBottomSheet(
             isVisible = state.isVisibleGiveStarsBottomSheet,

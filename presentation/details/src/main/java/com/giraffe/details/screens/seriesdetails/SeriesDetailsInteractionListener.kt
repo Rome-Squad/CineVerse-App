@@ -8,10 +8,6 @@ interface SeriesDetailsInteractionListener {
 
     fun onGiveStarsCardClick()
 
-    fun onAddToCollectionButtonClick()
-
-    fun onClickCreateCollection()
-
     fun onDismissAddToCollectionBottomSheet()
 
     fun onDismissGiveStarsBottomSheet()

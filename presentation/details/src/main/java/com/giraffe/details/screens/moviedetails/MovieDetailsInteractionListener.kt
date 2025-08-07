@@ -6,7 +6,7 @@ interface MovieDetailsInteractionListener {
 
     fun onAddToCollectionButtonClick()
 
-    fun onCollectionClick()
+    fun onCollectionClick(collectionId: Int)
 
     fun onLoginButtonClick()
 
