@@ -174,6 +174,16 @@ class MoviesRepositoryImpl @Inject constructor(
     private suspend fun getUpcomingMoviesFromRemote(page: Int, limit: Int) =
         remote.getUpcomingMovies(page).take(limit).map(MovieDto::toEntity)
 
+    override suspend fun getRatedMovies(accountId: Int): Map<Float, Movie> = SafeCall {
+        remote.getRatedMovies(accountId)
+            .filter { it.userRating != null }
+            .associate { it.userRating!! to it.toEntity() }
+    }
+
+    override suspend fun deleteMovieRating(movieId: Int) = SafeCall {
+        remote.deleteMovieRating(movieId)
+    }
+
     override suspend fun clearMovieCache() = SafeCall {
         local.clearMovieCache()
     }
@@ -189,4 +199,5 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun clearMovieGenres() {
         local.clearMovieGenres()
     }
+
 }
