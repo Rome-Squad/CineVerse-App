@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -74,19 +74,21 @@ fun PosterHorizontal(
                         .sharedElement(
                             sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                             animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                    placeHolderTint = Theme.color.brand.secondary,
+                    placeholderModifier = Modifier
+                        .height(88.dp)
+                        .width(64.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Theme.color.stroke.primary,
+                            shape = RoundedCornerShape(
+                                topStart = Theme.radius.lg,
+                                bottomStart = Theme.radius.lg,
+                                topEnd = Theme.radius.lg
+                            )
                         )
-                ) {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = stringResource(R.string.loading_image),
-                        modifier = Modifier
-                            .heightIn(min = 88.dp)
-                            .width(64.dp)
-                            .padding(16.dp),
-                        tint = Theme.color.brand.secondary
-                    )
-
-                }
+                )
 
                 Column(
                     modifier = Modifier.padding(vertical = 12.dp),

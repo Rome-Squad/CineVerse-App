@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,12 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.ReadMoreText
-import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.utils.formatAsMonthDayYear
@@ -66,22 +65,22 @@ fun ReviewCard(
                     .size(40.dp),
                 imageUrl = reviewerImageUrl.toString(),
                 contentDescription = reviewerImageUrl.toString(),
-                contentScale = ContentScale.Crop
-            ) {
-                Icon(
-                    painter = painterResource(Theme.icons.dueTone.image),
-                    contentDescription = reviewerImageUrl.toString(),
-                    tint = Theme.color.brand.secondary,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Theme.color.stroke.primary,
-                            shape = CircleShape
+                contentScale = ContentScale.Crop,
+                placeHolderTint = Theme.color.brand.secondary,
+                placeholderModifier = Modifier
+                    .fillMaxSize()
+                    .padding(2.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Theme.color.stroke.primary,
+                        shape = RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg,
+                            bottomEnd = Theme.radius.lg
                         )
-                        .clip(CircleShape)
-                )
-            }
+                    )
+            )
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
