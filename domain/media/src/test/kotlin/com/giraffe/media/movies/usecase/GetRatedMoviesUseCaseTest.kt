@@ -1,7 +1,5 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.collections.fake.createFakeMovie
-import com.giraffe.media.collections.fake.createFakeSeries
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetUserUseCase
@@ -37,8 +35,8 @@ class GetRatedMoviesUseCaseTest {
             avatarUrl = ""
         )
         val expectedRatedMovies = mapOf(
-            9.0f to createFakeMovie(id = 1, title = "Inception"),
-            8.5f to createFakeMovie(id = 2, title = "Interstellar")
+            9.0f to fakeMovie(id = 1, title = "Inception"),
+            8.5f to fakeMovie(id = 2, title = "Interstellar")
         )
 
         coEvery { getUserUseCase() } returns mockUser
