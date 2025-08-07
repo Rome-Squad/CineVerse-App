@@ -43,7 +43,8 @@ import kotlin.math.absoluteValue
 fun ImagePager(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    images: List<Int>
+    images: List<Int>,
+    direction: Int
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
@@ -60,11 +61,8 @@ fun ImagePager(
         val pageOffsetAbsolute = pageOffset.absoluteValue.coerceIn(0f, 1f)
         val pageIndexDiff = page - pagerState.currentPage
 
-        val rotationZ = when {
-            pageIndexDiff > 0 -> if (layoutDirection == LayoutDirection.Rtl) -12f else 12f
-            pageIndexDiff < 0 -> if (layoutDirection == LayoutDirection.Rtl) 12f else -12f
-            else -> 0f
-        } * pageOffsetAbsolute
+        val baseRotation = if (layoutDirection == LayoutDirection.Rtl) -12f else 12f
+        val rotationZ = baseRotation * direction * pageOffsetAbsolute
 
         val animatedRotationZ by animateFloatAsState(
             targetValue = rotationZ,
