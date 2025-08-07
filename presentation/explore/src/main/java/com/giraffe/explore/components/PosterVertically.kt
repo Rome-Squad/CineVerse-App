@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,19 +13,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.Rating
-import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
@@ -60,17 +56,21 @@ fun PosterVertically(
                         .sharedElement(
                             sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
                             animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                    placeHolderTint = Theme.color.brand.secondary,
+                    placeholderModifier = Modifier
+                        .fillMaxSize()
+                        .border(
+                            width = 1.dp,
+                            color = Theme.color.stroke.primary,
+                            shape = RoundedCornerShape(
+                                topStart = Theme.radius.lg,
+                                bottomStart = Theme.radius.lg,
+                                topEnd = Theme.radius.lg
+                            )
                         )
                 )
-                {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = stringResource(R.string.loading_image),
-                        modifier = Modifier.size(32.dp),
-                        tint = Theme.color.brand.secondary
-                    )
 
-                }
 
                 Rating(
                     value = poster.rating,

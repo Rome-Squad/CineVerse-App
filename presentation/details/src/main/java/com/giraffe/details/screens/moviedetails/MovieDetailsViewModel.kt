@@ -115,12 +115,12 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadRecommendedMovieSuccess(recommendedSeries: List<Movie>) {
         updateState {
             it.copy(
-                recommendedMovies = recommendedSeries.map {
+                recommendedMovies = recommendedSeries.map { movie ->
                     Poster(
-                        id = it.id,
-                        name = it.title,
-                        imageUri = it.posterUrl.toString(),
-                        rating = it.rating
+                        id = movie.id,
+                        name = movie.title,
+                        imageUri = movie.posterUrl.toString(),
+                        rating = movie.rating
                     )
                 },
                 isLoadingRecommendedMovies = false
@@ -173,17 +173,14 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieReviewsSuccess,
             onError = ::loadMovieReviewsError
         ) {
-            //TODO("Implement pagination instead of fixed page")
             getMovieReviewsUseCase(
                 movieId = movieId,
-                pageNumber = 1,
-                pageSize = 20
+                pageNumber = 1
             )
         }
     }
 
     private fun loadMovieReviewsSuccess(reviews: List<Review>) {
-        Log.d("TAG", "loadMovieReviewsSuccess: $reviews")
         updateState {
             it.copy(
                 isLoadingReviews = false,
@@ -193,7 +190,6 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private fun loadMovieReviewsError(error: Throwable) {
-        Log.d("TAG", "loadMovieReviewsFailure: $error")
         updateState {
             it.copy(
                 isLoadingReviews = false,

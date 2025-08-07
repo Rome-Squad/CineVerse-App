@@ -108,8 +108,10 @@ class MoviesRepositoryImpl @Inject constructor(
     private suspend fun getRecommendedFromRemote(movieId: Int, page: Int, limit: Int) =
         remote.getMovieRecommendations(movieId, page).take(limit).map(MovieDto::toEntity)
 
-    override suspend fun getMovieReviews(movieId: Int) =
-        SafeCall { remote.getMovieReviews(movieId).map(ReviewDto::toEntity) }
+    override suspend fun getMovieReviews(
+        movieId: Int,
+        page: Int
+    ) = SafeCall { remote.getMovieReviews(movieId, page = page).map(ReviewDto::toEntity) }
 
     override suspend fun getUserMovieRating(movieId: Int) = SafeCall {
         remote.getUserMovieRating(movieId)

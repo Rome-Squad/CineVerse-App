@@ -1,5 +1,7 @@
 package com.giraffe.details.screens.reviewScreen
 
+import androidx.annotation.StringRes
+
 sealed class ReviewEffect {
-    data class ShowError(val message: String) : ReviewEffect()
+    data class ShowError(@param:StringRes val messageResId: Int) : ReviewEffect()
 }

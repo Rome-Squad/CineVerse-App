@@ -290,7 +290,7 @@ class SeriesDetailsViewModel @Inject constructor(
             onSuccess = ::loadSeriesReviewsSuccess,
             onError = ::loadError
         ) {
-            getSeriesReviews(seriesId)
+            getSeriesReviews(seriesId, 1)
         }
     }
 

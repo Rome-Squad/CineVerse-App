@@ -15,15 +15,6 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     override suspend fun getSessionId(): String? = safeCall {
         authenticationDatastore.getSessionId()
     }
-
-    override suspend fun saveAccountId(accountId: Int) = safeCall {
-        authenticationDatastore.saveAccountId(accountId)
-    }
-
-    override suspend fun getAccountId(): Int? = safeCall {
-        authenticationDatastore.getAccountId()
-    }
-
     override suspend fun isLoggedIn(): Boolean = safeCall {
         authenticationDatastore.getSessionId() != null
     }
@@ -31,4 +22,5 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     override suspend fun clearSessionId() = safeCall {
         authenticationDatastore.clearSessionId()
     }
+
 }

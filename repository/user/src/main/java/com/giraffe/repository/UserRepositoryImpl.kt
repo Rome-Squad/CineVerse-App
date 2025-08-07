@@ -19,7 +19,6 @@ class UserRepositoryImpl @Inject constructor(
             throw InvalidIdDataException()
         }
         val userResponse = userRemoteDataSource.getUser(sessionId.toString())
-        localDataSource.saveAccountId(userResponse.id)
         userResponse.toEntity()
     }
 }

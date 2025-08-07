@@ -228,6 +228,7 @@ fun SettingsContent(
                 titlePrimaryButton = stringResource(R.string.logout_dialog_primary_button),
                 titleSecondaryButton = stringResource(R.string.cancel),
                 onClickSecondaryButton = interaction::onDismissSheet,
+                onClickPrimaryButton = interaction::onConfirmLogout
             )
         }
     )
