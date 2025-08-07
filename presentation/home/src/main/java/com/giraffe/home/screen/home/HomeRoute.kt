@@ -24,7 +24,8 @@ fun NavGraphBuilder.homeRoute(
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToUpcomingMovies: () -> Unit,
     navigateToTopRatedTvShows: () -> Unit,
-    navigateToRecentlyViewed: () -> Unit
+    navigateToRecentlyViewed: () -> Unit,
+    navigateToRecentlyReleased: () -> Unit
 ) {
     composable<HomeRoute> {
         HomeScreen(
@@ -34,7 +35,8 @@ fun NavGraphBuilder.homeRoute(
             navigateToCollection = navigateToCollectionList,
             navigateToUpcomingMovies = navigateToUpcomingMovies,
             navigateToTopRatedTvShows = navigateToTopRatedTvShows,
-            navigateToRecentlyViewed = navigateToRecentlyViewed
+            navigateToRecentlyViewed = navigateToRecentlyViewed,
+            navigateToRecentlyReleased = navigateToRecentlyReleased
         )
     }
 }

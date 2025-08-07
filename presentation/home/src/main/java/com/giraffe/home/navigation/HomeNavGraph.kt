@@ -29,6 +29,8 @@ import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.show_more.moviesListRoute
 import com.giraffe.home.screen.show_more.navigateToCollectionList
 import com.giraffe.home.screen.show_more.navigateToMoviesList
+import com.giraffe.home.screen.show_more.recently_released.navigateToRecentlyReleased
+import com.giraffe.home.screen.show_more.recently_released.recentlyReleasedRoute
 import com.giraffe.home.screen.show_more.recently_viewed.navigateToRecentlyViewed
 import com.giraffe.home.screen.show_more.recently_viewed.recentlyViewedRoute
 import com.giraffe.home.screen.show_more.top_rated_tv_shows.navigateToTopRatedTvShows
@@ -140,6 +142,10 @@ fun HomeNavGraph(
                     navController.navigateToRecentlyViewed()
                     isBottomBarVisible = false
                 },
+                navigateToRecentlyReleased = {
+                    navController.navigateToRecentlyReleased()
+                    isBottomBarVisible = false
+                },
             )
 
             moviesListRoute(
@@ -163,6 +169,12 @@ fun HomeNavGraph(
             )
 
             recentlyViewedRoute(
+                onBackClick = { navController.popBackStack() },
+                navigateToMovieDetails = navController::navigateToMovieDetails,
+                navigateToSeriesDetails = navController::navigateToSeriesDetails
+            )
+
+            recentlyReleasedRoute(
                 onBackClick = { navController.popBackStack() },
                 navigateToMovieDetails = navController::navigateToMovieDetails,
                 navigateToSeriesDetails = navController::navigateToSeriesDetails

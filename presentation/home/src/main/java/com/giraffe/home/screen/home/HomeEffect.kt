@@ -6,7 +6,7 @@ import androidx.annotation.StringRes
 sealed interface HomeEffect {
     data class NavigateToMovieDetails(val movieId: Int) : HomeEffect
     data class NavigateToSeriesDetails(val seriesId: Int) : HomeEffect
-    data class NavigateToRecentlyReleasedList(val sectionTitle: String, val sectionType: String) : HomeEffect
+    data object NavigateToRecentlyReleasedList : HomeEffect
     data object NavigateToTopRatedTvShows : HomeEffect
     data object NavigateToUpcomingMovies : HomeEffect
     data object NavigateToRecentlyViewed : HomeEffect

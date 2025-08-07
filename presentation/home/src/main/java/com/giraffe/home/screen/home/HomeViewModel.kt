@@ -270,13 +270,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToRecentlyReleasedList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
+    override fun onSeeAllRecentlyReleasedClicked() {
+        sendEffect(HomeEffect.NavigateToRecentlyReleasedList)
     }
 
     override fun onSeeAllTopRatedClicked() {

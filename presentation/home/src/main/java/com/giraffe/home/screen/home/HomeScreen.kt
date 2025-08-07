@@ -55,17 +55,15 @@ fun HomeScreen(
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToUpcomingMovies: () -> Unit,
     navigateToTopRatedTvShows: () -> Unit,
-    navigateToRecentlyViewed: () -> Unit
+    navigateToRecentlyViewed: () -> Unit,
+    navigateToRecentlyReleased: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is HomeEffect.NavigateToRecentlyReleasedList -> {
-                    navigateToMoviesListScreen(
-                        MovieSectionType.RECENTLY_RELEASED,
-                        effect.sectionTitle
-                    )
+                    navigateToRecentlyReleased()
                 }
 
                 is HomeEffect.NavigateToUpcomingMovies -> {
@@ -172,7 +170,6 @@ fun HomeContent(
                 }
 
                 if (state.recentlyReleased.isNotEmpty()) {
-                    val recentlyReleased = stringResource(R.string.recently_released)
                     HomeUiListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -181,12 +178,7 @@ fun HomeContent(
                         endText = stringResource(R.string.show_more),
                         uiModels = state.recentlyReleased,
                         onClickItem = interactionListener::onMediaClicked,
-                        onClickEndText = {
-                            interactionListener.onSeeAllRecentlyReleasedClicked(
-                                sectionTitle = recentlyReleased,
-                                sectionType = MovieSectionType.RECENTLY_RELEASED
-                            )
-                        }
+                        onClickEndText = { interactionListener.onSeeAllRecentlyReleasedClicked() }
                     )
                 }
 
@@ -313,7 +305,7 @@ fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
         override fun loadHomeContent() {}
-        override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {}
+        override fun onSeeAllRecentlyReleasedClicked() {}
         override fun onSeeAllTopRatedClicked() {}
         override fun onSeeAllUpcomingClicked() {}
         override fun onSeeAllRecentlyViewedClicked() {}
