@@ -26,6 +26,8 @@ interface MovieDao {
 
     @Query("UPDATE movie_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
+    @Query("DELETE FROM $MOVIE_TABLE WHERE id = :movieId")
+    suspend fun deleteMovieById(movieId: Int)
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id IN (:ids)")
     suspend fun getMoviesByIds(ids: List<Int>): List<MovieCacheDto>

@@ -40,4 +40,6 @@ interface MoviesLocalDataSource {
     suspend fun clearRecentlyViewedMovies()
 
     suspend fun clearMovieGenres()
+
+    suspend fun deleteMovieById(movieId: Int)
 }

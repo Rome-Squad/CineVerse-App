@@ -118,7 +118,11 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.clearRecentlyViewedMovies()
     }
 
-    override suspend fun clearMovieGenres() {
+    override suspend fun clearMovieGenres() = safeCall {
         movieDao.clearMovieGenres()
+    }
+
+    override suspend fun deleteMovieById(movieId: Int) = safeCall {
+        movieDao.deleteMovieById(movieId)
     }
 }
