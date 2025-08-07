@@ -65,5 +65,10 @@
     <string name="log_in_to_save_movies_create_collections_and_get_personalized_recommendations">Log in to save movies, create collections, and get personalized recommendations.</string>
     <string name="not_now">Not Now</string>
     <string name="log_in">Log In</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Reviews</string><string name="error_network">Please check your internet connection.</string>
+    <string name="error_unknown">Something went wrong. Please try again later.</string>
+    <string name="access_denied_error">Access Denied Error!</string>
+    <string name="collection_name_cannot_be_blank">Collection name cannot be blank</string>
+    <string name="validation_error">Validation Error!</string>
+    <string name="collection_not_found">Collection not found!</string>
 </resources>
