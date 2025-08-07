@@ -4,7 +4,7 @@ import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.repository.datasource.mapper.toEntity
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.repository.exceptions.InvalidIdDataException
-import com.giraffe.repository.utils.SafeCall
+import com.giraffe.repository.utils.safeCall
 import com.giraffe.user.entity.User
 import com.giraffe.user.repository.UserRepository
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val localDataSource: AuthenticationLocalDataSource,
 ) : UserRepository {
-    override suspend fun getUser(): User = SafeCall {
+    override suspend fun getUser(): User = safeCall {
         val sessionId = localDataSource.getSessionId()
         if (!localDataSource.isLoggedIn()) {
             throw InvalidIdDataException()

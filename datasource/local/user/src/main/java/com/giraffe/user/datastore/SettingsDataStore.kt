@@ -21,6 +21,7 @@ class SettingsDataStore @Inject constructor(
     private object PreferencesKeys {
         val IS_DARK_MODE = booleanPreferencesKey(IS_DARK_MODE_S)
         val APP_LANGUAGE = stringPreferencesKey(APP_LANGUAGE_S)
+        val CONTENT_PREFERENCE = stringPreferencesKey("content_preference")
     }
 
     fun isDarkMode(): Flow<Boolean> =
@@ -42,6 +43,17 @@ class SettingsDataStore @Inject constructor(
     suspend fun setLanguage(languageCode: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.APP_LANGUAGE] = languageCode
+        }
+    }
+
+    fun getContentPreference(): Flow<String> =
+        context.dataStore.data.map { preferences ->
+            preferences[PreferencesKeys.CONTENT_PREFERENCE] ?: "HIDE_EXPLICIT"
+        }
+
+    suspend fun setContentPreference(preferenceName: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.CONTENT_PREFERENCE] = preferenceName
         }
     }
 
