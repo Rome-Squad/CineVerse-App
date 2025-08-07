@@ -129,7 +129,7 @@ class HomeViewModel @Inject constructor(
                 onSuccess = ::onGetPopularityMoviesSuccess,
                 onError = ::onFail,
                 block = { getPopularityMoviesUseCase(page = 1) }
-            ).join()
+            )
             safeExecute(
                 onSuccess = ::onGetPopularitySeriesSuccess,
                 onError = ::onFail,
@@ -170,7 +170,7 @@ class HomeViewModel @Inject constructor(
                 onSuccess = ::onGetRecentlyReleasedMoviesSuccess,
                 onError = ::onFail,
                 block = { getRecentlyReleasedMoviesUseCase(page = 1) }
-            ).join()
+            )
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
                 onError = ::onFail,
@@ -239,7 +239,7 @@ class HomeViewModel @Inject constructor(
                 onSuccess = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
                 block = getRecentlyViewedMoviesUseCase::invoke
-            ).join()
+            )
             safeExecute(
                 onSuccess = ::onGetRecentlySeriesSuccess,
                 onError = ::onFail,
