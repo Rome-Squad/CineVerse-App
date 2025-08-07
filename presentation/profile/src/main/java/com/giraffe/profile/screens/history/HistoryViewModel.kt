@@ -1,23 +1,20 @@
 package com.giraffe.profile.screens.history
 
-import androidx.lifecycle.viewModelScope
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.DeleteMovieUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
-import com.giraffe.profile.R
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.utils.toPosterUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getRecentlyMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val deleteMovieUseCase: DeleteMovieUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
@@ -57,7 +54,7 @@ class HistoryViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 errorMsgRes = null,
-                mediaList = (it.mediaList+newMediaList).distinctBy { poster -> poster.id }
+                mediaList = (it.mediaList + newMediaList).distinctBy { poster -> poster.id }
             )
         }
     }
@@ -67,8 +64,7 @@ class HistoryViewModel @Inject constructor(
     }
 
 
-
-    override fun onDeleteClicked(id: Int,mediaType: String) {
+    override fun onDeleteClicked(id: Int, mediaType: String) {
         safeExecute(
             onError = ::onFail,
             onSuccess = {
@@ -93,18 +89,18 @@ class HistoryViewModel @Inject constructor(
     }
 
 
-
     override fun onCloseClicked() {
-        updateState { it.copy(isVisible = false) }    }
+        updateState { it.copy(isVisible = false) }
+    }
 
-    override fun onMediaClicked(mediaId: Int,mediaType: String) {
+    override fun onMediaClicked(mediaId: Int, mediaType: String) {
         when (mediaType) {
             "movie" -> sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
             "series" -> sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
         }
 
-    sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
-            sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+        sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
+        sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
 
 
     }

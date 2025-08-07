@@ -7,11 +7,11 @@ import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
@@ -39,8 +39,8 @@ class HomeViewModel @Inject constructor(
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
     private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
-    private val getMoviesGenresByIdsUseCase: GetMovieGenresUseCase,
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
+    private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
@@ -217,7 +217,7 @@ class HomeViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyMoviesUseCase::invoke
+                block = getRecentlyViewedMoviesUseCase::invoke
             ).join()
             safeExecute(
                 onSuccess = ::onGetRecentlySeriesSuccess,

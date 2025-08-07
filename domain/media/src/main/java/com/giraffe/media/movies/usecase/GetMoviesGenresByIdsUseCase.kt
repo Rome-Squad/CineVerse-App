@@ -4,9 +4,9 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.repository.MoviesRepository
 import javax.inject.Inject
 
-class GetMovieGenresUseCase @Inject constructor(
+class GetMoviesGenresByIdsUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(genreIDs: List<Int>): List<Genre> =
-        repository.getMovieGenres(genreIDs)
+        repository.getMovieGenresByIds(genreIDs)
 }

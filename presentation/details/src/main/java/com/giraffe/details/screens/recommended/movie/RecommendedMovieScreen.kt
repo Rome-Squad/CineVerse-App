@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.recommended.movie
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,12 +39,7 @@ fun RecommendedMoviesScreen(
     ) { effect ->
         when (effect) {
             is RecommendedEffectMovie.NavigateToMovieDetails -> {
-                val movieId = effect.MovieId
-                if (movieId != null) {
-                    navigateToMovieDetails(movieId)
-                } else {
-                    Log.e("RecommendedMovies", "Invalid movie ID received: $movieId")
-                }
+                navigateToMovieDetails(effect.movieId)
             }
         }
     }

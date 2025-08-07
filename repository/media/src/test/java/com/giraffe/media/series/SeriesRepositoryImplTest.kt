@@ -13,12 +13,10 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SeriesRepositoryImplTest {
     private lateinit var local: SeriesLocalDateSource
     private lateinit var remote: SeriesRemoteDataSource

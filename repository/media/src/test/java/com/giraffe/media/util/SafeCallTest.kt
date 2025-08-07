@@ -32,35 +32,47 @@ class SafeCallTest {
         }
 
     @Test
-    fun `should throw NotFoundDomainException when execution throw ApiException with error code 34`() =
+    fun `should throw NotFoundDomainException when execution throw ApiDataException with error code 404`() =
         runTest {
-            val execute = suspend { throw ApiDataException(34) }
+            val execute = suspend { throw ApiDataException(404) }
             assertThrows<NotFoundException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw AccessDeniedDomainException when execution throw ApiException with error code 38`() =
+    fun `should throw AccessDeniedDomainException when execution throw ApiDataException with error code 403`() =
         runTest {
-            val execute = suspend { throw ApiDataException(38) }
+            val execute = suspend { throw ApiDataException(403) }
             assertThrows<AccessDeniedException> { safeCall(execute) }
         }
 
     @Test
-    fun `should throw AccessDeniedDomainException when execution throw ApiException with error code 25`() =
+    fun `should throw AccessDeniedDomainException when execution throw ApiDataException with error code 429`() =
         runTest {
-            val execute = suspend { throw ApiDataException(25) }
+            val execute = suspend { throw ApiDataException(429) }
             assertThrows<AccessDeniedException> { safeCall(execute) }
         }
 
 
     @Test
-    fun `should throw ValidationDomainException when execution throw ApiException with error code 5`() =
+    fun `should throw ValidationDomainException when execution throw ApiException with error code 400`() =
         runTest {
-            val execute = suspend { throw ApiDataException(5) }
+            val execute = suspend { throw ApiDataException(400) }
             assertThrows<ValidationException> { safeCall(execute) }
         }
 
+    @Test
+    fun `should throw ValidationDomainException when execution throw ApiException with error code 406`() =
+        runTest {
+            val execute = suspend { throw ApiDataException(406) }
+            assertThrows<ValidationException> { safeCall(execute) }
+        }
 
+    @Test
+    fun `should throw ValidationDomainException when execution throw ApiException with error code 422`() =
+        runTest {
+            val execute = suspend { throw ApiDataException(422) }
+            assertThrows<ValidationException> { safeCall(execute) }
+        }
 
     @Test
     fun `should throw UnknownDomainException when execution throw ApiException with unexpected error code`() =

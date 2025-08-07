@@ -16,10 +16,9 @@ import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
@@ -30,11 +29,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     val getMovieDetails: GetMovieDetailsUseCase,
-    val getMovieGenres: GetMovieGenresUseCase,
+    val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
-    val setMovieRecentUseCase: SetMovieRecentUseCase,
     val isLoggedInUseCase: IsLoggedInUseCase,
     savedStateHandle: SavedStateHandle,
     val addRatingUseCase: AddMovieRatingUseCase
@@ -70,7 +68,6 @@ class MovieDetailsViewModel @Inject constructor(
             )
         }
         loadMovieGenres(movie.genresID)
-        saveToRecentViewed(movie)
     }
 
     private fun loadMovieDetailsError(error: Throwable) {
@@ -88,7 +85,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieGenresSuccess,
             onError = ::loadMovieGenresError
         ) {
-            getMovieGenres(genresIds)
+            getMoviesGenresByIds(genresIds)
         }
     }
 
@@ -180,12 +177,6 @@ class MovieDetailsViewModel @Inject constructor(
                 movieId = movieId,
                 pageNumber = 1
             )
-        }
-    }
-
-    private fun saveToRecentViewed(movie: Movie) {
-        safeExecute {
-            setMovieRecentUseCase(movie)
         }
     }
 

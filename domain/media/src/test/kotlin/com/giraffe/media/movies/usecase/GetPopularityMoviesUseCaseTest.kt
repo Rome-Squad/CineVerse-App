@@ -1,13 +1,11 @@
 package com.giraffe.media.movies.usecase
 
-import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.repository.MoviesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -25,40 +23,16 @@ class GetPopularityMoviesUseCaseTest {
     @Test
     fun `given popular movies, when invoke is called, then return movie list`() = runTest {
         // Given
-        val expectedMovies = listOf(
-            Movie(
-                id = 1,
-                title = "Inception",
-                description = "A mind-bending thriller",
-                rating = 8.8f,
-                duration = 148,
-                posterUrl = "https://example.com/inception.jpg",
-                backdropUrl = "https://example.com/inception.jpg",
-                youtubeVideoId = "abc123",
-                genresID = listOf(1, 2),
-                releaseYear = LocalDate(2024, 4, 10)
-            ),
-            Movie(
-                id = 2,
-                title = "Interstellar",
-                description = "Exploring the universe",
-                rating = 8.6f,
-                duration = 169,
-                posterUrl = "https://example.com/interstellar.jpg",
-                backdropUrl = "https://example.com/inception.jpg",
-                youtubeVideoId = "abc123",
-                genresID = listOf(2, 3),
-                releaseYear = LocalDate(2023, 4, 5)
-            )
-        )
-
-        coEvery { repository.getPopularityMovies(1) } returns expectedMovies
+        val expectedPopularityMovies = fakeMovies.filter { it.popularity > 0 }
+        val page = 1
+        val limit = 10
+        coEvery { repository.getPopularityMovies(page, limit) } returns expectedPopularityMovies
 
         // When
-        val actualMovies = useCase(1)
+        val actualMovies = useCase(page,limit)
 
         // Then
-        coVerify(exactly = 1) { repository.getPopularityMovies(1) }
-        assertThat(actualMovies).isEqualTo(expectedMovies)
+        coVerify(exactly = 1) { repository.getPopularityMovies(page, limit) }
+        assertThat(actualMovies).isEqualTo(expectedPopularityMovies)
     }
 }

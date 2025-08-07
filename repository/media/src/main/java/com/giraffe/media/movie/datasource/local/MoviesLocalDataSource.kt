@@ -5,36 +5,41 @@ import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import kotlinx.coroutines.flow.Flow
 
 interface MoviesLocalDataSource {
-    suspend fun getMovieById(
-        movieId: Int
-    ): MovieCacheDto?
 
-    suspend fun insertMovies(movies: List<MovieCacheDto>)
+    suspend fun addMovieGenres(movieGenres: List<MovieGenreCacheDto>)
+    suspend fun setMovies(
+        movies: List<MovieCacheDto>,
+        transformer: ((MovieCacheDto) -> MovieCacheDto)? = null
+    )
 
-    suspend fun insertMovieGenres(movieGenres: List<MovieGenreCacheDto>)
+    suspend fun setMovie(
+        movie: MovieCacheDto,
+        transformer: ((MovieCacheDto) -> MovieCacheDto)? = null
+    )
 
-    suspend fun updateMovie(movie: MovieCacheDto)
+    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
-    suspend fun getMoviesByName(movieName: String, page: Int): List<MovieCacheDto>
+    suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
 
-    suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
+    suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
+
+    suspend fun getRecommendedMovies(movieId: Int, limit: Int): List<MovieCacheDto>
+
+    suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
 
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
-    suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenreCacheDto>
+    suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
 
-    suspend fun getMovieGenreById(genreId: Int): MovieGenreCacheDto
-
-    suspend fun getMovieGenresById(ids: List<Int>): List<MovieGenreCacheDto>
+    fun getRecentlyViewedMovies(): Flow<List<MovieCacheDto>>
 
     suspend fun clearMovieCache()
 
-    suspend fun clearRecentlyMovies()
+    suspend fun clearMovieCacheWithOutRecentViewed()
 
-    fun getRecentlyMovies(): Flow<List<MovieCacheDto>>
+    suspend fun clearRecentlyViewedMovies()
 
-    suspend fun clearMovieGenreCache()
+    suspend fun clearMovieGenres()
 
-    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
     suspend fun deleteMovieById(movieId: Int)
 }

@@ -1,7 +1,6 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.google.common.truth.Truth.assertThat
@@ -29,19 +28,6 @@ class SeriesRoomLocalDateSourceTest {
             "backdrop",
             listOf(1),
             "2015"
-        )
-    )
-    private val sampleSeasons = listOf(
-        SeasonCacheDto(
-            1,
-            1,
-            "S1",
-            "desc",
-            8.0f,
-            "poster",
-            1,
-            "2015",
-            10
         )
     )
     private val sampleGenres = listOf(
@@ -114,4 +100,5 @@ class SeriesRoomLocalDateSourceTest {
         coVerify { dao.getRecentSeries() }
         assertThat(result).isEqualTo(sampleSeries)
     }
+
 }
