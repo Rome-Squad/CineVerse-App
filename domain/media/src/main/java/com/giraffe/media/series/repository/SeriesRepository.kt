@@ -27,4 +27,6 @@ interface SeriesRepository {
     suspend fun getRatedSeries(accountId: Int): Map<Float, Series>
 
     suspend fun deleteSeriesRating(seriesId: Int)
+    suspend fun deleteSeriesById(seriesId: Int)
+
 }

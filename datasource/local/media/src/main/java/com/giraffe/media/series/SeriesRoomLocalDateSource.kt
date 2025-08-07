@@ -100,6 +100,11 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getRecommendedSeries(limit)
     }
 
+    override suspend fun deleteSeriesById(seriesId: Int) {
+        seriesDao.deleteSeriesById(seriesId)
+
+    }
+
 
     override suspend fun getRecentSeries() = safeFlow {
         seriesDao.getRecentSeries()

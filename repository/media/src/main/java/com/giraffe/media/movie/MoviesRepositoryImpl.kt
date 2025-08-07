@@ -128,6 +128,9 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getUpcomingMovies(page).map(MovieDto::toEntity)
     }
 
+    override suspend fun deleteMovieById(movieId: Int) {
+        local.deleteMovieById(movieId)    }
+
     override suspend fun getRatedMovies(accountId: Int): Map<Float, Movie> = SafeCall {
         remote.getRatedMovies(accountId)
             .filter { it.userRating != null }

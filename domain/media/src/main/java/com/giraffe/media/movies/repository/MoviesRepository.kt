@@ -48,6 +48,7 @@ interface MoviesRepository {
     suspend fun getRecentlyReleasedMovies(page: Int): List<Movie>
 
     suspend fun getUpcomingMovies(page: Int): List<Movie>
+    suspend fun deleteMovieById(movieId: Int)
 
     suspend fun getRatedMovies(accountId: Int): Map<Float, Movie>
     suspend fun deleteMovieRating(movieId: Int)
