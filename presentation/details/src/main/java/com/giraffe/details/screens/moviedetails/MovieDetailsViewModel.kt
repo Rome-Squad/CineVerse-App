@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.moviedetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
@@ -42,20 +41,29 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
 
     init {
+        loadMovieDetailsScreen()
+    }
+
+    fun loadMovieDetailsScreen() {
+        updateState {
+            it.copy(
+                isLoadingMovieDetails = true,
+                isNetworkError = false,
+                errorMessage = null
+            )
+        }
         loadMovieDetails(movieID)
         loadMoviePeople(movieID)
         loadMovieReviews(movieID)
         loadRecommendedMovie(movieID, 1)
     }
 
-    //loading movie data
     private fun loadMovieDetails(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::loadMovieDetailsError
         ) {
             val movie = getMovieDetails(movieId)
-            Log.d("TAG ViewModel", "loadMovieDetails: $movie")
             movie
         }
     }
@@ -70,14 +78,14 @@ class MovieDetailsViewModel @Inject constructor(
         loadMovieGenres(movie.genresID)
     }
 
-    private fun loadMovieDetailsError(error: Throwable) {
-        error.printStackTrace()
+    private fun loadMovieDetailsError(errorMsgRes: Int, isNetworkError: Boolean) {
         updateState {
             it.copy(
                 isLoadingMovieDetails = false,
+                errorMessage = errorMsgRes,
+                isNetworkError = isNetworkError,
             )
         }
-        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMovieGenres(genresIds: List<Int>) {
