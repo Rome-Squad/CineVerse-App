@@ -16,4 +16,10 @@ interface SeriesRemoteDataSource {
     suspend fun getRecentlyReleasedSeries(page: Int): List<SeriesDto>
     suspend fun getTopRatedSeries(page: Int): List<SeriesDto>
     suspend fun getSeriesTrailerUrl(seriesId: Int): String
+
+    suspend fun getRatedSeries(
+        accountId: Int
+    ): List<SeriesDto>
+
+    suspend fun deleteSeriesRating(seriesId: Int)
 }

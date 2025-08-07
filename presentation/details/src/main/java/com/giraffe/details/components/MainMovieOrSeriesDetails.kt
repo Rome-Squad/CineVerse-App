@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -58,12 +60,15 @@ fun MainMovieOrSeriesDetails(
     )
 
     val imageClipRadius = Theme.radius.xl
-
+    val hasSensitiveText by remember(animationProgress) {
+        derivedStateOf { animationProgress < 0.5f }
+    }
     Box(Modifier.fillMaxWidth()) {
         Box(modifier.fillMaxWidth()) {
             posterUrl?.let {
                 SafeIslamicImage(
                     imageUrl = it,
+                    hasSensitiveText = hasSensitiveText,
                     contentDescription = stringResource(R.string.poster_image),
                     modifier = Modifier
                         .align(BiasAlignment(animationProgress * -1, -1f))
