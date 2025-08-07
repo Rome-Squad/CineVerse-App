@@ -19,13 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun UserProfileSection(
@@ -60,32 +60,32 @@ fun UserProfileSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SafeIslamicImage(
-                imageUrl = userProfileImage,
-                hasSensitiveText = false,
-                contentDescription = userDisplayName,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(56.dp),
-                contentScale = ContentScale.Crop,
-                placeHolder = {
-                    Box(
-                        modifier = Modifier
-                            .size(56.dp)
-                            .background(
-                                shape = CircleShape,
-                                color = Theme.color.shade.quinary
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(Theme.icons.dueTone.profile),
-                            contentDescription = "profile Image",
-                            tint = Theme.color.shade.secondary
-                        )
-                    }
+            if (userProfileImage.isNotBlank()) {
+                AsyncImage(
+                    model = userProfileImage,
+                    contentDescription = userDisplayName,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(56.dp),
+                    contentScale = ContentScale.Crop,
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .background(
+                            shape = CircleShape,
+                            color = Theme.color.shade.quinary
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(Theme.icons.dueTone.profile),
+                        contentDescription = "profile Image",
+                        tint = Theme.color.shade.secondary
+                    )
                 }
-            )
+            }
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -184,7 +183,7 @@ fun SettingsContent(
                 titlePrimaryButton = stringResource(R.string.edit_profile_primary_button),
                 titleSecondaryButton = stringResource(R.string.cancel),
                 onClickPrimaryButton = interaction::onGoToWebsiteClick,
-                modifier = Modifier.size(304.dp, 214.dp)
+                onClickSecondaryButton = interaction::onDismissSheet,
             )
         }
     )
@@ -228,7 +227,7 @@ fun SettingsContent(
                 iconBackgroundColor = Theme.color.additional.secondary.red,
                 titlePrimaryButton = stringResource(R.string.logout_dialog_primary_button),
                 titleSecondaryButton = stringResource(R.string.cancel),
-                modifier = Modifier.size(304.dp, 214.dp)
+                onClickSecondaryButton = interaction::onDismissSheet,
             )
         }
     )

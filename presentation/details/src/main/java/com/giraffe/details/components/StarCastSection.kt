@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -110,10 +109,7 @@ fun CastCard(
                     painter = painterResource(Theme.icons.dueTone.image),
                     contentDescription = "$actorName image",
                     tint = Theme.color.brand.secondary,
-                    modifier = it
-                        .size(64.dp)
-                        .padding(12.dp)
-                        .wrapContentSize()
+                    modifier = Modifier.size(32.dp)
                 )
             }
 

@@ -65,10 +65,10 @@ fun ProfileLazyRow(
         items(items) { item ->
             IconTextBox(
                 modifier = Modifier
+                    .clip(shape = RoundedCornerShape(size = Theme.radius.full))
                     .clickable(
                         onClick = { item.onClick() }
                     )
-                    .clip(shape = RoundedCornerShape(size = Theme.radius.full))
                     .background(color = Theme.color.background.card)
                     .padding(vertical = 8.dp)
                     .padding(start = 10.dp, end = 12.dp),

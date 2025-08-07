@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,9 +78,7 @@ fun CastDetailsScreen(
             is CastDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
         }
     }
-//    if (state.isLoading) {
-//        LoadingView()
-//    } else {
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -113,7 +112,6 @@ fun CastDetailsScreen(
             )
         }
     }
-//    }
 }
 
 @Composable
@@ -124,14 +122,15 @@ fun CastDetailsContent(
     modifier: Modifier = Modifier,
 ) {
     val padding16 = 16.dp
-    val scrollState = rememberLazyListState()
-    var bottomSpacingHeight by remember { mutableIntStateOf(90) }
+    val bottomSpacingHeight = 90
     val innerColumnSpacing = 18.dp
-    var imageWidth by remember { mutableIntStateOf(64) }
-    var imageHeight by remember { mutableIntStateOf(80) }
-    var consumedX by remember { mutableIntStateOf(0) }
-    var consumedY by remember { mutableIntStateOf(0) }
-    var animationProgress by remember { mutableFloatStateOf(0f) }
+    val scrollState = rememberLazyListState()
+
+    var imageWidth by rememberSaveable { mutableIntStateOf(64) }
+    var imageHeight by rememberSaveable { mutableIntStateOf(80) }
+    var consumedX by rememberSaveable { mutableIntStateOf(0) }
+    var consumedY by rememberSaveable { mutableIntStateOf(0) }
+    var animationProgress by rememberSaveable { mutableFloatStateOf(0f) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
