@@ -48,6 +48,12 @@ class AuthenticationDatastore @Inject constructor(
         }
     }
 
+    suspend fun clearAccountId() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(PreferencesKeys.ACCOUNT_ID)
+        }
+    }
+
 
     companion object {
         private const val DATA_STORE_NAME = "CineVerseAuthenticationDatastore"

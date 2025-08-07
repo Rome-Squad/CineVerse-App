@@ -26,6 +26,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 authRemoteDataSource.deleteSession(sessionId)
         }
         localDataSource.clearSessionId()
+        localDataSource.clearAccountId()
     }
 
 }
