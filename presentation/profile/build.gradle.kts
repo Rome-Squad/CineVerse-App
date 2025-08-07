@@ -44,6 +44,9 @@ dependencies {
     implementation(project(":domain:media"))
     implementation(project(":domain:user"))
     implementation(project(":api:profile"))
+    implementation(project(":api:authentication"))
+    implementation(project(":api:explore"))
+    implementation(project(":api:details"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

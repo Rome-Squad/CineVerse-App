@@ -2,9 +2,9 @@ name: Test & Coverage
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ develop, main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ develop, main ]
 
 permissions:
   checks: write
@@ -26,34 +26,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: ⚙️ Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: 🔑 Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # ✅ FIX: Create google-services.json before build
-      - name: 🧾 Create google-services.json in app/
-        env:
-          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: |
-          mkdir -p app
-          echo "$DATA" | base64 --decode > app/google-services.json
-          echo "✅ File created at app/google-services.json"
-          ls -la app/google-services.json
-          head -n 10 app/google-services.json || echo "❌ File is empty"
-
-      - name: 🧾 Create app/secrets.properties
-        run: |
-          mkdir -p app
-          echo "API_KEY=${{ secrets.API_KEY }}" > app/secrets.properties
-          echo "BASE_URL=${{ secrets.BASE_URL }}" >> app/secrets.properties
-          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> app/secrets.properties
-          
-
-      - name: 🏗️ Build with Gradle (ignore warnings)
-        run: ./gradlew build -x test --warning-mode=all
-
       - name: 📦 Cache Gradle packages
         uses: actions/cache@v3
         with:
@@ -64,13 +36,161 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: 🧪 Run Tests with Coverage
+      - name: ⚙️ Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: 🔑 Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: 🧾 Create google-services.json in app/
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          mkdir -p app
+          echo "$DATA" | base64 --decode > app/google-services.json
+          echo "✅ File created at app/google-services.json"
+          head -n 10 app/google-services.json || echo "❌ File is empty"
+
+      - name: 🧾 Create app/secrets.properties
+        run: |
+          mkdir -p app
+          echo "API_KEY=${{ secrets.API_KEY }}" > app/secrets.properties
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> app/secrets.properties
+          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> app/secrets.properties
+
+      - name: 🧪 Validate Gradle configuration
+        run: ./gradlew help
+
+      - name: 🔍 Check which modules changed
+        id: changes
+        run: |
+          if [ -n "${{ github.event.before }}" ]; then
+            git fetch origin ${{ github.event.before }}
+          else
+            echo "⚠️ No valid 'before' commit. Skipping fetch."
+          fi
+
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || echo "")
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          check_changed() {
+            echo "$CHANGED" | grep -q "^$1/" && echo "$2=true" >> $GITHUB_OUTPUT || echo "$2=false" >> $GITHUB_OUTPUT
+          }
+
+          check_changed "api/authentication" "api_authentication_changed"
+          check_changed "api/details" "api_details_changed"
+          check_changed "api/explore" "api_explore_changed"
+          check_changed "api/home" "api_home_changed"
+          check_changed "api/match" "api_match_changed"
+          check_changed "api/profile" "api_profile_changed"
+          check_changed "app" "app_changed"
+          check_changed "datasource" "datasource_changed"
+          check_changed "designsystem" "designsystem_changed"
+          check_changed "domain/media" "media_changed"
+          check_changed "domain/user" "user_changed"
+          check_changed "imageviewer" "imageviewer_changed"
+          check_changed "presentation/authentication" "presentation_authentication_changed"
+          check_changed "presentation/details" "presentation_details_changed"
+          check_changed "presentation/explore" "presentation_explore_changed"
+          check_changed "presentation/home" "presentation_home_changed"
+          check_changed "presentation/match" "presentation_match_changed"
+          check_changed "presentation/profile" "presentation_profile_changed"          
+
+      - name: 🏗️ Build API - Authentication (if changed)
+        if: steps.changes.outputs.api_authentication_changed == 'true'
+        run: ./gradlew :api:authentication:assembleDebug
+
+      - name: 🏗️ Build API - Details (if changed)
+        if: steps.changes.outputs.api_details_changed == 'true'
+        run: ./gradlew :api:details:assembleDebug
+
+      - name: 🏗️ Build API - Explore (if changed)
+        if: steps.changes.outputs.api_explore_changed == 'true'
+        run: ./gradlew :api:explore:assembleDebug
+
+      - name: 🏗️ Build API - Home (if changed)
+        if: steps.changes.outputs.api_home_changed == 'true'
+        run: ./gradlew :api:home:assembleDebug
+
+      - name: 🏗️ Build API - Match (if changed)
+        if: steps.changes.outputs.api_match_changed == 'true'
+        run: ./gradlew :api:match:assembleDebug
+
+      - name: 🏗️ Build API - Profile (if changed)
+        if: steps.changes.outputs.api_profile_changed == 'true'
+        run: ./gradlew :api:profile:assembleDebug
+
+      - name: 🏗️ Build App (if changed)
+        if: steps.changes.outputs.app_changed == 'true'
+        run: ./gradlew :app:assembleDebug
+
+      - name: 🏗️ Build Datasource (if changed)
+        if: steps.changes.outputs.datasource_changed == 'true'
+        run: ./gradlew :datasource:assembleDebug
+
+      - name: 🏗️ Build DesignSystem (if changed)
+        if: steps.changes.outputs.designsystem_changed == 'true'
+        run: ./gradlew :designsystem:assembleDebug
+
+      - name: 🏗️ Build ImageViewer (if changed)
+        if: steps.changes.outputs.imageviewer_changed == 'true'
+        run: ./gradlew :imageviewer:assembleDebug
+
+      - name: 🏗️ Build Presentation - Authentication
+        if: steps.changes.outputs.presentation_authentication_changed == 'true'
+        run: ./gradlew :presentation:authentication:assembleDebug
+
+      - name: 🏗️ Build Presentation - Details
+        if: steps.changes.outputs.presentation_details_changed == 'true'
+        run: ./gradlew :presentation:details:assembleDebug
+
+      - name: 🏗️ Build Presentation - Explore
+        if: steps.changes.outputs.presentation_explore_changed == 'true'
+        run: ./gradlew :presentation:explore:assembleDebug
+
+      - name: 🏗️ Build Presentation - Home
+        if: steps.changes.outputs.presentation_home_changed == 'true'
+        run: ./gradlew :presentation:home:assembleDebug
+
+      - name: 🏗️ Build Presentation - Match
+        if: steps.changes.outputs.presentation_match_changed == 'true'
+        run: ./gradlew :presentation:match:assembleDebug
+
+      - name: 🏗️ Build Presentation - Profile
+        if: steps.changes.outputs.presentation_profile_changed == 'true'
+        run: ./gradlew :presentation:profile:assembleDebug
+
+      - name: 🏗️ Build Repository (if changed)
+        if: steps.changes.outputs.repository_changed == 'true'
+        run: ./gradlew :repository:assembleDebug
+
+      - name: 🏗️ Build & Test Media Module (if changed)
+        if: steps.changes.outputs.media_changed == 'true'
         continue-on-error: true
         run: |
-          ./gradlew :domain:media:test :domain:media:jacocoTestReport
-          ./gradlew :domain:user:test :domain:user:jacocoTestReport
+          ./gradlew \
+            :domain:media:build \
+            :domain:media:test \
+            :domain:media:jacocoTestReport \
+            --build-cache \
+            --parallel \
+            --warning-mode=all
+
+      - name: 🏗️ Build & Test User Module (if changed)
+        if: steps.changes.outputs.user_changed == 'true'
+        continue-on-error: true
+        run: |
+          ./gradlew \
+            :domain:user:build \
+            :domain:user:test \
+            :domain:user:jacocoTestReport \
+            --build-cache \
+            --parallel \
+            --warning-mode=all
 
       - name: 📊 Upload Coverage Report
+        if: steps.changes.outputs.media_changed == 'true' || steps.changes.outputs.user_changed == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
@@ -79,15 +199,18 @@ jobs:
             domain/user/build/reports/jacoco/test/html
 
       - name: 📝 Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: "**/build/test-results/**/*.xml"
 
       - name: 🚨 Check Coverage Verification
+        if: steps.changes.outputs.media_changed == 'true' || steps.changes.outputs.user_changed == 'true'
         run: |
-          ./gradlew :domain:media:jacocoTestCoverageVerification
-          ./gradlew :domain:user:jacocoTestCoverageVerification
+          ./gradlew \
+            :domain:media:jacocoTestCoverageVerification \
+            :domain:user:jacocoTestCoverageVerification \
+            --build-cache
 
       - name: 📨 Notify on Failure
         if: failure()
