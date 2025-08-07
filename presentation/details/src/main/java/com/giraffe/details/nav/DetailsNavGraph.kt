@@ -34,7 +34,6 @@ internal fun DetailsNavGraph(
     ) {
         movieDetailsRoute(
             navController = navController,
-            navigateToReviews = navController::navigateToReviews,
             onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
         )
 
