@@ -9,30 +9,24 @@ import com.giraffe.home.utils.toPosterUi
 import com.giraffe.media.exception.MediaException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ShowMoreViewModel @Inject constructor(
-    private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
-    private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+//    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+//    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
+    private val movieFactory: MovieFactory,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<ShowMoreUiState, ShowMoreEffect>(initialState = ShowMoreUiState()),
     ShowMoreInteractionListener {
@@ -40,10 +34,15 @@ class ShowMoreViewModel @Inject constructor(
     private val sectionType = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionType
     private val collectionId = stateSavedStateHandle.toRoute<MoviesListRoute>().collectionId
 
+    private val movieStrategy = movieFactory.create(sectionType)
+
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            movieStrategy.loadData()
+        }
         when (sectionType) {
-            MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
-            MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
+//            MovieSectionType.RECENTLY_VIEWED -> getRecentViewed()
+//            MovieSectionType.MATCHES_YOUR_VIBES -> getRecommendations()
 //            MovieSectionType.RECENTLY_RELEASED -> loadMoviesBySection(sectionType)
 //            MovieSectionType.TOP_RATED_TV_SHOWS,
 //            MovieSectionType.UPCOMING_MOVIES ->
@@ -108,20 +107,20 @@ class ShowMoreViewModel @Inject constructor(
 //        }
 //    }
 
-    private fun getRecentViewed() {
-        viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::onGetRecentMoviesSuccess,
-                onError = ::onFail,
-                block = getRecentlyMoviesUseCase::invoke
-            ).join()
-            safeExecute(
-                onSuccess = ::onGetRecentSeriesSuccess,
-                onError = ::onFail,
-                block = getRecentlySeriesUseCase::invoke
-            )
-        }
-    }
+//    private fun getRecentViewed() {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            safeExecute(
+//                onSuccess = ::onGetRecentMoviesSuccess,
+//                onError = ::onFail,
+//                block = getRecentlyMoviesUseCase::invoke
+//            ).join()
+//            safeExecute(
+//                onSuccess = ::onGetRecentSeriesSuccess,
+//                onError = ::onFail,
+//                block = getRecentlySeriesUseCase::invoke
+//            )
+//        }
+//    }
 
     private suspend fun onGetRecentMoviesSuccess(movies: Flow<List<Movie>>) {
         movies.collectLatest { moviesList ->
@@ -147,28 +146,28 @@ class ShowMoreViewModel @Inject constructor(
         }
     }
 
-    private fun getRecommendations() {
-        viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::onGetRecommendedMoviesSuccess,
-                onError = ::onFail,
-                block = {
-                    getRecentlyMoviesUseCase().first().firstOrNull()?.id?.let { movieId ->
-                        getRecommendedMovieUseCase(movieId = movieId, page = 1)
-                    } ?: emptyList()
-                }
-            ).join()
-            safeExecute(
-                onSuccess = ::onGetRecommendedSeriesSuccess,
-                onError = ::onFail,
-                block = {
-                    getRecentlySeriesUseCase().first().firstOrNull()?.id?.let { seriesId ->
-                        getRecommendedSeriesUseCase(seriesId = seriesId, page = 1)
-                    } ?: emptyList()
-                }
-            )
-        }
-    }
+//    private fun getRecommendations() {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            safeExecute(
+//                onSuccess = ::onGetRecommendedMoviesSuccess,
+//                onError = ::onFail,
+//                block = {
+//                    getRecentlyMoviesUseCase().first().firstOrNull()?.id?.let { movieId ->
+//                        getRecommendedMovieUseCase(movieId = movieId, page = 1)
+//                    } ?: emptyList()
+//                }
+//            ).join()
+//            safeExecute(
+//                onSuccess = ::onGetRecommendedSeriesSuccess,
+//                onError = ::onFail,
+//                block = {
+//                    getRecentlySeriesUseCase().first().firstOrNull()?.id?.let { seriesId ->
+//                        getRecommendedSeriesUseCase(seriesId = seriesId, page = 1)
+//                    } ?: emptyList()
+//                }
+//            )
+//        }
+//    }
 
     private fun onGetRecommendedMoviesSuccess(recommendedMovies: List<Movie>) {
         updateState {
