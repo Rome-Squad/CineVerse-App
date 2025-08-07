@@ -31,12 +31,12 @@
     <string name="movies">افلام</string>
     <string name="series">مسلسلات</string>
     <string name="actors">ممثلين</string>
-    <string name="collection_item_icon">collection item icon</string>
-    <string name="arrow_right_icon">arrow right icon</string>
-    <string name="me">Me</string>
-    <string name="match">Match</string>
-    <string name="explore">Explore</string>
-    <string name="home">Home</string>
+    <string name="collection_item_icon">أيقونة عنصر التجميع</string>
+    <string name="arrow_right_icon">أيقونة الحق السهم</string>
+    <string name="me">أنا</string>
+    <string name="match">المطابقة</string>
+    <string name="explore">الاستكشف</string>
+    <string name="home">الرئيسيه</string>
     <string name="placeholder">صوره غير موجوده</string>
     <string name="forgot_password">نسيت كلمة المرور ؟</string>
 </resources>
