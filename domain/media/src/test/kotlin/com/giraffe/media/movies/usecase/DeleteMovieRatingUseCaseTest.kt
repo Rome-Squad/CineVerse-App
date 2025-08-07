@@ -19,7 +19,7 @@ class DeleteMovieRatingUseCaseTest {
     }
 
     @Test
-    fun `invoke should call deleteMovieRating on repository`() = runTest {
+    fun `invoke should call deleteMovieRating method on repository`() = runTest {
         // Given
         val movieId = 101
 
