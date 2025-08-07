@@ -40,8 +40,9 @@ fun NavGraphBuilder.seriesDetailsRoute(
             },
             onBackButtonClick = onBackButtonClick,
             onClickPlay = navController::navigateToYouTubePlayer,
-            navigateToLogIn = navController::navigateLoginScreen,
-            navigateToReviews = navController::navigateToReviews
+            navigateToLogIn = navController::navigateLoginScreen,{
+                navController.navigateToReviews(seriesId = it)
+            }
         )
     }
 }

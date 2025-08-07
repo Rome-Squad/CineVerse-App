@@ -61,7 +61,8 @@ interface MoviesApiServiceRetrofit {
 
     @GET("$MOVIE_END_POINT/{$ID}/$REVIEWS_END_POINT")
     suspend fun getMovieReviews(
-        @Path(ID) movieId: Int
+        @Path(ID) movieId: Int,
+        @Query(PAGE) page: Int
     ): Response<AllReviewsResponse>
 
     @GET("$MOVIE_END_POINT/{$MOVIE_ID}/$RECOMMENDATIONS")

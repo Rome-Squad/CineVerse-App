@@ -28,8 +28,11 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         }.results
 
 
-    override suspend fun getMovieReviews(movieId: Int): List<ReviewDto> =
-        retrofitRequestBuilder.get { getMovieReviews(movieId) }.results
+    override suspend fun getMovieReviews(
+        movieId: Int,
+        page: Int
+    ): List<ReviewDto> =
+        retrofitRequestBuilder.get { getMovieReviews(movieId, page = page) }.results
 
     override suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getRecommendations(movieId, page) }.results
