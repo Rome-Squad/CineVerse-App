@@ -7,8 +7,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class GetRatedMoviesUseCaseTest {
@@ -17,7 +17,7 @@ class GetRatedMoviesUseCaseTest {
     private lateinit var getUserUseCase: GetUserUseCase
     private lateinit var useCase: GetRatedMoviesUseCase
 
-    @Before
+    @BeforeEach
     fun setUp() {
         repository = mockk()
         getUserUseCase = mockk()

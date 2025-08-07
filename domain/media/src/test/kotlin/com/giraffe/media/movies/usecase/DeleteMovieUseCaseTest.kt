@@ -7,19 +7,18 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class DeleteMovieRatingUseCaseTest {
-
+class DeleteMovieUseCaseTest {
     private lateinit var repository: MoviesRepository
-    private lateinit var useCase: DeleteMovieRatingUseCase
+    private lateinit var useCase: DeleteMovieUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
-        useCase = DeleteMovieRatingUseCase(repository)
+        useCase = DeleteMovieUseCase(repository)
     }
 
     @Test
-    fun `invoke should call deleteMovieRating method on repository`() = runTest {
+    fun `invoke should call deleteMovieById method on repository`() = runTest {
         // Given
         val movieId = 101
 
@@ -27,6 +26,6 @@ class DeleteMovieRatingUseCaseTest {
         useCase(movieId)
 
         // Then
-        coVerify { repository.deleteMovieRating(movieId) }
+        coVerify { repository.deleteMovieById(movieId) }
     }
 }
