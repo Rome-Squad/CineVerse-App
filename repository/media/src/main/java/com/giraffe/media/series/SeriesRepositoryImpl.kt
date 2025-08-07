@@ -3,8 +3,6 @@ package com.giraffe.media.series
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.mapper.toEntity
-import com.giraffe.media.movie.mapper.toEntity
-import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
@@ -55,6 +53,14 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun clearRecentSeries() = SafeCall {
         seriesLocalDateSource.clearRecentSeries()
+    }
+
+    override suspend fun clearAllSeriesExceptRecentlyViewed() {
+        seriesLocalDateSource.clearAllSeriesExceptRecentlyViewed()
+    }
+
+    override suspend fun clearAllSeries() {
+        seriesLocalDateSource.clearAllSeries()
     }
 
     override suspend fun getSeriesDetails(seriesId: Int): Series = SafeCall {
