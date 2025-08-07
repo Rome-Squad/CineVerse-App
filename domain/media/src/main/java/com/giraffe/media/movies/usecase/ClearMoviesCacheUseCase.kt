@@ -8,6 +8,7 @@ class ClearMoviesCacheUseCase @Inject constructor(
 ) {
     suspend fun clearMovieCache() {
         repository.clearMovieCache()
+        repository.clearMovieGenres()
     }
 
     suspend fun clearMovieCacheWithOutRecentViewed() {

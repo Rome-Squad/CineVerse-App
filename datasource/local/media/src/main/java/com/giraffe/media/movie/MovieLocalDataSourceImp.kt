@@ -46,7 +46,18 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.upsertMovies(finalMovies)
     }
 
-    // need description to understand function
+    /**
+     * Merges the current [MovieCacheDto] with an existing one.
+     *
+     * - If [existing] is null, returns the current object as is.
+     * - Otherwise, returns a new [MovieCacheDto] where:
+     *   - Non-null fields in the current object take precedence.
+     *   - If a field in the current object is null, the corresponding value from [existing] is used.
+     *   - Some fields (e.g. `recentViewedAt`, `recommendedId`, etc.) are always taken from [existing].
+     *
+     * This is useful for preserving metadata fields from a cached movie
+     * while updating other fields with newer data.
+     */
     private fun MovieCacheDto.mergeWith(existing: MovieCacheDto?): MovieCacheDto {
         if (existing == null) return this
         return this.copy(
@@ -57,7 +68,8 @@ class MovieLocalDataSourceImp @Inject constructor(
             duration = this.duration ?: existing.duration,
             recentViewedAt = existing.recentViewedAt,
             recentReleasedAt = existing.recentReleasedAt,
-            upcomingAt = existing.upcomingAt
+            upcomingAt = existing.upcomingAt,
+            recommendedId = existing.recommendedId
         )
     }
 

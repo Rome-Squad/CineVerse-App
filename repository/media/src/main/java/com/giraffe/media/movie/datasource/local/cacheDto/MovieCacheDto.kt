@@ -22,7 +22,6 @@ data class MovieCacheDto(
     val recentReleasedAt: Long? = null,
     val recommendedId: Int? = null,
     val upcomingAt: Long? = null,
-    val cachedAt: Long = System.currentTimeMillis(),
     val popularity: Float,
 )
 
