@@ -50,7 +50,7 @@ class HistoryViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 errorMsgRes = null,
-                mediaList = newMediaList.distinctBy { poster -> poster.id }
+                mediaList = (it.mediaList+newMediaList).distinctBy { poster -> poster.id }
             )
         }
     }
@@ -62,15 +62,13 @@ class HistoryViewModel @Inject constructor(
 
 
     override fun onDeleteClicked(id: Int) {
-        val updatedList = state.value.mediaList.filter { poster ->
-            poster.id != id
-        }
+        val updatedList =state.value.mediaList.filterNot { it.id == id }
 
         updateState {
             it.copy(
                 mediaList = updatedList,
                 swipedPosterId = null,
-                isSwiped = false
+                isSwiped = false,
             )
         }
 
@@ -81,10 +79,15 @@ class HistoryViewModel @Inject constructor(
     override fun onCloseClicked() {
         updateState { it.copy(isVisible = false) }    }
 
-    override fun onMediaClicked(mediaId: Int) {
+    override fun onMediaClicked(mediaId: Int,mediaType: String) {
+        when (mediaType) {
+            "movie" -> sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
+            "series" -> sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+        }
 
-            sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
-        sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+    sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
+            sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+
 
     }
 

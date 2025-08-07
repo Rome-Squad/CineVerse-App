@@ -142,7 +142,11 @@ fun HistoryContent(
                 PosterItemHorizontal(
                     modifier = Modifier.fillMaxWidth(),
                     movie = poster,
-                    onClickPoster = { historyInteractionListener.onMediaClicked(poster.id) }
+                    onClickPoster = { poster.mediaTypeOfPoster?.let {
+                        historyInteractionListener.onMediaClicked(poster.id,
+                            it
+                        )
+                    } }
                 )
             }
         }
@@ -155,7 +159,7 @@ fun HistoryContentPreview() {
     val historyInteractionListener = object : HistoryInteractionListener {
         override fun onDeleteClicked(id:Int): Unit = Unit
         override fun onCloseClicked() {}
-        override fun onMediaClicked(mediaId: Int) {}
+        override fun onMediaClicked(mediaId: Int,mediaType:String) {}
         override fun navigateToExploreScreen() {}
     }
     HistoryContent(
