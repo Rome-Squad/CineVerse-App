@@ -55,11 +55,11 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesLocalDateSource.clearRecentSeries()
     }
 
-    override suspend fun clearAllSeriesExceptRecentlyViewed() {
+    override suspend fun clearAllSeriesExceptRecentlyViewed() = SafeCall {
         seriesLocalDateSource.clearAllSeriesExceptRecentlyViewed()
     }
 
-    override suspend fun clearAllSeries() {
+    override suspend fun clearAllSeries() = SafeCall {
         seriesLocalDateSource.clearAllSeries()
     }
 
@@ -92,7 +92,7 @@ class SeriesRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun addGenres(genres: List<Genre>) {
+    override suspend fun addGenres(genres: List<Genre>) = SafeCall {
         seriesLocalDateSource.insertGenres(genres.map(Genre::toCacheDto))
     }
 
@@ -104,7 +104,7 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addPopularitySeries(series: List<Series>) {
+    override suspend fun addPopularitySeries(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertPopularitySeries(series.map { it.toCacheDto() })
     }
 
@@ -121,7 +121,7 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addRecentlyReleasedSeries(series: List<Series>) {
+    override suspend fun addRecentlyReleasedSeries(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertRecentlyReleasedSeries(series.map { it.toCacheDto() })
     }
 
@@ -138,11 +138,11 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addTopRatedSeries(series: List<Series>) {
+    override suspend fun addTopRatedSeries(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertTopRatedSeries(series.map { it.toCacheDto() })
     }
 
-    override suspend fun deleteSeriesById(seriesId: Int) {
+    override suspend fun deleteSeriesById(seriesId: Int) = SafeCall {
         seriesLocalDateSource.deleteSeriesById(seriesId)
     }
 
@@ -163,7 +163,7 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addRecommendedSeries(series: List<Series>) {
+    override suspend fun addRecommendedSeries(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertRecommendedSeries(series.map { it.toCacheDto() })
     }
 
