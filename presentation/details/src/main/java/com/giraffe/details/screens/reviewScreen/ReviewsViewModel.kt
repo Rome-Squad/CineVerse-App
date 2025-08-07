@@ -20,11 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-data class ReviewsUiState(
-    val reviews: List<ReviewUI> = emptyList(),
-    val isLoading: Boolean = true
-)
-
 @HiltViewModel
 class ReviewsViewModel @Inject constructor(
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
@@ -79,13 +74,29 @@ class ReviewsViewModel @Inject constructor(
     }
 
     private fun fetchSeriesReviews(seriesId: Int) {
-        /*safeExecute(
-            onError = ::handleError,
-            onSuccess = ::onFetchReviewsSuccess
+        safeExecute(
+            onSuccess = ::onFetchReviewsSuccess,
+            onError = ::handleError
         ) {
-            getSeriesReviewsUseCase(seriesId)
+            val reviewsPager = Pager(
+                config = PagingConfig(
+                    pageSize = 15,
+                    prefetchDistance = 5,
+                    initialLoadSize = 15
+                )
+            ) {
+                BasePagingSource { page ->
+                    getSeriesReviewsUseCase(
+                        seriesId = seriesId,
+                        page = page
+                    )
+                }
+            }
+
+            return@safeExecute reviewsPager
+                .flow
+                .cachedIn(viewModelScope)
         }
-*/
     }
 
     private fun onFetchReviewsSuccess(reviews: Flow<PagingData<Review>>) {
