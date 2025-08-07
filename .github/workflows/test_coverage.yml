@@ -223,7 +223,8 @@ jobs:
             domain/user/build/reports/jacoco/test/html
 
       - name: 📝 Publish Test Results
-        if: always()
+        if: success() && (steps.changes.outputs.media_changed == 'true' || steps.changes.outputs.user_changed == 'true')
+        continue-on-error: true
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: "**/build/test-results/**/*.xml"

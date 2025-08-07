@@ -13,10 +13,15 @@ internal fun NavController.navigateToRatings() {
 }
 
 fun NavGraphBuilder.ratingsRoute(
-
+    navigateToMovieDetails: (Int) -> Unit = {},
+    navigateToSeriesDetails: (Int) -> Unit = {},
+    navigateBack: () -> Unit = {},
 ) {
     composable<RatingsRoute> { backStackEntry ->
-        RatingsScreen(
+        RatingScreen(
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails,
+            navigateBack = navigateBack
         )
     }
 }
