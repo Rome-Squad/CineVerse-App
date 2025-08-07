@@ -36,4 +36,5 @@ interface MoviesLocalDataSource {
     suspend fun clearMovieGenreCache()
 
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
+    suspend fun deleteMovieById(movieId: Int)
 }

@@ -135,7 +135,7 @@ fun HistoryContent(
             SwipableItem(
                 actionButton = {
                     DeleteButton(
-                        onDeleteClick = { historyInteractionListener.onDeleteClicked(poster.id) }
+                        onDeleteClick = { historyInteractionListener.onDeleteClicked(poster.id,poster.mediaTypeOfPoster?:"") }
                     )
                 },
             ) {
@@ -157,7 +157,7 @@ fun HistoryContent(
 @Composable
 fun HistoryContentPreview() {
     val historyInteractionListener = object : HistoryInteractionListener {
-        override fun onDeleteClicked(id:Int): Unit = Unit
+        override fun onDeleteClicked(id:Int,mediaType:String): Unit = Unit
         override fun onCloseClicked() {}
         override fun onMediaClicked(mediaId: Int,mediaType:String) {}
         override fun navigateToExploreScreen() {}

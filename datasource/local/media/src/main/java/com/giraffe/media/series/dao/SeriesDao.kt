@@ -69,4 +69,7 @@ interface SeriesDao {
 
     @Upsert
     suspend fun upsertSeries(series: List<SeriesCacheDto>)
+
+    @Query("DELETE FROM $SERIES_TABLE WHERE id = :seriesId")
+    suspend fun deleteSeriesById(seriesId: Int)
 }

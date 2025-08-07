@@ -70,6 +70,10 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.incrementInteractionCountForGenres(genreIds)
     }
 
+    override suspend fun deleteMovieById(movieId: Int) {
+        movieDao.deleteMovieById(movieId)
+    }
+
     override suspend fun clearMovieGenreCache() = safeCall {
         movieDao.clearMovieGenreCache()
     }

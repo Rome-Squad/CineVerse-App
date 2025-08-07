@@ -1,19 +1,26 @@
 package com.giraffe.profile.screens.history
 
+import androidx.lifecycle.viewModelScope
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movies.usecase.DeleteMovieUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.profile.R
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.utils.toPosterUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+    private val deleteMovieUseCase: DeleteMovieUseCase,
+    private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :
     BaseViewModel<HistoryUiState, HistoryEffect>(initialState = HistoryUiState()),
     HistoryInteractionListener {
@@ -61,15 +68,26 @@ class HistoryViewModel @Inject constructor(
 
 
 
-    override fun onDeleteClicked(id: Int) {
-        val updatedList =state.value.mediaList.filterNot { it.id == id }
+    override fun onDeleteClicked(id: Int,mediaType: String) {
+        safeExecute(
+            onError = ::onFail,
+            onSuccess = {
+                val updatedList = state.value.mediaList.filterNot { it.id == id }
 
-        updateState {
-            it.copy(
-                mediaList = updatedList,
-                swipedPosterId = null,
-                isSwiped = false,
-            )
+                updateState {
+                    it.copy(
+                        mediaList = updatedList,
+                        swipedPosterId = null,
+                        isSwiped = false
+                    )
+                }
+            }
+        ) {
+            if (mediaType == "movie") {
+                deleteMovieUseCase(id)
+            } else if (mediaType == "series") {
+                deleteSeriesUseCase(id)
+            }
         }
 
     }

@@ -128,6 +128,10 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteSeriesById(seriesId: Int) {
+        seriesLocalDateSource.deleteSeriesById(seriesId)
+    }
+
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) = SafeCall {
         seriesRemoteDataSource.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }

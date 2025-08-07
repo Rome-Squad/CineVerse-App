@@ -127,4 +127,7 @@ class MoviesRepositoryImpl @Inject constructor(
         remote.getUpcomingMovies(page).map(MovieDto::toEntity)
     }
 
+    override suspend fun deleteMovieById(movieId: Int) {
+        local.deleteMovieById(movieId)    }
+
 }
