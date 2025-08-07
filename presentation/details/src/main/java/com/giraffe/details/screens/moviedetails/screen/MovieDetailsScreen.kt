@@ -304,7 +304,7 @@ private fun MovieDetailsContent(
 
         LoginBottomSheet(
             isVisible = state.isVisibleLoginBottomSheet,
-            onLogInClick = navigateToLogIn,
+            onLogInClick = interaction::onLoginButtonClick,
             onDismiss = interaction::onDismissLoginBottomSheet
         )
     }
