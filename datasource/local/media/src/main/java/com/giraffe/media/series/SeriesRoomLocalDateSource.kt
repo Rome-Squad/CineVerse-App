@@ -23,7 +23,12 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
 
-    override suspend fun clearAllData() = safeCall {
+    override suspend fun clearAllSeriesExceptRecentlyViewed() = safeCall {
+        seriesDao.clearAllSeriesExceptRecentlyViewed()
+        seriesDao.clearAllGenres()
+    }
+
+    override suspend fun clearAllSeries() {
         seriesDao.clearAllSeries()
         seriesDao.clearAllGenres()
     }
@@ -39,7 +44,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
         upsertWithMerge(series) { old, new ->
             new.copy(
-                isRecent = old.isRecent,
+                isRecentViewed = old.isRecentViewed,
+                recentViewedAt = old.recentViewedAt,
                 isRecentlyReleased = old.isRecentlyReleased,
                 isRecommended = old.isRecommended,
                 isTopRated = old.isTopRated,
@@ -55,7 +61,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) = safeCall {
         upsertWithMerge(series) { old, new ->
             new.copy(
-                isRecent = old.isRecent,
+                isRecentViewed = old.isRecentViewed,
+                recentViewedAt = old.recentViewedAt,
                 isPopularity = old.isPopularity,
                 isRecommended = old.isRecommended,
                 isTopRated = old.isTopRated,
@@ -71,7 +78,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     override suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>) = safeCall {
         upsertWithMerge(series.map { it.copy(isTopRated = true) }) { old, new ->
             new.copy(
-                isRecent = old.isRecent,
+                isRecentViewed = old.isRecentViewed,
+                recentViewedAt = old.recentViewedAt,
                 isPopularity = old.isPopularity,
                 isRecommended = old.isRecommended,
                 isTopRated = true,
@@ -87,7 +95,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     override suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>) = safeCall {
         upsertWithMerge(series) { old, new ->
             new.copy(
-                isRecent = old.isRecent,
+                isRecentViewed = old.isRecentViewed,
+                recentViewedAt = old.recentViewedAt,
                 isPopularity = old.isPopularity,
                 isRecommended = true,
                 isTopRated = old.isTopRated,
@@ -107,7 +116,10 @@ class SeriesRoomLocalDateSource @Inject constructor(
 
 
     override suspend fun insertRecentSeries(seriesId: Int) = safeCall {
-        seriesDao.markSeriesAsViewed(seriesId)
+        seriesDao.markSeriesAsViewed(
+            seriesId = seriesId,
+            currentTime = System.currentTimeMillis()
+        )
     }
 
 
