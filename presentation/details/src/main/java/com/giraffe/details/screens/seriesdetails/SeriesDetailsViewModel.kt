@@ -13,13 +13,13 @@ import com.giraffe.details.models.toReviewUI
 import com.giraffe.details.screens.seriesdetails.screen.SeriesDetailsRoute
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
-import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
+import com.giraffe.media.series.usecase.AddSeriesRatingUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
@@ -39,7 +39,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getSeriesReviews: GetSeriesReviewsUseCase,
     private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
-    private val addRatingUseCase: AddMovieRatingUseCase,
+    private val addRatingUseCase: AddSeriesRatingUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
     SeriesDetailsScreenState()
@@ -146,7 +146,7 @@ class SeriesDetailsViewModel @Inject constructor(
             if (isLoggedInUseCase()) {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
                 addRatingUseCase(
-                    movieId = seriesID,
+                    serisId = seriesID,
                     ratingValue = state.value.currentRating.toFloat()
                 )
             } else {

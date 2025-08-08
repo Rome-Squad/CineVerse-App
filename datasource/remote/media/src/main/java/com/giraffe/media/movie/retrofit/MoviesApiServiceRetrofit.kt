@@ -79,6 +79,7 @@ interface MoviesApiServiceRetrofit {
     ): Response<Unit>
 
     @DELETE("$MOVIE_END_POINT/{$MOVIE_ID}/$RATING")
+    @Headers("$NEEDS_SESSION: true")
     suspend fun deleteMovieRating(
         @Path(MOVIE_ID) movieId: Int,
     ): Response<Unit>
@@ -110,6 +111,7 @@ interface MoviesApiServiceRetrofit {
     ): Response<MoviesListResponse<TrailerResponse>>
 
     @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$RATED_END_POINT")
+    @Headers("$NEEDS_SESSION: true")
     suspend fun getRatedMovies(
         @Path(ACCOUNT_ID_PATH) accountId: Int
     ): Response<MoviesListResponse<MovieDto>>

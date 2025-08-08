@@ -2,11 +2,11 @@ package com.giraffe.profile.screens.ratings
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -70,52 +70,50 @@ private fun RatingContent(
     state: RatingScreenState,
     interaction: RatingInteractionListener
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier
             .background(Theme.color.background.screen)
             .fillMaxSize()
-            .systemBarsPadding()
-            .padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(bottom = 12.dp)
+            .systemBarsPadding(),
     ) {
-        stickyHeader {
-            AppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                title = stringResource(R.string.my_ratings),
-                showBackButton = true,
-                onBackButtonClick = interaction::onBackClick
+        AppBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            title = stringResource(R.string.my_ratings),
+            showBackButton = true,
+            onBackButtonClick = interaction::onBackClick
+        )
+        AnimatedVisibility(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            visible = state.isTipVisible
+        ) {
+            InfoCard(
+                description = stringResource(R.string.tap_an_item_to_see_details_or_update_your_rating),
+                modifier = Modifier.fillMaxWidth(),
+                onClosedClick = interaction::onCloseTipClick
             )
         }
-        item {
-            AnimatedVisibility(
-                visible = state.isTipVisible
-            ) {
-                InfoCard(
-                    description = stringResource(R.string.tap_an_item_to_see_details_or_update_your_rating),
-                    modifier = Modifier.fillMaxWidth(),
-                    onClosedClick = interaction::onCloseTipClick
+        Tabs(
+            listOf(
+                stringResource(R.string.movies),
+                stringResource(R.string.series)
+            ),
+            selectedTabIndex = state.selectedTabIndex,
+            onTabSelected = interaction::onTabSelected,
+        )
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            contentPadding = PaddingValues(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(state.selectedPosters, key = { it.poster.id }) {
+                RatedItem(
+                    ratedPoster = it,
+                    onItemClick = interaction::onPosterClick,
+                    onDeleteClick = interaction::onDeleteRatedPosterClick
                 )
             }
-        }
-        item {
-            Tabs(
-                listOf(
-                    stringResource(R.string.movies),
-                    stringResource(R.string.series)
-                ),
-                selectedTabIndex = state.selectedTabIndex,
-                onTabSelected = interaction::onTabSelected,
-            )
-        }
-        items(state.selectedPosters) {
-            Spacer(modifier = Modifier.height(12.dp))
-            RatedItem(
-                ratedPoster = it,
-                onItemClick = interaction::onPosterClick,
-                onDeleteClick = interaction::onDeleteRatedPosterClick
-            )
         }
     }
 }

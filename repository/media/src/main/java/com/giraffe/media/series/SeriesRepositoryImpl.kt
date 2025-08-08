@@ -3,6 +3,7 @@ package com.giraffe.media.series
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.mapper.toEntity
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
@@ -140,6 +141,11 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun addTopRatedSeries(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertTopRatedSeries(series.map { it.toCacheDto() })
+    }
+
+    override suspend fun addRating(serisId: Int, ratingValue: Float) = SafeCall {
+        val requestBody = RatingRequest(value = ratingValue)
+        seriesRemoteDataSource.addRating(serisId, requestBody)
     }
 
     override suspend fun deleteSeriesById(seriesId: Int) = SafeCall {

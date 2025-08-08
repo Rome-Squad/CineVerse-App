@@ -36,5 +36,11 @@ object NetworkConstants {
 
     //rated
     const val RATED_END_POINT = "rated/movies"
+
+    //series
+    const val SERIES_ID = "series_id"
+    const val TV_END_POINT = "tv"
+
+
 }
 

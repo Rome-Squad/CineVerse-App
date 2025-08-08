@@ -1,5 +1,6 @@
 package com.giraffe.media.series.retrofit
 
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.response.AllReviewsResponse
 import com.giraffe.media.response.TrailerResponse
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
@@ -7,12 +8,17 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.response.GenresResponse
 import com.giraffe.media.series.response.SeriesResponse
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
+import com.giraffe.media.util.NetworkConstants.NEEDS_SESSION
 import com.giraffe.media.util.NetworkConstants.RATING
+import com.giraffe.media.util.NetworkConstants.TV_END_POINT
 import com.giraffe.media.util.NetworkConstants.USER_END_POINT
 import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -73,14 +79,24 @@ interface SeriesApiServiceRetrofit {
 
 
     @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$RATED/$TV")
+    @Headers("$NEEDS_SESSION: true")
     suspend fun getRatedSeries(
         @Path(ACCOUNT_ID_PATH) accountId: Int
     ): Response<SeriesResponse<SeriesDto>>
 
 
     @DELETE("$TV/{$SERIES_ID}/$RATING")
+    @Headers("$NEEDS_SESSION: true")
     suspend fun deleteSeriesRating(
         @Path(SERIES_ID) seriesId: Int,
+    ): Response<Unit>
+
+
+    @POST("$TV_END_POINT/{$SERIES_ID}/$RATING")
+    @Headers("$NEEDS_SESSION: true")
+    suspend fun rateSeries(
+        @Path(SERIES_ID) seriesId: Int,
+        @Body request: RatingRequest
     ): Response<Unit>
 
     companion object {
