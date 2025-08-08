@@ -24,3 +24,12 @@
 -keepattributes SourceFile,LineNumberTable
 
 -keepattributes KotlinMetadata
+
+# Keep all Route implementations and their names
+-keep class * implements com.giraffe.designsystem.composable.navbar.Route { *; }
+-keepclassmembers class * implements com.giraffe.designsystem.composable.navbar.Route { *; }
+
+# Keep the generated Kotlin serialization names
+-keepattributes *Annotation*, InnerClasses, EnclosingMethod
+-keep class **$$serializer { *; }
+-keep class kotlinx.serialization.** { *; }
