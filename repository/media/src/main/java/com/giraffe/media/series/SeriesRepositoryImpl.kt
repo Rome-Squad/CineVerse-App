@@ -173,10 +173,8 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesLocalDateSource.insertRecommendedSeries(series.map { it.toCacheDto() })
     }
 
-    override suspend fun getRatedSeries(accountId: Int): Map<Float, Series> = SafeCall {
-        seriesRemoteDataSource.getRatedSeries(accountId)
-            .filter { it.userRating != null }
-            .associate { it.userRating!! to it.toEntity() }
+    override suspend fun getRatedSeries(accountId: Int) = SafeCall {
+        seriesRemoteDataSource.getRatedSeries(accountId).map(SeriesDto::toEntity)
     }
 
     override suspend fun deleteSeriesRating(seriesId: Int) = SafeCall {

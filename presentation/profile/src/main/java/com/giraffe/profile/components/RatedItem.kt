@@ -21,15 +21,14 @@ import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.profile.model.RatedPoster
 
 @Composable
 fun RatedItem(
     modifier: Modifier = Modifier,
     ratedPoster: RatedPoster,
-    onItemClick: (Poster) -> Unit = {},
-    onDeleteClick: (Poster) -> Unit = {}
+    onItemClick: (RatedPoster) -> Unit = {},
+    onDeleteClick: (RatedPoster) -> Unit = {}
 ) {
     Column(
         modifier = Modifier,
@@ -39,19 +38,18 @@ fun RatedItem(
         RateSection(
             modifier = Modifier.fillMaxWidth(),
             rate = ratedPoster.rating.toDouble(),
-            date = ratedPoster.poster.date ?: "--- --, 20--"
         )
         SwipableItem(
             actionButton = {
                 DeleteButton(
-                    onDeleteClick = { onDeleteClick(ratedPoster.poster) }
+                    onDeleteClick = { onDeleteClick(ratedPoster) }
                 )
             },
         ) {
             PosterItemHorizontal(
                 modifier = modifier.fillMaxWidth(),
                 movie = ratedPoster.poster,
-                onClickPoster = { onItemClick(ratedPoster.poster) }
+                onClickPoster = { onItemClick(ratedPoster) }
             )
         }
     }
@@ -80,7 +78,7 @@ fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) 
 }
 
 @Composable
-private fun RateSection(modifier: Modifier = Modifier, rate: Double, date: String) {
+private fun RateSection(modifier: Modifier = Modifier, rate: Double) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -97,11 +95,6 @@ private fun RateSection(modifier: Modifier = Modifier, rate: Double, date: Strin
             )
             Stars(rate = rate)
         }
-        Text(
-            text = "on $date",
-            style = Theme.textStyle.body.sm.medium,
-            color = Theme.color.shade.primary
-        )
     }
 }
 

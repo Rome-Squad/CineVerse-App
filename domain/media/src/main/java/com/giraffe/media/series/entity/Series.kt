@@ -12,5 +12,6 @@ data class Series(
     val releaseYear: String,
     val seasons: List<Season> = emptyList(),
     val youtubeVideoId: String = "",
-    val popularity: Double = 0.0
+    val popularity: Double = 0.0,
+    val userRating: Float? = null
 )

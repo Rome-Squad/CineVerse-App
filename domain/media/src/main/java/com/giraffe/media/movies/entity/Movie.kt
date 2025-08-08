@@ -17,5 +17,6 @@ data class Movie(
     val recentViewedAt: Long?,
     val recentReleasedAt: Long?,
     val upcomingAt: Long?,
-    val popularity: Float
+    val popularity: Float,
+    val userRating: Float? = null
 )
