@@ -1,4 +1,4 @@
-package com.giraffe.home.navigation
+package com.giraffe.home.navigation.main
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -24,18 +24,17 @@ import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
+import com.giraffe.home.navigation.home.HomeNavGraph
 import com.giraffe.home.screen.home.HomeRoute
 import com.giraffe.home.screen.home.HomeTab
 import com.giraffe.home.screen.home.homeRoute
-import com.giraffe.home.screen.movies_list.moviesListRoute
 import com.giraffe.home.screen.movies_list.navigateToCollectionList
 import com.giraffe.home.screen.movies_list.navigateToMoviesList
 import com.giraffe.match.MatchApi
 import com.giraffe.profile.ProfileApi
 
-
 @Composable
-fun HomeNavGraph(
+fun MainNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
     exploreApi: ExploreApi,
@@ -108,60 +107,50 @@ fun HomeNavGraph(
             modifier = Modifier.weight(1f)
         ) {
 
-            homeRoute(
-                navigateToMoviesScreen = { sectionType, sectionTitle ->
-                    navController.navigateToMoviesList(sectionType, sectionTitle)
-                    isBottomBarVisible = false
-                },
-                navigateToMoviesDetailsScreen = {
-                    navController.navigateToMovieDetails(it)
-                    isBottomBarVisible = false
-                },
-                navigateToSeriesDetailsScreen = {
-                    navController.navigateToSeriesDetails(it)
-                    isBottomBarVisible = false
-                },
-                navigateToCollectionList = { collectionId, collectionTitle ->
-                    navController.navigateToCollectionList(
-                        collectionId = collectionId,
-                        collectionTitle = collectionTitle
-                    )
-                },
-                navigateToYourCollection = navController::navigateToYourCollection,
-                navigateToExploreScreen = {
-                    navController.navigate(ExploreRoute) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
+            composable(
+                route = HomeRoute.route
+            ) {
+                HomeNavGraph(
+                    navigateToMovieDetails = {
+                        navController.navigateToMovieDetails(it)
+                        isBottomBarVisible = false
+                    },
+                    navigateToSeriesDetails = {
+                        navController.navigateToSeriesDetails(it)
+                        isBottomBarVisible = false
+                    },
+                    navigateToCollection = { collectionId, collectionTitle ->
+                        navController.navigateToCollectionList(
+                            collectionId = collectionId,
+                            collectionTitle = collectionTitle
+                        )
+                    },
+                    navigateToYourCollections = navController::navigateToYourCollection,
+                    navigateToExplore = {
+                        navController.navigate(ExploreRoute) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                navigateToMatchScreen = {
-                    navController.navigate(MatchRoute) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
+                    },
+                    navigateToMatch = {
+                        navController.navigate(MatchRoute) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
-                },
-                navigateToCollection = { collectionId, collectionName ->
-                    navController.navigateToCollection(
-                        collectionId = collectionId,
-                        collectionName = collectionName
-                    )
+                ) {
+                    isBottomBarVisible = it
                 }
-            )
 
-            moviesListRoute(
-                onBackClick = navController::popBackStack,
-                navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
-                navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails
-            )
-
+            }
 
             composable<SeriesDetailsRoute> { backStackEntry ->
                 val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId

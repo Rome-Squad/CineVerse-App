@@ -1,4 +1,4 @@
-package com.giraffe.home.navigation
+package com.giraffe.home.navigation.main
 
 import androidx.navigation.NavController
 import kotlinx.serialization.Serializable

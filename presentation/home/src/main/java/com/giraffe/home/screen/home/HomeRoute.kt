@@ -27,9 +27,7 @@ fun NavGraphBuilder.homeRoute(
     navigateToYourCollection: () -> Unit,
     navigateToCollection: (collectionId: Int, collectionName: String) -> Unit
 ) {
-    composable(
-        route = HomeRoute.route
-    ) {
+    composable<HomeRoute> {
         HomeScreen(
             navigateToMoviesListScreen = navigateToMoviesScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
