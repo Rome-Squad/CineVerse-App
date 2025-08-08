@@ -1,6 +1,5 @@
 package com.giraffe.profile.base
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.exception.NoInternetException
@@ -46,7 +45,6 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
                 onSuccess(block())
                 _isNoInternet.update { false }
             } catch (e: Throwable) {
-                Log.d("messi", "safeExecute: $e")
                 if (e is NoInternetException) {
                     _isNoInternet.update { true }
                 } else {
