@@ -13,8 +13,6 @@ import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.model.RatedPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,102 +27,52 @@ class RatingViewModel @Inject constructor(
     RatingInteractionListener {
 
     init {
-        safeExecute(
-            onSuccess = {
-                getRatedItems()
-            }
-        ) {
-            coroutineScope {
-                val moviesJob = async { getMoviesGenres() }
-                val seriesJob = async { getSeriesGenres() }
-                moviesJob.await()
-                seriesJob.await()
-            }
-        }
-
-        onTabSelected(0)
+        getGenres()
     }
 
-    private fun getRatedItems() {
-        safeExecute {
-            coroutineScope {
-                val ratedMoviesJob = async { getRatedMovies() }
-                val ratedSeriesJob = async { getRatedSeries() }
-                ratedMoviesJob.await()
-                ratedSeriesJob.await()
-            }
-        }
-    }
-
-
-    private fun getMoviesGenres() {
+    private fun getGenres() {
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
-            onError = ::onGetMoviesGenresFailure
-        ) {
-            getMoviesGenresUseCase()
-        }
+            onError = ::onGetMoviesGenresFailure,
+            block = getMoviesGenresUseCase::invoke
+        )
+        safeExecute(
+            onSuccess = ::onGetSeriesGenresSuccess,
+            onError = ::onGetSeriesGenresFailure,
+            block = getSeriesGenresUseCase::invoke
+        )
     }
 
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
-        updateState {
-            it.copy(
-                isLoading = false,
-                movieGenres = genres
-            )
-        }
+        updateState { it.copy(isLoading = false, movieGenres = genres) }
+        safeExecute(
+            onSuccess = ::onGetRatedMoviesSuccess,
+            onError = ::onGetRatedMoviesFailure,
+            block = getRatedMoviesUseCase::invoke
+        )
     }
 
     private fun onGetMoviesGenresFailure(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoading = false
-            )
-        }
-
+        updateState { it.copy(isLoading = false) }
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
-    }
-
-
-    private fun getSeriesGenres() {
-        safeExecute(
-            onSuccess = ::onGetSeriesGenresSuccess,
-            onError = ::onGetSeriesGenresFailure
-        ) {
-            getSeriesGenresUseCase()
-        }
     }
 
     private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
-        updateState {
-            it.copy(
-                isLoading = false,
-                movieGenres = genres
-            )
-        }
+        updateState { it.copy(isLoading = false, seriesGenres = genres) }
+        safeExecute(
+            onSuccess = ::onGetRatedSeriesSuccess,
+            onError = ::onGetRatedSeriesFailure,
+            block = getRatedSeriesUseCase::invoke
+        )
     }
 
     private fun onGetSeriesGenresFailure(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoading = false
-            )
-        }
-
+        updateState { it.copy(isLoading = false) }
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
-    private fun getRatedMovies() {
-        safeExecute(
-            onSuccess = ::onGetRatedMoviesSuccess,
-            onError = ::onGetRatedMoviesFailure
-        ) {
-            getRatedMoviesUseCase()
-        }
-    }
-
-    private fun onGetRatedMoviesSuccess(moviesMap: Map<Float, Movie>) {
-        val ratedMovies = moviesMap.entries
+    private fun onGetRatedMoviesSuccess(ratedMovies: Map<Float, Movie>) {
+        val ratedMovies = ratedMovies.entries
             .map {
                 RatedPoster.fromMovie(
                     movie = it.value,
@@ -132,31 +80,16 @@ class RatingViewModel @Inject constructor(
                     genres = state.value.movieGenres
                 )
             }
-
-        if (state.value.selectedTabIndex == 0) {
-            updateState {
-                it.copy(
-                    selectedPosters = ratedMovies,
-                )
-            }
-        }
+        updateState { it.copy(moviesPosters = ratedMovies) }
+        if (state.value.selectedTabIndex == 0) updateState { it.copy(selectedPosters = ratedMovies) }
     }
 
     private fun onGetRatedMoviesFailure(error: Throwable) {
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
-    private fun getRatedSeries() {
-        safeExecute(
-            onSuccess = ::onGetRatedSeriesSuccess,
-            onError = ::onGetRatedSeriesFailure
-        ) {
-            getRatedSeriesUseCase()
-        }
-    }
-
-    private fun onGetRatedSeriesSuccess(seriesMap: Map<Float, Series>) {
-        val ratedSeries = seriesMap.entries
+    private fun onGetRatedSeriesSuccess(ratedSeries: Map<Float, Series>) {
+        val ratedSeries = ratedSeries.entries
             .map {
                 RatedPoster.fromSeries(
                     series = it.value,
@@ -164,30 +97,14 @@ class RatingViewModel @Inject constructor(
                     genres = state.value.seriesGenres
                 )
             }
-
-        if (state.value.selectedTabIndex == 1) {
-            updateState {
-                it.copy(
-                    selectedPosters = ratedSeries,
-                )
-            }
-        }
+        updateState { it.copy(seriesPosters = ratedSeries) }
+        if (state.value.selectedTabIndex != 0) updateState { it.copy(selectedPosters = ratedSeries) }
     }
 
     private fun onGetRatedSeriesFailure(error: Throwable) {
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
-    override fun onPosterClick(poster: Poster) {
-        if (poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
-            sendEffect(RatingEffect.NavigateToMovieDetails(poster.id))
-        }
-
-        if (poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
-            sendEffect(RatingEffect.NavigateToSeriesDetails(poster.id))
-        }
-
-    }
 
     override fun onCloseTipClick() {
         updateState { it.copy(isTipVisible = false) }
@@ -206,6 +123,18 @@ class RatingViewModel @Inject constructor(
         }
     }
 
+
+    override fun onPosterClick(poster: Poster) {
+        if (poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
+            sendEffect(RatingEffect.NavigateToMovieDetails(poster.id))
+        }
+
+        if (poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
+            sendEffect(RatingEffect.NavigateToSeriesDetails(poster.id))
+        }
+
+    }
+
     override fun onDeleteRatedPosterClick(poster: Poster) {
         if (poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
             deleteMovieRating(poster.id)
@@ -218,16 +147,19 @@ class RatingViewModel @Inject constructor(
 
     private fun deleteMovieRating(movieId: Int) {
         safeExecute(
-            onSuccess = ::onDeleteMovieRatingSuccess,
+            onSuccess = { onDeleteMovieRatingSuccess() },
             onError = ::onMovieRatingDeleteFailure
         ) {
             deleteMovieRatingUseCase(movieId)
         }
     }
 
-
-    private fun onDeleteMovieRatingSuccess(result: Unit) {
-        getRatedMovies()
+    private fun onDeleteMovieRatingSuccess() {
+        safeExecute(
+            onSuccess = ::onGetRatedMoviesSuccess,
+            onError = ::onGetRatedMoviesFailure,
+            block = getRatedMoviesUseCase::invoke
+        )
     }
 
     private fun onMovieRatingDeleteFailure(error: Throwable) {
@@ -236,15 +168,19 @@ class RatingViewModel @Inject constructor(
 
     private fun deleteSeriesRating(seriesId: Int) {
         safeExecute(
-            onSuccess = ::onDeleteSeriesRatingSuccess,
+            onSuccess = { onDeleteSeriesRatingSuccess() },
             onError = ::onSeriesRatingDeleteFailure
         ) {
             deleteSeriesRatingUseCase(seriesId)
         }
     }
 
-    private fun onDeleteSeriesRatingSuccess(result: Unit) {
-        getRatedSeries()
+    private fun onDeleteSeriesRatingSuccess() {
+        safeExecute(
+            onSuccess = ::onGetRatedSeriesSuccess,
+            onError = ::onGetRatedSeriesFailure,
+            block = getRatedSeriesUseCase::invoke
+        )
     }
 
     private fun onSeriesRatingDeleteFailure(error: Throwable) {
