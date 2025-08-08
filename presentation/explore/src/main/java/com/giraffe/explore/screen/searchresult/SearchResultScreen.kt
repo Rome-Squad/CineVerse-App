@@ -1,5 +1,8 @@
 package com.giraffe.explore.screen.searchresult
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -129,14 +132,20 @@ private fun SearchResultContent(
                 }
             }
         }
-        ViewToggle(
+        AnimatedVisibility(
+            visible = state.selectedTab != SearchTab.ACTORS,
+            enter = fadeIn(),
+            exit = fadeOut(),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
-                .padding(bottom = 16.dp, end = 16.dp),
-            isListSelected = !state.isGridSelected,
-            onGridSelected = interactions::changeView,
-        )
+                .padding(bottom = 16.dp, end = 16.dp)
+        ) {
+            ViewToggle(
+                isListSelected = !state.isGridSelected,
+                onGridSelected = interactions::changeView
+            )
+        }
     }
 }
 

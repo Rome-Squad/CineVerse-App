@@ -15,58 +15,62 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertMovies(movies: List<MovieCacheDto>)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieGenres(movies: List<MovieGenreCacheDto>)
 
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE title LIKE '%' || :movieName || '%' AND page = :page")
-    suspend fun getMovieByName(movieName: String, page: Int): List<MovieCacheDto>
+    @Upsert
+    suspend fun upsertMovies(movies: List<MovieCacheDto>)
+
+    @Upsert
+    suspend fun upsertMovie(movie: MovieCacheDto)
+
+    @Query("UPDATE movie_genre SET count = count + 1 WHERE id IN (:genreIds)")
+    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
+    @Query("DELETE FROM $MOVIE_TABLE WHERE id = :movieId")
+    suspend fun deleteMovieById(movieId: Int)
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE id IN (:ids)")
+    suspend fun getMoviesByIds(ids: List<Int>): List<MovieCacheDto>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE id =:movieId")
     suspend fun getMovieById(movieId: Int): MovieCacheDto?
 
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE title LIKE '%' || :movieName || '%'")
+    suspend fun getMovieByName(movieName: String): List<MovieCacheDto>
+
+    @Query("SELECT * FROM $MOVIE_TABLE ORDER BY popularity DESC LIMIT :limit")
+    suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE recentReleasedAt IS NOT NULL AND recentReleasedAt > 0 ORDER BY recentReleasedAt DESC LIMIT :limit")
+    suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
+
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE recommendedId IS NOT NULL AND recommendedId = :movieId LIMIT :limit")
+    suspend fun getRecommendedMovies(movieId: Int, limit: Int): List<MovieCacheDto>
+
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
-
-    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE ID =:id")
-    suspend fun getMovieGenreById(id: Int): MovieGenreCacheDto
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY count DESC")
     suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
 
-    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:genreIds)")
-    suspend fun getMovieGenres(genreIds: List<Int>): List<MovieGenreCacheDto>
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE upcomingAt IS NOT NULL AND upcomingAt > 0 ORDER BY upcomingAt DESC LIMIT :limit")
+    fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
 
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE genresID =:genreId")
-    suspend fun getMoviesByGenre(genreId: Int): List<MovieCacheDto>
+    @Query("SELECT * FROM $MOVIE_TABLE WHERE recentViewedAt > 0 ORDER BY recentReleasedAt DESC")
+    fun getRecentlyViewedMovies(): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $MOVIE_TABLE")
     suspend fun clearMovieCache()
 
+    @Query("DELETE FROM $MOVIE_TABLE WHERE recentViewedAt IS NULL")
+    suspend fun clearMovieCacheWithOutRecentViewed()
+
+    @Query("UPDATE $MOVIE_TABLE SET recentViewedAt = Null")
+    suspend fun clearRecentlyViewedMovies()
+
+    @Query("UPDATE $MOVIE_TABLE SET recentReleasedAt = Null And upcomingAt = Null And recommendedId = Null")
+    suspend fun resetMoviesCache()
+
     @Query("DELETE FROM $MOVIE_GENRE_TABLE")
-    suspend fun clearMovieGenreCache()
-
-    @Query("DELETE FROM $MOVIE_TABLE WHERE isRecent = 1")
-    suspend fun clearRecentlyMovies()
-
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE isRecent = 1")
-    fun getRecentlyMovies(): Flow<List<MovieCacheDto>>
-
-    @Upsert
-    suspend fun updateMovie(movie: MovieCacheDto)
-
-    @Query(
-        """
-    DELETE FROM $MOVIE_TABLE 
-    WHERE isRecent = 0 
-    AND cachedAt <= :currentTime - 3600000
-"""
-    )
-    suspend fun clearMovieCache(currentTime: Long)
-
-    @Query("UPDATE movie_genre SET count = count + 1 WHERE id IN (:genreIds)")
-    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
-
+    suspend fun clearMovieGenres()
 }

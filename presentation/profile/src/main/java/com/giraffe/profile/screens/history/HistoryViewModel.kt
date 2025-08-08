@@ -2,8 +2,10 @@ package com.giraffe.profile.screens.history
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetRecentlyMoviesUseCase
+import com.giraffe.media.movies.usecase.DeleteMovieUseCase
+import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.utils.toPosterUi
@@ -12,8 +14,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val getRecentlyMoviesUseCase: GetRecentlyMoviesUseCase,
+    private val getRecentlyMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+    private val deleteMovieUseCase: DeleteMovieUseCase,
+    private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :
     BaseViewModel<HistoryUiState, HistoryEffect>(initialState = HistoryUiState()),
     HistoryInteractionListener {
@@ -60,32 +64,54 @@ class HistoryViewModel @Inject constructor(
     }
 
 
+    override fun onDeleteClicked(id: Int, mediaType: String) {
+        safeExecute(
+            onError = ::onFail,
+            onSuccess = {
+                val updatedList = state.value.mediaList.filterNot { it.id == id }
 
-    override fun onDeleteClicked(){
-        val updatedList = state.value.mediaList.filter { poster ->
-            poster.id != state.value.mediaList.firstOrNull()?.id
+                updateState {
+                    it.copy(
+                        mediaList = updatedList,
+                        swipedPosterId = null,
+                        isSwiped = false
+                    )
+                }
+            }
+        ) {
+            if (mediaType == "movie") {
+                deleteMovieUseCase(id)
+            } else if (mediaType == "series") {
+                deleteSeriesUseCase(id)
+            }
         }
 
-        updateState {
-            it.copy(
-                mediaList = updatedList,
-                isSwiped = false
-            )
-        }
     }
 
-    override fun onCloseClicked() {
-        updateState { it.copy(isVisible = false) }    }
 
-    override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {
+    override fun onCloseClicked() {
+        updateState { it.copy(isVisible = false) }
+    }
+
+    override fun onMediaClicked(mediaId: Int, mediaType: String) {
         when (mediaType) {
-            MediaType.MOVIE -> sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
-            MediaType.SERIES -> sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+            "movie" -> sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
+            "series" -> sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
         }
+
+        sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
+        sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
+
+
     }
 
     override fun navigateToExploreScreen() {
         sendEffect(HistoryEffect.navigateToExploreScreen)
+    }
+
+    override fun retry() {
+        getRecentViewedMovies()
+        getRecentViewedSeries()
     }
 
 }

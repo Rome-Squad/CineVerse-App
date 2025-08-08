@@ -49,9 +49,6 @@ interface PersonDao {
     @Query("DELETE FROM $PERSONS_TABLE WHERE isRecent = 1")
     suspend fun clearRecentPeople()
 
-    @Query("""DELETE FROM $PERSONS_TABLE WHERE isRecent = 0 AND cachedAt <= :currentTime - 3600000""")
-    suspend fun clearPersonCache(currentTime: Long)
-
     @Transaction
     suspend fun insertPeopleForMovie(people: List<PersonCacheDto>, movieId: Int) {
         insertPeople(people)

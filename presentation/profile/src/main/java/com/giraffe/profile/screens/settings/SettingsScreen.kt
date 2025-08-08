@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,6 +27,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.profile.R
+import com.giraffe.profile.components.ContentPreferencesContent
 import com.giraffe.profile.components.LanguageSelector
 import com.giraffe.profile.components.MenuItem
 import com.giraffe.profile.components.ProfileLazyRow
@@ -48,7 +51,7 @@ fun SettingsScreen(
             when (effect) {
                 is SettingsScreenEffect.NavigateToLogin -> onNavigateToLogin()
                 is SettingsScreenEffect.NavigateToEditProfileWebsite -> onNavigateToEditProfileWebView()
-                else -> {}
+                is SettingsScreenEffect.ShowError -> {}
             }
         }
     }
@@ -75,6 +78,7 @@ fun SettingsContent(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(color = Theme.color.background.screen)
             .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -209,7 +213,10 @@ fun SettingsContent(
         onDismiss = interaction::onDismissSheet,
         title = stringResource(R.string.content_preferences_title),
         content = {
-
+            ContentPreferencesContent(
+                currentPreference = state.contentPreference,
+                onPreferenceSelected = interaction::onContentPreferenceChange
+            )
         }
     )
 

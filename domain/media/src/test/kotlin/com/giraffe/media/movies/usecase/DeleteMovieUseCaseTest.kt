@@ -7,23 +7,25 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class ClearCacheUseCaseTest {
-
+class DeleteMovieUseCaseTest {
     private lateinit var repository: MoviesRepository
-    private lateinit var useCase: ClearCacheUseCase
+    private lateinit var useCase: DeleteMovieUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
-        useCase = ClearCacheUseCase(repository)
+        useCase = DeleteMovieUseCase(repository)
     }
 
     @Test
-    fun `should call repository to clear cache`() = runTest {
+    fun `invoke should call deleteMovieById method on repository`() = runTest {
+        // Given
+        val movieId = 101
+
         // When
-        useCase()
+        useCase(movieId)
 
         // Then
-        coVerify { repository.clearCache() }
+        coVerify { repository.deleteMovieById(movieId) }
     }
 }

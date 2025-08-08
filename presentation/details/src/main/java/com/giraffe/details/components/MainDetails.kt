@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,7 +31,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -93,26 +93,16 @@ fun MainDetails(
                             height = 80.dp - (40.dp * animationProgress),
                             width = 64.dp - (24.dp * animationProgress)
                         )
-                        .clip(shape = shapeImage)
-                ) {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = actorName,
-                        tint = Theme.color.brand.secondary,
-                        modifier = Modifier
-                            .padding(8.dp * animationProgress)
-                            .size(
-                                height = 80.dp - (40.dp * animationProgress),
-                                width = 64.dp - (24.dp * animationProgress)
-                            )
-                            .border(
-                                width = 1.dp,
-                                color = Theme.color.stroke.primary,
-                                shape = shapeImage
-                            )
-                            .clip(shape = shapeImage)
-                    )
-                }
+                        .clip(shape = shapeImage),
+                    placeHolderTint = Theme.color.brand.secondary,
+                    placeholderModifier = Modifier
+                        .fillMaxSize()
+                        .border(
+                            width = 1.dp,
+                            color = Theme.color.stroke.primary,
+                            shape = shapeImage
+                        )
+                )
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

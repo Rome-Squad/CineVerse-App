@@ -20,10 +20,9 @@ import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
@@ -34,7 +33,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetails: GetMovieDetailsUseCase,
-    private val getMovieGenres: GetMovieGenresUseCase,
+    private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getRecommendedMovie: GetRecommendedMovieUseCase,
     private val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
@@ -51,10 +50,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
 
     init {
-        loadMovieDetails(movieID)
-        loadMoviePeople(movieID)
-        loadMovieReviews(movieID)
-        loadRecommendedMovie(movieID)
+        loadMovieDetailsScreen()
     }
 
     override fun onShowAddToCollectionBottomSheet() {
@@ -191,6 +187,20 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
+    private fun loadMovieDetailsScreen() {
+        updateState {
+            it.copy(
+                isLoadingMovieDetails = true,
+                isNetworkError = false,
+                errorMessage = null
+            )
+        }
+        loadMovieDetails(movieID)
+        loadMoviePeople(movieID)
+        loadMovieReviews(movieID)
+        loadRecommendedMovie(movieID, 1)
+    }
+
     private fun addMovieToCollectionSuccess(isAdded: Boolean, collectionId: Int) {
         updateState {
             it.copy(
@@ -234,13 +244,16 @@ class MovieDetailsViewModel @Inject constructor(
             )
         }
         loadMovieGenres(movie.genresID)
-        saveToRecentViewed(movie)
     }
 
-    private fun loadMovieDetailsError(error: Throwable) {
-        error.printStackTrace()
-        updateState { it.copy(isLoadingMovieDetails = false) }
-        sendEffect(MovieDetailsEffect.Error(error))
+    private fun loadMovieDetailsError(errorMsgRes: Int, isNetworkError: Boolean) {
+        updateState {
+            it.copy(
+                isLoadingMovieDetails = false,
+                errorMessage = errorMsgRes,
+                isNetworkError = isNetworkError,
+            )
+        }
     }
 
     private fun loadMovieGenres(genresIds: List<Int>) {
@@ -248,7 +261,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieGenresSuccess,
             onError = ::loadMovieGenresError
         ) {
-            getMovieGenres(genresIds)
+            getMoviesGenresByIds(genresIds)
         }
     }
 
@@ -278,12 +291,12 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadRecommendedMovieSuccess(recommendedSeries: List<Movie>) {
         updateState {
             it.copy(
-                recommendedMovies = recommendedSeries.map {
+                recommendedMovies = recommendedSeries.map { movie ->
                     Poster(
-                        id = it.id,
-                        name = it.title,
-                        imageUri = it.posterUrl.toString(),
-                        rating = it.rating
+                        id = movie.id,
+                        name = movie.title,
+                        imageUri = movie.posterUrl.toString(),
+                        rating = movie.rating
                     )
                 },
                 isLoadingRecommendedMovies = false
@@ -330,8 +343,7 @@ class MovieDetailsViewModel @Inject constructor(
         ) {
             getMovieReviewsUseCase(
                 movieId = movieId,
-                pageNumber = 1,
-                pageSize = 20
+                pageNumber = 1
             )
         }
     }

@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.screens.seriesdetails.SeriesDetailsEffect
@@ -65,11 +66,23 @@ fun SeriesDetailsScreen(
             .systemBarsPadding(),
         contentAlignment = Alignment.Center
     ) {
-        AnimatedVisibility(state.isLoading) {
-            Progress(modifier = Modifier.size(40.dp))
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            AnimatedVisibility(state.isNetworkError) {
+                NoInternetScreen(
+                    onRetryClick = {
+                        viewModel.loadSeriesDetailsScreen()
+                    }
+                )
+            }
+            AnimatedVisibility(state.isLoading) {
+                Progress(modifier = Modifier.size(40.dp))
+            }
         }
         AnimatedVisibility(
-            visible = !state.isLoading,
+            visible = !state.isLoading && !state.isNetworkError,
             enter = fadeIn(),
             exit = fadeOut()
         ) {

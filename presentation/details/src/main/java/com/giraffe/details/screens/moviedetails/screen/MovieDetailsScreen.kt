@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -39,7 +40,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
+import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterListSection
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
@@ -92,11 +95,32 @@ fun MovieDetailsScreen(
         }
     }
 
-    MovieDetailsContent(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        state = state,
-        interaction = viewModel
-    )
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedVisibility(state.isNetworkError) {
+            NoInternetScreen(
+                onRetryClick = {
+                    viewModel.loadMovieDetailsScreen()
+                }
+            )
+        }
+        AnimatedVisibility(state.isLoadingMovieDetails) {
+            Progress(modifier = Modifier.size(40.dp))
+        }
+    }
+    AnimatedVisibility(
+        visible = !state.isLoadingMovieDetails && !state.isNetworkError,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        MovieDetailsContent(
+            modifier = Modifier.fillMaxSize(),
+            state = state,
+            interaction = viewModel
+        )
+    }
 }
 
 @Composable

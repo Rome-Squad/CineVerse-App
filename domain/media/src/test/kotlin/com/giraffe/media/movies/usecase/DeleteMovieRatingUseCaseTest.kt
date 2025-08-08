@@ -4,15 +4,15 @@ import com.giraffe.media.movies.repository.MoviesRepository
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class DeleteMovieRatingUseCaseTest {
 
     private lateinit var repository: MoviesRepository
     private lateinit var useCase: DeleteMovieRatingUseCase
 
-    @Before
+    @BeforeEach
     fun setUp() {
         repository = mockk(relaxed = true)
         useCase = DeleteMovieRatingUseCase(repository)

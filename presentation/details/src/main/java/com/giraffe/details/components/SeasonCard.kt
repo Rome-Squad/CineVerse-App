@@ -1,6 +1,7 @@
 package com.giraffe.details.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,8 +16,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -95,22 +94,21 @@ fun SeasonCard(
                             contentDescription = stringResource(R.string.season_image),
                             modifier = Modifier.fillMaxSize(),
                             hasSensitiveText = false,
-                            contentScale = ContentScale.Crop
-                        ) {
-                            Icon(
-                                painter = painterResource(Theme.icons.dueTone.image),
-                                contentDescription = null,
-                                tint = Theme.color.brand.secondary,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .background(
-                                        Theme.color.background.card,
-                                        shape = CircleShape
+                            contentScale = ContentScale.Crop,
+                            placeHolderTint = Theme.color.brand.secondary,
+                            placeholderModifier = Modifier
+                                .fillMaxSize()
+                                .border(
+                                    width = 1.dp,
+                                    color = Theme.color.stroke.primary,
+                                    shape = RoundedCornerShape(
+                                        topStart = Theme.radius.x4l,
+                                        topEnd = Theme.radius.x4l,
+                                        bottomEnd = Theme.radius.xs,
+                                        bottomStart = Theme.radius.xs
                                     )
-                                    .padding(12.dp)
-                                    .wrapContentSize(),
-                            )
-                        }
+                                )
+                        )
                     }
                 }
                 Column(

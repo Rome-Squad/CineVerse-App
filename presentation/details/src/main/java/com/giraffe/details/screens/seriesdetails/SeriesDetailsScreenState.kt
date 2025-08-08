@@ -16,7 +16,8 @@ data class SeriesDetailsScreenState(
     val seriesReviews: List<ReviewUI> = emptyList(),
 
     val isLoading: Boolean = true,
-
+    val errorMessage: Int? = null,
+    val isNetworkError: Boolean = false,
     val isVisibleAddToCollectionBottomSheet: Boolean = false,
     val isVisibleGiveStarsBottomSheet: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,

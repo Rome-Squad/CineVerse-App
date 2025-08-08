@@ -15,6 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
@@ -29,6 +31,7 @@ fun ReviewsScreen(
     reviewsViewModel: ReviewsViewModel = hiltViewModel()
 ) {
     val state = reviewsViewModel.state.collectAsState().value
+    val reviews = state.reviewsFlow.collectAsLazyPagingItems()
 
     AnimatedContent(
         state.isLoading
@@ -36,7 +39,7 @@ fun ReviewsScreen(
         when (it) {
             true -> LoadingView()
             false -> ReviewsContent(
-                reviewsList = state.reviews,
+                reviewsList = reviews,
                 onBackArrowClick = { navController.navigateUp() }
             )
         }
@@ -45,7 +48,7 @@ fun ReviewsScreen(
 
 @Composable
 private fun ReviewsContent(
-    reviewsList: List<ReviewUI>,
+    reviewsList: LazyPagingItems<ReviewUI>,
     onBackArrowClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -66,16 +69,18 @@ private fun ReviewsContent(
                 onBackButtonClick = onBackArrowClick
             )
         }
-        items(reviewsList.size) { index ->
-            ReviewCard(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                rate = reviewsList[index].rating,
-                reviewText = reviewsList[index].content,
-                reviewDate = reviewsList[index].createdAt,
-                reviewerImageUrl = reviewsList[index].authorImageUrl,
-                reviewerName = reviewsList[index].authorName,
-                reviewerUsername = reviewsList[index].authorUserName
-            )
+        items(reviewsList.itemCount) { index ->
+            reviewsList[index]?.let { review ->
+                ReviewCard(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    rate = review.rating,
+                    reviewText = review.content,
+                    reviewDate = review.createdAt,
+                    reviewerImageUrl = review.authorImageUrl,
+                    reviewerName = review.authorName,
+                    reviewerUsername = review.authorUserName
+                )
+            }
         }
     }
 }
