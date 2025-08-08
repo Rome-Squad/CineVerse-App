@@ -84,7 +84,7 @@ fun MovieDetailsScreen(
 
                 is MovieDetailsEffect.Error -> {}
                 is MovieDetailsEffect.NavigateToCollection -> {}
-                is MovieDetailsEffect.NavigateToLogin -> {}
+                is MovieDetailsEffect.NavigateToLogin -> {navigateToLogin()}
                 is MovieDetailsEffect.NavigateToCastDetails -> navigateToCastDetails(effect.personId)
 
                 is MovieDetailsEffect.NavigateToMoviesRecommended -> navigateToMoviesRecommended(
@@ -123,7 +123,6 @@ fun MovieDetailsScreen(
             onBackButtonClick = onBackButtonClick,
             onClickPlay = onClickPlay,
             onClickPoster = onClickPoster,
-            navigateToLogIn = navigateToLogin
         )
     }
 }
@@ -137,7 +136,6 @@ private fun MovieDetailsContent(
     onBackButtonClick: () -> Unit,
     onClickPlay: (String) -> Unit,
     onClickPoster: (Int) -> Unit,
-    navigateToLogIn: () -> Unit
 ) {
     val scrollState = rememberLazyListState()
     var imageWidth by rememberSaveable { mutableIntStateOf(216) }
@@ -344,7 +342,7 @@ private fun MovieDetailsContent(
 
         LoginBottomSheet(
             isVisible = state.isVisibleLoginBottomSheet,
-            onLogInClick = navigateToLogIn,
+            onLogInClick =interaction::onLoginClick,
             onDismiss = interaction::onDismissLoginBottomSheet
         )
     }
