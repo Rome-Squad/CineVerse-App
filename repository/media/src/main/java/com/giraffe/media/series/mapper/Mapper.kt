@@ -107,7 +107,8 @@ fun SeriesDto.toEntity() = Series(
     genreIDs = genreIds,
     releaseYear = firstAirDate?.toFormattedDate() ?: "",
     popularity = popularity ?: 0.0,
-    seasons = emptyList()
+    seasons = emptyList(),
+    userRating = userRating
 )
 
 fun GenreDto.toEntity() = Genre(

@@ -97,5 +97,6 @@ fun MovieDto.toEntity(
     recentViewedAt = recentViewedAt,
     recentReleasedAt = recentReleasedAt,
     upcomingAt = upcomingAt,
-    popularity = popularity ?: 0f
+    popularity = popularity ?: 0f,
+    userRating = userRating
 )

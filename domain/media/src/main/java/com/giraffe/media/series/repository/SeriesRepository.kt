@@ -28,7 +28,7 @@ interface SeriesRepository {
     suspend fun getRecentlyReleasedSeries(page: Int, limit: Int): List<Series>
     suspend fun addRecentlyReleasedSeries(series: List<Series>)
     suspend fun getTopRatedSeries(page: Int, limit: Int): List<Series>
-    suspend fun getRatedSeries(accountId: Int): Map<Float, Series>
+    suspend fun getRatedSeries(accountId: Int): List<Series>
     suspend fun deleteSeriesRating(seriesId: Int)
     suspend fun deleteSeriesById(seriesId: Int)
     suspend fun addTopRatedSeries(series: List<Series>)

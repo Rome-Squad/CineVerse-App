@@ -12,6 +12,7 @@ import com.giraffe.media.series.usecase.GetRatedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.profile.base.BaseViewModel
 import com.giraffe.profile.model.RatedPoster
+import com.giraffe.profile.utils.toRatedPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -71,15 +72,9 @@ class RatingViewModel @Inject constructor(
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
-    private fun onGetRatedMoviesSuccess(ratedMovies: Map<Float, Movie>) {
-        val ratedMovies = ratedMovies.entries
-            .map {
-                RatedPoster.fromMovie(
-                    movie = it.value,
-                    rating = it.key,
-                    genres = state.value.movieGenres
-                )
-            }
+    private fun onGetRatedMoviesSuccess(ratedMovies: List<Movie>) {
+        val ratedMovies =
+            ratedMovies.map { it.toRatedPoster(state.value.movieGenres.filter { genres -> genres.id in it.genresID }) }
         updateState { it.copy(moviesPosters = ratedMovies) }
         if (state.value.selectedTabIndex == 0) updateState { it.copy(selectedPosters = ratedMovies) }
     }
@@ -88,15 +83,9 @@ class RatingViewModel @Inject constructor(
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
-    private fun onGetRatedSeriesSuccess(ratedSeries: Map<Float, Series>) {
-        val ratedSeries = ratedSeries.entries
-            .map {
-                RatedPoster.fromSeries(
-                    series = it.value,
-                    rating = it.key,
-                    genres = state.value.seriesGenres
-                )
-            }
+    private fun onGetRatedSeriesSuccess(ratedSeries: List<Series>) {
+        val ratedSeries =
+            ratedSeries.map { it.toRatedPoster(state.value.seriesGenres.filter { genres -> genres.id in it.genreIDs }) }
         updateState { it.copy(seriesPosters = ratedSeries) }
         if (state.value.selectedTabIndex != 0) updateState { it.copy(selectedPosters = ratedSeries) }
     }
@@ -124,63 +113,61 @@ class RatingViewModel @Inject constructor(
     }
 
 
-    override fun onPosterClick(poster: Poster) {
-        if (poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
-            sendEffect(RatingEffect.NavigateToMovieDetails(poster.id))
+    override fun onPosterClick(ratedPoster: RatedPoster) {
+        if (ratedPoster.poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
+            sendEffect(RatingEffect.NavigateToMovieDetails(ratedPoster.poster.id))
         }
 
-        if (poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
-            sendEffect(RatingEffect.NavigateToSeriesDetails(poster.id))
+        if (ratedPoster.poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
+            sendEffect(RatingEffect.NavigateToSeriesDetails(ratedPoster.poster.id))
         }
 
     }
 
-    override fun onDeleteRatedPosterClick(poster: Poster) {
-        if (poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
-            deleteMovieRating(poster.id)
+    override fun onDeleteRatedPosterClick(ratedPoster: RatedPoster) {
+        if (ratedPoster.poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
+            deleteMovieRating(ratedPoster)
         }
 
-        if (poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
-            deleteSeriesRating(poster.id)
+        if (ratedPoster.poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
+            deleteSeriesRating(ratedPoster)
         }
     }
 
-    private fun deleteMovieRating(movieId: Int) {
+    private fun deleteMovieRating(ratedPoster: RatedPoster) {
         safeExecute(
-            onSuccess = { onDeleteMovieRatingSuccess() },
+            onSuccess = { onDeleteMovieRatingSuccess(ratedPoster) },
             onError = ::onMovieRatingDeleteFailure
         ) {
-            deleteMovieRatingUseCase(movieId)
+            deleteMovieRatingUseCase(ratedPoster.poster.id)
         }
     }
 
-    private fun onDeleteMovieRatingSuccess() {
-        safeExecute(
-            onSuccess = ::onGetRatedMoviesSuccess,
-            onError = ::onGetRatedMoviesFailure,
-            block = getRatedMoviesUseCase::invoke
-        )
+    private fun onDeleteMovieRatingSuccess(ratedPoster: RatedPoster) {
+        (state.value.moviesPosters - ratedPoster).let { moviesPosters ->
+            updateState { it.copy(moviesPosters = moviesPosters) }
+            if (state.value.selectedTabIndex == 0) updateState { it.copy(selectedPosters = moviesPosters) }
+        }
     }
 
     private fun onMovieRatingDeleteFailure(error: Throwable) {
         sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
-    private fun deleteSeriesRating(seriesId: Int) {
+    private fun deleteSeriesRating(ratedPoster: RatedPoster) {
         safeExecute(
-            onSuccess = { onDeleteSeriesRatingSuccess() },
+            onSuccess = { onDeleteSeriesRatingSuccess(ratedPoster) },
             onError = ::onSeriesRatingDeleteFailure
         ) {
-            deleteSeriesRatingUseCase(seriesId)
+            deleteSeriesRatingUseCase(ratedPoster.poster.id)
         }
     }
 
-    private fun onDeleteSeriesRatingSuccess() {
-        safeExecute(
-            onSuccess = ::onGetRatedSeriesSuccess,
-            onError = ::onGetRatedSeriesFailure,
-            block = getRatedSeriesUseCase::invoke
-        )
+    private fun onDeleteSeriesRatingSuccess(ratedPoster: RatedPoster) {
+        (state.value.seriesPosters - ratedPoster).let { seriesPosters ->
+            updateState { it.copy(seriesPosters = seriesPosters) }
+            if (state.value.selectedTabIndex != 0) updateState { it.copy(selectedPosters = seriesPosters) }
+        }
     }
 
     private fun onSeriesRatingDeleteFailure(error: Throwable) {

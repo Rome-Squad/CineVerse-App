@@ -1,19 +1,19 @@
 package com.giraffe.profile.utils
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.entity.Series
+import com.giraffe.profile.model.RatedPoster
 import com.giraffe.profile.screens.history.HistoryUiModel
 import com.giraffe.profile.screens.history.MediaType
-
-
 
 
 fun Movie.toHistoryUiModel(): HistoryUiModel {
     return HistoryUiModel(
         id = id,
         title = title,
-        posterUrl = posterUrl .orEmpty(),
+        posterUrl = posterUrl.orEmpty(),
         rating = rating,
         mediaType = MediaType.MOVIE
     )
@@ -29,22 +29,34 @@ fun Series.toHistoryUiModel(): HistoryUiModel {
     )
 }
 
-fun Series.toPosterUi(): Poster {
+fun Series.toRatedPoster(genres: List<Genre>) = RatedPoster(
+    poster = this.toPosterUi(genres),
+    rating = userRating ?: 0f,
+)
+
+fun Series.toPosterUi(genres: List<Genre> = emptyList()): Poster {
     return Poster(
         id = id,
         name = name,
+        genres = genres.joinToString(", ") { it.title },
         imageUri = posterUrl,
         rating = rating,
         date = releaseYear,
-        mediaTypeOfPoster ="series"
+        mediaTypeOfPoster = "series"
     )
 }
 
-fun Movie.toPosterUi(): Poster {
+fun Movie.toRatedPoster(genres: List<Genre>) = RatedPoster(
+    poster = this.toPosterUi(genres),
+    rating = userRating ?: 0f,
+)
+
+fun Movie.toPosterUi(genres: List<Genre> = emptyList()): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl .orEmpty(),
+        genres = genres.joinToString(", ") { it.title },
+        imageUri = posterUrl.orEmpty(),
         rating = rating,
         date = releaseYear.toString(),
         mediaTypeOfPoster = "movie"
