@@ -25,11 +25,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.home.navigation.home.HomeNavGraph
-import com.giraffe.home.screen.home.HomeRoute
-import com.giraffe.home.screen.home.HomeTab
-import com.giraffe.home.screen.home.homeRoute
 import com.giraffe.home.screen.movies_list.navigateToCollectionList
-import com.giraffe.home.screen.movies_list.navigateToMoviesList
 import com.giraffe.match.MatchApi
 import com.giraffe.profile.ProfileApi
 
