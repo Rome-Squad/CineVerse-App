@@ -1,5 +1,6 @@
 package com.giraffe.media.series.retrofit
 
+import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
@@ -52,4 +53,8 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
 
     override suspend fun deleteSeriesRating(seriesId: Int) =
         retrofitRequestBuilder.delete { deleteSeriesRating(seriesId) }
+
+    override suspend fun addRating(serisId: Int, request: RatingRequest) {
+        retrofitRequestBuilder.post { rateSeries(serisId, request) }
+    }
 }

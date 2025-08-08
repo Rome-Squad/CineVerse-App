@@ -32,4 +32,6 @@ interface SeriesRepository {
     suspend fun deleteSeriesRating(seriesId: Int)
     suspend fun deleteSeriesById(seriesId: Int)
     suspend fun addTopRatedSeries(series: List<Series>)
+
+    suspend fun addRating(serisId: Int, ratingValue: Float)
 }
