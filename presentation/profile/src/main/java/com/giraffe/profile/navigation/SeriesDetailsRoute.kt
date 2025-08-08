@@ -10,5 +10,5 @@ internal data class SeriesDetailsRoute(
 )
 
 internal fun NavController.navigateToSeriesDetails(seriesId: Int) {
-    navigate(MovieDetailsRoute(seriesId))
+    navigate(SeriesDetailsRoute(seriesId))
 }
