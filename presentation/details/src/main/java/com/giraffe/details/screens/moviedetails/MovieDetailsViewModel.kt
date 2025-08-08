@@ -159,7 +159,7 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadMovieDetailsScreen() {
+    fun loadMovieDetailsScreen() {
         updateState {
             it.copy(
                 isLoadingMovieDetails = true,
