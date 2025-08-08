@@ -1,8 +1,12 @@
 package com.giraffe.details.screens.moviedetails.screen
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,7 +47,6 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.details.components.CollectionBottomSheetContent
 import com.giraffe.details.components.LoginBottomSheet
 import com.giraffe.details.components.MainMovieOrSeriesDetailsAnimatedContent
 import com.giraffe.details.components.RatingSection
@@ -51,6 +54,9 @@ import com.giraffe.details.components.RatingSelector
 import com.giraffe.details.components.ReviewCard
 import com.giraffe.details.components.StaffInfoSection
 import com.giraffe.details.components.StarCastSection
+import com.giraffe.details.components.collectionBottomSheet.AddToCollectionBottomSheetContent
+import com.giraffe.details.components.collectionBottomSheet.NoCollectionsBottomSheetContent
+import com.giraffe.details.components.createCollection.CreateCollectionContent
 import com.giraffe.details.screens.moviedetails.MovieDetailsEffect
 import com.giraffe.details.screens.moviedetails.MovieDetailsInteractionListener
 import com.giraffe.details.screens.moviedetails.MovieDetailsScreenState
@@ -290,14 +296,47 @@ private fun MovieDetailsContent(
 
 
         BaseBottomSheet(
-            isVisible = state.isVisibleAddToCollectionBottomSheet,
+            isVisible = state.collectionBottomSheet != null,
             onDismiss = interaction::onDismissAddToCollectionBottomSheet,
             title = stringResource(R.string.add_to_collection),
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp),
             content = {
-                CollectionBottomSheetContent(
-                    onCreateCollectionClick = interaction::onAddToCollectionButtonClick
-                )
+                AnimatedContent(
+                    targetState = state.collectionBottomSheet,
+                    transitionSpec = {
+                        slideInHorizontally { it } togetherWith slideOutVertically { -it }
+                    }
+                ) { collectionBottomSheet ->
+                    when (collectionBottomSheet) {
+                        is MovieDetailsScreenState.CollectionBottomSheet.AddToCollection -> {
+                            AddToCollectionBottomSheetContent(
+                                collectionsList = state.collections,
+                                onNewCollectionClick = interaction::onCreateCollectionButtonClick,
+                                onCollectionClick = interaction::onCollectionClick
+                            )
+                        }
+
+                        is MovieDetailsScreenState.CollectionBottomSheet.NoCollections -> {
+                            NoCollectionsBottomSheetContent(
+                                onCreateCollectionClick = interaction::onCreateCollectionButtonClick
+                            )
+                        }
+
+                        is MovieDetailsScreenState.CollectionBottomSheet.CreateCollection -> {
+                            CreateCollectionContent(
+                                startIcon = com.giraffe.designsystem.R.drawable.outline_folder,
+                                hintText = stringResource(R.string.collection_name),
+                                value = state.newCollectionName,
+                                title = stringResource(R.string.collection_name),
+                                onValueChange = interaction::onNewCollectionNameChange,
+                                createButtonClick = interaction::onConfirmCreateNewCollectionClick,
+                                cancelButtonClick = interaction::onCancelCreateNewCollectionClick
+                            )
+                        }
+
+                        else -> Unit
+                    }
+                }
             },
         )
 

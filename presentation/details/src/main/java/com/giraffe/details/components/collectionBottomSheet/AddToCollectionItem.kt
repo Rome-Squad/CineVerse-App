@@ -1,7 +1,8 @@
-package com.giraffe.details.components
+package com.giraffe.details.components.collectionBottomSheet
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,29 +22,32 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Progress
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
 
 @Composable
-fun AddToCollectionContent(
-    modifier: Modifier = Modifier,
+fun AddToCollectionItem(
     title: String,
-    isLoading: Boolean = false
+    isLoading: Boolean,
+    onCollectionClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.bottomSheetCard)
             .padding(start = 16.dp, end = 12.dp)
+            .height(48.dp)
+            .clickable(onClick = onCollectionClicked)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = modifier
                 .align(Alignment.CenterStart)
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 12.dp)
-
         ) {
             Icon(
                 painter = painterResource(id = Theme.icons.dueTone.folder),
@@ -68,7 +70,6 @@ fun AddToCollectionContent(
                     modifier = Modifier.size(24.dp),
                 )
             }
-
         }
     }
 }
@@ -77,12 +78,13 @@ fun AddToCollectionContent(
 @Preview()
 fun PreviewAddToCollectionContentLight() {
     CineVerseTheme(isDarkTheme = false) {
-        AddToCollectionContent(
+        AddToCollectionItem(
             title = "My Folder",
             isLoading = true,
             modifier = Modifier
                 .width(304.dp)
-                .height(48.dp)
+                .height(48.dp),
+            onCollectionClicked = { }
         )
     }
 }
@@ -91,11 +93,10 @@ fun PreviewAddToCollectionContentLight() {
 @Preview()
 fun PreviewAddToCollectionContentDark() {
     CineVerseTheme(isDarkTheme = true) {
-        AddToCollectionContent(
+        AddToCollectionItem(
             title = "My Folder",
             isLoading = true,
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
-
+            onCollectionClicked = {}
         )
     }
 }

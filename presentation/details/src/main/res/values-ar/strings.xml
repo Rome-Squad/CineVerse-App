@@ -6,6 +6,9 @@
     <string name="not_now">ليس الآن</string>
     <string name="log_in">تسجيل الدخول</string>
     <string name="reviews">تقيمات</string>
+    <string name="cancel">الغاء</string>
+    <string name="create">انشاء مجموعه</string>
+    <string name="collection_name">اسم المجموعه</string>
     <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
     <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
     <string name="access_denied_error">خطأ : تم رفض الوصول!</string>

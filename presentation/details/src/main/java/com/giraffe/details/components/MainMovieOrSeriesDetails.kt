@@ -53,8 +53,8 @@ fun MainMovieOrSeriesDetails(
     releaseDate: String,
     isPlayButtonEnabled: Boolean,
     onClickPlay: () -> Unit,
-    onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
+    onClickAdd: (() -> Unit)? = null,
     animationProgress: Float = 0f
 ) {
     val playButtonBackground by animateColorAsState(
@@ -205,6 +205,7 @@ fun MainMovieOrSeriesDetails(
                             .padding(top = 17.dp * (1f - animationProgress))
                             .width(40.dp + (88.dp - 40.dp) * animationProgress)
                             .height(92.dp - (92.dp - 40.dp) * animationProgress)
+                            .align(Alignment.CenterVertically)
                     ) {
                         Icon(
                             painter = painterResource(Theme.icons.dueTone.play),
@@ -225,21 +226,23 @@ fun MainMovieOrSeriesDetails(
                                 .align(Alignment.TopEnd)
                         )
 
-                        Icon(
-                            painter = painterResource(Theme.icons.dueTone.add),
-                            contentDescription = stringResource(R.string.save_Icon),
-                            tint = Theme.color.shade.primary,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(RoundedCornerShape(Theme.radius.md))
-                                .background(
-                                    color = Theme.color.button.secondary,
-                                    shape = RoundedCornerShape(Theme.radius.md)
-                                )
-                                .clickable(onClick = onClickAdd)
-                                .padding(10.dp)
-                                .align(Alignment.BottomStart)
-                        )
+                        onClickAdd?.let {
+                            Icon(
+                                painter = painterResource(Theme.icons.dueTone.add),
+                                contentDescription = stringResource(R.string.save_Icon),
+                                tint = Theme.color.shade.primary,
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(RoundedCornerShape(Theme.radius.md))
+                                    .background(
+                                        color = Theme.color.button.secondary,
+                                        shape = RoundedCornerShape(Theme.radius.md)
+                                    )
+                                    .clickable(onClick = onClickAdd)
+                                    .padding(10.dp)
+                                    .align(Alignment.BottomStart)
+                            )
+                        }
                     }
                 }
             }
