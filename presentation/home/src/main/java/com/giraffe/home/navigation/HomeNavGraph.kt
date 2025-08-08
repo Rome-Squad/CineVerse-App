@@ -142,6 +142,12 @@ fun HomeNavGraph(
                         launchSingleTop = true
                         restoreState = true
                     }
+                },
+                navigateToCollection = { collectionId, collectionName ->
+                    navController.navigateToCollection(
+                        collectionId = collectionId,
+                        collectionName = collectionName
+                    )
                 }
             )
 
@@ -181,7 +187,27 @@ fun HomeNavGraph(
             }
 
             composable<YourCollectionRoute> {
-                profileApi.YourCollectionsContainer { isBottomBarVisible = it }
+                profileApi.YourCollectionsContainer(
+                    navigateBack = {
+                        navController.popBackStack()
+                    },
+                    onShowBottomBarChange = { isBottomBarVisible = it }
+                )
+            }
+
+            composable<CollectionRoute> { backStackEntry ->
+                val args = backStackEntry.toRoute<CollectionRoute>()
+                val collectionId = args.collectionId
+                val collectionName = args.collectionName
+                profileApi.CollectionContainer(
+                    collectionId = collectionId,
+                    collectionName = collectionName,
+                    navigateBack = {
+                        navController.popBackStack()
+                    }
+                ) {
+                    isBottomBarVisible = it
+                }
             }
         }
 

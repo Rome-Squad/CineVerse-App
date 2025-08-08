@@ -24,7 +24,8 @@ fun NavGraphBuilder.homeRoute(
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToExploreScreen: () -> Unit,
     navigateToMatchScreen: () -> Unit,
-    navigateToYourCollection: () -> Unit
+    navigateToYourCollection: () -> Unit,
+    navigateToCollection: (collectionId: Int, collectionName: String) -> Unit
 ) {
     composable<HomeRoute> {
         HomeScreen(
@@ -34,7 +35,8 @@ fun NavGraphBuilder.homeRoute(
             navigateToExploreScreen = navigateToExploreScreen,
             navigateToMatchScreen = navigateToMatchScreen,
             navigateToYourCollection = navigateToYourCollection,
-            navigateToFeaturedCollection = navigateToCollectionList
+            navigateToFeaturedCollection = navigateToCollectionList,
+            navigateToCollection = navigateToCollection
         )
     }
 }

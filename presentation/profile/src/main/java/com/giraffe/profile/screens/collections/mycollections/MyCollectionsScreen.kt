@@ -138,7 +138,7 @@ private fun MyCollectionsScreenContent(
             ) {
                 items(state.collections) { collection ->
                     CollectionItem(
-                        modifier = Modifier,
+                        modifier = Modifier.fillMaxWidth(),
                         text = collection.name,
                         description = context.getString(
                             ProfileResources.string.movies_count,

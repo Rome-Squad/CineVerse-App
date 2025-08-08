@@ -34,7 +34,8 @@ internal fun ProfileNavGraph(
     authenticationApi: AuthenticationApi,
     detailsApi: DetailsApi,
     exploreApi: ExploreApi,
-    onShowBottomBarChange: (Boolean) -> Unit
+    onShowBottomBarChange: (Boolean) -> Unit,
+    navigateBack: (() -> Unit)? = null,
 ) {
 
 
@@ -87,7 +88,13 @@ internal fun ProfileNavGraph(
         )
 
         myCollectionsRoute(
-            navigateBack = navController::navigateUp,
+            navigateBack = {
+                if (navigateBack != null) {
+                    navigateBack()
+                } else {
+                    navController.navigateUp()
+                }
+            },
             navigateToCollection = {
                 navController.navigateToCollection(
                     collectionId = it.id,
@@ -100,7 +107,13 @@ internal fun ProfileNavGraph(
         collectionRoute(
             modifier = Modifier
                 .fillMaxSize(),
-            navigateBack = navController::navigateUp,
+            navigateBack = {
+                if (navigateBack != null) {
+                    navigateBack()
+                } else {
+                    navController.navigateUp()
+                }
+            },
             navigateToMovieDetails = navController::navigateToMovieDetails
         )
 
