@@ -56,7 +56,6 @@ fun SeriesDetailsContent(
     interaction: SeriesDetailsInteractionListener,
     onBackButtonClick: () -> Unit,
     onClickPlay: (String) -> Unit,
-    navigateToLogIn: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberLazyListState()
@@ -303,7 +302,7 @@ fun SeriesDetailsContent(
 
         LoginBottomSheet(
             isVisible = state.isVisibleLoginBottomSheet,
-            onLogInClick = navigateToLogIn,
+            onLogInClick = interaction::onLoginClick,
             onDismiss = interaction::onDismissGiveStarsBottomSheet
         )
     }
