@@ -161,6 +161,12 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     override fun onLoginButtonClick() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = false,
+                isVisibleLoginBottomSheet = false
+            )
+        }
         sendEffect(SeriesDetailsEffect.NavigateToLogIn)
     }
 
