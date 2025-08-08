@@ -1,6 +1,5 @@
 package com.giraffe.home.navigation.main
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
@@ -25,7 +24,6 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.home.navigation.home.HomeNavGraph
-import com.giraffe.home.screen.movies_list.navigateToCollectionList
 import com.giraffe.match.MatchApi
 import com.giraffe.profile.ProfileApi
 
@@ -76,10 +74,6 @@ fun MainNavGraph(
         else -> null
     }
 
-    Log.d("NAVBAR", "HomeNavGraph: currentRouteString = $currentRouteString")
-    Log.d("NAVBAR", "HomeNavGraph: currentRoute = $currentRoute")
-
-
     var isBottomBarVisible by rememberSaveable {
         mutableStateOf(
             true
@@ -115,33 +109,10 @@ fun MainNavGraph(
                         navController.navigateToSeriesDetails(it)
                         isBottomBarVisible = false
                     },
-                    navigateToCollection = { collectionId, collectionTitle ->
-                        navController.navigateToCollectionList(
-                            collectionId = collectionId,
-                            collectionTitle = collectionTitle
-                        )
-                    },
-                    navigateToYourCollections = navController::navigateToYourCollection,
-                    navigateToExplore = {
-                        navController.navigate(ExploreRoute) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    navigateToMatch = {
-                        navController.navigate(MatchRoute) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
+                    navigateToCollection = navController::navigateToCollection,
+                    navigateToYourCollections = navController::navigateToYourCollections,
+                    navigateToExplore = navController::navigateToExplore,
+                    navigateToMatch = navController::navigateToMatch,
                 ) {
                     isBottomBarVisible = it
                 }
@@ -182,7 +153,7 @@ fun MainNavGraph(
                 profileApi.ProfileContainer { isBottomBarVisible = it }
             }
 
-            composable<YourCollectionRoute> {
+            composable<YourCollectionsRoute> {
                 profileApi.YourCollectionsContainer(
                     navigateBack = {
                         navController.popBackStack()

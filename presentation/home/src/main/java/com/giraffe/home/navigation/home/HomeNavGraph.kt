@@ -44,33 +44,10 @@ fun HomeNavGraph(
                 },
                 navigateToMoviesDetailsScreen = navigateToMovieDetails,
                 navigateToSeriesDetailsScreen = navigateToSeriesDetails,
-                navigateToCollectionList = navigateToCollection/*{ collectionId, collectionTitle ->
-                    navController.navigateToCollectionList(
-                        collectionId = collectionId,
-                        collectionTitle = collectionTitle
-                    )
-                }*/,
+                navigateToCollectionList = navigateToCollection,
                 navigateToYourCollection = navigateToYourCollections,
-                navigateToExploreScreen = navigateToExplore/*{
-                    navController.navigate(ExploreRoute) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }*/,
-                navigateToMatchScreen = navigateToMatch/*{
-                    navController.navigate(MatchRoute) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }*/,
+                navigateToExploreScreen = navigateToExplore,
+                navigateToMatchScreen = navigateToMatch,
                 navigateToCollection = navigateToCollection
             )
 

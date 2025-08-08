@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import kotlinx.serialization.Serializable
 
 @Serializable
-object YourCollectionRoute
+object YourCollectionsRoute
 
-fun NavController.navigateToYourCollection() {
-    navigate(YourCollectionRoute)
+fun NavController.navigateToYourCollections() {
+    navigate(YourCollectionsRoute)
 }
