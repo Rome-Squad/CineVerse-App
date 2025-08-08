@@ -228,9 +228,14 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onLoginClick() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = false,
+                isVisibleLoginBottomSheet = false
+            )
+        }
         sendEffect(MovieDetailsEffect.NavigateToLogin)
     }
-
 
     override fun onShowMoreReviewsClick() {
         sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))
