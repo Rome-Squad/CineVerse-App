@@ -6,6 +6,7 @@ import androidx.navigation.compose.rememberNavController
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.home.HomeApi
+import com.giraffe.home.navigation.main.MainNavGraph
 import com.giraffe.match.MatchApi
 import com.giraffe.profile.ProfileApi
 import javax.inject.Inject
@@ -17,9 +18,9 @@ class HomeApiImp @Inject constructor(
     private val matchApi: MatchApi
 ) : HomeApi {
     @Composable
-    override fun HomeContainer() {
+    override fun MainContainer() {
         val navController: NavHostController = rememberNavController()
-        HomeNavGraph(
+        MainNavGraph(
             navController = navController,
             detailsApi = detailsApi,
             exploreApi = exploreApi,

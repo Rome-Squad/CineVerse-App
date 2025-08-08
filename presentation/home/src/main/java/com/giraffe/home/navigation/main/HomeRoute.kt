@@ -1,15 +1,17 @@
-package com.giraffe.home.navigation
+package com.giraffe.home.navigation.main
 
 import com.giraffe.designsystem.composable.navbar.BottomTab
 import com.giraffe.designsystem.composable.navbar.Route
 import kotlinx.serialization.Serializable
 
-@Serializable
-object ExploreRoute : Route
 
-class ExploreTab(
+@Serializable
+data object HomeRoute : Route("home")
+
+class HomeTab(
     override val labelRes: Int,
     override val iconRes: Int
-) : BottomTab<ExploreRoute> {
-    override val route = ExploreRoute
+) : BottomTab<HomeRoute> {
+    override val route = HomeRoute
 }
+

@@ -29,15 +29,6 @@ fun NavController.navigateToMoviesList(sectionType: String, sectionTitle: String
     )
 }
 
-fun NavController.navigateToCollectionList(collectionId: Int, collectionTitle: String) {
-    navigate(
-        MoviesListRoute(
-            collectionId = collectionId,
-            sectionTitle = collectionTitle,
-        )
-    )
-}
-
 fun NavGraphBuilder.moviesListRoute(
     onBackClick: () -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,

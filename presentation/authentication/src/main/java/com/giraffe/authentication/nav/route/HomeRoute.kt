@@ -21,6 +21,6 @@ fun NavGraphBuilder.homeRoute(
     composable<HomeRoute> {
         val activity = LocalActivity.current
         BackHandler { activity?.finish() }
-        homeApi.HomeContainer()
+        homeApi.MainContainer()
     }
 }
