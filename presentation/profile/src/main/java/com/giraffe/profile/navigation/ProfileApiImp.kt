@@ -7,6 +7,7 @@ import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.profile.ProfileApi
+import com.giraffe.profile.screens.collections.collection.CollectionRoute
 import com.giraffe.profile.screens.collections.mycollections.MyCollectionsRoute
 import com.giraffe.profile.screens.settings.SettingsScreenRoute
 import javax.inject.Inject
@@ -17,10 +18,32 @@ class ProfileApiImp @Inject constructor(
     private val detailsApi: DetailsApi,
     private val exploreApi: ExploreApi,
 ) : ProfileApi {
+    @Composable
+    override fun CollectionContainer(
+        collectionId: Int,
+        collectionName: String,
+        navigateBack: () -> Unit,
+        onShowBottomBarChange: (Boolean) -> Unit,
+    ) {
+        val navController: NavHostController = rememberNavController()
+        ProfileNavGraph(
+            navController = navController,
+            startDestinationRoute = CollectionRoute(
+                collectionId = collectionId,
+                collectionName = collectionName
+            ),
+            authenticationApi = authApiProvider.get(),
+            detailsApi = detailsApi,
+            exploreApi = exploreApi,
+            onShowBottomBarChange = onShowBottomBarChange,
+            navigateBack = navigateBack
+        )
+    }
 
     @Composable
     override fun YourCollectionsContainer(
-        onShowBottomBarChange: (Boolean) -> Unit
+        onShowBottomBarChange: (Boolean) -> Unit,
+        navigateBack: () -> Unit,
     ) {
         val navController: NavHostController = rememberNavController()
         ProfileNavGraph(
@@ -29,12 +52,14 @@ class ProfileApiImp @Inject constructor(
             authenticationApi = authApiProvider.get(),
             detailsApi = detailsApi,
             exploreApi = exploreApi,
-            onShowBottomBarChange = onShowBottomBarChange
+            onShowBottomBarChange = onShowBottomBarChange,
+            navigateBack = navigateBack
         )
     }
+
     @Composable
     override fun ProfileContainer(
-        onShowBottomBarChange: (Boolean) -> Unit
+        onShowBottomBarChange: (Boolean) -> Unit,
     ) {
 
         val navController: NavHostController = rememberNavController()

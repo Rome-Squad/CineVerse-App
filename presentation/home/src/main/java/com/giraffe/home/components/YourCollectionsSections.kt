@@ -26,7 +26,8 @@ import com.giraffe.home.screen.home.YourCollectionUiModel
 fun YourCollectionsSections(
     modifier: Modifier = Modifier,
     collectionItems: List<YourCollectionUiModel>,
-    onShowMoreClick: () -> Unit
+    onShowMoreClick: () -> Unit,
+    onCollectionClick: (collectionId: Int, collectionName: String) -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -64,7 +65,10 @@ fun YourCollectionsSections(
                     modifier = Modifier.height(63.dp),
                     text = item.title,
                     description = item.numberOfItems.toString(),
-                    icon = Theme.icons.dueTone.folder
+                    icon = Theme.icons.dueTone.folder,
+                    onClick = {
+                        onCollectionClick(item.id, item.title)
+                    }
                 )
             }
         }
@@ -88,6 +92,7 @@ fun YourCollectionPreview() {
     )
     YourCollectionsSections(
         collectionItems = collectionItems,
-        onShowMoreClick = {}
+        onShowMoreClick = {},
+        onCollectionClick = { _, _ -> }
     )
 }

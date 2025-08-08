@@ -374,4 +374,13 @@ class HomeViewModel @Inject constructor(
     override fun onMatchSectionClicked() {
         sendEffect(HomeEffect.NavigateToMatchScreen)
     }
+
+    override fun onCollectionClick(collectionId: Int, collectionName: String) {
+        sendEffect(
+            HomeEffect.NavigateToCollection(
+                collectionId = collectionId,
+                collectionName = collectionName
+            )
+        )
+    }
 }

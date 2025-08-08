@@ -12,4 +12,9 @@ interface HomeInteractionListener {
     fun onYourCollectionClicked()
     fun onExploreSectionClicked()
     fun onMatchSectionClicked()
+
+    fun onCollectionClick(
+        collectionId: Int,
+        collectionName: String
+    )
 }

@@ -55,6 +55,7 @@ fun HomeScreen(
     navigateToYourCollection: () -> Unit,
     navigateToExploreScreen: () -> Unit,
     navigateToMatchScreen: () -> Unit,
+    navigateToCollection: (collectionId: Int, collectionName: String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     EventListener(viewModel.effect) { effect ->
@@ -104,6 +105,12 @@ fun HomeScreen(
                 )
             }
 
+            is HomeEffect.NavigateToCollection -> {
+                navigateToCollection(
+                    effect.collectionId,
+                    effect.collectionName
+                )
+            }
             is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
             is HomeEffect.NavigateToMatchScreen -> navigateToMatchScreen()
             is HomeEffect.ShowError -> {}
@@ -296,7 +303,8 @@ fun HomeContent(
                     YourCollectionsSections(
                         modifier = Modifier.padding(vertical = 16.dp),
                         collectionItems = state.yourCollections,
-                        onShowMoreClick = interactionListener::onYourCollectionClicked
+                        onShowMoreClick = interactionListener::onYourCollectionClicked,
+                        onCollectionClick = interactionListener::onCollectionClick
                     )
                 }
 
@@ -353,6 +361,9 @@ fun HomeContentPreview() {
         override fun onYourCollectionClicked() {}
         override fun onExploreSectionClicked() {}
         override fun onMatchSectionClicked() {}
+        override fun onCollectionClick(collectionId: Int, collectionName: String) {
+            TODO("Not yet implemented")
+        }
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(
