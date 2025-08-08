@@ -1,7 +1,5 @@
 package com.giraffe.home.navigation.main
 
-import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
