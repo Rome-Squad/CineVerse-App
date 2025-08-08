@@ -17,7 +17,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.toRoute
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
 import com.giraffe.designsystem.theme.Theme
@@ -101,37 +100,16 @@ fun MainNavGraph(
                 route = HomeRoute.route
             ) {
                 HomeNavGraph(
-                    navigateToMovieDetails = {
-                        navController.navigateToMovieDetails(it)
-                        isBottomBarVisible = false
-                    },
-                    navigateToSeriesDetails = {
-                        navController.navigateToSeriesDetails(it)
-                        isBottomBarVisible = false
-                    },
-                    navigateToCollection = navController::navigateToCollection,
-                    navigateToYourCollections = navController::navigateToYourCollections,
                     navigateToExplore = navController::navigateToExplore,
                     navigateToMatch = navController::navigateToMatch,
+                    detailsApi = detailsApi,
+                    profileApi = profileApi,
                 ) {
                     isBottomBarVisible = it
                 }
 
             }
 
-            composable<SeriesDetailsRoute> { backStackEntry ->
-                val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
-                detailsApi.SeriesDetailsContainer(seriesId) {
-                    navController.popBackStack()
-                }
-            }
-
-            composable<MovieDetailsRoute> { backStackEntry ->
-                val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId
-                detailsApi.MovieDetailsContainer(movieId) {
-                    navController.popBackStack()
-                }
-            }
 
             composable(
                 route = ExploreRoute.route
@@ -153,29 +131,6 @@ fun MainNavGraph(
                 profileApi.ProfileContainer { isBottomBarVisible = it }
             }
 
-            composable<YourCollectionsRoute> {
-                profileApi.YourCollectionsContainer(
-                    navigateBack = {
-                        navController.popBackStack()
-                    },
-                    onShowBottomBarChange = { isBottomBarVisible = it }
-                )
-            }
-
-            composable<CollectionRoute> { backStackEntry ->
-                val args = backStackEntry.toRoute<CollectionRoute>()
-                val collectionId = args.collectionId
-                val collectionName = args.collectionName
-                profileApi.CollectionContainer(
-                    collectionId = collectionId,
-                    collectionName = collectionName,
-                    navigateBack = {
-                        navController.popBackStack()
-                    }
-                ) {
-                    isBottomBarVisible = it
-                }
-            }
         }
 
         BottomNavigationBar(
@@ -195,8 +150,5 @@ fun MainNavGraph(
         )
     }
 
-    val activity = LocalActivity.current
-    val isAtRoot =
-        navController.currentDestination?.route == navController.graph.startDestinationRoute
-    BackHandler(isAtRoot) { activity?.finish() }
+
 }
