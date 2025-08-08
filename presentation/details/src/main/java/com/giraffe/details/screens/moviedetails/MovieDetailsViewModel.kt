@@ -65,6 +65,12 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onLoginButtonClick() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = false,
+                isVisibleLoginBottomSheet = false
+            )
+        }
         sendEffect(MovieDetailsEffect.NavigateToLogin)
     }
 
