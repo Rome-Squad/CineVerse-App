@@ -1,7 +1,6 @@
 package com.giraffe.details.screens.seriesdetails
 
 
-
 interface SeriesDetailsEffect {
     data class Error(val error: Throwable) : SeriesDetailsEffect
     data class NavigateToCastDetails(val personId: Int) :
@@ -18,5 +17,6 @@ interface SeriesDetailsEffect {
 
     data class NavigateToReviews(val seriesId: Int) : SeriesDetailsEffect
 
+    object NavigateToLogin : SeriesDetailsEffect
 
 }
