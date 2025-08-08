@@ -2,23 +2,21 @@ package com.giraffe.details.screens.moviedetails
 
 interface MovieDetailsInteractionListener {
 
-    fun onAddToCollectionClick()
+    fun onShowAddToCollectionBottomSheet()
 
-    fun onCreateCollectionClick()
+    fun onAddToCollectionButtonClick()
 
     fun onCollectionClick()
 
-    fun onLoginClick()
+    fun onLoginButtonClick()
 
-    fun onPersonClick(personId: Int)
+    fun onShowMoreReviewsTextClick()
 
-    fun onShowMoreReviewsClick()
+    fun onMoviePosterClick(movieId: Int)
 
-    fun onMovieClick(movieId: Int)
+    fun onGiveStarsCardClick()
 
-    fun onGiveStarsClick()
-
-    fun onAddRatingClick()
+    fun onAddRateButtonClick()
 
     fun onDismissAddToCollectionBottomSheet()
 
@@ -26,15 +24,15 @@ interface MovieDetailsInteractionListener {
 
     fun onDismissGiveStarsBottomSheet()
 
-    fun navigateToCastDetailsScreen(personId: Int)
+    fun onCastCardClick(personId: Int)
 
-    fun navigateToMovieRecommendation(movieId: Int, title: String)
-    fun navigateToReviews(movieId: Int)
+    fun onShowMoreRecommendedMoviesTextClick(movieId: Int, title: String)
+
+    fun onShowMoreReviewsTextClick(movieId: Int)
 
     fun onRateChange(rate: Int)
+
+    fun onBackButtonClick()
+
+    fun onPlayButtonClick(url: String)
 }
-
-
-
-
-

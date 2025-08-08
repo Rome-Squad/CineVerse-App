@@ -13,7 +13,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class MovieDetailsRoute(val id: Int)
 
-
 fun NavController.navigateToMovieDetails(id: Int) {
     navigate(MovieDetailsRoute(id))
 }
@@ -23,7 +22,6 @@ fun NavGraphBuilder.movieDetailsRoute(
     onBackButtonClick: () -> Unit,
 ) {
     composable<MovieDetailsRoute> {
-
         MovieDetailsScreen(
             navigateToReviews = {
                 navController.navigateToReviews(movieId = it)

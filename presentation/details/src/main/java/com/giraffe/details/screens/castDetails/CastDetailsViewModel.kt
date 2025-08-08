@@ -8,8 +8,8 @@ import com.giraffe.details.screens.castCredit.MediaType
 import com.giraffe.details.screens.castDetails.state.CastDetailsUiState
 import com.giraffe.details.screens.castDetails.state.toUiState
 import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 import com.giraffe.media.person.usecase.AddRecentPersonUseCase
+import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -26,11 +26,11 @@ class CastDetailsViewModel @Inject constructor(
         getPersonDetails(personId)
     }
 
-    override fun navigateToActorMediaLink(url: String) {
+    override fun onSocialMediaLinkClick(url: String) {
         sendEffect(CastDetailsEffect.OpenUrl(url))
     }
 
-    override fun navigateToActorGalleryScreen() {
+    override fun onShowMoreGalleryTextClick() {
         sendEffect(
             CastDetailsEffect.NavigateToGallery(
                 actorName = state.value.actorName,
@@ -39,7 +39,7 @@ class CastDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun navigateToCastCreditScreen(castId: Int, actorName: String) {
+    override fun onShowMoreCastCreditsTextClick(castId: Int, actorName: String) {
         sendEffect(
             CastDetailsEffect.NavigateToCastCredit(
                 castID = castId,
@@ -53,6 +53,10 @@ class CastDetailsViewModel @Inject constructor(
             MediaType.MOVIE.value -> sendEffect(CastDetailsEffect.NavigateToMovieDetails(mediaId))
             MediaType.TV.value -> sendEffect(CastDetailsEffect.NavigateToSeriesDetails(mediaId))
         }
+    }
+
+    override fun onBackArrowClick() {
+        sendEffect(CastDetailsEffect.NavigateUp)
     }
 
     private fun getPersonDetails(personId: Int) {
@@ -100,5 +104,4 @@ class CastDetailsViewModel @Inject constructor(
             )
         }
     }
-
 }

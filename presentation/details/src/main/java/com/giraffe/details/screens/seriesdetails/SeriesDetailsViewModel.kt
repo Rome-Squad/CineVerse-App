@@ -66,7 +66,7 @@ class SeriesDetailsViewModel @Inject constructor(
         loadSeriesPeople(seriesID)
     }
 
-    override fun onClickGiveStars() {
+    override fun onGiveStarsCardClick() {
         updateState {
             it.copy(
                 isVisibleGiveStarsBottomSheet = true
@@ -85,7 +85,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
 
-    override fun onClickAddToCollection() {
+    override fun onAddToCollectionButtonClick() {
         updateState {
             it.copy(
                 isVisibleAddToCollectionBottomSheet = true
@@ -93,7 +93,9 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun onClickCreateCollection() {}
+    override fun onClickCreateCollection() {
+        //todo
+    }
 
     override fun onDismissAddToCollectionBottomSheet() {
         updateState {
@@ -120,7 +122,7 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun navigateToCastDetailsScreen(personId: Int) {
+    override fun onCastCardClick(personId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToCastDetails(
                 personId = personId
@@ -128,7 +130,7 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun navigateToSeasonsScreen(seriesId: Int) {
+    override fun onShowMoreSeasonsTextClick(seriesId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToSeasons(
                 seriesId = seriesId
@@ -136,7 +138,7 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun navigateToRecommendedSeriesScreen(seriesId: Int, title: String) {
+    override fun onShowMoreRecommendedSeriesTextClick(seriesId: Int, title: String) {
         sendEffect(
             SeriesDetailsEffect.NavigateToRecommendedSeries(
                 seriesId = seriesId,
@@ -145,13 +147,13 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun navigateToSeriesDetails(seriesId: Int) {
+    override fun onSeriesPosterClick(seriesId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToSeriesDetails(seriesId)
         )
     }
 
-    override fun addRate() {
+    override fun onAddRateButtonClick() {
         safeExecute {
             if (isLoggedInUseCase()) {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
@@ -171,23 +173,30 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun navigateToReviews(seriesId: Int) {
+    override fun onShowMoreReviewsTextClick(seriesId: Int) {
         sendEffect(
             SeriesDetailsEffect.NavigateToReviews(seriesId)
         )
     }
 
+    override fun onPlayButtonClick(url: String) {
+        sendEffect(SeriesDetailsEffect.NavigateToYouTubePlayer(url))
+    }
+
+    override fun onLoginButtonClick() {
+        sendEffect(SeriesDetailsEffect.NavigateToLogIn)
+    }
+
+    override fun onBackButtonClick() {
+        sendEffect(SeriesDetailsEffect.OnBackButtonClick)
+    }
 
     private fun loadSeriesDetails(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesDetailsSuccess,
             onError = ::loadSeriesDetailsError
         ) {
-            updateState {
-                it.copy(
-                    isLoading = true
-                )
-            }
+            updateState { it.copy(isLoading = true) }
             getSeriesDetails(seriesId)
         }
     }
@@ -215,10 +224,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun saveSeriesToRecent(series: Series) {
-        safeExecute(
-            onError = {},
-            onSuccess = {}
-        ) {
+        safeExecute {
             storeRecentSeriesUseCase(series)
         }
     }

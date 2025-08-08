@@ -44,6 +44,128 @@ class MovieDetailsViewModel @Inject constructor(
         loadMovieDetailsScreen()
     }
 
+    override fun onShowAddToCollectionBottomSheet() {
+        updateState {
+            it.copy(
+                isVisibleAddToCollectionBottomSheet = true
+            )
+        }
+    }
+
+    override fun onAddToCollectionButtonClick() {
+        if (!state.value.isLoggedIn) {
+            updateState {
+                it.copy(
+                    isVisibleLoginBottomSheet = true
+                )
+            }
+        } else {
+            sendEffect(MovieDetailsEffect.NavigateToCollection)
+        }
+    }
+
+    override fun onLoginClick() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = false,
+                isVisibleLoginBottomSheet = false
+            )
+        }
+        sendEffect(MovieDetailsEffect.NavigateToLogin)
+    }
+
+
+    override fun onShowMoreReviewsTextClick() {
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))
+    }
+
+    override fun onMoviePosterClick(movieId: Int) {
+        updateState {
+            MovieDetailsScreenState()
+        }
+        loadMovieDetails(movieId)
+    }
+
+    override fun onGiveStarsCardClick() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = true
+            )
+        }
+    }
+
+    override fun onDismissAddToCollectionBottomSheet() {
+        updateState {
+            it.copy(
+                isVisibleAddToCollectionBottomSheet = false
+            )
+        }
+    }
+
+    override fun onDismissLoginBottomSheet() {
+        updateState {
+            it.copy(
+                isVisibleLoginBottomSheet = false
+            )
+        }
+    }
+
+    override fun onDismissGiveStarsBottomSheet() {
+        updateState {
+            it.copy(
+                isVisibleGiveStarsBottomSheet = false
+            )
+        }
+    }
+
+    override fun onCastCardClick(personId: Int) {
+        sendEffect(
+            MovieDetailsEffect.NavigateToCastDetails(
+                personId = personId
+            )
+        )
+    }
+
+    override fun onShowMoreRecommendedMoviesTextClick(movieId: Int, title: String) {
+        sendEffect(MovieDetailsEffect.NavigateToMoviesRecommended(movieId, title))
+    }
+
+    override fun onShowMoreReviewsTextClick(movieId: Int) {
+        sendEffect(MovieDetailsEffect.NavigateToReviews(state.value.movie.id))
+    }
+
+    override fun onRateChange(rate: Int) {
+        safeExecute {
+            updateState { it.copy(currentRating = rate) }
+        }
+    }
+
+    override fun onBackButtonClick() {
+        sendEffect(MovieDetailsEffect.NavigateUp)
+    }
+
+    override fun onPlayButtonClick(url: String) {
+        sendEffect(MovieDetailsEffect.NavigateToYouTubePlayer(url))
+    }
+
+    override fun onCollectionClick() {
+        sendEffect(MovieDetailsEffect.NavigateToCollection)
+    }
+
+    override fun onAddRateButtonClick() {
+        safeExecute {
+            if (isLoggedInUseCase()) {
+                updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
+                addRatingUseCase(
+                    movieId = state.value.movie.id,
+                    ratingValue = state.value.currentRating.toFloat()
+                )
+            } else {
+                updateState { it.copy(isVisibleLoginBottomSheet = true) }
+            }
+        }
+    }
+
     fun loadMovieDetailsScreen() {
         updateState {
             it.copy(
@@ -205,6 +327,7 @@ class MovieDetailsViewModel @Inject constructor(
         }
         sendEffect(MovieDetailsEffect.Error(error))
     }
+
 
     //user interaction listeners
     override fun onAddToCollectionClick() {

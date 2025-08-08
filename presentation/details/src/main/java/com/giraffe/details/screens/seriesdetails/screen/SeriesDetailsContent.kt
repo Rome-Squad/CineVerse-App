@@ -54,9 +54,7 @@ import kotlin.math.min
 fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
     interaction: SeriesDetailsInteractionListener,
-    onBackButtonClick: () -> Unit,
-    onClickPlay: (String) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val scrollState = rememberLazyListState()
     var imageWidth by rememberSaveable { mutableIntStateOf(216) }
@@ -72,10 +70,10 @@ fun SeriesDetailsContent(
                 if (
                     (scrollState.firstVisibleItemIndex != 0 || scrollState.firstVisibleItemScrollOffset != 0)
                     && delta > 0
-                ) return Offset(
-                    consumedX.toFloat(),
-                    consumedY.toFloat()
-                )
+                ) {
+                    return Offset(consumedX.toFloat(), consumedY.toFloat())
+                }
+
                 val newImageWidth = imageWidth + delta
                 val previousImageWidth = imageWidth
                 imageWidth = newImageWidth.coerceIn(40, 216)
@@ -117,7 +115,7 @@ fun SeriesDetailsContent(
                 Column(modifier.background(Theme.color.background.screen)) {
                     AppBar(
                         showBackButton = true,
-                        onBackButtonClick = onBackButtonClick,
+                        onBackButtonClick = interaction::onBackButtonClick,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
 
@@ -129,8 +127,8 @@ fun SeriesDetailsContent(
                         genres = state.genres,
                         releaseYear = state.seriesDetails.releaseYear,
                         isPlayButtonEnabled = state.seriesDetails.youtubeVideoId.isNotBlank(),
-                        onClickPlay = { onClickPlay(state.seriesDetails.youtubeVideoId) },
-                        onClickAdd = interaction::onClickAddToCollection,
+                        onClickPlay = { interaction.onPlayButtonClick(state.seriesDetails.youtubeVideoId) },
+                        onClickAdd = interaction::onAddToCollectionButtonClick,
                         modifier = Modifier.padding(horizontal = 16.dp),
                         duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
                         animationProgress = animationProgress
@@ -154,7 +152,7 @@ fun SeriesDetailsContent(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         title = stringResource(R.string.latest_seasons),
                         clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
-                        onClickableText = { interaction.navigateToSeasonsScreen(state.seriesDetails.id) }
+                        onClickableText = { interaction.onShowMoreSeasonsTextClick(state.seriesDetails.id) }
                     )
                 }
             }
@@ -190,7 +188,7 @@ fun SeriesDetailsContent(
                     StarCastSection(
                         title = stringResource(R.string.star_cast),
                         castList = state.cast,
-                        onCastClick = interaction::navigateToCastDetailsScreen
+                        onCastClick = interaction::onCastCardClick
                     )
                 }
             }
@@ -212,13 +210,13 @@ fun SeriesDetailsContent(
                         endText = stringResource(R.string.show_more),
                         posters = state.recommendedSeries,
                         onClickEndText = {
-                            interaction.navigateToRecommendedSeriesScreen(
+                            interaction.onShowMoreRecommendedSeriesTextClick(
                                 seriesId = state.seriesDetails.id,
                                 title = state.seriesDetails.name
                             )
                         },
                         onClickPoster = {
-                            interaction.navigateToSeriesDetails(it.id)
+                            interaction.onSeriesPosterClick(it.id)
                         }
                     )
                 }
@@ -227,7 +225,7 @@ fun SeriesDetailsContent(
             item {
                 RatingSection(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    onClickCard = interaction::onClickGiveStars
+                    onClickCard = interaction::onGiveStarsCardClick
                 )
             }
 
@@ -243,7 +241,7 @@ fun SeriesDetailsContent(
                             modifier = Modifier,
                             title = stringResource(R.string.top_reviews),
                             clickableText = if (state.seriesReviews.size > 3) stringResource(R.string.show_more) else null,
-                            onClickableText = { interaction.navigateToReviews(state.seriesDetails.id) }
+                            onClickableText = { interaction.onShowMoreReviewsTextClick(state.seriesDetails.id) }
                         )
 
                         val reviewsToShow = state.seriesReviews.take(3)
@@ -270,7 +268,7 @@ fun SeriesDetailsContent(
             modifier = Modifier.padding(vertical = 28.dp, horizontal = 12.dp),
             content = {
                 CollectionBottomSheetContent(
-                    onCreateCollectionClick = interaction::onClickAddToCollection
+                    onCreateCollectionClick = interaction::onAddToCollectionButtonClick
                 )
             }
         )
@@ -294,7 +292,7 @@ fun SeriesDetailsContent(
                             .padding(top = 24.dp),
                         text = stringResource(R.string.add_to_rate),
                         enabled = state.currentRating > 0,
-                        onClick = interaction::addRate
+                        onClick = interaction::onAddRateButtonClick
                     )
                 }
             }

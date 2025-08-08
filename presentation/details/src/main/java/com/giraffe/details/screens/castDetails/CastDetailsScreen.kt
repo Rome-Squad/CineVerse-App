@@ -76,6 +76,7 @@ fun CastDetailsScreen(
 
             is CastDetailsEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
             is CastDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
+            is CastDetailsEffect.NavigateUp -> onBackButtonClick()
         }
     }
 
@@ -88,7 +89,6 @@ fun CastDetailsScreen(
         CastDetailsContent(
             state = state,
             interaction = castDetailsViewModel,
-            onBackArrowClick = onBackButtonClick,
             modifier = modifier,
         )
 
@@ -118,7 +118,6 @@ fun CastDetailsScreen(
 fun CastDetailsContent(
     state: CastDetailsUiState,
     interaction: CastDetailsInteractionListener,
-    onBackArrowClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val padding16 = 16.dp
@@ -172,7 +171,7 @@ fun CastDetailsContent(
                     AppBar(
                         showBackButton = true,
                         hasBackground = false,
-                        onBackButtonClick = onBackArrowClick,
+                        onBackButtonClick = interaction::onBackArrowClick,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
 
@@ -182,7 +181,7 @@ fun CastDetailsContent(
                         actorBirthday = state.actorBirth,
                         actorPlaceOfBirth = state.actorPlace,
                         socialMediaUiList = state.socialMediaUiList,
-                        onLinkClick = interaction::navigateToActorMediaLink,
+                        onSocialMediaLinkClick = interaction::onSocialMediaLinkClick,
                         animationProgress = animationProgress
                     )
 
@@ -210,7 +209,7 @@ fun CastDetailsContent(
                         )
                     },
                     onClickEndText = {
-                        interaction.navigateToCastCreditScreen(
+                        interaction.onShowMoreCastCreditsTextClick(
                             state.actorId,
                             state.actorName
                         )
@@ -225,7 +224,7 @@ fun CastDetailsContent(
                         .fillMaxWidth()
                         .padding(horizontal = padding16),
                     imageUrls = state.actorGalleryImageUrls,
-                    onShowMoreClick = interaction::navigateToActorGalleryScreen
+                    onShowMoreClick = interaction::onShowMoreGalleryTextClick
                 )
             }
 
@@ -249,7 +248,7 @@ private fun MainDetailsAnimatedContent(
     actorPlaceOfBirth: String,
     actorImageUrl: String?,
     socialMediaUiList: List<SocialMediaUi>,
-    onLinkClick: (String) -> Unit,
+    onSocialMediaLinkClick: (String) -> Unit,
     animationProgress: Float
 ) {
     MainDetails(
@@ -257,7 +256,7 @@ private fun MainDetailsAnimatedContent(
         actorBirthday = actorBirthday,
         actorPlaceOfBirth = actorPlaceOfBirth,
         socialMediaUiList = socialMediaUiList,
-        onLinkClick = onLinkClick,
+        onLinkClick = onSocialMediaLinkClick,
         actorImageUrl = actorImageUrl,
         animationProgress = animationProgress,
         modifier = Modifier
