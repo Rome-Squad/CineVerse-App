@@ -38,6 +38,7 @@ fun SeriesDetailsScreen(
     EventListener(events = viewModel.effect) {
         when (it) {
             is SeriesDetailsEffect.Error -> {}
+            SeriesDetailsEffect.NavigateToLogin -> navigateToLogIn()
             is SeriesDetailsEffect.NavigateToCastDetails -> navigateToCastDetails(it.personId)
 
             is SeriesDetailsEffect.NavigateToSeasons -> navigateToSeason(it.seriesId)
@@ -85,7 +86,6 @@ fun SeriesDetailsScreen(
                 interaction = viewModel,
                 onBackButtonClick = onBackButtonClick,
                 onClickPlay = onClickPlay,
-                navigateToLogIn = navigateToLogIn,
                 modifier = Modifier.fillMaxSize()
             )
         }
