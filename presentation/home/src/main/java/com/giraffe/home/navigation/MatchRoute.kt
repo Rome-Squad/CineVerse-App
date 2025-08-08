@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-object MatchRoute : Route
+object MatchRoute : Route("match")
 
 class MatchTab(
     override val labelRes: Int,

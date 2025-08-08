@@ -1,5 +1,6 @@
 package com.giraffe.home.navigation
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
@@ -73,12 +74,16 @@ fun HomeNavGraph(
     val currentRouteString = navBackStackEntry?.destination?.route
 
     val currentRoute = when (currentRouteString) {
-        HomeRoute::class.qualifiedName -> HomeRoute
-        ExploreRoute::class.qualifiedName -> ExploreRoute
-        MatchRoute::class.qualifiedName -> MatchRoute
-        ProfileRoute::class.qualifiedName -> ProfileRoute
+        HomeRoute.route -> HomeRoute
+        ExploreRoute.route -> ExploreRoute
+        MatchRoute.route -> MatchRoute
+        ProfileRoute.route -> ProfileRoute
         else -> null
     }
+
+    Log.d("NAVBAR", "HomeNavGraph: currentRouteString = $currentRouteString")
+    Log.d("NAVBAR", "HomeNavGraph: currentRoute = $currentRoute")
+
 
     var isBottomBarVisible by rememberSaveable {
         mutableStateOf(
@@ -87,7 +92,7 @@ fun HomeNavGraph(
     }
 
     LaunchedEffect(currentRouteString) {
-        if (currentRouteString == HomeRoute::class.qualifiedName) {
+        if (currentRouteString == HomeRoute.route) {
             isBottomBarVisible = true
         }
     }
@@ -99,7 +104,7 @@ fun HomeNavGraph(
     ) {
         NavHost(
             navController = navController,
-            startDestination = HomeRoute,
+            startDestination = HomeRoute.route,
             modifier = Modifier.weight(1f)
         ) {
 
@@ -172,17 +177,23 @@ fun HomeNavGraph(
                 }
             }
 
-            composable<ExploreRoute> {
+            composable(
+                route = ExploreRoute.route
+            ) {
                 exploreApi.ExploreContainer {
                     isBottomBarVisible = it
                 }
             }
 
-            composable<MatchRoute> {
+            composable(
+                route = MatchRoute.route
+            ) {
                 matchApi.MatchContainer { isBottomBarVisible = it }
             }
 
-            composable<ProfileRoute> {
+            composable(
+                route = ProfileRoute.route
+            ) {
                 profileApi.ProfileContainer { isBottomBarVisible = it }
             }
 
@@ -216,7 +227,7 @@ fun HomeNavGraph(
             selectedTabRoute = currentRoute,
             isBottomBarVisible = isBottomBarVisible,
             onTabSelected = { tab ->
-                navController.navigate(tab.route) {
+                navController.navigate(tab.route.route) {
                     popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
                         inclusive = true

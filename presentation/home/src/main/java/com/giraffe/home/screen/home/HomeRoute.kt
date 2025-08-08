@@ -7,7 +7,7 @@ import com.giraffe.designsystem.composable.navbar.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object HomeRoute : Route
+data object HomeRoute : Route("home")
 
 class HomeTab(
     override val labelRes: Int,
@@ -27,7 +27,9 @@ fun NavGraphBuilder.homeRoute(
     navigateToYourCollection: () -> Unit,
     navigateToCollection: (collectionId: Int, collectionName: String) -> Unit
 ) {
-    composable<HomeRoute> {
+    composable(
+        route = HomeRoute.route
+    ) {
         HomeScreen(
             navigateToMoviesListScreen = navigateToMoviesScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,

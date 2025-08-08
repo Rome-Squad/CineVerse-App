@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-object ProfileRoute: Route
+object ProfileRoute: Route("profile")
 
 class ProfileTab(
     override val labelRes: Int,

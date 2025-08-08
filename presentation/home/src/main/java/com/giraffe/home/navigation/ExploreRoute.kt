@@ -5,7 +5,7 @@ import com.giraffe.designsystem.composable.navbar.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ExploreRoute : Route
+object ExploreRoute : Route("explore")
 
 class ExploreTab(
     override val labelRes: Int,
