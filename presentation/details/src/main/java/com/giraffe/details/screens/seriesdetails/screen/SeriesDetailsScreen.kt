@@ -28,7 +28,7 @@ fun SeriesDetailsScreen(
     navigateToSeason: (seriesId: Int) -> Unit,
     navigateToSeriesDetails: (seriesId: Int) -> Unit,
     onBackButtonClick: () -> Unit,
-    onClickPlay: (String) -> Unit,
+    navigateToYouTubePlayer: (String) -> Unit,
     navigateToLogIn: () -> Unit,
     navigateToReviews: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -37,19 +37,25 @@ fun SeriesDetailsScreen(
     val state = viewModel.state.collectAsState().value
     EventListener(events = viewModel.effect) {
         when (it) {
-            is SeriesDetailsEffect.Error -> {}
             is SeriesDetailsEffect.NavigateToCastDetails -> navigateToCastDetails(it.personId)
 
             is SeriesDetailsEffect.NavigateToSeasons -> navigateToSeason(it.seriesId)
 
             is SeriesDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
 
-            is SeriesDetailsEffect.NavigateToRecommendedSeries -> navigateToRecommendedSeries(
-                it.seriesId,
-                it.title
-            )
+            is SeriesDetailsEffect.NavigateToRecommendedSeries -> {
+                navigateToRecommendedSeries(it.seriesId, it.title)
+            }
 
             is SeriesDetailsEffect.NavigateToReviews -> navigateToReviews(it.seriesId)
+
+            is SeriesDetailsEffect.NavigateToLogIn -> navigateToLogIn()
+
+            is SeriesDetailsEffect.OnBackButtonClick -> onBackButtonClick()
+
+            is SeriesDetailsEffect.NavigateToYouTubePlayer -> navigateToYouTubePlayer(it.url)
+
+            is SeriesDetailsEffect.Error -> Unit
         }
     }
 
@@ -83,9 +89,6 @@ fun SeriesDetailsScreen(
             SeriesDetailsContent(
                 state = state,
                 interaction = viewModel,
-                onBackButtonClick = onBackButtonClick,
-                onClickPlay = onClickPlay,
-                navigateToLogIn = navigateToLogIn,
                 modifier = Modifier.fillMaxSize()
             )
         }
