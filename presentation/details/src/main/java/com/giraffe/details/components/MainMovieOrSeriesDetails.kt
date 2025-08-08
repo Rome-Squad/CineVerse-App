@@ -5,11 +5,13 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -18,7 +20,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -58,12 +62,15 @@ fun MainMovieOrSeriesDetails(
     )
 
     val imageClipRadius = Theme.radius.xl
-
+    val hasSensitiveText by remember(animationProgress) {
+        derivedStateOf { animationProgress < 0.5f }
+    }
     Box(Modifier.fillMaxWidth()) {
         Box(modifier.fillMaxWidth()) {
             posterUrl?.let {
                 SafeIslamicImage(
                     imageUrl = it,
+                    hasSensitiveText = hasSensitiveText,
                     contentDescription = stringResource(R.string.poster_image),
                     modifier = Modifier
                         .align(BiasAlignment(animationProgress * -1, -1f))
@@ -73,19 +80,21 @@ fun MainMovieOrSeriesDetails(
                             height = 289.dp - (289 - 40).dp * (animationProgress)
                         )
                         .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * animationProgress)),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    placeHolderTint = Theme.color.brand.secondary,
+                    placeholderModifier = Modifier
+                        .fillMaxSize()
+                        .border(
+                            width = 1.dp,
+                            color = Theme.color.stroke.primary,
+                            shape = RoundedCornerShape(
+                                imageClipRadius
+                                        + (40.dp - imageClipRadius)
+                                        * animationProgress
+                            )
+
+                        )
                 )
-                {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.image),
-                        contentDescription = null,
-                        tint = Theme.color.brand.secondary,
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(RoundedCornerShape(Theme.radius.xl))
-                            .background(Theme.color.background.card),
-                    )
-                }
 
                 Row(
                     modifier = Modifier

@@ -28,8 +28,11 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         }.results
 
 
-    override suspend fun getMovieReviews(movieId: Int): List<ReviewDto> =
-        retrofitRequestBuilder.get { getMovieReviews(movieId) }.results
+    override suspend fun getMovieReviews(
+        movieId: Int,
+        page: Int
+    ): List<ReviewDto> =
+        retrofitRequestBuilder.get { getMovieReviews(movieId, page = page) }.results
 
     override suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getRecommendations(movieId, page) }.results
@@ -57,4 +60,11 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         val results = retrofitRequestBuilder.get { getMovieTrailerUrl(movieId) }.results
         return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
     }
+
+    override suspend fun getRatedMovies(
+        accountId: Int
+    ): List<MovieDto> = retrofitRequestBuilder.get { getRatedMovies(accountId) }.results
+
+    override suspend fun deleteMovieRating(movieId: Int) =
+        retrofitRequestBuilder.delete { deleteMovieRating(movieId) }
 }

@@ -12,7 +12,7 @@ import com.giraffe.details.base.BasePagingSource
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.toMovieUi
 import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class RecommendedMoviesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getRecommendedMovies: GetRecommendedMovieUseCase,
-    private val getMovieGenres: GetMovieGenresUseCase
+    private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase
 ) : ViewModel(), RecommendedInteractionListener {
 
     private val movieId: Int = checkNotNull(savedStateHandle["movieId"])
@@ -46,7 +46,7 @@ class RecommendedMoviesViewModel @Inject constructor(
 
     private suspend fun mapMovieToMovieUi(movie: Movie): MovieUi {
         val movieUi = movie.toMovieUi()
-        val genres = getMovieGenres(movieUi.genresID).map { it.title }
+        val genres = getMoviesGenresByIds(movieUi.genresID).map { it.title }
         return movieUi.copy(genres = genres)
     }
 

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -35,13 +37,9 @@ fun SafeIslamicImage(
     contentScale: ContentScale = ContentScale.FillBounds,
     alignment: Alignment = Alignment.Center,
     hasSensitiveText: Boolean = true,
-    placeHolder: @Composable (modifier: Modifier) -> Unit = {
-        Image(
-            painter = painterResource(id = R.drawable.placeholder),
-            contentDescription = stringResource(id = R.string.placeholder),
-            modifier = modifier
-        )
-    }
+    placeholderModifier: Modifier = Modifier,
+    placeholderIcon: Painter = painterResource(id = R.drawable.placeholder),
+    placeHolderTint: Color = Color(0xFFE1E1E3),
 ) {
     val context = LocalContext.current
     val host = remember { SafeIslamicImageHost(context.applicationContext) }
@@ -56,7 +54,7 @@ fun SafeIslamicImage(
     ) {
         when (val state = host.imageState) {
             is ImageState.Loading -> {
-                placeHolder(modifier)
+                Placeholder(placeholderIcon, placeholderModifier, placeHolderTint)
             }
 
             is ImageState.Success -> {
@@ -98,8 +96,23 @@ fun SafeIslamicImage(
             }
 
             is ImageState.Error -> {
-                placeHolder(modifier)
+                Placeholder(placeholderIcon, placeholderModifier, placeHolderTint)
             }
         }
     }
+}
+
+@Composable
+private fun Placeholder(
+    icon: Painter,
+    modifier: Modifier,
+    tint: Color,
+) {
+    Image(
+        painter = icon,
+        contentDescription = stringResource(id = R.string.placeholder),
+        colorFilter = ColorFilter.tint(tint),
+        modifier = modifier
+            .wrapContentSize()
+    )
 }

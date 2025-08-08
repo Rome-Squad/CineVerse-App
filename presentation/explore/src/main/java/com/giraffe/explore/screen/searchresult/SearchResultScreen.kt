@@ -1,10 +1,14 @@
 package com.giraffe.explore.screen.searchresult
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +29,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.Tabs
+import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.CastItem
@@ -126,6 +131,20 @@ private fun SearchResultContent(
                     }
                 }
             }
+        }
+        AnimatedVisibility(
+            visible = state.selectedTab != SearchTab.ACTORS,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
+                .padding(bottom = 16.dp, end = 16.dp)
+        ) {
+            ViewToggle(
+                isListSelected = !state.isGridSelected,
+                onGridSelected = interactions::changeView
+            )
         }
     }
 }

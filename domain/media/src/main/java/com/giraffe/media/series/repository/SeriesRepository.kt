@@ -13,14 +13,23 @@ interface SeriesRepository {
     suspend fun getSeriesGenres(): List<Genre>
     suspend fun getRecentSeries(): Flow<List<Series>>
     suspend fun clearRecentSeries()
+    suspend fun clearAllSeriesExceptRecentlyViewed()
+    suspend fun clearAllSeries()
     suspend fun getSeriesDetails(seriesId: Int): Series
     suspend fun getRecommendedSeries(seriesId: Int, page: Int, limit: Int): List<Series>
+    suspend fun addRecommendedSeries(series: List<Series>)
     suspend fun getSeriesReviews(seriesId: Int, page: Int = 1): List<Review>
     suspend fun getSeasonOfSeries(seriesId: Int): List<Season>
     suspend fun getSeriesByGenre(genreId: Int, page: Int): List<Series>
     suspend fun getSeriesGenresByIds(genreIDs: List<Int>): List<Genre>
     suspend fun addGenres(genres: List<Genre>)
     suspend fun getPopularitySeries(page: Int, limit: Int): List<Series>
+    suspend fun addPopularitySeries(series: List<Series>)
     suspend fun getRecentlyReleasedSeries(page: Int, limit: Int): List<Series>
+    suspend fun addRecentlyReleasedSeries(series: List<Series>)
     suspend fun getTopRatedSeries(page: Int, limit: Int): List<Series>
+    suspend fun getRatedSeries(accountId: Int): Map<Float, Series>
+    suspend fun deleteSeriesRating(seriesId: Int)
+    suspend fun deleteSeriesById(seriesId: Int)
+    suspend fun addTopRatedSeries(series: List<Series>)
 }

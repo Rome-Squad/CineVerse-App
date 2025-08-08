@@ -12,13 +12,16 @@ data class MovieDto(
     val genresID: List<Int> = emptyList(),
     val genres: List<MovieGenreDto> = emptyList(),
     @SerialName("poster_path")
-    val posterPath : String? = null,
+    val posterPath: String? = null,
     @SerialName("vote_average")
-    val voteAverage : Float? = null,
+    val voteAverage: Float? = null,
+    @SerialName("rating")
+    val userRating: Float? = null,
     @SerialName("release_date")
-    val releaseDate : String? = null,
+    val releaseDate: String? = null,
     @SerialName("backdrop_path")
-    val backdropPath : String? = null,
+    val backdropPath: String? = null,
     val runtime: Int? = null,
-    var youtubeVideoId: String? = null
+    var youtubeVideoId: String? = null,
+    val popularity: Float? = null,
 )

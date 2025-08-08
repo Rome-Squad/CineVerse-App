@@ -1,7 +1,6 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.google.common.truth.Truth.assertThat
@@ -31,19 +30,17 @@ class SeriesRoomLocalDateSourceTest {
             "2015"
         )
     )
-    private val sampleSeasons = listOf(
-        SeasonCacheDto(
-            1,
-            1,
-            "S1",
-            "desc",
-            8.0f,
-            "poster",
-            1,
-            "2015",
-            10
+    private val oldSeries = sampleSeries.map {
+        it.copy(
+            isRecentViewed = true,
+            recentViewedAt = 9999L,
+            isRecentlyReleased = false,
+            isRecommended = true,
+            isTopRated = true,
+            isPopularity = false
         )
-    )
+    }
+
     private val sampleGenres = listOf(
         SeriesGenreCacheDto(id = 1, name = "Action", count = 1)
     )
@@ -75,27 +72,42 @@ class SeriesRoomLocalDateSourceTest {
 
 
     @Test
-    fun `saveGenres inserts genres`() = runTest {
-        val genres = listOf(SeriesGenreCacheDto(id = 2, name = "Drama", count = 2))
+    fun `insertGenres inserts genres`() = runTest {
+        val newGenres = listOf(
+            SeriesGenreCacheDto(id = 2, name = "Drama", count = 2)
+        )
 
-        dataSource.insertGenres(genres)
+        dataSource.insertGenres(newGenres)
 
-        coVerify { dao.insertGenres(genres) }
+        coVerify { dao.insertGenres(newGenres) }
     }
 
     @Test
-    fun `clearAllData clears DAO`() = runTest {
-        dataSource.clearAllData()
+    fun `clearAllSeriesExceptRecentlyViewed clears DAO`() = runTest {
+        dataSource.clearAllSeriesExceptRecentlyViewed()
 
-        coVerify { dao.clearAllSeries() }
-        coVerify { dao.clearAllGenres() }
+        coVerify {
+            dao.clearAllSeriesExceptRecentlyViewed()
+            dao.clearAllGenres()
+        }
+    }
+
+    @Test
+    fun `clearAllSeries clears DAO`() = runTest {
+        dataSource.clearAllSeries()
+
+        coVerify {
+            dao.clearAllSeries()
+            dao.clearAllGenres()
+        }
     }
 
     @Test
     fun `storeRecentSeries marks as viewed`() = runTest {
-        dataSource.insertRecentSeries(1)
+        val seriesId = 1
+        dataSource.insertRecentSeries(seriesId)
 
-        coVerify { dao.markSeriesAsViewed(1) }
+        coVerify { dao.markSeriesAsViewed(seriesId, any()) }
     }
 
     @Test
@@ -114,4 +126,139 @@ class SeriesRoomLocalDateSourceTest {
         coVerify { dao.getRecentSeries() }
         assertThat(result).isEqualTo(sampleSeries)
     }
+
+    @Test
+    fun `incrementInteractionCountForGenres calls DAO`() = runTest {
+        val genreIds = listOf(1, 2, 3)
+
+        dataSource.incrementInteractionCountForGenres(genreIds)
+
+        coVerify { dao.incrementInteractionCountForGenres(genreIds) }
+    }
+
+    @Test
+    fun `getGenresByIDs returns genres from DAO`() = runTest {
+        val genreIds = listOf(1)
+        coEvery { dao.getGenresByIds(genreIds) } returns sampleGenres
+
+        val result = dataSource.getGenresByIDs(genreIds)
+
+        assertThat(result).isEqualTo(sampleGenres)
+    }
+
+    @Test
+    fun `insertPopularitySeries performs upsert with popularity flag`() = runTest {
+        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
+
+        dataSource.insertPopularitySeries(sampleSeries)
+
+        coVerify {
+            dao.upsertSeries(
+                match { mergedList ->
+                    mergedList.size == 1 &&
+                            mergedList[0].isPopularity &&
+                            mergedList[0].isRecentViewed == true &&
+                            mergedList[0].isRecommended == true &&
+                            mergedList[0].isTopRated == true &&
+                            mergedList[0].recentViewedAt == 9999L
+                }
+            )
+        }
+    }
+
+    @Test
+    fun `getPopularitySeries returns series`() = runTest {
+        coEvery { dao.getPopularitySeries(10) } returns sampleSeries
+
+        val result = dataSource.getPopularitySeries(10)
+
+        assertThat(result).isEqualTo(sampleSeries)
+    }
+
+    @Test
+    fun `insertRecentlyReleasedSeries performs upsert with recentlyReleased flag`() = runTest {
+        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
+
+        dataSource.insertRecentlyReleasedSeries(sampleSeries)
+
+        coVerify {
+            dao.upsertSeries(
+                match { mergedList ->
+                    mergedList.size == 1 &&
+                            mergedList[0].isRecentlyReleased &&
+                            mergedList[0].isRecentViewed == true &&
+                            mergedList[0].isRecommended == true &&
+                            mergedList[0].isTopRated == true &&
+                            mergedList[0].recentViewedAt == 9999L
+                }
+            )
+        }
+    }
+
+    @Test
+    fun `getRecentlyReleasedSeries returns series`() = runTest {
+        coEvery { dao.getRecentlyReleasedSeries(10) } returns sampleSeries
+
+        val result = dataSource.getRecentlyReleasedSeries(10)
+
+        assertThat(result).isEqualTo(sampleSeries)
+    }
+
+    @Test
+    fun `insertTopRatedSeries performs upsert with topRated flag`() = runTest {
+        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
+
+        dataSource.insertTopRatedSeries(sampleSeries)
+
+        coVerify {
+            dao.upsertSeries(
+                match { mergedList ->
+                    mergedList.size == 1 &&
+                            mergedList[0].isTopRated &&
+                            mergedList[0].isRecentViewed == true &&
+                            mergedList[0].isRecommended == true &&
+                            mergedList[0].recentViewedAt == 9999L
+                }
+            )
+        }
+    }
+
+    @Test
+    fun `getTopRatedSeries returns series`() = runTest {
+        coEvery { dao.getTopRatedSeries(10) } returns sampleSeries
+
+        val result = dataSource.getTopRatedSeries(10)
+
+        assertThat(result).isEqualTo(sampleSeries)
+    }
+
+    @Test
+    fun `insertRecommendedSeries performs upsert with recommended flag`() = runTest {
+        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
+
+        dataSource.insertRecommendedSeries(sampleSeries)
+
+        coVerify {
+            dao.upsertSeries(
+                match { mergedList ->
+                    mergedList.size == 1 &&
+                            mergedList[0].isRecommended &&
+                            mergedList[0].isRecentViewed == true &&
+                            mergedList[0].isTopRated == true &&
+                            mergedList[0].recentViewedAt == 9999L
+                }
+            )
+        }
+    }
+
+    @Test
+    fun `getRecommendedSeries returns series`() = runTest {
+        coEvery { dao.getRecommendedSeries(10) } returns sampleSeries
+
+        val result = dataSource.getRecommendedSeries(10)
+
+        assertThat(result).isEqualTo(sampleSeries)
+    }
+
+
 }

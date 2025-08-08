@@ -1,6 +1,5 @@
 package com.giraffe.details.screens.moviedetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
@@ -16,10 +15,9 @@ import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movies.usecase.GetMovieGenresUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.SetMovieRecentUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
@@ -30,11 +28,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     val getMovieDetails: GetMovieDetailsUseCase,
-    val getMovieGenres: GetMovieGenresUseCase,
+    val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     val getRecommendedMovie: GetRecommendedMovieUseCase,
     val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
-    val setMovieRecentUseCase: SetMovieRecentUseCase,
     val isLoggedInUseCase: IsLoggedInUseCase,
     savedStateHandle: SavedStateHandle,
     val addRatingUseCase: AddMovieRatingUseCase
@@ -44,10 +41,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
 
     init {
-        loadMovieDetails(movieID)
-        loadMoviePeople(movieID)
-        loadMovieReviews(movieID)
-        loadRecommendedMovie(movieID, 1)
+        loadMovieDetailsScreen()
     }
 
     override fun onShowAddToCollectionBottomSheet() {
@@ -165,13 +159,26 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
+    private fun loadMovieDetailsScreen() {
+        updateState {
+            it.copy(
+                isLoadingMovieDetails = true,
+                isNetworkError = false,
+                errorMessage = null
+            )
+        }
+        loadMovieDetails(movieID)
+        loadMoviePeople(movieID)
+        loadMovieReviews(movieID)
+        loadRecommendedMovie(movieID, 1)
+    }
+
     private fun loadMovieDetails(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::loadMovieDetailsError
         ) {
             val movie = getMovieDetails(movieId)
-            Log.d("TAG ViewModel", "loadMovieDetails: $movie")
             movie
         }
     }
@@ -184,17 +191,16 @@ class MovieDetailsViewModel @Inject constructor(
             )
         }
         loadMovieGenres(movie.genresID)
-        saveToRecentViewed(movie)
     }
 
-    private fun loadMovieDetailsError(error: Throwable) {
-        error.printStackTrace()
+    private fun loadMovieDetailsError(errorMsgRes: Int, isNetworkError: Boolean) {
         updateState {
             it.copy(
                 isLoadingMovieDetails = false,
+                errorMessage = errorMsgRes,
+                isNetworkError = isNetworkError,
             )
         }
-        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMovieGenres(genresIds: List<Int>) {
@@ -202,7 +208,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieGenresSuccess,
             onError = ::loadMovieGenresError
         ) {
-            getMovieGenres(genresIds)
+            getMoviesGenresByIds(genresIds)
         }
     }
 
@@ -232,12 +238,12 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadRecommendedMovieSuccess(recommendedSeries: List<Movie>) {
         updateState {
             it.copy(
-                recommendedMovies = recommendedSeries.map {
+                recommendedMovies = recommendedSeries.map { movie ->
                     Poster(
-                        id = it.id,
-                        name = it.title,
-                        imageUri = it.posterUrl.toString(),
-                        rating = it.rating
+                        id = movie.id,
+                        name = movie.title,
+                        imageUri = movie.posterUrl.toString(),
+                        rating = movie.rating
                     )
                 },
                 isLoadingRecommendedMovies = false
@@ -290,23 +296,14 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieReviewsSuccess,
             onError = ::loadMovieReviewsError
         ) {
-            //TODO("Implement pagination instead of fixed page")
             getMovieReviewsUseCase(
                 movieId = movieId,
-                pageNumber = 1,
-                pageSize = 20
+                pageNumber = 1
             )
         }
     }
 
-    private fun saveToRecentViewed(movie: Movie) {
-        safeExecute {
-            setMovieRecentUseCase(movie)
-        }
-    }
-
     private fun loadMovieReviewsSuccess(reviews: List<Review>) {
-        Log.d("TAG", "loadMovieReviewsSuccess: $reviews")
         updateState {
             it.copy(
                 isLoadingReviews = false,
@@ -316,7 +313,6 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private fun loadMovieReviewsError(error: Throwable) {
-        Log.d("TAG", "loadMovieReviewsFailure: $error")
         updateState {
             it.copy(
                 isLoadingReviews = false,

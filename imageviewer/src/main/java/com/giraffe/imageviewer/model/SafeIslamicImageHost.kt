@@ -36,6 +36,9 @@ class SafeIslamicImageHost @Inject constructor(
 
     suspend fun loadImage(imageUrl: String) = withContext(Dispatchers.Default) {
         try {
+            if (imageUrl.isBlank() || imageUrl.lowercase() == "null") {
+                throw Exception()
+            }
             imageState = ImageState.Loading
 
             val cachedBlurState = classifier.getResultFromCache(imageUrl)
@@ -55,13 +58,10 @@ class SafeIslamicImageHost @Inject constructor(
                 } else {
                     imageState = ImageState.Success(loadedBitmap, isUnsafe)
                 }
-            } ?: run {
-                setPlaceholderState()
             }
 
         } catch (e: Exception) {
             imageState = ImageState.Error(e)
-            setPlaceholderState()
         }
     }
 

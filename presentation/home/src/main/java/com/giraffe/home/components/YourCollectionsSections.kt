@@ -5,27 +5,28 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.CinePreview
 import com.giraffe.designsystem.composable.CollectionItem
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.home.R
+import com.giraffe.home.screen.home.YourCollectionUiModel
 
 @Composable
 fun YourCollectionsSections(
     modifier: Modifier = Modifier,
-    collectionItems: List<UserCollection>,
-    onShowMoreClick: () -> Unit = {}
+    collectionItems: List<YourCollectionUiModel>,
+    onShowMoreClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -49,43 +50,44 @@ fun YourCollectionsSections(
                 color = Theme.color.brand.primary
             )
         }
-        LazyRow(
+        LazyHorizontalGrid(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(135.dp),
+            rows = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(collectionItems.chunked(2)) { rowItems ->
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    rowItems.forEach { item ->
-                        CollectionItem(
-                            modifier = Modifier.width(280.dp),
-                            text = item.title,
-                            description = item.description,
-                            icon = Theme.icons.dueTone.folder
-                        )
-                    }
-                }
+            items(collectionItems) { item ->
+                CollectionItem(
+                    modifier = Modifier.height(63.dp),
+                    text = item.title,
+                    description = item.numberOfItems.toString(),
+                    icon = Theme.icons.dueTone.folder
+                )
             }
         }
     }
 }
 
-data class UserCollection(
-    val title: String,
-    val description: String
-)
-
-@CinePreview
+@PreviewScreenSizes
 @Composable
-private fun Preview() {
-    CineVerseTheme {
-        val collections = listOf(
-            UserCollection("My Favorite TV Shows", "5 shows"),
-            UserCollection("Animated Series", "4 shows"),
-            UserCollection("My Watchlist", "10 movies"),
-            UserCollection("Documentaries", "6 movies"),
+fun YourCollectionPreview() {
+    val collectionItems = listOf(
+        YourCollectionUiModel(
+            id = 1,
+            title = "hello",
+            numberOfItems = 0
+        ),
+        YourCollectionUiModel(
+            id = 1,
+            title = "hello",
+            numberOfItems = 0
         )
-        YourCollectionsSections(collectionItems = collections)
-    }
+    )
+    YourCollectionsSections(
+        collectionItems = collectionItems,
+        onShowMoreClick = {}
+    )
 }

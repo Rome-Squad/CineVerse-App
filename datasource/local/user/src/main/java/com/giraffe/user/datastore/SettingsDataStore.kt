@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 import javax.inject.Inject
 
 class SettingsDataStore @Inject constructor(
@@ -21,6 +22,7 @@ class SettingsDataStore @Inject constructor(
     private object PreferencesKeys {
         val IS_DARK_MODE = booleanPreferencesKey(IS_DARK_MODE_S)
         val APP_LANGUAGE = stringPreferencesKey(APP_LANGUAGE_S)
+        val CONTENT_PREFERENCE = stringPreferencesKey("content_preference")
     }
 
     fun isDarkMode(): Flow<Boolean> =
@@ -36,12 +38,23 @@ class SettingsDataStore @Inject constructor(
 
     fun getLanguage(): Flow<String> =
         context.dataStore.data.map { preferences ->
-            preferences[PreferencesKeys.APP_LANGUAGE] ?: "en"
+            preferences[PreferencesKeys.APP_LANGUAGE] ?: Locale.getDefault().language
         }
 
     suspend fun setLanguage(languageCode: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.APP_LANGUAGE] = languageCode
+        }
+    }
+
+    fun getContentPreference(): Flow<String> =
+        context.dataStore.data.map { preferences ->
+            preferences[PreferencesKeys.CONTENT_PREFERENCE] ?: "HIDE_EXPLICIT"
+        }
+
+    suspend fun setContentPreference(preferenceName: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.CONTENT_PREFERENCE] = preferenceName
         }
     }
 

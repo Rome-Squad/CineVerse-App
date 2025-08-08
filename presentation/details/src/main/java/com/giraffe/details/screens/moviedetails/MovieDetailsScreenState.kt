@@ -30,5 +30,7 @@ data class MovieDetailsScreenState(
     val isVisibleLoginBottomSheet: Boolean = false,
 
     val isLoggedIn: Boolean = false,
-    val currentRating: Int = 0
+    val currentRating: Int = 0,
+    val errorMessage: Int? = null,
+    val isNetworkError: Boolean = false,
 )
