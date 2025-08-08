@@ -70,6 +70,7 @@
     <string name="create">create</string>
     <string name="collection_name">collection name</string>
     <string name="error_unknown">Something went wrong. Please try again later.</string>
+    <string name="error_network">Please check your internet connection.</string>
     <string name="access_denied_error">Access Denied Error!</string>
     <string name="collection_name_cannot_be_blank">Collection name cannot be blank</string>
     <string name="validation_error">Validation Error!</string>

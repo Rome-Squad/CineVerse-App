@@ -37,7 +37,6 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getRecommendedMovie: GetRecommendedMovieUseCase,
     private val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
-    private val setMovieRecentUseCase: SetMovieRecentUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
@@ -172,7 +171,13 @@ class MovieDetailsViewModel @Inject constructor(
 
         safeExecute(
             onSuccess = { addMovieToCollectionSuccess(it, collectionId) },
-            onError = { addMovieToCollectionError(it, collectionId) }
+            onError = { strRes, isNetworkError ->
+                addMovieToCollectionError(
+                    strRes,
+                    isNetworkError,
+                    collectionId
+                )
+            }
         ) {
             addMovieToCollectionUseCase(collectionId, movieID)
         }
@@ -193,7 +198,7 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadMovieDetailsScreen() {
+    fun loadMovieDetailsScreen() {
         updateState {
             it.copy(
                 isLoadingMovieDetails = true,
@@ -204,7 +209,7 @@ class MovieDetailsViewModel @Inject constructor(
         loadMovieDetails(movieID)
         loadMoviePeople(movieID)
         loadMovieReviews(movieID)
-        loadRecommendedMovie(movieID, 1)
+        loadRecommendedMovie(movieID)
     }
 
     private fun addMovieToCollectionSuccess(isAdded: Boolean, collectionId: Int) {
@@ -219,18 +224,22 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun addMovieToCollectionError(error: Throwable, collectionId: Int) {
-        error.printStackTrace()
+    private fun addMovieToCollectionError(
+        collectionId: Int,
+        isNetworkError: Boolean,
+        errorMessage: Int
+    ) {
         updateState {
             it.copy(
                 isLoadingAddToCollection = false,
                 collections = it.collections.map { collection ->
                     if (collection.id == collectionId) collection.copy(isLoading = false)
                     else collection
-                }
+                },
+                errorMessage = errorMessage,
+                isNetworkError = isNetworkError
             )
         }
-        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMovieDetails(movieId: Int) {
@@ -352,10 +361,6 @@ class MovieDetailsViewModel @Inject constructor(
                 pageNumber = 1
             )
         }
-    }
-
-    private fun saveToRecentViewed(movie: Movie) {
-        safeExecute { setMovieRecentUseCase(movie) }
     }
 
     private fun loadMovieReviewsSuccess(reviews: List<Review>) {
