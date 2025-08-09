@@ -1,12 +1,13 @@
-package com.giraffe.presentation.home.screen.movies_list
+package com.giraffe.presentation.home.screen.show_more
+
 
 import com.giraffe.presentation.home.screen.home.MediaType
 
-data class MoviesListUiState(
+data class ShowMoreState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val mediaList: List<PosterUiState> = emptyList(),
-    val moviesListTitle: String = "",
+    val sectionType: ShowMoreSectionType?=null,
     val isListSelected: Boolean = false,
     val errorMsgRes:Int? = null
 )
