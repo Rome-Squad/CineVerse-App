@@ -33,7 +33,7 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.components.ExploreHeader
 import com.giraffe.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.explore.util.toTitle
-import com.giraffe.media.explore.R
+import com.giraffe.presentation.explore.R
 
 @Composable
 fun DiscoverScreen(
