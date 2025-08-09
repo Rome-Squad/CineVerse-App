@@ -1,19 +1,19 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
+import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.screen.show_more.MatchesYourVibesStrategy
 import com.giraffe.presentation.home.screen.show_more.RecentlyReleasedStrategy
 import com.giraffe.presentation.home.screen.show_more.RecentlyViewedStrategy
 import com.giraffe.presentation.home.screen.show_more.ShowMoreFactory
 import com.giraffe.presentation.home.screen.show_more.TopRatedTvShowsStrategy
 import com.giraffe.presentation.home.screen.show_more.UpcomingMoviesStrategy
-import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
-import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,7 +52,7 @@ object PresentationModule {
     @Singleton
     fun provideRecentlyViewedStrategy(
         getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-        getRecentlySeriesUseCase: GetRecentSeriesUseCase
+        getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase
     ): RecentlyViewedStrategy {
         return RecentlyViewedStrategy(getRecentlyViewedMovies, getRecentlySeriesUseCase)
     }
@@ -61,7 +61,7 @@ object PresentationModule {
     @Singleton
     fun provideMatchesYourVibesStrategy(
         getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-        getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+        getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
         getRecommendedMovie: GetRecommendedMovieUseCase,
         getRecommendedSeries: GetRecommendedSeriesUseCase
     ): MatchesYourVibesStrategy {

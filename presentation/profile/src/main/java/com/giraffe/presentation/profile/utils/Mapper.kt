@@ -41,7 +41,7 @@ fun Series.toPosterUi(genres: List<Genre> = emptyList()): Poster {
         genres = genres.joinToString(", ") { it.title },
         imageUri = posterUrl,
         rating = rating,
-        date = releaseYear,
+        date = releaseYear.toString(),
         mediaTypeOfPoster = "series"
     )
 }

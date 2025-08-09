@@ -4,11 +4,11 @@ import com.giraffe.media.series.repository.SeriesRepository
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 
-class DeleteSeriesRatingUseCaseTest {
+class DeleteSeriesUseCaseTest {
     private val repository: SeriesRepository = mockk(relaxed = true)
-    private val useCase: DeleteSeriesRatingUseCase = DeleteSeriesRatingUseCase(repository)
+    private val useCase: DeleteSeriesUseCase = DeleteSeriesUseCase(repository)
 
 
     @Test
@@ -16,6 +16,6 @@ class DeleteSeriesRatingUseCaseTest {
         val seriesId = 123
         useCase(seriesId)
 
-        coVerify(exactly = 1) { repository.deleteRating(seriesId) }
+        coVerify(exactly = 1) { repository.deleteById(seriesId) }
     }
 }

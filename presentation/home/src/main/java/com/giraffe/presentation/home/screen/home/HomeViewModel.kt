@@ -14,8 +14,8 @@ import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,

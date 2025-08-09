@@ -1,40 +1,36 @@
 package com.giraffe.media.series.usecase
 
+import com.giraffe.media.collections.fake.createFakeSeries
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetRecommendedSeriesUseCaseTest {
-    private lateinit var getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase
-    private lateinit var seriesRepository: SeriesRepository
+    private val seriesRepository: SeriesRepository = mockk(relaxed = true)
+    private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase =
+        GetRecommendedSeriesUseCase(seriesRepository)
 
-    @BeforeEach
-    fun setup() {
-        seriesRepository = mockk()
-        getRecommendedSeriesUseCase = GetRecommendedSeriesUseCase(seriesRepository)
-    }
 
     @Test
     fun `should return a list of recommended series when repository returns success`() = runTest {
         val recommendedSeries = listOf(
-            fakeSeries(id = 1, name = "Series 1"),
-            fakeSeries(id = 2, name = "Series 2"),
-            fakeSeries(id = 3, name = "Series 3")
+            createFakeSeries(id = 1, name = "Series 1"),
+            createFakeSeries(id = 2, name = "Series 2"),
+            createFakeSeries(id = 3, name = "Series 3")
         )
 
         coEvery {
-            seriesRepository.getRecommendedSeries(
+            seriesRepository.getRecommended(
                 any(),
                 any(),
                 any()
             )
         } returns recommendedSeries
 
-        val result = getRecommendedSeriesUseCase(1, 1)
+        val result = getRecommendedSeriesUseCase(1, recommendedSeries.size)
         assertThat(result).isEqualTo(recommendedSeries)
     }
 }
