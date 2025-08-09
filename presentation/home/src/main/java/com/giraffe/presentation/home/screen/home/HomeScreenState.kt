@@ -1,5 +1,10 @@
 package com.giraffe.presentation.home.screen.home
 
+import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
+import com.giraffe.presentation.home.model.HomeUiModel
+import com.giraffe.presentation.home.model.PopularMediaUiModel
+import com.giraffe.presentation.home.model.YourCollectionUiModel
+
 
 data class HomeScreenState(
     val userName: String = "",

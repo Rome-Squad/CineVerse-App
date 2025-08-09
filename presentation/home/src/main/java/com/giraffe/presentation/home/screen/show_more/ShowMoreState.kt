@@ -1,25 +1,16 @@
 package com.giraffe.presentation.home.screen.show_more
 
 
-import com.giraffe.presentation.home.screen.home.MediaType
+import com.giraffe.presentation.home.model.PosterUiModel
+import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
 
 data class ShowMoreState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val mediaList: List<PosterUiState> = emptyList(),
+    val mediaList: List<PosterUiModel> = emptyList(),
     val sectionType: ShowMoreSectionType?=null,
     val isListSelected: Boolean = false,
     val errorMsgRes:Int? = null
 )
 
 
-data class PosterUiState(
-    val id: Int,
-    val name: String,
-    val imageUri: String,
-    val rating: Float,
-    val genres: String? = null,
-    val time: String? = null,
-    val date: String? = null,
-    val mediaType: MediaType
-)

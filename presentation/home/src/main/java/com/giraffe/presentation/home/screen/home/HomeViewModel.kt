@@ -20,7 +20,8 @@ import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
-import com.giraffe.presentation.home.screen.show_more.ShowMoreSectionType
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
 import com.giraffe.presentation.home.utils.toHomeUiModel
 import com.giraffe.presentation.home.utils.toPopularMediaUiModel
 import com.giraffe.presentation.home.utils.toUiModel

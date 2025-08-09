@@ -23,7 +23,8 @@ import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.components.ListTitleSection
 import com.giraffe.presentation.home.components.TransitionLazyColumnToGrid
-import com.giraffe.presentation.home.screen.home.MediaType
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
 
 @Composable
 fun ShowMoreScreen(

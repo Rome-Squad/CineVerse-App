@@ -24,7 +24,7 @@ import coil3.compose.AsyncImage
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.screen.home.FeaturedCollectionUiModel
+import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable

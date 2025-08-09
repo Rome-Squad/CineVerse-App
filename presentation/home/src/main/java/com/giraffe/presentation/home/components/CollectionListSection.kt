@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.screen.home.FeaturedCollectionUiModel
+import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
 
 @Composable
 fun CollectionListSection(

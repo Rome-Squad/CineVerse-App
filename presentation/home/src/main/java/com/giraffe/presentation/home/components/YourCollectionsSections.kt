@@ -20,7 +20,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.screen.home.YourCollectionUiModel
+import com.giraffe.presentation.home.model.YourCollectionUiModel
 
 @Composable
 fun YourCollectionsSections(

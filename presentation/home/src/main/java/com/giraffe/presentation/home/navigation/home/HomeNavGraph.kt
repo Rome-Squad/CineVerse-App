@@ -26,8 +26,8 @@ import com.giraffe.presentation.home.navigation.main.navigateToSeriesDetails
 import com.giraffe.presentation.home.navigation.main.navigateToYourCollections
 import com.giraffe.presentation.home.screen.home.HomeRoute
 import com.giraffe.presentation.home.screen.home.homeRoute
-import com.giraffe.presentation.home.screen.show_more.navigateToShowMore
-import com.giraffe.presentation.home.screen.show_more.showMoreRoute
+import com.giraffe.presentation.home.navigation.show_more.navigateToShowMore
+import com.giraffe.presentation.home.navigation.show_more.showMoreRoute
 
 
 

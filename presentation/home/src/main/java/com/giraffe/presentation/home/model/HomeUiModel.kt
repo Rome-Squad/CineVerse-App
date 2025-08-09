@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.home
+package com.giraffe.presentation.home.model
 
 import androidx.compose.runtime.Stable
 

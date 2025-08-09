@@ -34,13 +34,13 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
-import com.giraffe.presentation.home.screen.show_more.PosterUiState
+import com.giraffe.presentation.home.model.PosterUiModel
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PosterHorizontal(
-    poster: PosterUiState,
+    poster: PosterUiModel,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,

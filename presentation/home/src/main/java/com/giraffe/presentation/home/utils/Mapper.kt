@@ -1,15 +1,15 @@
 package com.giraffe.presentation.home.utils
 
-import com.giraffe.presentation.home.screen.home.FeaturedCollectionUiModel
-import com.giraffe.presentation.home.screen.home.HomeUiModel
-import com.giraffe.presentation.home.screen.home.MediaType
-import com.giraffe.presentation.home.screen.home.PopularMediaUiModel
-import com.giraffe.presentation.home.screen.home.YourCollectionUiModel
+import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
+import com.giraffe.presentation.home.model.HomeUiModel
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.PopularMediaUiModel
+import com.giraffe.presentation.home.model.YourCollectionUiModel
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.entity.Series
-import com.giraffe.presentation.home.screen.show_more.PosterUiState
+import com.giraffe.presentation.home.model.PosterUiModel
 
 
 fun Movie.toHomeUiModel(): HomeUiModel {
@@ -32,8 +32,8 @@ fun Series.toHomeUiModel(): HomeUiModel {
     )
 }
 
-fun Series.toPosterUi(): PosterUiState {
-    return PosterUiState(
+fun Series.toPosterUi(): PosterUiModel {
+    return PosterUiModel(
         id = id,
         name = name,
         imageUri = posterUrl,
@@ -43,8 +43,8 @@ fun Series.toPosterUi(): PosterUiState {
     )
 }
 
-fun Movie.toPosterUi(): PosterUiState {
-    return PosterUiState(
+fun Movie.toPosterUi(): PosterUiModel {
+    return PosterUiModel(
         id = id,
         name = title,
         imageUri = posterUrl.orEmpty(),

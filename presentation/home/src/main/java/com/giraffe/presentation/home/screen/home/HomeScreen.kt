@@ -46,9 +46,9 @@ import com.giraffe.presentation.home.screen.home.HomeEffect
 import com.giraffe.presentation.home.screen.home.HomeInteractionListener
 import com.giraffe.presentation.home.screen.home.HomeScreenState
 import com.giraffe.presentation.home.screen.home.HomeViewModel
-import com.giraffe.presentation.home.screen.home.MediaType
-import com.giraffe.presentation.home.screen.home.PopularMediaUiModel
-import com.giraffe.presentation.home.screen.show_more.ShowMoreSectionType
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.PopularMediaUiModel
+import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
 import com.giraffe.presentation.home.utils.EventListener
 
 @Composable

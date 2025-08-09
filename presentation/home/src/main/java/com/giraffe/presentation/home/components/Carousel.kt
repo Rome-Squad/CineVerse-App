@@ -33,8 +33,8 @@ import com.giraffe.designsystem.composable.CinePreview
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.home.screen.home.MediaType
-import com.giraffe.presentation.home.screen.home.PopularMediaUiModel
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.PopularMediaUiModel
 import kotlin.math.abs
 
 @Composable

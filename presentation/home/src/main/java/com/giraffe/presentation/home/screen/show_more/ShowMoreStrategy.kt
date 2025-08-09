@@ -9,10 +9,12 @@ import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.presentation.home.model.PosterUiModel
+import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
 import kotlinx.coroutines.flow.first
 
 interface ShowMoreStrategy {
-    suspend fun loadData(): List<PosterUiState>
+    suspend fun loadData(): List<PosterUiModel>
     fun getSectionType(): ShowMoreSectionType
 }
 
@@ -20,7 +22,7 @@ class RecentlyReleasedStrategy(
     private val getRecentlyReleasedMovies: GetRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeries: GetRecentlyReleasedSeriesUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(): List<PosterUiState> {
+    override suspend fun loadData(): List<PosterUiModel> {
         val recentMovies = getRecentlyReleasedMovies(page = 1).map { it.toPosterUi() }
         val recentSeries = getRecentlyReleasedSeries(page = 1, limit = 10).map { it.toPosterUi() }
         return recentMovies + recentSeries
@@ -32,7 +34,7 @@ class RecentlyReleasedStrategy(
 class TopRatedTvShowsStrategy(
     private val getTopRatedSeries: GetTopRatedSeriesUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(): List<PosterUiState> {
+    override suspend fun loadData(): List<PosterUiModel> {
         return getTopRatedSeries(page = 1, limit = 10).map { it.toPosterUi() }
     }
 
@@ -42,7 +44,7 @@ class TopRatedTvShowsStrategy(
 class UpcomingMoviesStrategy(
     private val getUpcomingMovies: GetUpcomingMoviesUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(): List<PosterUiState> {
+    override suspend fun loadData(): List<PosterUiModel> {
         return getUpcomingMovies(page = 1).map { it.toPosterUi() }
     }
 
@@ -54,7 +56,7 @@ class RecentlyViewedStrategy(
     private val getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentSeriesUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(): List<PosterUiState> {
+    override suspend fun loadData(): List<PosterUiModel> {
         val recentMovies = getRecentlyViewedMovies().first().map { it.toPosterUi() }
         val recentSeries = getRecentlySeriesUseCase().first().map { it.toPosterUi() }
         return (recentMovies + recentSeries).distinctBy { it.id }
@@ -69,7 +71,7 @@ class MatchesYourVibesStrategy(
     private val getRecommendedMovie: GetRecommendedMovieUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(): List<PosterUiState> {
+    override suspend fun loadData(): List<PosterUiModel> {
         val recentMovieId = getRecentlyViewedMovies().first().firstOrNull()?.id
         val recentSeriesId = getRecentlySeriesUseCase().first().firstOrNull()?.id
 

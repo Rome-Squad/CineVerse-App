@@ -2,7 +2,7 @@ package com.giraffe.presentation.home.screen.show_more
 
 
 
-import com.giraffe.presentation.home.screen.home.MediaType
+import com.giraffe.presentation.home.model.MediaType
 
 interface ShowMoreInteractionListener {
     fun onViewChanged(isGrid: Boolean)
