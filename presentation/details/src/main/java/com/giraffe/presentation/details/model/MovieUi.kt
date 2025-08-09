@@ -1,6 +1,7 @@
 package com.giraffe.presentation.details.model
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.entity.Genre
 import com.giraffe.presentation.details.utils.toFormattedDate
 import com.giraffe.presentation.details.utils.toFormattedDuration
 import com.giraffe.media.movies.entity.Movie
@@ -20,7 +21,7 @@ data class MovieUi(
 )
 
 
-fun Movie.toMovieUi() = MovieUi(
+fun Movie.toMovieUi(genres: List<Genre> = emptyList()) = MovieUi(
     id = id,
     title = title,
     description = description,
@@ -29,6 +30,7 @@ fun Movie.toMovieUi() = MovieUi(
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genresID,
+    genres = genres.map { it.title },
     releaseYear = if (releaseYear != null) releaseYear.toString().toFormattedDate() else null,
     youtubeVideoId = youtubeVideoId.orEmpty()
 

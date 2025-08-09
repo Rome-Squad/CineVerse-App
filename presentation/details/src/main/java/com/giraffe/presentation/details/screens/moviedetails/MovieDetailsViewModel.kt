@@ -3,14 +3,6 @@ package com.giraffe.presentation.details.screens.moviedetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.model.groupByRole
-import com.giraffe.presentation.details.model.toCastUi
-import com.giraffe.presentation.details.model.toCrewUi
-import com.giraffe.presentation.details.model.toMovieUi
-import com.giraffe.presentation.details.model.toReviewUI
-import com.giraffe.presentation.details.model.toUi
-import com.giraffe.presentation.details.screens.moviedetails.screen.MovieDetailsRoute
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
@@ -26,6 +18,15 @@ import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.model.groupByRole
+import com.giraffe.presentation.details.model.toCastUi
+import com.giraffe.presentation.details.model.toCrewUi
+import com.giraffe.presentation.details.model.toMovieUi
+import com.giraffe.presentation.details.model.toReviewUI
+import com.giraffe.presentation.details.model.toUi
+import com.giraffe.presentation.details.screens.moviedetails.screen.MovieDetailsRoute
+import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -46,19 +47,56 @@ class MovieDetailsViewModel @Inject constructor(
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState()
 ), MovieDetailsInteractionListener {
-    private val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
 
     init {
-        loadMovieDetailsScreen()
+        val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
+
+        loadMovieDetailsScreen(movieID)
     }
+
+
+    fun loadMovieDetailsScreen(movieID: Int) {
+        updateState {
+            it.copy(
+                isLoadingMovieDetails = true,
+                isNetworkError = false,
+                errorMessage = null
+            )
+        }
+
+        loadMovieDetails(movieID)
+        loadMoviePeople(movieID)
+        loadMovieReviews(movieID)
+        loadRecommendedMovie(movieID)
+    }
+
 
     override fun onShowAddToCollectionBottomSheet() {
         safeExecute(
             onSuccess = ::onIsLoggedInSuccess,
+            onError = ::onIsLoggedInError
         ) {
             isLoggedInUseCase()
         }
     }
+
+    private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
+        if (isLoggedIn) {
+            safeExecute(
+                onSuccess = ::onGetCollectionsSuccess,
+                onError = ::onGetCollectionsError
+            ) {
+                getCollectionsUseCase()
+            }
+        } else {
+            updateState { it.copy(isVisibleLoginBottomSheet = true) }
+        }
+    }
+
+    private fun onIsLoggedInError(throwable: Throwable) {
+        sendEffect(MovieDetailsEffect.Error(throwable))
+    }
+
 
     override fun onCreateCollectionButtonClick() {
         updateState {
@@ -151,6 +189,46 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
+    private fun onCreateCollectionSuccess(result: Unit) {
+        safeExecute(
+            onSuccess = ::onGetCollectionsSuccess,
+            onError = ::onGetCollectionsError
+        ) {
+            val collections = getCollectionsUseCase()
+            updateState {
+                it.copy(
+                    collectionBottomSheet = MovieDetailsScreenState.CollectionBottomSheet.AddToCollection,
+                    newCollectionName = ""
+                )
+            }
+            collections
+        }
+    }
+
+    private fun onGetCollectionsSuccess(collections: List<Collection>) {
+        updateState {
+            it.copy(
+                collectionBottomSheet = if (collections.isNotEmpty()) {
+                    MovieDetailsScreenState.CollectionBottomSheet.AddToCollection
+                } else {
+                    MovieDetailsScreenState.CollectionBottomSheet.NoCollections
+                },
+                collections = collections.map { collection -> collection.toUi() }
+            )
+        }
+    }
+
+    private fun onGetCollectionsError(error: Throwable) {
+        updateState { it.copy(collectionBottomSheet = null) }
+        sendEffect(MovieDetailsEffect.Error(error))
+    }
+
+    private fun onCreateCollectionFailure(error: Throwable) {
+        updateState { it.copy(newCollectionName = "") }
+        sendEffect(MovieDetailsEffect.Error(error))
+    }
+
+
     override fun onCancelCreateNewCollectionClick() {
         updateState {
             it.copy(
@@ -170,17 +248,48 @@ class MovieDetailsViewModel @Inject constructor(
         }
 
         safeExecute(
-            onSuccess = { addMovieToCollectionSuccess(it, collectionId) },
-            onError = { strRes, isNetworkError ->
-                addMovieToCollectionError(
-                    strRes,
-                    isNetworkError,
-                    collectionId
+            onSuccess = { addMovieToCollectionSuccess(collectionId) },
+            onError = { error ->
+                onAddMovieToCollectionError(
+                    collectionId,
+                    error
                 )
             }
         ) {
-            addMovieToCollectionUseCase(collectionId, movieID)
+            addMovieToCollectionUseCase(collectionId, state.value.movie.id)
         }
+    }
+
+
+    private fun addMovieToCollectionSuccess(collectionId: Int) {
+        updateState {
+            it.copy(
+                isLoadingAddToCollection = false,
+                collections = it.collections.map { collection ->
+                    if (collection.id == collectionId) collection.copy(isLoading = false)
+                    else collection
+                }
+            )
+        }
+    }
+
+    private fun onAddMovieToCollectionError(
+        collectionId: Int,
+        error: Throwable
+    ) {
+        val isNetworkError = error is NoInternetException
+        updateState {
+            it.copy(
+                isLoadingAddToCollection = false,
+                collections = it.collections.map { collection ->
+                    if (collection.id == collectionId) collection.copy(isLoading = false)
+                    else collection
+                },
+                isNetworkError = isNetworkError
+            )
+        }
+
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     override fun onAddRateButtonClick() {
@@ -195,50 +304,6 @@ class MovieDetailsViewModel @Inject constructor(
             } else {
                 updateState { it.copy(isVisibleLoginBottomSheet = true) }
             }
-        }
-    }
-
-    fun loadMovieDetailsScreen() {
-        updateState {
-            it.copy(
-                isLoadingMovieDetails = true,
-                isNetworkError = false,
-                errorMessage = null
-            )
-        }
-        loadMovieDetails(movieID)
-        loadMoviePeople(movieID)
-        loadMovieReviews(movieID)
-        loadRecommendedMovie(movieID)
-    }
-
-    private fun addMovieToCollectionSuccess(isAdded: Boolean, collectionId: Int) {
-        updateState {
-            it.copy(
-                isLoadingAddToCollection = false,
-                collections = it.collections.map { collection ->
-                    if (collection.id == collectionId) collection.copy(isLoading = false)
-                    else collection
-                }
-            )
-        }
-    }
-
-    private fun addMovieToCollectionError(
-        collectionId: Int,
-        isNetworkError: Boolean,
-        errorMessage: Int
-    ) {
-        updateState {
-            it.copy(
-                isLoadingAddToCollection = false,
-                collections = it.collections.map { collection ->
-                    if (collection.id == collectionId) collection.copy(isLoading = false)
-                    else collection
-                },
-                errorMessage = errorMessage,
-                isNetworkError = isNetworkError
-            )
         }
     }
 
@@ -261,14 +326,16 @@ class MovieDetailsViewModel @Inject constructor(
         loadMovieGenres(movie.genresID)
     }
 
-    private fun loadMovieDetailsError(errorMsgRes: Int, isNetworkError: Boolean) {
+    private fun loadMovieDetailsError(error: Throwable) {
+        val isNetworkError = error is NoInternetException
         updateState {
             it.copy(
                 isLoadingMovieDetails = false,
-                errorMessage = errorMsgRes,
                 isNetworkError = isNetworkError,
             )
         }
+
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMovieGenres(genresIds: List<Int>) {
@@ -290,7 +357,6 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private fun loadMovieGenresError(error: Throwable) {
-
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
@@ -377,56 +443,5 @@ class MovieDetailsViewModel @Inject constructor(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-    private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
-        if (isLoggedIn) {
-            safeExecute(
-                onSuccess = ::onGetCollectionsSuccess,
-                onError = ::onGetCollectionsError
-            ) {
-                getCollectionsUseCase()
-            }
-        } else {
-            updateState { it.copy(isVisibleLoginBottomSheet = true) }
-        }
-    }
 
-    private fun onGetCollectionsSuccess(collections: List<Collection>) {
-        updateState {
-            it.copy(
-                collectionBottomSheet = if (collections.isNotEmpty()) {
-                    MovieDetailsScreenState.CollectionBottomSheet.AddToCollection
-                } else {
-                    MovieDetailsScreenState.CollectionBottomSheet.NoCollections
-                },
-                collections = collections.map { it.toUi() }
-            )
-        }
-    }
-
-    private fun onGetCollectionsError(error: Throwable) {
-        updateState { it.copy(collectionBottomSheet = null) }
-        sendEffect(MovieDetailsEffect.Error(error))
-    }
-
-    private fun onCreateCollectionSuccess(result: Unit) {
-        safeExecute(
-            onSuccess = ::onGetCollectionsSuccess,
-            onError = ::onGetCollectionsError
-        ) {
-            val collections = getCollectionsUseCase()
-            updateState {
-                it.copy(
-                    collectionBottomSheet = MovieDetailsScreenState.CollectionBottomSheet.AddToCollection,
-                    newCollectionName = ""
-                )
-            }
-            collections
-        }
-    }
-
-
-    private fun onCreateCollectionFailure(error: Throwable) {
-        updateState { it.copy(newCollectionName = "") }
-        sendEffect(MovieDetailsEffect.Error(error))
-    }
 }
