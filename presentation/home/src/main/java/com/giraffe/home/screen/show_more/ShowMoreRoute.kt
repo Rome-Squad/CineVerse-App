@@ -1,4 +1,4 @@
-package com.giraffe.home.screen.movies_list
+package com.giraffe.home.screen.show_more
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,24 +7,34 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MoviesListRoute(
-    val collectionId: Int? = null,
-    val sectionType: String? = null,
-    val sectionTitle: String
+    val collectionId: Int,
+    val sectionType: ShowMoreSectionType
 )
 
-object MovieSectionType {
-    const val RECENTLY_RELEASED = "recently_released"
-    const val TOP_RATED_TV_SHOWS = "top_rated_tv_shows"
-    const val UPCOMING_MOVIES = "upcoming_movies"
-    const val RECENTLY_VIEWED = "recently_viewed"
-    const val MATCHES_YOUR_VIBES = "matches_your_vibes"
+
+enum class ShowMoreSectionType {
+    RECENTLY_RELEASED,
+    TOP_RATED_TV_SHOWS,
+    UPCOMING_MOVIES,
+    RECENTLY_VIEWED,
+    MATCHES_YOUR_VIBES;
+
+    fun isPredefinedSection(): Boolean {
+        return when (this) {
+            RECENTLY_RELEASED,
+            TOP_RATED_TV_SHOWS,
+            UPCOMING_MOVIES,
+            RECENTLY_VIEWED,
+            MATCHES_YOUR_VIBES -> true
+        }
+    }
 }
 
-fun NavController.navigateToMoviesList(sectionType: String, sectionTitle: String) {
+fun NavController.navigateToMoviesList(sectionType: ShowMoreSectionType, collectionId: String) {
     navigate(
         MoviesListRoute(
             sectionType = sectionType,
-            sectionTitle = sectionTitle,
+            collectionId =5
         )
     )
 }

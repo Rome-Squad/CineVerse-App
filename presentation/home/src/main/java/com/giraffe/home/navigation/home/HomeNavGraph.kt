@@ -25,8 +25,8 @@ import com.giraffe.home.navigation.main.navigateToSeriesDetails
 import com.giraffe.home.navigation.main.navigateToYourCollections
 import com.giraffe.home.screen.home.HomeRoute
 import com.giraffe.home.screen.home.homeRoute
-import com.giraffe.home.screen.movies_list.moviesListRoute
-import com.giraffe.home.screen.movies_list.navigateToMoviesList
+import com.giraffe.home.screen.show_more.moviesListRoute
+import com.giraffe.home.screen.show_more.navigateToMoviesList
 import com.giraffe.profile.ProfileApi
 
 

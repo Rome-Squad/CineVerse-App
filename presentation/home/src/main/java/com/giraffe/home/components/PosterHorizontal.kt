@@ -33,7 +33,7 @@ import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.home.screen.movies_list.PosterUiState
+import com.giraffe.home.screen.show_more.PosterUiState
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @OptIn(ExperimentalSharedTransitionApi::class)

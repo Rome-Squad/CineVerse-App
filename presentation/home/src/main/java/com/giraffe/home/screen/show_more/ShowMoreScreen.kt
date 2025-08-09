@@ -1,4 +1,4 @@
-package com.giraffe.home.screen.movies_list
+package com.giraffe.home.screen.show_more
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,30 +25,30 @@ import com.giraffe.home.screen.home.MediaType
 
 @Composable
 fun MoviesListScreen(
-    moviesListViewModel: MoviesListViewModel = hiltViewModel(),
+    showMoreViewModel: ShowMoreViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
-    val state by moviesListViewModel.state.collectAsState()
+    val state by showMoreViewModel.state.collectAsState()
     LaunchedEffect(Unit) {
-        moviesListViewModel.effect.collect { effect ->
+        showMoreViewModel.effect.collect { effect ->
             when (effect) {
-                is MoviesListEffect.NavigateToMovieDetails -> {
+                is ShowMoreEffect.NavigateToMovieDetails -> {
                     navigateToMoviesDetailsScreen(effect.movieId)
                 }
 
-                is MoviesListEffect.NavigateToSeriesDetails -> {
+                is ShowMoreEffect.NavigateToSeriesDetails -> {
                     navigateToSeriesDetailsScreen(effect.seriesId)
                 }
 
-                is MoviesListEffect.ShowError -> {}
+                is ShowMoreEffect.ShowError -> {}
             }
         }
     }
     MoviesListContent(
         state = state,
-        moviesListInteractionListener = moviesListViewModel,
+        showMoreInteractionListener = showMoreViewModel,
         onBackClick = onBackClick,
     )
 }
@@ -56,7 +56,7 @@ fun MoviesListScreen(
 @Composable
 fun MoviesListContent(
     state: MoviesListUiState,
-    moviesListInteractionListener: MoviesListInteractionListener,
+    showMoreInteractionListener: ShowMoreInteractionListener,
     onBackClick: () -> Unit
 ) {
     Box {
@@ -77,7 +77,7 @@ fun MoviesListContent(
                 TransitionLazyColumnToGrid(
                     poster = state.mediaList,
                     isListSelected = state.isListSelected,
-                    onClickItem = moviesListInteractionListener::onMediaClicked,
+                    onClickItem = showMoreInteractionListener::onMediaClicked,
                 )
             }
 
@@ -88,7 +88,7 @@ fun MoviesListContent(
                 .navigationBarsPadding()
                 .padding(bottom = 16.dp, end = 16.dp),
             isListSelected = state.isListSelected,
-            onGridSelected = moviesListInteractionListener::onViewChanged
+            onGridSelected = showMoreInteractionListener::onViewChanged
         )
     }
 }
@@ -97,13 +97,13 @@ fun MoviesListContent(
 @Preview(showSystemUi = false, showBackground = true)
 @Composable
 fun MoviesListPreview() {
-    val interactionListener = object : MoviesListInteractionListener {
+    val interactionListener = object : ShowMoreInteractionListener {
         override fun onViewChanged(isGrid: Boolean) {}
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
     }
     MoviesListContent(
         state = MoviesListUiState(),
-        moviesListInteractionListener = interactionListener,
+        showMoreInteractionListener = interactionListener,
         onBackClick = {},
     )
 }

@@ -1,4 +1,4 @@
-package com.giraffe.home.screen.movies_list
+package com.giraffe.home.screen.show_more
 
 import com.giraffe.home.screen.home.MediaType
 
