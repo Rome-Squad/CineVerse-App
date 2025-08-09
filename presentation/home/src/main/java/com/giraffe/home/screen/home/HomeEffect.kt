@@ -1,24 +1,25 @@
 package com.giraffe.home.screen.home
 
 import androidx.annotation.StringRes
+import com.giraffe.home.screen.show_more.ShowMoreSectionType
 
 
 sealed interface HomeEffect {
     data class NavigateToMovieDetails(val movieId: Int) : HomeEffect
     data class NavigateToSeriesDetails(val seriesId: Int) : HomeEffect
-    data class NavigateToRecentlyReleasedList(val sectionTitle: String, val sectionType: String) :
+    data class NavigateToRecentlyReleasedList(val sectionTitle: String, val sectionType: ShowMoreSectionType) :
         HomeEffect
 
-    data class NavigateToTopRatedList(val sectionTitle: String, val sectionType: String) :
+    data class NavigateToTopRatedList(val sectionTitle: String, val sectionType: ShowMoreSectionType) :
         HomeEffect
 
-    data class NavigateToUpcomingList(val sectionTitle: String, val sectionType: String) :
+    data class NavigateToUpcomingList(val sectionTitle: String, val sectionType:ShowMoreSectionType) :
         HomeEffect
 
-    data class NavigateToRecentlyViewedList(val sectionTitle: String, val sectionType: String) :
+    data class NavigateToRecentlyViewedList(val sectionTitle: String, val sectionType: ShowMoreSectionType) :
         HomeEffect
 
-    data class NavigateToRecommendedList(val sectionTitle: String, val sectionType: String) :
+    data class NavigateToRecommendedList(val sectionTitle: String, val sectionType: ShowMoreSectionType) :
         HomeEffect
 
     data object NavigateToExploreScreen : HomeEffect

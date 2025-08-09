@@ -42,13 +42,13 @@ import com.giraffe.home.components.CollectionListSection
 import com.giraffe.home.components.HomeUiListSection
 import com.giraffe.home.components.TopAppBar
 import com.giraffe.home.components.YourCollectionsSections
-import com.giraffe.home.screen.movies_list.MovieSectionType
+import com.giraffe.home.screen.show_more.ShowMoreSectionType
 import com.giraffe.home.utils.EventListener
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToMoviesListScreen: (sectionType: String, sectionTitle: String) -> Unit,
+    navigateToMoviesListScreen: (sectionType: ShowMoreSectionType, sectionTitle: String) -> Unit,
     navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
@@ -62,35 +62,35 @@ fun HomeScreen(
         when (effect) {
             is HomeEffect.NavigateToRecentlyReleasedList -> {
                 navigateToMoviesListScreen(
-                    MovieSectionType.RECENTLY_RELEASED,
+                    ShowMoreSectionType.RECENTLY_RELEASED,
                     effect.sectionTitle
                 )
             }
 
             is HomeEffect.NavigateToUpcomingList -> {
                 navigateToMoviesListScreen(
-                    MovieSectionType.UPCOMING_MOVIES,
+                    ShowMoreSectionType.UPCOMING_MOVIES,
                     effect.sectionTitle
                 )
             }
 
             is HomeEffect.NavigateToRecommendedList -> {
                 navigateToMoviesListScreen(
-                    MovieSectionType.MATCHES_YOUR_VIBES,
+                    ShowMoreSectionType.MATCHES_YOUR_VIBES,
                     effect.sectionTitle
                 )
             }
 
             is HomeEffect.NavigateToTopRatedList -> {
                 navigateToMoviesListScreen(
-                    MovieSectionType.TOP_RATED_TV_SHOWS,
+                    ShowMoreSectionType.TOP_RATED_TV_SHOWS,
                     effect.sectionTitle
                 )
             }
 
             is HomeEffect.NavigateToRecentlyViewedList -> {
                 navigateToMoviesListScreen(
-                    MovieSectionType.RECENTLY_VIEWED,
+                    ShowMoreSectionType.RECENTLY_VIEWED,
                     effect.sectionTitle
                 )
             }
@@ -138,7 +138,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeContent(
-    state: HomeScreenUiState,
+    state: HomeScreenState,
     interactionListener: HomeInteractionListener
 ) {
     if (state.isGenericError && state.isNetworkError) {
@@ -202,7 +202,7 @@ fun HomeContent(
                         onClickEndText = {
                             interactionListener.onSeeAllRecentlyReleasedClicked(
                                 sectionTitle = recentlyReleased,
-                                sectionType = MovieSectionType.RECENTLY_RELEASED
+                                sectionType = ShowMoreSectionType.RECENTLY_RELEASED
                             )
                         }
                     )
@@ -232,7 +232,7 @@ fun HomeContent(
                         onClickEndText = {
                             interactionListener.onSeeAllUpcomingClicked(
                                 sectionTitle = upcomingMovies,
-                                sectionType = MovieSectionType.UPCOMING_MOVIES
+                                sectionType = ShowMoreSectionType.UPCOMING_MOVIES
                             )
                         }
                     )
@@ -250,7 +250,7 @@ fun HomeContent(
                         onClickEndText = {
                             interactionListener.onWhatShouldIWatchClicked(
                                 sectionTitle = matchVibes,
-                                sectionType = MovieSectionType.MATCHES_YOUR_VIBES
+                                sectionType = ShowMoreSectionType.MATCHES_YOUR_VIBES
                             )
                         }
                     )
@@ -276,7 +276,7 @@ fun HomeContent(
                         onClickEndText = {
                             interactionListener.onSeeAllTopRatedClicked(
                                 sectionTitle = topRated,
-                                sectionType = MovieSectionType.TOP_RATED_TV_SHOWS
+                                sectionType = ShowMoreSectionType.TOP_RATED_TV_SHOWS
                             )
                         },
                     )
@@ -294,7 +294,7 @@ fun HomeContent(
                         onClickEndText = {
                             interactionListener.onSeeAllRecentlyViewedClicked(
                                 sectionTitle = recentlyReleasedTitle,
-                                sectionType = MovieSectionType.RECENTLY_VIEWED
+                                sectionType = ShowMoreSectionType.RECENTLY_VIEWED
                             )
                         }
                     )
@@ -352,12 +352,22 @@ fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
         override fun loadHomeContent() {}
-        override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {}
-        override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {}
-        override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {}
-        override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {}
-        override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {}
-        override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
+        override fun onSeeAllRecentlyReleasedClicked(
+            sectionTitle: String,
+            sectionType: ShowMoreSectionType
+        ) {
+        }
+
+        override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
+        override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
+        override fun onFeaturedCollectionClicked(
+            collectionId: Int,
+            collectionTitle: String
+        ) {
+        }
+
         override fun onYourCollectionClicked() {}
         override fun onExploreSectionClicked() {}
         override fun onMatchSectionClicked() {}
@@ -367,7 +377,7 @@ fun HomeContentPreview() {
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(
-            state = HomeScreenUiState(
+            state = HomeScreenState(
                 popularity = listOf(
                     PopularMediaUiModel(
                         id = 1,

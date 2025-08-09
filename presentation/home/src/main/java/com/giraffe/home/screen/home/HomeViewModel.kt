@@ -2,6 +2,7 @@ package com.giraffe.home.screen.home
 
 import androidx.lifecycle.viewModelScope
 import com.giraffe.home.base.BaseViewModel
+import com.giraffe.home.screen.show_more.ShowMoreSectionType
 import com.giraffe.home.utils.toHomeUiModel
 import com.giraffe.home.utils.toPopularMediaUiModel
 import com.giraffe.home.utils.toUiModel
@@ -50,7 +51,7 @@ class HomeViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
-) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
+) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
     init {
@@ -307,7 +308,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
+    override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
         sendEffect(
             HomeEffect.NavigateToRecentlyReleasedList(
                 sectionTitle = sectionTitle,
@@ -316,7 +317,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {
+    override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
         sendEffect(
             HomeEffect.NavigateToTopRatedList(
                 sectionTitle = sectionTitle,
@@ -325,7 +326,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {
+    override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
         sendEffect(
             HomeEffect.NavigateToUpcomingList(
                 sectionTitle = sectionTitle,
@@ -334,7 +335,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {
+    override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
         sendEffect(
             HomeEffect.NavigateToRecentlyViewedList(
                 sectionTitle = sectionTitle,
@@ -343,7 +344,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {
+    override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
         sendEffect(
             HomeEffect.NavigateToRecommendedList(
                 sectionTitle = sectionTitle,
