@@ -1,10 +1,6 @@
 package com.giraffe.presentation.home.screen.home
 
 import androidx.lifecycle.viewModelScope
-import com.giraffe.presentation.home.base.BaseViewModel
-import com.giraffe.presentation.home.utils.toHomeUiModel
-import com.giraffe.presentation.home.utils.toPopularMediaUiModel
-import com.giraffe.presentation.home.utils.toUiModel
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
@@ -23,6 +19,11 @@ import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.presentation.home.base.BaseViewModel
+import com.giraffe.presentation.home.screen.show_more.ShowMoreSectionType
+import com.giraffe.presentation.home.utils.toHomeUiModel
+import com.giraffe.presentation.home.utils.toPopularMediaUiModel
+import com.giraffe.presentation.home.utils.toUiModel
 import com.giraffe.user.usecase.GetUserNameUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,7 +51,7 @@ class HomeViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
-) : BaseViewModel<HomeScreenUiState, HomeEffect>(initialState = HomeScreenUiState()),
+) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
     init {
@@ -68,6 +69,7 @@ class HomeViewModel @Inject constructor(
         isLoggedIn()
         getYourCollections()
     }
+
 
     private fun isLoggedIn() {
         safeExecute(
@@ -307,46 +309,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToRecentlyReleasedList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
-    }
 
-    override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: String) {
+    override fun onWhatShouldIWatchClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
-            HomeEffect.NavigateToTopRatedList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
-    }
-
-    override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToUpcomingList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
-    }
-
-    override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToRecentlyViewedList(
-                sectionTitle = sectionTitle,
-                sectionType = sectionType
-            )
-        )
-    }
-
-    override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: String) {
-        sendEffect(
-            HomeEffect.NavigateToRecommendedList(
-                sectionTitle = sectionTitle,
+            HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
             )
         )
@@ -380,6 +346,37 @@ class HomeViewModel @Inject constructor(
             HomeEffect.NavigateToCollection(
                 collectionId = collectionId,
                 collectionName = collectionName
+            )
+        )
+    }
+    override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {
+        sendEffect(
+            HomeEffect.NavigateToShowMore(
+                sectionType = sectionType
+            )
+        )
+    }
+
+    override fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType) {
+        sendEffect(
+            HomeEffect.NavigateToShowMore(
+                sectionType = sectionType
+            )
+        )
+    }
+
+    override fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType) {
+        sendEffect(
+            HomeEffect.NavigateToShowMore(
+                sectionType = sectionType
+            )
+        )
+    }
+
+    override fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType) {
+        sendEffect(
+            HomeEffect.NavigateToShowMore(
+                sectionType = sectionType
             )
         )
     }

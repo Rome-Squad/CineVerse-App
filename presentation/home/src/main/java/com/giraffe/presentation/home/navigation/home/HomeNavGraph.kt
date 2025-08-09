@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.giraffe.api.details.DetailsApi
+import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.navigation.main.CollectionRoute
 import com.giraffe.presentation.home.navigation.main.MovieDetailsRoute
@@ -25,9 +26,9 @@ import com.giraffe.presentation.home.navigation.main.navigateToSeriesDetails
 import com.giraffe.presentation.home.navigation.main.navigateToYourCollections
 import com.giraffe.presentation.home.screen.home.HomeRoute
 import com.giraffe.presentation.home.screen.home.homeRoute
-import com.giraffe.presentation.home.screen.movies_list.moviesListRoute
-import com.giraffe.presentation.home.screen.movies_list.navigateToMoviesList
-import com.giraffe.profile.ProfileApi
+import com.giraffe.presentation.home.screen.show_more.navigateToShowMore
+import com.giraffe.presentation.home.screen.show_more.showMoreRoute
+
 
 
 @Composable
@@ -68,8 +69,8 @@ fun HomeNavGraph(
         ) {
 
             homeRoute(
-                navigateToMoviesScreen = { sectionType, sectionTitle ->
-                    navController.navigateToMoviesList(sectionType, sectionTitle)
+                navigateToShowMoreScreen = {
+                    navController.navigateToShowMore(it)
                 },
                 navigateToMoviesDetailsScreen = {
                     navController.navigateToMovieDetails(it)
@@ -84,7 +85,7 @@ fun HomeNavGraph(
                 navigateToCollection = navController::navigateToCollection
             )
 
-            moviesListRoute(
+            showMoreRoute(
                 onBackClick = navController::popBackStack,
                 navigateToMoviesDetailsScreen = {
                     navController.navigateToMovieDetails(it)
@@ -137,5 +138,4 @@ fun HomeNavGraph(
         }
 
     }
-
 }
