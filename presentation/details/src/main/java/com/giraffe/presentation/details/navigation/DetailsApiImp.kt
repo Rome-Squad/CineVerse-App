@@ -3,11 +3,11 @@ package com.giraffe.presentation.details.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.api.details.DetailsApi
-import com.giraffe.presentation.details.screens.castDetails.CastDetailsRoute
-import com.giraffe.presentation.details.screens.moviedetails.MovieDetailsRoute
-import com.giraffe.presentation.details.screens.seriesdetails.SeriesDetailsRoute
+import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
 import javax.inject.Inject
 import javax.inject.Provider
 

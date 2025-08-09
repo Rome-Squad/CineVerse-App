@@ -18,6 +18,7 @@ import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi

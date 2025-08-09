@@ -7,8 +7,9 @@ import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.AddRecentPersonUseCase
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
 import com.giraffe.presentation.details.screens.castCredit.MediaType
-import com.giraffe.presentation.details.screens.castDetails.state.toUiState
+import com.giraffe.presentation.details.utils.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
