@@ -26,7 +26,8 @@ fun SeriesCacheDto.toEntity() = Series(
     popularity = popularity.orEmpty(),
     youtubeVideoId = youtubeVideoId,
     userRating = userRating,
-    recentViewedAt = recentViewedAt?.toULong()
+    recentViewedAt = recentViewedAt?.toULong(),
+    seasons = emptyList()
 )
 
 fun Series.toCacheDto() = SeriesCacheDto(
@@ -86,7 +87,8 @@ fun SeriesDto.toEntity() = Series(
     popularity = popularity?.toFloat().orEmpty(),
     userRating = userRating,
     youtubeVideoId = null,
-    recentViewedAt = null
+    recentViewedAt = null,
+    seasons = emptyList()
 )
 
 fun SeasonDto.toEntity() = Season(
