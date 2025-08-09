@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.home.show_more
+package com.giraffe.presentation.home.screen.show_more
 
 import androidx.annotation.StringRes
 

@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:presentation/home/src/main/java/com/giraffe/home/screen/show_more/ShowMoreScreen.kt
-package com.giraffe.home.screen.show_more
-========
-package com.giraffe.presentation.home.screen.movies_list
->>>>>>>> origin/develop:presentation/home/src/main/java/com/giraffe/presentation/home/screen/movies_list/MoviesListScreen.kt
+package com.giraffe.presentation.home.screen.show_more
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -39,14 +36,8 @@ fun ShowMoreScreen(
     LaunchedEffect(Unit) {
         showMoreViewModel.effect.collect { effect ->
             when (effect) {
-                is ShowMoreEffect.NavigateToMovieDetails -> {
-                    navigateToMoviesDetailsScreen(effect.movieId)
-                }
-
-                is ShowMoreEffect.NavigateToSeriesDetails -> {
-                    navigateToSeriesDetailsScreen(effect.seriesId)
-                }
-
+                is ShowMoreEffect.NavigateToMovieDetails -> { navigateToMoviesDetailsScreen(effect.movieId) }
+                is ShowMoreEffect.NavigateToSeriesDetails -> { navigateToSeriesDetailsScreen(effect.seriesId) }
                 is ShowMoreEffect.ShowError -> {}
             }
         }

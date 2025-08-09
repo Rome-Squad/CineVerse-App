@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:presentation/home/src/main/java/com/giraffe/home/screen/show_more/ShowMoreState.kt
-package com.giraffe.home.screen.show_more
-========
-package com.giraffe.presentation.home.screen.movies_list
->>>>>>>> origin/develop:presentation/home/src/main/java/com/giraffe/presentation/home/screen/movies_list/MoviesListUiState.kt
+package com.giraffe.presentation.home.screen.show_more
+
 
 import com.giraffe.presentation.home.screen.home.MediaType
 

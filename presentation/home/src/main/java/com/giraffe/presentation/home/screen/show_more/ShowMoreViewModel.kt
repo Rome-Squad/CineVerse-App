@@ -1,9 +1,11 @@
-package com.giraffe.presentation.home.screen.home.show_more
+package com.giraffe.presentation.home.screen.show_more
+
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.home.base.BaseViewModel
-import com.giraffe.home.screen.home.MediaType
+import com.giraffe.presentation.home.base.BaseViewModel
+import com.giraffe.presentation.home.screen.home.MediaType
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

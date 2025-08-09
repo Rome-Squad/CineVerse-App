@@ -1,10 +1,10 @@
-package com.giraffe.presentation.home.screen.home.show_more
+package com.giraffe.presentation.home.screen.show_more
 
 import android.content.Context
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.home.R
+import com.giraffe.presentation.home.R
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,7 +13,7 @@ data class ShowMoreRoute(
 )
 
 
-enum class ShowMoreSectionType {
+enum class ShowMoreSectionType{
     RECENTLY_RELEASED,
     TOP_RATED_TV_SHOWS,
     UPCOMING_MOVIES,

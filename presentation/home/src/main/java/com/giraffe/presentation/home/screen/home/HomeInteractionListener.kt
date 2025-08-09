@@ -1,6 +1,6 @@
 package com.giraffe.presentation.home.screen.home
 
-import com.giraffe.home.screen.show_more.ShowMoreSectionType
+import com.giraffe.presentation.home.screen.show_more.ShowMoreSectionType
 
 interface HomeInteractionListener {
     fun onMediaClicked(mediaId: Int, mediaType: MediaType)

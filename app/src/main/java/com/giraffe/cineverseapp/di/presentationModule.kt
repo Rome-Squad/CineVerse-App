@@ -1,11 +1,11 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.home.screen.show_more.MatchesYourVibesStrategy
-import com.giraffe.home.screen.show_more.RecentlyReleasedStrategy
-import com.giraffe.home.screen.show_more.RecentlyViewedStrategy
-import com.giraffe.home.screen.show_more.ShowMoreFactory
-import com.giraffe.home.screen.show_more.TopRatedTvShowsStrategy
-import com.giraffe.home.screen.show_more.UpcomingMoviesStrategy
+import com.giraffe.presentation.home.screen.show_more.MatchesYourVibesStrategy
+import com.giraffe.presentation.home.screen.show_more.RecentlyReleasedStrategy
+import com.giraffe.presentation.home.screen.show_more.RecentlyViewedStrategy
+import com.giraffe.presentation.home.screen.show_more.ShowMoreFactory
+import com.giraffe.presentation.home.screen.show_more.TopRatedTvShowsStrategy
+import com.giraffe.presentation.home.screen.show_more.UpcomingMoviesStrategy
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase

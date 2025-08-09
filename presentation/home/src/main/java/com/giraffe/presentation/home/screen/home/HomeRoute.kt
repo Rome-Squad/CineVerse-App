@@ -2,7 +2,8 @@ package com.giraffe.presentation.home.screen.home
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.home.screen.show_more.ShowMoreSectionType
+import com.giraffe.home.screen.home.HomeScreen
+import com.giraffe.presentation.home.screen.show_more.ShowMoreSectionType
 import kotlinx.serialization.Serializable
 
 @Serializable

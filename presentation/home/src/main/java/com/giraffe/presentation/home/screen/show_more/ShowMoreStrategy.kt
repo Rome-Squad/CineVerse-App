@@ -1,6 +1,6 @@
-package com.giraffe.presentation.home.screen.home.show_more
+package com.giraffe.presentation.home.screen.show_more
 
-import com.giraffe.home.utils.toPosterUi
+import com.giraffe.presentation.home.utils.toPosterUi
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
