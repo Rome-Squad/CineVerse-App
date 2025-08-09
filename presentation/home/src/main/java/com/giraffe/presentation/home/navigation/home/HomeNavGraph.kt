@@ -16,19 +16,6 @@ import androidx.navigation.toRoute
 import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.home.navigation.main.CollectionRoute
-import com.giraffe.home.navigation.main.MovieDetailsRoute
-import com.giraffe.home.navigation.main.SeriesDetailsRoute
-import com.giraffe.home.navigation.main.YourCollectionsRoute
-import com.giraffe.home.navigation.main.navigateToCollection
-import com.giraffe.home.navigation.main.navigateToMovieDetails
-import com.giraffe.home.navigation.main.navigateToSeriesDetails
-import com.giraffe.home.navigation.main.navigateToYourCollections
-import com.giraffe.home.screen.home.HomeRoute
-import com.giraffe.home.screen.home.homeRoute
-import com.giraffe.home.screen.movies_list.moviesListRoute
-import com.giraffe.home.screen.movies_list.navigateToMoviesList
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.navigation.main.CollectionRoute
 import com.giraffe.presentation.home.navigation.main.MovieDetailsRoute
 import com.giraffe.presentation.home.navigation.main.SeriesDetailsRoute
@@ -41,8 +28,6 @@ import com.giraffe.presentation.home.screen.home.HomeRoute
 import com.giraffe.presentation.home.screen.home.homeRoute
 import com.giraffe.presentation.home.screen.movies_list.moviesListRoute
 import com.giraffe.presentation.home.screen.movies_list.navigateToMoviesList
-import com.giraffe.profile.ProfileApi
-
 
 @Composable
 fun HomeNavGraph(
