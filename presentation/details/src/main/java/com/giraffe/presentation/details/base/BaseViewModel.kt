@@ -70,9 +70,3 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     }
 
 }
-
-
-//1- move no internet state from base view model
-//2- remove snack bar from base view model
-//3- map error to resource is a util to be consumed by the screen but the view model only use Throwables
-//4-
