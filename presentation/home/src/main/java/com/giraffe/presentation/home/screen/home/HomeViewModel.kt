@@ -155,9 +155,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun onGetPopularitySeriesSuccess(series: List<Series>) {
-        val popularSeriesUi = series.map { series ->
-            val genres = getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-            series.toPopularMediaUiModel(genres)
+        val popularSeriesUi = series.map { seriesList ->
+            val genres = getSeriesGenresByIdsUseCase(seriesList.genreIDs).map { it.title }
+            seriesList.toPopularMediaUiModel(genres)
         }
         updateState { currentState ->
             currentState.copy(
@@ -241,12 +241,12 @@ class HomeViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyViewedMoviesUseCase::invoke
+                block = { getRecentlyViewedMoviesUseCase.invoke() }
             )
             safeExecute(
                 onSuccess = ::onGetRecentlySeriesSuccess,
                 onError = ::onFail,
-                block = getRecentlySeriesUseCase::invoke
+                block = {getRecentlySeriesUseCase.invoke()}
             )
         }
     }
@@ -281,12 +281,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getRecommendedSeries(series: List<Series>) {
-        series.firstOrNull()?.let { series ->
+        series.firstOrNull()?.let { seriesList ->
             safeExecute(
                 onSuccess = ::onGetRecommendedSeriesSuccess,
                 onError = ::onFail,
             ) {
-                getRecommendedSeriesUseCase(series.id, 1)
+                getRecommendedSeriesUseCase(seriesList.id, 1)
             }
         }
     }
@@ -295,11 +295,11 @@ class HomeViewModel @Inject constructor(
         updateState { it.copy(matchVibes = (it.matchVibes + recommendedSeries.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
     }
 
-    private fun onFail(errorMesRes: Int) = updateState {
+    private fun onFail(error: Throwable) = updateState {
         it.copy(
             isLoading = false,
             isError = true,
-            errorMsgRes = errorMesRes
+            errorMsgRes = error.message
         )
     }
 
@@ -350,6 +350,7 @@ class HomeViewModel @Inject constructor(
             )
         )
     }
+
     override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(

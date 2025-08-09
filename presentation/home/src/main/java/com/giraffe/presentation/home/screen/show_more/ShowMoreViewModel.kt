@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.PosterUiModel
 import com.giraffe.presentation.home.navigation.show_more.ShowMoreRoute
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,11 +25,28 @@ class ShowMoreViewModel @Inject constructor(
     }
 
     private fun loadByStrategy() {
-        safeExecute {
-            updateState { it.copy(sectionType = sectionType,isLoading = true, errorMessage = null) }
-            val mediaList = showMoreFactory.createStrategy(sectionType).loadData()
-            updateState { it.copy(isLoading = false, mediaList = mediaList) }
+        safeExecute(
+            onError = ::onLoadByStrategyFail,
+            onSuccess = ::onLoadByStrategySuccess,
+        ) {
+            showMoreFactory.createStrategy(sectionType).loadData()
         }
+    }
+
+    private fun onLoadByStrategySuccess(media: List<PosterUiModel>) {
+        updateState {
+            it.copy(
+                sectionType = sectionType,
+                mediaList = media,
+                isLoading = false,
+                errorMessage = null
+            )
+        }
+    }
+
+    private fun onLoadByStrategyFail(exception: Throwable) {
+        updateState { it.copy(isLoading = false) }
+        sendEffect(ShowMoreEffect.ShowError(exception))
     }
 
 
