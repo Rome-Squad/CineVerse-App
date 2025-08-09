@@ -1,0 +1,23 @@
+package com.giraffe.presentation.details.utils
+
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+
+@OptIn(ExperimentalTime::class)
+fun getCurrentLocalDateTime(): LocalDateTime {
+    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+}
+
+fun getCurrentLocalDate(): LocalDate {
+    return getCurrentLocalDateTime().date
+}
+
+
+fun LocalDateTime.formatAsMonthDayYear(): String {
+    val monthName = this.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)
+    return "$monthName $day, ${this.year}"
+}
