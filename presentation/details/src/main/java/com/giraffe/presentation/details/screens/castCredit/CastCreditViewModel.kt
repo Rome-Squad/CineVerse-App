@@ -1,19 +1,14 @@
 package com.giraffe.presentation.details.screens.castCredit
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.utils.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,54 +20,58 @@ class CastCreditViewModel @Inject constructor(
 ) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(initialState = CastCreditScreenState()),
     CastCreditInteractionListener {
 
-    val castId = savedStateHandle.toRoute<CastCreditRoute>().castID
-    val actorName = savedStateHandle.toRoute<CastCreditRoute>().actorName
-
     init {
+        val castId = savedStateHandle.toRoute<CastCreditRoute>().castID
+        val actorName = savedStateHandle.toRoute<CastCreditRoute>().actorName
+
+        updateState {
+            it.copy(
+                castId = castId,
+                actorName = actorName
+            )
+        }
+
         loadCastCredit(castId)
     }
 
     private fun loadCastCredit(castId: Int) {
+        updateState { it.copy(isLoading = true) }
+
         safeExecute(
             onSuccess = ::loadCastCreditSuccess,
             onError = ::loadCastCreditError
         ) {
-            updateState { it.copy(isLoading = true) }
             getPeopleMediaCredits(castId)
         }
     }
 
     private fun loadCastCreditSuccess(personCredits: List<PersonCredit>) {
-        safeExecute {
-            val posters = loadPostersOfCastCredit(personCredits)
-            updateState {
-                it.copy(
-                    isLoading = false,
-                    posters = posters,
-                    actorName = actorName
-                )
+        safeExecute(
+            onError = ::loadCastCreditError,
+            onSuccess = { posters ->
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        posters = posters,
+                    )
+                }
             }
+        ) {
+
+            personCredits.map { personCredit ->
+                val mediaType = MediaType.from(personCredit.mediaType)
+
+                val genres = when (mediaType) {
+                    MediaType.MOVIE -> getMoviesGenresByIds(personCredit.genreIds)
+                    MediaType.TV -> getSeriesGenres(personCredit.genreIds)
+                    else -> emptyList()
+                }
+
+                personCredit.toPoster().copy(genres = genres.joinToString(", "))
+            }
+
         }
     }
-
-    private suspend fun loadPostersOfCastCredit(personCredits: List<PersonCredit>) =
-        coroutineScope {
-            personCredits.map { personCredit ->
-                async {
-                    val mediaType = MediaType.from(personCredit.mediaType)
-                    val genres = when (mediaType) {
-                        MediaType.MOVIE -> getMoviesGenresByIds(personCredit.genreIds)
-                            .map { it.title }
-
-                        MediaType.TV -> getSeriesGenres(personCredit.genreIds)
-                            .map { it.title }
-
-                        else -> emptyList()
-                    }
-                    personCredit.toPoster().copy(genres = genres.joinToString(", "))
-                }
-            }.awaitAll()
-        }
 
 
     private fun loadCastCreditError(exception: Throwable) {
@@ -81,15 +80,13 @@ class CastCreditViewModel @Inject constructor(
     }
 
     override fun onPosterClick(mediaId: Int, mediaType: String) {
-        viewModelScope.launch {
-            sendEffect(
-                when (mediaType) {
-                    MediaType.MOVIE.value -> CastCreditEffect.NavigateToMovieDetails(mediaId)
-                    MediaType.TV.value -> CastCreditEffect.NavigateToSeriesDetails(mediaId)
-                    else -> return@launch
-                }
-            )
-        }
+        sendEffect(
+            effect = when (mediaType) {
+                MediaType.MOVIE.value -> CastCreditEffect.NavigateToMovieDetails(mediaId)
+                MediaType.TV.value -> CastCreditEffect.NavigateToSeriesDetails(mediaId)
+                else -> return
+            }
+        )
     }
 
     override fun changeView(isGrid: Boolean) {
