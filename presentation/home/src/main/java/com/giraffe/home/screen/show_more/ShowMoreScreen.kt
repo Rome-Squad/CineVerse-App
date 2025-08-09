@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,7 +25,7 @@ import com.giraffe.home.components.TransitionLazyColumnToGrid
 import com.giraffe.home.screen.home.MediaType
 
 @Composable
-fun MoviesListScreen(
+fun ShowMoreScreen(
     showMoreViewModel: ShowMoreViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     navigateToMoviesDetailsScreen: (Int) -> Unit,
@@ -46,7 +47,7 @@ fun MoviesListScreen(
             }
         }
     }
-    MoviesListContent(
+    ShowMoreContent(
         state = state,
         showMoreInteractionListener = showMoreViewModel,
         onBackClick = onBackClick,
@@ -54,8 +55,8 @@ fun MoviesListScreen(
 }
 
 @Composable
-fun MoviesListContent(
-    state: MoviesListUiState,
+fun ShowMoreContent(
+    state: ShowMoreState,
     showMoreInteractionListener: ShowMoreInteractionListener,
     onBackClick: () -> Unit
 ) {
@@ -67,7 +68,7 @@ fun MoviesListContent(
                 .statusBarsPadding()
         ) {
             ListTitleSection(
-                title = state.moviesListTitle,
+                title = state.sectionType?.getSectionTitle(LocalContext.current)?:"",
                 onBackClick = onBackClick
             )
             Box(
@@ -96,13 +97,15 @@ fun MoviesListContent(
 
 @Preview(showSystemUi = false, showBackground = true)
 @Composable
-fun MoviesListPreview() {
+fun ShowMorePreview() {
     val interactionListener = object : ShowMoreInteractionListener {
         override fun onViewChanged(isGrid: Boolean) {}
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
     }
-    MoviesListContent(
-        state = MoviesListUiState(),
+    ShowMoreContent(
+        state = ShowMoreState(
+            sectionType = ShowMoreSectionType.RECENTLY_RELEASED
+        ),
         showMoreInteractionListener = interactionListener,
         onBackClick = {},
     )
