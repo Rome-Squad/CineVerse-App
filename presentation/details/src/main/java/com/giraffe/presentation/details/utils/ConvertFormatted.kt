@@ -12,8 +12,8 @@ fun Int.toFormattedDuration(): String {
     }.trim()
 }
 
-fun String.toFormattedDate(): String {
-    if (this.isBlank()) return this
+fun String?.toFormattedDate(): String {
+    if (this.isNullOrBlank()) return this.toString()
     val inputFormat = SimpleDateFormat("yyyy-M-dd", Locale.ENGLISH)
     val date = inputFormat.parse(this) ?: return this
 

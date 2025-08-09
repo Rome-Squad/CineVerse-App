@@ -10,7 +10,7 @@ data class SeriesUi(
     val overview: String = "",
     val rating: Float = 0.0f,
     val posterUrl: String? = null,
-    val releaseYear: String = "",
+    val releaseYear: String? = null,
     val youtubeVideoId: String = "",
     val genres: List<String> = emptyList(),
 ) {
@@ -23,7 +23,7 @@ data class SeriesUi(
             posterUrl = series.posterUrl,
             releaseYear = series.releaseYear.toString().toFormattedDate(),
             genres = emptyList(),
-            youtubeVideoId = series.youtubeVideoId.toString(),
+            youtubeVideoId = series.youtubeVideoId.orEmpty(),
         )
     }
 }
@@ -31,7 +31,7 @@ data class SeriesUi(
 fun SeriesUi.toPoster(): Poster = Poster(
     id = id,
     name = name,
-    imageUri = posterUrl .orEmpty(),
+    imageUri = posterUrl.orEmpty(),
     rating = rating,
     genres = genres.joinToString(", "),
     date = releaseYear
