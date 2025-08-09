@@ -10,7 +10,7 @@ interface SeriesRepository {
 
     suspend fun getByName(name: String, page: Int): List<Series>
 
-    suspend fun getByGenre(genreId: Int, page: Int): List<Series>
+    suspend fun getByGenreId(genreId: Int, page: Int): List<Series>
 
     suspend fun getGenres(): List<Genre>
 

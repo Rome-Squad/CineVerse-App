@@ -77,7 +77,7 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getByGenre(genreId: Int, page: Int) = SafeCall {
+    override suspend fun getByGenreId(genreId: Int, page: Int) = SafeCall {
         seriesRemoteDataSource.getSeriesByGenre(genreId, page).map { it.toEntity() }
     }
 
