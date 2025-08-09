@@ -3,9 +3,9 @@ package com.giraffe.presentation.profile.screens.settings
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.giraffe.presentation.profile.base.BaseViewModel
-import com.giraffe.presentation.profile.screens.settings.model.toUserUiModel
 import com.giraffe.presentation.profile.utils.Language
 import com.giraffe.presentation.profile.utils.LanguageHelper
+import com.giraffe.presentation.profile.utils.toUi
 import com.giraffe.user.entity.ContentPreference
 import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
@@ -35,7 +35,7 @@ class SettingsViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
-) : BaseViewModel<SettingsScreenState, SettingsScreenEffect>(SettingsScreenState()),
+) : BaseViewModel<SettingsScreenState, SettingsEffect>(SettingsScreenState()),
     SettingsInteractionListener {
 
     init {
@@ -83,23 +83,23 @@ class SettingsViewModel @Inject constructor(
     private fun getUserProfile() {
         safeExecute(
             onSuccess = ::handleGetUserProfileSuccess,
-            onError = ::handleGetUserProfileError
+            onError = ::onFailure
         ) {
             getUserUseCase()
         }
     }
 
     private fun handleGetUserProfileSuccess(user: User) {
-        updateState { it.copy(isLoading = false, user = user.toUserUiModel()) }
+        updateState { it.copy(isLoading = false, user = user.toUi()) }
     }
 
-    private fun handleGetUserProfileError(error: Throwable) {
+    private fun onFailure(error: Throwable) {
         updateState { it.copy(isLoading = false) }
-        sendEffect(SettingsScreenEffect.ShowError(mapErrorToResource(error)))
+        sendEffect(SettingsEffect.ShowError(error))
     }
 
     override fun onLoginClick() {
-        sendEffect(SettingsScreenEffect.NavigateToLogin)
+        sendEffect(SettingsEffect.NavigateToLogin)
     }
 
     override fun onEditProfileClick() {
@@ -147,20 +147,16 @@ class SettingsViewModel @Inject constructor(
         onDismissSheet()
         safeExecute(
             onSuccess = {
-                sendEffect(SettingsScreenEffect.NavigateToLogin)
+                sendEffect(SettingsEffect.NavigateToLogin)
             },
-            onError = ::onLogoutFailure
+            onError = ::onFailure
         ) {
             logoutUseCase()
         }
     }
 
-    private fun onLogoutFailure(error: Throwable) {
-        sendEffect(SettingsScreenEffect.ShowError(mapErrorToResource(error)))
-    }
-
     override fun onGoToWebsiteClick() {
-        sendEffect(SettingsScreenEffect.NavigateToEditProfileWebsite)
+        sendEffect(SettingsEffect.NavigateToEditProfileWebsite)
         onDismissSheet()
     }
 

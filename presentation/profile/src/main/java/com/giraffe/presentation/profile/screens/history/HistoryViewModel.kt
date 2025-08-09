@@ -8,7 +8,7 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
-import com.giraffe.presentation.profile.utils.toPosterUi
+import com.giraffe.presentation.profile.utils.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class HistoryViewModel @Inject constructor(
     private val deleteMovieUseCase: DeleteMovieUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :
-    BaseViewModel<HistoryUiState, HistoryEffect>(initialState = HistoryUiState()),
+    BaseViewModel<HistoryScreenState, HistoryEffect>(initialState = HistoryScreenState()),
     HistoryInteractionListener {
 
     init {
@@ -30,23 +30,23 @@ class HistoryViewModel @Inject constructor(
     private fun getRecentViewedMovies() {
         safeCollect(
             onEmitNewValue = ::onGetRecentMoviesSuccess,
-            onError = ::onFail
+            onError = ::onFailure
         ) { getRecentlyMoviesUseCase.invoke() }
     }
 
     private fun getRecentViewedSeries() {
         safeCollect(
             onEmitNewValue = ::onGetRecentSeriesSuccess,
-            onError = ::onFail
+            onError = ::onFailure
         ) { getRecentlySeriesUseCase.invoke() }
     }
 
     private fun onGetRecentMoviesSuccess(moviesList: List<Movie>) {
-        updateMediaList(moviesList.map(Movie::toPosterUi))
+        updateMediaList(moviesList.map(Movie::toPoster))
     }
 
     private fun onGetRecentSeriesSuccess(seriesList: List<Series>) {
-        updateMediaList(seriesList.map(Series::toPosterUi))
+        updateMediaList(seriesList.map(Series::toPoster))
     }
 
     private fun updateMediaList(newMediaList: List<Poster>) {
@@ -59,14 +59,14 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    private fun onFail(error: Throwable) {
-        updateState { it.copy(isLoading = false, errorMsgRes = mapErrorToResource(error)) }
+    private fun onFailure(error: Throwable) {
+        updateState { it.copy(isLoading = false) }
+        sendEffect(HistoryEffect.ShowError(error))
     }
-
 
     override fun onDeleteClicked(id: Int, mediaType: String) {
         safeExecute(
-            onError = ::onFail,
+            onError = ::onFailure,
             onSuccess = {
                 val updatedList = state.value.mediaList.filterNot { it.id == id }
 
@@ -88,7 +88,6 @@ class HistoryViewModel @Inject constructor(
 
     }
 
-
     override fun onCloseClicked() {
         updateState { it.copy(isVisible = false) }
     }
@@ -106,14 +105,6 @@ class HistoryViewModel @Inject constructor(
     }
 
     override fun navigateToExploreScreen() {
-        sendEffect(HistoryEffect.navigateToExploreScreen)
+        sendEffect(HistoryEffect.NavigateToExploreScreen)
     }
-
-    override fun retry() {
-        getRecentViewedMovies()
-        getRecentViewedSeries()
-    }
-
 }
-
-
