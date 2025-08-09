@@ -11,7 +11,7 @@ data object HomeRoute
 
 fun NavGraphBuilder.homeRoute(
     navigateToCollectionList: (Int, String) -> Unit,
-    navigateToMoviesScreen: (ShowMoreSectionType, String) -> Unit,
+    navigateToShowMoreScreen: (ShowMoreSectionType) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToExploreScreen: () -> Unit,
@@ -21,7 +21,7 @@ fun NavGraphBuilder.homeRoute(
 ) {
     composable<HomeRoute> {
         HomeScreen(
-            navigateToMoviesListScreen = navigateToMoviesScreen,
+            navigateToShowMoreScreen = navigateToShowMoreScreen,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
             navigateToExploreScreen = navigateToExploreScreen,
