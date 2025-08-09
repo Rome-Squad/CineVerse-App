@@ -3,7 +3,7 @@ package com.giraffe.home.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.giraffe.details.DetailsApi
+import com.giraffe.api.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.home.HomeApi
 import com.giraffe.home.navigation.main.MainNavGraph
