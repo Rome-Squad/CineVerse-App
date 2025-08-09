@@ -25,8 +25,8 @@ import com.giraffe.home.navigation.main.navigateToSeriesDetails
 import com.giraffe.home.navigation.main.navigateToYourCollections
 import com.giraffe.home.screen.home.HomeRoute
 import com.giraffe.home.screen.home.homeRoute
-import com.giraffe.home.screen.show_more.moviesListRoute
-import com.giraffe.home.screen.show_more.navigateToMoviesList
+import com.giraffe.home.screen.show_more.showMoreRoute
+import com.giraffe.home.screen.show_more.navigateToShowMore
 import com.giraffe.profile.ProfileApi
 
 
@@ -68,8 +68,8 @@ fun HomeNavGraph(
         ) {
 
             homeRoute(
-                navigateToMoviesScreen = { sectionType, sectionTitle ->
-                    navController.navigateToMoviesList(sectionType, sectionTitle)
+                navigateToShowMoreScreen = {
+                    navController.navigateToShowMore(it)
                 },
                 navigateToMoviesDetailsScreen = {
                     navController.navigateToMovieDetails(it)
@@ -84,7 +84,7 @@ fun HomeNavGraph(
                 navigateToCollection = navController::navigateToCollection
             )
 
-            moviesListRoute(
+            showMoreRoute(
                 onBackClick = navController::popBackStack,
                 navigateToMoviesDetailsScreen = {
                     navController.navigateToMovieDetails(it)
@@ -137,5 +137,4 @@ fun HomeNavGraph(
         }
 
     }
-
 }
