@@ -48,7 +48,7 @@ import com.giraffe.home.utils.EventListener
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToMoviesListScreen: (sectionType: ShowMoreSectionType, sectionTitle: String) -> Unit,
+    navigateToShowMoreScreen: (sectionType: ShowMoreSectionType) -> Unit,
     navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
@@ -60,60 +60,15 @@ fun HomeScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     EventListener(viewModel.effect) { effect ->
         when (effect) {
-            is HomeEffect.NavigateToRecentlyReleasedList -> {
-                navigateToMoviesListScreen(
-                    ShowMoreSectionType.RECENTLY_RELEASED,
-                    effect.sectionTitle
-                )
-            }
-
-            is HomeEffect.NavigateToUpcomingList -> {
-                navigateToMoviesListScreen(
-                    ShowMoreSectionType.UPCOMING_MOVIES,
-                    effect.sectionTitle
-                )
-            }
-
-            is HomeEffect.NavigateToRecommendedList -> {
-                navigateToMoviesListScreen(
-                    ShowMoreSectionType.MATCHES_YOUR_VIBES,
-                    effect.sectionTitle
-                )
-            }
-
-            is HomeEffect.NavigateToTopRatedList -> {
-                navigateToMoviesListScreen(
-                    ShowMoreSectionType.TOP_RATED_TV_SHOWS,
-                    effect.sectionTitle
-                )
-            }
-
-            is HomeEffect.NavigateToRecentlyViewedList -> {
-                navigateToMoviesListScreen(
-                    ShowMoreSectionType.RECENTLY_VIEWED,
-                    effect.sectionTitle
-                )
-            }
-
             is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
             is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
             is HomeEffect.NavigateToExploreScreen -> navigateToExploreScreen()
-            is HomeEffect.NavigateToFeaturedCollection -> {
-                navigateToFeaturedCollection(
-                    effect.collectionId,
-                    effect.collectionTitle
-                )
-            }
-
-            is HomeEffect.NavigateToCollection -> {
-                navigateToCollection(
-                    effect.collectionId,
-                    effect.collectionName
-                )
-            }
+            is HomeEffect.NavigateToFeaturedCollection -> { navigateToFeaturedCollection(effect.collectionId, effect.collectionTitle) }
+            is HomeEffect.NavigateToCollection -> { navigateToCollection(effect.collectionId, effect.collectionName) }
             is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
             is HomeEffect.NavigateToMatchScreen -> navigateToMatchScreen()
             is HomeEffect.ShowError -> {}
+            is HomeEffect.NavigateToShowMore -> { navigateToShowMoreScreen(effect.sectionType) }
         }
     }
 
@@ -190,7 +145,6 @@ fun HomeContent(
                 }
 
                 if (state.recentlyReleased.isNotEmpty()) {
-                    val recentlyReleased = stringResource(R.string.recently_released)
                     HomeUiListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -201,7 +155,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllRecentlyReleasedClicked(
-                                sectionTitle = recentlyReleased,
+
                                 sectionType = ShowMoreSectionType.RECENTLY_RELEASED
                             )
                         }
@@ -220,7 +174,6 @@ fun HomeContent(
                 )
 
                 if (state.upcomingMovies.isNotEmpty()) {
-                    val upcomingMovies = stringResource(R.string.upcoming_movies)
                     HomeUiListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -231,14 +184,12 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllUpcomingClicked(
-                                sectionTitle = upcomingMovies,
                                 sectionType = ShowMoreSectionType.UPCOMING_MOVIES
                             )
                         }
                     )
                 }
                 if (state.matchVibes.isNotEmpty()) {
-                    val matchVibes = stringResource(R.string.matches_your_vibe)
                     HomeUiListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -249,7 +200,6 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onWhatShouldIWatchClicked(
-                                sectionTitle = matchVibes,
                                 sectionType = ShowMoreSectionType.MATCHES_YOUR_VIBES
                             )
                         }
@@ -264,7 +214,6 @@ fun HomeContent(
                 }
 
                 if (state.topRated.isNotEmpty()) {
-                    val topRated = stringResource(R.string.top_rated_tv_shows)
                     HomeUiListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -275,14 +224,12 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllTopRatedClicked(
-                                sectionTitle = topRated,
                                 sectionType = ShowMoreSectionType.TOP_RATED_TV_SHOWS
                             )
                         },
                     )
                 }
                 if (state.recentlyViewed.isNotEmpty()) {
-                    val recentlyReleasedTitle = stringResource(R.string.you_recent_viewed)
                     HomeUiListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -293,7 +240,6 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllRecentlyViewedClicked(
-                                sectionTitle = recentlyReleasedTitle,
                                 sectionType = ShowMoreSectionType.RECENTLY_VIEWED
                             )
                         }
@@ -352,28 +298,16 @@ fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
         override fun loadHomeContent() {}
-        override fun onSeeAllRecentlyReleasedClicked(
-            sectionTitle: String,
-            sectionType: ShowMoreSectionType
-        ) {
-        }
-
-        override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
-        override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
-        override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
-        override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {}
-        override fun onFeaturedCollectionClicked(
-            collectionId: Int,
-            collectionTitle: String
-        ) {
-        }
-
+        override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType) {}
+        override fun onWhatShouldIWatchClicked(sectionType: ShowMoreSectionType) {}
+        override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {}
         override fun onYourCollectionClicked() {}
         override fun onExploreSectionClicked() {}
         override fun onMatchSectionClicked() {}
-        override fun onCollectionClick(collectionId: Int, collectionName: String) {
-            TODO("Not yet implemented")
-        }
+        override fun onCollectionClick(collectionId: Int, collectionName: String) {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(
