@@ -6,13 +6,13 @@ import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.SeasonUi
 import com.giraffe.details.screens.seasons.screen.SeasonsRoute
 import com.giraffe.media.series.entity.Season
-import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
+import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SeasonsViewModel @Inject constructor(
-    private val getSeasons: GetLastSeasonsUseCase,
+    private val getSeasons: GetSeasonsUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeasonsScreenState, SeasonsEffect>(
     SeasonsScreenState()

@@ -6,11 +6,11 @@ import javax.inject.Inject
 class ClearSeriesCacheUseCase @Inject constructor(
     private val repository: SeriesRepository
 ) {
-    suspend fun clearSeriesCache() {
-        repository.clearAllSeries()
-    }
-
-    suspend fun clearSeriesExceptRecentlyViewed() {
-        repository.clearAllSeriesExceptRecentlyViewed()
+    suspend operator fun invoke(exceptRecentlyViewed: Boolean = false) {
+        if (exceptRecentlyViewed) {
+            repository.clearAllExceptRecentlyViewed()
+        } else {
+            repository.clearAll()
+        }
     }
 }

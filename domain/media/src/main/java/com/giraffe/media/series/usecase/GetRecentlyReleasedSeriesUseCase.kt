@@ -7,5 +7,5 @@ import javax.inject.Inject
 
 class GetRecentlyReleasedSeriesUseCase @Inject constructor(private val repository: SeriesRepository) {
     suspend operator fun invoke(page: Int, limit: Int): List<Series> =
-        repository.getRecentlyReleasedSeries(page, limit)
+        repository.getRecentlyReleased(page, limit)
 }

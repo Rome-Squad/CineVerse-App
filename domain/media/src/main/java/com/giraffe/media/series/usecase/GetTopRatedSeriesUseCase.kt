@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 class GetTopRatedSeriesUseCase @Inject constructor(private val repository: SeriesRepository) {
     suspend operator fun invoke(page: Int, limit: Int): List<Series> =
-        repository.getTopRatedSeries(page, limit)
+        repository.getTopRated(page, limit)
 }

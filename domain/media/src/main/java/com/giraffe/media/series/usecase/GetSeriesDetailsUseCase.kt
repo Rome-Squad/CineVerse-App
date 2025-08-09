@@ -8,6 +8,6 @@ class GetSeriesDetailsUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(seriesId: Int): Series {
-        return seriesRepository.getSeriesDetails(seriesId)
+        return seriesRepository.getDetails(seriesId)
     }
 }

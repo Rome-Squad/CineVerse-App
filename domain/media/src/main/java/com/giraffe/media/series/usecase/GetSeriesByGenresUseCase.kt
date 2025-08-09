@@ -7,5 +7,5 @@ class GetSeriesByGenresUseCase @Inject constructor(
     private val repository: SeriesRepository
 ) {
     suspend operator fun invoke(genresId: Int, page: Int) =
-        repository.getSeriesByGenre(genresId, page)
+        repository.getByGenre(genresId, page)
 }

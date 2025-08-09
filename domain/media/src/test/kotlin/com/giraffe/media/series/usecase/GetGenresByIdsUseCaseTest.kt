@@ -6,18 +6,12 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetGenresByIdsUseCaseTest {
-    private lateinit var repository: SeriesRepository
-    private lateinit var useCase: GetSeriesGenresByIdsUseCase
+    private val repository: SeriesRepository = mockk(relaxed = true)
+    private val useCase: GetSeriesGenresByIdsUseCase = GetSeriesGenresByIdsUseCase(repository)
 
-    @BeforeEach
-    fun setUp() {
-        repository = mockk()
-        useCase = GetSeriesGenresByIdsUseCase(repository)
-    }
 
     @Test
     fun `should return list of series genres from repository`() = runTest {
@@ -32,7 +26,7 @@ class GetGenresByIdsUseCaseTest {
                 rank = 0
             )
         )
-        coEvery { repository.getSeriesGenresByIds(seriesGenresIds) } returns expectedGenres
+        coEvery { repository.getGenresByIds(seriesGenresIds) } returns expectedGenres
 
         val result = useCase(seriesGenresIds)
 

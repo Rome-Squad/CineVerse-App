@@ -8,5 +8,5 @@ class GetRatedSeriesUseCase @Inject constructor(
     private val repository: SeriesRepository,
     private val getUserUseCase: GetUserUseCase
 ) {
-    suspend operator fun invoke() = repository.getRatedSeries(getUserUseCase().id)
+    suspend operator fun invoke() = repository.getUserRated(getUserUseCase().id)
 }
