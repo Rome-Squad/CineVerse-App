@@ -44,7 +44,7 @@ fun SeasonsContent(
                     rating = state.seasons[index].rating,
                     episodes = state.seasons[index].episodeCount,
                     year = if (state.seasons[index].releaseYear != null) state.seasons[index].releaseYear?.split(
-                        "-"
+                        ","
                     )
                         ?.first()?.toInt()
                     else null,
