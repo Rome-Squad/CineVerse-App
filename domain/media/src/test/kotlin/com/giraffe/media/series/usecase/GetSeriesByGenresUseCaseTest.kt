@@ -27,7 +27,7 @@ class GetSeriesByGenresUseCaseTest {
                 name = "Series 2"
             )
         )
-        coEvery { repository.getByGenre(genreId, page) } returns expectedSeries
+        coEvery { repository.getByGenreId(genreId, page) } returns expectedSeries
 
         val result = useCase(genreId, page)
 
