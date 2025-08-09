@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.details"
+    namespace = "com.giraffe.api.details"
     compileSdk = 36
 
     defaultConfig {
