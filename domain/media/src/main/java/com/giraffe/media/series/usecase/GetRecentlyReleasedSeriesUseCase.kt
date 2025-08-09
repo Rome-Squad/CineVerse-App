@@ -5,7 +5,7 @@ import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
 
-class GetRecentlyReleasedSeriesUseCase @Inject constructor(private val repository: SeriesRepository) {
+class GetRecentlyReleasedSeriesUseCase @Inject constructor(private val seriesRepository: SeriesRepository) {
     suspend operator fun invoke(page: Int, limit: Int): List<Series> =
-        repository.getRecentlyReleased(page, limit)
+        seriesRepository.getRecentlyReleased(page, limit)
 }

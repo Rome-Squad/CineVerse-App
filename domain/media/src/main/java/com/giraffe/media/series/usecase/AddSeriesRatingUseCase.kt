@@ -4,9 +4,9 @@ import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
 class AddSeriesRatingUseCase @Inject constructor(
-    private val repository: SeriesRepository
+    private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(seriesId: Int, rating: Float) {
-        repository.addRating(seriesId, rating)
+        seriesRepository.addRating(seriesId, rating)
     }
 }

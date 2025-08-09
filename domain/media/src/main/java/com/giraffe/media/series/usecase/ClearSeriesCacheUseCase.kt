@@ -4,10 +4,10 @@ import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
 class ClearSeriesCacheUseCase @Inject constructor(
-    private val repository: SeriesRepository
+    private val seriesRepository: SeriesRepository
 ) {
-    suspend fun clearAll() = repository.clearAll()
+    suspend fun clearAll() = seriesRepository.clearAll()
 
-    suspend fun clearAllExceptRecentlyViewed() = repository.clearAllExceptRecentlyViewed()
+    suspend fun clearAllExceptRecentlyViewed() = seriesRepository.clearAllExceptRecentlyViewed()
 
 }

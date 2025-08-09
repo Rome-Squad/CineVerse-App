@@ -3,7 +3,7 @@ package com.giraffe.media.series.usecase
 import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
-class GetTopRatedSeriesUseCase @Inject constructor(private val repository: SeriesRepository) {
+class GetTopRatedSeriesUseCase @Inject constructor(private val seriesRepository: SeriesRepository) {
     suspend operator fun invoke(page: Int, limit: Int) =
-        repository.getTopRated(page, limit)
+        seriesRepository.getTopRated(page, limit)
 }
