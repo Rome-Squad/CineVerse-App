@@ -1,10 +1,10 @@
-package com.giraffe.presentation.details.nav
+package com.giraffe.presentation.details.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.authentication.AuthenticationApi
-import com.giraffe.presentation.details.nav.route.loginRoute
+import com.giraffe.presentation.details.navigation.route.loginRoute
 import com.giraffe.presentation.details.screens.castCredit.castCreditRoute
 import com.giraffe.presentation.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.presentation.details.screens.castDetails.castDetailsRoute

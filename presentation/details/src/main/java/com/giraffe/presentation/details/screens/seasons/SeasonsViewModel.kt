@@ -3,7 +3,7 @@ package com.giraffe.presentation.details.screens.seasons
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.models.SeasonUi
+import com.giraffe.presentation.details.model.SeasonUi
 import com.giraffe.presentation.details.screens.seasons.screen.SeasonsRoute
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase

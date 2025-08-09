@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.models
+package com.giraffe.presentation.details.model
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.series.entity.Series

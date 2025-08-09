@@ -10,7 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.presentation.details.base.BasePagingSource
-import com.giraffe.presentation.details.models.SeriesUi
+import com.giraffe.presentation.details.model.SeriesUi
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase

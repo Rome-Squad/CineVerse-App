@@ -1,7 +1,7 @@
 package com.giraffe.presentation.details.screens.reviewScreen
 
 import androidx.paging.PagingData
-import com.giraffe.presentation.details.models.ReviewUI
+import com.giraffe.presentation.details.model.ReviewUI
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

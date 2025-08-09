@@ -2,10 +2,10 @@ package com.giraffe.presentation.details.screens.moviedetails
 
 import androidx.compose.runtime.Stable
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.presentation.details.models.CastUi
-import com.giraffe.presentation.details.models.CollectionUi
-import com.giraffe.presentation.details.models.MovieUi
-import com.giraffe.presentation.details.models.ReviewUI
+import com.giraffe.presentation.details.model.CastUi
+import com.giraffe.presentation.details.model.CollectionUi
+import com.giraffe.presentation.details.model.MovieUi
+import com.giraffe.presentation.details.model.ReviewUI
 
 @Stable
 data class MovieDetailsScreenState(

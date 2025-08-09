@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.models
+package com.giraffe.presentation.details.model
 
 import com.giraffe.media.collections.entity.Collection
 

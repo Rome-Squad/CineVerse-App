@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.details.models.CastUi
+import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 

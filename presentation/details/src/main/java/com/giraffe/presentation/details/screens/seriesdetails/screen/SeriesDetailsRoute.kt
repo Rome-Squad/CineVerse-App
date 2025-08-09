@@ -3,7 +3,7 @@ package com.giraffe.presentation.details.screens.seriesdetails.screen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.presentation.details.nav.route.navigateLoginScreen
+import com.giraffe.presentation.details.navigation.route.navigateLoginScreen
 import com.giraffe.presentation.details.screens.castDetails.navigateToCastDetails
 import com.giraffe.presentation.details.screens.recommended.series.navigateToRecommendedSeries
 import com.giraffe.presentation.details.screens.reviewScreen.navigateToReviews

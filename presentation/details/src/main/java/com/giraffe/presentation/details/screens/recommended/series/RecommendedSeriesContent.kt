@@ -22,7 +22,7 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.models.SeriesUi
+import com.giraffe.presentation.details.model.SeriesUi
 
 @Composable
 fun RecommendedSeriesContent(

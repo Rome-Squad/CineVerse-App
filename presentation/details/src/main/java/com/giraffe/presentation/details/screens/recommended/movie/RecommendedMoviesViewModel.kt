@@ -9,8 +9,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.presentation.details.base.BasePagingSource
-import com.giraffe.presentation.details.models.MovieUi
-import com.giraffe.presentation.details.models.toMovieUi
+import com.giraffe.presentation.details.model.MovieUi
+import com.giraffe.presentation.details.model.toMovieUi
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase

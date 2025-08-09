@@ -23,7 +23,7 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.models.MovieUi
+import com.giraffe.presentation.details.model.MovieUi
 
 @Composable
 fun RecommendedContent(

@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.nav.route
+package com.giraffe.presentation.details.navigation.route
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

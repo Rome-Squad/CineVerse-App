@@ -1,6 +1,6 @@
 package com.giraffe.presentation.details.screens.seasons
 
-import com.giraffe.presentation.details.models.SeasonUi
+import com.giraffe.presentation.details.model.SeasonUi
 
 data class SeasonsScreenState(
     val seasons: List<SeasonUi> = emptyList(),

@@ -22,7 +22,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.components.LoadingView
 import com.giraffe.presentation.details.components.ReviewCard
-import com.giraffe.presentation.details.models.ReviewUI
+import com.giraffe.presentation.details.model.ReviewUI
 
 
 @Composable

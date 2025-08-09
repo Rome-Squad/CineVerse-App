@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.nav
+package com.giraffe.presentation.details.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

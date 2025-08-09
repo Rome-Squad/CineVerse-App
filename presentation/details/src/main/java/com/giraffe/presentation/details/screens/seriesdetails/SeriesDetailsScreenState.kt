@@ -1,10 +1,10 @@
 package com.giraffe.presentation.details.screens.seriesdetails
 
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.presentation.details.models.CastUi
-import com.giraffe.presentation.details.models.ReviewUI
-import com.giraffe.presentation.details.models.SeasonUi
-import com.giraffe.presentation.details.models.SeriesUi
+import com.giraffe.presentation.details.model.CastUi
+import com.giraffe.presentation.details.model.ReviewUI
+import com.giraffe.presentation.details.model.SeasonUi
+import com.giraffe.presentation.details.model.SeriesUi
 
 data class SeriesDetailsScreenState(
     val seriesDetails: SeriesUi = SeriesUi(),
