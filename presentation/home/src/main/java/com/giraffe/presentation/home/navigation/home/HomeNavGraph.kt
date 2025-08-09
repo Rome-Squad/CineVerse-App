@@ -13,8 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.giraffe.api.details.DetailsApi
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.details.DetailsApi
 import com.giraffe.presentation.home.navigation.main.CollectionRoute
 import com.giraffe.presentation.home.navigation.main.MovieDetailsRoute
 import com.giraffe.presentation.home.navigation.main.SeriesDetailsRoute
