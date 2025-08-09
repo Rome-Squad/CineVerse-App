@@ -51,11 +51,17 @@ class MovieDetailsViewModel @Inject constructor(
     init {
         val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
 
+        updateState {
+            it.copy(
+                movie = it.movie.copy(id = movieID)
+            )
+        }
+
         loadMovieDetailsScreen(movieID)
     }
 
 
-    fun loadMovieDetailsScreen(movieID: Int) {
+    private fun loadMovieDetailsScreen(movieID: Int = state.value.movie.id) {
         updateState {
             it.copy(
                 isLoadingMovieDetails = true,
@@ -235,6 +241,10 @@ class MovieDetailsViewModel @Inject constructor(
                 collectionBottomSheet = MovieDetailsScreenState.CollectionBottomSheet.AddToCollection
             )
         }
+    }
+
+    override fun onRetryClick() {
+        loadMovieDetailsScreen(state.value.movie.id)
     }
 
     override fun onCollectionClick(collectionId: Int) {

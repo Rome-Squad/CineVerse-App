@@ -49,10 +49,19 @@ class SeriesDetailsViewModel @Inject constructor(
 
     init {
         val seriesID = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
+
+        updateState {
+            it.copy(
+                seriesDetails = it.seriesDetails.copy(
+                    id = seriesID
+                )
+            )
+        }
+
         loadSeriesDetailsScreen(seriesID)
     }
 
-    fun loadSeriesDetailsScreen(seriesID: Int) {
+    private fun loadSeriesDetailsScreen(seriesID: Int = state.value.seriesDetails.id) {
         updateState {
             it.copy(
                 isLoading = true,
@@ -172,6 +181,10 @@ class SeriesDetailsViewModel @Inject constructor(
 
     override fun onBackButtonClick() {
         sendEffect(SeriesDetailsEffect.OnBackButtonClick)
+    }
+
+    override fun onRetryClick() {
+        loadSeriesDetailsScreen(state.value.seriesDetails.id)
     }
 
     private fun loadSeriesDetails(seriesId: Int) {

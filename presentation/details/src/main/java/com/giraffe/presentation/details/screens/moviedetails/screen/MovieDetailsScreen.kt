@@ -102,9 +102,7 @@ fun MovieDetailsScreen(
     ) {
         AnimatedVisibility(state.isNetworkError) {
             NoInternetScreen(
-                onRetryClick = {
-                    viewModel.loadMovieDetailsScreen()
-                }
+                onRetryClick = viewModel::onRetryClick
             )
         }
         AnimatedVisibility(state.isLoadingMovieDetails) {

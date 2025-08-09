@@ -72,9 +72,7 @@ fun SeriesDetailsScreen(
         ) {
             AnimatedVisibility(state.isNetworkError) {
                 NoInternetScreen(
-                    onRetryClick = {
-                        viewModel.loadSeriesDetailsScreen()
-                    }
+                    onRetryClick = viewModel::onRetryClick
                 )
             }
             AnimatedVisibility(state.isLoading) {
