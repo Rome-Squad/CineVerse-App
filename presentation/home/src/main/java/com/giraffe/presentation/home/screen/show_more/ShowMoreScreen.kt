@@ -1,4 +1,5 @@
-package com.giraffe.presentation.home.screen.movies_list
+package com.giraffe.presentation.home.screen.show_more
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,39 +26,33 @@ import com.giraffe.presentation.home.components.TransitionLazyColumnToGrid
 import com.giraffe.presentation.home.screen.home.MediaType
 
 @Composable
-fun MoviesListScreen(
-    moviesListViewModel: MoviesListViewModel = hiltViewModel(),
+fun ShowMoreScreen(
+    showMoreViewModel: ShowMoreViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
-    val state by moviesListViewModel.state.collectAsState()
+    val state by showMoreViewModel.state.collectAsState()
     LaunchedEffect(Unit) {
-        moviesListViewModel.effect.collect { effect ->
+        showMoreViewModel.effect.collect { effect ->
             when (effect) {
-                is MoviesListEffect.NavigateToMovieDetails -> {
-                    navigateToMoviesDetailsScreen(effect.movieId)
-                }
-
-                is MoviesListEffect.NavigateToSeriesDetails -> {
-                    navigateToSeriesDetailsScreen(effect.seriesId)
-                }
-
-                is MoviesListEffect.ShowError -> {}
+                is ShowMoreEffect.NavigateToMovieDetails -> { navigateToMoviesDetailsScreen(effect.movieId) }
+                is ShowMoreEffect.NavigateToSeriesDetails -> { navigateToSeriesDetailsScreen(effect.seriesId) }
+                is ShowMoreEffect.ShowError -> {}
             }
         }
     }
-    MoviesListContent(
+    ShowMoreContent(
         state = state,
-        moviesListInteractionListener = moviesListViewModel,
+        showMoreInteractionListener = showMoreViewModel,
         onBackClick = onBackClick,
     )
 }
 
 @Composable
-fun MoviesListContent(
-    state: MoviesListUiState,
-    moviesListInteractionListener: MoviesListInteractionListener,
+fun ShowMoreContent(
+    state: ShowMoreState,
+    showMoreInteractionListener: ShowMoreInteractionListener,
     onBackClick: () -> Unit
 ) {
     Box {
@@ -67,7 +63,7 @@ fun MoviesListContent(
                 .statusBarsPadding()
         ) {
             ListTitleSection(
-                title = state.moviesListTitle,
+                title = state.sectionType?.getSectionTitle(LocalContext.current)?:"",
                 onBackClick = onBackClick
             )
             Box(
@@ -77,7 +73,7 @@ fun MoviesListContent(
                 TransitionLazyColumnToGrid(
                     poster = state.mediaList,
                     isListSelected = state.isListSelected,
-                    onClickItem = moviesListInteractionListener::onMediaClicked,
+                    onClickItem = showMoreInteractionListener::onMediaClicked,
                 )
             }
 
@@ -88,7 +84,7 @@ fun MoviesListContent(
                 .navigationBarsPadding()
                 .padding(bottom = 16.dp, end = 16.dp),
             isListSelected = state.isListSelected,
-            onGridSelected = moviesListInteractionListener::onViewChanged
+            onGridSelected = showMoreInteractionListener::onViewChanged
         )
     }
 }
@@ -96,14 +92,16 @@ fun MoviesListContent(
 
 @Preview(showSystemUi = false, showBackground = true)
 @Composable
-fun MoviesListPreview() {
-    val interactionListener = object : MoviesListInteractionListener {
+fun ShowMorePreview() {
+    val interactionListener = object : ShowMoreInteractionListener {
         override fun onViewChanged(isGrid: Boolean) {}
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
     }
-    MoviesListContent(
-        state = MoviesListUiState(),
-        moviesListInteractionListener = interactionListener,
+    ShowMoreContent(
+        state = ShowMoreState(
+            sectionType = ShowMoreSectionType.RECENTLY_RELEASED
+        ),
+        showMoreInteractionListener = interactionListener,
         onBackClick = {},
     )
 }
