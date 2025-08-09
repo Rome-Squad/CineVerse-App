@@ -308,46 +308,41 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onSeeAllRecentlyReleasedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
+    override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
-            HomeEffect.NavigateToRecentlyReleasedList(
-                sectionTitle = sectionTitle,
+            HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
             )
         )
     }
 
-    override fun onSeeAllTopRatedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
+    override fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
-            HomeEffect.NavigateToTopRatedList(
-                sectionTitle = sectionTitle,
+            HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
             )
         )
     }
 
-    override fun onSeeAllUpcomingClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
+    override fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
-            HomeEffect.NavigateToUpcomingList(
-                sectionTitle = sectionTitle,
+            HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
             )
         )
     }
 
-    override fun onSeeAllRecentlyViewedClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
+    override fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
-            HomeEffect.NavigateToRecentlyViewedList(
-                sectionTitle = sectionTitle,
+            HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
             )
         )
     }
 
-    override fun onWhatShouldIWatchClicked(sectionTitle: String, sectionType: ShowMoreSectionType) {
+    override fun onWhatShouldIWatchClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
-            HomeEffect.NavigateToRecommendedList(
-                sectionTitle = sectionTitle,
+            HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
             )
         )
