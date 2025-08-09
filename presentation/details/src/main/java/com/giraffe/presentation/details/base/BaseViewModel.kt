@@ -1,20 +1,15 @@
 package com.giraffe.presentation.details.base
 
-import android.util.Log
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.presentation.details.R
-import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.ValidationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,39 +26,34 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         onSuccess: (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        onCompletion: () -> Unit = {},
-        block: suspend () -> T
+        block: suspend CoroutineScope.() -> T
     ) {
         coroutineScope.launch(dispatcher) {
             try {
                 onSuccess(block())
             } catch (e: Throwable) {
                 onError(e)
-            } finally {
-                onCompletion()
             }
         }
     }
 
-    protected fun <T> safeExecute(
+
+    protected fun <T> safeCollect(
+        onError: (Throwable) -> Unit = {},
+        onEmitNewValue: (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        onSuccess: suspend (T) -> Unit,
-        onError: (Int, Boolean) -> Unit,
-        block: suspend () -> T
-    ) = coroutineScope.launch(dispatcher + handler(onError)) {
-        onSuccess(block())
-    }
-
-    private fun handler(onError: (errorMsgRes: Int, isNetworkError: Boolean) -> Unit = { _, _ -> }) =
-        CoroutineExceptionHandler { _, throwable ->
-            Log.d("no internet Messi vs Ronaldo", "handler: $throwable")
-            onError(
-                mapErrorToResource(throwable),
-                throwable is NoInternetException
-            )
+        block: suspend () -> Flow<T>
+    ) {
+        coroutineScope.launch(dispatcher) {
+            block()
+                .catch {
+                    onError(it)
+                }.collect {
+                    onEmitNewValue(it)
+                }
         }
-
+    }
 
     protected fun updateState(updater: (S) -> S) {
         _state.update(updater)
@@ -79,16 +69,10 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         }
     }
 
-    @StringRes
-    fun mapErrorToResource(error: Throwable) = when (error) {
-        is NoInternetException -> R.string.error_network
-        is AccessDeniedException -> R.string.access_denied_error
-        is ValidationException -> if (error.message == "Collection name cannot be blank")
-            R.string.collection_name_cannot_be_blank
-        else
-            R.string.validation_error
-
-        is NotFoundException -> R.string.collection_not_found
-        else -> R.string.error_unknown
-    }
 }
+
+
+//1- move no internet state from base view model
+//2- remove snack bar from base view model
+//3- map error to resource is a util to be consumed by the screen but the view model only use Throwables
+//4-
