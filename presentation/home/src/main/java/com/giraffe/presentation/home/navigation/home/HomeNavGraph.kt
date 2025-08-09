@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.giraffe.api.details.DetailsApi
+import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.navigation.main.CollectionRoute
 import com.giraffe.presentation.home.navigation.main.MovieDetailsRoute
@@ -28,6 +29,7 @@ import com.giraffe.presentation.home.screen.home.homeRoute
 import com.giraffe.presentation.home.screen.show_more.navigateToShowMore
 import com.giraffe.presentation.home.screen.show_more.showMoreRoute
 import com.giraffe.profile.ProfileApi
+
 
 
 @Composable
