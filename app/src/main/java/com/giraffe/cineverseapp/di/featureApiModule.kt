@@ -1,7 +1,7 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.authentication.AuthenticationApi
-import com.giraffe.authentication.nav.AuthenticationApiImp
+import com.giraffe.api.authentication.AuthenticationApi
+import com.giraffe.presentation.authentication.nav.AuthenticationApiImp
 import com.giraffe.details.DetailsApi
 import com.giraffe.details.nav.DetailsApiImp
 import com.giraffe.explore.ExploreApi

@@ -3,7 +3,7 @@ package com.giraffe.profile.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.profile.ProfileApi

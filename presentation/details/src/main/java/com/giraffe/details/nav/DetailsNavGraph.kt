@@ -3,7 +3,7 @@ package com.giraffe.details.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.details.nav.route.loginRoute
 import com.giraffe.details.screens.castCredit.castCreditRoute
 import com.giraffe.details.screens.castCredit.navigateToCastCredit
