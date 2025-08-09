@@ -7,9 +7,6 @@ import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.profile.base.BaseViewModel
-import com.giraffe.profile.utils.toPosterUi
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.toPosterUi
 import dagger.hilt.android.lifecycle.HiltViewModel
