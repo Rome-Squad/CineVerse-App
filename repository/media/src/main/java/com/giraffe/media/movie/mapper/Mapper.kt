@@ -5,7 +5,7 @@ import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDate
 

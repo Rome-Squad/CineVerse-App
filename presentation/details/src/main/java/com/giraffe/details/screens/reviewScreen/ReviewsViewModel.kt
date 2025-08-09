@@ -12,7 +12,7 @@ import com.giraffe.details.base.BasePagingSource
 import com.giraffe.details.base.BaseViewModel
 import com.giraffe.details.models.toReviewUI
 import com.giraffe.media.entity.Review
-import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

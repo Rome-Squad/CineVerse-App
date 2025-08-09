@@ -9,8 +9,8 @@ import com.giraffe.explore.base.BaseViewModel
 import com.giraffe.explore.util.BasePagingSource
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
-import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
-import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.GetMoviesByGenresUseCase
+import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

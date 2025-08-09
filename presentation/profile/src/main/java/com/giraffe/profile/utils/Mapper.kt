@@ -2,7 +2,7 @@ package com.giraffe.profile.utils
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.profile.model.RatedPoster
 import com.giraffe.profile.screens.history.HistoryUiModel

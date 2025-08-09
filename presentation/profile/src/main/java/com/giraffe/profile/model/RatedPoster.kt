@@ -2,7 +2,7 @@ package com.giraffe.profile.model
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 
 data class RatedPoster(

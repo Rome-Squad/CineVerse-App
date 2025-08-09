@@ -3,7 +3,7 @@ package com.giraffe.details.models
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.details.utils.toFormattedDate
 import com.giraffe.details.utils.toFormattedDuration
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 
 data class MovieUi(
     val id: Int = 0,

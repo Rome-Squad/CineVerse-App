@@ -1,9 +1,9 @@
 package com.giraffe.profile.screens.history
 
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.DeleteMovieUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.DeleteMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase

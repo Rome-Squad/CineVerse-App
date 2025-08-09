@@ -11,9 +11,9 @@ import androidx.paging.map
 import com.giraffe.details.base.BasePagingSource
 import com.giraffe.details.models.MovieUi
 import com.giraffe.details.models.toMovieUi
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
