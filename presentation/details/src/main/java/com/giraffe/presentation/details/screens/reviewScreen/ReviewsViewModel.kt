@@ -9,11 +9,11 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.presentation.details.base.BasePagingSource
-import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.toReviewUI
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -107,6 +107,6 @@ class ReviewsViewModel @Inject constructor(
     }
 
     private fun handleError(throwable: Throwable) {
-        sendEffect(ReviewEffect.ShowError(mapErrorToResource(throwable)))
+        sendEffect(ReviewEffect.ShowError(throwable))
     }
 }
