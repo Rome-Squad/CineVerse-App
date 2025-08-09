@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.giraffe.authentication.AuthenticationApi
-import com.giraffe.details.DetailsApi
+import com.giraffe.api.details.DetailsApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.profile.edit.editProfileWebViewRoute
 import com.giraffe.profile.screens.collections.collection.collectionRoute
