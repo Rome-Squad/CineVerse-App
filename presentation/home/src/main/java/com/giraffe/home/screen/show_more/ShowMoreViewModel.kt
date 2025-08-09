@@ -4,45 +4,30 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.home.base.BaseViewModel
 import com.giraffe.home.screen.home.MediaType
-import com.giraffe.home.utils.toPosterUi
-import com.giraffe.media.movies.usecase.GetMoviesByGenresUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ShowMoreViewModel @Inject constructor(
     private val showMoreFactory: ShowMoreFactory,
-    private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     stateSavedStateHandle: SavedStateHandle
-) : BaseViewModel<MoviesListUiState, ShowMoreEffect>(MoviesListUiState()),
+) : BaseViewModel<ShowMoreState, ShowMoreEffect>(ShowMoreState()),
     ShowMoreInteractionListener {
 
-    private val sectionType = stateSavedStateHandle.toRoute<MoviesListRoute>().sectionType
-    private val collectionId = stateSavedStateHandle.toRoute<MoviesListRoute>().collectionId
+    private val sectionType = stateSavedStateHandle.toRoute<ShowMoreRoute>().sectionType
 
     init {
-        if (!sectionType.isPredefinedSection()) {
-            loadMoviesByGenres(collectionId)
-        } else {
-            loadByStrategy()
-        }
+        loadByStrategy()
     }
 
     private fun loadByStrategy() {
         safeExecute {
-            updateState { it.copy(isLoading = true, errorMessage = null) }
-            val strategy = showMoreFactory.createStrategy(sectionType)
-            val mediaList = strategy.loadData()
+            updateState { it.copy(sectionType = sectionType,isLoading = true, errorMessage = null) }
+            val mediaList = showMoreFactory.createStrategy(sectionType).loadData()
             updateState { it.copy(isLoading = false, mediaList = mediaList) }
         }
     }
 
-    private fun loadMoviesByGenres(genreId: Int) {
-        safeExecute {
-            val movies = getMoviesByGenresUseCase(genreId = genreId, page = 1)
-            updateState { it.copy(isLoading = false, mediaList = movies.map { it.toPosterUi() }) }
-        }
-    }
 
     override fun onViewChanged(isGrid: Boolean) {
         updateState {
