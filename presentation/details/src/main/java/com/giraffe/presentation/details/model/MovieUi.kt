@@ -1,9 +1,9 @@
 package com.giraffe.presentation.details.model
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.presentation.details.utils.toFormattedDate
 import com.giraffe.presentation.details.utils.toFormattedDuration
-import com.giraffe.media.movies.entity.Movie
 
 data class MovieUi(
     val id: Int = 0,
@@ -38,7 +38,7 @@ fun MovieUi.toPoster(): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl .orEmpty(),
+        imageUri = posterUrl.orEmpty(),
         rating = rating,
         genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
         time = duration,

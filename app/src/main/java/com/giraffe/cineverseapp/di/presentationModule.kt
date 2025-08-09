@@ -1,9 +1,9 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase

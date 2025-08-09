@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.toSwipeablePoster
 import dagger.hilt.android.lifecycle.HiltViewModel

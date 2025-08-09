@@ -7,7 +7,7 @@ import com.giraffe.presentation.home.screen.home.PopularMediaUiModel
 import com.giraffe.presentation.home.screen.home.YourCollectionUiModel
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.home.screen.show_more.PosterUiState
 
