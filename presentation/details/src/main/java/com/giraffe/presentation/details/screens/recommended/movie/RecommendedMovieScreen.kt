@@ -209,7 +209,7 @@ private fun CardsSection(
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 5.dp),
             onItemClick = { movieId ->
-                movieId?.let {
+                movieId.let {
                     onItemClick(it)
                 } ?: Log.e("RecommendedMovies", "Movie ID is null.")
             }
