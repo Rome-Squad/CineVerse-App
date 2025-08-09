@@ -6,7 +6,7 @@ import com.giraffe.media.movies.usecase.DeleteMovieUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.toPosterUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val getRecentlyMoviesUseCase: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val deleteMovieUseCase: DeleteMovieUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :

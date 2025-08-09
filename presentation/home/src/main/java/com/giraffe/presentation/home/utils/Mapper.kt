@@ -38,7 +38,7 @@ fun Series.toPosterUi(): PosterUiState {
         name = name,
         imageUri = posterUrl,
         rating = rating,
-        date = releaseYear,
+        date = releaseYear.toString(),
         mediaType = MediaType.SERIES
     )
 }

@@ -2,6 +2,7 @@ package com.giraffe.media.collections.fake
 
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
+import kotlinx.datetime.LocalDate
 
 fun createFakeSeries(
     id: Int = 1,
@@ -11,20 +12,35 @@ fun createFakeSeries(
     posterUrl: String = "",
     backdropUrl: String = "",
     genreIDs: List<Int> = listOf(),
-    releaseYear: String = "2025-08-03",
+    releaseYear: LocalDate? = null,
     seasons: List<Season> = emptyList(),
-    youtubeVideoId: String = ""
-): Series {
-    return Series(
-        id = id,
-        name = name,
-        overview = overview,
-        rating = rating,
-        posterUrl = posterUrl,
-        backdropUrl = backdropUrl,
-        genreIDs = genreIDs,
-        releaseYear = releaseYear,
-        seasons = seasons,
-        youtubeVideoId = youtubeVideoId
-    )
-}
+    youtubeVideoId: String = "",
+    popularity: Float = 0f,
+    userRating: Float = 0f,
+    recentViewedAt: ULong = 0u
+) = Series(
+    id = id,
+    name = name,
+    overview = overview,
+    rating = rating,
+    posterUrl = posterUrl,
+    backdropUrl = backdropUrl,
+    genreIDs = genreIDs,
+    releaseYear = releaseYear,
+    seasons = seasons,
+    youtubeVideoId = youtubeVideoId,
+    popularity = popularity,
+    userRating = userRating,
+    recentViewedAt = recentViewedAt
+)
+
+
+fun createFakeSeason(id: Int) = Season(
+    id = id,
+    overview = "",
+    rating = 0f,
+    posterUrl = "",
+    seasonNumber = 1,
+    releaseYear = null,
+    episodeCount = 1
+)

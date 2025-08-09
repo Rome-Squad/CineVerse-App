@@ -46,11 +46,11 @@ fun Series.toPoster(allGenres: List<Genre> = emptyList()): Poster {
     return Poster(
         id = id,
         name = name,
-        imageUri = posterUrl.orEmpty(),
+        imageUri = posterUrl,
         rating = rating,
         genres = genreTitles,
         time = null,
-        date = releaseYear,
+        date = releaseYear.toString(),
         mediaTypeOfPoster = Poster.Type.MOVIE.value
     )
 }

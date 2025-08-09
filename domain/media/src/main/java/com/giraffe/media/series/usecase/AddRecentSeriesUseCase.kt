@@ -8,6 +8,6 @@ class AddRecentSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(series: Series) {
-        seriesRepository.addRecentSeries(series)
+        seriesRepository.addRecentlyViewed(series)
     }
 }
