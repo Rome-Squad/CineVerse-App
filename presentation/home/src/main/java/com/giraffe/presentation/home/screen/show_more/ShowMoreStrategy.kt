@@ -1,14 +1,14 @@
 package com.giraffe.presentation.home.screen.show_more
 
-import com.giraffe.presentation.home.utils.toPosterUi
 import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.presentation.home.utils.toPosterUi
 import kotlinx.coroutines.flow.first
 
 interface ShowMoreStrategy {
@@ -52,7 +52,7 @@ class UpcomingMoviesStrategy(
 
 class RecentlyViewedStrategy(
     private val getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase
+    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase
 ) : ShowMoreStrategy {
     override suspend fun loadData(): List<PosterUiState> {
         val recentMovies = getRecentlyViewedMovies().first().map { it.toPosterUi() }
@@ -65,7 +65,7 @@ class RecentlyViewedStrategy(
 
 class MatchesYourVibesStrategy(
     private val getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getRecommendedMovie: GetRecommendedMovieUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase
 ) : ShowMoreStrategy {
