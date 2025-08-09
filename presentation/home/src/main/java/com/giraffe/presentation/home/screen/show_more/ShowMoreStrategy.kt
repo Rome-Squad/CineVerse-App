@@ -1,14 +1,14 @@
 package com.giraffe.presentation.home.screen.show_more
 
-import com.giraffe.presentation.home.utils.toPosterUi
-import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.presentation.home.utils.toPosterUi
 import kotlinx.coroutines.flow.first
 
 interface ShowMoreStrategy {
