@@ -11,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.details.DetailsApi
 import com.giraffe.explore.ExploreApi

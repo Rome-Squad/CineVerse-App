@@ -12,7 +12,7 @@ import com.giraffe.presentation.authentication.onboarding.screen.onBoardingRoute
 import com.giraffe.presentation.authentication.resetpassword.resetPasswordRoute
 import com.giraffe.presentation.authentication.signup.webViewRoute
 
-import com.giraffe.home.HomeApi
+import com.giraffe.api.home.HomeApi
 
 @Composable
 internal fun AuthenticationNavGraph(
