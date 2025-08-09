@@ -15,27 +15,3 @@ data class ReviewUI(
     val authorUserName: String = "",
     val rating: Int = 0,
 )
-
-fun ReviewUI.toReviewEntity(): Review {
-    return Review(
-        id = id,
-        authorImageUrl = authorImageUrl,
-        authorName = authorName,
-        authorUserName = authorUserName,
-        content = content,
-        rating = rating,
-        createdAt = createdAt
-    )
-}
-
-fun Review.toReviewUI(): ReviewUI {
-    return ReviewUI(
-        id = id,
-        authorImageUrl = authorImageUrl,
-        authorName = authorName,
-        authorUserName = authorUserName,
-        content = content,
-        rating = rating,
-        createdAt = createdAt
-    )
-}

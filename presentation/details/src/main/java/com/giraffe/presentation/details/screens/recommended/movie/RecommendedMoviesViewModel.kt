@@ -13,7 +13,7 @@ import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.model.toMovieUi
+import com.giraffe.presentation.details.utils.toMovieUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

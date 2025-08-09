@@ -18,13 +18,13 @@ import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.model.SeasonUi
-import com.giraffe.presentation.details.model.groupByRole
-import com.giraffe.presentation.details.model.toCastUi
-import com.giraffe.presentation.details.model.toCrewUi
-import com.giraffe.presentation.details.model.toReviewUI
-import com.giraffe.presentation.details.model.toSeriesUi
 import com.giraffe.presentation.details.screens.seriesdetails.screen.SeriesDetailsRoute
+import com.giraffe.presentation.details.utils.groupByRole
+import com.giraffe.presentation.details.utils.toCastUi
+import com.giraffe.presentation.details.utils.toCrewUi
+import com.giraffe.presentation.details.utils.toReviewUI
+import com.giraffe.presentation.details.utils.toSeasonUi
+import com.giraffe.presentation.details.utils.toSeriesUi
 import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -272,7 +272,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
-                seasons = season.map { season -> SeasonUi.Companion.fromEntity(season) },
+                seasons = season.map { season -> season.toSeasonUi() },
                 isLoading = false
             )
         }
