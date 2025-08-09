@@ -1,5 +1,7 @@
 package com.giraffe.media.series.entity
 
+import kotlinx.datetime.LocalDate
+
 
 data class Series(
     val id: Int,
@@ -9,9 +11,10 @@ data class Series(
     val posterUrl: String,
     val backdropUrl: String,
     val genreIDs: List<Int> = emptyList(),
-    val releaseYear: String,
+    val releaseYear: LocalDate?,
     val seasons: List<Season> = emptyList(),
-    val youtubeVideoId: String = "",
-    val popularity: Double = 0.0,
-    val userRating: Float? = null
+    val youtubeVideoId: String?,
+    val popularity: Float,
+    val userRating: Float?,
+    val recentViewedAt: ULong?
 )
