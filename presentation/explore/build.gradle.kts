@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.media.explore"
+    namespace = "com.giraffe.presentation.explore"
     compileSdk = 36
 
     defaultConfig {
