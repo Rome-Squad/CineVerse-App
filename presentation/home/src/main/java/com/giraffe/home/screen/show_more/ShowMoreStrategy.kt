@@ -100,7 +100,6 @@ class ShowMoreFactory(
             ShowMoreSectionType.UPCOMING_MOVIES -> upcomingMoviesStrategy
             ShowMoreSectionType.RECENTLY_VIEWED -> recentlyViewedStrategy
             ShowMoreSectionType.MATCHES_YOUR_VIBES -> matchesYourVibesStrategy
-            else -> throw IllegalArgumentException("Unknown section type: $sectionType")
         }
     }
 }
