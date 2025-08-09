@@ -19,7 +19,6 @@ import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.screens.moviedetails.screen.MovieDetailsRoute
 import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi

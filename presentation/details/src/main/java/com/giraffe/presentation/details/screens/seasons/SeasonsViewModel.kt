@@ -5,7 +5,6 @@ import androidx.navigation.toRoute
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.screens.seasons.screen.SeasonsRoute
 import com.giraffe.presentation.details.utils.toSeasonUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

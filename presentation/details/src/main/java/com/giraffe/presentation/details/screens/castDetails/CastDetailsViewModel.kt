@@ -3,13 +3,12 @@ package com.giraffe.presentation.details.screens.castDetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.presentation.details.screens.castCredit.MediaType
-import com.giraffe.presentation.details.screens.castDetails.state.CastDetailsUiState
-import com.giraffe.presentation.details.screens.castDetails.state.toUiState
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.AddRecentPersonUseCase
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.screens.castCredit.MediaType
+import com.giraffe.presentation.details.screens.castDetails.state.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

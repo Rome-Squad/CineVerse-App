@@ -1,6 +1,8 @@
-package com.giraffe.presentation.details.screens.seriesdetails.screen
+package com.giraffe.presentation.details.screens.seriesdetails
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -27,9 +30,11 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.InfoSection
+import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
@@ -44,13 +49,85 @@ import com.giraffe.presentation.details.components.ReviewCard
 import com.giraffe.presentation.details.components.SeasonCard
 import com.giraffe.presentation.details.components.StaffInfoSection
 import com.giraffe.presentation.details.components.StarCastSection
-import com.giraffe.presentation.details.screens.seriesdetails.SeriesDetailsInteractionListener
-import com.giraffe.presentation.details.screens.seriesdetails.SeriesDetailsScreenState
+import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.TypeOfScreen
 import kotlin.math.min
 
 @Composable
-fun SeriesDetailsContent(
+fun SeriesDetailsScreen(
+    navigateToRecommendedSeries: (seriesID: Int, titleSeries: String) -> Unit,
+    navigateToCastDetails: (castID: Int) -> Unit,
+    navigateToSeason: (seriesId: Int) -> Unit,
+    navigateToSeriesDetails: (seriesId: Int) -> Unit,
+    onBackButtonClick: () -> Unit,
+    navigateToYouTubePlayer: (String) -> Unit,
+    navigateToLogIn: () -> Unit,
+    navigateToReviews: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SeriesDetailsViewModel = hiltViewModel()
+) {
+    val state = viewModel.state.collectAsState().value
+    EventListener(events = viewModel.effect) {
+        when (it) {
+            is SeriesDetailsEffect.NavigateToCastDetails -> navigateToCastDetails(it.personId)
+
+            is SeriesDetailsEffect.NavigateToSeasons -> navigateToSeason(it.seriesId)
+
+            is SeriesDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
+
+            is SeriesDetailsEffect.NavigateToRecommendedSeries -> {
+                navigateToRecommendedSeries(it.seriesId, it.title)
+            }
+
+            is SeriesDetailsEffect.NavigateToReviews -> navigateToReviews(it.seriesId)
+
+            is SeriesDetailsEffect.NavigateToLogIn -> navigateToLogIn()
+
+            is SeriesDetailsEffect.OnBackButtonClick -> onBackButtonClick()
+
+            is SeriesDetailsEffect.NavigateToYouTubePlayer -> navigateToYouTubePlayer(it.url)
+
+            is SeriesDetailsEffect.Error -> Unit
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Theme.color.background.screen)
+            .systemBarsPadding(),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            AnimatedVisibility(state.isNetworkError) {
+                NoInternetScreen(
+                    onRetryClick = viewModel::onRetryClick
+                )
+            }
+            AnimatedVisibility(state.isLoading) {
+                Progress(modifier = Modifier.size(40.dp))
+            }
+        }
+        AnimatedVisibility(
+            visible = !state.isLoading && !state.isNetworkError,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            SeriesDetailsContent(
+                state = state,
+                interaction = viewModel,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
     interaction: SeriesDetailsInteractionListener,
     modifier: Modifier = Modifier

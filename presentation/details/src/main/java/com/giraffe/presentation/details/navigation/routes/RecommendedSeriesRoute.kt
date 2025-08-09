@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.screens.recommended.series
+package com.giraffe.presentation.details.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -18,7 +18,7 @@ internal fun NavGraphBuilder.recommendedSeriesRoute(
 ) {
     composable<RecommendedSeriesRoute>
     { backStackEntry ->
-        RecommendedSeriesScreen(
+        _root_ide_package_.com.giraffe.presentation.details.screens.recommended.series.RecommendedSeriesScreen(
             navigateToSeriesDetails = navigateToSeriesDetails,
             onBackClick = onBackClick,
         )

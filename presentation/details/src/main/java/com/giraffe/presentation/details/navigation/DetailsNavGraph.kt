@@ -4,20 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.authentication.AuthenticationApi
-import com.giraffe.presentation.details.navigation.route.loginRoute
+import com.giraffe.presentation.details.navigation.routes.loginRoute
 import com.giraffe.presentation.details.screens.castCredit.castCreditRoute
 import com.giraffe.presentation.details.screens.castCredit.navigateToCastCredit
 import com.giraffe.presentation.details.screens.castDetails.castDetailsRoute
 import com.giraffe.presentation.details.screens.gallery.galleryRoute
 import com.giraffe.presentation.details.screens.gallery.navigateToGallery
-import com.giraffe.presentation.details.screens.moviedetails.screen.movieDetailsRoute
-import com.giraffe.presentation.details.screens.moviedetails.screen.navigateToMovieDetails
-import com.giraffe.presentation.details.screens.recommended.movie.recommendedMoviesRoute
+import com.giraffe.presentation.details.screens.moviedetails.movieDetailsRoute
+import com.giraffe.presentation.details.screens.moviedetails.navigateToMovieDetails
+import com.giraffe.presentation.details.navigation.routes.recommendedMoviesRoute
 import com.giraffe.presentation.details.screens.recommended.series.recommendedSeriesRoute
 import com.giraffe.presentation.details.screens.reviewScreen.reviewRoute
-import com.giraffe.presentation.details.screens.seasons.screen.seasonsRoute
-import com.giraffe.presentation.details.screens.seriesdetails.screen.navigateToSeriesDetails
-import com.giraffe.presentation.details.screens.seriesdetails.screen.seriesDetailsRoute
+import com.giraffe.presentation.details.screens.seasons.seasonsRoute
+import com.giraffe.presentation.details.screens.seriesdetails.navigateToSeriesDetails
+import com.giraffe.presentation.details.screens.seriesdetails.seriesDetailsRoute
 import com.giraffe.presentation.details.screens.videoPlayer.youTubePlayerRouteRoute
 
 @Composable

@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.screens.moviedetails.screen
+package com.giraffe.presentation.details.screens.moviedetails
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -57,10 +57,6 @@ import com.giraffe.presentation.details.components.StarCastSection
 import com.giraffe.presentation.details.components.collectionBottomSheet.AddToCollectionBottomSheetContent
 import com.giraffe.presentation.details.components.collectionBottomSheet.NoCollectionsBottomSheetContent
 import com.giraffe.presentation.details.components.createCollection.CreateCollectionContent
-import com.giraffe.presentation.details.screens.moviedetails.MovieDetailsEffect
-import com.giraffe.presentation.details.screens.moviedetails.MovieDetailsInteractionListener
-import com.giraffe.presentation.details.screens.moviedetails.MovieDetailsScreenState
-import com.giraffe.presentation.details.screens.moviedetails.MovieDetailsViewModel
 import com.giraffe.presentation.details.utils.TypeOfScreen
 import com.giraffe.designsystem.R as DesignSystemResources
 

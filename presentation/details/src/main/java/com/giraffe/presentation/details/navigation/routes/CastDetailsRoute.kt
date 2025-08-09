@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.screens.castDetails
+package com.giraffe.presentation.details.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -20,7 +20,7 @@ internal fun NavGraphBuilder.castDetailsRoute(
     onBackButtonClick: () -> Unit,
 ) {
     composable<CastDetailsRoute> {
-        CastDetailsScreen(
+        _root_ide_package_.com.giraffe.presentation.details.screens.castDetails.CastDetailsScreen(
             onBackButtonClick = onBackButtonClick,
             navigateToCastCredit = navigateToCastCredit,
             navigateToGallery = navigateToGallery,

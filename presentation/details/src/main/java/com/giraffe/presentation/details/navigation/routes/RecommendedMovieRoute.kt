@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.screens.recommended.movie
+package com.giraffe.presentation.details.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -17,7 +17,7 @@ internal fun NavGraphBuilder.recommendedMoviesRoute(
     navigateToMovieDetails: (Int) -> Unit
 ) {
     composable<RecommendedMovieRoute> {
-        RecommendedMoviesScreen(
+        _root_ide_package_.com.giraffe.presentation.details.screens.recommended.movie.RecommendedMoviesScreen(
             onBackClick = onBackClick,
             navigateToMovieDetails = navigateToMovieDetails,
         )

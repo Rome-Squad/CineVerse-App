@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.screens.seasons.screen
+package com.giraffe.presentation.details.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -17,7 +17,7 @@ fun NavGraphBuilder.seasonsRoute(
     onBackClick: () -> Unit,
 ) {
     composable<SeasonsRoute> { backStackEntry ->
-        SeasonsScreen(
+        _root_ide_package_.com.giraffe.presentation.details.screens.seasons.SeasonsScreen(
             onBackClick = onBackClick,
         )
     }

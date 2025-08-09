@@ -43,8 +43,7 @@ import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.components.LoadingView
 import com.giraffe.presentation.details.components.MainDetails
 import com.giraffe.presentation.details.components.gallery.GallerySection
-import com.giraffe.presentation.details.screens.castDetails.state.CastDetailsUiState
-import com.giraffe.presentation.details.screens.castDetails.state.SocialMediaUi
+import com.giraffe.presentation.details.model.SocialMediaUi
 import com.giraffe.presentation.details.utils.EventListener
 
 @Composable

@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.screens.castCredit
+package com.giraffe.presentation.details.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -18,7 +18,7 @@ fun NavGraphBuilder.castCreditRoute(
     onBackClick: () -> Unit,
 ) {
     composable<CastCreditRoute> { backStackEntry ->
-        CastCreditScreen(
+        _root_ide_package_.com.giraffe.presentation.details.screens.castCredit.CastCreditScreen(
             onBackClick = onBackClick,
             navigateToSeriesDetails = navigateToSeriesDetails,
             navigateToMovieDetails = navigateToMovieDetails
