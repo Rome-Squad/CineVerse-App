@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.api.details.DetailsApi
+import com.giraffe.api.profile.ProfileApi
 import com.giraffe.explore.ExploreApi
 import com.giraffe.home.HomeApi
 import com.giraffe.home.navigation.main.MainNavGraph
 import com.giraffe.match.MatchApi
-import com.giraffe.profile.ProfileApi
 import javax.inject.Inject
 
 class HomeApiImp @Inject constructor(
