@@ -54,9 +54,10 @@ class SeriesRepositoryImplTest {
             backdropUrl = "backdrop",
             genreIDs = listOf(1),
             releaseYear = null,
-            popularity = null,
+            popularity = 90.0f,
             youtubeVideoId = null,
-            seasons = emptyList()
+            userRating = null,
+            recentViewedAt = null
         )
     )
 
@@ -74,7 +75,10 @@ class SeriesRepositoryImplTest {
             backdropUrl = "backdrop",
             genresID = listOf(1),
             releaseYear = null,
-            popularity = 90.0
+            popularity = 90.0f,
+            youtubeVideoId = null,
+            userRating = null,
+            recentViewedAt = null
         )
     )
 

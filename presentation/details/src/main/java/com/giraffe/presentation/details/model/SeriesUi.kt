@@ -2,6 +2,7 @@ package com.giraffe.presentation.details.model
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.series.entity.Series
+import com.giraffe.presentation.details.utils.toFormattedDate
 
 data class SeriesUi(
     val id: Int = 0,
@@ -20,9 +21,9 @@ data class SeriesUi(
             overview = series.overview,
             rating = series.rating,
             posterUrl = series.posterUrl,
-            releaseYear = series.releaseYear,
+            releaseYear = series.releaseYear.toString().toFormattedDate(),
             genres = emptyList(),
-            youtubeVideoId = series.youtubeVideoId
+            youtubeVideoId = series.youtubeVideoId.toString(),
         )
     }
 }

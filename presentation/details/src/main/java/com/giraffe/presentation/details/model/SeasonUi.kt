@@ -1,6 +1,7 @@
 package com.giraffe.presentation.details.model
 
 import com.giraffe.media.series.entity.Season
+import com.giraffe.presentation.details.utils.toFormattedDate
 
 data class SeasonUi(
     val id: Int = 0,
@@ -17,7 +18,7 @@ data class SeasonUi(
             overview = season.overview,
             rating = season.rating,
             posterUrl = season.posterUrl,
-            releaseYear = season.releaseYear,
+            releaseYear = season.releaseYear.toString().toFormattedDate(),
             seasonNumber = season.seasonNumber,
             episodeCount = season.episodeCount
         )

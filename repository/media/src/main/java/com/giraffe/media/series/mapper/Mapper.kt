@@ -22,11 +22,11 @@ fun SeriesCacheDto.toEntity() = Series(
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genreIDs = genresID,
-    releaseYear = releaseYear,
+    releaseYear = releaseYear?.let { LocalDate.parse(it) },
     popularity = popularity.orEmpty(),
     youtubeVideoId = youtubeVideoId,
     userRating = userRating,
-    recentViewedAt = recentViewedAt
+    recentViewedAt = recentViewedAt?.toULong()
 )
 
 fun Series.toCacheDto() = SeriesCacheDto(
@@ -37,11 +37,11 @@ fun Series.toCacheDto() = SeriesCacheDto(
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genreIDs,
-    releaseYear = releaseYear,
+    releaseYear = releaseYear.toString(),
     popularity = popularity,
     youtubeVideoId = youtubeVideoId,
     userRating = userRating,
-    recentViewedAt = recentViewedAt
+    recentViewedAt = recentViewedAt?.toLong()
 )
 // endregion
 

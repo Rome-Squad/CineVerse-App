@@ -3,14 +3,6 @@ package com.giraffe.presentation.details.screens.seriesdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.model.SeasonUi
-import com.giraffe.presentation.details.model.SeriesUi
-import com.giraffe.presentation.details.model.groupByRole
-import com.giraffe.presentation.details.model.toCastUi
-import com.giraffe.presentation.details.model.toCrewUi
-import com.giraffe.presentation.details.model.toReviewUI
-import com.giraffe.presentation.details.screens.seriesdetails.screen.SeriesDetailsRoute
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.person.entity.Person
@@ -25,6 +17,14 @@ import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.model.SeasonUi
+import com.giraffe.presentation.details.model.SeriesUi
+import com.giraffe.presentation.details.model.groupByRole
+import com.giraffe.presentation.details.model.toCastUi
+import com.giraffe.presentation.details.model.toCrewUi
+import com.giraffe.presentation.details.model.toReviewUI
+import com.giraffe.presentation.details.screens.seriesdetails.screen.SeriesDetailsRoute
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -135,8 +135,8 @@ class SeriesDetailsViewModel @Inject constructor(
             if (isLoggedInUseCase()) {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
                 addRatingUseCase(
-                    serisId = seriesID,
-                    ratingValue = state.value.currentRating.toFloat()
+                    seriesId = seriesID,
+                    rating = state.value.currentRating.toFloat()
                 )
             } else {
                 updateState { it.copy(isVisibleLoginBottomSheet = true) }

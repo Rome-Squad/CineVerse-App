@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
-import kotlinx.datetime.LocalDate
 
 
 @Entity(tableName = SERIES_TABLE)
@@ -16,9 +15,9 @@ data class SeriesCacheDto(
     val posterUrl: String,
     val backdropUrl: String,
     val genresID: List<Int>,
-    val releaseYear: LocalDate?,
+    val releaseYear: String?,
     val isRecentViewed: Boolean = false,
-    val recentViewedAt: ULong? = System.currentTimeMillis().toULong(),
+    val recentViewedAt: Long? = System.currentTimeMillis(),
     val popularity: Float? = null,
     val isPopularity: Boolean = false,
     val isRecentlyReleased: Boolean = false,
