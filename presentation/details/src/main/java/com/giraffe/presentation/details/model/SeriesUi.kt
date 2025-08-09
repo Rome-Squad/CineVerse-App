@@ -21,7 +21,8 @@ data class SeriesUi(
             overview = series.overview,
             rating = series.rating,
             posterUrl = series.posterUrl,
-            releaseYear = series.releaseYear.toString().toFormattedDate(),
+            releaseYear = if (series.releaseYear != null) series.releaseYear.toString()
+                .toFormattedDate() else null,
             genres = emptyList(),
             youtubeVideoId = series.youtubeVideoId.orEmpty(),
         )
