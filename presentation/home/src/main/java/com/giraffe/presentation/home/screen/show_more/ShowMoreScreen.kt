@@ -24,7 +24,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.components.ListTitleSection
 import com.giraffe.presentation.home.components.TransitionLazyColumnToGrid
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
+import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 
 @Composable
 fun ShowMoreScreen(

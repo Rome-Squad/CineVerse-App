@@ -21,7 +21,7 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
+import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 import com.giraffe.presentation.home.utils.toHomeUiModel
 import com.giraffe.presentation.home.utils.toPopularMediaUiModel
 import com.giraffe.presentation.home.utils.toUiModel
@@ -29,8 +29,6 @@ import com.giraffe.user.usecase.GetUserNameUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -83,7 +81,6 @@ class HomeViewModel @Inject constructor(
     private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
         updateState { it.copy(isLoggedIn = isLoggedIn) }
     }
-
 
     private fun getUserName() {
         safeExecute(
@@ -141,29 +138,33 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onGetPopularityMoviesSuccess(movies: List<Movie>) {
-        val popularMoviesUi = movies.map { movie ->
-            val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-            movie.toPopularMediaUiModel(genres)
-        }
-        updateState { currentState ->
-            currentState.copy(
-                popularity =
-                    currentState.popularity + popularMoviesUi
-            )
+    private fun onGetPopularityMoviesSuccess(movies: List<Movie>) {
+        viewModelScope.launch {
+            val popularMoviesUi = movies.map { movie ->
+                val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                movie.toPopularMediaUiModel(genres)
+            }
+            updateState { currentState ->
+                currentState.copy(
+                    popularity =
+                        currentState.popularity + popularMoviesUi
+                )
+            }
         }
     }
 
-    private suspend fun onGetPopularitySeriesSuccess(series: List<Series>) {
-        val popularSeriesUi = series.map { seriesList ->
-            val genres = getSeriesGenresByIdsUseCase(seriesList.genreIDs).map { it.title }
-            seriesList.toPopularMediaUiModel(genres)
-        }
-        updateState { currentState ->
-            currentState.copy(
-                popularity =
-                    currentState.popularity + popularSeriesUi
-            )
+    private fun onGetPopularitySeriesSuccess(series: List<Series>) {
+        viewModelScope.launch {
+            val popularSeriesUi = series.map { seriesList ->
+                val genres = getSeriesGenresByIdsUseCase(seriesList.genreIDs).map { it.title }
+                seriesList.toPopularMediaUiModel(genres)
+            }
+            updateState { currentState ->
+                currentState.copy(
+                    popularity =
+                        currentState.popularity + popularSeriesUi
+                )
+            }
         }
     }
 
@@ -238,31 +239,28 @@ class HomeViewModel @Inject constructor(
 
     private fun getRecentViewed() {
         viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::onGetRecentlyMoviesSuccess,
+            safeCollect(
+                onEmitNewValue = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
                 block = { getRecentlyViewedMoviesUseCase.invoke() }
             )
-            safeExecute(
-                onSuccess = ::onGetRecentlySeriesSuccess,
+            safeCollect(
+                onEmitNewValue = ::onGetRecentlySeriesSuccess,
                 onError = ::onFail,
-                block = {getRecentlySeriesUseCase.invoke()}
+                block = { getRecentlySeriesUseCase.invoke() }
             )
         }
     }
 
-    private suspend fun onGetRecentlyMoviesSuccess(moviesFlow: Flow<List<Movie>>) {
-        moviesFlow.collectLatest { movies ->
-            updateState { it.copy(recentlyViewed = (it.recentlyViewed + movies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
-            getRecommendedMovies(movies)
-        }
+    private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
+        updateState { it.copy(recentlyViewed = (it.recentlyViewed + movies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
+        getRecommendedMovies(movies)
     }
 
-    private suspend fun onGetRecentlySeriesSuccess(seriesFlow: Flow<List<Series>>) {
-        seriesFlow.collectLatest { series ->
-            updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
-            getRecommendedSeries(series)
-        }
+    private fun onGetRecentlySeriesSuccess(series: List<Series>) {
+        updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
+        getRecommendedSeries(series)
+
     }
 
     private fun getRecommendedMovies(movies: List<Movie>) {

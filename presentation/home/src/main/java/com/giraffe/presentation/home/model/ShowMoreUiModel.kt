@@ -1,6 +1,6 @@
 package com.giraffe.presentation.home.model
 
-data class PosterUiModel(
+data class PosterUi(
     val id: Int,
     val name: String,
     val imageUri: String,

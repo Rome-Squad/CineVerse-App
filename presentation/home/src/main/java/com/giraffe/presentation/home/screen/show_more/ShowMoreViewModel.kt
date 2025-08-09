@@ -5,8 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.model.PosterUiModel
-import com.giraffe.presentation.home.navigation.show_more.ShowMoreRoute
+import com.giraffe.presentation.home.model.PosterUi
+import com.giraffe.presentation.home.navigation.home.routes.ShowMoreRoute
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class ShowMoreViewModel @Inject constructor(
         }
     }
 
-    private fun onLoadByStrategySuccess(media: List<PosterUiModel>) {
+    private fun onLoadByStrategySuccess(media: List<PosterUi>) {
         updateState {
             it.copy(
                 sectionType = sectionType,

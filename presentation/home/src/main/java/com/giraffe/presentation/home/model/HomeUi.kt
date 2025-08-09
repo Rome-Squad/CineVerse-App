@@ -8,7 +8,7 @@ enum class MediaType {
 }
 
 @Stable
-data class HomeUiModel(
+data class HomeUi(
     val id: Int,
     val title: String,
     val posterUrl: String,
@@ -16,20 +16,20 @@ data class HomeUiModel(
     val mediaType: MediaType
 )
 
-data class YourCollectionUiModel(
+data class YourCollectionUi(
     val id: Int,
     val title: String,
     val numberOfItems: Int
 )
 
-data class FeaturedCollectionUiModel(
+data class FeaturedCollectionUi(
     val id: Int,
     val title: String,
     val backgroundImageUrl: String
 )
 
 @Stable
-data class PopularMediaUiModel(
+data class PopularMediaUi(
     val id: Int,
     val title: String,
     val posterUrl: String,

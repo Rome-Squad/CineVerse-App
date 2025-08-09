@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.navigation.show_more
+package com.giraffe.presentation.home.navigation.home.routes
 
 import android.content.Context
 import androidx.navigation.NavController

@@ -24,13 +24,13 @@ import coil3.compose.AsyncImage
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun CollectionItem(
     modifier: Modifier = Modifier,
-    collectionItemData: FeaturedCollectionUiModel,
+    collectionItemData: FeaturedCollectionUi,
     onClick: () -> Unit
 ) {
     val configuration = LocalConfiguration.current

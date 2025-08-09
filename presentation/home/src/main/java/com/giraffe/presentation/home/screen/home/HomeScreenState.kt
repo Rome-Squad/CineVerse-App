@@ -1,21 +1,21 @@
 package com.giraffe.presentation.home.screen.home
 
-import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
-import com.giraffe.presentation.home.model.HomeUiModel
-import com.giraffe.presentation.home.model.PopularMediaUiModel
-import com.giraffe.presentation.home.model.YourCollectionUiModel
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
+import com.giraffe.presentation.home.model.HomeUi
+import com.giraffe.presentation.home.model.PopularMediaUi
+import com.giraffe.presentation.home.model.YourCollectionUi
 
 
 data class HomeScreenState(
     val userName: String = "",
-    val matchVibes: List<HomeUiModel> = emptyList(),
-    val popularity: List<PopularMediaUiModel> = emptyList(),
-    val recentlyReleased: List<HomeUiModel> = emptyList(),
-    val topRated: List<HomeUiModel> = emptyList(),
-    val upcomingMovies: List<HomeUiModel> = emptyList(),
-    val recentlyViewed: List<HomeUiModel> = emptyList(),
-    val yourCollections: List<YourCollectionUiModel> = emptyList(),
-    val featuredCollections: List<FeaturedCollectionUiModel> = emptyList(),
+    val matchVibes: List<HomeUi> = emptyList(),
+    val popularity: List<PopularMediaUi> = emptyList(),
+    val recentlyReleased: List<HomeUi> = emptyList(),
+    val topRated: List<HomeUi> = emptyList(),
+    val upcomingMovies: List<HomeUi> = emptyList(),
+    val recentlyViewed: List<HomeUi> = emptyList(),
+    val yourCollections: List<YourCollectionUi> = emptyList(),
+    val featuredCollections: List<FeaturedCollectionUi> = emptyList(),
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val errorMsgRes: String? = null,

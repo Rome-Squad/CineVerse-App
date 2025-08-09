@@ -16,12 +16,12 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
 
 @Composable
 fun CollectionListSection(
     modifier: Modifier = Modifier,
-    collectionItems: List<FeaturedCollectionUiModel>,
+    collectionItems: List<FeaturedCollectionUi>,
     onCollectionItemClick: (Int, String) -> Unit
 ) {
     Column(

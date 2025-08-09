@@ -1,7 +1,7 @@
 package com.giraffe.presentation.home.screen.home
 
 import androidx.annotation.StringRes
-import com.giraffe.presentation.home.navigation.show_more.ShowMoreSectionType
+import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 
 
 sealed interface HomeEffect {

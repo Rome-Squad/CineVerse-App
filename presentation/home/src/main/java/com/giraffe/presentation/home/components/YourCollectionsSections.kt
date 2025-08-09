@@ -20,12 +20,12 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.model.YourCollectionUiModel
+import com.giraffe.presentation.home.model.YourCollectionUi
 
 @Composable
 fun YourCollectionsSections(
     modifier: Modifier = Modifier,
-    collectionItems: List<YourCollectionUiModel>,
+    collectionItems: List<YourCollectionUi>,
     onShowMoreClick: () -> Unit,
     onCollectionClick: (collectionId: Int, collectionName: String) -> Unit
 ) {
@@ -79,12 +79,12 @@ fun YourCollectionsSections(
 @Composable
 fun YourCollectionPreview() {
     val collectionItems = listOf(
-        YourCollectionUiModel(
+        YourCollectionUi(
             id = 1,
             title = "hello",
             numberOfItems = 0
         ),
-        YourCollectionUiModel(
+        YourCollectionUi(
             id = 1,
             title = "hello",
             numberOfItems = 0

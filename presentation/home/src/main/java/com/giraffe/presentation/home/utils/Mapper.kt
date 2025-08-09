@@ -1,19 +1,19 @@
 package com.giraffe.presentation.home.utils
 
-import com.giraffe.presentation.home.model.FeaturedCollectionUiModel
-import com.giraffe.presentation.home.model.HomeUiModel
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
+import com.giraffe.presentation.home.model.HomeUi
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.model.PopularMediaUiModel
-import com.giraffe.presentation.home.model.YourCollectionUiModel
+import com.giraffe.presentation.home.model.PopularMediaUi
+import com.giraffe.presentation.home.model.YourCollectionUi
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.entity.Series
-import com.giraffe.presentation.home.model.PosterUiModel
+import com.giraffe.presentation.home.model.PosterUi
 
 
-fun Movie.toHomeUiModel(): HomeUiModel {
-    return HomeUiModel(
+fun Movie.toHomeUiModel(): HomeUi {
+    return HomeUi(
         id = id,
         title = title,
         posterUrl = posterUrl.orEmpty(),
@@ -22,8 +22,8 @@ fun Movie.toHomeUiModel(): HomeUiModel {
     )
 }
 
-fun Series.toHomeUiModel(): HomeUiModel {
-    return HomeUiModel(
+fun Series.toHomeUiModel(): HomeUi {
+    return HomeUi(
         id = id,
         title = name,
         posterUrl = posterUrl,
@@ -32,8 +32,8 @@ fun Series.toHomeUiModel(): HomeUiModel {
     )
 }
 
-fun Series.toPosterUi(): PosterUiModel {
-    return PosterUiModel(
+fun Series.toPosterUi(): PosterUi {
+    return PosterUi(
         id = id,
         name = name,
         imageUri = posterUrl,
@@ -43,8 +43,8 @@ fun Series.toPosterUi(): PosterUiModel {
     )
 }
 
-fun Movie.toPosterUi(): PosterUiModel {
-    return PosterUiModel(
+fun Movie.toPosterUi(): PosterUi {
+    return PosterUi(
         id = id,
         name = title,
         imageUri = posterUrl.orEmpty(),
@@ -55,8 +55,8 @@ fun Movie.toPosterUi(): PosterUiModel {
 }
 
 
-fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
-    return PopularMediaUiModel(
+fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUi {
+    return PopularMediaUi(
         id = id,
         title = title,
         posterUrl = posterUrl.orEmpty(),
@@ -67,8 +67,8 @@ fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
     )
 }
 
-fun Series.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
-    return PopularMediaUiModel(
+fun Series.toPopularMediaUiModel(genres: List<String>): PopularMediaUi {
+    return PopularMediaUi(
         id = id,
         title = name,
         posterUrl = posterUrl,
@@ -78,16 +78,16 @@ fun Series.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
     )
 }
 
-fun Collection.toUiModel(): YourCollectionUiModel {
-    return YourCollectionUiModel(
+fun Collection.toUiModel(): YourCollectionUi {
+    return YourCollectionUi(
         id = id,
         title = name,
         numberOfItems = itemsCount
     )
 }
 
-fun Genre.toUiModel(): FeaturedCollectionUiModel {
-    return FeaturedCollectionUiModel(
+fun Genre.toUiModel(): FeaturedCollectionUi {
+    return FeaturedCollectionUi(
         id = id,
         title = title,
         backgroundImageUrl = GenreBackgroundImage.getImageUrlForGenre(title)
