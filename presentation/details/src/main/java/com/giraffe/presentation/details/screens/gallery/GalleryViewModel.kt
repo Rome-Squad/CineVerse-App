@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.person.usecase.GetPersonImagesUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.navigation.routes.GalleryRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

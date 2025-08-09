@@ -13,6 +13,7 @@ import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.navigation.routes.ReviewRoute
 import com.giraffe.presentation.details.utils.toReviewUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
