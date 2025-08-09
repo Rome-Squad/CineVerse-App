@@ -6,8 +6,8 @@ import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.authentication.nav.AuthenticationApiImp
 import com.giraffe.explore.ExploreApi
 import com.giraffe.explore.navigation.ExploreApiImp
-import com.giraffe.home.HomeApi
-import com.giraffe.home.navigation.HomeApiImp
+import com.giraffe.api.home.HomeApi
+import com.giraffe.presentation.home.navigation.HomeApiImp
 import com.giraffe.match.MatchApi
 import com.giraffe.match.navigation.MatchApiImp
 import com.giraffe.presentation.details.navigation.DetailsApiImp
