@@ -2,11 +2,11 @@ package com.giraffe.presentation.details.screens.seasons
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.SeasonUi
 import com.giraffe.presentation.details.screens.seasons.screen.SeasonsRoute
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,9 +18,17 @@ class SeasonsViewModel @Inject constructor(
     SeasonsScreenState()
 ) {
 
-    val seriesID = savedStateHandle.toRoute<SeasonsRoute>().seriesID
+
 
     init {
+        val seriesID = savedStateHandle.toRoute<SeasonsRoute>().seriesID
+        updateState {
+            it.copy(
+                seriesId = seriesID,
+                isLoading = true,
+            )
+        }
+
         loadSeason(seriesID)
     }
 
