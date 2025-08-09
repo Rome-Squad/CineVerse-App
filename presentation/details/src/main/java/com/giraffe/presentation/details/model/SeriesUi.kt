@@ -1,6 +1,7 @@
 package com.giraffe.presentation.details.model
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.entity.Series
 
 data class SeriesUi(
@@ -12,20 +13,20 @@ data class SeriesUi(
     val releaseYear: String = "",
     val youtubeVideoId: String = "",
     val genres: List<String> = emptyList(),
-) {
-    companion object {
-        fun fromEntity(series: Series) = SeriesUi(
-            id = series.id,
-            name = series.name,
-            overview = series.overview,
-            rating = series.rating,
-            posterUrl = series.posterUrl,
-            releaseYear = series.releaseYear,
-            genres = emptyList(),
-            youtubeVideoId = series.youtubeVideoId
-        )
-    }
-}
+)
+
+fun Series.toSeriesUi(
+    genres: List<Genre> = emptyList()
+) = SeriesUi(
+    id = id,
+    name = name,
+    overview = overview,
+    rating = rating,
+    posterUrl = posterUrl,
+    releaseYear = releaseYear,
+    genres = genres.map { it.title },
+    youtubeVideoId = youtubeVideoId
+)
 
 fun SeriesUi.toPoster(): Poster = Poster(
     id = id,
