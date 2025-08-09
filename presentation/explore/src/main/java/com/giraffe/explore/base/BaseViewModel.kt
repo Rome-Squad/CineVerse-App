@@ -8,7 +8,7 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
-import com.giraffe.media.explore.R
+import com.giraffe.presentation.explore.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
