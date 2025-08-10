@@ -34,9 +34,9 @@ class SeriesRepositoryImplTest {
             overview = "desc",
             popularity = 90.0,
             originalName = "Vikings",
-            firstAirDate = "2015-01-01",
-            posterPath = "poster",
-            backdropPath = "backdrop",
+            releaseYear = "2015-01-01",
+            posterUrl = "poster",
+            backdropUrl = "backdrop",
             voteAverage = 8.0,
             genreIds = listOf(1),
             originCountry = listOf("US"),
@@ -53,7 +53,11 @@ class SeriesRepositoryImplTest {
             posterUrl = "poster",
             backdropUrl = "backdrop",
             genreIDs = listOf(1),
-            releaseYear = "2015"
+            releaseYear = null,
+            popularity = 90.0f,
+            youtubeVideoId = null,
+            userRating = null,
+            recentViewedAt = null
         )
     )
 
@@ -70,8 +74,11 @@ class SeriesRepositoryImplTest {
             posterUrl = "poster",
             backdropUrl = "backdrop",
             genresID = listOf(1),
-            releaseYear = "2015",
-            popularity = 90.0
+            releaseYear = null,
+            popularity = 90.0f,
+            youtubeVideoId = null,
+            userRating = null,
+            recentViewedAt = null
         )
     )
 
@@ -85,9 +92,9 @@ class SeriesRepositoryImplTest {
         voteCount = 1000,
         overview = "desc",
         originalName = "Vikings",
-        firstAirDate = "2015-01-01",
-        posterPath = "poster",
-        backdropPath = "backdrop",
+        releaseYear = "2015-01-01",
+        posterUrl = "poster",
+        backdropUrl = "backdrop",
         voteAverage = 8.0,
         originCountry = listOf("US"),
         originalLanguage = "en"
@@ -104,7 +111,7 @@ class SeriesRepositoryImplTest {
     fun `searchSeriesByName should return Series has correct name`() = runTest {
         coEvery { remote.getSeriesByName("Vikings", 1) } returns remoteSeriesDto
 
-        val result = repository.searchSeriesByName("Vikings", 1)
+        val result = repository.getByName("Vikings", 1)
 
         assertThat(result).hasSize(1)
         assertThat(result.first().name).isEqualTo("Vikings")
@@ -114,7 +121,7 @@ class SeriesRepositoryImplTest {
     fun `getSeriesGenres returns cached if valid`() = runTest {
         coEvery { local.getCachedGenres() } returns cachedGenres
 
-        val result = repository.getSeriesGenres()
+        val result = repository.getGenres()
 
         assertThat(result).hasSize(1)
         assertThat(result.first().title).isEqualTo("Action")
@@ -128,7 +135,7 @@ class SeriesRepositoryImplTest {
         coEvery { remote.getSeriesDetails(seriesId) } returns seriesDetailsDto
         coEvery { remote.getSeriesTrailerUrl(seriesId) } returns exceptedTrailer
 
-        val result = repository.getSeriesDetails(seriesId)
+        val result = repository.getDetails(seriesId)
 
         assertThat(result.name).isEqualTo("Vikings")
     }
@@ -137,7 +144,7 @@ class SeriesRepositoryImplTest {
     fun `getRecentSeries should return mapped cached series`() = runTest {
         coEvery { local.getRecentSeries() } returns flowOf(cachedSeries)
 
-        val result = repository.getRecentSeries().first()
+        val result = repository.getRecentlyViewed().first()
 
         assertThat(result.first().name).isEqualTo("Vikings")
         coVerify { local.getRecentSeries() }
@@ -148,7 +155,7 @@ class SeriesRepositoryImplTest {
         coEvery { local.getCachedGenres() } returns emptyList()
         coEvery { remote.getGenres() } returns remoteGenres
 
-        val result = repository.getSeriesGenres()
+        val result = repository.getGenres()
 
         assertThat(result).hasSize(1)
         assertThat(result.first().title).isEqualTo("Action")
@@ -158,19 +165,19 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `storeRecentSeries should call local storage`() = runTest {
-        repository.addRecentSeries(sampleSeries[0])
+        repository.addRecentlyViewed(sampleSeries[0])
         coVerify { local.insertRecentSeries(1) }
     }
 
     @Test
     fun `clearRecentSeries should call local clear`() = runTest {
-        repository.clearRecentSeries()
+        repository.clearRecentlyViewed()
         coVerify { local.clearRecentSeries() }
     }
 
     @Test
     fun `SeriesRepository should return Series`() = runTest {
-        repository.getRecommendedSeries(1, 1, 10)
+        repository.getRecommended(1, 1, 10)
         coVerify { remote.getSeriesRecommendations(1, 1) }
     }
 
@@ -178,7 +185,7 @@ class SeriesRepositoryImplTest {
     fun `getPopularitySeries returns cached if available`() = runTest {
         coEvery { local.getPopularitySeries(10) } returns cachedSeries
 
-        val result = repository.getPopularitySeries(1, 10)
+        val result = repository.getPopular(1, 10)
 
         assertThat(result.first().name).isEqualTo(cachedSeries.first().name)
         coVerify(exactly = 0) { remote.getPopularitySeries(any()) }
@@ -189,7 +196,7 @@ class SeriesRepositoryImplTest {
         coEvery { local.getPopularitySeries(10) } returns emptyList()
         coEvery { remote.getPopularitySeries(1) } returns remoteSeriesDto
 
-        val result = repository.getPopularitySeries(1, 10)
+        val result = repository.getPopular(1, 10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify { local.insertPopularitySeries(any()) }
@@ -199,7 +206,7 @@ class SeriesRepositoryImplTest {
     fun `getRecentlyReleasedSeries returns cached if page is 1 and cache is not empty`() = runTest {
         coEvery { local.getRecentlyReleasedSeries(10) } returns cachedSeries
 
-        val result = repository.getRecentlyReleasedSeries(1, 10)
+        val result = repository.getRecentlyReleased(1, 10)
 
         assertThat(result.first().name).isEqualTo(cachedSeries.first().name)
         coVerify(exactly = 0) { remote.getRecentlyReleasedSeries(any()) }
@@ -210,7 +217,7 @@ class SeriesRepositoryImplTest {
         coEvery { local.getRecentlyReleasedSeries(10) } returns emptyList()
         coEvery { remote.getRecentlyReleasedSeries(1) } returns remoteSeriesDto
 
-        val result = repository.getRecentlyReleasedSeries(1, 10)
+        val result = repository.getRecentlyReleased(1, 10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify { local.insertRecentlyReleasedSeries(any()) }
@@ -220,7 +227,7 @@ class SeriesRepositoryImplTest {
     fun `getRecentlyReleasedSeries fetches from remote if page is greater than 1`() = runTest {
         coEvery { remote.getRecentlyReleasedSeries(2) } returns remoteSeriesDto
 
-        val result = repository.getRecentlyReleasedSeries(2, 10)
+        val result = repository.getRecentlyReleased(2, 10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify(exactly = 0) { local.getRecentlyReleasedSeries(any()) }
@@ -230,7 +237,7 @@ class SeriesRepositoryImplTest {
     fun `getTopRatedSeries returns cached if page is 1 and cache is not empty`() = runTest {
         coEvery { local.getTopRatedSeries(10) } returns cachedSeries
 
-        val result = repository.getTopRatedSeries(1, 10)
+        val result = repository.getTopRated(1, 10)
 
         assertThat(result.first().name).isEqualTo(cachedSeries.first().name)
         coVerify(exactly = 0) { remote.getTopRatedSeries(any()) }
@@ -241,7 +248,7 @@ class SeriesRepositoryImplTest {
         coEvery { local.getTopRatedSeries(10) } returns emptyList()
         coEvery { remote.getTopRatedSeries(1) } returns remoteSeriesDto
 
-        val result = repository.getTopRatedSeries(1, 10)
+        val result = repository.getTopRated(1, 10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify { local.insertTopRatedSeries(any()) }
@@ -251,7 +258,7 @@ class SeriesRepositoryImplTest {
     fun `getTopRatedSeries fetches from remote if page is greater than 1`() = runTest {
         coEvery { remote.getTopRatedSeries(2) } returns remoteSeriesDto
 
-        val result = repository.getTopRatedSeries(2, 10)
+        val result = repository.getTopRated(2, 10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify(exactly = 0) { local.getTopRatedSeries(any()) }
@@ -261,7 +268,7 @@ class SeriesRepositoryImplTest {
     fun `getRecommendedSeries returns cached if page is 1 and cache is not empty`() = runTest {
         coEvery { local.getRecommendedSeries(10) } returns cachedSeries
 
-        val result = repository.getRecommendedSeries(1, 1, 10)
+        val result = repository.getRecommended(1, 1, 10)
 
         assertThat(result.first().name).isEqualTo(cachedSeries.first().name)
         coVerify(exactly = 0) { remote.getSeriesRecommendations(any(), any()) }
@@ -273,7 +280,7 @@ class SeriesRepositoryImplTest {
         coEvery { local.getRecommendedSeries(10) } returns emptyList()
         coEvery { remote.getSeriesRecommendations(seriesId, 1) } returns remoteSeriesDto
 
-        val result = repository.getRecommendedSeries(seriesId, 1, 10)
+        val result = repository.getRecommended(seriesId, 1, 10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify { local.insertRecommendedSeries(any()) }
@@ -284,7 +291,7 @@ class SeriesRepositoryImplTest {
         val seriesId = 1
         coEvery { remote.getSeriesRecommendations(seriesId, 2) } returns remoteSeriesDto
 
-        val result = repository.getRecommendedSeries(seriesId, 2, 10)
+        val result = repository.getRecommended(seriesId, 2, 10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify(exactly = 0) { local.getRecommendedSeries(any()) }

@@ -8,7 +8,6 @@ class DeleteSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
 
-    suspend operator fun invoke(movieId: Int) {
-        seriesRepository.deleteSeriesById(movieId)
-    }
+    suspend operator fun invoke(seriesId: Int) = seriesRepository.deleteById(seriesId)
+
 }

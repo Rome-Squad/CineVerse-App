@@ -7,13 +7,13 @@ import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.ClearMoviesCacheUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.media.series.usecase.ClearRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,8 +31,8 @@ class SearchViewModel @Inject constructor(
     private val deleteKeywordUseCase: DeleteKeywordUseCase,
     private val clearSearchHistory: ClearSearchHistoryUseCase,
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
-    private val getRecentSeriesUseCase: GetRecentSeriesUseCase,
-    private val clearRecentSeriesUseCase: ClearRecentSeriesUseCase,
+    private val getRecentSeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val clearRecentSeriesUseCase: ClearRecentlyViewedSeriesUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
     private val clearRecentlyPeopleUseCase: ClearRecentPeopleUseCase
 ) : BaseViewModel<SearchScreenState>(SearchScreenState()),

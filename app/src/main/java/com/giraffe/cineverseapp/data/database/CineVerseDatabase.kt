@@ -1,12 +1,12 @@
 package com.giraffe.cineverseapp.data.database
 
-import com.giraffe.media.movie.dao.MovieDao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.giraffe.cineverseapp.data.database.converter.Converters
 import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
+import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.person.dao.PersonDao
@@ -14,7 +14,6 @@ import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.MoviePersonCrossRef
 import com.giraffe.media.person.relations.SeriesPersonCrossRef
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.media.series.datasource.local.cacheDto.SeasonCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 
@@ -24,7 +23,6 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
         MovieCacheDto::class,
         MovieGenreCacheDto::class,
         SeriesCacheDto::class,
-        SeasonCacheDto::class,
         SeriesGenreCacheDto::class,
         PersonCacheDto::class,
         MoviePersonCrossRef::class,

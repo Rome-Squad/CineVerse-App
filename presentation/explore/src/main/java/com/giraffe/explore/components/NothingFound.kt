@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.media.explore.R
+import com.giraffe.presentation.explore.R
 
 @Composable
 fun NothingFound(modifier: Modifier = Modifier) {

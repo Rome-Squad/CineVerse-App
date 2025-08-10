@@ -12,14 +12,14 @@ import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.BasePagingSource
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.SearchMovieByNameUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
-import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -28,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchResultViewModel @Inject constructor(
     private val searchMovieByName: SearchMovieByNameUseCase,
-    private val searchSeriesByName: SearchSeriesByNameUseCase,
+    private val searchSeriesByName: GetSeriesByNameUseCase,
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,

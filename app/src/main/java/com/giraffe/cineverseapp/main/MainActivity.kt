@@ -17,8 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
-import com.giraffe.profile.screens.ratings.RatingScreen
-import com.giraffe.profile.utils.LanguageHelper
+import com.giraffe.presentation.profile.utils.LanguageHelper
+
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.collectLatest

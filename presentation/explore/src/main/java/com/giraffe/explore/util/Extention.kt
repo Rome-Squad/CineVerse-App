@@ -2,7 +2,7 @@ package com.giraffe.explore.util
 
 import android.content.Context
 import com.giraffe.explore.screen.discover.SearchTab
-import com.giraffe.media.explore.R
+import com.giraffe.presentation.explore.R
 
 fun SearchTab.toTitle(context: Context) = when (this) {
     SearchTab.MOVIES -> context.getString(R.string.movies)

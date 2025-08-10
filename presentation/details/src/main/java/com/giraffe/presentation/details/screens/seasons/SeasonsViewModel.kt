@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.screens.seasons
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.series.entity.Season
+import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.SeasonsRoute
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SeasonsViewModel @Inject constructor(
-    private val getSeasons: GetLastSeasonsUseCase,
+    private val getSeasons: GetSeasonsUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeasonsScreenState, SeasonsEffect>(
     SeasonsScreenState()

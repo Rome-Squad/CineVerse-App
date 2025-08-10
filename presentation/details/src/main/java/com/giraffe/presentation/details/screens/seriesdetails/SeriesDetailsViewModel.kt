@@ -14,6 +14,7 @@ import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.media.series.usecase.AddSeriesRatingUseCase
 import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
@@ -33,7 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SeriesDetailsViewModel @Inject constructor(
     private val getSeriesDetails: GetSeriesDetailsUseCase,
-    private val getLastSeasons: GetLastSeasonsUseCase,
+    private val getLastSeasons: GetSeasonsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
     private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,

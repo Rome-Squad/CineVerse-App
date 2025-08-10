@@ -13,8 +13,8 @@ import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.mapper.toCacheDto
 import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.repository.MoviesRepository
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.repository.MoviesRepository
 import com.giraffe.media.utils.SafeCall
 import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.Dispatchers
