@@ -34,7 +34,7 @@ fun SelectionItem(
     icon: Painter? = painterResource(Theme.icons.dueTone.headphone),
     description: String,
     secondDescription: String? = null,
-    isCardType2: Boolean = false,
+    isSecondaryCardType: Boolean = false,
     horizontalPadding: Dp? = null,
     verticalPadding: Dp? = null,
     onClick: () -> Unit = {}
@@ -95,7 +95,7 @@ fun SelectionItem(
                 )
             }
         }
-        if (isCardType2 && secondDescription != null) {
+        if (isSecondaryCardType && secondDescription != null) {
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.Start,
