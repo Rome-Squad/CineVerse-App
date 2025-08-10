@@ -8,6 +8,7 @@ import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
+import com.giraffe.api.authentication.AuthenticationApi
 import javax.inject.Inject
 import javax.inject.Provider
 

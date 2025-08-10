@@ -19,6 +19,8 @@ import com.giraffe.presentation.details.navigation.routes.reviewRoute
 import com.giraffe.presentation.details.navigation.routes.seasonsRoute
 import com.giraffe.presentation.details.navigation.routes.seriesDetailsRoute
 import com.giraffe.presentation.details.navigation.routes.youTubePlayerRouteRoute
+import com.giraffe.api.authentication.AuthenticationApi
+
 
 @Composable
 internal fun DetailsNavGraph(
