@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="match_screen">Match Screen</string>
+    <string name="here_s_your_match_list">قائمة ترشيحاتك</string>
+    <string name="play_icon">أيقونة التشغيل</string>
+    <string name="poster_image">صورة الملصق</string>
+    <string name="save_Icon">أيقونة الحفظ</string>
+    <string name="media_type_movie">فيلم</string>
+    <string name="media_type_series">مسلسل</string>
+    <string name="view_details">عرض التفاصيل</string>
+
 </resources>

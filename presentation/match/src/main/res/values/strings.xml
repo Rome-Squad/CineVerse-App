@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="match_screen">Match Screen</string>
+    <string name="here_s_your_match_list">Here’s Your Match List</string>
+    <string name="play_icon">Play Icon</string>
+    <string name="poster_image">Poster Image</string>
+    <string name="save_Icon">Save Icon</string>
+    <string name="media_type_movie">Movie</string>
+    <string name="media_type_series">Series</string>
+    <string name="view_details">View Details</string>
+
 </resources>
