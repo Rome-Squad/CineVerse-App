@@ -36,4 +36,12 @@
     <string name="how_much_time_do_you_have">How much time do you have?</string>
     <string name="pick_a_genre_you_love">Pick a genre you love</string>
     <string name="what_mood_are_you_in">What mood are you in?</string>
+    <string name="here_s_your_match_list">Here’s Your Match List</string>
+    <string name="play_icon">Play Icon</string>
+    <string name="poster_image">Poster Image</string>
+    <string name="add_Icon">add Icon</string>
+    <string name="icon_description">icon_for_text_label</string>
+    <string name="media_type_movie">Movie</string>
+    <string name="media_type_series">Series</string>
+    <string name="view_details">View Details</string>
 </resources>

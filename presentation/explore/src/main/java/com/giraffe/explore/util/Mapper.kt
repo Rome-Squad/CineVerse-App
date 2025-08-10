@@ -3,7 +3,7 @@ package com.giraffe.explore.util
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.screen.discover.GenreUi
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.series.entity.Series
 
@@ -46,7 +46,7 @@ fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         imageUri = "https://image.tmdb.org/t/p/w500$posterUrl",
         rating = rating,
         genres = genreTitles,
-        date = releaseYear,
+        date = releaseYear.toString(),
         mediaTypeOfPoster = Poster.Type.SERIES.value
     )
 }

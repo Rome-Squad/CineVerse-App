@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.media.explore.R
+import com.giraffe.presentation.explore.R
 
 
 @Composable

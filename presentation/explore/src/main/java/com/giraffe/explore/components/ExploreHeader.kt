@@ -28,7 +28,7 @@ import com.giraffe.designsystem.composable.DefaultTextField
 import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.media.explore.R
+import com.giraffe.presentation.explore.R
 
 @Composable
 fun ExploreHeader(

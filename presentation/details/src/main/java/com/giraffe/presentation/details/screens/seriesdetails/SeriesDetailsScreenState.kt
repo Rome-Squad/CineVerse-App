@@ -1,0 +1,25 @@
+package com.giraffe.presentation.details.screens.seriesdetails
+
+import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.details.model.CastUi
+import com.giraffe.presentation.details.model.ReviewUI
+import com.giraffe.presentation.details.model.SeasonUi
+import com.giraffe.presentation.details.model.SeriesUi
+
+data class SeriesDetailsScreenState(
+    val seriesUi: SeriesUi = SeriesUi(),
+    val genres: List<String> = emptyList(),
+    val seasons: List<SeasonUi> = emptyList(),
+    val cast: List<CastUi> = emptyList(),
+    val crew: Map<String, List<String>> = emptyMap(),
+    val recommendedSeries: List<Poster> = emptyList(),
+    val seriesReviews: List<ReviewUI> = emptyList(),
+    val currentRating: Int = 0,
+
+    val isLoading: Boolean = true,
+    val isNetworkError: Boolean = false,
+
+    val isVisibleAddToCollectionBottomSheet: Boolean = false,
+    val isVisibleGiveStarsBottomSheet: Boolean = false,
+    val isVisibleLoginBottomSheet: Boolean = false,
+)

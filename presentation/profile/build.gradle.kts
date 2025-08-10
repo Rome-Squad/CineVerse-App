@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.profile"
+    namespace = "com.giraffe.presentation.profile"
     compileSdk = 36
 
     defaultConfig {

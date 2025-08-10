@@ -37,4 +37,13 @@
     <string name="how_much_time_do_you_have">كم من الوقت لديك؟</string>
     <string name="pick_a_genre_you_love">اختر نوعًا تحبه</string>
     <string name="what_mood_are_you_in">ما هو مزاجك الآن؟</string>
+    <string name="match_screen">Match Screen</string>
+    <string name="here_s_your_match_list">قائمة ترشيحاتك</string>
+    <string name="play_icon">أيقونة التشغيل</string>
+    <string name="poster_image">صورة الملصق</string>
+    <string name="add_Icon">أيقونة الحفظ</string>
+    <string name="media_type_movie">فيلم</string>
+    <string name="media_type_series">مسلسل</string>
+    <string name="icon_description">أيقونة مرفقة مع النص</string>
+    <string name="view_details">عرض التفاصيل</string>
 </resources>

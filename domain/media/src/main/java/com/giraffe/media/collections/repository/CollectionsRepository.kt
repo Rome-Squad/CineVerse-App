@@ -1,7 +1,7 @@
 package com.giraffe.media.collections.repository
 
 import com.giraffe.media.collections.entity.Collection
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 
 interface CollectionsRepository {
 
