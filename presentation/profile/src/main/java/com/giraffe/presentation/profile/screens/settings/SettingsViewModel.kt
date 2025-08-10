@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.settings
 
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.Language
 import com.giraffe.presentation.profile.utils.LanguageHelper
@@ -107,8 +106,8 @@ class SettingsViewModel @Inject constructor(
         updateState { it.copy(isLoading = false, isNoInternet = false, user = user.toUi()) }
     }
 
-    private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
+    private fun onFailure(error: Throwable, isNoInternet: Boolean) {
+        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
         sendEffect(SettingsEffect.ShowError(error))
     }
 

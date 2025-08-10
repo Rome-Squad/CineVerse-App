@@ -1,7 +1,6 @@
 package com.giraffe.presentation.profile.screens.history
 
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.DeleteMovieUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
@@ -62,8 +61,8 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
+    private fun onFailure(error: Throwable, isNoInternet: Boolean) {
+        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
         sendEffect(HistoryEffect.ShowError(error))
     }
 
