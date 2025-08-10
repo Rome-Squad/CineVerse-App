@@ -3,7 +3,7 @@ package com.giraffe.cineverseapp.di
 import com.giraffe.media.collections.CollectionsRepositoryImp
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.explore.ExploreRepositoryImpl
-import com.giraffe.media.explore.repository.ExploreRepository
+import com.giraffe.media.explore.repository.SearchRepository
 import com.giraffe.media.movie.MoviesRepositoryImpl
 import com.giraffe.media.movie.repository.MoviesRepository
 import com.giraffe.media.person.PersonRepositoryImpl
@@ -30,7 +30,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindExploreRepository(impl: ExploreRepositoryImpl): ExploreRepository
+    abstract fun bindExploreRepository(impl: ExploreRepositoryImpl): SearchRepository
 
     @Binds
     @Singleton
