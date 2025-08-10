@@ -7,6 +7,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
@@ -84,7 +85,7 @@ class SearchResultViewModel @Inject constructor(
     private fun getMoviesGenres() {
         safeExecute(
             onSuccess = { genres ->
-                updateState { it.copy(moviesGenres = genres.map { genre -> genre.toUi() }) }
+                updateState { it.copy(moviesGenres = genres.map(Genre::toUi)) }
             },
             onError = ::onError,
             block = { getMoviesGenresUseCase.invoke() }
@@ -94,7 +95,7 @@ class SearchResultViewModel @Inject constructor(
     private fun getSeriesGenres() {
         safeExecute(
             onSuccess = { genres ->
-                updateState { it.copy(seriesGenres = genres.map { genre -> genre.toUi() }) }
+                updateState { it.copy(seriesGenres = genres.map(Genre::toUi)) }
             },
             onError = ::onError,
             block = { getSeriesGenresUseCase.invoke() },

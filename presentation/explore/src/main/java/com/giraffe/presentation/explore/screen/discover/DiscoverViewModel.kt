@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesByGenresUseCase
@@ -22,96 +23,120 @@ import com.giraffe.presentation.explore.util.mapExceptionToStringRes
 import com.giraffe.presentation.explore.util.toPoster
 import com.giraffe.presentation.explore.util.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val getMoviesGenres: GetMoviesGenresUseCase,
-    private val getSeriesGenres: GetSeriesGenresUseCase,
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     private val getSeriesByGenresUseCase: GetSeriesByGenresUseCase,
 ) : BaseViewModel<DiscoverScreenState, DiscoverEffect>(DiscoverScreenState()),
     DiscoverInteractionListener {
 
     init {
-        getGenres()
+        getMovieGenres()
+        getSeriesGenres()
     }
 
-    private fun getGenres() {
+
+    private fun getMovieGenres() {
         safeExecute(
+            onSuccess = ::onGetMoviesGenresSuccess,
             onError = ::onError,
-        ) {
-            val moviesGenres = getMoviesGenres().map { it.toUi() }
-            val seriesGenres = getSeriesGenres().map { it.toUi() }
-            updateState {
-                it.copy(
-                    selectedGenres = moviesGenres,
-                    moviesGenres = moviesGenres,
-                    seriesGenres = seriesGenres
-                )
-            }
-            getMoviesByGenre()
-            getSeriesByGenre()
+            block = { getMoviesGenresUseCase() }
+        )
+    }
+
+    private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                moviesGenres = genres.map(Genre::toUi)
+            )
         }
+        getMoviesByGenre()
+    }
+
+    private fun getSeriesGenres() {
+        safeExecute(
+            onSuccess = ::getSeriesGenresSuccess,
+            onError = ::onError,
+            block = { getSeriesGenresUseCase() }
+        )
+    }
+
+    private fun getSeriesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                seriesGenres = genres.map(Genre::toUi)
+            )
+        }
+        getSeriesByGenre()
     }
 
     override fun getMoviesByGenre(genreId: Int) {
-        safeCollect(
+        safeExecute(
             onError = ::onError,
-            onEmitNewValue = ::onEmitNewMovieGenres
+            onSuccess = ::onGetMovieGenresSuccess
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource { page -> getMoviesByGenresUseCase(genreId, page) }
+                BasePagingSource(
+                    error = ::onError,
+                ) { page -> getMoviesByGenresUseCase(genreId, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
 
-    private fun onEmitNewMovieGenres(pagingData: PagingData<Movie>) {
-        val postersFlow =
+    private fun onGetMovieGenresSuccess(moviesFlow: Flow<PagingData<Movie>>) {
+        val postersFlow = moviesFlow.map { pagingData ->
             pagingData.map { movie -> movie.toPoster(state.value.moviesGenres) }
+        }
 
-        updateState { it.copy(moviesPosters = flowOf(postersFlow)) }
+        updateState { it.copy(moviesPosters = postersFlow) }
         if (state.value.selectedTab == SearchTab.MOVIES) {
-            updateState { it.copy(selectedPosters = flowOf(postersFlow)) }
+            updateState { it.copy(selectedPosters = postersFlow) }
         }
     }
 
     override fun getSeriesByGenre(genreId: Int) {
-        safeCollect(
+        safeExecute(
             onError = ::onError,
-            onEmitNewValue = ::onEmitNewSeriesGenres
+            onSuccess = ::onGetSeriesGenresSuccess
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource { page -> getSeriesByGenresUseCase(genreId, page) }
+                BasePagingSource(
+                    error = ::onError,
+                ) { page -> getSeriesByGenresUseCase(genreId, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
 
-    private fun onEmitNewSeriesGenres(pagingData: PagingData<Series>) {
-        val postersFlow = flowOf(
+    private fun onGetSeriesGenresSuccess(seriesFlow: Flow<PagingData<Series>>) {
+        val postersFlow = seriesFlow.map { pagingData ->
             pagingData.map { series -> series.toPoster(state.value.seriesGenres) }
-        )
-        updateState { it.copy(seriesPosters = postersFlow) }
-    }
+        }
 
-    override fun onViewChanged(isGrid: Boolean) {
-        safeExecute {
-            updateState { it.copy(isGridSelected = isGrid) }
+        updateState { it.copy(seriesPosters = postersFlow) }
+        if (state.value.selectedTab == SearchTab.SERIES) {
+            updateState { it.copy(selectedPosters = postersFlow) }
         }
     }
 
+    override fun onViewChanged(isGrid: Boolean) {
+        updateState { it.copy(isGridSelected = isGrid) }
+    }
+
     override fun onGenreSelected(genre: GenreUi) {
-        safeExecute(
-            onError = ::onError,
-        ) {
-            if (state.value.selectedTab == SearchTab.MOVIES) {
-                updateState { it.copy(selectedGenre = genre, selectedMovieGenre = genre) }
-                getMoviesByGenre(genre.id)
-            } else {
-                updateState { it.copy(selectedGenre = genre, selectedSeriesGenre = genre) }
-                getSeriesByGenre(genre.id)
-            }
+        if (state.value.selectedTab == SearchTab.MOVIES) {
+            updateState { it.copy(selectedGenre = genre, selectedMovieGenre = genre) }
+            getMoviesByGenre(genre.id)
+        } else {
+            updateState { it.copy(selectedGenre = genre, selectedSeriesGenre = genre) }
+            getSeriesByGenre(genre.id)
         }
     }
 
@@ -128,29 +153,25 @@ class DiscoverViewModel @Inject constructor(
     }
 
     override fun onTabSelected(tabIndex: Int) {
-        safeExecute(
-            onError = ::onError,
-        ) {
-            updateState {
-                it.copy(selectedTab = SearchTab.entries[tabIndex])
-            }
+        updateState {
+            it.copy(selectedTab = SearchTab.entries[tabIndex])
+        }
 
-            if (SearchTab.entries[tabIndex] == SearchTab.MOVIES) {
-                updateState {
-                    it.copy(
-                        selectedGenre = state.value.selectedMovieGenre,
-                        selectedGenres = state.value.moviesGenres,
-                        selectedPosters = state.value.moviesPosters
-                    )
-                }
-            } else {
-                updateState {
-                    it.copy(
-                        selectedGenre = state.value.selectedSeriesGenre,
-                        selectedGenres = state.value.seriesGenres,
-                        selectedPosters = state.value.seriesPosters
-                    )
-                }
+        if (SearchTab.entries[tabIndex] == SearchTab.MOVIES) {
+            updateState {
+                it.copy(
+                    selectedGenre = state.value.selectedMovieGenre,
+                    selectedGenres = state.value.moviesGenres,
+                    selectedPosters = state.value.moviesPosters
+                )
+            }
+        } else {
+            updateState {
+                it.copy(
+                    selectedGenre = state.value.selectedSeriesGenre,
+                    selectedGenres = state.value.seriesGenres,
+                    selectedPosters = state.value.seriesPosters
+                )
             }
         }
     }
