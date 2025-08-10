@@ -1,13 +1,13 @@
 package com.giraffe.media.person
 
 import com.giraffe.media.exception.MediaException
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.person.datasource.local.PersonLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
-import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
-import com.giraffe.media.person.datasource.remote.dto.PersonDto
+import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
+import com.giraffe.media.person.datasource.remote.dto.MediaMemberDto
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.mapper.toEntity
-import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -19,9 +19,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class PersonRepositoryImplTest {
-    private lateinit var repository: PersonRepository
-    private val remoteDataSource: PersonRemoteDataSource = mockk(relaxed = true)
+class MediaMemberRepositoryImplTest {
+    private lateinit var repository: MediaMemberRepository
+    private val remoteDataSource: MediaMemberRemoteDataSource = mockk(relaxed = true)
     private val localDataSource: PersonLocalDataSource = mockk(relaxed = true)
     private val keyword = "Mohannad"
     private val dummyPersonCacheDto = PersonCacheDto(
@@ -30,12 +30,12 @@ class PersonRepositoryImplTest {
         role = "Acting",
         type = "Cast",
     )
-    private val dummyPersonResponse = PersonDto(
+    private val dummyPersonResponse = MediaMemberDto(
         adult = false,
         gender = 1,
         id = 5,
         knownFor = listOf(),
-        role = "Actor",
+        department = "Actor",
         name = "Mohannad",
         originalName = "مهند",
         popularity = 100.0,
@@ -47,7 +47,7 @@ class PersonRepositoryImplTest {
 
     @Before
     fun setup() {
-        repository = PersonRepositoryImpl(
+        repository = MediaMemberRepositoryImpl(
             remoteDataSource,
             localDataSource
         )
@@ -57,9 +57,9 @@ class PersonRepositoryImplTest {
     fun `should throw MediaDomainException when remote search throw any exception`() = runTest {
         //given
         coEvery { localDataSource.searchByName(keyword, 1) } returns emptyList()
-        coEvery { remoteDataSource.searchByName(keyword, 1) } throws Exception()
+        coEvery { remoteDataSource.searchForActorByName(keyword, 1) } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.searchByName(keyword, 1) }
+        assertThrows<MediaException> { repository.searchForActorByName(keyword, 1) }
         coVerify(exactly = 0) { localDataSource.insertPerson(any()) }
     }
 
@@ -69,7 +69,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.insertPerson(dummyPersonCacheDto) } just Runs
         //when
-        repository.addRecentPerson(dummyPersonCacheDto.toEntity())
+        repository.addCastToRecentViewed(dummyPersonCacheDto.toEntity())
         //then
         coVerify(exactly = 1) { localDataSource.insertPerson(match { it.isRecent }) }
     }
@@ -79,7 +79,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.insertPerson(any()) } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.addRecentPerson(dummyPersonCacheDto.toEntity()) }
+        assertThrows<MediaException> { repository.addCastToRecentViewed(dummyPersonCacheDto.toEntity()) }
     }
 
 
@@ -88,7 +88,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.getRecentPeople() } returns dummyPeopleDto
         //when
-        val result = repository.getRecentPeople()
+        val result = repository.getRecentMediaMembers()
         //then
         assertThat(result.size).isEqualTo(3)
         assertThat(result.first()).isInstanceOf(Person::class.java)
@@ -99,7 +99,7 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.getRecentPeople() } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.getRecentPeople() }
+        assertThrows<MediaException> { repository.getRecentMediaMembers() }
     }
 
     @Test
@@ -107,9 +107,9 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.clearRecentPeople() } just Runs
         //when
-        repository.clearRecentPeople()
+        repository.clearRecentViewed()
         //then
-        coVerify(exactly = 1) { repository.clearRecentPeople() }
+        coVerify(exactly = 1) { repository.clearRecentViewed() }
     }
 
     @Test
@@ -117,6 +117,6 @@ class PersonRepositoryImplTest {
         //given
         coEvery { localDataSource.clearRecentPeople() } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.clearRecentPeople() }
+        assertThrows<MediaException> { repository.clearRecentViewed() }
     }
 }

@@ -1,8 +1,9 @@
 package com.giraffe.media.person.usecase
 
 import com.giraffe.media.exception.MediaException
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.person.entity.PersonCredit
-import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -13,7 +14,7 @@ import kotlin.test.Test
 
 class GetPeopleMediaCreditsUseCaseTest {
 
-    private lateinit var repository: PersonRepository
+    private lateinit var repository: MediaMemberRepository
     private lateinit var getPeopleMediaCreditsUseCase: GetPeopleMediaCreditsUseCase
     val personID = 1
 
@@ -53,7 +54,7 @@ class GetPeopleMediaCreditsUseCaseTest {
                 title = "Breaking Bad",
             )
         )
-        coEvery { repository.getPeopleMediaCredits(personID) } returns expectedMediaCredits
+        coEvery { repository.getMoviesAndSeriesById(personID) } returns expectedMediaCredits
 
         val result = getPeopleMediaCreditsUseCase(personID)
 
@@ -62,7 +63,7 @@ class GetPeopleMediaCreditsUseCaseTest {
 
     @Test
     fun `should return empty list when person has no media credits`() = runTest {
-        coEvery { repository.getPeopleMediaCredits(personID) } returns emptyList()
+        coEvery { repository.getMoviesAndSeriesById(personID) } returns emptyList()
 
         val result = getPeopleMediaCreditsUseCase(personID)
 
@@ -71,7 +72,7 @@ class GetPeopleMediaCreditsUseCaseTest {
 
     @Test
     fun `should propagate MediaException when repository throws`() = runTest {
-        coEvery { repository.getPeopleMediaCredits(personID) } throws MediaException()
+        coEvery { repository.getMoviesAndSeriesById(personID) } throws MediaException()
 
         assertThrows<MediaException> {
             getPeopleMediaCreditsUseCase(personID)

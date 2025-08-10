@@ -1,15 +1,16 @@
-package com.giraffe.media.person.retrofit
+package com.giraffe.media.mediaMember.retrofit
 
-import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
+import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
 import com.giraffe.media.util.RetrofitRequestBuilder
 import javax.inject.Inject
 
-class PersonRemoteDataSourceImplRetrofit @Inject constructor(
-    private val retrofitRequestBuilder: RetrofitRequestBuilder<PersonApiServiceRetrofit>
-) : PersonRemoteDataSource {
+class MediaMemberRemoteDataSourceImplRetrofit @Inject constructor(
+    private val retrofitRequestBuilder: RetrofitRequestBuilder<MediaMemberApiServiceRetrofit>
+) : MediaMemberRemoteDataSource {
 
-    override suspend fun searchByName(personName: String, page: Int) =
-        retrofitRequestBuilder.get { searchByName(name = personName, page = page) }.people
+    override suspend fun searchForActorByName(personName: String, page: Int) =
+        retrofitRequestBuilder.get { searchByName(name = personName, page = page) }.mediaMembers
+            .filter { it.department == ACTOR_DEPARTMENT }
 
     override suspend fun getPersonMediaCredits(personId: Int) =
         retrofitRequestBuilder.get { getPersonMediaCredits(personId) }.mediaCredits
@@ -28,4 +29,8 @@ class PersonRemoteDataSourceImplRetrofit @Inject constructor(
 
     override suspend fun getCreditsByMovieId(movieId: Int) =
         retrofitRequestBuilder.get { getCreditsByMovieId(movieId) }
+
+    private companion object {
+        const val ACTOR_DEPARTMENT = "Acting"
+    }
 }

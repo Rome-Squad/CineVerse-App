@@ -1,13 +1,13 @@
 package com.giraffe.details.models
 
-import com.giraffe.media.person.entity.Person
+import com.giraffe.media.mediaMember.entity.CrewMember
 
 data class CrewUi(
     val name : String = "",
     val role : String = "",
 )
 
-fun Person.toCrewUi() : CrewUi{
+fun CrewMember.toCrewUi(): CrewUi {
     return CrewUi(
         name = name,
         role = role

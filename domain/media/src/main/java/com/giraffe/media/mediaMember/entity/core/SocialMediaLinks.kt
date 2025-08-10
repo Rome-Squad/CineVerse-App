@@ -1,6 +1,6 @@
-package com.giraffe.media.person.entity
+package com.giraffe.media.mediaMember.entity.core
 
-data class PersonSocialMediaLinks(
+data class SocialMediaLinks(
     val facebookLink: String? = null,
     val instagramLink: String? = null,
     val youtubeLink: String? = null,

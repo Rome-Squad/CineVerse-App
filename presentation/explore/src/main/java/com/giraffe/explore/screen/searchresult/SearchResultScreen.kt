@@ -165,7 +165,7 @@ private fun ActorsSection(
         items(actors.itemCount) { actorIndex ->
             CastItem(
                 name = actors[actorIndex]?.name.toString(),
-                imageUrl = actors[actorIndex]?.imageUri.toString(),
+                imageUrl = actors[actorIndex]?.imageUrl.toString(),
                 onClick = {
                     navigateToCastDetails(actors[actorIndex]?.id ?: 0)
                 }

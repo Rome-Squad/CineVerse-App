@@ -8,9 +8,9 @@ import com.giraffe.details.screens.castCredit.CastCreditEffect.Error
 import com.giraffe.details.screens.castCredit.CastCreditEffect.NavigateToMovieDetails
 import com.giraffe.details.screens.castCredit.CastCreditEffect.NavigateToSeriesDetails
 import com.giraffe.details.utils.toPoster
+import com.giraffe.media.mediaMember.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.person.entity.PersonCredit
-import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async

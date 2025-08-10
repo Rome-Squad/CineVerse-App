@@ -26,7 +26,7 @@ fun Movie.toPoster(allGenres: List<Genre> = emptyList()): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl.orEmpty(),
+        imageUrl = posterUrl.orEmpty(),
         rating = rating,
         genres = genreTitles,
         time = null,
@@ -46,7 +46,7 @@ fun Series.toPoster(allGenres: List<Genre> = emptyList()): Poster {
     return Poster(
         id = id,
         name = name,
-        imageUri = posterUrl.orEmpty(),
+        imageUrl = posterUrl.orEmpty(),
         rating = rating,
         genres = genreTitles,
         time = null,

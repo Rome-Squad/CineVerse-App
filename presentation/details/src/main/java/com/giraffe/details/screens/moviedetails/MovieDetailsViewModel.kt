@@ -17,15 +17,14 @@ import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movies.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -310,7 +309,7 @@ class MovieDetailsViewModel @Inject constructor(
                     Poster(
                         id = movie.id,
                         name = movie.title,
-                        imageUri = movie.posterUrl.toString(),
+                        imageUrl = movie.posterUrl.toString(),
                         rating = movie.rating
                     )
                 },
@@ -333,14 +332,16 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadMoviePeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST }.take(10)
-        val crew = people.filter { it.type == PersonType.CREW }.take(10)
+    private fun loadMoviePeopleSuccess(mediaMembers: MediaMemberRepository.MediaMembers) {
+        val cast = mediaMembers.cast.take(10)
+        val crew = mediaMembers.crew.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
+        val mappedCast = cast.map { it.toCastUi() }
+
         updateState {
             it.copy(
                 isLoadingCast = false,
-                cast = cast.map { cast -> cast.toCastUi() },
+                cast = mappedCast,
                 crew = mappedCrew.groupByRole()
             )
         }

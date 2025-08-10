@@ -46,7 +46,7 @@ fun PosterItemVertically(
             contentAlignment = Alignment.Center
         ) {
             SafeIslamicImage(
-                imageUrl = poster.imageUri,
+                imageUrl = poster.imageUrl,
                 contentDescription = poster.name,
                 modifier = Modifier
                     .fillMaxSize(),
@@ -95,7 +95,7 @@ private fun Preview() {
             poster = Poster(
                 id = 1,
                 name = "The Flash",
-                imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
+                imageUrl = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                 rating = 0f,
             ),
             modifier = Modifier.width(156.dp)

@@ -39,7 +39,7 @@ fun Series.toPosterUi(genres: List<Genre> = emptyList()): Poster {
         id = id,
         name = name,
         genres = genres.joinToString(", ") { it.title },
-        imageUri = posterUrl,
+        imageUrl = posterUrl,
         rating = rating,
         date = releaseYear,
         mediaTypeOfPoster = "series"
@@ -56,7 +56,7 @@ fun Movie.toPosterUi(genres: List<Genre> = emptyList()): Poster {
         id = id,
         name = title,
         genres = genres.joinToString(", ") { it.title },
-        imageUri = posterUrl.orEmpty(),
+        imageUrl = posterUrl.orEmpty(),
         rating = rating,
         date = releaseYear.toString(),
         mediaTypeOfPoster = "movie"
@@ -68,7 +68,7 @@ fun Poster.toHistoryUiModel(): HistoryUiModel {
     return HistoryUiModel(
         id = id,
         title = name,
-        posterUrl = imageUri,
+        posterUrl = imageUrl,
         rating = rating,
         mediaType = if (mediaTypeOfPoster == "movie") MediaType.MOVIE else MediaType.SERIES
     )

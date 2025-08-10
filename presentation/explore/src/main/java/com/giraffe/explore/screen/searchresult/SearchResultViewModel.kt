@@ -12,11 +12,11 @@ import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.BasePagingSource
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
@@ -150,8 +150,8 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    private fun onGetActorsSuccess(actorsFlow: Flow<PagingData<Person>>) {
-        actorsFlow.map { actors -> actors.map(Person::toPoster) }.let { posters ->
+    private fun onGetActorsSuccess(actorsFlow: Flow<PagingData<CastMember>>) {
+        actorsFlow.map { actors -> actors.map(CastMember::toPoster) }.let { posters ->
             updateState {
                 it.copy(
                     actorsPosters = posters,

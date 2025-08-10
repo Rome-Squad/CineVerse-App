@@ -1,7 +1,8 @@
 package com.giraffe.media.person.usecase
 
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -11,7 +12,7 @@ import kotlin.test.Test
 
 class GetPeopleByMovieIdUseCaseTest {
 
-    private lateinit var repository: PersonRepository
+    private lateinit var repository: MediaMemberRepository
     private lateinit var getPeopleByMovieIdUseCase: GetPeopleByMovieIdUseCase
 
     private val expectedPeople = listOf(
@@ -39,7 +40,7 @@ class GetPeopleByMovieIdUseCaseTest {
     fun `should return list of people when repository returns people for movieId`() = runTest {
         // Given
         val movieId = 123
-        coEvery { repository.getPeopleByMovieId(movieId) } returns expectedPeople
+        coEvery { repository.getMediaMembersByMovieId(movieId) } returns expectedPeople
 
         // When
         val result = getPeopleByMovieIdUseCase(movieId)

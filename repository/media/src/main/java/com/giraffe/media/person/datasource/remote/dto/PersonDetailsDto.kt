@@ -17,7 +17,7 @@ data class PersonDetailsDto(
     @SerialName("imdb_id")
     val imdbId: String?,
     @SerialName("known_for_department")
-    val knownForDepartment: String,
+    val department: String,
     @SerialName("name")
     val name: String,
     @SerialName("place_of_birth")

@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.details.R
-import com.giraffe.media.person.entity.PersonSocialMediaLinks
+import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 
 data class SocialMediaUi(
     val platform: SocialMediaPlatform,
@@ -29,7 +29,7 @@ fun SocialMediaPlatform.getIcon(): Painter {
     }
 }
 
-fun PersonSocialMediaLinks.toUiState(): List<SocialMediaUi> {
+fun SocialMediaLinks.toUiState(): List<SocialMediaUi> {
     val socialMediaUiList: MutableList<SocialMediaUi> = mutableListOf()
     youtubeLink?.let { url ->
         socialMediaUiList.add(

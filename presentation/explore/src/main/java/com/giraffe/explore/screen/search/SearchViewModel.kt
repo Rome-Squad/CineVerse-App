@@ -7,10 +7,10 @@ import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
+import com.giraffe.media.mediaMember.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase

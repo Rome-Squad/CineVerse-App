@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import com.giraffe.designsystem.composable.Progress
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,8 +29,8 @@ import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.profile.R
-import com.giraffe.profile.components.SwipableItem
 import com.giraffe.profile.components.DeleteButton
+import com.giraffe.profile.components.SwipableItem
 
 @Composable
 fun HistoryScreen(
@@ -113,7 +112,8 @@ fun HistoryContent(
 
         if (state.mediaList.isEmpty() && state.isLoading.not()) {
                 MessageInfoBox(
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier
+                        .align(Alignment.Center)
                         .padding(60.dp)
                     ,
                     title = stringResource(R.string.no_history_yet),
@@ -210,7 +210,7 @@ fun HistoryContentPreview() {
                 Poster(
                     id = 1,
                     name = "Movie 1",
-                    imageUri = "https://example.com/movie1.jpg",
+                    imageUrl = "https://example.com/movie1.jpg",
                     rating = 2f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
@@ -218,7 +218,7 @@ fun HistoryContentPreview() {
                 Poster(
                     id = 2,
                     name = "Movie 2",
-                    imageUri = "https://example.com/movie2.jpg",
+                    imageUrl = "https://example.com/movie2.jpg",
                     rating = 3f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
@@ -226,7 +226,7 @@ fun HistoryContentPreview() {
                 Poster(
                     id = 3,
                     name = "Movie 1",
-                    imageUri = "https://example.com/movie1.jpg",
+                    imageUrl = "https://example.com/movie1.jpg",
                     rating = 2f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"
@@ -234,7 +234,7 @@ fun HistoryContentPreview() {
                 Poster(
                     id = 4,
                     name = "Movie 2",
-                    imageUri = "https://example.com/movie2.jpg",
+                    imageUrl = "https://example.com/movie2.jpg",
                     rating = 3f, mediaTypeOfPoster = "Movie",
                     genres = "Actions",
                     date = "2023-10-01"

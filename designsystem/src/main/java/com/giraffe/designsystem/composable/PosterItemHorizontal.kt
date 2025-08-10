@@ -47,7 +47,7 @@ fun PosterItemHorizontal(
     ) {
 
         SafeIslamicImage(
-            imageUrl = movie.imageUri,
+            imageUrl = movie.imageUrl,
             contentDescription = movie.name,
             hasSensitiveText = false,
             modifier = Modifier
@@ -156,7 +156,7 @@ private fun Preview() {
             movie = Poster(
                 id = 1,
                 name = "The Flash",
-                imageUri = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
+                imageUrl = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                 rating = 7.5f,
                 genres = "Drama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, Thriller",
                 time = "2h 32m",

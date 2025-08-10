@@ -13,9 +13,8 @@ import com.giraffe.details.models.toReviewUI
 import com.giraffe.details.screens.seriesdetails.screen.SeriesDetailsRoute
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetPeopleBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
@@ -279,13 +278,16 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadSeriesPeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST }.take(10)
-        val crew = people.filter { it.type == PersonType.CREW }.take(10)
+    private fun loadSeriesPeopleSuccess(mediaMembers: MediaMemberRepository.MediaMembers) {
+        val cast = mediaMembers.cast.take(10)
+        val crew = mediaMembers.crew.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
+        val mappedCast = cast.map { it.toCastUi() }
+
+
         updateState {
             it.copy(
-                cast = cast.map { it.toCastUi() },
+                cast = mappedCast,
                 crew = mappedCrew.groupByRole()
             )
         }
@@ -308,7 +310,7 @@ class SeriesDetailsViewModel @Inject constructor(
                     Poster(
                         id = it.id,
                         name = it.name,
-                        imageUri = it.posterUrl,
+                        imageUrl = it.posterUrl,
                         rating = it.rating
                     )
                 },

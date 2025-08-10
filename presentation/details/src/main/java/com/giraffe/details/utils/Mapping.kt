@@ -6,7 +6,7 @@ import com.giraffe.media.person.entity.PersonCredit
 fun PersonCredit.toPoster() = Poster(
     id = id,
     name = title,
-    imageUri = posterPath.toString(),
+    imageUrl = posterPath.toString(),
     rating = voteAverage.toFloat(),
     date = releaseYear,
     mediaTypeOfPoster = mediaType

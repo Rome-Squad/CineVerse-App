@@ -3,7 +3,7 @@ package com.giraffe.details.screens.gallery
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.details.base.BaseViewModel
-import com.giraffe.media.person.usecase.GetPersonImagesUseCase
+import com.giraffe.media.mediaMember.usecase.GetPersonImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

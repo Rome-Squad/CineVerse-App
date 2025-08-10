@@ -1,6 +1,6 @@
 package com.giraffe.details.models
 
-import com.giraffe.media.person.entity.Person
+import com.giraffe.media.mediaMember.entity.CastMember
 
 data class CastUi(
     val id: Int = 0,
@@ -9,7 +9,7 @@ data class CastUi(
     val urlImage : String? = ""
 )
 
-fun Person.toCastUi() : CastUi{
+fun CastMember.toCastUi(): CastUi {
     return CastUi(
         id = id,
         name = name,

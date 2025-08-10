@@ -1,0 +1,156 @@
+package com.giraffe.media.person
+
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.entity.CrewMember
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
+import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheType
+import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
+import com.giraffe.media.person.datasource.remote.dto.CastDto
+import com.giraffe.media.person.datasource.remote.dto.CreditsDto
+import com.giraffe.media.person.datasource.remote.dto.CrewDto
+import com.giraffe.media.person.datasource.remote.dto.MediaMemberDto
+import com.giraffe.media.person.datasource.remote.dto.ProfileDto
+import com.giraffe.media.person.mapper.mapToCast
+import com.giraffe.media.person.mapper.mapToCrew
+import com.giraffe.media.person.mapper.mapToMediaMembers
+import com.giraffe.media.person.mapper.toCacheDto
+import com.giraffe.media.person.mapper.toCastEntity
+import com.giraffe.media.person.mapper.toEntity
+import com.giraffe.media.person.mapper.toImageUrl
+import com.giraffe.media.utils.SafeCall
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+class MediaMemberRepositoryImpl @Inject constructor(
+    private val remoteDataSource: MediaMemberRemoteDataSource,
+    private val localDataSource: PersonLocalDataSource,
+) : MediaMemberRepository {
+
+    override suspend fun searchForActorByName(name: String, page: Int) = SafeCall {
+        remoteDataSource.searchForActorByName(name, page)
+            .map(MediaMemberDto::toCastEntity)
+    }
+
+    override suspend fun addCastToRecentViewed(castMember: CastMember) = SafeCall {
+        localDataSource.insertPerson(
+            castMember.toCacheDto().copy(isRecent = true)
+        )
+    }
+
+    override suspend fun addCrewToRecentViewed(crewMember: CrewMember) = SafeCall {
+        localDataSource.insertPerson(
+            crewMember.toCacheDto().copy(isRecent = true)
+        )
+    }
+
+    override suspend fun getRecentMediaMembers() = SafeCall {
+        localDataSource.getRecentPeople()
+            .groupBy { it.type }
+            .run {
+                mapToMediaMembers(this)
+            }
+    }
+
+    override suspend fun clearRecentViewed() = SafeCall {
+        localDataSource.clearRecentPeople()
+    }
+
+    override suspend fun getMediaMembersByMovieId(movieId: Int) = SafeCall {
+        localDataSource.getPeopleByMovieId(movieId)
+            .ifEmpty {
+                return@SafeCall remoteDataSource.getCreditsByMovieId(movieId)
+                    .run { storeMediaMembersInCache(this) }
+            }
+            .groupBy { it.type }
+            .run {
+                mapToMediaMembers(
+                    cast = this[PersonCacheType.CAST.name].orEmpty(),
+                    crew = this[PersonCacheType.CREW.name].orEmpty()
+                )
+            }
+    }
+
+    override suspend fun getMediaMembersBySeriesId(seriesId: Int) = SafeCall {
+        localDataSource.getPeopleBySeriesId(seriesId)
+            .ifEmpty {
+                return@SafeCall remoteDataSource.getCreditsBySeriesId(seriesId)
+                    .run { storeMediaMembersInCache(this) }
+            }
+            .groupBy { it.type }
+            .run {
+                mapToMediaMembers(
+                    cast = this[PersonCacheType.CAST.name].orEmpty(),
+                    crew = this[PersonCacheType.CREW.name].orEmpty()
+                )
+            }
+    }
+
+    override suspend fun getImagesUrlById(id: Int): List<String> = SafeCall {
+        remoteDataSource.getPersonImages(id).profiles.map(ProfileDto::toImageUrl)
+    }
+
+    override suspend fun getCastDetailsById(id: Int) = SafeCall {
+        withContext(Dispatchers.IO) {
+            val details = async { remoteDataSource.getPersonDetails(id) }
+            val images = async { remoteDataSource.getPersonImages(id) }
+            val socialMedia = async { remoteDataSource.getPersonSocialMedia(id) }
+
+            mapToCast(
+                personId = id,
+                details = details.await(),
+                // The first image is typically the profile image already included in person details.
+                // Dropping it prevents duplication in the image list.
+                images = images.await().profiles.drop(1),
+                socialMedia = socialMedia.await()
+            )
+        }
+    }
+
+    override suspend fun getCrewDetailsById(id: Int) = SafeCall {
+        withContext(Dispatchers.IO) {
+            val details = async { remoteDataSource.getPersonDetails(id) }
+            val images = async { remoteDataSource.getPersonImages(id) }
+            val socialMedia = async { remoteDataSource.getPersonSocialMedia(id) }
+
+            mapToCrew(
+                personId = id,
+                details = details.await(),
+                // The first image is typically the profile image already included in person details.
+                // Dropping it prevents duplication in the image list.
+                images = images.await().profiles.drop(1),
+                socialMedia = socialMedia.await()
+            )
+        }
+    }
+
+    private fun mapToMediaMembers(
+        map: Map<String, List<PersonCacheDto>>
+    ): MediaMemberRepository.MediaMembers {
+
+        return mapToMediaMembers(
+            cast = map[PersonCacheType.CAST.name].orEmpty(),
+            crew = map[PersonCacheType.CREW.name].orEmpty()
+        )
+    }
+
+    private suspend fun storeMediaMembersInCache(credits: CreditsDto) = SafeCall {
+        val crew = credits.crew.map(CrewDto::toEntity)
+        val cast = credits.cast.map(CastDto::toEntity)
+
+        MediaMemberRepository.MediaMembers(crew = crew, cast = cast)
+            .also {
+                localDataSource.insertPeople(
+                    cast.map(CastMember::toCacheDto) + crew.map(CrewMember::toCacheDto)
+                )
+            }
+    }
+
+//todo add this to movies and series !!
+//    override suspend fun getMoviesAndSeriesById(personId: Int) = SafeCall {
+//        remoteDataSource.getPersonMediaCredits(personId).map(PersonCreditDto::toEntity)
+//    }
+}

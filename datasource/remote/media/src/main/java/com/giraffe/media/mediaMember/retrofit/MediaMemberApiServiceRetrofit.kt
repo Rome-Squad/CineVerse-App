@@ -1,17 +1,17 @@
-package com.giraffe.media.person.retrofit
+package com.giraffe.media.mediaMember.retrofit
 
+import com.giraffe.media.mediaMember.response.MediaMemberCreditsResponse
+import com.giraffe.media.mediaMember.response.SearchForMediaMemberResponse
 import com.giraffe.media.person.datasource.remote.dto.CreditsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonProfileImageDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
-import com.giraffe.media.person.response.PersonCreditsResponse
-import com.giraffe.media.person.response.SearchPersonResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface PersonApiServiceRetrofit {
+interface MediaMemberApiServiceRetrofit {
 
     @GET(ENDPOINT_SEARCH_PERSON)
     suspend fun searchByName(
@@ -19,13 +19,13 @@ interface PersonApiServiceRetrofit {
         @Query(PARAM_INCLUDE_ADULT) includeAdult: Boolean = false,
         @Query(PARAM_LANGUAGE) language: String = "en-US",
         @Query(PARAM_PAGE) page: Int = 1
-    ): Response<SearchPersonResponse>
+    ): Response<SearchForMediaMemberResponse>
 
     @GET(ENDPOINT_PERSON_COMBINED_CREDITS)
     suspend fun getPersonMediaCredits(
         @Path(PATH_ID) personId: Int,
         @Query(PARAM_LANGUAGE) language: String = "en-US"
-    ): Response<PersonCreditsResponse>
+    ): Response<MediaMemberCreditsResponse>
 
     @GET(ENDPOINT_PERSON_EXTERNAL_IDS)
     suspend fun getPersonSocialMedia(

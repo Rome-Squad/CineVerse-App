@@ -1,7 +1,8 @@
 package com.giraffe.media.person.usecase
 
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetRecentPeopleUseCase
 import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -12,7 +13,7 @@ import kotlin.test.Test
 
 class GetRecentPeopleUseCaseTest {
     private lateinit var getRecentPeopleUseCase: GetRecentPeopleUseCase
-    private val repository: PersonRepository = mockk(relaxed = true)
+    private val repository: MediaMemberRepository = mockk(relaxed = true)
 
     private val dummyPerson = Person(id = 5, name = "Mohannad", role = "Acting")
     private val dummyPeople = listOf(dummyPerson, dummyPerson, dummyPerson)
@@ -25,7 +26,7 @@ class GetRecentPeopleUseCaseTest {
     @Test
     fun `should get recent people when call GetRecentPeopleUseCase`() = runTest {
         //given
-        coEvery { repository.getRecentPeople() } returns dummyPeople
+        coEvery { repository.getRecentMediaMembers() } returns dummyPeople
         //when
         val result = getRecentPeopleUseCase()
         //then
@@ -37,7 +38,7 @@ class GetRecentPeopleUseCaseTest {
     @Test
     fun `should not proceed when repository throw Exception`() = runTest {
         //given
-        coEvery { repository.getRecentPeople() } throws Exception()
+        coEvery { repository.getRecentMediaMembers() } throws Exception()
         //when && then
         assertThrows<Exception> { getRecentPeopleUseCase() }
     }

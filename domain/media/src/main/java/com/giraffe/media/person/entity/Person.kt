@@ -1,5 +1,7 @@
 package com.giraffe.media.person.entity
 
+import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
+
 data class Person(
     val id: Int,
     val name: String,
@@ -11,7 +13,7 @@ data class Person(
     val placeOfBirth: String? = null,
     val images: List<String> = emptyList(),
     val personCredits: List<PersonCredit> = emptyList(),
-    val socialMedia: PersonSocialMediaLinks? = null
+    val socialMedia: SocialMediaLinks? = null
 )
 
 enum class PersonType {

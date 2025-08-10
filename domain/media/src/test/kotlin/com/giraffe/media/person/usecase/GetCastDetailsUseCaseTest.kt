@@ -1,10 +1,11 @@
 package com.giraffe.media.person.usecase
 
 
+import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
-import com.giraffe.media.person.entity.PersonSocialMediaLinks
-import com.giraffe.media.person.repository.PersonRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -12,10 +13,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class GetPersonDetailsUseCaseTest {
+class GetCastDetailsUseCaseTest {
 
-    private lateinit var repository: PersonRepository
-    private lateinit var getPersonDetailsUseCase: GetPersonDetailsUseCase
+    private lateinit var repository: MediaMemberRepository
+    private lateinit var getCastDetailsUseCase: GetCastDetailsUseCase
 
     private val expectedPersonDetails = Person(
         id = 3895,
@@ -44,7 +45,7 @@ class GetPersonDetailsUseCaseTest {
                 mediaType = null
             )
         ),
-        socialMedia = PersonSocialMediaLinks(
+        socialMedia = SocialMediaLinks(
             facebookLink = "michaelcaine",
             instagramLink = "michaelcaine_official",
             youtubeLink = "UCV1n8z2d3a5b6c7d8e9f0g1h"
@@ -55,7 +56,7 @@ class GetPersonDetailsUseCaseTest {
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        getPersonDetailsUseCase = GetPersonDetailsUseCase(repository)
+        getCastDetailsUseCase = GetCastDetailsUseCase(repository)
     }
 
     @Test
@@ -65,7 +66,7 @@ class GetPersonDetailsUseCaseTest {
         coEvery { repository.getPersonDetails(personId) } returns expectedPersonDetails
 
         // When
-        val result = getPersonDetailsUseCase(personId)
+        val result = getCastDetailsUseCase(personId)
 
         // Then
         assertThat(result).isEqualTo(expectedPersonDetails)

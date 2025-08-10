@@ -1,14 +1,15 @@
-package com.giraffe.media.person.response
+package com.giraffe.media.mediaMember.response
 
-import com.giraffe.media.person.datasource.remote.dto.PersonDto
+import com.giraffe.media.person.datasource.remote.dto.MediaMemberDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchPersonResponse(
+data class SearchForMediaMemberResponse(
+    @SerialName("page")
     val page: Int,
     @SerialName("results")
-    val people: List<PersonDto>,
+    val mediaMembers: List<MediaMemberDto>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")

@@ -54,7 +54,7 @@ fun PosterHorizontal(
         with(sharedTransitionScope) {
 
             SafeIslamicImage(
-                imageUrl = poster.imageUri,
+                imageUrl = poster.imageUrl,
                 contentDescription = poster.name,
                 hasSensitiveText = false,
                 modifier = Modifier

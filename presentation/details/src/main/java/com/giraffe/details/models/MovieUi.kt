@@ -38,7 +38,7 @@ fun MovieUi.toPoster(): Poster {
     return Poster(
         id = id,
         name = title,
-        imageUri = posterUrl .orEmpty(),
+        imageUrl = posterUrl.orEmpty(),
         rating = rating,
         genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
         time = duration,
