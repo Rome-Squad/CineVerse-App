@@ -1,5 +1,6 @@
 package com.giraffe.match.composable
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -17,7 +18,7 @@ fun ReadOnlyBlurWrapper(
             .alpha(0.6f)
     } else Modifier
 
-    androidx.compose.foundation.layout.Box(modifier = modifier) {
+    Box(modifier = modifier) {
         content()
     }
 }
