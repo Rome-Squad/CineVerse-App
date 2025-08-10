@@ -5,7 +5,7 @@ import com.giraffe.media.entity.Review
 import com.giraffe.media.movie.entity.Movie
 import kotlinx.coroutines.flow.Flow
 
-interface MoviesRepository {
+interface MovieRepository {
 
     suspend fun addRating(movieId: Int, rating: Float)
 

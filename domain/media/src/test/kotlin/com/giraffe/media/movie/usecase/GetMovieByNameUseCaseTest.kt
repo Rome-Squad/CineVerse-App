@@ -1,7 +1,7 @@
 package com.giraffe.media.movie.usecase
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -10,10 +10,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class SearchMovieByNameUseCaseTest {
+class GetMovieByNameUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
-    private lateinit var useCase: SearchMovieByNameUseCase
+    private lateinit var repository: MovieRepository
+    private lateinit var useCase: GetMovieByNameUseCase
 
     private val movieAction = fakeMovie(
         id = 1,
@@ -33,7 +33,7 @@ class SearchMovieByNameUseCaseTest {
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        useCase = SearchMovieByNameUseCase(repository)
+        useCase = GetMovieByNameUseCase(repository)
     }
 
     @Test

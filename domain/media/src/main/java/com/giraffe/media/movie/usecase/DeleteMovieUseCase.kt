@@ -1,14 +1,11 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import jakarta.inject.Inject
 
 class DeleteMovieUseCase @Inject constructor(
-    private val moviesRepository: MoviesRepository
+    private val movieRepository: MovieRepository
 ) {
-
-    suspend operator fun invoke(movieId: Int) {
-        // Clear the movie from the local database
-        moviesRepository.deleteById(movieId)
-    }
+    suspend operator fun invoke(movieId: Int) =
+        movieRepository.deleteById(movieId)
 }

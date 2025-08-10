@@ -13,8 +13,8 @@ import com.giraffe.explore.util.BasePagingSource
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
 import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMovieByNameUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.SearchMovieByNameUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchResultViewModel @Inject constructor(
-    private val searchMovieByName: SearchMovieByNameUseCase,
+    private val getMovieByNameUseCase: GetMovieByNameUseCase,
     private val searchSeriesByName: GetSeriesByNameUseCase,
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
@@ -93,7 +93,7 @@ class SearchResultViewModel @Inject constructor(
             onError = ::onFail,
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource { page -> searchMovieByName(state.value.query, page) }
+                BasePagingSource { page -> getMovieByNameUseCase(state.value.query, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }

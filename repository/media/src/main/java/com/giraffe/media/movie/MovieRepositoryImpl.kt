@@ -14,7 +14,7 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.mapper.toCacheDto
 import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.utils.SafeCall
 import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.Dispatchers
@@ -24,10 +24,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MoviesRepositoryImpl @Inject constructor(
+class MovieRepositoryImpl @Inject constructor(
     private val movieLocal: MoviesLocalDataSource,
     private val movieRemote: MoviesRemoteDataSource,
-) : MoviesRepository {
+) : MovieRepository {
     override suspend fun addRating(movieId: Int, rating: Float) = SafeCall {
         val requestBody = RatingRequest(value = rating)
         movieRemote.addRating(movieId, requestBody)

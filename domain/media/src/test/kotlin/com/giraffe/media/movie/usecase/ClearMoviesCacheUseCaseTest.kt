@@ -1,6 +1,6 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 class ClearMoviesCacheUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
+    private lateinit var repository: MovieRepository
     private lateinit var useCase: ClearMoviesCacheUseCase
 
     @BeforeEach
@@ -21,7 +21,7 @@ class ClearMoviesCacheUseCaseTest {
     @Test
     fun `should call clearMovieCache form repository to clear all movies cache`() = runTest {
         // When
-        useCase.clearMovieCache()
+        useCase.clearAll()
 
         // Then
         coVerify(exactly = 1) {
@@ -33,7 +33,7 @@ class ClearMoviesCacheUseCaseTest {
     fun `should call clearMovieCache form repository to clear only recent viewed movies cache`() =
         runTest {
             // When
-            useCase.clearRecentlyViewedMovies()
+            useCase.clearRecentlyViewed()
 
             // Then
             coVerify(exactly = 1) {
@@ -45,7 +45,7 @@ class ClearMoviesCacheUseCaseTest {
     fun `should call clearMovieCache form repository to clear all movies cache exclude recent viewed`() =
         runTest {
             // When
-            useCase.clearMovieCacheWithOutRecentViewed()
+            useCase.clearExceptRecentlyViewed()
 
             // Then
             coVerify(exactly = 1) {

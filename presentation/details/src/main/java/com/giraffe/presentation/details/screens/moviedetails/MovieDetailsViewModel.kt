@@ -14,7 +14,7 @@ import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
@@ -35,7 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetails: GetMovieDetailsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    private val getRecommendedMovie: GetRecommendedMovieUseCase,
+    private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
@@ -190,7 +190,7 @@ class MovieDetailsViewModel @Inject constructor(
 
                 addRatingUseCase(
                     movieId = state.value.movie.id,
-                    ratingValue = state.value.currentRating.toFloat()
+                    rating = state.value.currentRating.toFloat()
                 )
             } else {
                 updateState { it.copy(isVisibleLoginBottomSheet = true) }
@@ -299,7 +299,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadRecommendedMovieSuccess,
             onError = ::loadRecommendedMovieError
         ) {
-            getRecommendedMovie(movieId = movieId, page = 1)
+            getRecommendedMovies(movieId = movieId, page = 1)
         }
     }
 
@@ -358,7 +358,7 @@ class MovieDetailsViewModel @Inject constructor(
         ) {
             getMovieReviewsUseCase(
                 movieId = movieId,
-                pageNumber = 1
+                page = 1
             )
         }
     }

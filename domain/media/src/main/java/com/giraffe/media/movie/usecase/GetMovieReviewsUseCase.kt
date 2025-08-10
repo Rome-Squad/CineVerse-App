@@ -1,13 +1,12 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.entity.Review
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import javax.inject.Inject
 
 class GetMovieReviewsUseCase @Inject constructor(
-    private val repository: MoviesRepository
+    private val movieRepository: MovieRepository
 ) {
-    suspend operator fun invoke(movieId: Int, pageNumber: Int): List<Review> {
-        return repository.getReviews(movieId, pageNumber)
-    }
+    suspend operator fun invoke(movieId: Int, page: Int) =
+        movieRepository.getReviews(movieId = movieId, page = page)
+
 }

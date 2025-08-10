@@ -10,7 +10,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.model.toMovieUi
@@ -26,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RecommendedMoviesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getRecommendedMovies: GetRecommendedMovieUseCase,
+    private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase
 ) : ViewModel(), RecommendedInteractionListener {
 

@@ -1,6 +1,6 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -11,13 +11,13 @@ import kotlin.test.Test
 
 class GetRecommendedMovieUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
-    private lateinit var getRecommendedMovieUseCase: GetRecommendedMovieUseCase
+    private lateinit var repository: MovieRepository
+    private lateinit var getRecommendedMoviesUseCase: GetRecommendedMoviesUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        getRecommendedMovieUseCase = GetRecommendedMovieUseCase(repository)
+        getRecommendedMoviesUseCase = GetRecommendedMoviesUseCase(repository)
     }
 
     @Test
@@ -30,7 +30,7 @@ class GetRecommendedMovieUseCaseTest {
             coEvery { repository.getRecommended(movieId, page, limit) } returns emptyList()
 
             // when
-            getRecommendedMovieUseCase(movieId, page, limit)
+            getRecommendedMoviesUseCase(movieId, page, limit)
 
             // then
             coVerify(exactly = 1) { repository.getRecommended(movieId, page, limit) }
@@ -49,7 +49,7 @@ class GetRecommendedMovieUseCaseTest {
         coEvery { repository.getRecommended(movieId, page, limit) } returns expectedMovies
 
         // when
-        val result = getRecommendedMovieUseCase(movieId, page, limit)
+        val result = getRecommendedMoviesUseCase(movieId, page, limit)
 
         // then
         assertThat(result).isEqualTo(expectedMovies)
