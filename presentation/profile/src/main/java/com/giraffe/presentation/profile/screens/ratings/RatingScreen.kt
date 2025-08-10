@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.ratings
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +21,7 @@ import com.giraffe.presentation.profile.R
 import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.screens.ratings.components.RatedItem
 import com.giraffe.presentation.profile.utils.EffectListener
+import com.giraffe.presentation.profile.utils.showToast
 import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
@@ -38,16 +38,9 @@ fun RatingScreen(
     ) { effect ->
         when (effect) {
             RatingEffect.NavigateBack -> navigateBack()
-
             is RatingEffect.NavigateToMovieDetails -> navigateToMovieDetails(effect.movieId)
-
             is RatingEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(effect.seriesId)
-
-            is RatingEffect.ShowError -> Toast.makeText(
-                context,
-                context.getString(effect.error.toStringResource()),
-                Toast.LENGTH_SHORT
-            ).show()
+            is RatingEffect.ShowError -> context.showToast(effect.error.toStringResource())
         }
     }
     RatingContent(

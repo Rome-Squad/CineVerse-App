@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.history
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +28,7 @@ import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.components.DeleteButton
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.utils.EffectListener
+import com.giraffe.presentation.profile.utils.showToast
 import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
@@ -47,14 +47,10 @@ fun HistoryScreen(
         when (effect) {
             is HistoryEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
             is HistoryEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
-            is HistoryEffect.NavigateToExploreScreen -> navigateToExploreScreen()
+            HistoryEffect.NavigateToExploreScreen -> navigateToExploreScreen()
             is HistoryEffect.NavigateToProfileScreen -> onBackClicked()
-            is HistoryEffect.NavigateToBack -> onBackClicked()
-            is HistoryEffect.ShowError -> Toast.makeText(
-                context,
-                context.getString(effect.error.toStringResource()),
-                Toast.LENGTH_SHORT
-            ).show()
+            HistoryEffect.NavigateBack -> onBackClicked()
+            is HistoryEffect.ShowError -> context.showToast(effect.error.toStringResource())
         }
     }
     HistoryContent(

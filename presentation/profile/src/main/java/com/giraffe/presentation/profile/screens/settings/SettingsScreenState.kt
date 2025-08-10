@@ -1,6 +1,6 @@
 package com.giraffe.presentation.profile.screens.settings
 
-import com.giraffe.presentation.profile.model.UserUiModel
+import com.giraffe.presentation.profile.model.UserUi
 import com.giraffe.presentation.profile.utils.Language
 import com.giraffe.user.entity.ContentPreference
 
@@ -9,7 +9,7 @@ data class SettingsScreenState(
     val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
-    val user: UserUiModel = UserUiModel(),
+    val user: UserUi = UserUi(),
     val isDarkMode: Boolean = false,
     val currentLanguage: Language = Language.ENGLISH,
     val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,

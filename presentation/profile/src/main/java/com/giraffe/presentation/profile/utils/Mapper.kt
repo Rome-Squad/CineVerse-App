@@ -5,13 +5,13 @@ import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
-import com.giraffe.presentation.profile.model.CollectionUiModel
+import com.giraffe.presentation.profile.model.CollectionUi
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.model.SwipeablePoster
-import com.giraffe.presentation.profile.model.UserUiModel
+import com.giraffe.presentation.profile.model.UserUi
 import com.giraffe.user.entity.User
 
-fun User.toUi() = UserUiModel(
+fun User.toUi() = UserUi(
     name = this.displayName,
     username = this.username,
     imageUrl = this.avatarUrl ?: ""
@@ -47,14 +47,14 @@ fun Movie.toPoster(genres: List<Genre> = emptyList()) = Poster(
     mediaTypeOfPoster = "movie"
 )
 
-fun Collection.toUi() = CollectionUiModel(
+fun Collection.toUi() = CollectionUi(
     id = id,
     name = name,
     itemCount = itemsCount,
     description = description
 )
 
-fun CollectionUiModel.toEntity() = Collection(
+fun CollectionUi.toEntity() = Collection(
     id = id,
     name = name,
     itemsCount = itemCount,

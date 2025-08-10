@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.settings
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +33,7 @@ import com.giraffe.presentation.profile.screens.settings.components.ProfileShort
 import com.giraffe.presentation.profile.screens.settings.components.SettingsSection
 import com.giraffe.presentation.profile.screens.settings.components.UserProfileSection
 import com.giraffe.presentation.profile.utils.EffectListener
+import com.giraffe.presentation.profile.utils.showToast
 import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
@@ -55,11 +55,7 @@ fun SettingsScreen(
                 SettingsEffect.NavigateToLogin -> onNavigateToLogin()
                 SettingsEffect.NavigateToMyCollections -> onNavigateToMyCollections()
                 SettingsEffect.NavigateToRatings -> onNavigateToRatings()
-                is SettingsEffect.ShowError -> Toast.makeText(
-                    context,
-                    context.getString(effect.error.toStringResource()),
-                    Toast.LENGTH_SHORT
-                ).show()
+                is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
     }

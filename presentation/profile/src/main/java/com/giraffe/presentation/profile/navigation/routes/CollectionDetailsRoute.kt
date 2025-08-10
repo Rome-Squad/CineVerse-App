@@ -3,7 +3,7 @@ package com.giraffe.presentation.profile.navigation.routes
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.presentation.profile.screens.collectiondetails.CollectionScreen
+import com.giraffe.presentation.profile.screens.collectiondetails.CollectionDetailsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -29,7 +29,7 @@ fun NavGraphBuilder.collectionRoute(
     navigateToMovieDetails: (Int) -> Unit
 ) {
     composable<CollectionRoute> {
-        CollectionScreen(
+        CollectionDetailsScreen(
             navigateBack = navigateBack,
             navigateToMovieDetails = navigateToMovieDetails
         )

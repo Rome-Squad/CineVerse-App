@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.settings
 
-import androidx.lifecycle.viewModelScope
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.Language
@@ -19,8 +18,6 @@ import com.giraffe.user.usecase.SetDarkModeUseCase
 import com.giraffe.user.usecase.SetLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 
 @HiltViewModel
@@ -58,22 +55,44 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun observeTheme() {
-        getDarkModeUseCase().onEach { isDark ->
-            updateState { it.copy(isDarkMode = isDark) }
-        }.launchIn(viewModelScope)
+        safeCollect(
+            onError = ::onFailure,
+            onEmitNewValue = ::onThemeChangedSuccess,
+            block = getDarkModeUseCase::invoke
+        )
+    }
+
+    fun onThemeChangedSuccess(isDark: Boolean) {
+        updateState { it.copy(isDarkMode = isDark) }
     }
 
     private fun observeLanguage() {
-        getLanguageUseCase().onEach { langCode ->
-            val language = Language.entries.firstOrNull { it.code == langCode } ?: Language.ARABIC
-            updateState { it.copy(currentLanguage = language) }
-        }.launchIn(viewModelScope)
+        safeCollect(
+            onError = ::onFailure,
+            onEmitNewValue = ::onLanguageChangedSuccess,
+            block = getLanguageUseCase::invoke
+        )
+    }
+
+    fun onLanguageChangedSuccess(langCode: String) {
+        updateState {
+            it.copy(
+                currentLanguage = Language.entries.firstOrNull { language -> language.code == langCode }
+                    ?: Language.ARABIC
+            )
+        }
     }
 
     private fun observeContentPreference() {
-        getContentPreferenceUseCase().onEach { preference ->
-            updateState { it.copy(contentPreference = preference) }
-        }.launchIn(viewModelScope)
+        safeCollect(
+            onError = ::onFailure,
+            onEmitNewValue = ::onContentPreferenceChangedSuccess,
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
+
+    fun onContentPreferenceChangedSuccess(preference: ContentPreference) {
+        updateState { it.copy(contentPreference = preference) }
     }
 
     private fun getUserProfile() {

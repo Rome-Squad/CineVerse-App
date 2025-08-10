@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.mycollections
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +33,7 @@ import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.screens.mycollections.components.CreateCollectionSection
 import com.giraffe.presentation.profile.screens.mycollections.components.NoCollectionsPlaceholder
 import com.giraffe.presentation.profile.utils.EffectListener
+import com.giraffe.presentation.profile.utils.showToast
 import com.giraffe.presentation.profile.utils.toStringResource
 import com.giraffe.presentation.profile.R as ProfileResources
 
@@ -50,17 +50,10 @@ fun MyCollectionsScreen(
         events = viewModel.effect
     ) { effect ->
         when (effect) {
-            MyCollectionsEffect.NavigateToBack -> navigateBack()
-
+            MyCollectionsEffect.NavigateBack -> navigateBack()
             is MyCollectionsEffect.NavigateToCollection -> navigateToCollection(effect.collection)
-
             MyCollectionsEffect.NavigateToExplore -> navigateToExploreScreen()
-
-            is MyCollectionsEffect.ShowError -> Toast.makeText(
-                context,
-                context.getString(effect.error.toStringResource()),
-                Toast.LENGTH_SHORT
-            ).show()
+            is MyCollectionsEffect.ShowError -> context.showToast(effect.error.toStringResource())
         }
     }
     MyCollectionsScreenContent(

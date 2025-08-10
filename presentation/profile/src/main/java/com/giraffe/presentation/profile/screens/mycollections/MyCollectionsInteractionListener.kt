@@ -1,9 +1,9 @@
 package com.giraffe.presentation.profile.screens.mycollections
 
-import com.giraffe.presentation.profile.model.CollectionUiModel
+import com.giraffe.presentation.profile.model.CollectionUi
 
 interface MyCollectionsInteractionListener {
-    fun onCollectionClick(collection: CollectionUiModel)
+    fun onCollectionClick(collection: CollectionUi)
     fun onNewCollectionNameChange(newCollectionName: String)
     fun onCreateNewCollectionClick()
     fun onConfirmCreateNewCollectionClick()

@@ -101,7 +101,7 @@ class HistoryViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        sendEffect(HistoryEffect.NavigateToBack)
+        sendEffect(HistoryEffect.NavigateBack)
     }
 
     override fun navigateToExploreScreen() {

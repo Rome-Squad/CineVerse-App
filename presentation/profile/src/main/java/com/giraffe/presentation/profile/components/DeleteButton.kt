@@ -11,9 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.profile.R
 
 @Composable
 fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) {
@@ -32,7 +34,7 @@ fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) 
         Icon(
             modifier = modifier.size(20.dp),
             painter = painterResource(Theme.icons.dueTone.trash),
-            contentDescription = "trash"
+            contentDescription = stringResource(R.string.trash)
         )
     }
 }

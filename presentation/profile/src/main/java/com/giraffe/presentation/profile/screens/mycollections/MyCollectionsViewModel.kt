@@ -5,7 +5,7 @@ import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.presentation.profile.base.BaseViewModel
-import com.giraffe.presentation.profile.model.CollectionUiModel
+import com.giraffe.presentation.profile.model.CollectionUi
 import com.giraffe.presentation.profile.utils.toEntity
 import com.giraffe.presentation.profile.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,7 +43,7 @@ class MyCollectionsViewModel @Inject constructor(
         }
     }
 
-    override fun onCollectionClick(collection: CollectionUiModel) {
+    override fun onCollectionClick(collection: CollectionUi) {
         sendEffect(MyCollectionsEffect.NavigateToCollection(collection.toEntity()))
     }
 
@@ -77,7 +77,7 @@ class MyCollectionsViewModel @Inject constructor(
             onError = ::onFailure
         ) {
             addCollectionUseCase(
-                collection = CollectionUiModel(
+                collection = CollectionUi(
                     name = state.value.newCollectionName
                 ).toEntity()
             )
@@ -107,6 +107,6 @@ class MyCollectionsViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        sendEffect(MyCollectionsEffect.NavigateToBack)
+        sendEffect(MyCollectionsEffect.NavigateBack)
     }
 }

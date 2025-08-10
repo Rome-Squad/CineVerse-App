@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.collectiondetails
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,10 +25,11 @@ import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.components.DeleteButton
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.utils.EffectListener
+import com.giraffe.presentation.profile.utils.showToast
 import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
-fun CollectionScreen(
+fun CollectionDetailsScreen(
     navigateBack: () -> Unit = {},
     navigateToMovieDetails: (Int) -> Unit = {},
     viewModel: CollectionDetailsViewModel = hiltViewModel(),
@@ -42,11 +42,7 @@ fun CollectionScreen(
         when (effect) {
             CollectionDetailsEffect.NavigateBack -> navigateBack()
             is CollectionDetailsEffect.NavigateToMovieDetails -> navigateToMovieDetails(effect.movieId)
-            is CollectionDetailsEffect.ShowError -> Toast.makeText(
-                context,
-                context.getString(effect.error.toStringResource()),
-                Toast.LENGTH_SHORT
-            ).show()
+            is CollectionDetailsEffect.ShowError -> context.showToast(effect.error.toStringResource())
         }
     }
     CollectionScreenContent(
