@@ -2,7 +2,7 @@ package com.giraffe.presentation.profile.utils
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.screens.history.HistoryUiModel
@@ -41,7 +41,7 @@ fun Series.toPosterUi(genres: List<Genre> = emptyList()): Poster {
         genres = genres.joinToString(", ") { it.title },
         imageUri = posterUrl,
         rating = rating,
-        date = releaseYear,
+        date = releaseYear.toString(),
         mediaTypeOfPoster = "series"
     )
 }

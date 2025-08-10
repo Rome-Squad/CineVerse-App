@@ -5,56 +5,42 @@ import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetUserUseCase
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GetRatedSeriesUseCaseTest {
 
-    private lateinit var repository: SeriesRepository
-    private lateinit var getUserUseCase: GetUserUseCase
-    private lateinit var useCase: GetRatedSeriesUseCase
+    private val repository: SeriesRepository = mockk(relaxed = true)
+    private val getUserUseCase: GetUserUseCase = mockk(relaxed = true)
+    private val useCase: GetRatedSeriesUseCase = GetRatedSeriesUseCase(repository, getUserUseCase)
 
-    @Before
-    fun setUp() {
-        repository = mockk()
-        getUserUseCase = mockk()
-        useCase = GetRatedSeriesUseCase(repository, getUserUseCase)
-    }
 
     @Test
     fun `invoke should return rated series for user`() = runTest {
-        // Given
-        val userId = 42
         val user = User(
-            id = userId,
+            id = 123,
             displayName = "",
             username = "",
             avatarUrl = "",
         )
-        val expectedResult = mapOf(
-            8.5f to createFakeSeries(
+        val expectedResult = listOf(
+            createFakeSeries(
                 id = 1,
                 name = "Breaking Bad"
             ),
-            9.0f to createFakeSeries(
+            createFakeSeries(
                 id = 2,
                 name = "Better Call Saul"
             )
         )
 
         coEvery { getUserUseCase() } returns user
-        coEvery { repository.getRatedSeries(userId) } returns expectedResult
+        coEvery { repository.getUserRated(user.id) } returns expectedResult
 
-        // When
         val result = useCase()
 
-        // Then
-        coVerify { getUserUseCase() }
-        coVerify { repository.getRatedSeries(userId) }
         assertEquals(expectedResult, result)
     }
 }

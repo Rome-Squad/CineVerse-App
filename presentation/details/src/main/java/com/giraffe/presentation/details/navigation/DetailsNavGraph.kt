@@ -3,22 +3,23 @@ package com.giraffe.presentation.details.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.giraffe.authentication.AuthenticationApi
-import com.giraffe.presentation.details.navigation.route.loginRoute
-import com.giraffe.presentation.details.screens.castCredit.castCreditRoute
-import com.giraffe.presentation.details.screens.castCredit.navigateToCastCredit
-import com.giraffe.presentation.details.screens.castDetails.castDetailsRoute
-import com.giraffe.presentation.details.screens.gallery.galleryRoute
-import com.giraffe.presentation.details.screens.gallery.navigateToGallery
-import com.giraffe.presentation.details.screens.moviedetails.screen.movieDetailsRoute
-import com.giraffe.presentation.details.screens.moviedetails.screen.navigateToMovieDetails
-import com.giraffe.presentation.details.screens.recommended.movie.recommendedMoviesRoute
-import com.giraffe.presentation.details.screens.recommended.series.recommendedSeriesRoute
-import com.giraffe.presentation.details.screens.reviewScreen.reviewRoute
-import com.giraffe.presentation.details.screens.seasons.screen.seasonsRoute
-import com.giraffe.presentation.details.screens.seriesdetails.screen.navigateToSeriesDetails
-import com.giraffe.presentation.details.screens.seriesdetails.screen.seriesDetailsRoute
-import com.giraffe.presentation.details.screens.videoPlayer.youTubePlayerRouteRoute
+import com.giraffe.api.authentication.AuthenticationApi
+import com.giraffe.presentation.details.navigation.routes.castCreditRoute
+import com.giraffe.presentation.details.navigation.routes.castDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.galleryRoute
+import com.giraffe.presentation.details.navigation.routes.loginRoute
+import com.giraffe.presentation.details.navigation.routes.movieDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.navigateToCastCredit
+import com.giraffe.presentation.details.navigation.routes.navigateToGallery
+import com.giraffe.presentation.details.navigation.routes.navigateToMovieDetails
+import com.giraffe.presentation.details.navigation.routes.navigateToSeriesDetails
+import com.giraffe.presentation.details.navigation.routes.recommendedMoviesRoute
+import com.giraffe.presentation.details.navigation.routes.recommendedSeriesRoute
+import com.giraffe.presentation.details.navigation.routes.reviewRoute
+import com.giraffe.presentation.details.navigation.routes.seasonsRoute
+import com.giraffe.presentation.details.navigation.routes.seriesDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.youTubePlayerRouteRoute
+
 
 @Composable
 internal fun DetailsNavGraph(

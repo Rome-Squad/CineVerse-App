@@ -5,18 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movies.usecase.GetPopularityMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.GetPopularityMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,

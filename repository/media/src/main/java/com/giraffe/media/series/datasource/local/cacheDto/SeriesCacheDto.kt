@@ -2,7 +2,6 @@ package com.giraffe.media.series.datasource.local.cacheDto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.giraffe.media.utils.DatabaseConstants.SEASON_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
 
@@ -16,29 +15,17 @@ data class SeriesCacheDto(
     val posterUrl: String,
     val backdropUrl: String,
     val genresID: List<Int>,
-    val releaseYear: String,
+    val releaseYear: String?,
     val isRecentViewed: Boolean = false,
     val recentViewedAt: Long? = System.currentTimeMillis(),
-    val popularity: Double = 0.0,
+    val popularity: Float? = null,
     val isPopularity: Boolean = false,
     val isRecentlyReleased: Boolean = false,
     val isRecommended: Boolean = false,
     val isTopRated: Boolean = false,
+    val userRating: Float? = null,
+    val youtubeVideoId: String?,
     val cachedAt: Long = System.currentTimeMillis()
-)
-
-
-@Entity(tableName = SEASON_TABLE)
-data class SeasonCacheDto(
-    @PrimaryKey val id: Int,
-    val seriesId: Int,
-    val name: String,
-    val overview: String,
-    val rate: Float,
-    val posterUrl: String,
-    val seasonNumber: Int,
-    val releaseYear: String,
-    val numberOfEpisodes: Int
 )
 
 
