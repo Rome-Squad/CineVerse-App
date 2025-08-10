@@ -20,7 +20,6 @@ import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.screen.discover.SearchTab
 import com.giraffe.presentation.explore.util.BasePagingSource
-import com.giraffe.presentation.explore.util.mapExceptionToStringRes
 import com.giraffe.presentation.explore.util.toPoster
 import com.giraffe.presentation.explore.util.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,7 +69,7 @@ class SearchResultViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        sendEffect(SearchResultEffect.OnBackClick)
+        sendEffect(SearchResultEffect.NavigateBack)
     }
 
     override fun onPosterClick(id: Int, searchTab: SearchTab) {
@@ -118,7 +117,6 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     moviesPosters = posters,
-                    errorMessageRes = null,
                     isNoInternet = false
                 )
             }
@@ -144,7 +142,6 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     seriesPosters = posters,
-                    errorMessageRes = null,
                     isNoInternet = false
                 )
             }
@@ -170,7 +167,6 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     actorsPosters = posters,
-                    errorMessageRes = null,
                     isNoInternet = false
                 )
             }
@@ -183,11 +179,10 @@ class SearchResultViewModel @Inject constructor(
     private fun onError(error: Throwable) {
         updateState {
             it.copy(
-                errorMessageRes = mapExceptionToStringRes(error),
                 isNoInternet = error is NoInternetException,
                 isLoading = false
             )
         }
-        sendEffect(SearchResultEffect.Error(error))
+        sendEffect(SearchResultEffect.ShowError(error))
     }
 }

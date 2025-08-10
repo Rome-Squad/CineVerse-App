@@ -13,5 +13,5 @@ interface SearchInteractionListener {
     fun onVoiceSearchFinished()
     fun onBackClick()
     fun onClickPoster(poster: Poster)
-    fun navigateToSearchResult(result: String)
+    fun onSearchClick(result: String)
 }

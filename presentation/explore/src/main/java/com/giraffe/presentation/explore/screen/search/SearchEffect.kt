@@ -1,8 +1,8 @@
 package com.giraffe.presentation.explore.screen.search
 
 sealed class SearchEffect {
-    data class Error(val error: Throwable) : SearchEffect()
-    object OnBackClick : SearchEffect()
+    data class ShowError(val error: Throwable) : SearchEffect()
+    object NavigateBack : SearchEffect()
     data class NavigateToMovieDetail(val movieId: Int) : SearchEffect()
     data class NavigateToSeriesDetail(val seriesId: Int) : SearchEffect()
     data class NavigateToPersonDetails(val personId: Int) : SearchEffect()

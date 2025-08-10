@@ -57,8 +57,8 @@ fun SearchScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is SearchEffect.Error -> {}
-                is SearchEffect.OnBackClick -> onBackClick()
+                is SearchEffect.ShowError -> {}
+                is SearchEffect.NavigateBack -> onBackClick()
                 is SearchEffect.NavigateToMovieDetail -> navigateToMovieDetails(effect.movieId)
                 is SearchEffect.NavigateToPersonDetails -> navigateToPersonDetails(effect.personId)
                 is SearchEffect.NavigateToSeriesDetail -> navigateToSeriesDetails(effect.seriesId)
@@ -168,7 +168,7 @@ private fun SearchContent(
                 focusRequester = focusRequester,
                 onEndIconClick = interactions::onPostfixIconClick,
                 onBackClick = interactions::onBackClick,
-                onSearch = interactions::navigateToSearchResult
+                onSearch = interactions::onSearchClick
             )
         }
 
@@ -182,7 +182,7 @@ private fun SearchContent(
             onKeywordClearClick = interactions::deleteKeyword,
             onKeywordsClick = {
                 interactions.onKeywordClick(it)
-                interactions.navigateToSearchResult(it)
+                interactions.onSearchClick(it)
             }
         )
 

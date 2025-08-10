@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 data class DiscoverScreenState(
-    val errorMessageRes: Int? = null,
     val selectedGenre: GenreUi? = null,
     val selectedMovieGenre: GenreUi? = null,
     val selectedSeriesGenre: GenreUi? = null,

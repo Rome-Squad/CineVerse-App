@@ -15,7 +15,6 @@ import com.giraffe.media.series.usecase.ClearRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.screen.search.SearchEffect.NavigateToMovieDetail
-import com.giraffe.presentation.explore.util.mapExceptionToStringRes
 import com.giraffe.presentation.explore.util.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -147,7 +146,7 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        sendEffect(SearchEffect.OnBackClick)
+        sendEffect(SearchEffect.NavigateBack)
     }
 
     override fun onClickPoster(poster: Poster) {
@@ -158,18 +157,17 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    override fun navigateToSearchResult(result: String) {
+    override fun onSearchClick(result: String) {
         sendEffect(SearchEffect.NavigateToSearchResult(result))
     }
 
     private fun onError(error: Throwable) {
         updateState {
             it.copy(
-                errorMessageRes = mapExceptionToStringRes(error),
                 isNoInternet = error is NoInternetException,
                 isLoading = false
             )
         }
-        sendEffect(SearchEffect.Error(error))
+        sendEffect(SearchEffect.ShowError(error))
     }
 }

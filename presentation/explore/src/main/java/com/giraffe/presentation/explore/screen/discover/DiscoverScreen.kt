@@ -51,7 +51,7 @@ fun DiscoverScreen(
                 is DiscoverEffect.NavigateToMovieDetails -> navigateToMovieDetails(effect.movieId)
                 is DiscoverEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(effect.seriesId)
                 is DiscoverEffect.NavigateToSearchScreen -> navigateToSearch()
-                is DiscoverEffect.Error -> {}
+                is DiscoverEffect.ShowError -> {}
             }
         }
 

@@ -19,7 +19,6 @@ import com.giraffe.presentation.explore.model.GenreUi
 import com.giraffe.presentation.explore.screen.discover.DiscoverEffect.NavigateToMovieDetails
 import com.giraffe.presentation.explore.screen.discover.DiscoverEffect.NavigateToSeriesDetails
 import com.giraffe.presentation.explore.util.BasePagingSource
-import com.giraffe.presentation.explore.util.mapExceptionToStringRes
 import com.giraffe.presentation.explore.util.toPoster
 import com.giraffe.presentation.explore.util.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -181,11 +180,10 @@ class DiscoverViewModel @Inject constructor(
     private fun onError(error: Throwable) {
         updateState {
             it.copy(
-                errorMessageRes = mapExceptionToStringRes(error),
                 isNoInternet = error is NoInternetException,
                 isLoading = false
             )
         }
-        sendEffect(DiscoverEffect.Error(error))
+        sendEffect(DiscoverEffect.ShowError(error))
     }
 }

@@ -53,11 +53,11 @@ fun SearchResultScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is SearchResultEffect.Error -> {}
+                is SearchResultEffect.ShowError -> {}
                 is SearchResultEffect.NavigateToCastDetails -> navigateToCastDetails(effect.personId)
                 is SearchResultEffect.NavigateToMovieDetail -> navigateToMovieDetails(effect.movieId)
                 is SearchResultEffect.NavigateToSeriesDetail -> navigateToSeriesDetails(effect.seriesId)
-                is SearchResultEffect.OnBackClick -> onBackClick()
+                is SearchResultEffect.NavigateBack -> onBackClick()
             }
         }
     }
