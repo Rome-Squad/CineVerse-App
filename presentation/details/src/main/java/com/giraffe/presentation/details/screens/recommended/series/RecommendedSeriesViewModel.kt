@@ -15,7 +15,7 @@ import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedSeriesRoute
-import com.giraffe.presentation.details.utils.toSeriesUi
+import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,26 +29,15 @@ class RecommendedSeriesViewModel @Inject constructor(
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<RecommendedSeriesScreenState, RecommendedSeriesEffect>(
-    RecommendedSeriesScreenState()
+    RecommendedSeriesScreenState(
+        seriesId = savedStateHandle.toRoute<RecommendedSeriesRoute>().seriesID,
+        seriesTitle = savedStateHandle.toRoute<RecommendedSeriesRoute>().titleSeries
+    )
 ),
     RecommendedInteractionListener {
 
     init {
-        val seriesId: Int = savedStateHandle.toRoute<RecommendedSeriesRoute>().seriesID
-        val title: String = savedStateHandle.toRoute<RecommendedSeriesRoute>().titleSeries
-
-        updateState {
-            it.copy(
-                seriesId = seriesId,
-                seriesTitle = title
-            )
-        }
-
         getSeriesGenres()
-
-        state.value.seriesId?.let {
-            getRecommendedSeries(it)
-        }
     }
 
     private fun getSeriesGenres() {
@@ -66,6 +55,10 @@ class RecommendedSeriesViewModel @Inject constructor(
                 isLoading = false,
                 seriesGenres = genres
             )
+        }
+
+        state.value.seriesId?.let {
+            getRecommendedSeries(it)
         }
     }
 
@@ -113,7 +106,7 @@ class RecommendedSeriesViewModel @Inject constructor(
 
     private fun onGetRecommendedSeriesSuccess(seriesFlow: Flow<PagingData<Series>>) {
         val seriesUiFlow = seriesFlow.map { pagingData ->
-            pagingData.map { it.toSeriesUi(state.value.seriesGenres) }
+            pagingData.map { it.toUi(state.value.seriesGenres) }
         }
 
         updateState {

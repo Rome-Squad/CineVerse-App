@@ -9,7 +9,7 @@ import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
 import com.giraffe.presentation.details.screens.castCredit.MediaType
-import com.giraffe.presentation.details.utils.toUiState
+import com.giraffe.presentation.details.utils.toSocialMediaUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,15 +18,15 @@ class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase,
     private val storeRecentSeriesUseCase: AddRecentPersonUseCase
-) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
+) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(
+    CastDetailsUiState(
+        actorId = savedStateHandle.toRoute<CastDetailsRoute>().id
+    )
+),
     CastDetailsInteractionListener {
 
     init {
-        val personId: Int = savedStateHandle.toRoute<CastDetailsRoute>().id
-
-        updateState { it.copy(actorId = personId) }
-
-        getPersonDetails(personId)
+        getPersonDetails(state.value.actorId)
     }
 
     private fun getPersonDetails(personId: Int) {
@@ -52,7 +52,7 @@ class CastDetailsViewModel @Inject constructor(
                 actorPlace = person.placeOfBirth.orEmpty(),
                 actorGalleryImageUrls = person.images,
                 biographyInfo = person.biography.orEmpty(),
-                socialMediaUiList = person.socialMedia?.toUiState() ?: emptyList(),
+                socialMediaUiList = person.socialMedia?.toSocialMediaUi() ?: emptyList(),
                 posters = person.personCredits.map { personCredit ->
                     Poster(
                         id = personCredit.id,
@@ -100,8 +100,10 @@ class CastDetailsViewModel @Inject constructor(
 
     override fun onPosterClick(mediaId: Int, mediaType: String) {
         when (mediaType) {
-            MediaType.MOVIE.value -> sendEffect(CastDetailsEffect.NavigateToMovieDetails(mediaId))
-            MediaType.TV.value -> sendEffect(CastDetailsEffect.NavigateToSeriesDetails(mediaId))
+            MediaType.MOVIE.value ->
+                sendEffect(CastDetailsEffect.NavigateToMovieDetails(mediaId))
+            MediaType.TV.value ->
+                sendEffect(CastDetailsEffect.NavigateToSeriesDetails(mediaId))
         }
     }
 

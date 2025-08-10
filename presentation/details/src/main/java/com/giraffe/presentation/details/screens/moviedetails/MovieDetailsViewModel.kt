@@ -19,12 +19,11 @@ import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
-import com.giraffe.presentation.details.utils.toMovieUi
-import com.giraffe.presentation.details.utils.toReviewUI
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
@@ -45,19 +44,17 @@ class MovieDetailsViewModel @Inject constructor(
     private val addCollectionUseCase: AddCollectionUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
-    MovieDetailsScreenState()
+    MovieDetailsScreenState(
+        movie = MovieUi(
+            id = savedStateHandle.toRoute<MovieDetailsRoute>().id
+        ),
+    )
 ), MovieDetailsInteractionListener {
 
     init {
-        val movieID = savedStateHandle.toRoute<MovieDetailsRoute>().id
-
-        updateState {
-            it.copy(
-                movie = it.movie.copy(id = movieID)
-            )
+        state.value.movie.id.let {
+            loadMovieDetailsScreen(it)
         }
-
-        loadMovieDetailsScreen(movieID)
     }
 
 
@@ -329,7 +326,7 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMovieDetailsSuccess(movie: Movie) {
         updateState {
             it.copy(
-                movie = movie.toMovieUi(),
+                movie = movie.toUi(),
                 isLoadingMovieDetails = false
             )
         }
@@ -443,7 +440,7 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoadingReviews = false,
-                movieReviews = reviews.map { review -> review.toReviewUI() }
+                movieReviews = reviews.map { review -> review.toUi() }
             )
         }
     }

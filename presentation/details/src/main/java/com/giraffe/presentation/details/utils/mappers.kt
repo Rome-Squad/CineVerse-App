@@ -4,7 +4,7 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.entity.PersonSocialMediaLinks
@@ -31,14 +31,12 @@ fun PersonCredit.toPoster() = Poster(
 )
 
 
-fun Person.toCastUi(): CastUi {
-    return CastUi(
-        id = id,
-        name = name,
-        role = role,
-        urlImage = imageUrl
-    )
-}
+fun Person.toCastUi() = CastUi(
+    id = id,
+    name = name,
+    role = role,
+    urlImage = imageUrl
+)
 
 
 fun Collection.toUi() = CollectionUi(
@@ -48,19 +46,18 @@ fun Collection.toUi() = CollectionUi(
 )
 
 
-fun Person.toCrewUi(): CrewUi {
-    return CrewUi(
-        name = name,
-        role = role
-    )
-}
+fun Person.toCrewUi() = CrewUi(
+    name = name,
+    role = role
+)
+
 
 fun List<CrewUi>.groupByRole(): Map<String, List<String>> {
     return this.groupBy { it.role }.mapValues { it.value.map { member -> member.name } }
 }
 
 
-fun Movie.toMovieUi(genres: List<Genre> = emptyList()) = MovieUi(
+fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     id = id,
     title = title,
     description = description,
@@ -75,55 +72,52 @@ fun Movie.toMovieUi(genres: List<Genre> = emptyList()) = MovieUi(
 
 )
 
-fun MovieUi.toPoster(): Poster {
-    return Poster(
-        id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
-        rating = rating,
-        genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
-        time = duration,
-        date = releaseYear
-    )
-}
+fun MovieUi.toPoster() = Poster(
+    id = id,
+    name = title,
+    imageUri = posterUrl.orEmpty(),
+    rating = rating,
+    genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
+    time = duration,
+    date = releaseYear
+)
 
 
-fun ReviewUI.toReviewEntity(): Review {
-    return Review(
-        id = id,
-        authorImageUrl = authorImageUrl,
-        authorName = authorName,
-        authorUserName = authorUserName,
-        content = content,
-        rating = rating,
-        createdAt = createdAt
-    )
-}
+fun ReviewUI.toEntity() = Review(
+    id = id,
+    authorImageUrl = authorImageUrl,
+    authorName = authorName,
+    authorUserName = authorUserName,
+    content = content,
+    rating = rating,
+    createdAt = createdAt
+)
 
-fun Review.toReviewUI(): ReviewUI {
-    return ReviewUI(
-        id = id,
-        authorImageUrl = authorImageUrl,
-        authorName = authorName,
-        authorUserName = authorUserName,
-        content = content,
-        rating = rating,
-        createdAt = createdAt
-    )
-}
+fun Review.toUi() = ReviewUI(
+    id = id,
+    authorImageUrl = authorImageUrl,
+    authorName = authorName,
+    authorUserName = authorUserName,
+    content = content,
+    rating = rating,
+    createdAt = createdAt
+)
 
-fun Season.toSeasonUi() = SeasonUi(
+
+fun Season.toUi() = SeasonUi(
     id = id,
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear,
+    releaseYear = releaseYear.let {
+        toString().toFormattedDate()
+    },
     seasonNumber = seasonNumber,
     episodeCount = episodeCount
 )
 
 
-fun Series.toSeriesUi(
+fun Series.toUi(
     genres: List<Genre> = emptyList()
 ) = SeriesUi(
     id = id,
@@ -131,9 +125,11 @@ fun Series.toSeriesUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear,
+    releaseYear = releaseYear.let {
+        toString().toFormattedDate()
+    },
     genres = genres.map { it.title },
-    youtubeVideoId = youtubeVideoId
+    youtubeVideoId = youtubeVideoId.orEmpty()
 )
 
 fun SeriesUi.toPoster(): Poster = Poster(
@@ -146,7 +142,7 @@ fun SeriesUi.toPoster(): Poster = Poster(
 )
 
 
-fun PersonSocialMediaLinks.toUiState(): List<SocialMediaUi> {
+fun PersonSocialMediaLinks.toSocialMediaUi(): List<SocialMediaUi> {
     val socialMediaUiList: MutableList<SocialMediaUi> = mutableListOf()
     youtubeLink?.let { url ->
         socialMediaUiList.add(

@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.navigation.routes
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.presentation.details.screens.recommended.movie.RecommendedMoviesScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,7 +18,7 @@ internal fun NavGraphBuilder.recommendedMoviesRoute(
     navigateToMovieDetails: (Int) -> Unit
 ) {
     composable<RecommendedMovieRoute> {
-        _root_ide_package_.com.giraffe.presentation.details.screens.recommended.movie.RecommendedMoviesScreen(
+        RecommendedMoviesScreen(
             onBackClick = onBackClick,
             navigateToMovieDetails = navigateToMovieDetails,
         )

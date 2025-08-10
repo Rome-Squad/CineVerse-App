@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.navigation.routes
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.presentation.details.screens.seriesdetails.SeriesDetailsScreen
 import kotlinx.serialization.Serializable
 
 
@@ -19,7 +20,7 @@ fun NavGraphBuilder.seriesDetailsRoute(
     onBackButtonClick: () -> Unit,
 ) {
     composable<SeriesDetailsRoute> { backStackEntry ->
-        _root_ide_package_.com.giraffe.presentation.details.screens.seriesdetails.SeriesDetailsScreen(
+        SeriesDetailsScreen(
             navigateToRecommendedSeries = navController::navigateToRecommendedSeries,
             navigateToCastDetails = navController::navigateToCastDetails,
             navigateToSeason = navController::navigateToSeasons,

@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.navigation.routes
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.presentation.details.screens.reviewScreen.ReviewsScreen
 import kotlinx.serialization.Serializable
 
 
@@ -14,7 +15,7 @@ fun NavController.navigateToReviews(movieId: Int? = null, seriesId: Int? = null)
 }
 fun NavGraphBuilder.reviewRoute(navController: NavController) {
     composable<ReviewRoute> { backStackEntry ->
-        _root_ide_package_.com.giraffe.presentation.details.screens.reviewScreen.ReviewsScreen(
+        ReviewsScreen(
             navController = navController
         )
     }

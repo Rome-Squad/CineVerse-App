@@ -2,7 +2,8 @@ package com.giraffe.presentation.details.screens.castCredit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
@@ -18,21 +19,18 @@ class CastCreditViewModel @Inject constructor(
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(initialState = CastCreditScreenState()),
-    CastCreditInteractionListener {
+) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(
+    CastCreditScreenState(
+        castId = savedStateHandle.toRoute<CastCreditRoute>().castID,
+        actorName = savedStateHandle.toRoute<CastCreditRoute>().actorName
+    )
+), CastCreditInteractionListener {
 
     init {
-        val castId = savedStateHandle.toRoute<CastCreditRoute>().castID
-        val actorName = savedStateHandle.toRoute<CastCreditRoute>().actorName
-
-        updateState {
-            it.copy(
-                castId = castId,
-                actorName = actorName
-            )
+        state.value.castId?.let {
+            loadCastCredit(it)
         }
 
-        loadCastCredit(castId)
     }
 
     private fun loadCastCredit(castId: Int) {
@@ -49,14 +47,7 @@ class CastCreditViewModel @Inject constructor(
     private fun loadCastCreditSuccess(personCredits: List<PersonCredit>) {
         safeExecute(
             onError = ::loadCastCreditError,
-            onSuccess = { posters ->
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        posters = posters,
-                    )
-                }
-            }
+            onSuccess = ::updateCastCreditPosters
         ) {
 
             personCredits.map { personCredit ->
@@ -72,6 +63,16 @@ class CastCreditViewModel @Inject constructor(
             }
 
         }
+    }
+
+    private fun updateCastCreditPosters(posters: List<Poster>) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                posters = posters,
+            )
+        }
+
     }
 
 

@@ -12,19 +12,14 @@ import javax.inject.Inject
 class GalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     val getPersonImagesUseCase: GetPersonImagesUseCase
-) : BaseViewModel<GalleryUiState, Any>(GalleryUiState()) {
+) : BaseViewModel<GalleryUiState, Any>(
+    GalleryUiState(
+        actorId = savedStateHandle.toRoute<GalleryRoute>().personId,
+        actorName = savedStateHandle.toRoute<GalleryRoute>().actorName,
+    )
+) {
 
     init {
-        val personId = savedStateHandle.toRoute<GalleryRoute>().personId
-        val actorName = savedStateHandle.toRoute<GalleryRoute>().actorName
-
-        updateState {
-            it.copy(
-                actorId = personId,
-                actorName = actorName
-            )
-        }
-
         getPersonImages()
     }
 
@@ -37,11 +32,9 @@ class GalleryViewModel @Inject constructor(
             onSuccess = ::getPersonImagesSuccess,
             onError = ::getPersonImagesError
         ) {
-            var images = emptyList<String>()
             state.value.actorId?.let { personId ->
-                images = getPersonImagesUseCase(personId)
-            }
-            images
+                getPersonImagesUseCase(personId)
+            } ?: emptyList()
         }
     }
 

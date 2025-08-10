@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.giraffe.presentation.details.screens.videoPlayer.YouTubePlayerScreen
 import kotlinx.serialization.Serializable
 
 
@@ -20,7 +21,7 @@ fun NavGraphBuilder.youTubePlayerRouteRoute(
 ) {
     composable<YouTubePlayerRoute> {
         val youtubeVideoId = it.toRoute<YouTubePlayerRoute>().youtubeVideoId
-        _root_ide_package_.com.giraffe.presentation.details.screens.videoPlayer.YouTubePlayerScreen(
+        YouTubePlayerScreen(
             youtubeVideoId = youtubeVideoId,
             onBackClick = onBackClick
         )

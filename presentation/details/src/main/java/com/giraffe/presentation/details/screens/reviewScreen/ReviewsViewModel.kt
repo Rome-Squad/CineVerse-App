@@ -14,7 +14,7 @@ import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.ReviewRoute
-import com.giraffe.presentation.details.utils.toReviewUI
+import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -25,19 +25,14 @@ class ReviewsViewModel @Inject constructor(
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getSeriesReviewsUseCase: GetSeriesReviewsUseCase,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<ReviewsScreenState, ReviewEffect>(initialState = ReviewsScreenState()) {
+) : BaseViewModel<ReviewsScreenState, ReviewEffect>(
+    initialState = ReviewsScreenState(
+        movieId = savedStateHandle.toRoute<ReviewRoute>().movieId,
+        seriesId = savedStateHandle.toRoute<ReviewRoute>().seriesId
+    )
+) {
 
     init {
-        val route = savedStateHandle.toRoute<ReviewRoute>()
-
-        updateState {
-            it.copy(
-                isLoading = true,
-                movieId = route.movieId,
-                seriesId = route.seriesId
-            )
-        }
-
         state.value.movieId?.let {
             fetchMovieReviews(it)
         }
@@ -97,7 +92,7 @@ class ReviewsViewModel @Inject constructor(
 
     private fun onFetchReviewsSuccess(reviews: Flow<PagingData<Review>>) {
         val reviewsUiFlow = reviews.map { pagingData ->
-            pagingData.map { it.toReviewUI() }
+            pagingData.map { it.toUi() }
         }
         updateState {
             it.copy(

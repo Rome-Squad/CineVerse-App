@@ -12,20 +12,18 @@ import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.media.series.usecase.AddSeriesRatingUseCase
-import com.giraffe.media.series.usecase.GetLastSeasonsUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.model.SeriesUi
 import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
-import com.giraffe.presentation.details.utils.toReviewUI
-import com.giraffe.presentation.details.utils.toSeasonUi
-import com.giraffe.presentation.details.utils.toSeriesUi
+import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,23 +42,19 @@ class SeriesDetailsViewModel @Inject constructor(
     private val addRatingUseCase: AddSeriesRatingUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
-    SeriesDetailsScreenState()
+    SeriesDetailsScreenState(
+        seriesDetails = SeriesUi(
+            id = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
+        )
+    )
 ), SeriesDetailsInteractionListener {
 
 
     init {
-        val seriesID = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
+        loadSeriesDetailsScreen(state.value.seriesDetails.id)
 
-        updateState {
-            it.copy(
-                seriesDetails = it.seriesDetails.copy(
-                    id = seriesID
-                )
-            )
-        }
-
-        loadSeriesDetailsScreen(seriesID)
     }
+
 
     private fun loadSeriesDetailsScreen(seriesID: Int = state.value.seriesDetails.id) {
         updateState {
@@ -147,8 +141,8 @@ class SeriesDetailsViewModel @Inject constructor(
             if (isLoggedInUseCase()) {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
                 addRatingUseCase(
-                    serisId = state.value.seriesDetails.id,
-                    ratingValue = state.value.currentRating.toFloat()
+                    seriesId = state.value.seriesDetails.id,
+                    rating = state.value.currentRating.toFloat()
                 )
             } else {
                 updateState { it.copy(isVisibleLoginBottomSheet = true) }
@@ -202,7 +196,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesDetailsSuccess(series: Series) {
         updateState {
             it.copy(
-                seriesDetails = series.toSeriesUi(),
+                seriesDetails = series.toUi(),
                 isLoading = false
             )
         }
@@ -273,7 +267,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
-                seasons = season.map { season -> season.toSeasonUi() },
+                seasons = season.map { season -> season.toUi() },
                 isLoading = false
             )
         }
@@ -390,7 +384,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
-                seriesReviews = reviews.map { review -> review.toReviewUI() }
+                seriesReviews = reviews.map { review -> review.toUi() }
             )
         }
     }
