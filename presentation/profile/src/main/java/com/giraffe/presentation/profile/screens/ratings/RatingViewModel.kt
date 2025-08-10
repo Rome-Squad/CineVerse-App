@@ -2,6 +2,7 @@ package com.giraffe.presentation.profile.screens.ratings
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.DeleteMovieRatingUseCase
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
@@ -45,7 +46,7 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
-        updateState { it.copy(isLoading = false, movieGenres = genres) }
+        updateState { it.copy(isLoading = false, isNoInternet = false, movieGenres = genres) }
         safeExecute(
             onSuccess = ::onGetRatedMoviesSuccess,
             onError = ::onFailure,
@@ -54,12 +55,12 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
         sendEffect(RatingEffect.ShowError(error))
     }
 
     private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
-        updateState { it.copy(isLoading = false, seriesGenres = genres) }
+        updateState { it.copy(isLoading = false, isNoInternet = false, seriesGenres = genres) }
         safeExecute(
             onSuccess = ::onGetRatedSeriesSuccess,
             onError = ::onFailure,
@@ -70,14 +71,26 @@ class RatingViewModel @Inject constructor(
     private fun onGetRatedMoviesSuccess(ratedMovies: List<Movie>) {
         val ratedMovies =
             ratedMovies.map { it.toRatedPoster(state.value.movieGenres.filter { genres -> genres.id in it.genresID }) }
-        updateState { it.copy(moviesPosters = ratedMovies) }
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = false,
+                moviesPosters = ratedMovies
+            )
+        }
         if (state.value.selectedTabIndex == 0) updateState { it.copy(selectedPosters = ratedMovies) }
     }
 
     private fun onGetRatedSeriesSuccess(ratedSeries: List<Series>) {
         val ratedSeries =
             ratedSeries.map { it.toRatedPoster(state.value.seriesGenres.filter { genres -> genres.id in it.genreIDs }) }
-        updateState { it.copy(seriesPosters = ratedSeries) }
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = false,
+                seriesPosters = ratedSeries
+            )
+        }
         if (state.value.selectedTabIndex != 0) updateState { it.copy(selectedPosters = ratedSeries) }
     }
 
@@ -130,7 +143,13 @@ class RatingViewModel @Inject constructor(
 
     private fun onDeleteMovieRatingSuccess(ratedPoster: RatedPoster) {
         (state.value.moviesPosters - ratedPoster).let { moviesPosters ->
-            updateState { it.copy(moviesPosters = moviesPosters) }
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    isNoInternet = false,
+                    moviesPosters = moviesPosters
+                )
+            }
             if (state.value.selectedTabIndex == 0) updateState { it.copy(selectedPosters = moviesPosters) }
         }
     }
@@ -146,7 +165,13 @@ class RatingViewModel @Inject constructor(
 
     private fun onDeleteSeriesRatingSuccess(ratedPoster: RatedPoster) {
         (state.value.seriesPosters - ratedPoster).let { seriesPosters ->
-            updateState { it.copy(seriesPosters = seriesPosters) }
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    isNoInternet = false,
+                    seriesPosters = seriesPosters
+                )
+            }
             if (state.value.selectedTabIndex != 0) updateState { it.copy(selectedPosters = seriesPosters) }
         }
     }

@@ -5,6 +5,7 @@ import com.giraffe.presentation.profile.model.RatedPoster
 
 data class RatingScreenState(
     val isLoading: Boolean = false,
+    val isNoInternet: Boolean = false,
     val isTipVisible: Boolean = true,
     val selectedTabIndex: Int = 0,
     val movieGenres: List<Genre> = emptyList(),
