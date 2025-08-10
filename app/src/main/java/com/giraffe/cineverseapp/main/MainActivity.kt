@@ -15,7 +15,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.presentation.profile.utils.LanguageHelper
 

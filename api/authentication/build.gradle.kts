@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.authentication"
+    namespace = "com.giraffe.api.authentication"
     compileSdk = 36
 
     defaultConfig {
