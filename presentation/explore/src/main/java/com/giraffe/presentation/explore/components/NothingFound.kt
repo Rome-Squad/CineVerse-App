@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.presentation.explore.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

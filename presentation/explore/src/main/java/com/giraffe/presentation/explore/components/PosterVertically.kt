@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.presentation.explore.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibilityScope

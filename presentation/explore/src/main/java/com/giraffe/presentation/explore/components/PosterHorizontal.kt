@@ -1,4 +1,4 @@
-package com.giraffe.explore.components
+package com.giraffe.presentation.explore.components
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
