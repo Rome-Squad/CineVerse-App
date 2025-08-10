@@ -1,16 +1,16 @@
 package com.giraffe.presentation.home.screen.show_more
 
-import com.giraffe.presentation.home.utils.toShowMorePoster
-import com.giraffe.media.movies.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
-import com.giraffe.media.movies.usecase.GetUpcomingMoviesUseCase
-import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
+import com.giraffe.presentation.home.utils.toShowMorePoster
 import kotlinx.coroutines.flow.first
 
 interface ShowMoreStrategy {
@@ -24,7 +24,8 @@ class RecentlyReleasedStrategy(
 ) : ShowMoreStrategy {
     override suspend fun loadData(): List<ShowMorePoster> {
         val recentMovies = getRecentlyReleasedMovies(page = 1).map { it.toShowMorePoster() }
-        val recentSeries = getRecentlyReleasedSeries(page = 1, limit = 10).map { it.toShowMorePoster() }
+        val recentSeries =
+            getRecentlyReleasedSeries(page = 1, limit = 10).map { it.toShowMorePoster() }
         return recentMovies + recentSeries
     }
 
@@ -54,7 +55,7 @@ class UpcomingMoviesStrategy(
 
 class RecentlyViewedStrategy(
     private val getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase
+    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase
 ) : ShowMoreStrategy {
     override suspend fun loadData(): List<ShowMorePoster> {
         val recentMovies = getRecentlyViewedMovies().first().map { it.toShowMorePoster() }
@@ -67,7 +68,7 @@ class RecentlyViewedStrategy(
 
 class MatchesYourVibesStrategy(
     private val getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentSeriesUseCase,
+    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getRecommendedMovie: GetRecommendedMovieUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase
 ) : ShowMoreStrategy {

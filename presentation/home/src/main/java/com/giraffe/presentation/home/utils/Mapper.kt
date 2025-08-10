@@ -2,7 +2,7 @@ package com.giraffe.presentation.home.utils
 
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
 import com.giraffe.presentation.home.model.MediaType
@@ -35,7 +35,7 @@ fun Series.toShowMorePoster() = ShowMorePoster(
     name = name,
     imageUri = posterUrl,
     rating = rating,
-    date = releaseYear,
+    date = releaseYear.toString(),
     mediaType = MediaType.SERIES
 )
 
