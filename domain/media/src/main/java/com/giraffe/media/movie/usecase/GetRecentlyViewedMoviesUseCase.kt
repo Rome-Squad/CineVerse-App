@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetRecentlyViewedMoviesUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
-    operator fun invoke() = repository.getRecentlyViewedMovies()
+    operator fun invoke() = repository.getRecentlyViewed()
 }

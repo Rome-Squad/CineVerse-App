@@ -27,13 +27,13 @@ class GetUpcomingMoviesUseCaseTest {
         val page = 1
         val limit = 10
 
-        coEvery { repository.getUpcomingMovies(page, limit) } returns expectedMovies
+        coEvery { repository.getUpcoming(page, limit) } returns expectedMovies
 
         // When
         val actualMovies = useCase(page, limit)
 
         // Then
-        coVerify(exactly = 1) { repository.getUpcomingMovies(page, limit) }
+        coVerify(exactly = 1) { repository.getUpcoming(page, limit) }
         assertThat(actualMovies).isEqualTo(expectedMovies)
     }
 }

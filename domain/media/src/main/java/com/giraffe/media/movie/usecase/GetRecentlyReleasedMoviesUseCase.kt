@@ -7,5 +7,5 @@ class GetRecentlyReleasedMoviesUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(page: Int, limit: Int = 10) =
-        repository.getRecentlyReleasedMovies(page, limit)
+        repository.getRecentlyReleased(page, limit)
 }

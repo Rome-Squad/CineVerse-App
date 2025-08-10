@@ -8,5 +8,5 @@ class GetRatedMoviesUseCase @Inject constructor(
     private val repository: MoviesRepository,
     private val getUserUseCase: GetUserUseCase
 ) {
-    suspend operator fun invoke() = repository.getRatedMovies(getUserUseCase().id)
+    suspend operator fun invoke() = repository.getUserRated(getUserUseCase().id)
 }

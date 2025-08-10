@@ -28,19 +28,19 @@ class GetMovieDetailsUseCaseTest {
     @Test
     fun `invoke should call getMovieDetails on repository with correct id`() = runTest {
         // given
-        coEvery { repository.getMovieDetails(any()) } returns fakeMovie
+        coEvery { repository.getDetails(any()) } returns fakeMovie
 
         // when
         getMovieDetailsUseCase(1)
 
         // then
-        coVerify(exactly = 1) { repository.getMovieDetails(1) }
+        coVerify(exactly = 1) { repository.getDetails(1) }
     }
 
     @Test
     fun `invoke should return movie details from repository`() = runTest {
         // given
-        coEvery { repository.getMovieDetails(1) } returns fakeMovie
+        coEvery { repository.getDetails(1) } returns fakeMovie
 
         // when
         val result = getMovieDetailsUseCase(1)

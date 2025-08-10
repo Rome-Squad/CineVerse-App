@@ -29,7 +29,7 @@ class GetRecentlyReleasedMoviesUseCaseTest {
             val page = 1
             val limit = 10
             coEvery {
-                repository.getRecentlyReleasedMovies(page, limit)
+                repository.getRecentlyReleased(page, limit)
             } returns expectedRecentlyReleased
 
             // When
@@ -37,7 +37,7 @@ class GetRecentlyReleasedMoviesUseCaseTest {
 
             // Then
             coVerify(exactly = 1) {
-                repository.getRecentlyReleasedMovies(page, limit)
+                repository.getRecentlyReleased(page, limit)
             }
             assertThat(actualMovies).isEqualTo(expectedRecentlyReleased)
         }

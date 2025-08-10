@@ -26,11 +26,11 @@ class GetRecentlyViewedMoviesUseCaseTest {
             emit(fakeMovies)
         }
 
-        coEvery { repository.getRecentlyViewedMovies() } returns expectedMovies
+        coEvery { repository.getRecentlyViewed() } returns expectedMovies
 
         val result = GetRecentlyViewedMoviesUseCase(repository).invoke()
 
-        coVerify { repository.getRecentlyViewedMovies() }
+        coVerify { repository.getRecentlyViewed() }
         assertThat(result).isEqualTo(expectedMovies)
 
     }

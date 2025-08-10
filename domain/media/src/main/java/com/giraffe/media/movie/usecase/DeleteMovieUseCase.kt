@@ -9,6 +9,6 @@ class DeleteMovieUseCase @Inject constructor(
 
     suspend operator fun invoke(movieId: Int) {
         // Clear the movie from the local database
-        moviesRepository.deleteMovieById(movieId)
+        moviesRepository.deleteById(movieId)
     }
 }

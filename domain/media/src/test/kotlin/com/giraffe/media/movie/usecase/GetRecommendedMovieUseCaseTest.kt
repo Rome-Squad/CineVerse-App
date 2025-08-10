@@ -27,13 +27,13 @@ class GetRecommendedMovieUseCaseTest {
             val movieId = 1
             val page = 2
             val limit = 10
-            coEvery { repository.getRecommendedMovie(movieId, page, limit) } returns emptyList()
+            coEvery { repository.getRecommended(movieId, page, limit) } returns emptyList()
 
             // when
             getRecommendedMovieUseCase(movieId, page, limit)
 
             // then
-            coVerify(exactly = 1) { repository.getRecommendedMovie(movieId, page, limit) }
+            coVerify(exactly = 1) { repository.getRecommended(movieId, page, limit) }
         }
 
     @Test
@@ -46,7 +46,7 @@ class GetRecommendedMovieUseCaseTest {
             fakeMovie(id = 101, title = "Recommended Movie 1"),
             fakeMovie(id = 102, title = "Recommended Movie 2")
         )
-        coEvery { repository.getRecommendedMovie(movieId, page, limit) } returns expectedMovies
+        coEvery { repository.getRecommended(movieId, page, limit) } returns expectedMovies
 
         // when
         val result = getRecommendedMovieUseCase(movieId, page, limit)

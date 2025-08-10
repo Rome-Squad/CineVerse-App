@@ -27,6 +27,6 @@ class DeleteMovieRatingUseCaseTest {
         useCase(movieId)
 
         // Then
-        coVerify { repository.deleteMovieRating(movieId) }
+        coVerify { repository.deleteRating(movieId) }
     }
 }

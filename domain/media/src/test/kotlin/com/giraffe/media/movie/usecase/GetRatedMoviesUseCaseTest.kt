@@ -36,14 +36,14 @@ class GetRatedMoviesUseCaseTest {
         )
 
         coEvery { getUserUseCase() } returns mockUser
-        coEvery { repository.getRatedMovies(accountId) } returns fakeMovies
+        coEvery { repository.getUserRated(accountId) } returns fakeMovies
 
         // When
         val result = useCase()
 
         // Then
         coVerify { getUserUseCase() }
-        coVerify { repository.getRatedMovies(accountId) }
+        coVerify { repository.getUserRated(accountId) }
         assertEquals(fakeMovies, result)
     }
 }

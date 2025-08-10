@@ -8,5 +8,5 @@ class GetMoviesGenresByIdsUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     suspend operator fun invoke(genreIDs: List<Int>): List<Genre> =
-        repository.getMovieGenresByIds(genreIDs)
+        repository.getGenresByIds(genreIDs)
 }

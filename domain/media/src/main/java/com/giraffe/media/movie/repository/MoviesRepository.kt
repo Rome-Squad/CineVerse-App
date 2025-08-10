@@ -7,46 +7,43 @@ import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {
 
-    suspend fun addRating(movieId: Int, ratingValue: Float)
+    suspend fun addRating(movieId: Int, rating: Float)
 
-    suspend fun searchMovieByName(movieName: String, page: Int): List<Movie>
+    suspend fun getByName(name: String, page: Int): List<Movie>
 
-    suspend fun getMovieGenresByIds(genreIds: List<Int>): List<Genre>
+    suspend fun getGenresByIds(genreIds: List<Int>): List<Genre>
 
-    suspend fun getMoviesGenres(): List<Genre>
+    suspend fun getGenres(): List<Genre>
 
-    suspend fun getMoviesByGenre(genreId: Int, page: Int): List<Movie>
+    suspend fun getByGenreId(genreId: Int, page: Int): List<Movie>
 
-    fun getRecentlyViewedMovies(): Flow<List<Movie>>
+    fun getRecentlyViewed(): Flow<List<Movie>>
 
-    suspend fun getMovieDetails(movieId: Int): Movie
+    suspend fun getDetails(movieId: Int): Movie
 
-    suspend fun getRecommendedMovie(movieId: Int, page: Int, limit: Int): List<Movie>
+    suspend fun getRecommended(movieId: Int, page: Int, limit: Int): List<Movie>
 
-    suspend fun getMovieReviews(
-        movieId: Int,
-        page: Int
-    ): List<Review>
+    suspend fun getReviews(movieId: Int, page: Int): List<Review>
 
-    suspend fun getUserMovieRating(movieId: Int): Float
+    suspend fun getUserRatedById(movieId: Int): Float
 
-    suspend fun getPopularityMovies(page: Int, limit: Int): List<Movie>
+    suspend fun getUserRated(accountId: Int): List<Movie>
 
-    suspend fun getRecentlyReleasedMovies(page: Int, limit: Int): List<Movie>
+    suspend fun getPopular(page: Int, limit: Int): List<Movie>
 
-    suspend fun getUpcomingMovies(page: Int, limit: Int): List<Movie>
+    suspend fun getRecentlyReleased(page: Int, limit: Int): List<Movie>
 
-    suspend fun deleteMovieById(movieId: Int)
+    suspend fun getUpcoming(page: Int, limit: Int): List<Movie>
 
-    suspend fun getRatedMovies(accountId: Int): List<Movie>
+    suspend fun deleteById(movieId: Int)
 
-    suspend fun deleteMovieRating(movieId: Int)
+    suspend fun deleteRating(movieId: Int)
 
-    suspend fun clearMovieCache()
+    suspend fun clearAll()
 
-    suspend fun clearRecentlyViewedMovies()
+    suspend fun clearRecentlyViewed()
 
-    suspend fun clearMovieCacheWithOutRecentViewed()
+    suspend fun clearExceptRecentlyViewed()
 
-    suspend fun clearMovieGenres()
+    suspend fun clearGenres()
 }

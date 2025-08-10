@@ -7,16 +7,16 @@ class ClearMoviesCacheUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     suspend fun clearMovieCache() {
-        repository.clearMovieCache()
-        repository.clearMovieGenres()
+        repository.clearAll()
+        repository.clearGenres()
     }
 
     suspend fun clearMovieCacheWithOutRecentViewed() {
-        repository.clearMovieCacheWithOutRecentViewed()
-        repository.clearMovieGenres()
+        repository.clearExceptRecentlyViewed()
+        repository.clearGenres()
     }
 
     suspend fun clearRecentlyViewedMovies() {
-        repository.clearRecentlyViewedMovies()
+        repository.clearRecentlyViewed()
     }
 }

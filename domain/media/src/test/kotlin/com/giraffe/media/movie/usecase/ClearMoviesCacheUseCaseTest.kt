@@ -25,7 +25,7 @@ class ClearMoviesCacheUseCaseTest {
 
         // Then
         coVerify(exactly = 1) {
-            repository.clearMovieCache()
+            repository.clearAll()
         }
     }
 
@@ -37,7 +37,7 @@ class ClearMoviesCacheUseCaseTest {
 
             // Then
             coVerify(exactly = 1) {
-                repository.clearRecentlyViewedMovies()
+                repository.clearRecentlyViewed()
             }
         }
 
@@ -49,7 +49,7 @@ class ClearMoviesCacheUseCaseTest {
 
             // Then
             coVerify(exactly = 1) {
-                repository.clearMovieCacheWithOutRecentViewed()
+                repository.clearExceptRecentlyViewed()
             }
         }
 }

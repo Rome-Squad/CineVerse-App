@@ -7,6 +7,6 @@ class GetUserMovieRatingUseCase @Inject constructor(
     private val moviesRepository: MoviesRepository
 ) {
     suspend operator fun invoke(movieId: Int): Float {
-        return moviesRepository.getUserMovieRating(movieId)
+        return moviesRepository.getUserRatedById(movieId)
     }
 }
