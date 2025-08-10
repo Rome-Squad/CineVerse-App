@@ -5,5 +5,7 @@ import androidx.compose.runtime.Composable
 interface MatchApi {
 
     @Composable
-    fun MatchContainer(onShowBottomBarChange: (Boolean) -> Unit)
+    fun MatchContainer(
+        onShowBottomBarChange: (Boolean) -> Unit,
+    )
 }
