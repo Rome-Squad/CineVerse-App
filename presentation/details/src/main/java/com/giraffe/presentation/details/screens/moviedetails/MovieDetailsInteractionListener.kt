@@ -41,4 +41,6 @@ interface MovieDetailsInteractionListener {
     fun onConfirmCreateNewCollectionClick()
 
     fun onCancelCreateNewCollectionClick()
+
+    fun onRetryClick()
 }

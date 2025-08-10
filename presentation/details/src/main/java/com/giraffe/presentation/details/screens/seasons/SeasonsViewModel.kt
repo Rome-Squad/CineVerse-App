@@ -2,11 +2,11 @@ package com.giraffe.presentation.details.screens.seasons
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.model.SeasonUi
-import com.giraffe.presentation.details.screens.seasons.screen.SeasonsRoute
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.usecase.GetSeasonsUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.navigation.routes.SeasonsRoute
+import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,13 +15,15 @@ class SeasonsViewModel @Inject constructor(
     private val getSeasons: GetSeasonsUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeasonsScreenState, SeasonsEffect>(
-    SeasonsScreenState()
+    SeasonsScreenState(
+        seriesId = savedStateHandle.toRoute<SeasonsRoute>().seriesID
+    )
 ) {
 
-    val seriesID = savedStateHandle.toRoute<SeasonsRoute>().seriesID
-
     init {
-        loadSeason(seriesID)
+        state.value.seriesId?.let {
+            loadSeason(it)
+        }
     }
 
     fun loadSeason(seriesId: Int) {
@@ -36,7 +38,7 @@ class SeasonsViewModel @Inject constructor(
     fun loadSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
-                seasons = season.map { SeasonUi.Companion.fromEntity(it) },
+                seasons = season.map(Season::toUi),
                 isLoading = false
             )
         }

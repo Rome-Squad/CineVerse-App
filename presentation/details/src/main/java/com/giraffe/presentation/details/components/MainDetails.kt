@@ -33,10 +33,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.screens.castDetails.state.SocialMediaUi
-import com.giraffe.presentation.details.screens.castDetails.state.getIcon
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.R
+import com.giraffe.presentation.details.model.SocialMediaUi
+import com.giraffe.presentation.details.utils.getIcon
 
 @Composable
 fun MainDetails(

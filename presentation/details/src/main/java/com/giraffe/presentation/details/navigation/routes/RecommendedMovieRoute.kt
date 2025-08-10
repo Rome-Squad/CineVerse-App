@@ -1,8 +1,9 @@
-package com.giraffe.presentation.details.screens.recommended.movie
+package com.giraffe.presentation.details.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.presentation.details.screens.recommended.movie.RecommendedMoviesScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
