@@ -59,7 +59,9 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         effect: E,
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.Main,
-    ) = coroutineScope.launch(dispatcher) {
-        _effect.send(effect)
+    ) {
+        coroutineScope.launch(dispatcher) {
+            _effect.send(effect)
+        }
     }
 }

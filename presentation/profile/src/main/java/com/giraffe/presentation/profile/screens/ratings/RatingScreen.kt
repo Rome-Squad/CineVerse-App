@@ -1,5 +1,6 @@
 package com.giraffe.presentation.profile.screens.ratings
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -35,39 +37,35 @@ import com.giraffe.presentation.profile.components.DeleteButton
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.utils.EffectListener
+import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
 fun RatingScreen(
-    modifier: Modifier = Modifier,
     navigateToMovieDetails: (Int) -> Unit = {},
     navigateToSeriesDetails: (Int) -> Unit = {},
     navigateBack: () -> Unit = {},
     viewModel: RatingViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     EffectListener(
         events = viewModel.effect
     ) { effect ->
         when (effect) {
-            RatingEffect.NavigateBack -> {
-                navigateBack()
-            }
+            RatingEffect.NavigateBack -> navigateBack()
 
-            is RatingEffect.NavigateToMovieDetails -> {
-                navigateToMovieDetails(effect.movieId)
-            }
+            is RatingEffect.NavigateToMovieDetails -> navigateToMovieDetails(effect.movieId)
 
-            is RatingEffect.NavigateToSeriesDetails -> {
-                navigateToSeriesDetails(effect.seriesId)
-            }
+            is RatingEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(effect.seriesId)
 
-            is RatingEffect.ShowError -> {
-
-            }
+            is RatingEffect.ShowError -> Toast.makeText(
+                context,
+                context.getString(effect.error.toStringResource()),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
     RatingContent(
-        modifier = modifier,
         state = state,
         interaction = viewModel
     )

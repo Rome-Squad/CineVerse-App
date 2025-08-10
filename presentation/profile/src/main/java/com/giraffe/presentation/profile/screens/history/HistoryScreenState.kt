@@ -9,8 +9,7 @@ data class HistoryScreenState(
     val historyListTitle: String = "",
     val isSwiped: Boolean = false,
     val swipedPosterId: Int? = null,
-    val errorMsgRes: Int? = null,
-    val isVisible: Boolean = true,
+    val isTipVisible: Boolean = true,
     val isNoInternet: Boolean = false
 )
 

@@ -26,6 +26,7 @@ import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterItemHorizontal
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
 import com.giraffe.presentation.profile.components.DeleteButton
@@ -68,8 +69,21 @@ fun HistoryScreen(
                 context.getString(effect.error.toStringResource()),
                 Toast.LENGTH_SHORT
             ).show()
+
+            HistoryEffect.NavigateToBack -> onBackClicked()
         }
     }
+    HistoryContent(
+        state = state,
+        interaction = viewModel
+    )
+}
+
+@Composable
+private fun HistoryContent(
+    state: HistoryScreenState,
+    interaction: HistoryInteractionListener
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -79,101 +93,88 @@ fun HistoryScreen(
         AppBar(
             title = stringResource(R.string.history),
             showBackButton = true,
-            onBackButtonClick = onBackClicked
+            onBackButtonClick = interaction::onBackClick
         )
-
-        if (state.isNoInternet) {
+        if (state.isLoading) {
+            Progress()
+        } else if (state.isNoInternet) {
             NoInternetScreen()
-        }
-
-        if (!state.isNoInternet) {
-            HistoryContent(
-                state = state,
-                historyInteractionListener = viewModel,
-
-                )
-        }
-    }
-}
-
-@Composable
-private fun HistoryContent(
-    state: HistoryScreenState,
-    historyInteractionListener: HistoryInteractionListener
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        if (state.mediaList.isEmpty() && state.isLoading.not()) {
-            MessageInfoBox(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(60.dp),
-                title = stringResource(R.string.no_history_yet),
-                caption = stringResource(R.string.it_s_quiet_in_here_start_watching_and_we_ll_keep_track_for_you),
-                icon = painterResource(id = Theme.icons.dueTone.history),
-                buttonBackgroundColor = Theme.color.brand.primary,
-                iconBackgroundColor = Theme.color.button.disabled,
-                iconTintColor = Theme.color.brand.primary,
-                titlePrimaryButton = stringResource(R.string.find_something_to_watch),
-                isButtonsVisible = true,
-                isSecondaryButtonVisible = false,
-                onClickPrimaryButton = { historyInteractionListener.navigateToExploreScreen() },
-            )
         } else {
-            LazyColumn(
+            Box(
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .background(Theme.color.background.screen)
                     .fillMaxSize()
-                    .systemBarsPadding()
-                    .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-
-
-                if (state.isVisible) {
-                    item {
-
-                        InfoCard(
-                            description = stringResource(
-                                id = R.string.screen_info
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            onClosedClick = historyInteractionListener::onCloseClicked
-                        )
-
-                    }
-                }
-
-                items(state.mediaList, key = { poster -> poster.id }) { poster ->
-                    SwipableItem(
-                        actionButton = {
-                            DeleteButton(
-                                onDeleteClick = {
-                                    historyInteractionListener.onDeleteClicked(
-                                        poster.id,
-                                        poster.mediaTypeOfPoster ?: ""
-                                    )
-                                }
-                            )
-                        },
+                if (state.mediaList.isEmpty() && state.isLoading.not()) {
+                    MessageInfoBox(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(60.dp),
+                        title = stringResource(R.string.no_history_yet),
+                        caption = stringResource(R.string.it_s_quiet_in_here_start_watching_and_we_ll_keep_track_for_you),
+                        icon = painterResource(id = Theme.icons.dueTone.history),
+                        buttonBackgroundColor = Theme.color.brand.primary,
+                        iconBackgroundColor = Theme.color.button.disabled,
+                        iconTintColor = Theme.color.brand.primary,
+                        titlePrimaryButton = stringResource(R.string.find_something_to_watch),
+                        isButtonsVisible = true,
+                        isSecondaryButtonVisible = false,
+                        onClickPrimaryButton = { interaction.navigateToExploreScreen() },
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .background(Theme.color.background.screen)
+                            .fillMaxSize()
+                            .systemBarsPadding()
+                            .padding(horizontal = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        PosterItemHorizontal(
-                            modifier = Modifier.fillMaxWidth(),
-                            movie = poster,
-                            onClickPoster = {
-                                poster.mediaTypeOfPoster?.let {
-                                    historyInteractionListener.onMediaClicked(
-                                        poster.id,
-                                        it
-                                    )
-                                }
+
+
+                        if (state.isTipVisible) {
+                            item {
+
+                                InfoCard(
+                                    description = stringResource(
+                                        id = R.string.screen_info
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    onClosedClick = interaction::onCloseClicked
+                                )
+
                             }
-                        )
+                        }
+
+                        items(state.mediaList, key = { poster -> poster.id }) { poster ->
+                            SwipableItem(
+                                actionButton = {
+                                    DeleteButton(
+                                        onDeleteClick = {
+                                            interaction.onDeleteClicked(
+                                                poster.id,
+                                                poster.mediaTypeOfPoster ?: ""
+                                            )
+                                        }
+                                    )
+                                },
+                            ) {
+                                PosterItemHorizontal(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    movie = poster,
+                                    onClickPoster = {
+                                        poster.mediaTypeOfPoster?.let {
+                                            interaction.onMediaClicked(
+                                                poster.id,
+                                                it
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }

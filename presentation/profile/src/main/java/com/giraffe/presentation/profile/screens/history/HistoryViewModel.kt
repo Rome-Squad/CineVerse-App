@@ -1,6 +1,7 @@
 package com.giraffe.presentation.profile.screens.history
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.DeleteMovieUseCase
 import com.giraffe.media.movies.usecase.GetRecentlyViewedMoviesUseCase
@@ -53,14 +54,14 @@ class HistoryViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                errorMsgRes = null,
+                isNoInternet = false,
                 mediaList = (it.mediaList + newMediaList).distinctBy { poster -> poster.id }
             )
         }
     }
 
     private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
         sendEffect(HistoryEffect.ShowError(error))
     }
 
@@ -89,7 +90,7 @@ class HistoryViewModel @Inject constructor(
     }
 
     override fun onCloseClicked() {
-        updateState { it.copy(isVisible = false) }
+        updateState { it.copy(isTipVisible = false) }
     }
 
     override fun onMediaClicked(mediaId: Int, mediaType: String) {
@@ -102,6 +103,10 @@ class HistoryViewModel @Inject constructor(
         sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
 
 
+    }
+
+    override fun onBackClick() {
+        sendEffect(HistoryEffect.NavigateToBack)
     }
 
     override fun navigateToExploreScreen() {

@@ -24,6 +24,7 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterItemHorizontal
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
 import com.giraffe.presentation.profile.components.DeleteButton
@@ -33,14 +34,12 @@ import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
 fun CollectionScreen(
-    modifier: Modifier = Modifier,
     navigateBack: () -> Unit = {},
     navigateToMovieDetails: (Int) -> Unit = {},
     viewModel: CollectionDetailsViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-    val interactions: CollectionDetailsInteractionListener = viewModel
     EffectListener(
         events = viewModel.effect
     ) { effect ->
@@ -56,6 +55,18 @@ fun CollectionScreen(
             ).show()
         }
     }
+    CollectionScreenContent(
+        state = state,
+        interactions = viewModel
+    )
+}
+
+@Composable
+private fun CollectionScreenContent(
+    modifier: Modifier = Modifier,
+    state: CollectionDetailsScreenState,
+    interactions: CollectionDetailsInteractionListener
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -70,66 +81,54 @@ fun CollectionScreen(
             showBackButton = true,
             onBackButtonClick = interactions::onBackClick
         )
-        if (state.isNoInternet) {
+        if (state.isLoading) {
+            Progress()
+        } else if (state.isNoInternet) {
             NoInternetScreen()
-        }
-        if (!state.isNoInternet) {
-            CollectionScreenContent(
-                modifier = Modifier.fillMaxSize(),
-                state = state,
-                interactions = viewModel
-            )
-        }
-    }
-}
-
-@Composable
-private fun CollectionScreenContent(
-    modifier: Modifier = Modifier,
-    state: CollectionDetailsScreenState,
-    interactions: CollectionDetailsInteractionListener
-) {
-    LazyColumn(
-        modifier = modifier
-            .background(Theme.color.background.screen)
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = 12.dp)
-    ) {
-        item {
-
-            AnimatedVisibility(
-                visible = state.isDeleteTipVisible
+        } else {
+            LazyColumn(
+                modifier = modifier
+                    .background(Theme.color.background.screen)
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(vertical = 12.dp)
             ) {
-                InfoCard(
-                    description = stringResource(
-                        id = R.string.tip_swipe_left_to_remove_movies_from_your_collection
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    onClosedClick = interactions::onCloseTipClick
-                )
+                item {
 
-            }
-        }
-        items(state.collectionMovies) { swipeablePoster ->
-            SwipableItem(
-                actionButton = {
-                    DeleteButton(
-                        onDeleteClick = {
-                            interactions.onDeletePosterClick(swipeablePoster.poster.id)
-                        }
-                    )
-                },
-            ) {
-                PosterItemHorizontal(
-                    modifier = Modifier.fillMaxWidth(),
-                    movie = swipeablePoster.poster,
-                    onClickPoster = {
-                        interactions.onPosterClick(swipeablePoster.poster.id)
+                    AnimatedVisibility(
+                        visible = state.isDeleteTipVisible
+                    ) {
+                        InfoCard(
+                            description = stringResource(
+                                id = R.string.tip_swipe_left_to_remove_movies_from_your_collection
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClosedClick = interactions::onCloseTipClick
+                        )
+
                     }
-                )
+                }
+                items(state.collectionMovies) { swipeablePoster ->
+                    SwipableItem(
+                        actionButton = {
+                            DeleteButton(
+                                onDeleteClick = {
+                                    interactions.onDeletePosterClick(swipeablePoster.poster.id)
+                                }
+                            )
+                        },
+                    ) {
+                        PosterItemHorizontal(
+                            modifier = Modifier.fillMaxWidth(),
+                            movie = swipeablePoster.poster,
+                            onClickPoster = {
+                                interactions.onPosterClick(swipeablePoster.poster.id)
+                            }
+                        )
+                    }
+                }
             }
         }
     }

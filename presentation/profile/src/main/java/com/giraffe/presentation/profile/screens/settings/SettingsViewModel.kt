@@ -1,7 +1,7 @@
 package com.giraffe.presentation.profile.screens.settings
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.Language
 import com.giraffe.presentation.profile.utils.LanguageHelper
@@ -21,7 +21,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 
 @HiltViewModel
@@ -40,33 +39,31 @@ class SettingsViewModel @Inject constructor(
 
     init {
         checkLoginStatus()
-        observeSettings()
+        observeTheme()
+        observeLanguage()
         observeContentPreference()
     }
 
     private fun checkLoginStatus() {
         safeExecute(
             onSuccess = ::handleLoginStatusSuccess,
-            onError = { updateState { it.copy(isLoading = false) } }
-        ) {
-            isLoggedInUseCase()
-        }
+            onError = { updateState { it.copy(isLoading = false) } },
+            block = isLoggedInUseCase::invoke
+        )
     }
 
     private fun handleLoginStatusSuccess(isLoggedIn: Boolean) {
-        updateState { it.copy(isLoggedIn = isLoggedIn) }
-        if (isLoggedIn) {
-            getUserProfile()
-        } else {
-            updateState { it.copy(isLoading = false) }
-        }
+        updateState { it.copy(isLoading = false, isLoggedIn = isLoggedIn) }
+        if (isLoggedIn) getUserProfile()
     }
 
-    private fun observeSettings() {
+    private fun observeTheme() {
         getDarkModeUseCase().onEach { isDark ->
             updateState { it.copy(isDarkMode = isDark) }
         }.launchIn(viewModelScope)
+    }
 
+    private fun observeLanguage() {
         getLanguageUseCase().onEach { langCode ->
             val language = Language.entries.firstOrNull { it.code == langCode } ?: Language.ARABIC
             updateState { it.copy(currentLanguage = language) }
@@ -76,17 +73,15 @@ class SettingsViewModel @Inject constructor(
     private fun observeContentPreference() {
         getContentPreferenceUseCase().onEach { preference ->
             updateState { it.copy(contentPreference = preference) }
-            Log.d("PreferenceUseCase", "Current preference is: $preference")
         }.launchIn(viewModelScope)
     }
 
     private fun getUserProfile() {
         safeExecute(
             onSuccess = ::handleGetUserProfileSuccess,
-            onError = ::onFailure
-        ) {
-            getUserUseCase()
-        }
+            onError = ::onFailure,
+            block = getUserUseCase::invoke
+        )
     }
 
     private fun handleGetUserProfileSuccess(user: User) {
@@ -94,7 +89,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
         sendEffect(SettingsEffect.ShowError(error))
     }
 
@@ -123,24 +118,41 @@ class SettingsViewModel @Inject constructor(
     }
 
     override fun onContentPreferenceChange(preference: ContentPreference) {
-        viewModelScope.launch {
-            setContentPreferenceUseCase(preference)
-            onDismissSheet()
-        }
+        safeExecute(
+            onSuccess = { onDismissSheet() },
+            onError = ::onFailure,
+            block = { setContentPreferenceUseCase(preference) }
+        )
+    }
+
+    override fun onNavigateToMyCollections() {
+        sendEffect(SettingsEffect.NavigateToMyCollections)
+    }
+
+    override fun onNavigateToHistory() {
+        sendEffect(SettingsEffect.NavigateToHistory)
+    }
+
+    override fun onNavigateToRatings() {
+        sendEffect(SettingsEffect.NavigateToRatings)
     }
 
     override fun onLanguageChange(languageCode: String) {
-        viewModelScope.launch {
-            setLanguageUseCase(languageCode)
-        }
-        LanguageHelper.updateAppLocale(languageCode)
-        onDismissSheet()
+        safeExecute(
+            onSuccess = {
+                LanguageHelper.updateAppLocale(languageCode)
+                onDismissSheet()
+            },
+            onError = ::onFailure,
+            block = { setLanguageUseCase(languageCode) }
+        )
     }
 
     override fun onToggleDarkMode(isDark: Boolean) {
-        viewModelScope.launch {
-            setDarkModeUseCase(isDark)
-        }
+        safeExecute(
+            onError = ::onFailure,
+            block = { setDarkModeUseCase(isDark) }
+        )
     }
 
     override fun onConfirmLogout() {
@@ -149,15 +161,14 @@ class SettingsViewModel @Inject constructor(
             onSuccess = {
                 sendEffect(SettingsEffect.NavigateToLogin)
             },
-            onError = ::onFailure
-        ) {
-            logoutUseCase()
-        }
+            onError = ::onFailure,
+            block = logoutUseCase::invoke
+        )
     }
 
     override fun onGoToWebsiteClick() {
-        sendEffect(SettingsEffect.NavigateToEditProfileWebsite)
         onDismissSheet()
+        sendEffect(SettingsEffect.NavigateToEditProfileWebView)
     }
 
     override fun onDismissSheet() {
@@ -169,9 +180,5 @@ class SettingsViewModel @Inject constructor(
                 showContentPreferencesSheet = false
             )
         }
-    }
-
-    override fun onCancelClick() {
-        onDismissSheet()
     }
 }
