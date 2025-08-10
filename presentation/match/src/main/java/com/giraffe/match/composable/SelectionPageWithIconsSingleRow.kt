@@ -36,7 +36,7 @@ fun SelectionPageWithIconsSingleRow(
                     secondDescription = option.secondLabel,
                     icon = option.icon,
                     isSelected = option.id in selectedItems,
-                    isCardType2 = option.secondLabel != null,
+                    isSecondaryCardType = option.secondLabel != null,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         if (!readOnly) {
