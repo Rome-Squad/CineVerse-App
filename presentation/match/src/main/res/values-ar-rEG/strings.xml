@@ -7,7 +7,7 @@
     <string name="add_Icon">أيقونة الحفظ</string>
     <string name="media_type_movie">فيلم</string>
     <string name="media_type_series">مسلسل</string>
-    <string name="icon_description">أيقونة</string>
+    <string name="icon_description">أيقونة مرفقة مع النص</string>
     <string name="view_details">عرض التفاصيل</string>
 
 </resources>
