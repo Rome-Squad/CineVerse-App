@@ -8,14 +8,14 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.SearchMovieByNameUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
-import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.screen.discover.SearchTab
 import com.giraffe.presentation.explore.util.BasePagingSource
@@ -30,7 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchResultViewModel @Inject constructor(
     private val searchMovieByName: SearchMovieByNameUseCase,
-    private val searchSeriesByName: SearchSeriesByNameUseCase,
+    private val getSeriesByName: GetSeriesByNameUseCase,
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
@@ -133,7 +133,7 @@ class SearchResultViewModel @Inject constructor(
             onError = ::onError
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource { page -> searchSeriesByName(state.value.query, page) }
+                BasePagingSource { page -> getSeriesByName(state.value.query, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
