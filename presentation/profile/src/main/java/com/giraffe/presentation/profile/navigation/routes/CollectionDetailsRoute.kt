@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.navigation.routes
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -26,13 +25,11 @@ fun NavController.navigateToCollection(
 }
 
 fun NavGraphBuilder.collectionRoute(
-    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateToMovieDetails: (Int) -> Unit
 ) {
     composable<CollectionRoute> {
         CollectionScreen(
-            modifier = modifier,
             navigateBack = navigateBack,
             navigateToMovieDetails = navigateToMovieDetails
         )

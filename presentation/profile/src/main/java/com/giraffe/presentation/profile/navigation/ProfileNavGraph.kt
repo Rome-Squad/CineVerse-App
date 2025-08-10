@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -113,8 +112,6 @@ internal fun ProfileNavGraph(
         )
 
         collectionRoute(
-            modifier = Modifier
-                .fillMaxSize(),
             navigateBack = {
                 if (navigateBack != null) {
                     navigateBack()
