@@ -3,13 +3,13 @@ package com.giraffe.presentation.profile.screens.mycollections
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.CollectionUiModel
 import com.giraffe.presentation.profile.utils.toEntity
 import com.giraffe.presentation.profile.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-
 
 @HiltViewModel
 class MyCollectionsViewModel @Inject constructor(
@@ -25,17 +25,17 @@ class MyCollectionsViewModel @Inject constructor(
 
     private fun getCollections() {
         safeExecute(
+            onSuccess = ::onGetCollectionsSuccess,
             onError = ::onFailure,
-            onSuccess = ::onGetCollectionsSuccess
-        ) {
-            getCollectionsUseCase()
-        }
+            block = getCollectionsUseCase::invoke
+        )
     }
 
     private fun onGetCollectionsSuccess(collections: List<Collection>) {
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 collections = collections.map { collection ->
                     collection.toUi()
                 }
@@ -50,6 +50,8 @@ class MyCollectionsViewModel @Inject constructor(
     override fun onNewCollectionNameChange(newCollectionName: String) {
         updateState {
             it.copy(
+                isLoading = false,
+                isNoInternet = false,
                 newCollectionName = newCollectionName
             )
         }
@@ -83,16 +85,16 @@ class MyCollectionsViewModel @Inject constructor(
     }
 
     private fun onCreateCollectionSuccess() {
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isNoInternet = false) }
         getCollections()
     }
 
     private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
         sendEffect(MyCollectionsEffect.ShowError(error))
     }
 
-    override fun onDismissCreateNewCollectionBottomSheet() {
+    override fun onDismissBottomSheet() {
         updateState {
             it.copy(
                 isBottomSheetVisible = false
@@ -105,6 +107,6 @@ class MyCollectionsViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        sendEffect(MyCollectionsEffect.NavigateBack)
+        sendEffect(MyCollectionsEffect.NavigateToBack)
     }
 }

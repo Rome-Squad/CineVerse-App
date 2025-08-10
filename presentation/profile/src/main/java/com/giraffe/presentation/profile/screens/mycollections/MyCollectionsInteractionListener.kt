@@ -7,7 +7,7 @@ interface MyCollectionsInteractionListener {
     fun onNewCollectionNameChange(newCollectionName: String)
     fun onCreateNewCollectionClick()
     fun onConfirmCreateNewCollectionClick()
-    fun onDismissCreateNewCollectionBottomSheet()
+    fun onDismissBottomSheet()
     fun onStartCollectingClick()
     fun onBackClick()
 }
