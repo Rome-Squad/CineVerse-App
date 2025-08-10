@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
@@ -49,8 +48,8 @@ class CollectionDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
+    private fun onFailure(error: Throwable, isNoInternet: Boolean) {
+        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
         sendEffect(CollectionDetailsEffect.ShowError(error))
     }
 
