@@ -1,8 +1,8 @@
 package com.giraffe.media.collections.usecase
 
 import com.giraffe.media.collections.repository.CollectionsRepository
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.fakeMovies
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.fakeMovies
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk

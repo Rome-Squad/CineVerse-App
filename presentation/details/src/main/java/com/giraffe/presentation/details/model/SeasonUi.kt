@@ -1,13 +1,14 @@
 package com.giraffe.presentation.details.model
 
 import com.giraffe.media.series.entity.Season
+import com.giraffe.presentation.details.utils.toFormattedDate
 
 data class SeasonUi(
     val id: Int = 0,
     val overview: String = "",
     val rating: Float = 0.0f,
     val posterUrl: String? = null,
-    val releaseYear: String = "",
+    val releaseYear: String? = null,
     val seasonNumber: Int = 0,
     val episodeCount: Int = 0
 ) {
@@ -17,7 +18,8 @@ data class SeasonUi(
             overview = season.overview,
             rating = season.rating,
             posterUrl = season.posterUrl,
-            releaseYear = season.releaseYear,
+            releaseYear = if (season.releaseYear != null) season.releaseYear.toString()
+                .toFormattedDate() else null,
             seasonNumber = season.seasonNumber,
             episodeCount = season.episodeCount
         )

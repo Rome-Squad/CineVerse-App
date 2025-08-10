@@ -3,12 +3,12 @@ package com.giraffe.presentation.details.screens.castCredit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.utils.toPoster
-import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.person.usecase.GetPeopleMediaCreditsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.utils.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
