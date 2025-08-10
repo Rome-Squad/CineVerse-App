@@ -37,8 +37,8 @@ class DiscoverViewModel @Inject constructor(
     DiscoverInteractionListener {
 
     init {
-        getMovieGenres()
         getSeriesGenres()
+        getMovieGenres()
     }
 
 
@@ -54,7 +54,8 @@ class DiscoverViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                moviesGenres = genres.map(Genre::toUi)
+                moviesGenres = genres.map(Genre::toUi),
+                selectedGenres = genres.map(Genre::toUi)
             )
         }
         getMoviesByGenre()
