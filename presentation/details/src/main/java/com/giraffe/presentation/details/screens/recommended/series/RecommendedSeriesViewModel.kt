@@ -43,10 +43,9 @@ class RecommendedSeriesViewModel @Inject constructor(
     private fun getSeriesGenres() {
         safeExecute(
             onSuccess = ::onGetSeriesGenresSuccess,
-            onError = ::onGetSeriesGenresFailure
-        ) {
-            getSeriesGenresUseCase()
-        }
+            onError = ::onError,
+            block = getSeriesGenresUseCase::invoke
+        )
     }
 
     private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
@@ -62,24 +61,13 @@ class RecommendedSeriesViewModel @Inject constructor(
         }
     }
 
-    private fun onGetSeriesGenresFailure(error: Throwable) {
-        updateState {
-            it.copy(
-                isLoading = false
-            )
-        }
-
-        sendEffect(RecommendedSeriesEffect.Error(error))
-    }
-
-
     private fun getRecommendedSeries(
         movieId: Int
     ) {
 
         safeExecute(
             onSuccess = ::onGetRecommendedSeriesSuccess,
-            onError = ::onGetRecommendedSeriesError
+            onError = ::onError
         ) {
             val pager = Pager(
                 config = PagingConfig(
@@ -117,11 +105,20 @@ class RecommendedSeriesViewModel @Inject constructor(
         }
     }
 
-    private fun onGetRecommendedSeriesError(error: Throwable) {
-        sendEffect(RecommendedSeriesEffect.Error(error))
-    }
 
     override fun navigateToSeriesDetailsScreen(seriesId: Int) {
         sendEffect(RecommendedSeriesEffect.NavigateToSeriesDetails(seriesId))
     }
+
+
+    private fun onError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+
+        sendEffect(RecommendedSeriesEffect.Error(error))
+    }
+
 }

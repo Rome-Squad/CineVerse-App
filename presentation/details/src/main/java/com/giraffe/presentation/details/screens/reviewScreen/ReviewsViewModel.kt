@@ -45,7 +45,7 @@ class ReviewsViewModel @Inject constructor(
     private fun fetchMovieReviews(movieId: Int) {
         safeExecute(
             onSuccess = ::onFetchReviewsSuccess,
-            onError = ::handleError
+            onError = ::onError
         ) {
             fetchPagingReviews { page ->
                 getMovieReviewsUseCase(
@@ -59,7 +59,7 @@ class ReviewsViewModel @Inject constructor(
     private fun fetchSeriesReviews(seriesId: Int) {
         safeExecute(
             onSuccess = ::onFetchReviewsSuccess,
-            onError = ::handleError
+            onError = ::onError
         ) {
             fetchPagingReviews { page ->
                 getSeriesReviewsUseCase(
@@ -92,7 +92,7 @@ class ReviewsViewModel @Inject constructor(
 
     private fun onFetchReviewsSuccess(reviews: Flow<PagingData<Review>>) {
         val reviewsUiFlow = reviews.map { pagingData ->
-            pagingData.map { it.toUi() }
+            pagingData.map (Review::toUi )
         }
         updateState {
             it.copy(
@@ -102,7 +102,13 @@ class ReviewsViewModel @Inject constructor(
         }
     }
 
-    private fun handleError(throwable: Throwable) {
+    private fun onError(throwable: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+
         sendEffect(ReviewEffect.ShowError(throwable))
     }
 }

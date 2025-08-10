@@ -43,7 +43,7 @@ class SeriesDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
     SeriesDetailsScreenState(
-        seriesDetails = SeriesUi(
+        seriesUi = SeriesUi(
             id = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
         )
     )
@@ -51,17 +51,15 @@ class SeriesDetailsViewModel @Inject constructor(
 
 
     init {
-        loadSeriesDetailsScreen(state.value.seriesDetails.id)
-
+        loadSeriesDetailsScreen(state.value.seriesUi.id)
     }
 
 
-    private fun loadSeriesDetailsScreen(seriesID: Int = state.value.seriesDetails.id) {
+    private fun loadSeriesDetailsScreen(seriesID: Int = state.value.seriesUi.id) {
         updateState {
             it.copy(
                 isLoading = true,
                 isNetworkError = false,
-                errorMessage = null
             )
         }
 
@@ -141,7 +139,7 @@ class SeriesDetailsViewModel @Inject constructor(
             if (isLoggedInUseCase()) {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
                 addRatingUseCase(
-                    seriesId = state.value.seriesDetails.id,
+                    seriesId = state.value.seriesUi.id,
                     rating = state.value.currentRating.toFloat()
                 )
             } else {
@@ -179,7 +177,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     override fun onRetryClick() {
-        loadSeriesDetailsScreen(state.value.seriesDetails.id)
+        loadSeriesDetailsScreen(state.value.seriesUi.id)
     }
 
     private fun loadSeriesDetails(seriesId: Int) {
@@ -196,7 +194,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesDetailsSuccess(series: Series) {
         updateState {
             it.copy(
-                seriesDetails = series.toUi(),
+                seriesUi = series.toUi(),
                 isLoading = false
             )
         }

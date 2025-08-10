@@ -20,8 +20,6 @@ class SeasonsViewModel @Inject constructor(
     )
 ) {
 
-
-
     init {
         state.value.seriesId?.let {
             loadSeason(it)
@@ -40,7 +38,7 @@ class SeasonsViewModel @Inject constructor(
     fun loadSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
-                seasons = season.map { season -> season.toUi() },
+                seasons = season.map(Season::toUi),
                 isLoading = false
             )
         }

@@ -26,7 +26,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         onSuccess: (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        block: suspend CoroutineScope.() -> T
+        block: suspend () -> T
     ) {
         coroutineScope.launch(dispatcher) {
             try {

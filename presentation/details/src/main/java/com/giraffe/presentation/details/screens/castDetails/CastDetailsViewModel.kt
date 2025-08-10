@@ -30,13 +30,13 @@ class CastDetailsViewModel @Inject constructor(
     }
 
     private fun getPersonDetails(personId: Int) {
+        updateState { it.copy(isLoading = true) }
+
         safeExecute(
             onSuccess = ::getPersonDetailsSuccess,
-            onError = ::getPersonDetailsError
-        ) {
-            updateState { it.copy(isLoading = true) }
-            getPersonDetailsUseCase(personId)
-        }
+            onError = ::getPersonDetailsError,
+            block = { getPersonDetailsUseCase(personId) }
+        )
     }
 
     private fun getPersonDetailsSuccess(person: Person) {
@@ -70,9 +70,10 @@ class CastDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                errorMessage = exception.message
             )
         }
+
+        sendEffect(CastDetailsEffect.ShowError(exception))
     }
 
 

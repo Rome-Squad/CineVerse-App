@@ -61,9 +61,8 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMovieDetailsScreen(movieID: Int = state.value.movie.id) {
         updateState {
             it.copy(
-                isLoadingMovieDetails = true,
+                isLoading = true,
                 isNetworkError = false,
-                errorMessage = null
             )
         }
 
@@ -77,20 +76,18 @@ class MovieDetailsViewModel @Inject constructor(
     override fun onShowAddToCollectionBottomSheet() {
         safeExecute(
             onSuccess = ::onIsLoggedInSuccess,
-            onError = ::onIsLoggedInError
-        ) {
-            isLoggedInUseCase()
-        }
+            onError = ::onIsLoggedInError,
+            block = isLoggedInUseCase::invoke
+        )
     }
 
     private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
         if (isLoggedIn) {
             safeExecute(
                 onSuccess = ::onGetCollectionsSuccess,
-                onError = ::onGetCollectionsError
-            ) {
-                getCollectionsUseCase()
-            }
+                onError = ::onGetCollectionsError,
+                block = getCollectionsUseCase::invoke
+            )
         } else {
             updateState { it.copy(isVisibleLoginBottomSheet = true) }
         }
@@ -179,7 +176,7 @@ class MovieDetailsViewModel @Inject constructor(
     override fun onConfirmCreateNewCollectionClick() {
         safeExecute(
             onSuccess = ::onCreateCollectionSuccess,
-            onError = ::onCreateCollectionFailure
+            onError = ::onCreateCollectionError
         ) {
             addCollectionUseCase(
                 collection = Collection(
@@ -226,7 +223,7 @@ class MovieDetailsViewModel @Inject constructor(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-    private fun onCreateCollectionFailure(error: Throwable) {
+    private fun onCreateCollectionError(error: Throwable) {
         updateState { it.copy(newCollectionName = "") }
         sendEffect(MovieDetailsEffect.Error(error))
     }
@@ -271,7 +268,6 @@ class MovieDetailsViewModel @Inject constructor(
     private fun addMovieToCollectionSuccess(collectionId: Int) {
         updateState {
             it.copy(
-                isLoadingAddToCollection = false,
                 collections = it.collections.map { collection ->
                     if (collection.id == collectionId) collection.copy(isLoading = false)
                     else collection
@@ -284,19 +280,16 @@ class MovieDetailsViewModel @Inject constructor(
         collectionId: Int,
         error: Throwable
     ) {
-        val isNetworkError = error is NoInternetException
         updateState {
             it.copy(
-                isLoadingAddToCollection = false,
                 collections = it.collections.map { collection ->
                     if (collection.id == collectionId) collection.copy(isLoading = false)
                     else collection
                 },
-                isNetworkError = isNetworkError
             )
         }
 
-        sendEffect(MovieDetailsEffect.Error(error))
+        onError(error)
     }
 
     override fun onAddRateButtonClick() {
@@ -317,7 +310,7 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMovieDetails(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieDetailsSuccess,
-            onError = ::loadMovieDetailsError
+            onError = ::onError
         ) {
             getMovieDetails(movieId)
         }
@@ -327,28 +320,17 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 movie = movie.toUi(),
-                isLoadingMovieDetails = false
+                isLoading = false
             )
         }
         loadMovieGenres(movie.genresID)
     }
 
-    private fun loadMovieDetailsError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
-        updateState {
-            it.copy(
-                isLoadingMovieDetails = false,
-                isNetworkError = isNetworkError,
-            )
-        }
-
-        sendEffect(MovieDetailsEffect.Error(error))
-    }
 
     private fun loadMovieGenres(genresIds: List<Int>) {
         safeExecute(
             onSuccess = ::loadMovieGenresSuccess,
-            onError = ::loadMovieGenresError
+            onError = ::onError
         ) {
             getMoviesGenresByIds(genresIds)
         }
@@ -358,19 +340,15 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 movieGenres = genres.map { genre -> genre.title },
-                isLoadingMovieGenres = false
+                isLoading = false
             )
         }
-    }
-
-    private fun loadMovieGenresError(error: Throwable) {
-        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadRecommendedMovie(movieId: Int) {
         safeExecute(
             onSuccess = ::loadRecommendedMovieSuccess,
-            onError = ::loadRecommendedMovieError
+            onError = ::onError
         ) {
             getRecommendedMovie(movieId = movieId, page = 1)
         }
@@ -387,20 +365,16 @@ class MovieDetailsViewModel @Inject constructor(
                         rating = movie.rating
                     )
                 },
-                isLoadingRecommendedMovies = false
+                isLoading = false
             )
         }
     }
 
-    private fun loadRecommendedMovieError(error: Throwable) {
-        updateState { it.copy(isLoadingRecommendedMovies = false) }
-        sendEffect(MovieDetailsEffect.Error(error))
-    }
 
     private fun loadMoviePeople(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMoviePeopleSuccess,
-            onError = ::loadMoviePeopleError
+            onError = ::onError
         ) {
             getPeopleByMovieId(movieId)
         }
@@ -409,25 +383,20 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMoviePeopleSuccess(people: List<Person>) {
         val cast = people.filter { it.type == PersonType.CAST }.take(10)
         val crew = people.filter { it.type == PersonType.CREW }.take(10)
-        val mappedCrew = crew.map { it.toCrewUi() }
+        val mappedCrew = crew.map(Person::toCrewUi)
         updateState {
             it.copy(
-                isLoadingCast = false,
-                cast = cast.map { cast -> cast.toCastUi() },
+                isLoading = false,
+                cast = cast.map(Person::toCastUi),
                 crew = mappedCrew.groupByRole()
             )
         }
     }
 
-    private fun loadMoviePeopleError(error: Throwable) {
-        updateState { it.copy(isLoadingCast = false) }
-        sendEffect(MovieDetailsEffect.Error(error))
-    }
-
     private fun loadMovieReviews(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMovieReviewsSuccess,
-            onError = ::loadMovieReviewsError
+            onError = ::onError
         ) {
             getMovieReviewsUseCase(
                 movieId = movieId,
@@ -439,16 +408,22 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMovieReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
-                isLoadingReviews = false,
-                movieReviews = reviews.map { review -> review.toUi() }
+                isLoading = false,
+                movieReviews = reviews.map(Review::toUi)
             )
         }
     }
 
-    private fun loadMovieReviewsError(error: Throwable) {
-        updateState { it.copy(isLoadingReviews = false) }
+    private fun onError(error: Throwable) {
+        val isNetworkError = error is NoInternetException
+
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNetworkError = isNetworkError
+            )
+        }
+
         sendEffect(MovieDetailsEffect.Error(error))
     }
-
-
 }

@@ -38,10 +38,9 @@ class CastCreditViewModel @Inject constructor(
 
         safeExecute(
             onSuccess = ::loadCastCreditSuccess,
-            onError = ::loadCastCreditError
-        ) {
-            getPeopleMediaCredits(castId)
-        }
+            onError = ::loadCastCreditError,
+            block = { getPeopleMediaCredits(castId) }
+        )
     }
 
     private fun loadCastCreditSuccess(personCredits: List<PersonCredit>) {

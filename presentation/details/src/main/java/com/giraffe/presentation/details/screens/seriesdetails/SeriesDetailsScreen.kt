@@ -197,13 +197,13 @@ private fun SeriesDetailsContent(
 
                     MainMovieOrSeriesDetailsAnimatedContent(
                         type = stringResource(id = TypeOfScreen.SERIES.titleResId),
-                        name = state.seriesDetails.name,
-                        imageUrl = state.seriesDetails.posterUrl,
-                        rating = state.seriesDetails.rating,
+                        name = state.seriesUi.name,
+                        imageUrl = state.seriesUi.posterUrl,
+                        rating = state.seriesUi.rating,
                         genres = state.genres,
-                        releaseYear = state.seriesDetails.releaseYear.toString(),
-                        isPlayButtonEnabled = state.seriesDetails.youtubeVideoId.isNotBlank(),
-                        onClickPlay = { interaction.onPlayButtonClick(state.seriesDetails.youtubeVideoId) },
+                        releaseYear = state.seriesUi.releaseYear.toString(),
+                        isPlayButtonEnabled = state.seriesUi.youtubeVideoId.isNotBlank(),
+                        onClickPlay = { interaction.onPlayButtonClick(state.seriesUi.youtubeVideoId) },
                         modifier = Modifier.padding(horizontal = 16.dp),
                         duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
                         animationProgress = animationProgress
@@ -211,12 +211,12 @@ private fun SeriesDetailsContent(
                 }
             }
 
-            if (state.seriesDetails.overview.isNotBlank()) {
+            if (state.seriesUi.overview.isNotBlank()) {
                 item {
                     InfoSection(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         title = stringResource(R.string.storyline),
-                        description = state.seriesDetails.overview
+                        description = state.seriesUi.overview
                     )
                 }
             }
@@ -227,7 +227,7 @@ private fun SeriesDetailsContent(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         title = stringResource(R.string.latest_seasons),
                         clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
-                        onClickableText = { interaction.onShowMoreSeasonsTextClick(state.seriesDetails.id) }
+                        onClickableText = { interaction.onShowMoreSeasonsTextClick(state.seriesUi.id) }
                     )
                 }
             }
@@ -288,8 +288,8 @@ private fun SeriesDetailsContent(
                         posters = state.recommendedSeries,
                         onClickEndText = {
                             interaction.onShowMoreRecommendedSeriesTextClick(
-                                seriesId = state.seriesDetails.id,
-                                title = state.seriesDetails.name
+                                seriesId = state.seriesUi.id,
+                                title = state.seriesUi.name
                             )
                         },
                         onClickPoster = {
@@ -318,7 +318,7 @@ private fun SeriesDetailsContent(
                             modifier = Modifier,
                             title = stringResource(R.string.top_reviews),
                             clickableText = if (state.seriesReviews.size > 3) stringResource(R.string.show_more) else null,
-                            onClickableText = { interaction.onShowMoreReviewsTextClick(state.seriesDetails.id) }
+                            onClickableText = { interaction.onShowMoreReviewsTextClick(state.seriesUi.id) }
                         )
 
                         val reviewsToShow = state.seriesReviews.take(3)
