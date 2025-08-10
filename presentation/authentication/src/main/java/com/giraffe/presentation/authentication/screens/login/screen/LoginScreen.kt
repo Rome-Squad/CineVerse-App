@@ -1,14 +1,16 @@
 package com.giraffe.presentation.authentication.screens.login.screen
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.presentation.authentication.screens.login.LoginEffect
 import com.giraffe.presentation.authentication.screens.login.LoginViewModel
-import com.giraffe.presentation.authentication.utils.mapExceptionToStringRes
+import com.giraffe.presentation.authentication.utils.toStringResource
 
 @Composable
 fun LoginScreen(
@@ -19,6 +21,9 @@ fun LoginScreen(
     navigateToResetPasswordScreen: () -> Unit,
     onBackClick: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
     val state by viewModel.state.collectAsState()
     val effectFlow = viewModel.effect
 
@@ -33,8 +38,11 @@ fun LoginScreen(
 
                 is LoginEffect.PopBack -> onBackClick()
                 is LoginEffect.ShowErrorMessage -> {
-                     mapExceptionToStringRes(effect.throwable)
-
+                    Toast.makeText(
+                        context,
+                        context.getString(effect.throwable.toStringResource()),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
             }
