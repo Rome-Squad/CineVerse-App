@@ -113,6 +113,9 @@ fun MainMovieOrSeriesDetails(
             }
 
             Column(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .align(Alignment.CenterVertically),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
