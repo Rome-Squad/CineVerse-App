@@ -65,7 +65,7 @@
     <string name="find_something_to_watch">ابحث عن شئ للمشاهده</string>
     <string name="movies_count">%1$d أفلام</string>
     <string name="tap_an_item_to_see_details_or_update_your_rating">انقر الفيلم لرؤية التفاصيل أو تعديل التقييم</string>
-    <string name="series">Series</string>
-
-
+    <string name="series">مسلسل</string>
+    <string name="star">نجمة</string>
+    <string name="trash">سلة مهملات</string>
 </resources>

@@ -22,9 +22,8 @@ import androidx.compose.ui.unit.IntOffset
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-
 @Composable
- fun SwipableItem(
+fun SwipableItem(
     modifier: Modifier = Modifier,
     actionButton: @Composable BoxScope.() -> Unit,
     onExpanded: () -> Unit = {},
