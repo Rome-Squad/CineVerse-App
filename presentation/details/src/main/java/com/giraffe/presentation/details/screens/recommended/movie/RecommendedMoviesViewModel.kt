@@ -8,12 +8,12 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.model.toMovieUi
-import com.giraffe.media.movies.entity.Movie
-import com.giraffe.media.movies.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movies.usecase.GetRecommendedMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted

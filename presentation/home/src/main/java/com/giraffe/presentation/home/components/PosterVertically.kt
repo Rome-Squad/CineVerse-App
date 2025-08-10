@@ -23,8 +23,9 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.home.screen.movies_list.PosterUiState
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.home.screen.show_more.PosterUiState
+
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("StateFlowValueCalledInComposition")

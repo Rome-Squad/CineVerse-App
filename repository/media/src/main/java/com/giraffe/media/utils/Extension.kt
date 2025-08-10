@@ -10,3 +10,5 @@ import kotlin.time.ExperimentalTime
 fun getCurrentLocalDateTime(): LocalDateTime {
     return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 }
+
+fun Float?.orEmpty() = this ?: 0f

@@ -4,8 +4,8 @@ import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
 class GetSeriesByGenresUseCase @Inject constructor(
-    private val repository: SeriesRepository
+    private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(genresId: Int, page: Int) =
-        repository.getSeriesByGenre(genresId, page)
+        seriesRepository.getByGenreId(genresId, page)
 }
