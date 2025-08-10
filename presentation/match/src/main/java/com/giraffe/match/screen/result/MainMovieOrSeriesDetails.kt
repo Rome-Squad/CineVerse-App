@@ -20,12 +20,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.match.R
 
 @Composable
 fun MainMovieOrSeriesDetails(
@@ -118,7 +120,7 @@ fun MainMovieOrSeriesDetails(
             ) {
                 Icon(
                     painter = painterResource(Theme.icons.dueTone.play),
-                    contentDescription = "play icon",
+                    contentDescription = stringResource(R.string.play_icon),
                     tint = Theme.color.brand.tertiary,
                     modifier = Modifier
                         .size(40.dp)
@@ -137,7 +139,7 @@ fun MainMovieOrSeriesDetails(
                 onClickAdd?.let {
                     Icon(
                         painter = painterResource(Theme.icons.dueTone.add),
-                        contentDescription = "save icon",
+                        contentDescription = stringResource(R.string.add_Icon),
                         tint = Theme.color.shade.primary,
                         modifier = Modifier
                             .size(40.dp)
@@ -172,7 +174,7 @@ private fun IconWithText(
     ) {
         Icon(
             painter = icon,
-            contentDescription = "icon",
+            contentDescription = stringResource(R.string.icon_description),
             modifier = Modifier.size(16.dp),
             tint = colorOfIcon
         )
