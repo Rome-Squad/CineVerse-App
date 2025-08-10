@@ -92,11 +92,10 @@ fun UserProfileSection(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = userDisplayName,
+                    text = if (userDisplayName.isNotEmpty()) userDisplayName else stringResource(R.string.tap_to_add_your_name),
                     style = Theme.textStyle.body.md.medium,
                     color = Theme.color.shade.primary
                 )
-
 
                 Text(
                     text = username,

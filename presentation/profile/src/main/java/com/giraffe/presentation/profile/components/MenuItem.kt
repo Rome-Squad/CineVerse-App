@@ -90,7 +90,7 @@ fun MenuItem(
                 Icon(
                     painter = painterResource(id = CineVerseIcons().outline.altArrowRight),
                     contentDescription = "Navigate to $title",
-                    tint = if (isDanger) Theme.color.additional.primary.red else Theme.color.shade.primary,
+                    tint = if (isDanger) Theme.color.additional.primary.red else Theme.color.shade.tertiary,
                     modifier = Modifier
                         .size(24.dp)
                 )

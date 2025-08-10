@@ -11,7 +11,7 @@ fun UserDto.toEntity(): User {
     }
     return User(
         id = this.id,
-        displayName = this.name,
+        displayName = this.name.orEmpty(),
         username = this.username,
         avatarUrl = fullAvatarUrl
     )
