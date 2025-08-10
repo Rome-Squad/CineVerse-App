@@ -6,7 +6,7 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
-import com.giraffe.media.mediaMember.usecase.GetPeopleBySeriesIdUseCase
+import com.giraffe.media.mediaMember.usecase.GetMediaMembersBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
@@ -33,7 +33,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getSeriesDetails: GetSeriesDetailsUseCase,
     private val getLastSeasons: GetSeasonsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
-    private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
+    private val getCastAndCrewOfSeries: GetMediaMembersBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
     private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
@@ -271,8 +271,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
-            onSuccess = ::loadSeriesPeopleSuccess,
-            onError = {}
+            onSuccess = ::loadSeriesPeopleSuccess
         ) {
             getCastAndCrewOfSeries(seriesId)
         }
@@ -296,8 +295,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadRecommendedSeries(seriesId: Int, page: Int) {
         safeExecute(
-            onSuccess = ::loadRecommendedSeriesSuccess,
-            onError = {}
+            onSuccess = ::loadRecommendedSeriesSuccess
         ) {
             getRecommendedSeries(seriesId = seriesId, page = page)
         }
@@ -321,8 +319,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadSeriesReviews(seriesId: Int) {
         safeExecute(
-            onSuccess = ::loadSeriesReviewsSuccess,
-            onError = {}
+            onSuccess = ::loadSeriesReviewsSuccess
         ) {
             getSeriesReviews(seriesId, 1)
         }

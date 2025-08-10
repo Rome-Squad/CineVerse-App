@@ -2,13 +2,13 @@ package com.giraffe.presentation.details.screens.castDetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.usecase.AddCastToRecentCastUseCase
+import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.screens.castCredit.MediaType
 import com.giraffe.presentation.details.screens.castDetails.state.CastDetailsUiState
 import com.giraffe.presentation.details.screens.castDetails.state.toUiState
-import com.giraffe.media.mediaMember.entity.CastMember
-import com.giraffe.media.mediaMember.usecase.AddRecentCastUseCase
-import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getCastDetailsUseCase: GetCastDetailsUseCase,
-    private val storeRecentSeriesUseCase: AddRecentCastUseCase
+    private val storeRecentSeriesUseCase: AddCastToRecentCastUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(initialState = CastDetailsUiState()),
     CastDetailsInteractionListener {
     private val personId: Int = savedStateHandle.toRoute<CastDetailsRoute>().id

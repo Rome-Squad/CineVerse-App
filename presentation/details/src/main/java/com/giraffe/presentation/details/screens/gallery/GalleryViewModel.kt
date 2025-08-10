@@ -2,15 +2,15 @@ package com.giraffe.presentation.details.screens.gallery
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.giraffe.media.mediaMember.usecase.GetMediaMemberImagesUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.media.mediaMember.usecase.GetPersonImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val getPersonImagesUseCase: GetPersonImagesUseCase
+    val getMediaMemberImagesUseCase: GetMediaMemberImagesUseCase
 ) : BaseViewModel<GalleryUiState, Any>(GalleryUiState()) {
     private val personId = savedStateHandle.toRoute<GalleryRoute>().personId
     private val actorName = savedStateHandle.toRoute<GalleryRoute>().actorName
@@ -34,7 +34,7 @@ class GalleryViewModel @Inject constructor(
             onSuccess = ::getPersonImagesSuccess,
             onError = ::getPersonImagesError
         ) {
-            getPersonImagesUseCase.invoke(personId)
+            getMediaMemberImagesUseCase.invoke(personId)
         }
     }
 

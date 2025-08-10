@@ -1,7 +1,6 @@
-package com.giraffe.media.person.usecase
+package com.giraffe.media.mediaMember.usecase
 
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
-import com.giraffe.media.mediaMember.usecase.ClearRecentPeopleUseCase
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -12,13 +11,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
-class ClearRecentPeopleUseCaseTest {
-    private lateinit var clearRecentPeopleUseCase: ClearRecentPeopleUseCase
+class ClearRecentMediaMembersUseCaseTest {
+    private lateinit var clearRecentMediaMembersUseCase: ClearRecentMediaMembersUseCase
     private val repository: MediaMemberRepository = mockk(relaxed = true)
 
     @BeforeEach
     fun setup() {
-        clearRecentPeopleUseCase = ClearRecentPeopleUseCase(repository)
+        clearRecentMediaMembersUseCase = ClearRecentMediaMembersUseCase(repository)
     }
 
     @Test
@@ -26,9 +25,9 @@ class ClearRecentPeopleUseCaseTest {
         //given
         coEvery { repository.clearRecentViewed() } just Runs
         //when
-        clearRecentPeopleUseCase()
+        clearRecentMediaMembersUseCase()
         //then
-        coVerify(exactly = 1) { clearRecentPeopleUseCase.invoke() }
+        coVerify(exactly = 1) { clearRecentMediaMembersUseCase.invoke() }
     }
 
     @Test
@@ -36,6 +35,6 @@ class ClearRecentPeopleUseCaseTest {
         //given
         coEvery { repository.clearRecentViewed() } throws Exception()
         //when && then
-        assertThrows<Exception> { clearRecentPeopleUseCase() }
+        assertThrows<Exception> { clearRecentMediaMembersUseCase() }
     }
 }

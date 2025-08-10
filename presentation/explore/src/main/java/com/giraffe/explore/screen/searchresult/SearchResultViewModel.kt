@@ -12,11 +12,11 @@ import com.giraffe.explore.screen.discover.SearchTab
 import com.giraffe.explore.util.BasePagingSource
 import com.giraffe.explore.util.toPoster
 import com.giraffe.explore.util.toUi
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.usecase.SearchMediaMembersByNameUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.SearchMovieByNameUseCase
-import com.giraffe.media.mediaMember.entity.CastMember
-import com.giraffe.media.mediaMember.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
@@ -29,7 +29,7 @@ import javax.inject.Inject
 class SearchResultViewModel @Inject constructor(
     private val searchMovieByName: SearchMovieByNameUseCase,
     private val searchSeriesByName: GetSeriesByNameUseCase,
-    private val searchPeopleByName: SearchPeopleByNameUseCase,
+    private val searchPeopleByName: SearchMediaMembersByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle

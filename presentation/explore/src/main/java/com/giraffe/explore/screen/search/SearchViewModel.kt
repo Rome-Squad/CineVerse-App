@@ -7,10 +7,10 @@ import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
+import com.giraffe.media.mediaMember.usecase.ClearRecentMediaMembersUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.mediaMember.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
@@ -34,7 +34,7 @@ class SearchViewModel @Inject constructor(
     private val getRecentSeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val clearRecentSeriesUseCase: ClearRecentlyViewedSeriesUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
-    private val clearRecentlyPeopleUseCase: ClearRecentPeopleUseCase
+    private val clearRecentlyPeopleUseCase: ClearRecentMediaMembersUseCase
 ) : BaseViewModel<SearchScreenState>(SearchScreenState()),
     SearchInteractionListener {
     init {

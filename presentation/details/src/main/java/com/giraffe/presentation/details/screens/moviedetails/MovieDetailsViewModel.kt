@@ -3,6 +3,20 @@ package com.giraffe.presentation.details.screens.moviedetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.collections.entity.Collection
+import com.giraffe.media.collections.usecase.AddCollectionUseCase
+import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
+import com.giraffe.media.collections.usecase.GetCollectionsUseCase
+import com.giraffe.media.entity.Genre
+import com.giraffe.media.entity.Review
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetMediaMembersByMovieIdUseCase
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
+import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
+import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.groupByRole
 import com.giraffe.presentation.details.model.toCastUi
@@ -11,20 +25,6 @@ import com.giraffe.presentation.details.model.toMovieUi
 import com.giraffe.presentation.details.model.toReviewUI
 import com.giraffe.presentation.details.model.toUi
 import com.giraffe.presentation.details.screens.moviedetails.screen.MovieDetailsRoute
-import com.giraffe.media.collections.entity.Collection
-import com.giraffe.media.collections.usecase.AddCollectionUseCase
-import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
-import com.giraffe.media.collections.usecase.GetCollectionsUseCase
-import com.giraffe.media.entity.Genre
-import com.giraffe.media.entity.Review
-import com.giraffe.media.mediaMember.repository.MediaMemberRepository
-import com.giraffe.media.mediaMember.usecase.GetPeopleByMovieIdUseCase
-import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
-import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -35,7 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getRecommendedMovie: GetRecommendedMovieUseCase,
-    private val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
+    private val getPeopleByMovieId: GetMediaMembersByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
