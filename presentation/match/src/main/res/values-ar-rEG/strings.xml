@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="match_screen">شاشة المطابقة</string>
     <string name="not_sure_what_to_watch">لست متأكدًا مما تشاهده؟</string>
     <string name="match_caption">أجب عن بعض الأسئلة السريعة وسنطابقك مع أفضل الاختيارات.</string>
     <string name="start_matching">ابدأ المطابقة</string>
