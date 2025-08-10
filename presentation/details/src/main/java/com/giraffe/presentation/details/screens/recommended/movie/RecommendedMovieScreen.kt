@@ -1,5 +1,6 @@
 package com.giraffe.presentation.details.screens.recommended.movie
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -7,9 +8,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,12 +27,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.Progress
+import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.composable.custom.Button
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
+import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.utils.EventListener
 
 @Composable
@@ -32,14 +46,18 @@ fun RecommendedMoviesScreen(
     modifier: Modifier = Modifier
 ) {
     val viewModel: RecommendedMoviesViewModel = hiltViewModel()
-
-    val lazyPagingItems = viewModel.recommendationScreenState.collectAsLazyPagingItems()
+    val state by viewModel.state.collectAsState()
+    val lazyPagingItems = state.recommendedMoviesFlow.collectAsLazyPagingItems()
     EventListener(
         events = viewModel.effect,
     ) { effect ->
         when (effect) {
-            is RecommendedEffectMovie.NavigateToMovieDetails -> {
+            is RecommendedMoviesEffect.NavigateToMovieDetails -> {
                 navigateToMovieDetails(effect.movieId)
+            }
+
+            is RecommendedMoviesEffect.ShowError -> {
+
             }
         }
     }
@@ -54,8 +72,8 @@ fun RecommendedMoviesScreen(
             .background(Theme.color.background.screen)
     ) {
         Column {
-            RecommendedContent(
-                title = viewModel.title,
+            RecommendedMovieContent(
+                title = state.movieTitle.orEmpty(),
                 lazyPagingItems = lazyPagingItems,
                 interaction = viewModel,
                 onBackClick = onBackClick
@@ -121,3 +139,81 @@ private fun ErrorContent(
         }
     }
 }
+
+
+@Composable
+fun RecommendedMovieContent(
+    title: String,
+    lazyPagingItems: LazyPagingItems<MovieUi>,
+    interaction: RecommendedInteractionListener,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isGridSelected by rememberSaveable { mutableStateOf(false) }
+
+    Box {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(Theme.color.background.screen)
+                .systemBarsPadding()
+        ) {
+            item {
+                AppBar(
+                    title = title,
+                    caption = stringResource(R.string.because_you_watched),
+                    showBackButton = true,
+                    modifier = Modifier.padding(8.dp),
+                    onBackButtonClick = onBackClick
+                )
+            }
+
+            item {
+                CardsSection(
+                    modifier = Modifier.fillParentMaxHeight(),
+                    lazyPagingItems = lazyPagingItems,
+                    isGridSelected = !isGridSelected,
+                    onItemClick = interaction::navigateToMovieDetailsScreen
+                )
+            }
+        }
+
+
+        ViewToggle(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
+                .padding(16.dp),
+            isListSelected = isGridSelected,
+            onGridSelected = { isGridSelected = !it }
+        )
+    }
+}
+
+
+@Composable
+private fun CardsSection(
+    modifier: Modifier = Modifier,
+    lazyPagingItems: LazyPagingItems<MovieUi>,
+    isGridSelected: Boolean,
+    onItemClick: (Int) -> Unit,
+
+    ) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Theme.color.background.screen)
+    ) {
+        TransitionLazyColumnToGridMovie(
+            lazyPagingItems = lazyPagingItems,
+            isListSelected = !isGridSelected,
+            contentPadding = PaddingValues(vertical = 5.dp),
+            onItemClick = { movieId ->
+                movieId.let {
+                    onItemClick(it)
+                } ?: Log.e("RecommendedMovies", "Movie ID is null.")
+            }
+        )
+    }
+}
+
