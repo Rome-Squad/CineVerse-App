@@ -68,12 +68,12 @@ class DiscoverViewModel @Inject constructor(
     }
 
     private fun onEmitNewMovieGenres(pagingData: PagingData<Movie>) {
-        val postersFlow = flowOf(
+        val postersFlow =
             pagingData.map { movie -> movie.toPoster(state.value.moviesGenres) }
-        )
-        updateState { it.copy(moviesPosters = postersFlow) }
+
+        updateState { it.copy(moviesPosters = flowOf(postersFlow)) }
         if (state.value.selectedTab == SearchTab.MOVIES) {
-            updateState { it.copy(selectedPosters = postersFlow) }
+            updateState { it.copy(selectedPosters = flowOf(postersFlow)) }
         }
     }
 
