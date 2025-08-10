@@ -30,23 +30,26 @@ fun Series.toPosterUi() = Poster(
 )
 
 
-fun Series.toShowMorePoster() = ShowMorePoster(
+fun Series.toShowMorePoster(genres: List<String>) = ShowMorePoster(
     id = id,
     name = name,
     imageUri = posterUrl,
     rating = rating,
-    date = releaseYear.toString(),
-    mediaType = MediaType.SERIES
+    date = releaseYear.toString().toFormattedDate(),
+    mediaType = MediaType.SERIES,
+    genres = genres
 )
 
 
-fun Movie.toShowMorePoster() = ShowMorePoster(
+fun Movie.toShowMorePoster(genres: List<String>) = ShowMorePoster(
     id = id,
     name = title,
     imageUri = posterUrl.orEmpty(),
     rating = rating,
-    date = releaseYear.toString(),
-    mediaType = MediaType.MOVIE
+    date = releaseYear.toString().toFormattedDate(),
+    mediaType = MediaType.MOVIE,
+    genres = genres,
+    time = duration.toString()
 )
 
 

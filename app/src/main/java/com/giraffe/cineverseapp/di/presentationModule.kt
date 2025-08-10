@@ -1,5 +1,6 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
@@ -7,6 +8,7 @@ import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.screen.show_more.MatchesYourVibesStrategy
 import com.giraffe.presentation.home.screen.show_more.RecentlyReleasedStrategy
@@ -27,34 +29,50 @@ object PresentationModule {
     @Singleton
     fun provideRecentlyReleasedStrategy(
         getRecentlyReleasedMovies: GetRecentlyReleasedMoviesUseCase,
-        getRecentlyReleasedSeries: GetRecentlyReleasedSeriesUseCase
+        getRecentlyReleasedSeries: GetRecentlyReleasedSeriesUseCase,
+        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
+        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
     ): RecentlyReleasedStrategy {
-        return RecentlyReleasedStrategy(getRecentlyReleasedMovies, getRecentlyReleasedSeries)
+        return RecentlyReleasedStrategy(
+            getRecentlyReleasedMovies,
+            getRecentlyReleasedSeries,
+            getMovieGenresUseCase,
+            getSeriesGenresUseCase
+        )
     }
 
     @Provides
     @Singleton
     fun provideTopRatedTvShowsStrategy(
-        getTopRatedSeries: GetTopRatedSeriesUseCase
+        getTopRatedSeries: GetTopRatedSeriesUseCase,
+        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
     ): TopRatedTvShowsStrategy {
-        return TopRatedTvShowsStrategy(getTopRatedSeries)
+        return TopRatedTvShowsStrategy(getTopRatedSeries, getSeriesGenresUseCase)
     }
 
     @Provides
     @Singleton
     fun provideUpcomingMoviesStrategy(
-        getUpcomingMovies: GetUpcomingMoviesUseCase
+        getUpcomingMovies: GetUpcomingMoviesUseCase,
+        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     ): UpcomingMoviesStrategy {
-        return UpcomingMoviesStrategy(getUpcomingMovies)
+        return UpcomingMoviesStrategy(getUpcomingMovies, getMovieGenresUseCase)
     }
 
     @Provides
     @Singleton
     fun provideRecentlyViewedStrategy(
         getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-        getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase
+        getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
+        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
+        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
     ): RecentlyViewedStrategy {
-        return RecentlyViewedStrategy(getRecentlyViewedMovies, getRecentlySeriesUseCase)
+        return RecentlyViewedStrategy(
+            getRecentlyViewedMovies,
+            getRecentlySeriesUseCase,
+            getMovieGenresUseCase,
+            getSeriesGenresUseCase
+        )
     }
 
     @Provides
@@ -63,13 +81,17 @@ object PresentationModule {
         getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
         getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
         getRecommendedMovie: GetRecommendedMovieUseCase,
-        getRecommendedSeries: GetRecommendedSeriesUseCase
+        getRecommendedSeries: GetRecommendedSeriesUseCase,
+        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
+        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
     ): MatchesYourVibesStrategy {
         return MatchesYourVibesStrategy(
             getRecentlyViewedMovies,
             getRecentlySeriesUseCase,
             getRecommendedMovie,
-            getRecommendedSeries
+            getRecommendedSeries,
+            getMovieGenresUseCase,
+            getSeriesGenresUseCase
         )
     }
 

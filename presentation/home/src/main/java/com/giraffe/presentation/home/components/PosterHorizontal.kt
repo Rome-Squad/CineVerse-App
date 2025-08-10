@@ -113,13 +113,15 @@ fun PosterHorizontal(
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
                         )
-                        Text(
-                            text = poster.genres ?: stringResource(R.string.unknown_genre),
-                            style = Theme.textStyle.body.sm.regular,
-                            color = Theme.color.shade.secondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        if (poster.genres.isNotEmpty()) {
+                            Text(
+                                text = poster.genres.joinToString(separator = ", "),
+                                style = Theme.textStyle.body.sm.regular,
+                                color = Theme.color.shade.secondary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                     Rating(
                         value = poster.rating,

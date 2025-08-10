@@ -8,7 +8,6 @@ import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreRoute
 import com.giraffe.user.exception.NoInternetException
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
