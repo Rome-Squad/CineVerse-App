@@ -52,16 +52,13 @@ fun MainMovieOrSeriesDetails(
                 .heightIn(min = 52.dp)
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .background(Theme.color.background.card.copy(1f - animationProgress))
-                .padding(
-                    start = 16.dp,
-                    bottom = 16.dp,
-                    end = 16.dp
-                ),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Text(
                     text = type.uppercase(),
