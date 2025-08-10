@@ -1,9 +1,10 @@
-package com.giraffe.presentation.details.screens.videoPlayer
+package com.giraffe.presentation.details.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.giraffe.presentation.details.screens.videoPlayer.YouTubePlayerScreen
 import kotlinx.serialization.Serializable
 
 

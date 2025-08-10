@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.match"
+    namespace = "com.giraffe.presentation.match"
     compileSdk = 36
 
     defaultConfig {
@@ -43,10 +43,11 @@ dependencies {
     implementation(project(":imageviewer"))
     implementation(project(":domain:media"))
     implementation(project(":api:match"))
+    implementation(project(":api:details"))
 
 
-
-
+    //android youtube player
+    implementation(libs.core)
 
 
     implementation(libs.androidx.core.ktx)

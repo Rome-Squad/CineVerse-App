@@ -10,7 +10,7 @@ data class SeriesUi(
     val overview: String = "",
     val rating: Float = 0.0f,
     val posterUrl: String? = null,
-    val releaseYear: String? = null,
+    val releaseYear: String = "",
     val youtubeVideoId: String = "",
     val genres: List<String> = emptyList(),
 ) {

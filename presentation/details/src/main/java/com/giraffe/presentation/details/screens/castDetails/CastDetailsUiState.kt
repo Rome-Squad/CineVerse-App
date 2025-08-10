@@ -1,6 +1,7 @@
-package com.giraffe.presentation.details.screens.castDetails.state
+package com.giraffe.presentation.details.screens.castDetails
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.details.model.SocialMediaUi
 
 data class CastDetailsUiState(
     val actorId: Int = 0,
