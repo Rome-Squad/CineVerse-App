@@ -10,7 +10,7 @@ data class SeriesUi(
     val overview: String = "",
     val rating: Float = 0.0f,
     val posterUrl: String? = null,
-    val releaseYear: String? = null,
+    val releaseYear: String = "",
     val youtubeVideoId: String = "",
     val genres: List<String> = emptyList(),
 ) {
@@ -21,8 +21,7 @@ data class SeriesUi(
             overview = series.overview,
             rating = series.rating,
             posterUrl = series.posterUrl,
-            releaseYear = if (series.releaseYear != null) series.releaseYear.toString()
-                .toFormattedDate() else null,
+            releaseYear = series.releaseYear.toFormattedDate(),
             genres = emptyList(),
             youtubeVideoId = series.youtubeVideoId.orEmpty(),
         )

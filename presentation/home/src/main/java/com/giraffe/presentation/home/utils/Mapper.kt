@@ -1,22 +1,22 @@
 package com.giraffe.presentation.home.utils
 
+import com.giraffe.media.collections.entity.Collection
+import com.giraffe.media.entity.Genre
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.home.screen.home.FeaturedCollectionUiModel
 import com.giraffe.presentation.home.screen.home.HomeUiModel
 import com.giraffe.presentation.home.screen.home.MediaType
 import com.giraffe.presentation.home.screen.home.PopularMediaUiModel
 import com.giraffe.presentation.home.screen.home.YourCollectionUiModel
-import com.giraffe.media.collections.entity.Collection
-import com.giraffe.media.entity.Genre
-import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.home.screen.show_more.PosterUiState
 
 
 fun Movie.toHomeUiModel(): HomeUiModel {
     return HomeUiModel(
         id = id,
-        title = title,
-        posterUrl = posterUrl.orEmpty(),
+        title = name,
+        posterUrl = posterUrl,
         rating = rating,
         mediaType = MediaType.MOVIE
     )
@@ -38,7 +38,7 @@ fun Series.toPosterUi(): PosterUiState {
         name = name,
         imageUri = posterUrl,
         rating = rating,
-        date = releaseYear.toString(),
+        date = releaseYear.orEmpty(),
         mediaType = MediaType.SERIES
     )
 }
@@ -46,21 +46,20 @@ fun Series.toPosterUi(): PosterUiState {
 fun Movie.toPosterUi(): PosterUiState {
     return PosterUiState(
         id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
+        name = name,
+        imageUri = posterUrl,
         rating = rating,
-        date = releaseYear.toString(),
+        date = releaseYear.orEmpty(),
         mediaType = MediaType.MOVIE
     )
 }
 
-
 fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
     return PopularMediaUiModel(
         id = id,
-        title = title,
-        posterUrl = posterUrl.orEmpty(),
-        backdropUrl = backdropUrl.orEmpty(),
+        title = name,
+        posterUrl = posterUrl,
+        backdropUrl = backdropUrl,
         genres = genres,
         rating = rating,
         mediaType = MediaType.MOVIE

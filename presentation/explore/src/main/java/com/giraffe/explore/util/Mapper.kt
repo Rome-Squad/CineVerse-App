@@ -23,11 +23,11 @@ fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
 
     return Poster(
         id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
+        name = name,
+        imageUri = posterUrl,
         rating = rating,
         genres = genreTitles,
-        time = duration.toString(),
+        time = duration.orEmpty(),
         date = date,
         mediaTypeOfPoster = Poster.Type.MOVIE.value
     )
@@ -46,7 +46,7 @@ fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         imageUri = "https://image.tmdb.org/t/p/w500$posterUrl",
         rating = rating,
         genres = genreTitles,
-        date = releaseYear.toString(),
+        date = releaseYear.orEmpty(),
         mediaTypeOfPoster = Poster.Type.SERIES.value
     )
 }
@@ -54,7 +54,7 @@ fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
 fun Person.toPoster() = Poster(
     id = id,
     name = name,
-    imageUri = imageUrl.toString(),
+    imageUri = imageUrl.orEmpty(),
     rating = 0f,
     mediaTypeOfPoster = Poster.Type.PERSON.value
 )

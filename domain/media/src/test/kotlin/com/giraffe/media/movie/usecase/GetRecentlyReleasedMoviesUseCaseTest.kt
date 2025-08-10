@@ -25,7 +25,7 @@ class GetRecentlyReleasedMoviesUseCaseTest {
     fun `given recently released movies, when invoke is called, then return movie list`() =
         runTest {
             // Given
-            val expectedRecentlyReleased = fakeMovies.filter { it.recentReleasedAt != null }
+            val expectedRecentlyReleased = fakeMovies
             val page = 1
             val limit = 10
             coEvery {

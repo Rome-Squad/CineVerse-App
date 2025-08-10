@@ -188,7 +188,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesDetailsSuccess(series: Series) {
         updateState {
             it.copy(
-                seriesDetails = SeriesUi.Companion.fromEntity(series),
+                seriesDetails = SeriesUi.fromEntity(series),
                 isLoading = false
             )
         }

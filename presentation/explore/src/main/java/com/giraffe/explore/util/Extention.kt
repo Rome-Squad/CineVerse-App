@@ -9,3 +9,5 @@ fun SearchTab.toTitle(context: Context) = when (this) {
     SearchTab.SERIES -> context.getString(R.string.series)
     SearchTab.ACTORS -> context.getString(R.string.actors)
 }
+
+fun Any?.orEmpty(): String = this?.toString() ?: ""

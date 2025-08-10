@@ -12,8 +12,8 @@ import com.giraffe.presentation.profile.screens.history.MediaType
 fun Movie.toHistoryUiModel(): HistoryUiModel {
     return HistoryUiModel(
         id = id,
-        title = title,
-        posterUrl = posterUrl.orEmpty(),
+        title = name,
+        posterUrl = posterUrl,
         rating = rating,
         mediaType = MediaType.MOVIE
     )
@@ -31,7 +31,7 @@ fun Series.toHistoryUiModel(): HistoryUiModel {
 
 fun Series.toRatedPoster(genres: List<Genre>) = RatedPoster(
     poster = this.toPosterUi(genres),
-    rating = userRating ?: 0f,
+    rating = userRating.orEmpty(),
 )
 
 fun Series.toPosterUi(genres: List<Genre> = emptyList()): Poster {
@@ -41,24 +41,24 @@ fun Series.toPosterUi(genres: List<Genre> = emptyList()): Poster {
         genres = genres.joinToString(", ") { it.title },
         imageUri = posterUrl,
         rating = rating,
-        date = releaseYear.toString(),
+        date = releaseYear.orEmpty(),
         mediaTypeOfPoster = "series"
     )
 }
 
 fun Movie.toRatedPoster(genres: List<Genre>) = RatedPoster(
     poster = this.toPosterUi(genres),
-    rating = userRating ?: 0f,
+    rating = userRating.orEmpty(),
 )
 
 fun Movie.toPosterUi(genres: List<Genre> = emptyList()): Poster {
     return Poster(
         id = id,
-        name = title,
+        name = name,
         genres = genres.joinToString(", ") { it.title },
-        imageUri = posterUrl.orEmpty(),
+        imageUri = posterUrl,
         rating = rating,
-        date = releaseYear.toString(),
+        date = releaseYear.orEmpty(),
         mediaTypeOfPoster = "movie"
     )
 }

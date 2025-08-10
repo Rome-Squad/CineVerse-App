@@ -3,14 +3,6 @@ package com.giraffe.presentation.details.screens.moviedetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.model.groupByRole
-import com.giraffe.presentation.details.model.toCastUi
-import com.giraffe.presentation.details.model.toCrewUi
-import com.giraffe.presentation.details.model.toMovieUi
-import com.giraffe.presentation.details.model.toReviewUI
-import com.giraffe.presentation.details.model.toUi
-import com.giraffe.presentation.details.screens.moviedetails.screen.MovieDetailsRoute
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
@@ -26,6 +18,14 @@ import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.model.groupByRole
+import com.giraffe.presentation.details.model.toCastUi
+import com.giraffe.presentation.details.model.toCrewUi
+import com.giraffe.presentation.details.model.toMovieUi
+import com.giraffe.presentation.details.model.toReviewUI
+import com.giraffe.presentation.details.model.toUi
+import com.giraffe.presentation.details.screens.moviedetails.screen.MovieDetailsRoute
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -309,8 +309,8 @@ class MovieDetailsViewModel @Inject constructor(
                 recommendedMovies = recommendedSeries.map { movie ->
                     Poster(
                         id = movie.id,
-                        name = movie.title,
-                        imageUri = movie.posterUrl.toString(),
+                        name = movie.name,
+                        imageUri = movie.posterUrl,
                         rating = movie.rating
                     )
                 },

@@ -8,7 +8,7 @@ data class SeasonUi(
     val overview: String = "",
     val rating: Float = 0.0f,
     val posterUrl: String? = null,
-    val releaseYear: String? = null,
+    val releaseYear: String = "",
     val seasonNumber: Int = 0,
     val episodeCount: Int = 0
 ) {
@@ -18,8 +18,7 @@ data class SeasonUi(
             overview = season.overview,
             rating = season.rating,
             posterUrl = season.posterUrl,
-            releaseYear = if (season.releaseYear != null) season.releaseYear.toString()
-                .toFormattedDate() else null,
+            releaseYear = season.releaseYear.toFormattedDate(),
             seasonNumber = season.seasonNumber,
             episodeCount = season.episodeCount
         )

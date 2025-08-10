@@ -4,6 +4,7 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
+import com.giraffe.presentation.profile.utils.orEmpty
 
 data class SwipeablePoster(
     val poster: Poster,
@@ -25,8 +26,8 @@ fun Movie.toPoster(allGenres: List<Genre> = emptyList()): Poster {
 
     return Poster(
         id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
+        name = name,
+        imageUri = posterUrl,
         rating = rating,
         genres = genreTitles,
         time = null,
@@ -50,7 +51,7 @@ fun Series.toPoster(allGenres: List<Genre> = emptyList()): Poster {
         rating = rating,
         genres = genreTitles,
         time = null,
-        date = releaseYear.toString(),
+        date = releaseYear.orEmpty(),
         mediaTypeOfPoster = Poster.Type.MOVIE.value
     )
 }

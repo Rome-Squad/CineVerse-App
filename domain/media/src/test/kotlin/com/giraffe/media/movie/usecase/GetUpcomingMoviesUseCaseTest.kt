@@ -23,7 +23,7 @@ class GetUpcomingMoviesUseCaseTest {
     @Test
     fun `given upcoming movies, when invoke is called, then return movie list`() = runTest {
         // Given
-        val expectedMovies = fakeMovies.filter { it.upcomingAt != null}
+        val expectedMovies = fakeMovies
         val page = 1
         val limit = 10
 
