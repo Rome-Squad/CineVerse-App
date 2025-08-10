@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.giraffe.media.movies.usecase.ClearMoviesCacheUseCase
+import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.series.usecase.ClearSeriesCacheUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -20,7 +20,7 @@ class CacheCleanupWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         return try {
             clearMoviesCacheUseCase.clearMovieCacheWithOutRecentViewed()
-            clearSeriesCacheUseCase.clearSeriesExceptRecentlyViewed()
+            clearSeriesCacheUseCase.clearAllExceptRecentlyViewed()
             Result.success()
         } catch (_: Exception) {
             Result.retry()

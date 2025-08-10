@@ -5,7 +5,7 @@ import com.giraffe.media.collections.datasource.remote.dto.CollectionItemDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionMediaTypeString
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.entity.CollectionMediaType
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import kotlinx.datetime.LocalDate
 

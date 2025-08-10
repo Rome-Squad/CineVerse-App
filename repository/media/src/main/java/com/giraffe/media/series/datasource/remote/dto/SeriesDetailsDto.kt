@@ -14,12 +14,13 @@ data class SeriesDetailsDto(
     val languages: List<String> = emptyList(),
     val genres: List<GenreDto> = emptyList(),
     val homepage: String? = null,
+    val popularity: Double? = null,
     @SerialName("vote_average")
     val voteAverage: Double? = null,
     @SerialName("vote_count")
     val voteCount: Int? = null,
     @SerialName("first_air_date")
-    val firstAirDate: String? = null,
+    val releaseYear: String? = null,
     @SerialName("last_air_date")
     val lastAirDate: String? = null,
     @SerialName("number_of_episodes")
@@ -33,8 +34,10 @@ data class SeriesDetailsDto(
     @SerialName("original_name")
     val originalName: String? = null,
     @SerialName("poster_path")
-    val posterPath: String? = null,
+    val posterUrl: String? = null,
     @SerialName("backdrop_path")
-    val backdropPath : String? = null,
+    val backdropUrl: String? = null,
+    @SerialName("rating")
+    val userRating: Float? = null,
     var youtubeVideoId: String? = null
 )

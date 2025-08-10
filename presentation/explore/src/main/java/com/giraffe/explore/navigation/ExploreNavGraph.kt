@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
-import com.giraffe.details.DetailsApi
+import com.giraffe.api.details.DetailsApi
 import com.giraffe.explore.screen.discover.DiscoverRoute
 import com.giraffe.explore.screen.discover.discoverRoute
 import com.giraffe.explore.screen.search.SearchRoute

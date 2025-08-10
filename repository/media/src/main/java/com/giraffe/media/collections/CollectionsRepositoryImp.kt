@@ -6,7 +6,7 @@ import com.giraffe.media.collections.mapper.toDto
 import com.giraffe.media.collections.mapper.toEntity
 import com.giraffe.media.collections.mapper.toMovie
 import com.giraffe.media.collections.repository.CollectionsRepository
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.SafeCall
 import javax.inject.Inject
 
