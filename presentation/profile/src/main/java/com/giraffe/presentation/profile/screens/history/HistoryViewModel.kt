@@ -20,7 +20,7 @@ class HistoryViewModel @Inject constructor(
     private val deleteMovieUseCase: DeleteMovieUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :
-    BaseViewModel<HistoryScreenState, HistoryEffect>(initialState = HistoryScreenState()),
+    BaseViewModel<HistoryScreenState, HistoryEffect>(HistoryScreenState()),
     HistoryInteractionListener {
 
     init {
@@ -31,15 +31,17 @@ class HistoryViewModel @Inject constructor(
     private fun getRecentViewedMovies() {
         safeCollect(
             onEmitNewValue = ::onGetRecentMoviesSuccess,
-            onError = ::onFailure
-        ) { getRecentlyMoviesUseCase.invoke() }
+            onError = ::onFailure,
+            block = getRecentlyMoviesUseCase::invoke
+        )
     }
 
     private fun getRecentViewedSeries() {
         safeCollect(
             onEmitNewValue = ::onGetRecentSeriesSuccess,
-            onError = ::onFailure
-        ) { getRecentlySeriesUseCase.invoke() }
+            onError = ::onFailure,
+            block = getRecentlySeriesUseCase::invoke
+        )
     }
 
     private fun onGetRecentMoviesSuccess(moviesList: List<Movie>) {
@@ -69,11 +71,9 @@ class HistoryViewModel @Inject constructor(
         safeExecute(
             onError = ::onFailure,
             onSuccess = {
-                val updatedList = state.value.mediaList.filterNot { it.id == id }
-
                 updateState {
                     it.copy(
-                        mediaList = updatedList,
+                        mediaList = state.value.mediaList.filterNot { media -> media.id == id },
                         swipedPosterId = null,
                         isSwiped = false
                     )
@@ -98,11 +98,6 @@ class HistoryViewModel @Inject constructor(
             "movie" -> sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
             "series" -> sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
         }
-
-        sendEffect(HistoryEffect.NavigateToMovieDetails(mediaId))
-        sendEffect(HistoryEffect.NavigateToSeriesDetails(mediaId))
-
-
     }
 
     override fun onBackClick() {

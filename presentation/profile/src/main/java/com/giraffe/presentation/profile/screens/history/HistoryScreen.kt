@@ -24,12 +24,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.composable.MessageInfoBox
-import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterItemHorizontal
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
 import com.giraffe.presentation.profile.components.DeleteButton
+import com.giraffe.presentation.profile.components.ScreenStates
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.utils.EffectListener
 import com.giraffe.presentation.profile.utils.toStringResource
@@ -48,29 +47,16 @@ fun HistoryScreen(
         events = viewModel.effect
     ) { effect ->
         when (effect) {
-            is HistoryEffect.NavigateToMovieDetails -> {
-                navigateToMoviesDetailsScreen(effect.movieId)
-            }
-
-            is HistoryEffect.NavigateToSeriesDetails -> {
-                navigateToSeriesDetailsScreen(effect.seriesId)
-            }
-
-            is HistoryEffect.NavigateToExploreScreen -> {
-                navigateToExploreScreen()
-            }
-
-            is HistoryEffect.NavigateToProfileScreen -> {
-                onBackClicked()
-            }
-
+            is HistoryEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
+            is HistoryEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
+            is HistoryEffect.NavigateToExploreScreen -> navigateToExploreScreen()
+            is HistoryEffect.NavigateToProfileScreen -> onBackClicked()
+            is HistoryEffect.NavigateToBack -> onBackClicked()
             is HistoryEffect.ShowError -> Toast.makeText(
                 context,
                 context.getString(effect.error.toStringResource()),
                 Toast.LENGTH_SHORT
             ).show()
-
-            HistoryEffect.NavigateToBack -> onBackClicked()
         }
     }
     HistoryContent(
@@ -95,16 +81,15 @@ private fun HistoryContent(
             showBackButton = true,
             onBackButtonClick = interaction::onBackClick
         )
-        if (state.isLoading) {
-            Progress()
-        } else if (state.isNoInternet) {
-            NoInternetScreen()
-        } else {
+        ScreenStates(
+            isLoading = state.isLoading,
+            isNoInternet = state.isNoInternet
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                if (state.mediaList.isEmpty() && state.isLoading.not()) {
+                if (state.mediaList.isEmpty()) {
                     MessageInfoBox(
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -131,8 +116,6 @@ private fun HistoryContent(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-
-
                         if (state.isTipVisible) {
                             item {
 
@@ -147,7 +130,6 @@ private fun HistoryContent(
 
                             }
                         }
-
                         items(state.mediaList, key = { poster -> poster.id }) { poster ->
                             SwipableItem(
                                 actionButton = {
