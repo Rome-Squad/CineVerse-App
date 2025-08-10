@@ -3,7 +3,7 @@ package com.giraffe.presentation.details.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.giraffe.authentication.AuthenticationApi
+import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.presentation.details.navigation.routes.castCreditRoute
 import com.giraffe.presentation.details.navigation.routes.castDetailsRoute
 import com.giraffe.presentation.details.navigation.routes.galleryRoute
@@ -19,7 +19,6 @@ import com.giraffe.presentation.details.navigation.routes.reviewRoute
 import com.giraffe.presentation.details.navigation.routes.seasonsRoute
 import com.giraffe.presentation.details.navigation.routes.seriesDetailsRoute
 import com.giraffe.presentation.details.navigation.routes.youTubePlayerRouteRoute
-import com.giraffe.api.authentication.AuthenticationApi
 
 
 @Composable
