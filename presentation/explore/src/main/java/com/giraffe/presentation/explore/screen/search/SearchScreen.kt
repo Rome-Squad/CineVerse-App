@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen.search
+package com.giraffe.presentation.explore.screen.search
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -36,30 +36,41 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.components.ExploreHeader
-import com.giraffe.explore.components.SearchItem
-import com.giraffe.explore.components.VoiceRecordingOverlay
-import com.giraffe.explore.util.VoiceSearchHelper
 import com.giraffe.presentation.explore.R
+import com.giraffe.presentation.explore.components.ExploreHeader
+import com.giraffe.presentation.explore.components.SearchItem
+import com.giraffe.presentation.explore.components.VoiceRecordingOverlay
+import com.giraffe.presentation.explore.util.VoiceSearchHelper
 
 @Composable
 fun SearchScreen(
     navigateToSearchResult: (String) -> Unit,
     onBackClick: () -> Unit,
-    onClickPoster: (Poster) -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToPersonDetails: (Int) -> Unit,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var rmsDbLevel by remember { mutableFloatStateOf(0f) }
 
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is SearchEffect.Error -> {}
+                is SearchEffect.OnBackClick -> onBackClick()
+                is SearchEffect.NavigateToMovieDetail -> navigateToMovieDetails(effect.movieId)
+                is SearchEffect.NavigateToPersonDetails -> navigateToPersonDetails(effect.personId)
+                is SearchEffect.NavigateToSeriesDetail -> navigateToSeriesDetails(effect.seriesId)
+                is SearchEffect.NavigateToSearchResult -> navigateToSearchResult(effect.result)
+            }
+        }
+    }
+
     Box {
         SearchContent(
             state = state,
             interactions = viewModel,
-            navigateToSearchResult = navigateToSearchResult,
-            onBackClick = onBackClick,
-            onClickPoster = onClickPoster,
             onRmsChanged = { rmsDbLevel = it }
         )
         VoiceRecordingOverlay(
@@ -74,9 +85,6 @@ fun SearchScreen(
 private fun SearchContent(
     state: SearchScreenState,
     interactions: SearchInteractionListener,
-    navigateToSearchResult: (String) -> Unit,
-    onBackClick: () -> Unit,
-    onClickPoster: (Poster) -> Unit,
     onRmsChanged: (Float) -> Unit
 ) {
     val context = LocalContext.current
@@ -159,8 +167,8 @@ private fun SearchContent(
                 placeholder = stringResource(R.string.search),
                 focusRequester = focusRequester,
                 onEndIconClick = interactions::onPostfixIconClick,
-                onBackClick = onBackClick,
-                onSearch = navigateToSearchResult
+                onBackClick = interactions::onBackClick,
+                onSearch = interactions::navigateToSearchResult
             )
         }
 
@@ -174,7 +182,7 @@ private fun SearchContent(
             onKeywordClearClick = interactions::deleteKeyword,
             onKeywordsClick = {
                 interactions.onKeywordClick(it)
-                navigateToSearchResult(it)
+                interactions.navigateToSearchResult(it)
             }
         )
 
@@ -185,7 +193,7 @@ private fun SearchContent(
                 title = stringResource(R.string.you_recent_viewed),
                 posters = state.recentPosters,
                 onClickEndText = interactions::clearAllRecentViewedPosters,
-                onClickPoster = onClickPoster
+                onClickPoster = interactions::onClickPoster
             )
         }
     }

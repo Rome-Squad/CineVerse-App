@@ -1,8 +1,7 @@
-package com.giraffe.explore.screen.search
+package com.giraffe.presentation.explore.screen.search
 
-import androidx.lifecycle.viewModelScope
-import com.giraffe.explore.base.BaseViewModel
-import com.giraffe.explore.util.toPoster
+import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
@@ -14,11 +13,13 @@ import com.giraffe.media.person.usecase.ClearRecentPeopleUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearRecentSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentSeriesUseCase
+import com.giraffe.presentation.explore.base.BaseViewModel
+import com.giraffe.presentation.explore.screen.search.SearchEffect.NavigateToMovieDetail
+import com.giraffe.presentation.explore.util.mapExceptionToStringRes
+import com.giraffe.presentation.explore.util.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -35,47 +36,49 @@ class SearchViewModel @Inject constructor(
     private val clearRecentSeriesUseCase: ClearRecentSeriesUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
     private val clearRecentlyPeopleUseCase: ClearRecentPeopleUseCase
-) : BaseViewModel<SearchScreenState>(SearchScreenState()),
+) : BaseViewModel<SearchScreenState, SearchEffect>(SearchScreenState()),
     SearchInteractionListener {
+
     init {
         onQueryChange()
         getRecentViewed()
     }
 
-    private fun onFail(errorMsgRes: Int, isConnected: Boolean) =
-        updateState { it.copy(errorMsgRes = errorMsgRes, isConnected = isConnected) }
-
     private fun getRecentViewed() {
-        viewModelScope.launch(Dispatchers.IO) {
-            updateState { it.copy(isConnected = true) }
-            safeExecute(
-                onSuccess = ::onGetRecentlyMoviesSuccess,
-                onError = ::onFail,
-                block = getRecentlyViewedMoviesUseCase::invoke
-            ).join()
-            safeExecute(
-                onSuccess = ::onGetRecentlySeriesSuccess,
-                onError = ::onFail,
-                block = getRecentSeriesUseCase::invoke
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
+
+        safeCollect(
+            onError = ::onError,
+            onEmitNewValue = ::onGetRecentlyMoviesSuccess,
+            block = getRecentlyViewedMoviesUseCase::invoke
+        )
+        safeCollect(
+            onEmitNewValue = ::onGetRecentlySeriesSuccess,
+            onError = ::onError,
+            block = getRecentSeriesUseCase::invoke
+        )
+    }
+
+    private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
+        updateState {
+            it.copy(
+                recentPosters = (it.recentPosters + movies.map(Movie::toPoster)).distinctBy { poster -> poster.id },
+                isLoading = false
             )
         }
     }
 
-    private suspend fun onGetRecentlyMoviesSuccess(moviesFlow: Flow<List<Movie>>) {
-        moviesFlow.collectLatest { movies ->
-            updateState { it.copy(recentPosters = (it.recentPosters + movies.map(Movie::toPoster)).distinctBy { poster -> poster.id }) }
-        }
-    }
-
-    private suspend fun onGetRecentlySeriesSuccess(seriesFlow: Flow<List<Series>>) {
-        seriesFlow.collectLatest { series ->
-            updateState { it.copy(recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id }) }
+    private fun onGetRecentlySeriesSuccess(series: List<Series>) {
+        updateState {
+            it.copy(
+                recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id }
+            )
         }
     }
 
     private var searchJob: Job? = null
     override fun onQueryChange(query: String) {
-        updateState { it.copy(isConnected = true) }
+        updateState { it.copy(isNoInternet = false) }
         searchJob?.cancel()
         searchJob = safeExecute {
             updateState { it.copy(query) }
@@ -141,5 +144,32 @@ class SearchViewModel @Inject constructor(
                 it.copy(isVoiceRecording = false)
             }
         }
+    }
+
+    override fun onBackClick() {
+        sendEffect(SearchEffect.OnBackClick)
+    }
+
+    override fun onClickPoster(poster: Poster) {
+        when (poster.mediaTypeOfPoster) {
+            Poster.Type.MOVIE.value -> sendEffect(NavigateToMovieDetail(poster.id))
+            Poster.Type.SERIES.value -> sendEffect(SearchEffect.NavigateToSeriesDetail(poster.id))
+            Poster.Type.PERSON.value -> sendEffect(SearchEffect.NavigateToPersonDetails(poster.id))
+        }
+    }
+
+    override fun navigateToSearchResult(result: String) {
+        sendEffect(SearchEffect.NavigateToSearchResult(result))
+    }
+
+    private fun onError(error: Throwable) {
+        updateState {
+            it.copy(
+                errorMessageRes = mapExceptionToStringRes(error),
+                isNoInternet = error is NoInternetException,
+                isLoading = false
+            )
+        }
+        sendEffect(SearchEffect.Error(error))
     }
 }

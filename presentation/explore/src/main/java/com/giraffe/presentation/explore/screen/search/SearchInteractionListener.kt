@@ -1,4 +1,6 @@
-package com.giraffe.explore.screen.search
+package com.giraffe.presentation.explore.screen.search
+
+import com.giraffe.designsystem.uimodel.Poster
 
 interface SearchInteractionListener {
     fun onQueryChange(query: String = "")
@@ -9,4 +11,7 @@ interface SearchInteractionListener {
     fun onPostfixIconClick()
     fun onPermissionResult(isGranted: Boolean)
     fun onVoiceSearchFinished()
+    fun onBackClick()
+    fun onClickPoster(poster: Poster)
+    fun navigateToSearchResult(result: String)
 }
