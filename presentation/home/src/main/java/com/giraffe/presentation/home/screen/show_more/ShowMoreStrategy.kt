@@ -46,11 +46,9 @@ class TopRatedTvShowsStrategy(
     private val getTopRatedSeries: GetTopRatedSeriesUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(): List<ShowMorePoster> {
-        return getTopRatedSeries(page = 1, limit = 10).map { series ->
-            series.toShowMorePoster(
-                getSeriesGenresUseCase(series.genreIDs).map { it.title })
-        }
+    override suspend fun loadData() = getTopRatedSeries(page = 1, limit = 10).map { series ->
+        series.toShowMorePoster(
+            getSeriesGenresUseCase(series.genreIDs).map { it.title })
     }
 
     override fun getSectionType() = ShowMoreSectionType.TOP_RATED_TV_SHOWS
@@ -60,11 +58,9 @@ class UpcomingMoviesStrategy(
     private val getUpcomingMovies: GetUpcomingMoviesUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
 ) : ShowMoreStrategy {
-    override suspend fun loadData(): List<ShowMorePoster> {
-        return getUpcomingMovies(page = 1).map { movie ->
-            movie.toShowMorePoster(
-                getMovieGenresUseCase(movie.genresID).map { it.title })
-        }
+    override suspend fun loadData() = getUpcomingMovies(page = 1).map { movie ->
+        movie.toShowMorePoster(
+            getMovieGenresUseCase(movie.genresID).map { it.title })
     }
 
     override fun getSectionType() = ShowMoreSectionType.UPCOMING_MOVIES

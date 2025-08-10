@@ -2,7 +2,7 @@ package com.giraffe.presentation.home.navigation.home.routes
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.home.screen.home.HomeScreen
+import com.giraffe.presentation.home.screen.home.HomeScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

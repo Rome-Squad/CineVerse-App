@@ -1,7 +1,6 @@
 package com.giraffe.presentation.home.screen.show_more
 
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +27,7 @@ import com.giraffe.presentation.home.components.HorizontalDivider
 import com.giraffe.presentation.home.components.TransitionLazyColumnToGrid
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
+import com.giraffe.presentation.home.utils.showToast
 import com.giraffe.presentation.home.utils.toStringRes
 
 @Composable
@@ -54,12 +54,7 @@ fun ShowMoreScreen(
                     onBackClick()
                 }
 
-                is ShowMoreEffect.ShowError -> {
-                    Toast.makeText(
-                        context,
-                        context.getString(effect.error.toStringRes()), Toast.LENGTH_LONG
-                    ).show()
-                }
+                is ShowMoreEffect.ShowError -> {context.showToast(effect.error.toStringRes())}
             }
         }
     }

@@ -1,6 +1,5 @@
-package com.giraffe.home.screen.home
+package com.giraffe.presentation.home.screen.home
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -41,11 +40,8 @@ import com.giraffe.presentation.home.components.YourCollectionsSections
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
-import com.giraffe.presentation.home.screen.home.HomeEffect
-import com.giraffe.presentation.home.screen.home.HomeInteractionListener
-import com.giraffe.presentation.home.screen.home.HomeScreenState
-import com.giraffe.presentation.home.screen.home.HomeViewModel
 import com.giraffe.presentation.home.utils.EffectListener
+import com.giraffe.presentation.home.utils.showToast
 import com.giraffe.presentation.home.utils.toStringRes
 
 @Composable
@@ -81,10 +77,7 @@ fun HomeScreen(
                 navigateToShowMoreScreen(effect.sectionType)
             }
 
-            is HomeEffect.ShowError -> Toast.makeText(
-                context,
-                context.getString(effect.error.toStringRes()), Toast.LENGTH_LONG
-            ).show()
+            is HomeEffect.ShowError -> context.showToast(effect.error.toStringRes())
         }
     }
 

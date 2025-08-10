@@ -12,7 +12,7 @@ import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.model.YourCollectionUi
 
 
-fun Movie.toPosterUi() = Poster(
+fun Movie.toPoster() = Poster(
     id = id,
     title = title,
     posterUrl = posterUrl.orEmpty(),
@@ -21,7 +21,7 @@ fun Movie.toPosterUi() = Poster(
 )
 
 
-fun Series.toPosterUi() = Poster(
+fun Series.toPoster() = Poster(
     id = id,
     title = name,
     posterUrl = posterUrl,
@@ -53,7 +53,7 @@ fun Movie.toShowMorePoster(genres: List<String>) = ShowMorePoster(
 )
 
 
-fun Movie.toPopularMediaUiModel(genres: List<String>) = PopularMediaUi(
+fun Movie.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
     id = id,
     title = title,
     posterUrl = posterUrl.orEmpty(),
@@ -64,7 +64,7 @@ fun Movie.toPopularMediaUiModel(genres: List<String>) = PopularMediaUi(
 )
 
 
-fun Series.toPopularMediaUiModel(genres: List<String>) = PopularMediaUi(
+fun Series.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
     id = id,
     title = name,
     posterUrl = posterUrl,
@@ -74,14 +74,14 @@ fun Series.toPopularMediaUiModel(genres: List<String>) = PopularMediaUi(
 )
 
 
-fun Collection.toUiModel() = YourCollectionUi(
+fun Collection.toUi() = YourCollectionUi(
     id = id,
     title = name,
     numberOfItems = itemsCount
 )
 
 
-fun Genre.toUiModel() = FeaturedCollectionUi(
+fun Genre.toFeaturedCollectionUi() = FeaturedCollectionUi(
     id = id,
     title = title,
     backgroundImageUrl = GenreBackgroundImage.getImageUrlForGenre(title)
