@@ -303,10 +303,12 @@ fun MatchPagerScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                text = if (state.currentPage < pagerState.pageCount - 2) stringResource(R.string.next) else stringResource(
-                    R.string.start_matching
-                ),
-                isLoading = false,
+                text = if (state.currentPage < pagerState.pageCount - 2) {
+                    stringResource(R.string.next)
+                } else {
+                    stringResource(R.string.start_matching)
+                },
+                isLoading = state.currentPage >= pagerState.pageCount - 2,
                 onClick = {
                     coroutineScope.launch {
                         viewModel.onNextClicked()
