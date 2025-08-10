@@ -1,4 +1,4 @@
-package com.giraffe.explore
+package com.giraffe.api.explore
 
 import androidx.compose.runtime.Composable
 

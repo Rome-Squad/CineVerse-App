@@ -1,4 +1,4 @@
-package com.giraffe.explore.navigation
+package com.giraffe.presentation.explore.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,20 +10,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.giraffe.api.details.DetailsApi
-import com.giraffe.explore.screen.discover.DiscoverRoute
-import com.giraffe.explore.screen.discover.discoverRoute
-import com.giraffe.explore.screen.search.SearchRoute
-import com.giraffe.explore.screen.search.navigateToSearch
-import com.giraffe.explore.screen.search.searchRoute
-import com.giraffe.explore.screen.searchresult.CastDetailsRoute
-import com.giraffe.explore.screen.searchresult.MovieDetailsRoute
-import com.giraffe.explore.screen.searchresult.SearchResultRoute
-import com.giraffe.explore.screen.searchresult.SeriesDetailsRoute
-import com.giraffe.explore.screen.searchresult.navigateToCastDetails
-import com.giraffe.explore.screen.searchresult.navigateToMovieDetails
-import com.giraffe.explore.screen.searchresult.navigateToSearchResult
-import com.giraffe.explore.screen.searchresult.navigateToSeriesDetails
-import com.giraffe.explore.screen.searchresult.searchResultRoute
+import com.giraffe.presentation.explore.navigation.routes.CastDetailsRoute
+import com.giraffe.presentation.explore.navigation.routes.DiscoverRoute
+import com.giraffe.presentation.explore.navigation.routes.MovieDetailsRoute
+import com.giraffe.presentation.explore.navigation.routes.SearchResultRoute
+import com.giraffe.presentation.explore.navigation.routes.SearchRoute
+import com.giraffe.presentation.explore.navigation.routes.SeriesDetailsRoute
+import com.giraffe.presentation.explore.navigation.routes.discoverRoute
+import com.giraffe.presentation.explore.navigation.routes.navigateToCastDetails
+import com.giraffe.presentation.explore.navigation.routes.navigateToMovieDetails
+import com.giraffe.presentation.explore.navigation.routes.navigateToSearch
+import com.giraffe.presentation.explore.navigation.routes.navigateToSearchResult
+import com.giraffe.presentation.explore.navigation.routes.navigateToSeriesDetails
+import com.giraffe.presentation.explore.navigation.routes.searchResultRoute
+import com.giraffe.presentation.explore.navigation.routes.searchRoute
 
 @Composable
 internal fun ExploreNavGraph(

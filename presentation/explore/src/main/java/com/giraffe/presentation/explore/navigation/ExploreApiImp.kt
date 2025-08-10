@@ -1,10 +1,10 @@
-package com.giraffe.explore.navigation
+package com.giraffe.presentation.explore.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.api.details.DetailsApi
-import com.giraffe.explore.ExploreApi
+import com.giraffe.api.explore.ExploreApi
 import javax.inject.Inject
 
 class ExploreApiImp @Inject constructor(

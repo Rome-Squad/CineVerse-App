@@ -1,15 +1,15 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.api.details.DetailsApi
+import com.giraffe.api.explore.ExploreApi
+import com.giraffe.api.home.HomeApi
 import com.giraffe.authentication.AuthenticationApi
 import com.giraffe.authentication.nav.AuthenticationApiImp
-import com.giraffe.api.details.DetailsApi
-import com.giraffe.presentation.details.navigation.DetailsApiImp
-import com.giraffe.explore.ExploreApi
-import com.giraffe.explore.navigation.ExploreApiImp
-import com.giraffe.api.home.HomeApi
-import com.giraffe.presentation.home.navigation.HomeApiImp
 import com.giraffe.match.MatchApi
 import com.giraffe.match.navigation.MatchApiImp
+import com.giraffe.presentation.details.navigation.DetailsApiImp
+import com.giraffe.presentation.explore.navigation.ExploreApiImp
+import com.giraffe.presentation.home.navigation.HomeApiImp
 import com.giraffe.profile.ProfileApi
 import com.giraffe.profile.navigation.ProfileApiImp
 import dagger.Binds
