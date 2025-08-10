@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ExploreRepositoryImpl @Inject constructor(
+class SearchRepositoryImpl @Inject constructor(
     private val local: LocalExploreDataSource,
     private val remote: ExploreRemoteDataSource,
 ) : SearchRepository {
