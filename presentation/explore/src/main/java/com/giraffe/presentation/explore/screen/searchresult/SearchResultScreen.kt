@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen.searchresult
+package com.giraffe.presentation.explore.screen.searchresult
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,12 +33,12 @@ import com.giraffe.designsystem.composable.Tabs
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.components.CastItem
-import com.giraffe.explore.components.ExploreHeader
-import com.giraffe.explore.components.NothingFound
-import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.explore.screen.discover.SearchTab
-import com.giraffe.explore.util.toTitle
+import com.giraffe.presentation.explore.components.CastItem
+import com.giraffe.presentation.explore.components.ExploreHeader
+import com.giraffe.presentation.explore.components.NothingFound
+import com.giraffe.presentation.explore.components.TransitionLazyColumnToGrid
+import com.giraffe.presentation.explore.screen.discover.SearchTab
+import com.giraffe.presentation.explore.util.toTitle
 
 @Composable
 fun SearchResultScreen(
@@ -48,13 +49,21 @@ fun SearchResultScreen(
     viewModel: SearchResultViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is SearchResultEffect.Error -> {}
+                is SearchResultEffect.NavigateToCastDetails -> navigateToCastDetails(effect.personId)
+                is SearchResultEffect.NavigateToMovieDetail -> navigateToMovieDetails(effect.movieId)
+                is SearchResultEffect.NavigateToSeriesDetail -> navigateToSeriesDetails(effect.seriesId)
+                is SearchResultEffect.OnBackClick -> onBackClick()
+            }
+        }
+    }
     SearchResultContent(
         state = state,
         interactions = viewModel,
-        navigateToMovieDetails = navigateToMovieDetails,
-        navigateToSeriesDetails = navigateToSeriesDetails,
-        navigateToCastDetails = navigateToCastDetails,
-        onBackClick = onBackClick,
     )
 }
 
@@ -62,10 +71,6 @@ fun SearchResultScreen(
 private fun SearchResultContent(
     state: SearchResultScreenState,
     interactions: SearchResultInteractionListener,
-    navigateToMovieDetails: (Int) -> Unit,
-    navigateToSeriesDetails: (Int) -> Unit,
-    navigateToCastDetails: (Int) -> Unit,
-    onBackClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val posters = state.selectedPosters.collectAsLazyPagingItems()
@@ -84,8 +89,8 @@ private fun SearchResultContent(
                     readOnly = true,
                     showBackButton = true,
                     value = state.query,
-                    onTextFieldClicked = onBackClick,
-                    onBackClick = onBackClick
+                    onTextFieldClicked = interactions::onBackClick,
+                    onBackClick = interactions::onBackClick
                 )
             }
             stickyHeader {
@@ -112,7 +117,9 @@ private fun SearchResultContent(
                             ActorsSection(
                                 modifier = Modifier.fillMaxSize(),
                                 actors = posters,
-                                navigateToCastDetails = navigateToCastDetails
+                                navigateToCastDetails = { id ->
+                                    interactions.onPosterClick(id, SearchTab.ACTORS)
+                                }
                             )
                         } else {
                             TransitionLazyColumnToGrid(
@@ -120,11 +127,7 @@ private fun SearchResultContent(
                                 posters = posters,
                                 isListSelected = !state.isGridSelected,
                                 onPosterClicked = { id ->
-                                    when (state.selectedTab) {
-                                        SearchTab.MOVIES -> navigateToMovieDetails(id)
-                                        SearchTab.SERIES -> navigateToSeriesDetails(id)
-                                        SearchTab.ACTORS -> navigateToCastDetails(id)
-                                    }
+                                    interactions.onPosterClick(id, state.selectedTab)
                                 }
                             )
                         }

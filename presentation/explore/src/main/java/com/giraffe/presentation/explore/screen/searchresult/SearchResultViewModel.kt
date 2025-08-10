@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen.searchresult
+package com.giraffe.presentation.explore.screen.searchresult
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -7,11 +7,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.giraffe.explore.base.BaseViewModel
-import com.giraffe.explore.screen.discover.SearchTab
-import com.giraffe.explore.util.BasePagingSource
-import com.giraffe.explore.util.toPoster
-import com.giraffe.explore.util.toUi
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.movies.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movies.usecase.SearchMovieByNameUseCase
@@ -20,6 +16,12 @@ import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.media.series.usecase.SearchSeriesByNameUseCase
+import com.giraffe.presentation.explore.base.BaseViewModel
+import com.giraffe.presentation.explore.screen.discover.SearchTab
+import com.giraffe.presentation.explore.util.BasePagingSource
+import com.giraffe.presentation.explore.util.mapExceptionToStringRes
+import com.giraffe.presentation.explore.util.toPoster
+import com.giraffe.presentation.explore.util.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -33,7 +35,7 @@ class SearchResultViewModel @Inject constructor(
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<SearchResultScreenState>(
+) : BaseViewModel<SearchResultScreenState, SearchResultEffect>(
     SearchResultScreenState(query = savedStateHandle.get<String>("query").orEmpty()),
 ), SearchResultInteractionListener {
 
@@ -66,14 +68,26 @@ class SearchResultViewModel @Inject constructor(
         getActors()
     }
 
+    override fun onBackClick() {
+        sendEffect(SearchResultEffect.OnBackClick)
+    }
+
+    override fun onPosterClick(id: Int, searchTab: SearchTab) {
+        when (searchTab) {
+            SearchTab.MOVIES -> sendEffect(SearchResultEffect.NavigateToMovieDetail(id))
+            SearchTab.SERIES -> sendEffect(SearchResultEffect.NavigateToSeriesDetail(id))
+            SearchTab.ACTORS -> sendEffect(SearchResultEffect.NavigateToCastDetails(id))
+        }
+    }
+
 
     private fun getMoviesGenres() {
         safeExecute(
             onSuccess = { genres ->
                 updateState { it.copy(moviesGenres = genres.map { genre -> genre.toUi() }) }
             },
-            onError = ::onFail,
-            block = getMoviesGenresUseCase::invoke,
+            onError = ::onError,
+            block = { getMoviesGenresUseCase.invoke() }
         )
     }
 
@@ -82,15 +96,15 @@ class SearchResultViewModel @Inject constructor(
             onSuccess = { genres ->
                 updateState { it.copy(seriesGenres = genres.map { genre -> genre.toUi() }) }
             },
-            onError = ::onFail,
-            block = getSeriesGenresUseCase::invoke,
+            onError = ::onError,
+            block = { getSeriesGenresUseCase.invoke() },
         )
     }
 
     private fun getMovies() {
         safeExecute(
             onSuccess = ::onGetMoviesSuccess,
-            onError = ::onFail,
+            onError = ::onError,
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                 BasePagingSource { page -> searchMovieByName(state.value.query, page) }
@@ -103,8 +117,8 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     moviesPosters = posters,
-                    errorMessage = null,
-                    isNetworkError = false
+                    errorMessageRes = null,
+                    isNoInternet = false
                 )
             }
             if (state.value.selectedTab == SearchTab.MOVIES) updateState {
@@ -116,7 +130,7 @@ class SearchResultViewModel @Inject constructor(
     private fun getSeries() {
         safeExecute(
             onSuccess = ::onGetSeriesSuccess,
-            onError = ::onFail
+            onError = ::onError
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                 BasePagingSource { page -> searchSeriesByName(state.value.query, page) }
@@ -129,8 +143,8 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     seriesPosters = posters,
-                    errorMessage = null,
-                    isNetworkError = false
+                    errorMessageRes = null,
+                    isNoInternet = false
                 )
             }
             if (state.value.selectedTab == SearchTab.SERIES) updateState {
@@ -142,7 +156,7 @@ class SearchResultViewModel @Inject constructor(
     private fun getActors() {
         safeExecute(
             onSuccess = ::onGetActorsSuccess,
-            onError = ::onFail
+            onError = ::onError
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                 BasePagingSource { page -> searchPeopleByName(state.value.query, page) }
@@ -155,8 +169,8 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     actorsPosters = posters,
-                    errorMessage = null,
-                    isNetworkError = false
+                    errorMessageRes = null,
+                    isNoInternet = false
                 )
             }
             if (state.value.selectedTab == SearchTab.ACTORS) updateState {
@@ -165,12 +179,14 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    private fun onFail(errorMsgRes: Int, isNetworkError: Boolean) {
+    private fun onError(error: Throwable) {
         updateState {
             it.copy(
-                errorMessage = errorMsgRes,
-                isNetworkError = isNetworkError
+                errorMessageRes = mapExceptionToStringRes(error),
+                isNoInternet = error is NoInternetException,
+                isLoading = false
             )
         }
+        sendEffect(SearchResultEffect.Error(error))
     }
 }

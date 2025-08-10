@@ -1,9 +1,9 @@
-package com.giraffe.explore.screen.searchresult
+package com.giraffe.presentation.explore.screen.searchresult
 
 import androidx.paging.PagingData
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.screen.discover.GenreUi
-import com.giraffe.explore.screen.discover.SearchTab
+import com.giraffe.presentation.explore.model.GenreUi
+import com.giraffe.presentation.explore.screen.discover.SearchTab
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -22,7 +22,7 @@ data class SearchResultScreenState(
     val actorsPosters: Flow<PagingData<Poster>> = flowOf(),
     val moviesGenres: List<GenreUi> = emptyList(),
     val seriesGenres: List<GenreUi> = emptyList(),
-    val errorMessage: Int? = null,
-    val isNetworkError: Boolean = false,
+    val errorMessageRes: Int? = null,
+    val isNoInternet: Boolean = false,
     val isLoading: Boolean = false,
 )
