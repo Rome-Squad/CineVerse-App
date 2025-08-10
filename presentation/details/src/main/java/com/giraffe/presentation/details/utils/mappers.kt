@@ -125,9 +125,7 @@ fun Series.toUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear.let {
-        toString().toFormattedDate()
-    },
+    releaseYear = releaseYear?.toString()?.toFormattedDate().orEmpty(),
     genres = genres.map { it.title },
     youtubeVideoId = youtubeVideoId.orEmpty()
 )

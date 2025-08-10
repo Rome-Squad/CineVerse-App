@@ -101,12 +101,12 @@ fun MovieDetailsScreen(
                 onRetryClick = viewModel::onRetryClick
             )
         }
-        AnimatedVisibility(state.isLoadingMovieDetails) {
+        AnimatedVisibility(state.isLoading) {
             Progress(modifier = Modifier.size(40.dp))
         }
     }
     AnimatedVisibility(
-        visible = !state.isLoadingMovieDetails && !state.isNetworkError,
+        visible = !state.isLoading && !state.isNetworkError,
         enter = fadeIn(),
         exit = fadeOut()
     ) {
@@ -164,7 +164,7 @@ private fun MovieDetailsContent(
     ) {
 
         AnimatedVisibility(
-            visible = !state.isLoadingMovieDetails,
+            visible = !state.isLoading,
             enter = fadeIn(),
             exit = fadeOut()
         ) {

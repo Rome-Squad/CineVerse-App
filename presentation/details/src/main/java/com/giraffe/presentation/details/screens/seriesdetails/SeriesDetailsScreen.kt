@@ -250,9 +250,9 @@ private fun SeriesDetailsContent(
                                 year = if (state.seasons[i].releaseYear != null)
                                     state.seasons[i].releaseYear
                                         .takeIf { it?.isNotBlank() == true && it.contains("-") == true }
-                                    ?.split("-")
-                                    ?.firstOrNull()
-                                    ?.toIntOrNull()
+                                        ?.split("-")
+                                        ?.firstOrNull()
+                                        ?.toIntOrNull()
                                 else null
                             )
                         }

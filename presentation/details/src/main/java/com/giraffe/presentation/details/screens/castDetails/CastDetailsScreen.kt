@@ -76,6 +76,9 @@ fun CastDetailsScreen(
             is CastDetailsEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
             is CastDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
             is CastDetailsEffect.NavigateUp -> onBackButtonClick()
+            is CastDetailsEffect.ShowError -> {
+
+            }
         }
     }
 

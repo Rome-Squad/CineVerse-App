@@ -181,11 +181,12 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun loadSeriesDetails(seriesId: Int) {
+        updateState { it.copy(isLoading = true) }
+
         safeExecute(
             onSuccess = ::loadSeriesDetailsSuccess,
-            onError = ::loadSeriesDetailsError
+            onError = ::onError
         ) {
-            updateState { it.copy(isLoading = true) }
             getSeriesDetails(seriesId)
         }
     }
@@ -199,21 +200,10 @@ class SeriesDetailsViewModel @Inject constructor(
             )
         }
         loadSeriesGenres(series.genreIDs)
+
         saveSeriesToRecent(series)
     }
 
-    private fun loadSeriesDetailsError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
-
-        updateState {
-            it.copy(
-                isLoading = false,
-                isNetworkError = isNetworkError,
-            )
-        }
-
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
 
     private fun saveSeriesToRecent(series: Series) {
         safeExecute {
@@ -225,7 +215,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesGenres(genreIDs: List<Int>) {
         safeExecute(
             onSuccess = ::loadSeriesGenresSuccess,
-            onError = ::loadSeriesGenresError
+            onError = ::onError
         ) {
             getSeriesGenres(genreIDs)
         }
@@ -239,24 +229,11 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadSeriesGenresError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
-
-        updateState {
-            it.copy(
-                isNetworkError = isNetworkError,
-                isLoading = false
-            )
-        }
-
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
 
     private fun loadSeason(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeasonsSuccess,
-            onError = ::loadSeasonsError
+            onError = ::onError
         ) {
             getLastSeasons(seriesId)
         }
@@ -271,24 +248,11 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadSeasonsError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
-
-        updateState {
-            it.copy(
-                isNetworkError = isNetworkError,
-                isLoading = false
-            )
-        }
-
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
 
     private fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesPeopleSuccess,
-            onError = ::loadSeriesPeopleError
+            onError = ::onError
         ) {
             getCastAndCrewOfSeries(seriesId)
         }
@@ -306,40 +270,15 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadSeriesPeopleError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
-
-        updateState {
-            it.copy(
-                isNetworkError = isNetworkError,
-                isLoading = false
-            )
-        }
-
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
-
     private fun loadRecommendedSeries(seriesId: Int, page: Int = 1) {
         safeExecute(
             onSuccess = ::loadRecommendedSeriesSuccess,
-            onError = ::loadRecommendedSeriesError
+            onError = ::onError
         ) {
             getRecommendedSeries(seriesId = seriesId, page = page)
         }
     }
 
-    private fun loadRecommendedSeriesError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
-
-        updateState {
-            it.copy(
-                isNetworkError = isNetworkError,
-                isLoading = false
-            )
-        }
-
-        sendEffect(SeriesDetailsEffect.Error(error))
-    }
 
     private fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
         updateState {
@@ -360,23 +299,10 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesReviews(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesReviewsSuccess,
-            onError = ::loadSeriesReviewsError
+            onError = ::onError
         ) {
             getSeriesReviews(seriesId, 1)
         }
-    }
-
-    private fun loadSeriesReviewsError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
-
-        updateState {
-            it.copy(
-                isNetworkError = isNetworkError,
-                isLoading = false
-            )
-        }
-
-        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
     private fun loadSeriesReviewsSuccess(reviews: List<Review>) {
@@ -385,5 +311,18 @@ class SeriesDetailsViewModel @Inject constructor(
                 seriesReviews = reviews.map { review -> review.toUi() }
             )
         }
+    }
+
+    private fun onError(throwable: Throwable) {
+        val isNetworkError = throwable is NoInternetException
+
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNetworkError = isNetworkError
+            )
+        }
+
+        sendEffect(SeriesDetailsEffect.Error(throwable))
     }
 }
