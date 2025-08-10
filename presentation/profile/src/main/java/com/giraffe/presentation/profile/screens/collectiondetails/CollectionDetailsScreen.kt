@@ -4,12 +4,10 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -20,13 +18,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoCard
 import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
+import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.components.DeleteButton
-import com.giraffe.presentation.profile.components.ScreenStates
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.utils.EffectListener
 import com.giraffe.presentation.profile.utils.toStringResource
@@ -54,75 +51,62 @@ fun CollectionScreen(
     }
     CollectionScreenContent(
         state = state,
-        interactions = viewModel
+        interaction = viewModel
     )
 }
 
 @Composable
 private fun CollectionScreenContent(
     state: CollectionDetailsScreenState,
-    interactions: CollectionDetailsInteractionListener
+    interaction: CollectionDetailsInteractionListener
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .systemBarsPadding()
+    BaseScreen(
+        title = state.collectionName,
+        isLoading = state.isLoading,
+        isNoInternet = state.isNoInternet,
+        onBackClick = interaction::onBackClick,
     ) {
-        AppBar(
+        LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
+                .background(Theme.color.background.screen)
+                .fillMaxSize()
                 .padding(horizontal = 16.dp),
-            title = state.collectionName,
-            showBackButton = true,
-            onBackButtonClick = interactions::onBackClick
-        )
-        ScreenStates(
-            isLoading = state.isLoading,
-            isNoInternet = state.isNoInternet
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(vertical = 12.dp)
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .background(Theme.color.background.screen)
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(vertical = 12.dp)
-            ) {
-                item {
+            item {
 
-                    AnimatedVisibility(
-                        visible = state.isDeleteTipVisible
-                    ) {
-                        InfoCard(
-                            description = stringResource(
-                                id = R.string.tip_swipe_left_to_remove_movies_from_your_collection
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            onClosedClick = interactions::onCloseTipClick
-                        )
+                AnimatedVisibility(
+                    visible = state.isDeleteTipVisible
+                ) {
+                    InfoCard(
+                        description = stringResource(
+                            id = R.string.tip_swipe_left_to_remove_movies_from_your_collection
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClosedClick = interaction::onCloseTipClick
+                    )
 
-                    }
                 }
-                items(state.collectionMovies) { swipeablePoster ->
-                    SwipableItem(
-                        actionButton = {
-                            DeleteButton(
-                                onDeleteClick = {
-                                    interactions.onDeletePosterClick(swipeablePoster.poster.id)
-                                }
-                            )
-                        },
-                    ) {
-                        PosterItemHorizontal(
-                            modifier = Modifier.fillMaxWidth(),
-                            movie = swipeablePoster.poster,
-                            onClickPoster = {
-                                interactions.onPosterClick(swipeablePoster.poster.id)
+            }
+            items(state.collectionMovies) { swipeablePoster ->
+                SwipableItem(
+                    actionButton = {
+                        DeleteButton(
+                            onDeleteClick = {
+                                interaction.onDeletePosterClick(swipeablePoster.poster.id)
                             }
                         )
-                    }
+                    },
+                ) {
+                    PosterItemHorizontal(
+                        modifier = Modifier.fillMaxWidth(),
+                        movie = swipeablePoster.poster,
+                        onClickPoster = {
+                            interaction.onPosterClick(swipeablePoster.poster.id)
+                        }
+                    )
                 }
             }
         }
