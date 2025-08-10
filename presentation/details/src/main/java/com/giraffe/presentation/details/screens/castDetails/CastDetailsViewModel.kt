@@ -6,8 +6,9 @@ import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.usecase.AddCastToRecentCastUseCase
 import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
 import com.giraffe.presentation.details.screens.castCredit.MediaType
-import com.giraffe.presentation.details.screens.castDetails.state.CastDetailsUiState
+import com.giraffe.presentation.details.utils.toSocialMediaUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

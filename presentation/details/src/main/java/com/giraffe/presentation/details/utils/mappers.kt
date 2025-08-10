@@ -4,10 +4,11 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.entity.CrewMember
+import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonCredit
-import com.giraffe.media.person.entity.PersonSocialMediaLinks
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.details.R
@@ -24,14 +25,14 @@ import com.giraffe.presentation.details.model.SocialMediaUi
 fun PersonCredit.toPoster() = Poster(
     id = id,
     name = title,
-    imageUri = posterPath.toString(),
+    imageUrl = posterPath.toString(),
     rating = voteAverage.toFloat(),
     date = releaseYear,
     mediaTypeOfPoster = mediaType
 )
 
 
-fun Person.toCastUi() = CastUi(
+fun CastMember.toCastUi() = CastUi(
     id = id,
     name = name,
     role = role,
@@ -46,7 +47,7 @@ fun Collection.toUi() = CollectionUi(
 )
 
 
-fun Person.toCrewUi() = CrewUi(
+fun CrewMember.toCrewUi() = CrewUi(
     name = name,
     role = role
 )
@@ -75,7 +76,7 @@ fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
 fun MovieUi.toPoster() = Poster(
     id = id,
     name = title,
-    imageUri = posterUrl.orEmpty(),
+    imageUrl = posterUrl.orEmpty(),
     rating = rating,
     genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
     time = duration,
@@ -133,14 +134,14 @@ fun Series.toUi(
 fun SeriesUi.toPoster(): Poster = Poster(
     id = id,
     name = name,
-    imageUri = posterUrl.orEmpty(),
+    imageUrl = posterUrl.orEmpty(),
     rating = rating,
     genres = genres.joinToString(", "),
     date = releaseYear
 )
 
 
-fun PersonSocialMediaLinks.toSocialMediaUi(): List<SocialMediaUi> {
+fun SocialMediaLinks.toSocialMediaUi(): List<SocialMediaUi> {
     val socialMediaUiList: MutableList<SocialMediaUi> = mutableListOf()
     youtubeLink?.let { url ->
         socialMediaUiList.add(

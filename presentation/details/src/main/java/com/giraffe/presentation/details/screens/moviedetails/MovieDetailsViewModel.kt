@@ -23,10 +23,8 @@ import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.model.groupByRole
 import com.giraffe.presentation.details.model.toCastUi
 import com.giraffe.presentation.details.model.toCrewUi
-import com.giraffe.presentation.details.model.toMovieUi
-import com.giraffe.presentation.details.model.toReviewUI
-import com.giraffe.presentation.details.model.toUi
-import com.giraffe.presentation.details.screens.moviedetails.screen.MovieDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
+import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -388,7 +386,7 @@ class MovieDetailsViewModel @Inject constructor(
 
         updateState {
             it.copy(
-                isLoadingCast = false,
+                isLoading = false,
                 cast = mappedCast,
                 crew = mappedCrew.groupByRole()
             )

@@ -21,7 +21,7 @@ import com.giraffe.presentation.details.model.SeriesUi
 import com.giraffe.presentation.details.model.groupByRole
 import com.giraffe.presentation.details.model.toCastUi
 import com.giraffe.presentation.details.model.toCrewUi
-import com.giraffe.presentation.details.screens.seriesdetails.screen.SeriesDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
