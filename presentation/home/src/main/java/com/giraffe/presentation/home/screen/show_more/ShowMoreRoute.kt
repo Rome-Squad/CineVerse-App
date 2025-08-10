@@ -1,6 +1,7 @@
 package com.giraffe.presentation.home.screen.show_more
 
 import android.content.Context
+import androidx.annotation.Keep
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -12,7 +13,8 @@ data class ShowMoreRoute(
     val sectionType: ShowMoreSectionType
 )
 
-
+@Keep
+@Serializable
 enum class ShowMoreSectionType{
     RECENTLY_RELEASED,
     TOP_RATED_TV_SHOWS,
