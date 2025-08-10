@@ -7,9 +7,9 @@ import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.api.profile.ProfileApi
 import com.giraffe.explore.ExploreApi
-import com.giraffe.presentation.profile.screens.collections.collection.CollectionRoute
-import com.giraffe.presentation.profile.screens.collections.mycollections.MyCollectionsRoute
-import com.giraffe.presentation.profile.screens.settings.SettingsScreenRoute
+import com.giraffe.presentation.profile.navigation.routes.CollectionRoute
+import com.giraffe.presentation.profile.navigation.routes.MyCollectionsRoute
+import com.giraffe.presentation.profile.navigation.routes.SettingsScreenRoute
 import javax.inject.Inject
 import javax.inject.Provider
 

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.giraffe.match"
+    namespace = "com.giraffe.api.match"
     compileSdk = 36
 
     defaultConfig {

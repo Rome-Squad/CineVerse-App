@@ -1,9 +1,9 @@
 package com.giraffe.presentation.profile.screens.history
 
 interface HistoryInteractionListener {
-    fun onDeleteClicked(id:Int,mediaType: String)
+    fun onDeleteClicked(id: Int, mediaType: String)
     fun onCloseClicked()
-    fun onMediaClicked(mediaId: Int,mediaType: String)
+    fun onMediaClicked(mediaId: Int, mediaType: String)
+    fun onBackClick()
     fun navigateToExploreScreen()
-    fun retry()
 }
