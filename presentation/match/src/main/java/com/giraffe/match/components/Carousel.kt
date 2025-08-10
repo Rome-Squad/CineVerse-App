@@ -48,7 +48,8 @@ fun HeroCarousel(
     }
     val screenWidth = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
     val width = screenWidth - 48.dp
-    val initialHeight = width
+    val posterAspectRatio = 4f / 5f
+    val initialHeight = width / posterAspectRatio
 
     Box(
         modifier = modifier

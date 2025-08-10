@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -98,11 +100,12 @@ private fun MatchResultContent(
     navigateToYouTubePlayer: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var selectedIndex by remember { mutableStateOf(0) }
-
+    var selectedIndex by remember { mutableIntStateOf(0) }
+    val scrollState = rememberScrollState()
     Column(
         modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .statusBarsPadding()
             .background(Theme.color.background.screen)
     ) {
@@ -133,6 +136,7 @@ private fun MatchResultContent(
         val match = state.matchItems.getOrNull(selectedIndex)
         match?.let {
             MainMovieOrSeriesDetails(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 type = stringResource(id = it.mediaType.labelRes),
                 name = it.title,
                 genres = it.genres,
