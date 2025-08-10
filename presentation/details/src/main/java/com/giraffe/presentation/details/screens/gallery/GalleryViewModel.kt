@@ -2,8 +2,9 @@ package com.giraffe.presentation.details.screens.gallery
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.media.person.usecase.GetPersonImagesUseCase
+import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.navigation.routes.GalleryRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -11,22 +12,19 @@ import javax.inject.Inject
 class GalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     val getPersonImagesUseCase: GetPersonImagesUseCase
-) : BaseViewModel<GalleryUiState, Any>(GalleryUiState()) {
-    private val personId = savedStateHandle.toRoute<GalleryRoute>().personId
-    private val actorName = savedStateHandle.toRoute<GalleryRoute>().actorName
+) : BaseViewModel<GalleryUiState, Any>(
+    GalleryUiState(
+        actorId = savedStateHandle.toRoute<GalleryRoute>().personId,
+        actorName = savedStateHandle.toRoute<GalleryRoute>().actorName,
+    )
+) {
 
     init {
-        initializeActorName()
-        getPersonImages(personId)
+        getPersonImages()
     }
 
-    private fun initializeActorName() {
-        updateState {
-            it.copy(actorName = actorName)
-        }
-    }
 
-    private fun getPersonImages(personId: Int) {
+    private fun getPersonImages() {
         updateState {
             it.copy(isLoading = true)
         }
@@ -34,7 +32,9 @@ class GalleryViewModel @Inject constructor(
             onSuccess = ::getPersonImagesSuccess,
             onError = ::getPersonImagesError
         ) {
-            getPersonImagesUseCase.invoke(personId)
+            state.value.actorId?.let { personId ->
+                getPersonImagesUseCase(personId)
+            } ?: emptyList()
         }
     }
 
@@ -47,7 +47,7 @@ class GalleryViewModel @Inject constructor(
         }
     }
 
-    private fun getPersonImagesSuccess(images: List<String?>) {
+    private fun getPersonImagesSuccess(images: List<String>) {
         updateState {
             it.copy(
                 isLoading = false,

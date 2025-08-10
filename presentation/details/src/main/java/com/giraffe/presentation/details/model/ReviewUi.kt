@@ -1,7 +1,6 @@
 package com.giraffe.presentation.details.model
 
 
-import com.giraffe.media.entity.Review
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -15,27 +14,3 @@ data class ReviewUI(
     val authorUserName: String = "",
     val rating: Int = 0,
 )
-
-fun ReviewUI.toReviewEntity(): Review {
-    return Review(
-        id = id,
-        authorImageUrl = authorImageUrl,
-        authorName = authorName,
-        authorUserName = authorUserName,
-        content = content,
-        rating = rating,
-        createdAt = createdAt
-    )
-}
-
-fun Review.toReviewUI(): ReviewUI {
-    return ReviewUI(
-        id = id,
-        authorImageUrl = authorImageUrl,
-        authorName = authorName,
-        authorUserName = authorUserName,
-        content = content,
-        rating = rating,
-        createdAt = createdAt
-    )
-}

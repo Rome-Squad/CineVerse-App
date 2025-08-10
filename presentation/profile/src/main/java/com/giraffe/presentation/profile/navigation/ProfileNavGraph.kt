@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,7 +47,7 @@ internal fun ProfileNavGraph(
     val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
         navDestination.route?.let { route ->
             bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName .orEmpty())
+                route.contains(klass.simpleName.orEmpty())
             }
         } == true
     } == true
@@ -105,8 +104,6 @@ internal fun ProfileNavGraph(
         )
 
         collectionRoute(
-            modifier = Modifier
-                .fillMaxSize(),
             navigateBack = {
                 if (navigateBack != null) {
                     navigateBack()
