@@ -4,7 +4,7 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.explore.screen.discover.GenreUi
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.mediaMember.entity.CastMember
-import com.giraffe.media.movies.entity.Movie
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 
 
