@@ -1,8 +1,9 @@
-package com.giraffe.explore.screen.searchresult
+package com.giraffe.presentation.explore.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.presentation.explore.screen.searchresult.SearchResultScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

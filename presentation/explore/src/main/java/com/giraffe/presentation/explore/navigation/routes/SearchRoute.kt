@@ -1,9 +1,9 @@
-package com.giraffe.explore.screen.search
+package com.giraffe.presentation.explore.navigation.routes
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.explore.screen.search.SearchScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -24,13 +24,9 @@ fun NavGraphBuilder.searchRoute(
         SearchScreen(
             navigateToSearchResult = navigateToSearchResult,
             onBackClick = onBackClick,
-            onClickPoster = { poster ->
-                when (poster.mediaTypeOfPoster) {
-                    Poster.Type.MOVIE.value -> navigateToMovieDetail(poster.id)
-                    Poster.Type.SERIES.value -> navigateToSeriesDetail(poster.id)
-                    Poster.Type.PERSON.value -> navigateToPersonDetail(poster.id)
-                }
-            }
+            navigateToMovieDetails = navigateToMovieDetail,
+            navigateToSeriesDetails = navigateToSeriesDetail,
+            navigateToPersonDetails = navigateToPersonDetail,
         )
     }
 }

@@ -1,7 +1,8 @@
-package com.giraffe.explore.screen.discover
+package com.giraffe.presentation.explore.navigation.routes
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.presentation.explore.screen.discover.DiscoverScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

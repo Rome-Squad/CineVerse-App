@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen.searchresult
+package com.giraffe.presentation.explore.navigation.routes
 
 import androidx.navigation.NavController
 import kotlinx.serialization.Serializable
