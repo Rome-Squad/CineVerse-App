@@ -18,13 +18,13 @@ import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
-import com.giraffe.presentation.details.model.SeasonUi
 import com.giraffe.presentation.details.model.SeriesUi
-import com.giraffe.presentation.details.model.groupByRole
-import com.giraffe.presentation.details.model.toCastUi
-import com.giraffe.presentation.details.model.toCrewUi
-import com.giraffe.presentation.details.model.toReviewUI
-import com.giraffe.presentation.details.screens.seriesdetails.screen.SeriesDetailsRoute
+import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
+import com.giraffe.presentation.details.utils.groupByRole
+import com.giraffe.presentation.details.utils.toCastUi
+import com.giraffe.presentation.details.utils.toCrewUi
+import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -42,26 +42,30 @@ class SeriesDetailsViewModel @Inject constructor(
     private val addRatingUseCase: AddSeriesRatingUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
-    SeriesDetailsScreenState()
+    SeriesDetailsScreenState(
+        seriesUi = SeriesUi(
+            id = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
+        )
+    )
 ), SeriesDetailsInteractionListener {
 
-    private val seriesID = savedStateHandle.toRoute<SeriesDetailsRoute>().seriesID
 
     init {
-        loadSeriesDetailsScreen()
+        loadSeriesDetailsScreen(state.value.seriesUi.id)
     }
 
-    fun loadSeriesDetailsScreen() {
+
+    private fun loadSeriesDetailsScreen(seriesID: Int = state.value.seriesUi.id) {
         updateState {
             it.copy(
                 isLoading = true,
                 isNetworkError = false,
-                errorMessage = null
             )
         }
+
         loadSeriesDetails(seriesID)
         loadSeason(seriesID)
-        loadRecommendedSeries(seriesID, 1)
+        loadRecommendedSeries(seriesID)
         loadSeriesReviews(seriesID)
         loadSeriesPeople(seriesID)
     }
@@ -135,7 +139,7 @@ class SeriesDetailsViewModel @Inject constructor(
             if (isLoggedInUseCase()) {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
                 addRatingUseCase(
-                    seriesId = seriesID,
+                    seriesId = state.value.seriesUi.id,
                     rating = state.value.currentRating.toFloat()
                 )
             } else {
@@ -145,9 +149,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     override fun onRateChange(rate: Int) {
-        safeExecute {
-            updateState { it.copy(currentRating = rate) }
-        }
+        updateState { it.copy(currentRating = rate) }
     }
 
     override fun onShowMoreReviewsTextClick(seriesId: Int) {
@@ -174,12 +176,17 @@ class SeriesDetailsViewModel @Inject constructor(
         sendEffect(SeriesDetailsEffect.OnBackButtonClick)
     }
 
+    override fun onRetryClick() {
+        loadSeriesDetailsScreen(state.value.seriesUi.id)
+    }
+
     private fun loadSeriesDetails(seriesId: Int) {
+        updateState { it.copy(isLoading = true) }
+
         safeExecute(
             onSuccess = ::loadSeriesDetailsSuccess,
-            onError = ::loadSeriesDetailsError
+            onError = ::onError
         ) {
-            updateState { it.copy(isLoading = true) }
             getSeriesDetails(seriesId)
         }
     }
@@ -188,23 +195,15 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesDetailsSuccess(series: Series) {
         updateState {
             it.copy(
-                seriesDetails = SeriesUi.fromEntity(series),
+                seriesUi = series.toUi(),
                 isLoading = false
             )
         }
         loadSeriesGenres(series.genreIDs)
+
         saveSeriesToRecent(series)
     }
 
-    private fun loadSeriesDetailsError(errorMsgRes: Int, isNetworkError: Boolean) {
-        updateState {
-            it.copy(
-                errorMessage = errorMsgRes,
-                isNetworkError = isNetworkError,
-                isLoading = false
-            )
-        }
-    }
 
     private fun saveSeriesToRecent(series: Series) {
         safeExecute {
@@ -216,7 +215,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesGenres(genreIDs: List<Int>) {
         safeExecute(
             onSuccess = ::loadSeriesGenresSuccess,
-            onError = ::loadSeriesGenresError
+            onError = ::onError
         ) {
             getSeriesGenres(genreIDs)
         }
@@ -225,17 +224,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
-                genres = genres.map { it.title },
-            )
-        }
-    }
-
-    private fun loadSeriesGenresError(errorMsgRes: Int, isNetworkError: Boolean) {
-        updateState {
-            it.copy(
-                errorMessage = errorMsgRes,
-                isNetworkError = isNetworkError,
-                isLoading = false
+                genres = genres.map { genre -> genre.title },
             )
         }
     }
@@ -244,7 +233,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeason(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeasonsSuccess,
-            onError = ::loadSeasonsError
+            onError = ::onError
         ) {
             getLastSeasons(seriesId)
         }
@@ -253,17 +242,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeasonsSuccess(season: List<Season>) {
         updateState {
             it.copy(
-                seasons = season.map { SeasonUi.Companion.fromEntity(it) },
-                isLoading = false
-            )
-        }
-    }
-
-    private fun loadSeasonsError(errorMsgRes: Int, isNetworkError: Boolean) {
-        updateState {
-            it.copy(
-                errorMessage = errorMsgRes,
-                isNetworkError = isNetworkError,
+                seasons = season.map { season -> season.toUi() },
                 isLoading = false
             )
         }
@@ -273,7 +252,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesPeopleSuccess,
-            onError = {}
+            onError = ::onError
         ) {
             getCastAndCrewOfSeries(seriesId)
         }
@@ -285,31 +264,31 @@ class SeriesDetailsViewModel @Inject constructor(
         val mappedCrew = crew.map { it.toCrewUi() }
         updateState {
             it.copy(
-                cast = cast.map { it.toCastUi() },
+                cast = cast.map { cast -> cast.toCastUi() },
                 crew = mappedCrew.groupByRole()
             )
         }
     }
 
-
-    private fun loadRecommendedSeries(seriesId: Int, page: Int) {
+    private fun loadRecommendedSeries(seriesId: Int, page: Int = 1) {
         safeExecute(
             onSuccess = ::loadRecommendedSeriesSuccess,
-            onError = {}
+            onError = ::onError
         ) {
             getRecommendedSeries(seriesId = seriesId, page = page)
         }
     }
 
+
     private fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
         updateState {
             it.copy(
-                recommendedSeries = recommendedSeries.map {
+                recommendedSeries = recommendedSeries.map { poster ->
                     Poster(
-                        id = it.id,
-                        name = it.name,
-                        imageUri = it.posterUrl,
-                        rating = it.rating
+                        id = poster.id,
+                        name = poster.name,
+                        imageUri = poster.posterUrl,
+                        rating = poster.rating
                     )
                 },
             )
@@ -320,7 +299,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesReviews(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesReviewsSuccess,
-            onError = {}
+            onError = ::onError
         ) {
             getSeriesReviews(seriesId, 1)
         }
@@ -329,8 +308,21 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
-                seriesReviews = reviews.map { it.toReviewUI() }
+                seriesReviews = reviews.map { review -> review.toUi() }
             )
         }
+    }
+
+    private fun onError(throwable: Throwable) {
+        val isNetworkError = throwable is NoInternetException
+
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNetworkError = isNetworkError
+            )
+        }
+
+        sendEffect(SeriesDetailsEffect.Error(throwable))
     }
 }
