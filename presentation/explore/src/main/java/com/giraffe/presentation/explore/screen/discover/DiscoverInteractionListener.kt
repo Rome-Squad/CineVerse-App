@@ -1,4 +1,6 @@
-package com.giraffe.explore.screen.discover
+package com.giraffe.presentation.explore.screen.discover
+
+import com.giraffe.presentation.explore.model.GenreUi
 
 interface DiscoverInteractionListener {
     fun onTabSelected(tabIndex: Int)
@@ -6,4 +8,6 @@ interface DiscoverInteractionListener {
     fun getSeriesByGenre(genreId: Int = -1)
     fun onViewChanged(isGrid: Boolean)
     fun onGenreSelected(genre: GenreUi)
+    fun onPosterClick(mediaId: Int, selectedTab: SearchTab)
+    fun onSearchClick()
 }

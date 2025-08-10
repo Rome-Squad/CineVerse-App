@@ -1,4 +1,4 @@
-package com.giraffe.explore.screen.discover
+package com.giraffe.presentation.explore.screen.discover
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,10 +31,11 @@ import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.components.ExploreHeader
-import com.giraffe.explore.components.TransitionLazyColumnToGrid
-import com.giraffe.explore.util.toTitle
 import com.giraffe.presentation.explore.R
+import com.giraffe.presentation.explore.components.ExploreHeader
+import com.giraffe.presentation.explore.components.TransitionLazyColumnToGrid
+import com.giraffe.presentation.explore.model.GenreUi
+import com.giraffe.presentation.explore.util.toTitle
 
 @Composable
 fun DiscoverScreen(
@@ -43,12 +45,20 @@ fun DiscoverScreen(
     viewModel: DiscoverViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is DiscoverEffect.NavigateToMovieDetails -> navigateToMovieDetails(effect.movieId)
+                is DiscoverEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(effect.seriesId)
+                is DiscoverEffect.NavigateToSearchScreen -> navigateToSearch()
+                is DiscoverEffect.Error -> {}
+            }
+        }
+
+    }
     ExploreContent(
         state = state,
         interactions = viewModel,
-        navigateToMovieDetails = navigateToMovieDetails,
-        navigateToSeriesDetails = navigateToSeriesDetails,
-        navigateToSearch = navigateToSearch,
     )
 }
 
@@ -56,9 +66,6 @@ fun DiscoverScreen(
 fun ExploreContent(
     state: DiscoverScreenState,
     interactions: DiscoverInteractionListener,
-    navigateToMovieDetails: (Int) -> Unit,
-    navigateToSeriesDetails: (Int) -> Unit,
-    navigateToSearch: () -> Unit
 ) {
     val context = LocalContext.current
     val posters = state.selectedPosters.collectAsLazyPagingItems()
@@ -76,8 +83,8 @@ fun ExploreContent(
                     placeholder = stringResource(R.string.search),
                     enabled = false,
                     readOnly = true,
-                    onTextFieldClicked = navigateToSearch,
-                    onEndIconClick = navigateToSearch
+                    onTextFieldClicked = interactions::onSearchClick,
+                    onEndIconClick = interactions::onSearchClick
                 )
             }
             stickyHeader {
@@ -92,11 +99,7 @@ fun ExploreContent(
                 GenresAndCardsSection(
                     modifier = Modifier.fillParentMaxHeight(),
                     onPosterClicked = { id ->
-                        when (state.selectedTab) {
-                            SearchTab.MOVIES -> navigateToMovieDetails(id)
-                            SearchTab.SERIES -> navigateToSeriesDetails(id)
-                            SearchTab.ACTORS -> {}
-                        }
+                        interactions.onPosterClick(id, state.selectedTab)
                     },
                     posters = posters,
                     selectedGenre = state.selectedGenre
@@ -184,13 +187,15 @@ private fun PreviewDiscoverScreen() {
                 override fun getSeriesByGenre(genreId: Int) = Unit
 
                 override fun onViewChanged(isGrid: Boolean) = Unit
+                override fun onGenreSelected(genre: GenreUi) {}
+                override fun onPosterClick(
+                    mediaId: Int,
+                    selectedTab: SearchTab
+                ) {
+                }
 
-                override fun onGenreSelected(genre: GenreUi) = Unit
-
+                override fun onSearchClick() {}
             },
-            navigateToMovieDetails = { },
-            navigateToSeriesDetails = { },
-            navigateToSearch = { }
         )
     }
 }
