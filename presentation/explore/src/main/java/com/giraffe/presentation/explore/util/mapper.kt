@@ -1,11 +1,11 @@
-package com.giraffe.explore.util
+package com.giraffe.presentation.explore.util
 
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.explore.screen.discover.GenreUi
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.series.entity.Series
+import com.giraffe.presentation.explore.model.GenreUi
 
 
 fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {

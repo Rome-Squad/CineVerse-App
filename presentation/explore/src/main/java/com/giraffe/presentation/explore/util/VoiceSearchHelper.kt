@@ -1,4 +1,4 @@
-package com.giraffe.explore.util
+package com.giraffe.presentation.explore.util
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import com.giraffe.presentation.explore.R
 import java.util.Locale
 
 class VoiceSearchHelper(
@@ -19,7 +20,7 @@ class VoiceSearchHelper(
 
     fun startListening() {
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
-            onError?.invoke("Speech recognition not available on this device")
+            onError?.invoke(context.getString(R.string.speech_recognition_not_available_on_this_device))
             return
         }
 
@@ -59,7 +60,7 @@ class VoiceSearchHelper(
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search...")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, context.getString(R.string.speak_to_search))
         }
 
         speechRecognizer?.startListening(intent)
@@ -75,16 +76,16 @@ class VoiceSearchHelper(
 
     private fun getErrorMessage(errorCode: Int): String {
         return when (errorCode) {
-            SpeechRecognizer.ERROR_AUDIO -> "Audio recording error"
-            SpeechRecognizer.ERROR_CLIENT -> "Client side error"
-            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Insufficient permissions"
-            SpeechRecognizer.ERROR_NETWORK -> "Network error"
-            SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Network timeout"
-            SpeechRecognizer.ERROR_NO_MATCH -> "No match found"
-            SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Speech recognizer is busy"
-            SpeechRecognizer.ERROR_SERVER -> "Server error"
-            SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "No speech input"
-            else -> "Unknown error"
+            SpeechRecognizer.ERROR_AUDIO -> context.getString(R.string.audio_recording_error)
+            SpeechRecognizer.ERROR_CLIENT -> context.getString(R.string.client_side_error)
+            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> context.getString(R.string.insufficient_permissions)
+            SpeechRecognizer.ERROR_NETWORK -> context.getString(R.string.network_error)
+            SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> context.getString(R.string.network_timeout)
+            SpeechRecognizer.ERROR_NO_MATCH -> context.getString(R.string.no_match_found)
+            SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> context.getString(R.string.speech_recognizer_is_busy)
+            SpeechRecognizer.ERROR_SERVER -> context.getString(R.string.server_error)
+            SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> context.getString(R.string.no_speech_input)
+            else -> context.getString(R.string.unknown_error)
         }
     }
 }

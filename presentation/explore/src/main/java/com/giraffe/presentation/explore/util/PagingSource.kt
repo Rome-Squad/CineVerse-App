@@ -1,4 +1,4 @@
-package com.giraffe.explore.util
+package com.giraffe.presentation.explore.util
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
