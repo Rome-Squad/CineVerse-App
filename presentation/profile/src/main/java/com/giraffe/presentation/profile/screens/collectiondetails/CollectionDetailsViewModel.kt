@@ -18,28 +18,15 @@ class CollectionDetailsViewModel @Inject constructor(
     private val removeMovieFromCollectionUseCase: RemoveMovieFromCollectionUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     savedStateHandle: SavedStateHandle
-
 ) : BaseViewModel<CollectionDetailsScreenState, CollectionDetailsEffect>(
-    CollectionDetailsScreenState()
+    CollectionDetailsScreenState(
+        collectionId = savedStateHandle.get<Int>("collectionId") ?: 0,
+        collectionName = savedStateHandle.get<String>("collectionName") ?: "",
+
+        )
 ), CollectionDetailsInteractionListener {
 
     init {
-        savedStateHandle.get<String>("collectionName")?.let { collectionName ->
-            updateState {
-                it.copy(
-                    collectionName = collectionName
-                )
-            }
-        }
-
-        savedStateHandle.get<Int>("collectionId")?.let { collectionId ->
-            updateState {
-                it.copy(
-                    collectionId = collectionId
-                )
-            }
-        }
-
         getMoviesGenres()
         getCollectionItems()
     }
@@ -47,10 +34,9 @@ class CollectionDetailsViewModel @Inject constructor(
     private fun getMoviesGenres() {
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
-            onError = ::onFailure
-        ) {
-            getMoviesGenresUseCase()
-        }
+            onError = ::onFailure,
+            block = getMoviesGenresUseCase::invoke
+        )
     }
 
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
@@ -88,6 +74,7 @@ class CollectionDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 collectionMovies = swipeablePosters
             )
         }

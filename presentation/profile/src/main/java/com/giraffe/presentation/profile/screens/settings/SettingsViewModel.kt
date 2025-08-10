@@ -47,13 +47,13 @@ class SettingsViewModel @Inject constructor(
     private fun checkLoginStatus() {
         safeExecute(
             onSuccess = ::handleLoginStatusSuccess,
-            onError = { updateState { it.copy(isLoading = false) } },
+            onError = ::onFailure,
             block = isLoggedInUseCase::invoke
         )
     }
 
     private fun handleLoginStatusSuccess(isLoggedIn: Boolean) {
-        updateState { it.copy(isLoading = false, isLoggedIn = isLoggedIn) }
+        updateState { it.copy(isLoading = false, isNoInternet = false, isLoggedIn = isLoggedIn) }
         if (isLoggedIn) getUserProfile()
     }
 
@@ -85,7 +85,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun handleGetUserProfileSuccess(user: User) {
-        updateState { it.copy(isLoading = false, user = user.toUi()) }
+        updateState { it.copy(isLoading = false, isNoInternet = false, user = user.toUi()) }
     }
 
     private fun onFailure(error: Throwable) {

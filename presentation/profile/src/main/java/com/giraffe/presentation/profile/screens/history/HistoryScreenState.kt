@@ -4,7 +4,7 @@ import com.giraffe.designsystem.uimodel.Poster
 
 
 data class HistoryScreenState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
     val mediaList: List<Poster> = emptyList(),
     val historyListTitle: String = "",

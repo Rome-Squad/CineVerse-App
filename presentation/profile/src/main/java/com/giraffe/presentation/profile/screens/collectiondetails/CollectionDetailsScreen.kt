@@ -22,12 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoCard
-import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterItemHorizontal
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
 import com.giraffe.presentation.profile.components.DeleteButton
+import com.giraffe.presentation.profile.components.ScreenStates
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.utils.EffectListener
 import com.giraffe.presentation.profile.utils.toStringResource
@@ -45,9 +44,7 @@ fun CollectionScreen(
     ) { effect ->
         when (effect) {
             CollectionDetailsEffect.NavigateBack -> navigateBack()
-
             is CollectionDetailsEffect.NavigateToMovieDetails -> navigateToMovieDetails(effect.movieId)
-
             is CollectionDetailsEffect.ShowError -> Toast.makeText(
                 context,
                 context.getString(effect.error.toStringResource()),
@@ -63,12 +60,11 @@ fun CollectionScreen(
 
 @Composable
 private fun CollectionScreenContent(
-    modifier: Modifier = Modifier,
     state: CollectionDetailsScreenState,
     interactions: CollectionDetailsInteractionListener
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .systemBarsPadding()
@@ -81,13 +77,12 @@ private fun CollectionScreenContent(
             showBackButton = true,
             onBackButtonClick = interactions::onBackClick
         )
-        if (state.isLoading) {
-            Progress()
-        } else if (state.isNoInternet) {
-            NoInternetScreen()
-        } else {
+        ScreenStates(
+            isLoading = state.isLoading,
+            isNoInternet = state.isNoInternet
+        ) {
             LazyColumn(
-                modifier = modifier
+                modifier = Modifier
                     .background(Theme.color.background.screen)
                     .fillMaxSize()
                     .padding(horizontal = 16.dp),

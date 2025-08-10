@@ -6,7 +6,7 @@ import com.giraffe.user.entity.ContentPreference
 
 
 data class SettingsScreenState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
     val user: UserUiModel = UserUiModel(),
