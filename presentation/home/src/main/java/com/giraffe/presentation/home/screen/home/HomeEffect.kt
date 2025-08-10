@@ -1,6 +1,5 @@
 package com.giraffe.presentation.home.screen.home
 
-import androidx.annotation.StringRes
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 
 
@@ -15,7 +14,7 @@ sealed interface HomeEffect {
     data class NavigateToFeaturedCollection(val collectionId: Int, val collectionTitle: String) :
         HomeEffect
 
-    data class ShowError(@param:StringRes val messageRes: Int) : HomeEffect
+    data class ShowError(val error: Throwable) : HomeEffect
     object NavigateToYourCollection : HomeEffect
     data class NavigateToCollection(
         val collectionId: Int,

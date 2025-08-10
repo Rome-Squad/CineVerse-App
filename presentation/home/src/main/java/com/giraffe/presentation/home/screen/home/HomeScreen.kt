@@ -1,19 +1,15 @@
 package com.giraffe.home.screen.home
 
-import androidx.compose.animation.AnimatedVisibility
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -24,32 +20,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.giraffe.designsystem.composable.MessageInfoBox
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.components.AdvertisementSection
+import com.giraffe.presentation.home.components.BaseScreenWithStates
 import com.giraffe.presentation.home.components.Carousel
 import com.giraffe.presentation.home.components.CollectionListSection
-import com.giraffe.presentation.home.components.HomeUiListSection
+import com.giraffe.presentation.home.components.HorizontalDivider
+import com.giraffe.presentation.home.components.ListSection
 import com.giraffe.presentation.home.components.TopAppBar
 import com.giraffe.presentation.home.components.YourCollectionsSections
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.PopularMediaUi
+import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 import com.giraffe.presentation.home.screen.home.HomeEffect
 import com.giraffe.presentation.home.screen.home.HomeInteractionListener
 import com.giraffe.presentation.home.screen.home.HomeScreenState
 import com.giraffe.presentation.home.screen.home.HomeViewModel
-import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.model.PopularMediaUi
-import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 import com.giraffe.presentation.home.utils.EffectListener
+import com.giraffe.presentation.home.utils.toStringRes
 
 @Composable
 fun HomeScreen(
@@ -64,38 +61,37 @@ fun HomeScreen(
     navigateToCollection: (collectionId: Int, collectionName: String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     EffectListener(viewModel.effect) { effect ->
         when (effect) {
             is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
             is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
             is HomeEffect.NavigateToExploreScreen -> navigateToExploreScreen()
-            is HomeEffect.NavigateToFeaturedCollection -> { navigateToFeaturedCollection(effect.collectionId, effect.collectionTitle) }
-            is HomeEffect.NavigateToCollection -> { navigateToCollection(effect.collectionId, effect.collectionName) }
+            is HomeEffect.NavigateToFeaturedCollection -> {
+                navigateToFeaturedCollection(effect.collectionId, effect.collectionTitle)
+            }
+
+            is HomeEffect.NavigateToCollection -> {
+                navigateToCollection(effect.collectionId, effect.collectionName)
+            }
+
             is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
             is HomeEffect.NavigateToMatchScreen -> navigateToMatchScreen()
-            is HomeEffect.ShowError -> {}
-            is HomeEffect.NavigateToShowMore -> { navigateToShowMoreScreen(effect.sectionType) }
+            is HomeEffect.NavigateToShowMore -> {
+                navigateToShowMoreScreen(effect.sectionType)
+            }
+
+            is HomeEffect.ShowError -> Toast.makeText(
+                context,
+                context.getString(effect.error.toStringRes()), Toast.LENGTH_LONG
+            ).show()
         }
     }
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .systemBarsPadding(),
-        contentAlignment = Alignment.Center,
-    ) {
-        AnimatedVisibility(state.isLoading) {
-            Progress(modifier = Modifier.size(40.dp))
-        }
-    }
-    AnimatedVisibility(!state.isLoading) {
-        HomeContent(
-            state = state,
-            interactionListener = viewModel
-        )
-    }
+    HomeContent(
+        state = state,
+        interactionListener = viewModel
+    )
 }
 
 @Composable
@@ -103,31 +99,13 @@ fun HomeContent(
     state: HomeScreenState,
     interactionListener: HomeInteractionListener
 ) {
-    if (state.isGenericError && state.isNetworkError) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 45.dp)
-                .statusBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            MessageInfoBox(
-                title = stringResource(R.string.oops_no_internet),
-                caption = stringResource(R.string.looks_like_you_are_offline_let_s_reconnect_so_you_don_t_miss_out),
-                icon = painterResource(id = Theme.icons.dueTone.station),
-                buttonBackgroundColor = Theme.color.brand.primary,
-                iconBackgroundColor = Theme.color.additional.secondary.red,
-                iconTintColor = Theme.color.additional.primary.red,
-                titlePrimaryButton = stringResource(R.string.try_again),
-                isButtonsVisible = true,
-                isSecondaryButtonVisible = false,
-                onClickPrimaryButton = interactionListener::loadHomeContent
-            )
-        }
-    } else {
-        var topAppBarHeight by remember { mutableStateOf(0.dp) }
-        val density = LocalDensity.current
+    var topAppBarHeight by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
+
+    BaseScreenWithStates(
+        isLoading = state.isLoading,
+        isNoInternet = state.isNoInternet,
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -140,7 +118,6 @@ fun HomeContent(
                     .verticalScroll(rememberScrollState())
                     .padding(top = topAppBarHeight)
             ) {
-
                 if (state.popularity.isNotEmpty()) {
                     Carousel(
                         modifier = Modifier
@@ -152,7 +129,7 @@ fun HomeContent(
                 }
 
                 if (state.recentlyReleased.isNotEmpty()) {
-                    HomeUiListSection(
+                    ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
@@ -180,7 +157,7 @@ fun HomeContent(
                 )
 
                 if (state.upcomingMovies.isNotEmpty()) {
-                    HomeUiListSection(
+                    ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
@@ -196,7 +173,7 @@ fun HomeContent(
                     )
                 }
                 if (state.matchVibes.isNotEmpty()) {
-                    HomeUiListSection(
+                    ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
@@ -218,9 +195,8 @@ fun HomeContent(
                         onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,
                     )
                 }
-
                 if (state.topRated.isNotEmpty()) {
-                    HomeUiListSection(
+                    ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
@@ -236,7 +212,7 @@ fun HomeContent(
                     )
                 }
                 if (state.recentlyViewed.isNotEmpty()) {
-                    HomeUiListSection(
+                    ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
@@ -287,12 +263,7 @@ fun HomeContent(
                     userName = state.userName,
                     isLoggedIn = state.isLoggedIn
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Theme.color.stroke.primary)
-                )
+                HorizontalDivider()
             }
         }
     }
@@ -303,7 +274,6 @@ fun HomeContent(
 fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
-        override fun loadHomeContent() {}
         override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {}
 
         override fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType) {}

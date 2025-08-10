@@ -24,14 +24,14 @@ import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
-import com.giraffe.presentation.home.model.PosterUi
+import com.giraffe.presentation.home.model.ShowMorePoster
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun PosterVertically(
-    poster: PosterUi,
+    poster: ShowMorePoster,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,

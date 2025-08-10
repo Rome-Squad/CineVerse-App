@@ -1,5 +1,6 @@
 package com.giraffe.presentation.home.screen.home
 
+import android.accounts.NetworkErrorException
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
@@ -22,8 +23,8 @@ import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
-import com.giraffe.presentation.home.utils.toHomeUiModel
 import com.giraffe.presentation.home.utils.toPopularMediaUiModel
+import com.giraffe.presentation.home.utils.toPosterUi
 import com.giraffe.presentation.home.utils.toUiModel
 import com.giraffe.user.usecase.GetUserNameUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
@@ -54,10 +55,6 @@ class HomeViewModel @Inject constructor(
     HomeInteractionListener {
 
     init {
-        loadHomeContent()
-    }
-
-    override fun loadHomeContent() {
         getFeaturedCollection()
         getRecentViewed()
         getPopularity()
@@ -68,7 +65,6 @@ class HomeViewModel @Inject constructor(
         isLoggedIn()
         getYourCollections()
     }
-
 
     private fun isLoggedIn() {
         safeExecute(
@@ -91,7 +87,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getUseNameSuccess(userName: String) {
-        updateState { it.copy(userName = userName) }
+        updateState { it.copy(userName = userName, isNoInternet = false, isLoading = false) }
     }
 
     private fun getYourCollections() {
@@ -106,7 +102,7 @@ class HomeViewModel @Inject constructor(
         val yourCollections = collections.map { it.toUiModel() }
         updateState { currentState ->
             currentState.copy(
-                yourCollections = yourCollections
+                yourCollections = yourCollections, isNoInternet = false, isLoading = false
             )
         }
     }
@@ -120,7 +116,13 @@ class HomeViewModel @Inject constructor(
 
     private fun onGetFeaturedCollectionSuccess(genres: List<Genre>) {
         val featuredCollection = genres.map { it.toUiModel() }
-        updateState { it.copy(featuredCollections = featuredCollection) }
+        updateState {
+            it.copy(
+                featuredCollections = featuredCollection,
+                isNoInternet = false,
+                isLoading = false
+            )
+        }
     }
 
     private fun getPopularity() {
@@ -147,7 +149,9 @@ class HomeViewModel @Inject constructor(
             updateState { currentState ->
                 currentState.copy(
                     popularity =
-                        currentState.popularity + popularMoviesUi
+                        currentState.popularity + popularMoviesUi,
+                    isNoInternet = false,
+                    isLoading = false
                 )
             }
         }
@@ -162,7 +166,9 @@ class HomeViewModel @Inject constructor(
             updateState { currentState ->
                 currentState.copy(
                     popularity =
-                        currentState.popularity + popularSeriesUi
+                        currentState.popularity + popularSeriesUi,
+                    isNoInternet = false,
+                    isLoading = false
                 )
             }
         }
@@ -184,21 +190,25 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetRecentlyReleasedMoviesSuccess(movies: List<Movie>) {
-        val recentMoviesUi = movies.map { it.toHomeUiModel() }
+        val recentMoviesUi = movies.map { it.toPosterUi() }
         updateState { currentState ->
             currentState.copy(
                 recentlyReleased =
-                    currentState.recentlyReleased + recentMoviesUi
+                    currentState.recentlyReleased + recentMoviesUi,
+                isNoInternet = false,
+                isLoading = false
             )
         }
     }
 
     private fun onGetRecentlyReleasedSeriesSuccess(series: List<Series>) {
-        val recentSeriesUi = series.map { it.toHomeUiModel() }
+        val recentSeriesUi = series.map { it.toPosterUi() }
         updateState { currentState ->
             currentState.copy(
                 recentlyReleased =
-                    currentState.recentlyReleased + recentSeriesUi
+                    currentState.recentlyReleased + recentSeriesUi,
+                isNoInternet = false,
+                isLoading = false
             )
         }
     }
@@ -212,10 +222,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetTopRatedSeriesSuccess(series: List<Series>) {
-        val topRatedUi = series.map { it.toHomeUiModel() }
+        val topRatedUi = series.map { it.toPosterUi() }
         updateState { currentState ->
             currentState.copy(
-                topRated = currentState.topRated + topRatedUi
+                topRated = currentState.topRated + topRatedUi,
+                isNoInternet = false,
+                isLoading = false
             )
         }
     }
@@ -229,10 +241,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetUpcomingMoviesSuccess(movies: List<Movie>) {
-        val upcomingUi = movies.map { it.toHomeUiModel() }
+        val upcomingUi = movies.map { it.toPosterUi() }
         updateState { currentState ->
             currentState.copy(
-                upcomingMovies = currentState.upcomingMovies + upcomingUi
+                upcomingMovies = currentState.upcomingMovies + upcomingUi,
+                isNoInternet = false,
+                isLoading = false
             )
         }
     }
@@ -242,7 +256,7 @@ class HomeViewModel @Inject constructor(
             safeCollect(
                 onEmitNewValue = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
-                block = { getRecentlyViewedMoviesUseCase.invoke() }
+                block = getRecentlyViewedMoviesUseCase::invoke
             )
             safeCollect(
                 onEmitNewValue = ::onGetRecentlySeriesSuccess,
@@ -253,12 +267,25 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
-        updateState { it.copy(recentlyViewed = (it.recentlyViewed + movies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
+        updateState {
+            it.copy(
+                recentlyViewed = (
+                        it.recentlyViewed + movies.map(Movie::toPosterUi)).distinctBy { movie -> movie.id },
+                isNoInternet = false,
+                isLoading = false
+            )
+        }
         getRecommendedMovies(movies)
     }
 
     private fun onGetRecentlySeriesSuccess(series: List<Series>) {
-        updateState { it.copy(recentlyViewed = (it.recentlyViewed + series.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
+        updateState {
+            it.copy(
+                recentlyViewed = (it.recentlyViewed + series.map(Series::toPosterUi)).distinctBy { series -> series.id },
+                isNoInternet = false,
+                isLoading = false
+            )
+        }
         getRecommendedSeries(series)
 
     }
@@ -275,7 +302,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetRecommendedMoviesSuccess(recommendedMovies: List<Movie>) {
-        updateState { it.copy(matchVibes = (it.matchVibes + recommendedMovies.map(Movie::toHomeUiModel)).distinctBy { movie -> movie.id }) }
+        updateState {
+            it.copy(
+                matchVibes = (it.matchVibes + recommendedMovies.map(Movie::toPosterUi)).distinctBy { movie -> movie.id },
+                isNoInternet = false,
+                isLoading = false
+            )
+        }
     }
 
     private fun getRecommendedSeries(series: List<Series>) {
@@ -290,14 +323,19 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
-        updateState { it.copy(matchVibes = (it.matchVibes + recommendedSeries.map(Series::toHomeUiModel)).distinctBy { series -> series.id }) }
+        updateState {
+            it.copy(
+                matchVibes = (it.matchVibes + recommendedSeries.map(Series::toPosterUi)).distinctBy { series -> series.id },
+                isNoInternet = false,
+                isLoading = false
+            )
+        }
     }
 
     private fun onFail(error: Throwable) = updateState {
         it.copy(
             isLoading = false,
-            isError = true,
-            errorMsgRes = error.message
+            isNoInternet = error is NetworkErrorException
         )
     }
 

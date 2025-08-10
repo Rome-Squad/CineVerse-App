@@ -5,10 +5,9 @@ import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 
 interface HomeInteractionListener {
     fun onMediaClicked(mediaId: Int, mediaType: MediaType)
-    fun loadHomeContent()
-    fun onSeeAllRecentlyReleasedClicked( sectionType: ShowMoreSectionType)
-    fun onSeeAllTopRatedClicked( sectionType: ShowMoreSectionType)
-    fun onSeeAllUpcomingClicked( sectionType: ShowMoreSectionType)
+    fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType)
+    fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType)
+    fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType)
     fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType)
     fun onWhatShouldIWatchClicked(sectionType: ShowMoreSectionType)
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)

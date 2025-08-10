@@ -1,98 +1,89 @@
 package com.giraffe.presentation.home.utils
 
-import com.giraffe.presentation.home.model.FeaturedCollectionUi
-import com.giraffe.presentation.home.model.HomeUi
-import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.model.PopularMediaUi
-import com.giraffe.presentation.home.model.YourCollectionUi
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movies.entity.Movie
 import com.giraffe.media.series.entity.Series
-import com.giraffe.presentation.home.model.PosterUi
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.PopularMediaUi
+import com.giraffe.presentation.home.model.Poster
+import com.giraffe.presentation.home.model.ShowMorePoster
+import com.giraffe.presentation.home.model.YourCollectionUi
 
 
-fun Movie.toHomeUiModel(): HomeUi {
-    return HomeUi(
-        id = id,
-        title = title,
-        posterUrl = posterUrl.orEmpty(),
-        rating = rating,
-        mediaType = MediaType.MOVIE
-    )
-}
-
-fun Series.toHomeUiModel(): HomeUi {
-    return HomeUi(
-        id = id,
-        title = name,
-        posterUrl = posterUrl,
-        rating = rating,
-        mediaType = MediaType.SERIES
-    )
-}
-
-fun Series.toPosterUi(): PosterUi {
-    return PosterUi(
-        id = id,
-        name = name,
-        imageUri = posterUrl,
-        rating = rating,
-        date = releaseYear,
-        mediaType = MediaType.SERIES
-    )
-}
-
-fun Movie.toPosterUi(): PosterUi {
-    return PosterUi(
-        id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
-        rating = rating,
-        date = releaseYear.toString(),
-        mediaType = MediaType.MOVIE
-    )
-}
+fun Movie.toPosterUi() = Poster(
+    id = id,
+    title = title,
+    posterUrl = posterUrl.orEmpty(),
+    rating = rating,
+    mediaType = MediaType.MOVIE
+)
 
 
-fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUi {
-    return PopularMediaUi(
-        id = id,
-        title = title,
-        posterUrl = posterUrl.orEmpty(),
-        backdropUrl = backdropUrl.orEmpty(),
-        genres = genres,
-        rating = rating,
-        mediaType = MediaType.MOVIE
-    )
-}
+fun Series.toPosterUi() = Poster(
+    id = id,
+    title = name,
+    posterUrl = posterUrl,
+    rating = rating,
+    mediaType = MediaType.SERIES
+)
 
-fun Series.toPopularMediaUiModel(genres: List<String>): PopularMediaUi {
-    return PopularMediaUi(
-        id = id,
-        title = name,
-        posterUrl = posterUrl,
-        genres = genres,
-        rating = rating,
-        mediaType = MediaType.SERIES
-    )
-}
 
-fun Collection.toUiModel(): YourCollectionUi {
-    return YourCollectionUi(
-        id = id,
-        title = name,
-        numberOfItems = itemsCount
-    )
-}
+fun Series.toShowMorePoster() = ShowMorePoster(
+    id = id,
+    name = name,
+    imageUri = posterUrl,
+    rating = rating,
+    date = releaseYear,
+    mediaType = MediaType.SERIES
+)
 
-fun Genre.toUiModel(): FeaturedCollectionUi {
-    return FeaturedCollectionUi(
-        id = id,
-        title = title,
-        backgroundImageUrl = GenreBackgroundImage.getImageUrlForGenre(title)
-    )
-}
+
+fun Movie.toShowMorePoster() = ShowMorePoster(
+    id = id,
+    name = title,
+    imageUri = posterUrl.orEmpty(),
+    rating = rating,
+    date = releaseYear.toString(),
+    mediaType = MediaType.MOVIE
+)
+
+
+fun Movie.toPopularMediaUiModel(genres: List<String>) = PopularMediaUi(
+    id = id,
+    title = title,
+    posterUrl = posterUrl.orEmpty(),
+    backdropUrl = backdropUrl.orEmpty(),
+    genres = genres,
+    rating = rating,
+    mediaType = MediaType.MOVIE
+)
+
+
+fun Series.toPopularMediaUiModel(genres: List<String>) = PopularMediaUi(
+    id = id,
+    title = name,
+    posterUrl = posterUrl,
+    genres = genres,
+    rating = rating,
+    mediaType = MediaType.SERIES
+)
+
+
+fun Collection.toUiModel() = YourCollectionUi(
+    id = id,
+    title = name,
+    numberOfItems = itemsCount
+)
+
+
+fun Genre.toUiModel() = FeaturedCollectionUi(
+    id = id,
+    title = title,
+    backgroundImageUrl = GenreBackgroundImage.getImageUrlForGenre(title)
+)
+
 
 enum class GenreBackgroundImage(
     val imageUrl: String,
