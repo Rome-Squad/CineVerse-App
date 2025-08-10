@@ -9,6 +9,7 @@ import com.giraffe.presentation.details.model.ReviewUI
 
 @Stable
 data class MovieDetailsScreenState(
+
     val movie: MovieUi = MovieUi(),
     val movieGenres: List<String> = emptyList(),
     val cast: List<CastUi> = emptyList(),
@@ -17,21 +18,16 @@ data class MovieDetailsScreenState(
     val recommendedMovies: List<Poster> = emptyList(),
     val movieReviews: List<ReviewUI> = emptyList(),
     val newCollectionName: String = "",
-    //loading states
-    val isLoadingMovieDetails: Boolean = true,
-    val isLoadingMovieGenres: Boolean = true,
-    val isLoadingCast: Boolean = true,
-    val isLoadingRecommendedMovies: Boolean = true,
-    val isLoadingReviews: Boolean = true,
-    val isLoadingAddToCollection: Boolean = false,
-    //bottom sheets visibility
+    val isLoggedIn: Boolean = false,
+    val currentRating: Int = 0,
+
     val collectionBottomSheet: CollectionBottomSheet? = null,
     val isVisibleGiveStarsBottomSheet: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,
-    val isLoggedIn: Boolean = false,
-    val currentRating: Int = 0,
-    val errorMessage: Int? = null,
+
+    val isLoading:Boolean = true,
     val isNetworkError: Boolean = false,
+
 ) {
     @Stable
     sealed class CollectionBottomSheet {
