@@ -14,4 +14,5 @@ interface SearchInteractionListener {
     fun onBackClick()
     fun onClickPoster(poster: Poster)
     fun onSearchClick(result: String)
+    fun retry()
 }

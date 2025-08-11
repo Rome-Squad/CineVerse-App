@@ -1,4 +1,4 @@
-package com.giraffe.presentation.explore.components
+package com.giraffe.presentation.explore.screen.search.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,11 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.explore.R
 
 @Composable
 fun SearchItem(
@@ -44,7 +46,7 @@ fun SearchItem(
         ) {
             Icon(
                 painter = painterResource(id = if (isRecent) Theme.icons.outline.history else Theme.icons.outline.search),
-                contentDescription = "Search",
+                contentDescription = stringResource(R.string.search),
                 modifier = Modifier.size(20.dp),
                 tint = Theme.color.shade.tertiary
             )
@@ -58,7 +60,7 @@ fun SearchItem(
             )
             Icon(
                 painter = postfixIcon,
-                contentDescription = "Navigate",
+                contentDescription = stringResource(R.string.navigate),
                 modifier = Modifier
                     .size(20.dp)
                     .clip(RoundedCornerShape(Theme.radius.xs))

@@ -23,5 +23,5 @@ data class SearchResultScreenState(
     val moviesGenres: List<GenreUi> = emptyList(),
     val seriesGenres: List<GenreUi> = emptyList(),
     val isNoInternet: Boolean = false,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
 )

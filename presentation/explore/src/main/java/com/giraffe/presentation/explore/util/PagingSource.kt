@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 
 class BasePagingSource<T : Any>(
-    private val error: (Throwable) -> Unit = {},
+    private val onError: (Throwable) -> Unit = {},
     private val dataSource: suspend (Int) -> List<T>
 ) : PagingSource<Int, T>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
@@ -17,7 +17,7 @@ class BasePagingSource<T : Any>(
                 nextKey = if (result.isEmpty()) null else nextPage.inc()
             )
         } catch (e: Exception) {
-            error(e)
+            onError(e)
             LoadResult.Error(e)
         }
     }
