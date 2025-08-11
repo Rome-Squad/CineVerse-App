@@ -183,27 +183,25 @@ fun ProfileDto.toImageUrl(): String = BASE_IMAGE_URL + filePath
 
 fun PersonCreditDto.toMovieEntity() = Movie(
     id = id,
-    title = title.orEmpty(),
-    description = overview.orEmpty(),
+    name = title.orEmpty(),
+    overview = overview.orEmpty(),
     rating = voteAverage ?: 0f,
     duration = null,
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL))
             it else
             BASE_IMAGE_URL + it
-    },
+    }.orEmpty(),
     backdropUrl = backdropPath?.let {
         if (it.contains(BASE_IMAGE_URL))
             it else
             BASE_IMAGE_URL + it
-    },
-    genresID = genreIds.orEmpty(),
+    }.orEmpty(),
+    genresID = genreIds ?: emptyList(),
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
-    popularity = popularity ?: 0f,
-    youtubeVideoId = null,
+    popularity = popularity.orEmpty(),
+    youtubeVideoId = "",
     recentViewedAt = null,
-    recentReleasedAt = null,
-    upcomingAt = null,
     userRating = null
 )
 
@@ -214,7 +212,7 @@ fun PersonCreditDto.toSeriesEntity() = Series(
     rating = voteAverage.orEmpty(),
     posterUrl = posterPath.orEmpty(),
     backdropUrl = backdropPath.orEmpty(),
-    genreIDs = genreIds.orEmpty(),
+    genreIDs = genreIds ?: emptyList(),
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
     seasons = emptyList(),
     youtubeVideoId = null,

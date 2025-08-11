@@ -8,6 +8,11 @@ import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.presentation.profile.R
 
+
+fun Any?.orEmpty(): String = this?.toString() ?: ""
+
+fun Float?.orEmpty() = this ?: 0f
+
 fun Throwable.toStringResource() = when (this) {
     is NoInternetException -> R.string.error_network
     is AccessDeniedException -> R.string.access_denied_error

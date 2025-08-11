@@ -4,8 +4,8 @@ import com.giraffe.media.collections.CollectionsRepositoryImp
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.explore.SearchRepositoryImpl
 import com.giraffe.media.explore.repository.SearchRepository
-import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.movie.MoviesRepositoryImpl
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.movie.repository.MoviesRepository
 import com.giraffe.media.person.MediaMemberRepositoryImpl
 import com.giraffe.media.series.SeriesRepositoryImpl
@@ -38,7 +38,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindMoviesRepository(impl: MoviesRepositoryImpl): MoviesRepository
+    abstract fun bindMovieRepository(impl: MoviesRepositoryImpl): MoviesRepository
 
     @Binds
     @Singleton

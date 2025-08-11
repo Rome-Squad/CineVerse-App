@@ -7,6 +7,7 @@ import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
+import com.giraffe.media.utils.orEmpty
 import kotlinx.datetime.LocalDate
 
 fun MovieGenreCacheDto.toEntity() = Genre(id, name, count)
@@ -22,81 +23,71 @@ fun MovieGenreDto.toEntity() = Genre(
 fun MovieCacheDto.toEntity() =
     Movie(
         id = id,
-        title = title,
-        description = overview,
+        name = title,
+        overview = overview,
         rating = voteAverage,
         duration = duration,
         posterUrl = posterPath?.let {
             if (it.contains(BASE_IMAGE_URL))
                 it
             else BASE_IMAGE_URL + it
-        },
+        }.orEmpty(),
         backdropUrl = backdropPath?.let {
             if (it.contains(BASE_IMAGE_URL))
                 it else
                 BASE_IMAGE_URL + it
-        },
+        }.orEmpty(),
         youtubeVideoId = youtubeVideoId.orEmpty(),
         genresID = genresID,
         recentViewedAt = recentViewedAt,
-        recentReleasedAt = recentReleasedAt,
-        upcomingAt = upcomingAt,
         popularity = popularity,
-        releaseYear = if (releaseDate.isNullOrEmpty())
-            null
-        else
-            LocalDate.parse(releaseDate)
+        userRating = null,
+        releaseYear = releaseDate?.let { LocalDate.parse(it) }
     )
 
 fun Movie.toCacheDto() = MovieCacheDto(
     id = id,
-    title = title,
-    overview = description,
+    title = name,
+    overview = overview,
     voteAverage = rating,
-    posterPath = posterUrl?.let {
+    posterPath = posterUrl.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
-    backdropPath = backdropUrl?.let {
+    backdropPath = backdropUrl.let {
         if (it.contains(BASE_IMAGE_URL))
             it else
             BASE_IMAGE_URL + it
     },
-    youtubeVideoId = youtubeVideoId.orEmpty(),
+    youtubeVideoId = youtubeVideoId,
     genresID = genresID,
-    releaseDate = releaseYear?.toString(),
+    releaseDate = releaseYear.orEmpty(),
     duration = duration,
     popularity = popularity,
     recentViewedAt = recentViewedAt,
-    recentReleasedAt = recentReleasedAt,
-    upcomingAt = upcomingAt,
 )
 
 fun MovieDto.toEntity(
     recentViewedAt: Long? = null,
-    recentReleasedAt: Long? = null,
-    upcomingAt: Long? = null
 ) = Movie(
     id = id,
-    title = title.orEmpty(),
-    description = overview.orEmpty(),
-    rating = voteAverage ?: 0f,
+    name = title.orEmpty(),
+    overview = overview.orEmpty(),
+    rating = voteAverage.orEmpty(),
     duration = runtime,
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL))
             it else
             BASE_IMAGE_URL + it
-    },
+    }.orEmpty(),
     backdropUrl = backdropPath?.let {
         if (it.contains(BASE_IMAGE_URL))
             it else
             BASE_IMAGE_URL + it
-    },
+    }.orEmpty(),
     genresID = genresID.ifEmpty { genres.map { it.id } },
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    releaseYear = releaseDate?.let { LocalDate.parse(it) },
     youtubeVideoId = youtubeVideoId.orEmpty(),
     recentViewedAt = recentViewedAt,
-    recentReleasedAt = recentReleasedAt,
-    upcomingAt = upcomingAt,
-    popularity = popularity ?: 0f,
+    popularity = popularity.orEmpty(),
     userRating = userRating
 )

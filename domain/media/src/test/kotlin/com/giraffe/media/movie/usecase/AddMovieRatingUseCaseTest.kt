@@ -1,6 +1,6 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -10,7 +10,7 @@ import kotlin.test.Test
 
 class AddMovieRatingUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
+    private lateinit var repository: MovieRepository
     private lateinit var addMovieRatingUseCase: AddMovieRatingUseCase
 
     @BeforeEach
@@ -25,7 +25,7 @@ class AddMovieRatingUseCaseTest {
         coEvery { repository.addRating(any(), any()) } returns Unit
 
         // when
-        addMovieRatingUseCase(movieId = 1, ratingValue = 8.5f)
+        addMovieRatingUseCase(movieId = 1, rating = 8.5f)
 
         // then
         coVerify(exactly = 1) { repository.addRating(1, 8.5f) }

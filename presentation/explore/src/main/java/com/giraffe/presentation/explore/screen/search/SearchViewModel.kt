@@ -117,7 +117,7 @@ class SearchViewModel @Inject constructor(
     override fun clearAllRecentViewedPosters() {
         safeExecute {
             val job1 = launch { clearRecentlyViewedSeriesUseCase() }
-            val job2 = launch { clearMoviesCacheUseCase.clearRecentlyViewedMovies() }
+            val job2 = launch { clearMoviesCacheUseCase.clearRecentlyViewed() }
             val job3 = launch { clearRecentlyPeopleUseCase() }
             joinAll(job1, job2, job3)
             updateState { it.copy(recentPosters = emptyList()) }

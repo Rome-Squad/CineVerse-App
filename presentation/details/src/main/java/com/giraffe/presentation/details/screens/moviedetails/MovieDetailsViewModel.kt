@@ -30,13 +30,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
-
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetails: GetMovieDetailsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    private val getRecommendedMovie: GetRecommendedMovieUseCase,
+    private val getRecommendedMovies: GetRecommendedMovieUseCase,
     private val getMediaMembersByMovieId: GetMediaMembersByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
@@ -310,7 +309,7 @@ class MovieDetailsViewModel @Inject constructor(
                 ) {
                     addRatingUseCase(
                         movieId = state.value.movie.id,
-                        ratingValue = state.value.currentRating.toFloat()
+                        rating = state.value.currentRating.toFloat()
                     )
                 }
             },
@@ -369,7 +368,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadRecommendedMovieSuccess,
             onError = ::onError
         ) {
-            getRecommendedMovie(movieId = movieId, page = 1)
+            getRecommendedMovies(movieId = movieId, page = 1)
         }
     }
 
@@ -380,7 +379,7 @@ class MovieDetailsViewModel @Inject constructor(
                     Poster(
                         id = movie.id,
                         name = movie.title,
-                        imageUrl = movie.posterUrl.toString(),
+                        imageUrl = movie.posterUrl.orEmpty(),
                         rating = movie.rating
                     )
                 },
@@ -427,7 +426,7 @@ class MovieDetailsViewModel @Inject constructor(
         ) {
             getMovieReviewsUseCase(
                 movieId = movieId,
-                pageNumber = 1
+                page = 1
             )
         }
     }
@@ -441,7 +440,6 @@ class MovieDetailsViewModel @Inject constructor(
             )
         }
     }
-
 
 
     private fun executeIfLoggedIn(

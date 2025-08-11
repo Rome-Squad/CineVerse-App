@@ -8,15 +8,13 @@ fun fakeMovie(
     title: String,
     popularity: Float = 0f,
     recentViewedAt: Long? = null,
-    recentReleasedAt: Long? = null,
-    upcomingAt: Long? = null,
     genresID: List<Int> = listOf(28, 878),
     userRating: Float? = null,
 ): Movie {
     return Movie(
         id = id,
-        title = title,
-        description = "A sample description for the movie.",
+        name = title,
+        overview = "A sample description for the movie.",
         rating = 8.0f,
         duration = 120,
         posterUrl = "https://example.com/poster.jpg",
@@ -26,8 +24,6 @@ fun fakeMovie(
         releaseYear = LocalDate(2024, 1, 1),
         popularity = popularity,
         recentViewedAt = recentViewedAt,
-        recentReleasedAt = recentReleasedAt,
-        upcomingAt = upcomingAt,
         userRating = userRating
     )
 }
@@ -38,8 +34,8 @@ val fakeMovies: List<Movie> = listOf(
     fakeMovie(id = 3, title = "title 3", popularity = 333f),
     fakeMovie(id = 4, title = "title 4", popularity = 50f),
     fakeMovie(id = 5, title = "title 5", popularity = 1f),
-    fakeMovie(id = 6, title = "title 6", popularity = 1000333f, upcomingAt = 1234),
+    fakeMovie(id = 6, title = "title 6", popularity = 1000333f),
     fakeMovie(id = 7, title = "title 7", recentViewedAt = 1234),
-    fakeMovie(id = 8, title = "title 8", recentReleasedAt = 1234),
+    fakeMovie(id = 8, title = "title 8"),
     fakeMovie(id = 9, title = "title 9", userRating = 0.9f),
 )

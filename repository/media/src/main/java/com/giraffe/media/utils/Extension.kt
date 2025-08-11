@@ -12,3 +12,5 @@ fun getCurrentLocalDateTime(): LocalDateTime {
 }
 
 fun Float?.orEmpty() = this ?: 0f
+
+fun Any?.orEmpty(): String = this?.toString() ?: ""

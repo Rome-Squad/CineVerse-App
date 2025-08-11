@@ -1,6 +1,6 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class GetUserMovieRatingUseCaseTest {
-    private lateinit var repository: MoviesRepository
+    private lateinit var repository: MovieRepository
     private lateinit var getUserMovieRatingUseCase: GetUserMovieRatingUseCase
 
     @BeforeEach
@@ -22,20 +22,20 @@ class GetUserMovieRatingUseCaseTest {
     @Test
     fun `invoke should call getUserMovieRating on repository with correct id`() = runTest {
         // given
-        coEvery { repository.getUserMovieRating(any()) } returns 5.0f
+        coEvery { repository.getUserRatedById(any()) } returns 5.0f
 
         // when
         getUserMovieRatingUseCase(1)
 
         // then
-        coVerify(exactly = 1) { repository.getUserMovieRating(1) }
+        coVerify(exactly = 1) { repository.getUserRatedById(1) }
     }
 
     @Test
     fun `invoke should return rating from repository`() = runTest {
         // given
         val expectedRating = 8.5f
-        coEvery { repository.getUserMovieRating(1) } returns expectedRating
+        coEvery { repository.getUserRatedById(1) } returns expectedRating
 
         // when
         val result = getUserMovieRatingUseCase(1)
