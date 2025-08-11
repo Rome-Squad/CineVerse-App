@@ -72,6 +72,6 @@ class ShowMoreViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        sendEffect(ShowMoreEffect.OnBackClick)
+        sendEffect(ShowMoreEffect.NavigateBack)
     }
 }

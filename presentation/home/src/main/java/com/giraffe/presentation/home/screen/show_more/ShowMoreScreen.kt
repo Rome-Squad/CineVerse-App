@@ -46,7 +46,7 @@ fun ShowMoreScreen(
 
                 is ShowMoreEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
 
-                ShowMoreEffect.OnBackClick -> onBackClick()
+                ShowMoreEffect.NavigateBack -> onBackClick()
 
                 is ShowMoreEffect.ShowError -> context.showToast(effect.error.toStringRes())
             }
