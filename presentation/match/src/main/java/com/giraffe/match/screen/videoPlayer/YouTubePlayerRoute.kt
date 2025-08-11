@@ -1,0 +1,28 @@
+package com.giraffe.match.screen.videoPlayer
+
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+internal data class YouTubePlayerRoute(val youtubeVideoId: String)
+
+
+fun NavController.navigateToYouTubePlayer(youtubeVideoId: String) {
+    navigate(YouTubePlayerRoute(youtubeVideoId))
+}
+
+fun NavGraphBuilder.youTubePlayerRouteRoute(
+    onBackClick: () -> Unit,
+) {
+    composable<YouTubePlayerRoute> {
+        val youtubeVideoId = it.toRoute<YouTubePlayerRoute>().youtubeVideoId
+        YouTubePlayerScreen(
+            youtubeVideoId = youtubeVideoId,
+            onBackClick = onBackClick
+        )
+    }
+}

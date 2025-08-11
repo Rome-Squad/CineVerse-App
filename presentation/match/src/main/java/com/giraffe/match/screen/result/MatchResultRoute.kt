@@ -1,0 +1,29 @@
+package com.giraffe.match.screen.result
+
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
+
+@Serializable
+internal object MatchRouteResult
+
+internal fun NavController.navigateToMatch() {
+    navigate(MatchRouteResult)
+}
+
+fun NavGraphBuilder.matchRoute(
+    onBackButtonClick: () -> Unit,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
+    navigateToYouTubePlayer: (String) -> Unit
+) {
+    composable<MatchRouteResult> {
+        MatchResultScreen(
+            navigateBack = onBackButtonClick,
+            navigateToMoviesDetailsScreen = navigateToMovieDetails,
+            navigateToSeriesDetailsScreen = navigateToSeriesDetails,
+            navigateToYouTubePlayer = navigateToYouTubePlayer
+        )
+    }
+}

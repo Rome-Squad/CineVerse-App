@@ -34,66 +34,64 @@ class RatingViewModel @Inject constructor(
     private fun getGenres() {
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
-            onError = ::onGetMoviesGenresFailure,
+            onError = ::onFailure,
             block = getMoviesGenresUseCase::invoke
         )
         safeExecute(
             onSuccess = ::onGetSeriesGenresSuccess,
-            onError = ::onGetSeriesGenresFailure,
+            onError = ::onFailure,
             block = getSeriesGenresUseCase::invoke
         )
     }
 
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
-        updateState { it.copy(isLoading = false, movieGenres = genres) }
+        updateState { it.copy(isLoading = false, isNoInternet = false, movieGenres = genres) }
         safeExecute(
             onSuccess = ::onGetRatedMoviesSuccess,
-            onError = ::onGetRatedMoviesFailure,
+            onError = ::onFailure,
             block = getRatedMoviesUseCase::invoke
         )
     }
 
-    private fun onGetMoviesGenresFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false) }
-        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
+    private fun onFailure(error: Throwable, isNoInternet: Boolean) {
+        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
+        sendEffect(RatingEffect.ShowError(error))
     }
 
     private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
-        updateState { it.copy(isLoading = false, seriesGenres = genres) }
+        updateState { it.copy(isLoading = false, isNoInternet = false, seriesGenres = genres) }
         safeExecute(
             onSuccess = ::onGetRatedSeriesSuccess,
-            onError = ::onGetRatedSeriesFailure,
+            onError = ::onFailure,
             block = getRatedSeriesUseCase::invoke
         )
-    }
-
-    private fun onGetSeriesGenresFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false) }
-        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
     private fun onGetRatedMoviesSuccess(ratedMovies: List<Movie>) {
         val ratedMovies =
             ratedMovies.map { it.toRatedPoster(state.value.movieGenres.filter { genres -> genres.id in it.genresID }) }
-        updateState { it.copy(moviesPosters = ratedMovies) }
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = false,
+                moviesPosters = ratedMovies
+            )
+        }
         if (state.value.selectedTabIndex == 0) updateState { it.copy(selectedPosters = ratedMovies) }
-    }
-
-    private fun onGetRatedMoviesFailure(error: Throwable) {
-        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
     private fun onGetRatedSeriesSuccess(ratedSeries: List<Series>) {
         val ratedSeries =
             ratedSeries.map { it.toRatedPoster(state.value.seriesGenres.filter { genres -> genres.id in it.genreIDs }) }
-        updateState { it.copy(seriesPosters = ratedSeries) }
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = false,
+                seriesPosters = ratedSeries
+            )
+        }
         if (state.value.selectedTabIndex != 0) updateState { it.copy(selectedPosters = ratedSeries) }
     }
-
-    private fun onGetRatedSeriesFailure(error: Throwable) {
-        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
-    }
-
 
     override fun onCloseTipClick() {
         updateState { it.copy(isTipVisible = false) }
@@ -111,7 +109,6 @@ class RatingViewModel @Inject constructor(
             )
         }
     }
-
 
     override fun onPosterClick(ratedPoster: RatedPoster) {
         if (ratedPoster.poster.mediaTypeOfPoster == Poster.Type.MOVIE.value) {
@@ -137,7 +134,7 @@ class RatingViewModel @Inject constructor(
     private fun deleteMovieRating(ratedPoster: RatedPoster) {
         safeExecute(
             onSuccess = { onDeleteMovieRatingSuccess(ratedPoster) },
-            onError = ::onMovieRatingDeleteFailure
+            onError = ::onFailure
         ) {
             deleteMovieRatingUseCase(ratedPoster.poster.id)
         }
@@ -145,19 +142,21 @@ class RatingViewModel @Inject constructor(
 
     private fun onDeleteMovieRatingSuccess(ratedPoster: RatedPoster) {
         (state.value.moviesPosters - ratedPoster).let { moviesPosters ->
-            updateState { it.copy(moviesPosters = moviesPosters) }
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    isNoInternet = false,
+                    moviesPosters = moviesPosters
+                )
+            }
             if (state.value.selectedTabIndex == 0) updateState { it.copy(selectedPosters = moviesPosters) }
         }
-    }
-
-    private fun onMovieRatingDeleteFailure(error: Throwable) {
-        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 
     private fun deleteSeriesRating(ratedPoster: RatedPoster) {
         safeExecute(
             onSuccess = { onDeleteSeriesRatingSuccess(ratedPoster) },
-            onError = ::onSeriesRatingDeleteFailure
+            onError = ::onFailure
         ) {
             deleteSeriesRatingUseCase(ratedPoster.poster.id)
         }
@@ -165,12 +164,14 @@ class RatingViewModel @Inject constructor(
 
     private fun onDeleteSeriesRatingSuccess(ratedPoster: RatedPoster) {
         (state.value.seriesPosters - ratedPoster).let { seriesPosters ->
-            updateState { it.copy(seriesPosters = seriesPosters) }
+            updateState {
+                it.copy(
+                    isLoading = false,
+                    isNoInternet = false,
+                    seriesPosters = seriesPosters
+                )
+            }
             if (state.value.selectedTabIndex != 0) updateState { it.copy(selectedPosters = seriesPosters) }
         }
-    }
-
-    private fun onSeriesRatingDeleteFailure(error: Throwable) {
-        sendEffect(RatingEffect.ShowError(mapErrorToResource(error)))
     }
 }

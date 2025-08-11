@@ -20,4 +20,16 @@
     <string name="pulse2" translatable="false">pulse2</string>
     <string name="pulse1" translatable="false">pulse1</string>
     <string name="voice_pulse" translatable="false">voice-pulse</string>
+    <string name="speech_recognition_not_available_on_this_device">Speech recognition not available on this device</string>
+    <string name="speak_to_search">Speak to search...</string>
+    <string name="audio_recording_error">Audio recording error</string>
+    <string name="client_side_error">Client side error</string>
+    <string name="insufficient_permissions">Insufficient permissions</string>
+    <string name="no_speech_input">No speech input</string>
+    <string name="server_error">Server error</string>
+    <string name="speech_recognizer_is_busy">Speech recognizer is busy</string>
+    <string name="no_match_found">No match found</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="network_error">Network error</string>
+    <string name="network_timeout">Network timeout</string>
 </resources>

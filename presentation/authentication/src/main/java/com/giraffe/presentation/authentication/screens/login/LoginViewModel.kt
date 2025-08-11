@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.presentation.authentication.base.BaseViewModel
 import com.giraffe.presentation.authentication.nav.routes.LoginRoute
+import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -37,12 +38,12 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onLoginClick() {
-        updateState { it.copy(isLoadingLogin = true) }
+        updateState { it.copy(isLoading = true) }
 
         safeExecute(
-            onError = ::onLoginError,
+            onError = this::onFailure,
             onSuccess = {
-                updateState { it.copy(isLoadingLogin = false) }
+                updateState { it.copy(isLoading = false) }
                 if (!fromRoute) sendEffect(LoginEffect.NavigateToHomeScreen)
                 else sendEffect(LoginEffect.PopBack)
 
@@ -51,8 +52,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun onLoginError(throwable: Throwable) {
-        sendEffect(LoginEffect.ShowErrorMessage(throwable))
+    private fun onFailure(error: Throwable) {
+        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
+        sendEffect(LoginEffect.ShowErrorMessage(error))
     }
 
     override fun onGoToWebsiteClick() {

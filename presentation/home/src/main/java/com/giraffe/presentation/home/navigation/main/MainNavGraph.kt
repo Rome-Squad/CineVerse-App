@@ -16,13 +16,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.giraffe.api.details.DetailsApi
+import com.giraffe.api.explore.ExploreApi
 import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.explore.ExploreApi
-import com.giraffe.presentation.home.navigation.home.HomeNavGraph
 import com.giraffe.match.MatchApi
+import com.giraffe.presentation.home.navigation.home.HomeNavGraph
 
 @Composable
 fun MainNavGraph(
