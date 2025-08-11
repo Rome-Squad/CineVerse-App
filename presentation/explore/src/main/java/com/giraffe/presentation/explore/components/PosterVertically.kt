@@ -45,8 +45,7 @@ fun PosterVertically(
                     .clip(RoundedCornerShape(Theme.radius.lg))
                     .background(Theme.color.background.card)
                     .clickable(onClick = onClick)
-                    .aspectRatio(0.74f),
-                contentAlignment = Alignment.Center
+                    .aspectRatio(0.74f), contentAlignment = Alignment.Center
             ) {
                 SafeIslamicImage(
                     imageUrl = poster.imageUri,

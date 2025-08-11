@@ -72,17 +72,6 @@ fun PosterHorizontal(
                         animatedVisibilityScope = animatedVisibilityScope
                     )
             )
-//            {
-//
-//                Icon(
-//                    painter = painterResource(Theme.icons.dueTone.image),
-//                    contentDescription = stringResource(R.string.loading_image),
-//                    modifier = Modifier.size(32.dp),
-//                    tint = Theme.color.brand.secondary
-//                )
-//
-//            }
-
 
             Column(
                 modifier = Modifier.padding(vertical = 12.dp),
@@ -101,8 +90,7 @@ fun PosterHorizontal(
                             style = Theme.textStyle.body.md.medium,
                             color = Theme.color.shade.primary,
                             maxLines = 1,
-                            modifier = Modifier
-                                .sharedElement(
+                            modifier = Modifier.sharedElement(
                                     sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
@@ -116,9 +104,7 @@ fun PosterHorizontal(
                         )
                     }
                     Rating(
-                        value = poster.rating,
-                        modifier = Modifier
-                            .sharedElement(
+                        value = poster.rating, modifier = Modifier.sharedElement(
                                 sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
