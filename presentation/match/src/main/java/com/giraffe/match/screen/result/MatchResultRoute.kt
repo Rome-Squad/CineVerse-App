@@ -13,14 +13,14 @@ internal fun NavController.navigateToMatchResult() {
 }
 
 fun NavGraphBuilder.matchRoute(
-    onBackButtonClick: () -> Unit,
+    onBackClick: () -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToYouTubePlayer: (String) -> Unit
 ) {
     composable<MatchRouteResult> {
         MatchResultScreen(
-            navigateBack = onBackButtonClick,
+            navigateBack = onBackClick,
             navigateToMoviesDetailsScreen = navigateToMovieDetails,
             navigateToSeriesDetailsScreen = navigateToSeriesDetails,
             navigateToYouTubePlayer = navigateToYouTubePlayer

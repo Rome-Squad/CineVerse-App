@@ -37,7 +37,7 @@ class MatchPagerViewModel @Inject constructor() : ViewModel() {
                 _state.value = _state.value.copy(currentPage = _state.value.currentPage + 1)
             } else {
                 _state.value = _state.value.copy(isLoading = true)
-                delay(500)
+                delay(LOADING_DELAY)
                 _state.value = _state.value.copy(isLoading = false)
                 _effect.emit(MatchScreenEffect.FinishMatching)
             }
@@ -59,4 +59,9 @@ class MatchPagerViewModel @Inject constructor() : ViewModel() {
     fun updateRecencySelections(selectedIds: List<Int>) {
         _state.value = _state.value.copy(recencySelections = selectedIds)
     }
+
+    companion object {
+        private const val LOADING_DELAY = 300L
+    }
+
 }

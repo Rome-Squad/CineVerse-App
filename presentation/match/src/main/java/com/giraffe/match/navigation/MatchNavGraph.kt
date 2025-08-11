@@ -6,8 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.giraffe.api.details.DetailsApi
-import com.giraffe.match.screen.match_pager.MatchRoutePager
+import com.giraffe.match.screen.MatchRouteStart
+import com.giraffe.match.screen.matchRouteStart
 import com.giraffe.match.screen.match_pager.matchPagerRoute
+import com.giraffe.match.screen.match_pager.navigateToMatchPager
 import com.giraffe.match.screen.result.matchRoute
 import com.giraffe.match.screen.result.navigateToMatchResult
 import com.giraffe.match.screen.videoPlayer.navigateToYouTubePlayer
@@ -21,16 +23,20 @@ internal fun MatchNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MatchRoutePager
+        startDestination = MatchRouteStart
     ) {
 
+        matchRouteStart(
+            onStartMatchingClick = navController::navigateToMatchPager
+        )
+
         matchPagerRoute(
-            onBackClick = { navController.popBackStack() },
-            onFinish = { navController.navigateToMatchResult() }
+            onBackClick = navController::popBackStack,
+            onFinish = navController::navigateToMatchResult
         )
 
         matchRoute(
-            onBackButtonClick = { navController.popBackStack() },
+            onBackClick = navController::popBackStack,
             navigateToMovieDetails = { movieId ->
                 navController.navigateToMovieDetails(movieId)
             },
@@ -57,7 +63,7 @@ internal fun MatchNavGraph(
         }
 
         youTubePlayerRouteRoute(
-            onBackClick = { navController.popBackStack() }
+            onBackClick = navController::popBackStack,
         )
     }
 }
