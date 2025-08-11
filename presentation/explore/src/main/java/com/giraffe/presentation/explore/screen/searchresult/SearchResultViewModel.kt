@@ -145,9 +145,7 @@ class SearchResultViewModel @Inject constructor(
             onError = ::onError,
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource(
-                    onError = ::onError
-                ) { page -> searchMovieByName(state.value.query, page) }
+                BasePagingSource { page -> searchMovieByName(state.value.query, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
@@ -175,9 +173,7 @@ class SearchResultViewModel @Inject constructor(
             onError = ::onError
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource(
-                    onError = ::onError
-                ) { page -> getSeriesByName(state.value.query, page) }
+                BasePagingSource { page -> getSeriesByName(state.value.query, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
@@ -198,14 +194,14 @@ class SearchResultViewModel @Inject constructor(
     }
 
     private fun getActors() {
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
+
         safeExecute(
             onSuccess = ::onGetActorsSuccess,
             onError = ::onError
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource(
-                    onError = ::onError
-                ) { page -> searchPeopleByName(state.value.query, page) }
+                BasePagingSource { page -> searchPeopleByName(state.value.query, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
