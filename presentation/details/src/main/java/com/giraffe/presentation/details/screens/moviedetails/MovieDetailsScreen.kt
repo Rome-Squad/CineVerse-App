@@ -1,15 +1,11 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -32,9 +28,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterListSection
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
@@ -85,29 +79,11 @@ fun MovieDetailsScreen(
         }
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        AnimatedVisibility(state.isNoInternet) {
-            NoInternetScreen(
-                onRetryClick = viewModel::onRetryClick
-            )
-        }
-        AnimatedVisibility(state.isLoading) {
-            Progress(modifier = Modifier.size(40.dp))
-        }
-    }
-    AnimatedVisibility(
-        visible = !state.isLoading && !state.isNoInternet,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        MovieDetailsContent(
-            state = state,
-            interaction = viewModel
-        )
-    }
+
+    MovieDetailsContent(
+        state = state,
+        interaction = viewModel
+    )
 }
 
 @Composable

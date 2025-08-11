@@ -25,7 +25,8 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.user.exception.NoInternetException
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -74,27 +75,22 @@ class MovieDetailsViewModel @Inject constructor(
 
 
     override fun onShowAddToCollectionBottomSheet() {
-        safeExecute(
-            onSuccess = ::onIsLoggedInSuccess,
-            onError = ::onIsLoggedInError,
-            block = isLoggedInUseCase::invoke
+        executeIfLoggedIn(
+            block = {
+                safeExecute(
+                    onSuccess = ::onGetCollectionsSuccess,
+                    onError = ::onGetCollectionsError,
+                    block = getCollectionsUseCase::invoke
+                )
+            },
+            ifNotLoggedIn = {
+                updateState {
+                    it.copy(
+                        isVisibleLoginBottomSheet = true
+                    )
+                }
+            }
         )
-    }
-
-    private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
-        if (isLoggedIn) {
-            safeExecute(
-                onSuccess = ::onGetCollectionsSuccess,
-                onError = ::onGetCollectionsError,
-                block = getCollectionsUseCase::invoke
-            )
-        } else {
-            updateState { it.copy(isVisibleLoginBottomSheet = true) }
-        }
-    }
-
-    private fun onIsLoggedInError(throwable: Throwable) {
-        sendEffect(MovieDetailsEffect.Error(throwable))
     }
 
 
@@ -190,6 +186,13 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private fun onCreateCollectionSuccess(result: Unit) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = false
+            )
+        }
+
         safeExecute(
             onSuccess = ::onGetCollectionsSuccess,
             onError = ::onGetCollectionsError
@@ -213,19 +216,21 @@ class MovieDetailsViewModel @Inject constructor(
                 } else {
                     MovieDetailsScreenState.CollectionBottomSheet.NoCollections
                 },
-                collections = collections.map { collection -> collection.toUi() }
+                collections = collections.map { collection -> collection.toUi() },
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
 
     private fun onGetCollectionsError(error: Throwable) {
         updateState { it.copy(collectionBottomSheet = null) }
-        sendEffect(MovieDetailsEffect.Error(error))
+        onError(error)
     }
 
     private fun onCreateCollectionError(error: Throwable) {
         updateState { it.copy(newCollectionName = "") }
-        sendEffect(MovieDetailsEffect.Error(error))
+        onError(error)
     }
 
 
@@ -271,7 +276,9 @@ class MovieDetailsViewModel @Inject constructor(
                 collections = it.collections.map { collection ->
                     if (collection.id == collectionId) collection.copy(isLoading = false)
                     else collection
-                }
+                },
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
@@ -293,18 +300,28 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onAddRateButtonClick() {
-        safeExecute {
-            if (isLoggedInUseCase()) {
+
+        executeIfLoggedIn(
+            block = {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
 
-                addRatingUseCase(
-                    movieId = state.value.movie.id,
-                    ratingValue = state.value.currentRating.toFloat()
-                )
-            } else {
-                updateState { it.copy(isVisibleLoginBottomSheet = true) }
+                safeExecute(
+                    onError = ::onError
+                ) {
+                    addRatingUseCase(
+                        movieId = state.value.movie.id,
+                        ratingValue = state.value.currentRating.toFloat()
+                    )
+                }
+            },
+            ifNotLoggedIn = {
+                updateState {
+                    it.copy(
+                        isVisibleLoginBottomSheet = true
+                    )
+                }
             }
-        }
+        )
     }
 
     private fun loadMovieDetails(movieId: Int) {
@@ -320,7 +337,8 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 movie = movie.toUi(),
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
         loadMovieGenres(movie.genresID)
@@ -340,7 +358,8 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 movieGenres = genres.map { genre -> genre.title },
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
@@ -365,7 +384,8 @@ class MovieDetailsViewModel @Inject constructor(
                         rating = movie.rating
                     )
                 },
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
@@ -374,10 +394,15 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMoviePeople(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMoviePeopleSuccess,
-            onError = ::onError
+            onError = ::onLoadMoviePeopleError
         ) {
             getPeopleByMovieId(movieId)
         }
+    }
+
+    private fun onLoadMoviePeopleError(error: Throwable) {
+        updateState { it.copy(isLoading = false) }
+        sendEffect(MovieDetailsEffect.Error(error))
     }
 
     private fun loadMoviePeopleSuccess(people: List<Person>) {
@@ -387,6 +412,7 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 cast = cast.map(Person::toCastUi),
                 crew = mappedCrew.groupByRole()
             )
@@ -409,13 +435,40 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 movieReviews = reviews.map(Review::toUi)
             )
         }
     }
 
+
+
+    private fun executeIfLoggedIn(
+        block: () -> Unit,
+        ifNotLoggedIn: () -> Unit
+    ) {
+        safeExecute(
+            onSuccess = { isLoggedIn ->
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        isNoInternet = false
+                    )
+                }
+
+                if (isLoggedIn) {
+                    block()
+                } else {
+                    ifNotLoggedIn()
+                }
+            },
+            onError = ::onError,
+            block = isLoggedInUseCase::invoke
+        )
+    }
+
     private fun onError(error: Throwable) {
-        val isNetworkError = error is NoInternetException
+        val isNetworkError = error is NoInternetException || error is UserNoInternetException
 
         updateState {
             it.copy(

@@ -25,7 +25,7 @@ data class MovieDetailsScreenState(
     val isVisibleGiveStarsBottomSheet: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,
 
-    val isLoading:Boolean = true,
+    val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
 
     ) {
