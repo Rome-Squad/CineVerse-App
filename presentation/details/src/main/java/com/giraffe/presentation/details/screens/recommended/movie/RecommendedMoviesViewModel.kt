@@ -9,6 +9,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
@@ -53,6 +55,7 @@ class RecommendedMoviesViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 movieGenres = genres
             )
         }
@@ -78,7 +81,9 @@ class RecommendedMoviesViewModel @Inject constructor(
                     initialLoadSize = 15
                 )
             ) {
-                BasePagingSource { page ->
+                BasePagingSource(
+                    onError = ::onError
+                ) { page ->
                     getRecommendedMovies(movieId, page)
                 }
             }
@@ -102,22 +107,33 @@ class RecommendedMoviesViewModel @Inject constructor(
         updateState {
             it.copy(
                 recommendedMoviesFlow = movieUiFlow,
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
 
-
-    override fun navigateToMovieDetailsScreen(movieId: Int) {
+    override fun onMovieClick(movieId: Int) {
         sendEffect(RecommendedMoviesEffect.NavigateToMovieDetails(movieId))
 
     }
 
+    override fun onBackClick() {
+        sendEffect(RecommendedMoviesEffect.NavigateBack)
+    }
+
+    override fun onRetryClick() {
+        getMoviesGenres()
+    }
 
     private fun onError(error: Throwable) {
+        val isNoInternet = error is NoInternetException ||
+                error is UserNoInternetException
+
         updateState {
             it.copy(
-                isLoading = false
+                isLoading = false,
+                isNoInternet = isNoInternet || it.isNoInternet
             )
         }
 

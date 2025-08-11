@@ -12,4 +12,5 @@ data class RecommendedMoviesScreenState(
     val movieGenres: List<Genre> = emptyList(),
     val recommendedMoviesFlow: Flow<PagingData<MovieUi>> = flowOf(),
     val isLoading: Boolean = true,
+    val isNoInternet: Boolean = false
 )
