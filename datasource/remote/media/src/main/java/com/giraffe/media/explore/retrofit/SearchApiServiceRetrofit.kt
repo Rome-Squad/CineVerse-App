@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ExploreApiServiceRetrofit {
+interface SearchApiServiceRetrofit {
 
     @GET(ENDPOINT_SEARCH_KEYWORD)
     suspend fun getSearchKeywords(

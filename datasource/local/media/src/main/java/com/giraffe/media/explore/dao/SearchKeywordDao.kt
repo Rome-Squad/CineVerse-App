@@ -8,7 +8,7 @@ import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ExploreSearchKeywordDao {
+interface SearchKeywordDao {
 
     @Query(
         value =
@@ -36,7 +36,7 @@ interface ExploreSearchKeywordDao {
                     "FROM SEARCH_KEYWORD " +
                     "WHERE keyword = :keyword "
     )
-    suspend fun deleteKeyword(keyword: String)
+    suspend fun deleteSearchKeyword(keyword: String)
 
     @Query("DELETE FROM SEARCH_KEYWORD")
     suspend fun clearSearchHistory()

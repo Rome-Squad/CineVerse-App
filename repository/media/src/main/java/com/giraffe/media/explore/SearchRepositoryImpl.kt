@@ -1,8 +1,8 @@
 package com.giraffe.media.explore
 
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
-import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
+import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.SearchRepository
@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
-    private val local: LocalExploreDataSource,
-    private val remote: ExploreRemoteDataSource,
+    private val local: LocalSearchDataSource,
+    private val remote: SearchRemoteDataSource,
 ) : SearchRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
@@ -54,7 +54,7 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteSearchKeyword(keyword: String) = SafeCall {
-        local.deleteKeyword(keyword)
+        local.deleteSearchKeyword(keyword)
     }
 
     override suspend fun clearSearchHistory() = SafeCall {
