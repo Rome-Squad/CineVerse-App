@@ -11,7 +11,7 @@ import androidx.paging.map
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedMovieRoute
@@ -26,9 +26,10 @@ import javax.inject.Inject
 @HiltViewModel
 class RecommendedMoviesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getRecommendedMovies: GetRecommendedMovieUseCase,
+    private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
-) : BaseViewModel<RecommendedMoviesScreenState, RecommendedMoviesEffect>(
+
+    ) : BaseViewModel<RecommendedMoviesScreenState, RecommendedMoviesEffect>(
     RecommendedMoviesScreenState(
 
         movieId = savedStateHandle.toRoute<RecommendedMovieRoute>().movieId,

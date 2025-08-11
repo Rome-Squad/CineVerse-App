@@ -59,22 +59,21 @@ fun List<CrewUi>.groupByRole(): Map<String, List<String>> {
 
 fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     id = id,
-    title = title,
-    description = description,
+    name = name,
+    overview = overview,
     rating = rating,
-    duration = if (duration != null && duration!! > 0) duration?.toFormattedDuration() else null,
+    duration = duration.toFormattedDuration(),
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genresID,
     genres = genres.map { it.title },
-    releaseYear = if (releaseYear != null) releaseYear.toString().toFormattedDate() else null,
-    youtubeVideoId = youtubeVideoId.orEmpty()
-
+    releaseYear = releaseYear.toFormattedDate(),
+    youtubeVideoId = youtubeVideoId,
 )
 
 fun MovieUi.toPoster() = Poster(
     id = id,
-    name = title,
+    name = name,
     imageUri = posterUrl.orEmpty(),
     rating = rating,
     genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
@@ -109,7 +108,7 @@ fun Season.toUi() = SeasonUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear?.toString()?.toFormattedDate().orEmpty(),
+    releaseYear = releaseYear.toFormattedDate(),
     seasonNumber = seasonNumber,
     episodeCount = episodeCount
 )
@@ -123,7 +122,7 @@ fun Series.toUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear?.toString()?.toFormattedDate().orEmpty(),
+    releaseYear = releaseYear.toFormattedDate(),
     genres = genres.map { it.title },
     youtubeVideoId = youtubeVideoId.orEmpty()
 )

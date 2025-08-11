@@ -1,6 +1,6 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 class GetMoviesByGenreUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
+    private lateinit var repository: MovieRepository
     private lateinit var useCase: GetMoviesByGenresUseCase
 
     @BeforeEach
@@ -26,13 +26,13 @@ class GetMoviesByGenreUseCaseTest {
         val genreId = 28
         val expectedMovies = fakeMovies
 
-        coEvery { repository.getMoviesByGenre(genreId, 1) } returns expectedMovies
+        coEvery { repository.getByGenreId(genreId, 1) } returns expectedMovies
 
         // When
         val result = useCase(genreId, 1)
 
         // Then
-        coVerify { repository.getMoviesByGenre(genreId, 1) }
+        coVerify { repository.getByGenreId(genreId, 1) }
         assertThat(result).isEqualTo(expectedMovies)
     }
 }

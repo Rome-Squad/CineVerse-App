@@ -8,10 +8,10 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.GetPopularityMoviesUseCase
+import com.giraffe.media.movie.usecase.GetPopularMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPopularityMoviesUseCase: GetPopularityMoviesUseCase,
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-    private val getRecommendedMovieUseCase: GetRecommendedMovieUseCase,
+    private val getRecommendedMoviesUseCase: GetRecommendedMoviesUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
@@ -131,7 +131,7 @@ class HomeViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetPopularityMoviesSuccess,
                 onError = ::onFail,
-                block = { getPopularityMoviesUseCase(page = 1) }
+                block = { getPopularMoviesUseCase(page = 1) }
             )
             safeExecute(
                 onSuccess = ::onGetPopularitySeriesSuccess,
@@ -293,7 +293,7 @@ class HomeViewModel @Inject constructor(
                 onSuccess = ::onGetRecommendedMoviesSuccess,
                 onError = ::onFail,
             ) {
-                getRecommendedMovieUseCase(movie.id, 1)
+                getRecommendedMoviesUseCase(movie.id, 1)
             }
         }
     }

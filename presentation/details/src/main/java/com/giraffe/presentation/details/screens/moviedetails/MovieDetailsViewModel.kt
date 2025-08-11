@@ -9,12 +9,13 @@ import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
@@ -25,18 +26,17 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.media.exception.NoInternetException
-import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetails: GetMovieDetailsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    private val getRecommendedMovie: GetRecommendedMovieUseCase,
+    private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
@@ -310,7 +310,7 @@ class MovieDetailsViewModel @Inject constructor(
                 ) {
                     addRatingUseCase(
                         movieId = state.value.movie.id,
-                        ratingValue = state.value.currentRating.toFloat()
+                        rating = state.value.currentRating.toFloat()
                     )
                 }
             },
@@ -369,7 +369,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadRecommendedMovieSuccess,
             onError = ::onError
         ) {
-            getRecommendedMovie(movieId = movieId, page = 1)
+            getRecommendedMovies(movieId = movieId, page = 1)
         }
     }
 
@@ -379,8 +379,8 @@ class MovieDetailsViewModel @Inject constructor(
                 recommendedMovies = recommendedSeries.map { movie ->
                     Poster(
                         id = movie.id,
-                        name = movie.title,
-                        imageUri = movie.posterUrl.toString(),
+                        name = movie.name,
+                        imageUri = movie.posterUrl,
                         rating = movie.rating
                     )
                 },
@@ -426,7 +426,7 @@ class MovieDetailsViewModel @Inject constructor(
         ) {
             getMovieReviewsUseCase(
                 movieId = movieId,
-                pageNumber = 1
+                page = 1
             )
         }
     }
@@ -440,7 +440,6 @@ class MovieDetailsViewModel @Inject constructor(
             )
         }
     }
-
 
 
     private fun executeIfLoggedIn(
