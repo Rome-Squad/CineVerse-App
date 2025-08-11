@@ -14,5 +14,5 @@ sealed interface CastDetailsEffect {
 
     data class NavigateToMovieDetails(val movieId: Int) : CastDetailsEffect
 
-    object NavigateUp : CastDetailsEffect
+    object NavigateBack : CastDetailsEffect
 }

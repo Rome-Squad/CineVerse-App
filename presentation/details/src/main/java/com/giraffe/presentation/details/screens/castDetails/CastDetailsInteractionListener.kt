@@ -10,5 +10,5 @@ interface CastDetailsInteractionListener {
 
     fun onPosterClick(mediaId: Int, mediaType: String)
 
-    fun onBackArrowClick()
+    fun onBackClick()
 }
