@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal object MatchRouteResult
 
-internal fun NavController.navigateToMatch() {
+internal fun NavController.navigateToMatchResult() {
     navigate(MatchRouteResult)
 }
 
