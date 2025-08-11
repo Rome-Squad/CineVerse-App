@@ -78,9 +78,12 @@ fun MainNavGraph(
     }
 
     LaunchedEffect(currentRouteString) {
-        if (currentRouteString == HomeRoute.route) {
-            isBottomBarVisible = true
-        }
+        isBottomBarVisible == currentRouteString in listOf(
+            HomeRoute.route,
+            ExploreRoute.route,
+            MatchRoute.route,
+            ProfileRoute.route
+        )
     }
 
     Column(
@@ -105,7 +108,6 @@ fun MainNavGraph(
                 ) {
                     isBottomBarVisible = it
                 }
-
             }
 
 
