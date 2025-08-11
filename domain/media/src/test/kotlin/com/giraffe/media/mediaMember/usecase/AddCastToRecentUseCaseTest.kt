@@ -11,14 +11,14 @@ import kotlin.test.Test
 class AddCastToRecentUseCaseTest {
     private val repository: MediaMemberRepository = mockk()
     private val addCastToRecentCastUseCase = AddCastToRecentCastUseCase(repository)
-    private val personToStore = createCastMember(1, "Tarek", "Acting")
 
     @Test
     fun `invoke should call storePerson on repository with correct data`() = runTest {
+        val castMember = createCastMember(1, "Tarek", "Acting")
         coEvery { repository.addCastToRecentViewed(any()) } returns Unit
 
-        addCastToRecentCastUseCase(personToStore)
+        addCastToRecentCastUseCase(castMember)
 
-        coVerify(exactly = 1) { repository.addCastToRecentViewed(personToStore) }
+        coVerify(exactly = 1) { repository.addCastToRecentViewed(castMember) }
     }
 }
