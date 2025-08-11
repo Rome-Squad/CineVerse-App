@@ -30,7 +30,7 @@
     <string name="logout_dialog_caption">You can always sign back in with your account.</string>
     <string name="logout_dialog_primary_button">Logout</string>
     <string name="Logout">Logout</string>
-    <string name="Version">Version 1.0.1</string>
+    <string name="app_version">Version %1$s</string>
     <string name="login_or_sign_up">Login or Sign up</string>
     <string name="My_Profile">My Profile</string>
     <string name="to_personalize_your_experience">to personalize your experience!</string>
