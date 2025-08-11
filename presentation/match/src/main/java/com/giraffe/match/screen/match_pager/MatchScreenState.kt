@@ -5,5 +5,6 @@ data class MatchScreenState(
     val moodSelections: List<Int> = emptyList(),
     val genreSelections: List<Int> = emptyList(),
     val timeSelections: List<Int> = emptyList(),
-    val recencySelections: List<Int> = emptyList()
+    val recencySelections: List<Int> = emptyList(),
+    val isLoading: Boolean = false
 )
