@@ -1,16 +1,20 @@
 package com.giraffe.match.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.giraffe.api.details.DetailsApi
 import com.giraffe.match.screen.MatchRouteStart
 import com.giraffe.match.screen.matchRouteStart
 import com.giraffe.match.screen.match_pager.matchPagerRoute
 import com.giraffe.match.screen.match_pager.navigateToMatchPager
-import com.giraffe.match.screen.result.matchRoute
+import com.giraffe.match.screen.result.matchRouteResult
 import com.giraffe.match.screen.result.navigateToMatchResult
 import com.giraffe.match.screen.videoPlayer.navigateToYouTubePlayer
 import com.giraffe.match.screen.videoPlayer.youTubePlayerRouteRoute
@@ -19,13 +23,29 @@ import com.giraffe.match.screen.videoPlayer.youTubePlayerRouteRoute
 @Composable
 internal fun MatchNavGraph(
     navController: NavHostController,
-    detailsApi: DetailsApi
+    detailsApi: DetailsApi,
+    onShowBottomBarChange: (Boolean) -> Unit
 ) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination
+    val bottomBarRoutes = listOf(
+        MatchRouteStart::class
+    )
+    val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
+        navDestination.route?.let { route ->
+            bottomBarRoutes.any { klass ->
+                route.contains(klass.simpleName.orEmpty())
+            }
+        } == true
+    } == true
+    LaunchedEffect(currentRoute) {
+        onShowBottomBarChange(isBottomBarVisible)
+    }
     NavHost(
         navController = navController,
         startDestination = MatchRouteStart
     ) {
-
         matchRouteStart(
             onStartMatchingClick = navController::navigateToMatchPager
         )
@@ -35,7 +55,7 @@ internal fun MatchNavGraph(
             onFinish = navController::navigateToMatchResult
         )
 
-        matchRoute(
+        matchRouteResult(
             onBackClick = navController::popBackStack,
             navigateToMovieDetails = { movieId ->
                 navController.navigateToMovieDetails(movieId)
@@ -63,7 +83,7 @@ internal fun MatchNavGraph(
         }
 
         youTubePlayerRouteRoute(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::popBackStack
         )
     }
 }
