@@ -73,88 +73,83 @@ private fun SearchResultContent(
     val context = LocalContext.current
     val posters = state.selectedPosters.collectAsLazyPagingItems()
 
-    if (state.isNoInternet) NoInternetScreen(onRetryClick = interactions::retry)
-    else {
-        Box {
-            LazyColumn(
-                modifier = Modifier
-                    .background(Theme.color.background.screen)
-                    .statusBarsPadding()
-                    .padding(top = 16.dp),
-            ) {
-                item {
-                    ExploreHeader(
-                        modifier = Modifier.padding(bottom = 12.dp),
-                        endIcon = painterResource(Theme.icons.outline.microphone),
-                        enabled = false,
-                        readOnly = true,
-                        showBackButton = true,
-                        value = state.query,
-                        onTextFieldClicked = interactions::onBackClick,
-                        onBackClick = interactions::onBackClick
-                    )
-                }
-                stickyHeader {
-                    Tabs(
-                        modifier = Modifier.background(Theme.color.background.screen),
-                        titles = state.tabs.map { it.toTitle(context) },
-                        selectedTabIndex = state.selectedTab.ordinal,
-                        onTabSelected = interactions::selectTap
-                    )
-                }
-                item {
-                    Box(
-                        modifier = Modifier.fillParentMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        when {
-                            posters.loadState.refresh is LoadState.Loading -> Progress(size = 32.dp)
-                            posters.loadState.hasError && posters.itemCount == 0 -> NoInternetScreen(
-                                onRetryClick = interactions::retry
+    Box {
+        LazyColumn(
+            modifier = Modifier
+                .background(Theme.color.background.screen)
+                .statusBarsPadding()
+                .padding(top = 16.dp),
+        ) {
+            item {
+                ExploreHeader(
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    endIcon = painterResource(Theme.icons.outline.microphone),
+                    enabled = false,
+                    readOnly = true,
+                    showBackButton = true,
+                    value = state.query,
+                    onTextFieldClicked = interactions::onBackClick,
+                    onBackClick = interactions::onBackClick
+                )
+            }
+            stickyHeader {
+                Tabs(
+                    modifier = Modifier.background(Theme.color.background.screen),
+                    titles = state.tabs.map { it.toTitle(context) },
+                    selectedTabIndex = state.selectedTab.ordinal,
+                    onTabSelected = interactions::selectTap
+                )
+            }
+            item {
+                Box(
+                    modifier = Modifier.fillParentMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    when {
+                        posters.loadState.refresh is LoadState.Loading -> Progress(size = 32.dp)
+                        state.isNoInternet -> NoInternetScreen(onRetryClick = interactions::retry)
+                        posters.itemCount == 0 -> NothingFound()
+                        state.isLoading -> Box(
+                            Modifier.fillParentMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) { Progress() }
+
+                        else -> if (state.selectedTab == SearchTab.ACTORS) {
+                            ActorsSection(
+                                modifier = Modifier.fillMaxSize(),
+                                actors = posters,
+                                navigateToCastDetails = { id ->
+                                    interactions.onPosterClick(id, SearchTab.ACTORS)
+                                }
                             )
-
-                            posters.itemCount == 0 -> NothingFound()
-                            state.isLoading -> Box(
-                                Modifier.fillParentMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) { Progress() }
-
-                            else -> if (state.selectedTab == SearchTab.ACTORS) {
-                                ActorsSection(
-                                    modifier = Modifier.fillMaxSize(),
-                                    actors = posters,
-                                    navigateToCastDetails = { id ->
-                                        interactions.onPosterClick(id, SearchTab.ACTORS)
-                                    }
-                                )
-                            } else {
-                                TransitionLazyColumnToGrid(
-                                    modifier = Modifier.fillMaxSize(),
-                                    posters = posters,
-                                    isListSelected = !state.isGridSelected,
-                                    onPosterClicked = { id ->
-                                        interactions.onPosterClick(id, state.selectedTab)
-                                    }
-                                )
-                            }
+                        } else {
+                            TransitionLazyColumnToGrid(
+                                modifier = Modifier.fillMaxSize(),
+                                posters = posters,
+                                isListSelected = !state.isGridSelected,
+                                onPosterClicked = { id ->
+                                    interactions.onPosterClick(id, state.selectedTab)
+                                }
+                            )
                         }
                     }
                 }
             }
-            AnimatedVisibility(
-                visible = state.selectedTab != SearchTab.ACTORS,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
-                    .padding(bottom = 16.dp, end = 16.dp)
-            ) {
-                ViewToggle(
-                    isListSelected = !state.isGridSelected,
-                    onGridSelected = interactions::changeView
-                )
-            }
+        }
+        AnimatedVisibility(
+            visible = state.selectedTab != SearchTab.ACTORS,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
+                .padding(bottom = 16.dp, end = 16.dp)
+        ) {
+            ViewToggle(
+                isListSelected = !state.isGridSelected,
+                onGridSelected = interactions::changeView
+            )
         }
     }
 }
