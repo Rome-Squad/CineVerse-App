@@ -2,8 +2,11 @@ package com.giraffe.presentation.profile.utils
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 
 enum class Language(
@@ -20,6 +23,7 @@ enum class Language(
                     id = R.drawable.colored_iraq_flag
                 ),
                 contentDescription = "Arabic",
+                modifier = Modifier.size(32.dp)
             )
         }
     ),
@@ -32,6 +36,7 @@ enum class Language(
                     id = R.drawable.colored_uk_flag
                 ),
                 contentDescription = "English",
+                modifier = Modifier.size(32.dp)
             )
         }
     )
