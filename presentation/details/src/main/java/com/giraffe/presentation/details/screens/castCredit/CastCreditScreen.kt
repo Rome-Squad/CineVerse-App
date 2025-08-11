@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,16 +21,18 @@ import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.TransitionBetweenColumnAndVerticalGrid
 import com.giraffe.presentation.details.utils.EventListener
+import com.giraffe.presentation.details.utils.showToast
+import com.giraffe.presentation.details.utils.toStringResource
 
 @Composable
 fun CastCreditScreen(
-    onBackClick: () -> Unit,
+    navigateBack: () -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToMovieDetails: (Int) -> Unit,
     viewModel: CastCreditViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-
+    val context = LocalContext.current
     EventListener(
         events = viewModel.effect,
     ) {
@@ -41,6 +44,14 @@ fun CastCreditScreen(
             is CastCreditEffect.NavigateToMovieDetails -> navigateToMovieDetails(
                 it.movieId,
             )
+
+            is CastCreditEffect.Error -> {
+                context.showToast(it.error.toStringResource())
+            }
+
+            CastCreditEffect.NavigateBack -> {
+                navigateBack()
+            }
         }
     }
 
