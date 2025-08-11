@@ -8,7 +8,6 @@ import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.entity.CrewMember
 import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.details.R
@@ -166,16 +165,6 @@ fun SocialMediaLinks.toSocialMediaUi(): List<SocialMediaUi> {
     }
     return socialMediaUiList
 }
-
-fun PersonCredit.toPoster() = Poster(
-    id = id,
-    name = title,
-    imageUrl = posterPath.toString(),
-    rating = voteAverage.toFloat(),
-    date = releaseYear,
-    mediaTypeOfPoster = mediaType
-)
-
 
 fun CastMember.toCastUi() = CastUi(
     id = id,

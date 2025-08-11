@@ -18,10 +18,10 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.SeriesUi
-import com.giraffe.presentation.details.model.groupByRole
-import com.giraffe.presentation.details.model.toCastUi
-import com.giraffe.presentation.details.model.toCrewUi
 import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
+import com.giraffe.presentation.details.utils.groupByRole
+import com.giraffe.presentation.details.utils.toCastUi
+import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase

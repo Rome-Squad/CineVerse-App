@@ -20,10 +20,10 @@ import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.MovieUi
-import com.giraffe.presentation.details.model.groupByRole
-import com.giraffe.presentation.details.model.toCastUi
-import com.giraffe.presentation.details.model.toCrewUi
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
+import com.giraffe.presentation.details.utils.groupByRole
+import com.giraffe.presentation.details.utils.toCastUi
+import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -409,6 +409,7 @@ class MovieDetailsViewModel @Inject constructor(
         val crew = mediaMembers.crew.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
         val mappedCast = cast.map { it.toCastUi() }
+
         updateState {
             it.copy(
                 isLoading = false,
