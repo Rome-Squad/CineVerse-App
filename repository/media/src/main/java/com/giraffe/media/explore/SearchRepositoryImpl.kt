@@ -1,17 +1,11 @@
 package com.giraffe.media.explore
 
-import android.Manifest
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
-import androidx.annotation.RequiresPermission
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
-import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
+import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toEntity
-import com.giraffe.media.explore.repository.ExploreRepository
+import com.giraffe.media.explore.repository.SearchRepository
 import com.giraffe.media.utils.SafeCall
 import com.giraffe.media.utils.SafeCall.mapToDomainException
 import kotlinx.coroutines.flow.Flow
@@ -19,10 +13,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ExploreRepositoryImpl @Inject constructor(
-    private val local: LocalExploreDataSource,
-    private val remote: ExploreRemoteDataSource,
-) : ExploreRepository {
+class SearchRepositoryImpl @Inject constructor(
+    private val local: LocalSearchDataSource,
+    private val remote: SearchRemoteDataSource,
+) : SearchRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
         return if (query.isBlank()) {
@@ -59,8 +53,8 @@ class ExploreRepositoryImpl @Inject constructor(
         local.insertSearchKeyword(cachedKeyword)
     }
 
-    override suspend fun deleteKeyword(keyword: String) = SafeCall {
-        local.deleteKeyword(keyword)
+    override suspend fun deleteSearchKeyword(keyword: String) = SafeCall {
+        local.deleteSearchKeyword(keyword)
     }
 
     override suspend fun clearSearchHistory() = SafeCall {

@@ -24,26 +24,22 @@ class GetLanguageUseCaseTest {
 
     @Test
     fun `invoke should call getLanguage on repository`() = runTest {
-        // given
-        every { settingsRepository.getLanguage() } returns flowOf("ar")
 
-        // when
+    every { settingsRepository.getLanguage() } returns flowOf("ar")
+
         getLanguageUseCase()
 
-        // then
         verify(exactly = 1) { settingsRepository.getLanguage() }
     }
 
     @Test
     fun `invoke should return language from repository`() = runTest {
-        // given
-        val expectedLang = "ar"
+
+    val expectedLang = "ar"
         every { settingsRepository.getLanguage() } returns flowOf(expectedLang)
 
-        // when
         val resultFlow = getLanguageUseCase()
 
-        // then
         assertThat(resultFlow.first()).isEqualTo(expectedLang)
     }
 }
