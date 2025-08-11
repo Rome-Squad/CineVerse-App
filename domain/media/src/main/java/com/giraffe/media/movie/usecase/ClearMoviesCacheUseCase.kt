@@ -1,22 +1,22 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import javax.inject.Inject
 
 class ClearMoviesCacheUseCase @Inject constructor(
-    private val repository: MoviesRepository
+    private val movieRepository: MovieRepository
 ) {
-    suspend fun clearMovieCache() {
-        repository.clearMovieCache()
-        repository.clearMovieGenres()
+    suspend fun clearAll() {
+        movieRepository.clearAll()
+        movieRepository.clearGenres()
     }
 
-    suspend fun clearMovieCacheWithOutRecentViewed() {
-        repository.clearMovieCacheWithOutRecentViewed()
-        repository.clearMovieGenres()
+    suspend fun clearExceptRecentlyViewed() {
+        movieRepository.clearExceptRecentlyViewed()
+        movieRepository.clearGenres()
     }
 
-    suspend fun clearRecentlyViewedMovies() {
-        repository.clearRecentlyViewedMovies()
-    }
+    suspend fun clearRecentlyViewed() =
+        movieRepository.clearRecentlyViewed()
+
 }

@@ -143,12 +143,12 @@ private fun MovieDetailsContent(
                     .fillMaxSize()
             ) {
 
-                if (state.movie.title.isNotBlank()) {
+                if (state.movie.name.isNotBlank()) {
                     stickyHeader {
                         MainMovieOrSeriesDetails(
                             type = stringResource(id = TypeOfScreen.MOVIE.titleResId),
                             posterUrl = state.movie.posterUrl,
-                            name = state.movie.title,
+                            name = state.movie.name,
                             genres = state.movieGenres,
                             rating = state.movie.rating,
                             duration = state.movie.duration,
@@ -165,12 +165,12 @@ private fun MovieDetailsContent(
                     }
                 }
 
-                if (state.movie.description.isNotBlank()) {
+                if (state.movie.overview.isNotBlank()) {
                     item {
                         InfoSection(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             title = stringResource(R.string.storyline),
-                            description = state.movie.description
+                            description = state.movie.overview
                         )
                     }
                 }
@@ -204,7 +204,7 @@ private fun MovieDetailsContent(
                             onClickEndText = {
                                 interaction.onShowMoreRecommendedMoviesTextClick(
                                     state.movie.id,
-                                    state.movie.title
+                                    state.movie.name
                                 )
                             },
                             onClickPoster = { interaction.onMoviePosterClick(it.id) }

@@ -50,7 +50,7 @@ class ReviewsViewModel @Inject constructor(
             fetchPagingReviews { page ->
                 getMovieReviewsUseCase(
                     movieId = movieId,
-                    pageNumber = page
+                    page = page
                 )
             }
         }
@@ -92,7 +92,7 @@ class ReviewsViewModel @Inject constructor(
 
     private fun onFetchReviewsSuccess(reviews: Flow<PagingData<Review>>) {
         val reviewsUiFlow = reviews.map { pagingData ->
-            pagingData.map (Review::toUi )
+            pagingData.map(Review::toUi)
         }
         updateState {
             it.copy(

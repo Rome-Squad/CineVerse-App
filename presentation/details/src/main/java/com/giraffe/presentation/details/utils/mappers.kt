@@ -26,14 +26,13 @@ fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     title = title,
     description = description,
     rating = rating,
-    duration = if (duration != null && duration!! > 0) duration?.toFormattedDuration() else null,
+    duration = duration?.toFormattedDuration(),
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genresID,
     genres = genres.map { it.title },
     releaseYear = if (releaseYear != null) releaseYear.toString().toFormattedDate() else null,
-    youtubeVideoId = youtubeVideoId.orEmpty()
-
+    youtubeVideoId = youtubeVideoId.orEmpty(),
 )
 
 fun MovieUi.toPoster() = Poster(

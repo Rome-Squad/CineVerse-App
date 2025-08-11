@@ -1,7 +1,7 @@
 package com.giraffe.media.movie.usecase
 
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -10,10 +10,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class SearchMovieByNameUseCaseTest {
+class GetMovieByNameUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
-    private lateinit var useCase: SearchMovieByNameUseCase
+    private lateinit var repository: MovieRepository
+    private lateinit var useCase: GetMoviesByNameUseCase
 
     private val movieAction = fakeMovie(
         id = 1,
@@ -33,29 +33,29 @@ class SearchMovieByNameUseCaseTest {
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        useCase = SearchMovieByNameUseCase(repository)
+        useCase = GetMoviesByNameUseCase(repository)
     }
 
     @Test
     fun `invoke() should call search and genres methods on repository`() = runTest {
         // Given
-        coEvery { repository.searchMovieByName(name, page) } returns emptyList()
-        coEvery { repository.getMoviesGenres() } returns emptyList()
+        coEvery { repository.getByName(name, page) } returns emptyList()
+        coEvery { repository.getGenres() } returns emptyList()
 
         // When
         useCase(name, page)
 
         // Then
-        coVerify(exactly = 1) { repository.searchMovieByName(name, page) }
-        coVerify(exactly = 1) { repository.getMoviesGenres() }
+        coVerify(exactly = 1) { repository.getByName(name, page) }
+        coVerify(exactly = 1) { repository.getGenres() }
     }
 
     @Test
     fun `when genres list is empty should return unsorted search results`() = runTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
-        coEvery { repository.searchMovieByName(name, page) } returns searchResults
-        coEvery { repository.getMoviesGenres() } returns emptyList()
+        coEvery { repository.getByName(name, page) } returns searchResults
+        coEvery { repository.getGenres() } returns emptyList()
 
         // When
         val result = useCase(name, page)
@@ -70,8 +70,8 @@ class SearchMovieByNameUseCaseTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         val genreWithZeroRank = Genre(id = 878, title = "Sci-Fi", rank = 0)
-        coEvery { repository.searchMovieByName(name, page) } returns searchResults
-        coEvery { repository.getMoviesGenres() } returns listOf(genreWithZeroRank)
+        coEvery { repository.getByName(name, page) } returns searchResults
+        coEvery { repository.getGenres() } returns listOf(genreWithZeroRank)
 
         // When
         val result = useCase(name, page)
@@ -86,8 +86,8 @@ class SearchMovieByNameUseCaseTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         val favoriteGenre = Genre(id = 878, title = "Sci-Fi", rank = 1)
-        coEvery { repository.searchMovieByName(name, page) } returns searchResults
-        coEvery { repository.getMoviesGenres() } returns listOf(favoriteGenre)
+        coEvery { repository.getByName(name, page) } returns searchResults
+        coEvery { repository.getGenres() } returns listOf(favoriteGenre)
 
         // When
         val result = useCase(name, page)
@@ -101,8 +101,8 @@ class SearchMovieByNameUseCaseTest {
         // Given
         val searchResults = listOf(movieAction, movieSciFi)
         val unmatchedGenre = Genre(id = 999, title = "Unknown", rank = 1)
-        coEvery { repository.searchMovieByName(name, page) } returns searchResults
-        coEvery { repository.getMoviesGenres() } returns listOf(unmatchedGenre)
+        coEvery { repository.getByName(name, page) } returns searchResults
+        coEvery { repository.getGenres() } returns listOf(unmatchedGenre)
 
         // When
         val result = useCase(name, page)

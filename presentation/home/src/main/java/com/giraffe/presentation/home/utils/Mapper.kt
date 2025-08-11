@@ -14,7 +14,7 @@ import com.giraffe.presentation.home.model.YourCollectionUi
 
 fun Movie.toPoster() = Poster(
     id = id,
-    title = title,
+    title = name,
     posterUrl = posterUrl.orEmpty(),
     rating = rating,
     mediaType = MediaType.MOVIE
@@ -35,7 +35,7 @@ fun Series.toShowMorePoster(genres: List<String>) = ShowMorePoster(
     name = name,
     imageUri = posterUrl,
     rating = rating,
-    date = releaseYear.toString().toFormattedDate(),
+    date = releaseYear.orEmpty(),
     mediaType = MediaType.SERIES,
     genres = genres
 )
@@ -43,10 +43,10 @@ fun Series.toShowMorePoster(genres: List<String>) = ShowMorePoster(
 
 fun Movie.toShowMorePoster(genres: List<String>) = ShowMorePoster(
     id = id,
-    name = title,
-    imageUri = posterUrl.orEmpty(),
+    name = name,
+    imageUri = posterUrl,
     rating = rating,
-    date = releaseYear.toString().toFormattedDate(),
+    date = releaseYear.orEmpty(),
     mediaType = MediaType.MOVIE,
     genres = genres,
     time = duration.toString()
@@ -55,9 +55,9 @@ fun Movie.toShowMorePoster(genres: List<String>) = ShowMorePoster(
 
 fun Movie.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
     id = id,
-    title = title,
-    posterUrl = posterUrl.orEmpty(),
-    backdropUrl = backdropUrl.orEmpty(),
+    title = name,
+    posterUrl = posterUrl,
+    backdropUrl = backdropUrl,
     genres = genres,
     rating = rating,
     mediaType = MediaType.MOVIE

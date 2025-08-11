@@ -1,12 +1,11 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.entity.Genre
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import javax.inject.Inject
 
 class GetMoviesGenresByIdsUseCase @Inject constructor(
-    private val repository: MoviesRepository
+    private val movieRepository: MovieRepository
 ) {
-    suspend operator fun invoke(genreIDs: List<Int>): List<Genre> =
-        repository.getMovieGenresByIds(genreIDs)
+    suspend operator fun invoke(genreIDs: List<Int>) =
+        movieRepository.getGenresByIds(genreIDs)
 }

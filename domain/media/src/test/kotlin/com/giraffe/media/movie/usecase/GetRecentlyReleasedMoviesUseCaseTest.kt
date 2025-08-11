@@ -1,7 +1,7 @@
 package com.giraffe.media.movie.usecase
 
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class GetRecentlyReleasedMoviesUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
+    private lateinit var repository: MovieRepository
     private lateinit var useCase: GetRecentlyReleasedMoviesUseCase
 
     @BeforeEach
@@ -25,11 +25,11 @@ class GetRecentlyReleasedMoviesUseCaseTest {
     fun `given recently released movies, when invoke is called, then return movie list`() =
         runTest {
             // Given
-            val expectedRecentlyReleased = fakeMovies.filter { it.recentReleasedAt != null }
+            val expectedRecentlyReleased = fakeMovies
             val page = 1
             val limit = 10
             coEvery {
-                repository.getRecentlyReleasedMovies(page, limit)
+                repository.getRecentlyReleased(page, limit)
             } returns expectedRecentlyReleased
 
             // When
@@ -37,7 +37,7 @@ class GetRecentlyReleasedMoviesUseCaseTest {
 
             // Then
             coVerify(exactly = 1) {
-                repository.getRecentlyReleasedMovies(page, limit)
+                repository.getRecentlyReleased(page, limit)
             }
             assertThat(actualMovies).isEqualTo(expectedRecentlyReleased)
         }

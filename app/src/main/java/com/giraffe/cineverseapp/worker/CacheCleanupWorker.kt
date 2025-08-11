@@ -19,7 +19,7 @@ class CacheCleanupWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
         return try {
-            clearMoviesCacheUseCase.clearMovieCacheWithOutRecentViewed()
+            clearMoviesCacheUseCase.clearExceptRecentlyViewed()
             clearSeriesCacheUseCase.clearAllExceptRecentlyViewed()
             Result.success()
         } catch (_: Exception) {

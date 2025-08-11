@@ -7,6 +7,7 @@ import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.entity.CollectionMediaType
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
+import com.giraffe.media.utils.orEmpty
 import kotlinx.datetime.LocalDate
 
 fun CollectionDto.toEntity() = Collection(
@@ -26,27 +27,26 @@ fun Collection.toDto() = CollectionDto(
 
 fun CollectionItemDto.toMovie() = Movie(
     id = id,
-    title = title.orEmpty(),
-    description = description.orEmpty(),
-    rating = rating?.toFloat() ?: 0f,
+    name = title.orEmpty(),
+    overview = description.orEmpty(),
+    rating = rating?.toFloat().orEmpty(),
     duration = null,
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL))
             it
         else BASE_IMAGE_URL + it
-    },
+    }.orEmpty(),
     backdropUrl = backdropPath?.let {
         if (it.contains(BASE_IMAGE_URL))
             it
         else BASE_IMAGE_URL + it
-    },
-    youtubeVideoId = null,
+    }.orEmpty(),
+    youtubeVideoId = "",
     genresID = genreIds,
-    releaseYear = LocalDate.parse(releaseDate.orEmpty()),
+    releaseYear = releaseDate?.let { LocalDate.parse(it) },
     recentViewedAt = null,
-    recentReleasedAt = null,
-    upcomingAt = null,
-    popularity = 0f
+    popularity = 0f,
+    userRating = null
 )
 
 fun CollectionMediaTypeString.toCollectionType() = when (this) {

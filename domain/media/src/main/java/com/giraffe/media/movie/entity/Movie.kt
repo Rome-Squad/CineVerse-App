@@ -5,18 +5,16 @@ import kotlinx.datetime.LocalDate
 
 data class Movie(
     val id: Int,
-    val title: String,
-    val description: String,
+    val name: String,
+    val overview: String,
     val rating: Float,
-    val duration: Int?,
-    val posterUrl: String?,
-    val backdropUrl: String?,
+    val posterUrl: String,
+    val backdropUrl: String,
     val genresID: List<Int>,
     val releaseYear: LocalDate?,
-    val youtubeVideoId: String?,
-    val recentViewedAt: Long?,
-    val recentReleasedAt: Long?,
-    val upcomingAt: Long?,
+    val duration: Int?,
+    val youtubeVideoId: String,
     val popularity: Float,
-    val userRating: Float? = null
+    val userRating: Float?,
+    val recentViewedAt: Long?,
 )

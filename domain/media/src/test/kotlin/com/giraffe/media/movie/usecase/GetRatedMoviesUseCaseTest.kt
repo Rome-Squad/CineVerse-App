@@ -1,6 +1,6 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetUserUseCase
 import io.mockk.coEvery
@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 class GetRatedMoviesUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
+    private lateinit var repository: MovieRepository
     private lateinit var getUserUseCase: GetUserUseCase
     private lateinit var useCase: GetRatedMoviesUseCase
 
@@ -36,14 +36,14 @@ class GetRatedMoviesUseCaseTest {
         )
 
         coEvery { getUserUseCase() } returns mockUser
-        coEvery { repository.getRatedMovies(accountId) } returns fakeMovies
+        coEvery { repository.getUserRated(accountId) } returns fakeMovies
 
         // When
         val result = useCase()
 
         // Then
         coVerify { getUserUseCase() }
-        coVerify { repository.getRatedMovies(accountId) }
+        coVerify { repository.getUserRated(accountId) }
         assertEquals(fakeMovies, result)
     }
 }

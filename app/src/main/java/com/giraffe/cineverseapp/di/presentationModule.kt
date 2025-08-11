@@ -3,7 +3,7 @@ package com.giraffe.cineverseapp.di
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
@@ -80,7 +80,7 @@ object PresentationModule {
     fun provideMatchesYourVibesStrategy(
         getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
         getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-        getRecommendedMovie: GetRecommendedMovieUseCase,
+        getRecommendedMovie: GetRecommendedMoviesUseCase,
         getRecommendedSeries: GetRecommendedSeriesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase

@@ -12,6 +12,9 @@ fun SearchTab.toTitle(context: Context) = when (this) {
     SearchTab.ACTORS -> context.getString(R.string.actors)
 }
 
+fun Any?.orEmpty(): String = this?.toString() ?: ""
+
+
 fun Context.showToast(@StringRes stringRes: Int, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, this.getString(stringRes), duration).show()
 }
