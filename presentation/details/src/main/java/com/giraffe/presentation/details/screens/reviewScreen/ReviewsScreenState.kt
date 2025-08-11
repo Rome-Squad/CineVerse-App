@@ -9,5 +9,6 @@ data class ReviewsScreenState(
     val movieId: Int? = null,
     val seriesId: Int? = null,
     val reviewsFlow: Flow<PagingData<ReviewUI>> = flowOf(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true,
+    val isNoInternet: Boolean = false
 )

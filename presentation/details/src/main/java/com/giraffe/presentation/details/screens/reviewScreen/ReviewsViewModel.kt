@@ -9,6 +9,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Review
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
@@ -19,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class ReviewsViewModel @Inject constructor(
@@ -30,9 +32,13 @@ class ReviewsViewModel @Inject constructor(
         movieId = savedStateHandle.toRoute<ReviewRoute>().movieId,
         seriesId = savedStateHandle.toRoute<ReviewRoute>().seriesId
     )
-) {
+), ReviewsInteractionListener {
 
     init {
+        getReviews()
+    }
+
+    private fun getReviews() {
         state.value.movieId?.let {
             fetchMovieReviews(it)
         }
@@ -80,7 +86,9 @@ class ReviewsViewModel @Inject constructor(
                 initialLoadSize = 15
             )
         ) {
-            BasePagingSource { page ->
+            BasePagingSource(
+                onError = ::onError
+            ) { page ->
                 pagingSource(page)
             }
         }
@@ -92,23 +100,36 @@ class ReviewsViewModel @Inject constructor(
 
     private fun onFetchReviewsSuccess(reviews: Flow<PagingData<Review>>) {
         val reviewsUiFlow = reviews.map { pagingData ->
-            pagingData.map (Review::toUi )
+            pagingData.map(Review::toUi)
         }
         updateState {
             it.copy(
                 reviewsFlow = reviewsUiFlow,
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
 
     private fun onError(throwable: Throwable) {
+        val isNoInternet = throwable is NoInternetException ||
+                throwable is UserNoInternetException
+
         updateState {
             it.copy(
-                isLoading = false
+                isLoading = false,
+                isNoInternet = isNoInternet || it.isNoInternet
             )
         }
 
         sendEffect(ReviewEffect.ShowError(throwable))
+    }
+
+    override fun onBackClick() {
+        sendEffect(ReviewEffect.NavigateBack)
+    }
+
+    override fun onRetryClick() {
+        getReviews()
     }
 }

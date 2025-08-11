@@ -3,7 +3,6 @@ package com.giraffe.presentation.details.base
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,9 +19,11 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun BaseScreen(
     title: String,
+    caption: String? = null,
     isLoading: Boolean,
     isNoInternet: Boolean,
     onBackClick: () -> Unit,
+    onRetryClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     Column(
@@ -36,12 +37,14 @@ fun BaseScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp),
             title = title,
+            caption = caption,
             showBackButton = true,
             onBackButtonClick = onBackClick
         )
         ScreenStates(
             isLoading = isLoading,
-            isNoInternet = isNoInternet
+            isNoInternet = isNoInternet,
+            onRetryClick = onRetryClick
         ) {
             content()
         }
@@ -53,6 +56,7 @@ fun BaseScreen(
 private fun ScreenStates(
     isLoading: Boolean,
     isNoInternet: Boolean,
+    onRetryClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     when {
@@ -60,7 +64,10 @@ private fun ScreenStates(
             Progress()
         }
 
-        isNoInternet -> NoInternetScreen()
+        isNoInternet -> NoInternetScreen(
+            onRetryClick = onRetryClick
+        )
+
         else -> content()
     }
 }
