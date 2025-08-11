@@ -7,5 +7,6 @@ data class CastCreditScreenState(
     val castId: Int? = null,
     val actorName: String = "",
     val isLoading: Boolean = false,
+    val isNoInternet: Boolean = false,
     val isGridSelected: Boolean = true,
 )
