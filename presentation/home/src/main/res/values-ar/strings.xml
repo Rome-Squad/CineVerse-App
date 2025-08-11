@@ -19,4 +19,5 @@
     <string name="browse_everything">تصفح كل شئ</string>
     <string name="explore_all_movies_and_series">استكشف جميع الأفلام والمسلسلات حسب النوع أو ابحث عن أي شيء تريده.</string>
     <string name="back">رجوع للنافذة السابقة</string>
+    <string name="star_rate">معدل النجوم</string>
 </resources>

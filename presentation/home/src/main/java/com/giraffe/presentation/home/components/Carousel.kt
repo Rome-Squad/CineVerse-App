@@ -1,5 +1,6 @@
 package com.giraffe.presentation.home.components
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,13 +17,15 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -35,22 +38,37 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun Carousel(
+    popularMediaItems: List<PopularMediaUi>,
+    onClickItem: (Int, MediaType) -> Unit,
     modifier: Modifier = Modifier,
-    movieCards: List<PopularMediaUi>,
-    onClickItem: (Int, MediaType) -> Unit
+    scrollDelayMillis: Long = 3000L
 ) {
-    if (movieCards.isEmpty()) return
-    val pagerState = rememberPagerState(2) { movieCards.size }
-    val currentMovieCard = movieCards[pagerState.currentPage]
-    val density = LocalDensity.current
+    if (popularMediaItems.isEmpty()) return
+    val pagerState = rememberPagerState(initialPage = 0) { popularMediaItems.size }
 
-    val screenWidth = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
+    val currentMovieCard = popularMediaItems[pagerState.currentPage]
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val scope = rememberCoroutineScope()
+    val screenWidth = with(density) { configuration.screenWidthDp.dp }
     val width = screenWidth - 48.dp
     val initialHeight = width * (200f / 312f)
+
+
+    LaunchedEffect(pagerState.currentPage) {
+        delay(scrollDelayMillis)
+        val nextIndex = (pagerState.currentPage + 1) % pagerState.pageCount
+        scope.launch {
+            pagerState.animateScrollToPage(nextIndex)
+        }
+    }
 
     Box(
         modifier = modifier
@@ -60,13 +78,13 @@ fun Carousel(
         HorizontalPager(
             modifier = Modifier
                 .align(Alignment.BottomCenter),
-            beyondViewportPageCount = movieCards.size,
+            beyondViewportPageCount = 2,
             pageSpacing = (-24).dp,
             contentPadding = PaddingValues(horizontal = 24.dp),
             state = pagerState,
         ) { pageIndex ->
             val isSelected = pageIndex == pagerState.currentPage
-            val movieCard = movieCards[pageIndex]
+            val popularMediaItem = popularMediaItems[pageIndex]
 
             val pageOffset =
                 (pageIndex - pagerState.currentPage) + pagerState.currentPageOffsetFraction
@@ -91,12 +109,12 @@ fun Carousel(
                     .clip(shape = RoundedCornerShape(Theme.radius.lg))
                     .clickable(onClick = dropUnlessResumed {
                         onClickItem(
-                            movieCard.id,
-                            movieCard.mediaType
+                            popularMediaItem.id,
+                            popularMediaItem.mediaType
                         )
                     })
                     .align(Alignment.TopCenter),
-                movieCard = movieCard,
+                popularMediaItem = popularMediaItem,
                 isSelected = isSelected
             )
         }
@@ -186,7 +204,7 @@ private fun Preview() {
     )
     CineVerseTheme(isDarkTheme = true) {
         Carousel(
-            movieCards = movieCards,
+            popularMediaItems = movieCards,
             onClickItem = { movieId, mediaType -> },
         )
     }
