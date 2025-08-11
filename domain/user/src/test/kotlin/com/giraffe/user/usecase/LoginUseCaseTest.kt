@@ -82,7 +82,7 @@ class LoginUseCaseTest {
 
         coEvery { authRepository.login(username, password) } returns Unit
 
-        loginUseCase(password, username)
+        loginUseCase(username, password)
 
         coVerify(exactly = 1) {
             authRepository.login(username, password)
