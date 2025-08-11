@@ -17,6 +17,7 @@ import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedMovieRoute
+import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -101,7 +102,7 @@ class RecommendedMoviesViewModel @Inject constructor(
 
     private fun onGetRecommendedMoviesSuccess(moviesFlow: Flow<PagingData<Movie>>) {
         val movieUiFlow = moviesFlow.map { pagingData ->
-            pagingData.map { it.toUi(state.value.movieGenres) }
+            pagingData.map { it.toUi(state.value.movieGenres).toPoster() }
         }
 
         updateState {

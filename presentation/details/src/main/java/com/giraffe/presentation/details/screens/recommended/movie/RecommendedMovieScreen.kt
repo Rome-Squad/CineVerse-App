@@ -1,9 +1,7 @@
 package com.giraffe.presentation.details.screens.recommended.movie
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -19,13 +17,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.ViewToggle
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.base.BaseScreen
-import com.giraffe.presentation.details.model.MovieUi
+import com.giraffe.presentation.details.components.TransitionLazyColumnToGridPoster
 import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.showToast
 import com.giraffe.presentation.details.utils.toStringResource
@@ -68,7 +64,7 @@ fun RecommendedMovieContent(
     state: RecommendedMoviesScreenState,
     interaction: RecommendedInteractionListener
 ) {
-    var isGridSelected by rememberSaveable { mutableStateOf(false) }
+    var isListSelected by rememberSaveable { mutableStateOf(false) }
     val lazyPagingItems = state.recommendedMoviesFlow.collectAsLazyPagingItems()
 
     BaseScreen(
@@ -83,11 +79,11 @@ fun RecommendedMovieContent(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            CardsSection(
-                modifier = Modifier
-                    .fillMaxSize(),
+
+            TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
-                isGridSelected = !isGridSelected,
+                isListSelected = isListSelected,
+                contentPadding = PaddingValues(vertical = 5.dp),
                 onItemClick = interaction::onMovieClick
             )
 
@@ -96,34 +92,12 @@ fun RecommendedMovieContent(
                     .align(Alignment.BottomEnd)
                     .navigationBarsPadding()
                     .padding(16.dp),
-                isListSelected = isGridSelected,
-                onGridSelected = { isGridSelected = !it }
+                isListSelected = isListSelected,
+                onGridSelected = { isListSelected = !it }
             )
         }
     }
 
 
-}
-
-
-@Composable
-private fun CardsSection(
-    modifier: Modifier = Modifier,
-    lazyPagingItems: LazyPagingItems<MovieUi>,
-    isGridSelected: Boolean,
-    onItemClick: (Int) -> Unit,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Theme.color.background.screen)
-    ) {
-        TransitionLazyColumnToGridMovie(
-            lazyPagingItems = lazyPagingItems,
-            isListSelected = !isGridSelected,
-            contentPadding = PaddingValues(vertical = 5.dp),
-            onItemClick = onItemClick
-        )
-    }
 }
 

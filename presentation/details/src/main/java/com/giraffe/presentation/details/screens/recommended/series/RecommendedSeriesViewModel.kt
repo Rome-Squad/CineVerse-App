@@ -18,6 +18,7 @@ import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedSeriesRoute
+import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -100,7 +101,7 @@ class RecommendedSeriesViewModel @Inject constructor(
 
     private fun onGetRecommendedSeriesSuccess(seriesFlow: Flow<PagingData<Series>>) {
         val seriesUiFlow = seriesFlow.map { pagingData ->
-            pagingData.map { it.toUi(state.value.seriesGenres) }
+            pagingData.map { it.toUi(state.value.seriesGenres).toPoster() }
         }
 
         updateState {

@@ -21,6 +21,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.base.BaseScreen
+import com.giraffe.presentation.details.components.TransitionLazyColumnToGridPoster
 import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.showToast
 import com.giraffe.presentation.details.utils.toStringResource
@@ -77,7 +78,7 @@ private fun RecommendedSeriesContent(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TransitionBetweenLazyColumnToLazyVerticalGridSeries(
+            TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = !isGridSelected,
                 contentPadding = PaddingValues(16.dp),
