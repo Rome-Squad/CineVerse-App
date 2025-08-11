@@ -116,7 +116,7 @@ fun HomeContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
-                        movieCards = state.popularity,
+                        popularMediaItems = state.popularity,
                         onClickItem = interactionListener::onMediaClicked
                     )
                 }

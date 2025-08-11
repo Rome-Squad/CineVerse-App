@@ -22,4 +22,5 @@
     <string name="oops_no_internet" translatable="false">Oops! No Internet</string>
     <string name="looks_like_you_are_offline_let_s_reconnect_so_you_don_t_miss_out" translatable="false">Looks like you are offline. Let’s reconnect so you don’t miss out!</string>
     <string name="try_again" translatable="false">Try Again</string>
+    <string name="star_rate">star rate</string>
 </resources>
