@@ -6,33 +6,35 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetMoviesByGenreUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var useCase: GetMoviesByGenresUseCase
+    private var repository: MovieRepository = mockk(relaxed = true)
+    private var useCase: GetMoviesByGenresUseCase = GetMoviesByGenresUseCase(repository)
+    private val genreId = 28
 
-    @BeforeEach
-    fun setUp() {
-        repository = mockk()
-        useCase = GetMoviesByGenresUseCase(repository)
+    @Test
+    fun `invoke should call getByGenreId on repository`() = runTest {
+        // given
+        coEvery { repository.getByGenreId(any(), any()) } returns emptyList()
+
+        // when
+        val result = useCase(genreId, page)
+
+        // then
+        coVerify(exactly = 1) { repository.getByGenreId(any(), any()) }
     }
 
     @Test
     fun `should return list of movies from repository for given genre id`() = runTest {
         // Given
-        val genreId = 28
-        val expectedMovies = fakeMovies
-
-        coEvery { repository.getByGenreId(genreId, 1) } returns expectedMovies
+        coEvery { repository.getByGenreId(genreId, page) } returns fakeMovies
 
         // When
-        val result = useCase(genreId, 1)
+        val result = useCase(genreId, page)
 
         // Then
-        coVerify { repository.getByGenreId(genreId, 1) }
-        assertThat(result).isEqualTo(expectedMovies)
+        assertThat(result).isEqualTo(fakeMovies)
     }
 }

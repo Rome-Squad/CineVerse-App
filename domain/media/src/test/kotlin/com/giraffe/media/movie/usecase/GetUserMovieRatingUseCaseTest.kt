@@ -20,25 +20,25 @@ class GetUserMovieRatingUseCaseTest {
     }
 
     @Test
-    fun `invoke should call getUserMovieRating on repository with correct id`() = runTest {
+    fun `invoke should call getUserRatedById on repository`() = runTest {
         // given
         coEvery { repository.getUserRatedById(any()) } returns 5.0f
 
         // when
-        getUserMovieRatingUseCase(1)
+        getUserMovieRatingUseCase(movieId)
 
         // then
-        coVerify(exactly = 1) { repository.getUserRatedById(1) }
+        coVerify(exactly = 1) { repository.getUserRatedById(any()) }
     }
 
     @Test
     fun `invoke should return rating from repository`() = runTest {
         // given
         val expectedRating = 8.5f
-        coEvery { repository.getUserRatedById(1) } returns expectedRating
+        coEvery { repository.getUserRatedById(movieId) } returns expectedRating
 
         // when
-        val result = getUserMovieRatingUseCase(1)
+        val result = getUserMovieRatingUseCase(movieId)
 
         // then
         assertThat(result).isEqualTo(expectedRating)

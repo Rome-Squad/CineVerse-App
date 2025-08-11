@@ -7,32 +7,37 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
 class GetRecentlyViewedMoviesUseCaseTest {
-    private lateinit var repository: MovieRepository
+    private var repository: MovieRepository = mockk(relaxed = true)
+    private var useCase: GetRecentlyViewedMoviesUseCase = GetRecentlyViewedMoviesUseCase(repository)
 
-    @BeforeEach
-    fun setUp() {
-        repository = mockk(relaxed = true)
+    @Test
+    fun `invoke should call getRecentlyViewed on repository`() = runTest {
+        // given
+        coEvery { repository.getRecentlyViewed() } returns flow { emit(emptyList()) }
+
+        // when
+        useCase()
+
+        // then
+        coVerify(exactly = 1) { repository.getRecentlyViewed() }
     }
 
 
     @Test
     fun `given recently viewed movies, when invoke is called, then return movie list`() = runTest {
-        val expectedMovies = flow {
-            emit(fakeMovies)
-        }
-
+        // given
+        val expectedMovies = flow { emit(fakeMovies) }
         coEvery { repository.getRecentlyViewed() } returns expectedMovies
 
-        val result = GetRecentlyViewedMoviesUseCase(repository).invoke()
+        // when
+        val result = useCase.invoke()
 
-        coVerify { repository.getRecentlyViewed() }
+        // then
         assertThat(result).isEqualTo(expectedMovies)
-
     }
 
 }

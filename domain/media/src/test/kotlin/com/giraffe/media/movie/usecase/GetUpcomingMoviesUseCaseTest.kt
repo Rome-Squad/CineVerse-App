@@ -6,34 +6,34 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetUpcomingMoviesUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var useCase: GetUpcomingMoviesUseCase
+    private var repository: MovieRepository = mockk(relaxed = true)
+    private var useCase: GetUpcomingMoviesUseCase = GetUpcomingMoviesUseCase(repository)
 
-    @BeforeEach
-    fun setUp() {
-        repository = mockk()
-        useCase = GetUpcomingMoviesUseCase(repository)
+    @Test
+    fun `invoke should call getUpcoming on repository`() = runTest {
+        // given
+        coEvery { repository.getUpcoming(any(), any()) } returns emptyList()
+
+        // when
+        useCase(page, limit)
+
+        // then
+        coVerify(exactly = 1) { repository.getUpcoming(any(), any()) }
     }
 
     @Test
     fun `given upcoming movies, when invoke is called, then return movie list`() = runTest {
         // Given
-        val expectedMovies = fakeMovies
-        val page = 1
-        val limit = 10
-
-        coEvery { repository.getUpcoming(page, limit) } returns expectedMovies
+        coEvery { repository.getUpcoming(page, limit) } returns fakeMovies
 
         // When
         val actualMovies = useCase(page, limit)
 
         // Then
-        coVerify(exactly = 1) { repository.getUpcoming(page, limit) }
-        assertThat(actualMovies).isEqualTo(expectedMovies)
+        assertThat(actualMovies).isEqualTo(fakeMovies)
     }
 }

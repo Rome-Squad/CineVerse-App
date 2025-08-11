@@ -1,28 +1,21 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 
 class GetMoviesGenresUseCaseTest {
-    private lateinit var repository: MovieRepository
-    private lateinit var getMoviesGenresUseCase: GetMoviesGenresUseCase
-
-    @BeforeEach
-    fun setup() {
-        repository = mockk()
-        getMoviesGenresUseCase = GetMoviesGenresUseCase(repository)
-    }
+    private var repository: MovieRepository = mockk(relaxed = true)
+    private var getMoviesGenresUseCase: GetMoviesGenresUseCase =
+        GetMoviesGenresUseCase(repository)
 
     @Test
-    fun `invoke should call getMoviesGenres on repository`() = runTest {
+    fun `invoke should call getGenres on repository`() = runTest {
         //given
         coEvery { repository.getGenres() } returns emptyList()
 
@@ -36,13 +29,12 @@ class GetMoviesGenresUseCaseTest {
     @Test
     fun `invoke should return list of genres from repository`() = runTest {
         // given
-        val expectedGenres = listOf(Genre(1, "Action",0), Genre(2, "Comedy",0))
-        coEvery { repository.getGenres() } returns expectedGenres
+        coEvery { repository.getGenres() } returns fakeGenres
 
         // when
         val result = getMoviesGenresUseCase()
 
         // then
-        assertThat(result).isEqualTo(expectedGenres)
+        assertThat(result).isEqualTo(fakeGenres)
     }
 }

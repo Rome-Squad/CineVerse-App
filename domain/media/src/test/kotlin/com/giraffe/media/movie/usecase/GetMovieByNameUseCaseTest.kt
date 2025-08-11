@@ -7,13 +7,12 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetMovieByNameUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var useCase: GetMoviesByNameUseCase
+    private var repository: MovieRepository = mockk(relaxed = true)
+    private var useCase: GetMoviesByNameUseCase = GetMoviesByNameUseCase(repository)
 
     private val movieAction = fakeMovie(
         id = 1,
@@ -28,25 +27,28 @@ class GetMovieByNameUseCaseTest {
         popularity = 0f
     )
     private val name = "test"
-    private val page = 1
 
-    @BeforeEach
-    fun setUp() {
-        repository = mockk()
-        useCase = GetMoviesByNameUseCase(repository)
+    @Test
+    fun `invoke should call getByName on repository`() = runTest {
+        // Given
+        coEvery { repository.getByName(any(), any()) } returns emptyList()
+
+        // When
+        useCase(name, page)
+
+        // Then
+        coVerify(exactly = 1) { repository.getByName(any(), any()) }
     }
 
     @Test
-    fun `invoke() should call search and genres methods on repository`() = runTest {
+    fun `invoke should call getGenres on repository`() = runTest {
         // Given
-        coEvery { repository.getByName(name, page) } returns emptyList()
         coEvery { repository.getGenres() } returns emptyList()
 
         // When
         useCase(name, page)
 
         // Then
-        coVerify(exactly = 1) { repository.getByName(name, page) }
         coVerify(exactly = 1) { repository.getGenres() }
     }
 

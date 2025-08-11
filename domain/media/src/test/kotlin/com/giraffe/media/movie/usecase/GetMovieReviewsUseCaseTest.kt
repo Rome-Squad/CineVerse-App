@@ -8,30 +8,24 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class GetMovieReviewsUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var getMovieReviewsUseCase: GetMovieReviewsUseCase
-
-    @BeforeEach
-    fun setup() {
-        repository = mockk()
-        getMovieReviewsUseCase = GetMovieReviewsUseCase(repository)
-    }
+    private var repository: MovieRepository = mockk(relaxed = true)
+    private var getMovieReviewsUseCase: GetMovieReviewsUseCase = GetMovieReviewsUseCase(repository)
+    private val reviewId = 1
 
     @Test
-    fun `invoke should call getMovieReviews on repository`() = runTest {
+    fun `invoke should call getReviews on repository`() = runTest {
         // given
-        coEvery { repository.getReviews(any(),any()) } returns emptyList()
+        coEvery { repository.getReviews(any(), any()) } returns emptyList()
 
         // when
-        getMovieReviewsUseCase(1, 1)
+        getMovieReviewsUseCase(reviewId, page)
 
         // then
-        coVerify(exactly = 1) { repository.getReviews(1, 1) }
+        coVerify(exactly = 1) { repository.getReviews(any(), any()) }
     }
 
     @Test
@@ -39,7 +33,7 @@ class GetMovieReviewsUseCaseTest {
         // given
         val expectedReviews = listOf(
             Review(
-                id = "1",
+                id = reviewId.toString(),
                 content = "Great movie! One of the best I've seen this year. The cinematography was stunning.",
                 createdAt = LocalDateTime(2025, 7, 10, 20, 30, 0),
                 authorName = "John Doe",
@@ -48,10 +42,10 @@ class GetMovieReviewsUseCaseTest {
                 authorImageUrl = "https://example.com/avatars/user1.jpg"
             )
         )
-        coEvery { repository.getReviews(1, 1) } returns expectedReviews
+        coEvery { repository.getReviews(reviewId, page) } returns expectedReviews
 
         // when
-        val result = getMovieReviewsUseCase(1, 1)
+        val result = getMovieReviewsUseCase(reviewId, page)
 
         // then
         assertThat(result).isEqualTo(expectedReviews)

@@ -5,19 +5,12 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class AddMovieRatingUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var addMovieRatingUseCase: AddMovieRatingUseCase
-
-    @BeforeEach
-    fun setup() {
-        repository = mockk()
-        addMovieRatingUseCase = AddMovieRatingUseCase(repository)
-    }
+    private var repository: MovieRepository = mockk(relaxed = true)
+    private var addMovieRatingUseCase: AddMovieRatingUseCase = AddMovieRatingUseCase(repository)
 
     @Test
     fun `invoke should call addRating on repository with correct data`() = runTest {
@@ -25,9 +18,9 @@ class AddMovieRatingUseCaseTest {
         coEvery { repository.addRating(any(), any()) } returns Unit
 
         // when
-        addMovieRatingUseCase(movieId = 1, rating = 8.5f)
+        addMovieRatingUseCase(movieId = movieId, rating = 8.5f)
 
         // then
-        coVerify(exactly = 1) { repository.addRating(1, 8.5f) }
+        coVerify(exactly = 1) { repository.addRating(movieId, 8.5f) }
     }
 }
