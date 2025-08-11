@@ -10,6 +10,7 @@ import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersByMovieIdUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
@@ -23,13 +24,12 @@ import com.giraffe.presentation.details.model.groupByRole
 import com.giraffe.presentation.details.model.toCastUi
 import com.giraffe.presentation.details.model.toCrewUi
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
-import com.giraffe.presentation.details.utils.groupByRole
-import com.giraffe.presentation.details.utils.toCastUi
-import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
+
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
