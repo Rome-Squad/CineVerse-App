@@ -5,9 +5,9 @@ import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import javax.inject.Inject
 
 class AddCastToRecentCastUseCase @Inject constructor(
-    private val repository: MediaMemberRepository
+    private val mediaMemberRepository: MediaMemberRepository
 ) {
     suspend operator fun invoke(castMember: CastMember) {
-        repository.addCastToRecentViewed(castMember)
+        mediaMemberRepository.addCastToRecentViewed(castMember)
     }
 }

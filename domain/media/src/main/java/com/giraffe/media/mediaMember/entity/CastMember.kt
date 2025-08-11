@@ -10,7 +10,7 @@ data class CastMember(
     val biography: String?,
     val birthday: String?,
     val characterName: String?,
-    val otherImages: List<String>?,
+    val otherImages: List<String> = emptyList(),
     val placeOfBirth: String?,
     val socialMedia: SocialMediaLinks?
 )

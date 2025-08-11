@@ -3,17 +3,17 @@ package com.giraffe.presentation.details.screens.gallery
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.user.exception.NoInternetException as UserNoInternetException
-import com.giraffe.media.mediaMember.usecase.GetMediaMemberImagesUseCase
+import com.giraffe.media.mediaMember.usecase.GetMediaMemberImageUrlsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.GalleryRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getMediaMemberImagesUseCase: GetMediaMemberImagesUseCase
+    private val getMediaMemberImageUrlsUseCase: GetMediaMemberImageUrlsUseCase
 ) :BaseViewModel<GalleryUiState, GalleryEffect>(
     GalleryUiState(
         actorId = savedStateHandle.toRoute<GalleryRoute>().personId,
@@ -35,7 +35,7 @@ class GalleryViewModel @Inject constructor(
             onError = ::getPersonImagesError
         ) {
             state.value.actorId?.let { personId ->
-                getMediaMemberImagesUseCase(personId)
+                getMediaMemberImageUrlsUseCase(personId)
             } ?: emptyList()
         }
     }

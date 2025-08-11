@@ -33,7 +33,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
     private val localDataSource: MediaMemberLocalDataSource,
 ) : MediaMemberRepository {
 
-    override suspend fun searchForActorByName(name: String, page: Int) = SafeCall {
+    override suspend fun getActorByName(name: String, page: Int) = SafeCall {
         remoteDataSource.searchForActorByName(name, page)
             .map(MediaMemberDto::toCastEntity)
     }

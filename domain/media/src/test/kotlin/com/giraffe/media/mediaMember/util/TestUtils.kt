@@ -34,7 +34,7 @@ fun createCastMember(
     birthday: String? = null,
     characterName: String? = null,
     imageUrl: String? = null,
-    otherImages: List<String>? = null,
+    otherImages: List<String> = emptyList(),
     placeOfBirth: String? = null,
     socialMedia: SocialMediaLinks? = null
 ) = CastMember(

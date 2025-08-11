@@ -8,19 +8,19 @@ data class MediaMemberDto(
     @SerialName("id")
     val id: Int,
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
     @SerialName("gender")
-    val gender: Int,
+    val gender: Int? = null,
     @SerialName("known_for")
-    val knownFor: List<KnownForDto>,
+    val knownFor: List<KnownForDto>? = null,
     @SerialName("known_for_department")
-    val department: String,
+    val department: String? = null,
     @SerialName("name")
-    val name: String,
+    val name: String? = null,
     @SerialName("original_name")
-    val originalName: String,
+    val originalName: String? = null,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Float? = null,
     @SerialName("profile_path")
     val profilePath: String? = null
 )
@@ -30,15 +30,15 @@ data class KnownForDto(
     @SerialName("id")
     val id: Int,
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
     @SerialName("backdrop_path")
     val backdropPath: String? = null,
     @SerialName("first_air_date")
     val firstAirDate: String? = null,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>? = null,
     @SerialName("media_type")
-    val mediaType: String,
+    val mediaType: String? = null,
     @SerialName("name")
     val name: String? = null,
     @SerialName("origin_country")
@@ -50,9 +50,9 @@ data class KnownForDto(
     @SerialName("original_title")
     val originalTitle: String? = null,
     @SerialName("overview")
-    val overview: String,
+    val overview: String? = null,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Float? = null,
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("release_date")
@@ -62,7 +62,7 @@ data class KnownForDto(
     @SerialName("video")
     val video: Boolean? = null,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Float? = null,
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int? = null
 )

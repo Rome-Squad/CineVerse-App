@@ -9,6 +9,8 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.usecase.GetMediaMembersByNameUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.SearchMovieByNameUseCase
@@ -18,8 +20,6 @@ import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.screen.discover.SearchTab
 import com.giraffe.presentation.explore.util.BasePagingSource
-import com.giraffe.media.mediaMember.entity.CastMember
-import com.giraffe.media.mediaMember.usecase.SearchMediaMembersByNameUseCase
 import com.giraffe.presentation.explore.util.toPoster
 import com.giraffe.presentation.explore.util.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +31,7 @@ import javax.inject.Inject
 class SearchResultViewModel @Inject constructor(
     private val searchMovieByName: SearchMovieByNameUseCase,
     private val getSeriesByName: GetSeriesByNameUseCase,
-    private val searchPeopleByName: SearchMediaMembersByNameUseCase,
+    private val searchPeopleByName: GetMediaMembersByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle

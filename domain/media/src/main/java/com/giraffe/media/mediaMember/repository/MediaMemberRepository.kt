@@ -27,7 +27,7 @@ interface MediaMemberRepository {
 
     suspend fun getCastCreditsById(id: Int): CastMedia
 
-    suspend fun searchForActorByName(name: String, page: Int): List<CastMember>
+    suspend fun getActorByName(name: String, page: Int): List<CastMember>
 
     data class MediaMembers(
         val cast: List<CastMember>,

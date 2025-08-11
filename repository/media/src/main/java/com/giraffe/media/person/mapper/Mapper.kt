@@ -32,11 +32,11 @@ fun mapToCast(
     socialMedia: PersonSocialMediaDto
 ): CastMember = CastMember(
     id = personId,
-    name = details.name,
+    name = details.name.orEmpty(),
     imageUrl = details.profilePath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
-    role = details.department,
+    role = details.department.orEmpty(),
     birthday = details.birthday,
     placeOfBirth = details.placeOfBirth,
     biography = details.biography,
@@ -52,11 +52,11 @@ fun mapToCrew(
     socialMedia: PersonSocialMediaDto
 ): CrewMember = CrewMember(
     id = personId,
-    name = details.name,
+    name = details.name.orEmpty(),
     imageUrl = details.profilePath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
-    role = details.department,
+    role = details.department.orEmpty(),
     birthday = details.birthday,
     placeOfBirth = details.placeOfBirth,
     biography = details.biography,
@@ -66,23 +66,23 @@ fun mapToCrew(
 
 fun MediaMemberDto.toCastEntity() = CastMember(
     id = id,
-    name = name,
-    role = department,
+    name = name.orEmpty(),
+    role = department.orEmpty(),
     imageUrl = profilePath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
     biography = null,
     birthday = null,
     characterName = null,
-    otherImages = null,
+    otherImages = emptyList(),
     placeOfBirth = null,
     socialMedia = null
 )
 
 fun MediaMemberDto.toCrewEntity() = CrewMember(
     id = id,
-    name = name,
-    role = department,
+    name = name.orEmpty(),
+    role = department.orEmpty(),
     imageUrl = profilePath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
@@ -123,7 +123,7 @@ fun PersonCacheDto.toCastMemberEntity() = CastMember(
     biography = null,
     birthday = null,
     characterName = null,
-    otherImages = null,
+    otherImages = emptyList(),
     placeOfBirth = null,
     socialMedia = null,
 )
@@ -152,7 +152,7 @@ fun CastDto.toEntity() = CastMember(
     role = role,
     biography = null,
     birthday = null,
-    otherImages = null,
+    otherImages = emptyList(),
     placeOfBirth = null,
     socialMedia = null,
 )

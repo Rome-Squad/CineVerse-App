@@ -5,9 +5,9 @@ import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import javax.inject.Inject
 
 class GetCastDetailsUseCase @Inject constructor(
-    private val repository: MediaMemberRepository
+    private val mediaMemberRepository: MediaMemberRepository
 ) {
     suspend operator fun invoke(castId: Int): CastMember {
-        return repository.getCastDetailsByid(castId)
+        return mediaMemberRepository.getCastDetailsByid(castId)
     }
 }

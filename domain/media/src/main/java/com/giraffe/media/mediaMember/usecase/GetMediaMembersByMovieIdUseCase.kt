@@ -4,9 +4,9 @@ import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import javax.inject.Inject
 
 class GetMediaMembersByMovieIdUseCase @Inject constructor(
-    private val repository: MediaMemberRepository
+    private val mediaMemberRepository: MediaMemberRepository
 ) {
     suspend operator fun invoke(movieId: Int): MediaMemberRepository.MediaMembers {
-        return repository.getMediaMembersByMovieId(movieId)
+        return mediaMemberRepository.getMediaMembersByMovieId(movieId)
     }
 }

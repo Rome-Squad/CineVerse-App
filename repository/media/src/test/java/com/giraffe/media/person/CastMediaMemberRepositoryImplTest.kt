@@ -35,7 +35,7 @@ class CastMediaMemberRepositoryImplTest {
         coEvery { localDataSource.searchByName(keyword, 1) } returns emptyList()
         coEvery { remoteDataSource.searchForActorByName(keyword, 1) } throws Exception()
         //when && then
-        assertThrows<MediaException> { repository.searchForActorByName(keyword, 1) }
+        assertThrows<MediaException> { repository.getActorByName(keyword, 1) }
         coVerify(exactly = 0) { localDataSource.insertPerson(any()) }
     }
 

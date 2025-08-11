@@ -4,11 +4,11 @@ import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import javax.inject.Inject
 
 class GetCastCreditsUseCase @Inject constructor(
-    private val repository: MediaMemberRepository
+    private val mediaMemberRepository: MediaMemberRepository
 ) {
     suspend operator fun invoke(
         personId: Int
     ): MediaMemberRepository.CastMedia {
-        return repository.getCastCreditsById(personId)
+        return mediaMemberRepository.getCastCreditsById(personId)
     }
 }
