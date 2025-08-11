@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.utils
 
-import androidx.annotation.StringRes
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.ValidationException

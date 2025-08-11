@@ -2,6 +2,8 @@ package com.giraffe.presentation.details.screens.gallery
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.media.person.usecase.GetPersonImagesUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.GalleryRoute
@@ -12,12 +14,12 @@ import javax.inject.Inject
 class GalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     val getPersonImagesUseCase: GetPersonImagesUseCase
-) : BaseViewModel<GalleryUiState, Any>(
+) : BaseViewModel<GalleryUiState, GalleryEffect>(
     GalleryUiState(
         actorId = savedStateHandle.toRoute<GalleryRoute>().personId,
         actorName = savedStateHandle.toRoute<GalleryRoute>().actorName,
     )
-) {
+), GalleryInteractionListener {
 
     init {
         getPersonImages()
@@ -42,17 +44,25 @@ class GalleryViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                errorMessage = error.message
+                isNoInternet = error is NoInternetException ||
+                        error is UserNoInternetException
             )
         }
+
+        sendEffect(GalleryEffect.ShowError(error))
     }
 
     private fun getPersonImagesSuccess(images: List<String>) {
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 imageUrls = images
             )
         }
+    }
+
+    override fun onBackClick() {
+        sendEffect(GalleryEffect.NavigateBack)
     }
 }
