@@ -18,7 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -33,6 +35,7 @@ fun SwipableItem(
     var cardWidth by remember { mutableFloatStateOf(0f) }
     val offset = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -56,7 +59,9 @@ fun SwipableItem(
                     detectHorizontalDragGestures(
                         onHorizontalDrag = { _, dragAmount ->
                             scope.launch {
-                                val newOffset = (offset.value - dragAmount).coerceIn(0f, cardWidth)
+                                val adjustedDragAmount = if (isRtl) -dragAmount else dragAmount
+                                val newOffset =
+                                    (offset.value - adjustedDragAmount).coerceIn(0f, cardWidth)
                                 offset.snapTo(newOffset)
                             }
                         },
