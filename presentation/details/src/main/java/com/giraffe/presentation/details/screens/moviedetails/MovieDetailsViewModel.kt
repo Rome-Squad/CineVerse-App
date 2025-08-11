@@ -473,7 +473,7 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                isNoInternet = isNetworkError
+                isNoInternet = isNetworkError || it.isNoInternet
             )
         }
 

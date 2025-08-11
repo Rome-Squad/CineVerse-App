@@ -19,12 +19,13 @@ fun GiveStarsBottomSheet(
     currentRating: Int,
     onRateChange: (Int) -> Unit,
     onAddRateButtonClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.rate_the_movie)
 ) {
     BaseBottomSheet(
         isVisible = isVisible,
         onDismiss = onDismiss,
-        title = stringResource(R.string.rate_the_movie),
+        title = title,
         modifier = modifier,
         content = {
             Column(
