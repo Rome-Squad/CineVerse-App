@@ -10,7 +10,7 @@ import androidx.paging.map
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.GetMovieByNameUseCase
+import com.giraffe.media.movie.usecase.GetMoviesByNameUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchResultViewModel @Inject constructor(
-    private val getMovieByNameUseCase: GetMovieByNameUseCase,
+    private val getMoviesByNameUseCase: GetMoviesByNameUseCase,
     private val getSeriesByName: GetSeriesByNameUseCase,
     private val searchPeopleByName: SearchPeopleByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
@@ -107,7 +107,7 @@ class SearchResultViewModel @Inject constructor(
             onError = ::onError,
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource { page -> getMovieByNameUseCase(state.value.query, page) }
+                BasePagingSource { page -> getMoviesByNameUseCase(state.value.query, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }

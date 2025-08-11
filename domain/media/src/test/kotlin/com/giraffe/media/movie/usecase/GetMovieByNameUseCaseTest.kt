@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 class GetMovieByNameUseCaseTest {
 
     private lateinit var repository: MovieRepository
-    private lateinit var useCase: GetMovieByNameUseCase
+    private lateinit var useCase: GetMoviesByNameUseCase
 
     private val movieAction = fakeMovie(
         id = 1,
@@ -33,7 +33,7 @@ class GetMovieByNameUseCaseTest {
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        useCase = GetMovieByNameUseCase(repository)
+        useCase = GetMoviesByNameUseCase(repository)
     }
 
     @Test

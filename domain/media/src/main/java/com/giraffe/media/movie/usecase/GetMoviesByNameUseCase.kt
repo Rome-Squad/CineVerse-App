@@ -4,7 +4,7 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.repository.MovieRepository
 import javax.inject.Inject
 
-class GetMovieByNameUseCase @Inject constructor(
+class GetMoviesByNameUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
     suspend operator fun invoke(movieName: String, page: Int): List<Movie> {
