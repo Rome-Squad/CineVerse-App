@@ -25,10 +25,10 @@ data class MovieDetailsScreenState(
     val isVisibleGiveStarsBottomSheet: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,
 
-    val isLoading:Boolean = true,
-    val isNetworkError: Boolean = false,
+    val isLoading: Boolean = true,
+    val isNoInternet: Boolean = false,
 
-) {
+    ) {
     @Stable
     sealed class CollectionBottomSheet {
         object AddToCollection : CollectionBottomSheet()
