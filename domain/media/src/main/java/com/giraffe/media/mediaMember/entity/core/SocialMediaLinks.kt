@@ -1,9 +1,9 @@
 package com.giraffe.media.mediaMember.entity.core
 
 data class SocialMediaLinks(
-    val facebookLink: String? = null,
-    val instagramLink: String? = null,
-    val youtubeLink: String? = null,
-    val tiktokLink: String? = null,
-    val twitterLink: String? = null,
+    val facebookLink: String?,
+    val instagramLink: String?,
+    val youtubeLink: String?,
+    val tiktokLink: String?,
+    val twitterLink: String?,
 )

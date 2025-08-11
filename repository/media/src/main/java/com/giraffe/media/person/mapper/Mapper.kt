@@ -88,7 +88,7 @@ fun MediaMemberDto.toCrewEntity() = CrewMember(
     },
     biography = null,
     birthday = null,
-    otherImages = null,
+    otherImages = emptyList(),
     placeOfBirth = null,
     socialMedia = null
 )
@@ -137,7 +137,7 @@ fun PersonCacheDto.toCrewMemberEntity() = CrewMember(
     },
     biography = null,
     birthday = null,
-    otherImages = null,
+    otherImages = emptyList(),
     placeOfBirth = null,
     socialMedia = null,
 )
@@ -166,7 +166,7 @@ fun CrewDto.toEntity() = CrewMember(
     },
     biography = null,
     birthday = null,
-    otherImages = null,
+    otherImages = emptyList(),
     placeOfBirth = null,
     socialMedia = null,
 )
