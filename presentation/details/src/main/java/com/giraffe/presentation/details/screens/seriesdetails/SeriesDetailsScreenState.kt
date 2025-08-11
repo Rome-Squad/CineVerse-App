@@ -17,7 +17,7 @@ data class SeriesDetailsScreenState(
     val currentRating: Int = 0,
 
     val isLoading: Boolean = true,
-    val isNetworkError: Boolean = false,
+    val isNoInternet: Boolean = false,
 
     val isVisibleAddToCollectionBottomSheet: Boolean = false,
     val isVisibleGiveStarsBottomSheet: Boolean = false,

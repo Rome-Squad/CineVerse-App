@@ -308,7 +308,6 @@ fun MatchPagerScreen(
                 } else {
                     stringResource(R.string.start_matching)
                 },
-                isLoading = state.currentPage >= pagerState.pageCount - 1,
                 onClick = {
                     coroutineScope.launch {
                         viewModel.onNextClicked()

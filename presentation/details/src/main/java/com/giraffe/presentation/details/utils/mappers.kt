@@ -110,9 +110,7 @@ fun Season.toUi() = SeasonUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear.let {
-        toString().toFormattedDate()
-    },
+    releaseYear = releaseYear?.toString()?.toFormattedDate().orEmpty(),
     seasonNumber = seasonNumber,
     episodeCount = episodeCount
 )
