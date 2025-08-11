@@ -5,9 +5,9 @@ import com.giraffe.cineverseapp.data.network.createRetrofitClient
 import com.giraffe.media.collections.datasource.remote.CollectionsRemoteDataSource
 import com.giraffe.media.collections.retrofit.CollectionsApiServiceRetrofit
 import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImp
-import com.giraffe.media.explore.datasource.remote.ExploreRemoteDataSource
-import com.giraffe.media.explore.retrofit.ExploreApiServiceRetrofit
-import com.giraffe.media.explore.retrofit.ExploreRemoteDataSourceImplRetrofit
+import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
+import com.giraffe.media.explore.retrofit.SearchApiServiceRetrofit
+import com.giraffe.media.explore.retrofit.SearchRemoteDataSourceImplRetrofit
 import com.giraffe.media.mediaMember.retrofit.MediaMemberApiServiceRetrofit
 import com.giraffe.media.mediaMember.retrofit.MediaMemberRemoteDataSourceImplRetrofit
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
@@ -100,8 +100,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideExploreApi(retrofit: Retrofit): ExploreApiServiceRetrofit =
-        retrofit.create(ExploreApiServiceRetrofit::class.java)
+    fun provideExploreApi(retrofit: Retrofit): SearchApiServiceRetrofit =
+        retrofit.create(SearchApiServiceRetrofit::class.java)
 
     @Provides
     @Singleton
@@ -130,7 +130,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideExploreRequestBuilder(api: ExploreApiServiceRetrofit): RetrofitRequestBuilder<ExploreApiServiceRetrofit> =
+    fun provideExploreRequestBuilder(api: SearchApiServiceRetrofit): RetrofitRequestBuilder<SearchApiServiceRetrofit> =
         RetrofitRequestBuilder(api)
 
     @Provides
@@ -150,8 +150,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideExploreRemoteDataSource(builder: RetrofitRequestBuilder<ExploreApiServiceRetrofit>): ExploreRemoteDataSource =
-        ExploreRemoteDataSourceImplRetrofit(builder)
+    fun provideExploreRemoteDataSource(builder: RetrofitRequestBuilder<SearchApiServiceRetrofit>): SearchRemoteDataSource =
+        SearchRemoteDataSourceImplRetrofit(builder)
 
     @Provides
     @Singleton

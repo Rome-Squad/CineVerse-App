@@ -1,7 +1,7 @@
 package com.giraffe.media.explore.usecase
 
-import com.giraffe.media.explore.entity.SearchKeyword
-import com.giraffe.media.explore.repository.ExploreRepository
+import com.giraffe.media.explore.dummydata.expected
+import com.giraffe.media.explore.repository.SearchRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 class GetSearchKeywordsUseCaseTest {
 
-    private lateinit var repository: ExploreRepository
+    private lateinit var repository: SearchRepository
     private lateinit var useCase: GetSearchKeywordsUseCase
 
     @BeforeEach
@@ -25,22 +25,14 @@ class GetSearchKeywordsUseCaseTest {
 
     @Test
     fun `should return list of search keywords when query is valid`() = runTest {
-        // Given
+
         val rawQuery = "  trending now "
         val trimmedQuery = "trending now"
-        val now = System.currentTimeMillis()
-
-        val expected = listOf(
-            SearchKeyword("trending now", isRecent = false, searchedAt = now),
-            SearchKeyword("popular", isRecent = true, searchedAt = now)
-        )
 
         coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(expected)
 
-        // When
         val result = useCase(rawQuery).first()
 
-        // Then
         assertThat(result).isEqualTo(expected)
         coVerify { repository.getSearchKeywords(trimmedQuery) }
     }
@@ -48,16 +40,14 @@ class GetSearchKeywordsUseCaseTest {
     @Test
     fun `should call repository with trimmed query when query has leading or trailing spaces`() =
         runTest {
-            // Given
+
             val rawQuery = "  horror "
             val trimmedQuery = "horror"
 
             coEvery { repository.getSearchKeywords(trimmedQuery) } returns flowOf(emptyList())
 
-            // When
-            useCase(rawQuery).first() // Collect the flow to trigger the repository call
+            useCase(rawQuery).first()
 
-            // Then
             coVerify { repository.getSearchKeywords(trimmedQuery) }
         }
 

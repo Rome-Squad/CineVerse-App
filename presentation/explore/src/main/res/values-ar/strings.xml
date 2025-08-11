@@ -16,4 +16,22 @@
     <string name="nothing_found">لم يتم العثور على شيء!</string>
     <string name="we_searched_the_entire_universe_but_found_nothing_matching_your_query_try_something_else">بحثنا في الكون كله... ولم نجد شيئًا يُطابق استفسارك. هل تُجرِّب شيئًا آخر؟</string>
     <string name="recording">تسجيل…</string>
+    <string name="speak_to_search">تحدث للبحث...</string>
+    <string name="audio_recording_error">خطأ في تسجيل الصوت</string>
+    <string name="client_side_error">خطأ في جهة العميل</string>
+    <string name="insufficient_permissions">الأذونات غير كافية</string>
+    <string name="no_speech_input">لم يتم إدخال صوت</string>
+    <string name="server_error">خطأ في الخادم</string>
+    <string name="speech_recognizer_is_busy">جهاز التعرف على الصوت مشغول</string>
+    <string name="no_match_found">لم يتم العثور على تطابق</string>
+    <string name="unknown_error">خطأ غير معروف</string>
+    <string name="network_error">خطأ في الشبكة</string>
+    <string name="network_timeout">انتهت مهلة الشبكة</string>
+    <string name="navigate">انتقال</string>
+    <string name="viewtoggleanimation">تحريك تبديل العرض</string>
+    <string name="explore_screen">شاشة الاستكشاف</string>
+    <string name="search_screen">شاشة البحث</string>
+    <string name="search_result_screen">شاشة نتائج البحث</string>
+
+
 </resources>

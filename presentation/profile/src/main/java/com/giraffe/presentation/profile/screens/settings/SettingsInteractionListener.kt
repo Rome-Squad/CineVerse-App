@@ -11,8 +11,10 @@ interface SettingsInteractionListener {
     fun onConfirmLogout()
     fun onGoToWebsiteClick()
     fun onDismissSheet()
-    fun onCancelClick()
     fun onContentPreferencesClick()
     fun onLanguageChange(languageCode: String)
     fun onContentPreferenceChange(preference: ContentPreference)
+    fun onNavigateToMyCollections()
+    fun onNavigateToHistory()
+    fun onNavigateToRatings()
 }

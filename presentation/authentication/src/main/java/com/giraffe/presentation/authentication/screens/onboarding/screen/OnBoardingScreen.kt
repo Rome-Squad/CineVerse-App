@@ -16,14 +16,17 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.presentation.authentication.screens.onboarding.composable.ImagePager
 import com.giraffe.presentation.authentication.screens.onboarding.composable.OnBoardingFooter
-import com.giraffe.presentation.authentication.utils.mapExceptionToStringRes
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.authentication.R
+import com.giraffe.presentation.authentication.utils.EffectListener
+import com.giraffe.presentation.authentication.utils.showToast
+import com.giraffe.presentation.authentication.utils.toStringResource
 
 @Composable
 fun OnBoardingScreen(
@@ -31,17 +34,19 @@ fun OnBoardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToLoginScreen: () -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is OnboardingEffect.NavigateToLogin -> navigateToLoginScreen()
-                is OnboardingEffect.ShowError -> {
-                     mapExceptionToStringRes(effect.throwable)
 
-                }
+    val context = LocalContext.current
+
+    EffectListener(events=viewModel.effect) {
+
+            when (it) {
+                is OnboardingEffect.NavigateToLogin -> navigateToLoginScreen()
+                is OnboardingEffect.ShowError ->
+                    context.showToast(context.getString(it.throwable.toStringResource()))
             }
+
         }
-    }
+
 
     OnBoardingContent(
         modifier = modifier,

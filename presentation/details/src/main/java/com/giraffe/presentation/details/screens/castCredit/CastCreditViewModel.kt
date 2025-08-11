@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.screens.castCredit
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
@@ -13,6 +14,7 @@ import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class CastCreditViewModel @Inject constructor(
@@ -44,6 +46,12 @@ class CastCreditViewModel @Inject constructor(
     }
 
     private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = false
+            )
+        }
         safeExecute(
             onError = ::loadCastCreditError,
             onSuccess = ::updateCastCreditPosters
@@ -74,8 +82,18 @@ class CastCreditViewModel @Inject constructor(
 
 
     private fun loadCastCreditError(exception: Throwable) {
-        updateState { it.copy(isLoading = false) }
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = exception is NoInternetException ||
+                        exception is UserNoInternetException
+            )
+        }
         sendEffect(CastCreditEffect.Error(exception))
+    }
+
+    override fun onBackClick() {
+        sendEffect(CastCreditEffect.NavigateBack)
     }
 
     override fun onPosterClick(mediaId: Int, mediaType: String) {

@@ -2,6 +2,7 @@ package com.giraffe.presentation.details.screens.castDetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.AddCastToRecentCastUseCase
@@ -15,6 +16,7 @@ import com.giraffe.presentation.details.utils.toSocialMediaUi
 import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class CastDetailsViewModel @Inject constructor(
@@ -30,11 +32,10 @@ class CastDetailsViewModel @Inject constructor(
     CastDetailsInteractionListener {
 
     init {
-        getCastCredits(state.value.actorId)
-        getPersonDetails(state.value.actorId)
+        getCastDetailsAndCredits(state.value.actorId)
     }
 
-    private fun getPersonDetails(personId: Int) {
+    private fun getCastDetailsAndCredits(personId: Int) {
         updateState { it.copy(isLoading = true) }
 
         safeExecute(
@@ -42,6 +43,7 @@ class CastDetailsViewModel @Inject constructor(
             onError = ::getPersonDetailsError,
             block = { getCastDetailsUseCase(personId) }
         )
+        getCastCredits(state.value.actorId)
     }
 
 
@@ -61,6 +63,7 @@ class CastDetailsViewModel @Inject constructor(
             it.copy(
                 actorId = castMember.id,
                 isLoading = false,
+                isNoInternet = false,
                 actorImageUrl = castMember.imageUrl.orEmpty(),
                 actorName = castMember.name,
                 actorBirth = castMember.birthday.orEmpty(),
@@ -76,6 +79,8 @@ class CastDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = exception is NoInternetException ||
+                        exception is UserNoInternetException
             )
         }
 
@@ -134,7 +139,7 @@ class CastDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun onBackArrowClick() {
-        sendEffect(CastDetailsEffect.NavigateUp)
+    override fun onBackClick() {
+        sendEffect(CastDetailsEffect.NavigateBack)
     }
 }

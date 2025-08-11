@@ -1,17 +1,14 @@
 package com.giraffe.presentation.details.screens.castDetails
 
 import android.content.Intent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -30,21 +27,19 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.PosterListSection
-import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.components.LoadingView
 import com.giraffe.presentation.details.components.MainDetails
 import com.giraffe.presentation.details.components.gallery.GallerySection
-import com.giraffe.presentation.details.model.SocialMediaUi
 import com.giraffe.presentation.details.utils.EventListener
+import com.giraffe.presentation.details.utils.showToast
+import com.giraffe.presentation.details.utils.toStringResource
 
 @Composable
 fun CastDetailsScreen(
@@ -53,7 +48,6 @@ fun CastDetailsScreen(
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     onBackButtonClick: () -> Unit,
-    modifier: Modifier = Modifier,
     castDetailsViewModel: CastDetailsViewModel = hiltViewModel()
 ) {
     val state by castDetailsViewModel.state.collectAsState()
@@ -67,53 +61,32 @@ fun CastDetailsScreen(
                 context.startActivity(intent)
             }
 
-            is CastDetailsEffect.NavigateToGallery -> navigateToGallery(it.actorName, it.personId)
+            is CastDetailsEffect.NavigateToGallery ->
+                navigateToGallery(it.actorName, it.personId)
+
             is CastDetailsEffect.NavigateToCastCredit -> navigateToCastCredit(
                 it.castID,
                 it.actorName
             )
 
-            is CastDetailsEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
-            is CastDetailsEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
-            is CastDetailsEffect.NavigateUp -> onBackButtonClick()
-            is CastDetailsEffect.ShowError -> {
+            is CastDetailsEffect.NavigateToMovieDetails ->
+                navigateToMovieDetails(it.movieId)
 
+            is CastDetailsEffect.NavigateToSeriesDetails ->
+                navigateToSeriesDetails(it.seriesId)
+
+            is CastDetailsEffect.NavigateBack -> onBackButtonClick()
+
+            is CastDetailsEffect.ShowError -> {
+                context.showToast(it.exception.toStringResource())
             }
         }
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .wrapContentSize()
-    ) {
-        CastDetailsContent(
-            state = state,
-            interaction = castDetailsViewModel,
-            modifier = modifier,
-        )
-
-        if (state.isLoading) LoadingView()
-
-        AnimatedVisibility(
-            visible = !state.errorMessage.isNullOrBlank(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .background(Theme.color.shade.primary)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            Text(
-                text = state.errorMessage
-                    ?: stringResource(R.string.unknown_error),
-                color = Theme.color.additional.primary.red,
-                textAlign = TextAlign.Center,
-                style = Theme.textStyle.label.md.regular
-            )
-        }
-    }
+    CastDetailsContent(
+        state = state,
+        interaction = castDetailsViewModel
+    )
 }
 
 @Composable
@@ -137,21 +110,26 @@ fun CastDetailsContent(
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y.toInt()
+
                 if (
                     (scrollState.firstVisibleItemIndex != 0 || scrollState.firstVisibleItemScrollOffset != 0)
                     && delta > 0
                 ) {
                     return Offset(consumedX.toFloat(), consumedY.toFloat())
                 }
+
                 val newImageWidth = imageWidth + delta
                 val previousImageWidth = imageWidth
                 imageWidth = newImageWidth.coerceIn(40, 64)
+
                 val newImageHeight = imageHeight + delta
                 val previousImageHeight = imageHeight
                 imageHeight = newImageHeight.coerceIn(40, 80)
+
                 animationProgress = 1f - (imageHeight - 40) / 40f
                 consumedX = imageWidth - previousImageWidth
                 consumedY = imageHeight - previousImageHeight
+
                 return Offset(consumedX.toFloat(), consumedY.toFloat())
             }
         }
@@ -173,18 +151,21 @@ fun CastDetailsContent(
                     AppBar(
                         showBackButton = true,
                         hasBackground = false,
-                        onBackButtonClick = interaction::onBackArrowClick,
+                        onBackButtonClick = interaction::onBackClick,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
 
-                    MainDetailsAnimatedContent(
-                        actorImageUrl = state.actorImageUrl,
+                    MainDetails(
                         actorName = state.actorName,
                         actorBirthday = state.actorBirth,
                         actorPlaceOfBirth = state.actorPlace,
                         socialMediaUiList = state.socialMediaUiList,
-                        onSocialMediaLinkClick = interaction::onSocialMediaLinkClick,
-                        animationProgress = animationProgress
+                        onLinkClick = interaction::onSocialMediaLinkClick,
+                        actorImageUrl = state.actorImageUrl,
+                        animationProgress = animationProgress,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 72.dp - 72.dp * animationProgress)
                     )
 
                     if (animationProgress == 1f) {
@@ -241,28 +222,5 @@ fun CastDetailsContent(
             }
         }
     }
-}
 
-@Composable
-private fun MainDetailsAnimatedContent(
-    actorName: String,
-    actorBirthday: String,
-    actorPlaceOfBirth: String,
-    actorImageUrl: String?,
-    socialMediaUiList: List<SocialMediaUi>,
-    onSocialMediaLinkClick: (String) -> Unit,
-    animationProgress: Float
-) {
-    MainDetails(
-        actorName = actorName,
-        actorBirthday = actorBirthday,
-        actorPlaceOfBirth = actorPlaceOfBirth,
-        socialMediaUiList = socialMediaUiList,
-        onLinkClick = onSocialMediaLinkClick,
-        actorImageUrl = actorImageUrl,
-        animationProgress = animationProgress,
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .padding(top = 72.dp - 72.dp * animationProgress)
-    )
 }

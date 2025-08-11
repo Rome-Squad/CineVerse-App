@@ -16,18 +16,18 @@ import androidx.navigation.toRoute
 import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.home.navigation.main.CollectionRoute
-import com.giraffe.presentation.home.navigation.main.MovieDetailsRoute
-import com.giraffe.presentation.home.navigation.main.SeriesDetailsRoute
-import com.giraffe.presentation.home.navigation.main.YourCollectionsRoute
-import com.giraffe.presentation.home.navigation.main.navigateToCollection
-import com.giraffe.presentation.home.navigation.main.navigateToMovieDetails
-import com.giraffe.presentation.home.navigation.main.navigateToSeriesDetails
-import com.giraffe.presentation.home.navigation.main.navigateToYourCollections
-import com.giraffe.presentation.home.screen.home.HomeRoute
-import com.giraffe.presentation.home.screen.home.homeRoute
-import com.giraffe.presentation.home.screen.show_more.navigateToShowMore
-import com.giraffe.presentation.home.screen.show_more.showMoreRoute
+import com.giraffe.presentation.home.navigation.home.routes.CollectionRoute
+import com.giraffe.presentation.home.navigation.home.routes.MovieDetailsRoute
+import com.giraffe.presentation.home.navigation.home.routes.SeriesDetailsRoute
+import com.giraffe.presentation.home.navigation.home.routes.YourCollectionsRoute
+import com.giraffe.presentation.home.navigation.home.routes.navigateToCollection
+import com.giraffe.presentation.home.navigation.home.routes.navigateToMovieDetails
+import com.giraffe.presentation.home.navigation.home.routes.navigateToSeriesDetails
+import com.giraffe.presentation.home.navigation.home.routes.navigateToYourCollections
+import com.giraffe.presentation.home.navigation.home.routes.HomeRoute
+import com.giraffe.presentation.home.navigation.home.routes.homeRoute
+import com.giraffe.presentation.home.navigation.home.routes.navigateToShowMore
+import com.giraffe.presentation.home.navigation.home.routes.showMoreRoute
 
 
 

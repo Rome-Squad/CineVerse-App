@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -11,20 +10,29 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
-import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.authentication.AuthenticationApi
-import com.giraffe.explore.ExploreApi
-import com.giraffe.presentation.profile.edit.editProfileWebViewRoute
-import com.giraffe.presentation.profile.screens.collections.collection.collectionRoute
-import com.giraffe.presentation.profile.screens.collections.collection.navigateToCollection
-import com.giraffe.presentation.profile.screens.collections.mycollections.myCollectionsRoute
-import com.giraffe.presentation.profile.screens.collections.mycollections.navigateToMyCollections
-import com.giraffe.presentation.profile.screens.history.historyRoute
-import com.giraffe.presentation.profile.screens.history.navigateToHistory
-import com.giraffe.presentation.profile.screens.ratings.navigateToRatings
-import com.giraffe.presentation.profile.screens.ratings.ratingsRoute
-import com.giraffe.presentation.profile.screens.settings.SettingsScreenRoute
-import com.giraffe.presentation.profile.screens.settings.settingsScreenRoute
+import com.giraffe.api.details.DetailsApi
+import com.giraffe.api.explore.ExploreApi
+import com.giraffe.presentation.profile.navigation.routes.ExploreRoute
+import com.giraffe.presentation.profile.navigation.routes.MovieDetailsRoute
+import com.giraffe.presentation.profile.navigation.routes.SeriesDetailsRoute
+import com.giraffe.presentation.profile.navigation.routes.SettingsScreenRoute
+import com.giraffe.presentation.profile.navigation.routes.collectionRoute
+import com.giraffe.presentation.profile.navigation.routes.historyRoute
+import com.giraffe.presentation.profile.navigation.routes.loginRoute
+import com.giraffe.presentation.profile.navigation.routes.myCollectionsRoute
+import com.giraffe.presentation.profile.navigation.routes.navigateLoginScreen
+import com.giraffe.presentation.profile.navigation.routes.navigateToCollection
+import com.giraffe.presentation.profile.navigation.routes.navigateToExploreScreen
+import com.giraffe.presentation.profile.navigation.routes.navigateToHistory
+import com.giraffe.presentation.profile.navigation.routes.navigateToMovieDetails
+import com.giraffe.presentation.profile.navigation.routes.navigateToMyCollections
+import com.giraffe.presentation.profile.navigation.routes.navigateToRatings
+import com.giraffe.presentation.profile.navigation.routes.navigateToSeriesDetails
+import com.giraffe.presentation.profile.navigation.routes.ratingsRoute
+import com.giraffe.presentation.profile.navigation.routes.settingsScreenRoute
+import editProfileWebViewRoute
+
 
 @Composable
 internal fun ProfileNavGraph(
@@ -48,7 +56,7 @@ internal fun ProfileNavGraph(
     val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
         navDestination.route?.let { route ->
             bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName .orEmpty())
+                route.contains(klass.simpleName.orEmpty())
             }
         } == true
     } == true
@@ -105,8 +113,6 @@ internal fun ProfileNavGraph(
         )
 
         collectionRoute(
-            modifier = Modifier
-                .fillMaxSize(),
             navigateBack = {
                 if (navigateBack != null) {
                     navigateBack()

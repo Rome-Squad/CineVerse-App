@@ -13,6 +13,6 @@ data class CastDetailsUiState(
     val actorGalleryImageUrls: List<String> = emptyList(),
     val posters: List<Poster> = emptyList(),
     val isLoading: Boolean = true,
-    val errorMessage: String? = null,
+    val isNoInternet: Boolean = false,
     val socialMediaUiList: List<SocialMediaUi> = emptyList()
 )

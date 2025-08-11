@@ -24,3 +24,6 @@
 -keepattributes SourceFile,LineNumberTable
 
 -keepattributes KotlinMetadata
+
+-keep class com.giraffe.**.Route { *; }
+-keep class com.giraffe.**Route { *; }

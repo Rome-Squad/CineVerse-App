@@ -26,19 +26,19 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.model.SelectionType
 
-
 @Composable
 fun SelectionItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     type: SelectionType = SelectionType.CARD,
-    icon: Painter = painterResource(Theme.icons.dueTone.headphone),
+    icon: Painter? = painterResource(Theme.icons.dueTone.headphone),
     description: String,
+    secondDescription: String? = null,
+    isSecondaryCardType: Boolean = false,
     horizontalPadding: Dp? = null,
     verticalPadding: Dp? = null,
     onClick: () -> Unit = {}
 ) {
-
     val backgroundColor by animateColorAsState(
         targetValue = if (isSelected) Theme.color.brand.tertiary else Theme.color.background.card,
         label = "BackgroundColor"
@@ -47,10 +47,11 @@ fun SelectionItem(
         targetValue = if (isSelected) Theme.color.brand.secondary else Theme.color.brand.tertiary,
         label = "IconBackgroundColor"
     )
-    val textColor by animateColorAsState(
+    val firstTextColor by animateColorAsState(
         targetValue = if (isSelected) Theme.color.brand.primary else Theme.color.shade.primary,
-        label = "TextColor"
+        label = "FirstTextColor"
     )
+
     val borderColor by animateColorAsState(
         targetValue = if (isSelected) Theme.color.brand.secondary else Color.Transparent,
         label = "BorderColor"
@@ -70,38 +71,58 @@ fun SelectionItem(
                 shape = RoundedCornerShape(Theme.radius.lg),
                 color = borderColor
             )
-            .clip(
-                shape = RoundedCornerShape(Theme.radius.lg)
-            )
+            .clip(RoundedCornerShape(Theme.radius.lg))
             .clickable(onClick = onClick)
             .padding(
                 horizontal = horizontalPadding,
                 vertical = verticalPadding,
             ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = if (type == SelectionType.CHIP) Arrangement.Center else Arrangement.spacedBy(12.dp)
     ) {
         if (type == SelectionType.CARD) {
-            Icon(
+            icon?.let {
+                Icon(
+                    modifier = Modifier
+                        .background(
+                            color = iconBackgroundColor,
+                            shape = RoundedCornerShape(Theme.radius.md)
+                        )
+                        .padding(8.dp),
+                    painter = it,
+                    tint = Theme.color.brand.primary,
+                    contentDescription = null
+                )
+            }
+        }
+        if (isSecondaryCardType && secondDescription != null) {
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    color = firstTextColor,
+                    text = description,
+                    style = Theme.textStyle.body.md.medium
+                )
+                Text(
+                    color = Theme.color.shade.secondary,
+                    text = secondDescription,
+                    style = Theme.textStyle.body.md.regular,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
+        } else {
+            Text(
+                color = firstTextColor,
+                text = description,
+                style = Theme.textStyle.body.md.medium,
                 modifier = Modifier
-                    .background(
-                        color = iconBackgroundColor,
-                        shape = RoundedCornerShape(Theme.radius.md)
-                    )
-                    .padding(8.dp),
-                painter = icon,
-                tint = Theme.color.brand.primary,
-                contentDescription = "headphone icon"
             )
         }
-        Text(
-            color = textColor,
-            text = description,
-            style = Theme.textStyle.body.md.medium
-        )
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun SelectionItemPreview() {

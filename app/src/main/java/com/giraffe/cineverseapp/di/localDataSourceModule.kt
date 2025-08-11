@@ -1,9 +1,9 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.media.explore.LocalExploreDataSourceImpl
+import com.giraffe.media.explore.LocalSearchDataSourceImpl
 import com.giraffe.media.explore.cleaner.KeywordsCacheCleaner
 import com.giraffe.media.explore.cleaner.KeywordsCacheCleanerImp
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.movie.MovieLocalDataSourceImp
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.person.PersonLocalDataSourceImp
@@ -36,7 +36,7 @@ abstract class LocalDataSourceBindModule {
 
     @Binds
     @Singleton
-    abstract fun bindLocalExploreDataSource(impl: LocalExploreDataSourceImpl): LocalExploreDataSource
+    abstract fun bindLocalExploreDataSource(impl: LocalSearchDataSourceImpl): LocalSearchDataSource
 
     @Binds
     @Singleton
