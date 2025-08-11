@@ -100,10 +100,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetYourCollectionsSuccess(collections: List<Collection>) {
-        val yourCollections = collections.map { it.toUi() }
         updateState { currentState ->
             currentState.copy(
-                yourCollections = yourCollections, isNoInternet = false, isLoading = false
+                yourCollections = collections.map(Collection::toUi),
+                isNoInternet = false,
+                isLoading = false
             )
         }
     }
@@ -116,10 +117,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetFeaturedCollectionSuccess(genres: List<Genre>) {
-        val featuredCollection = genres.map { it.toFeaturedCollectionUi() }
         updateState {
             it.copy(
-                featuredCollections = featuredCollection,
+                featuredCollections = genres.map(Genre::toFeaturedCollectionUi),
                 isNoInternet = false,
                 isLoading = false
             )
@@ -142,7 +142,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetPopularityMoviesSuccess(movies: List<Movie>) {
-        viewModelScope.launch {
+        safeExecute {
             val popularMoviesUi = movies.map { movie ->
                 val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
                 movie.toPopularMediaUi(genres)
@@ -159,7 +159,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetPopularitySeriesSuccess(series: List<Series>) {
-        viewModelScope.launch {
+        safeExecute {
             val popularSeriesUi = series.map { seriesList ->
                 val genres = getSeriesGenresByIdsUseCase(seriesList.genreIDs).map { it.title }
                 seriesList.toPopularMediaUi(genres)
@@ -191,11 +191,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetRecentlyReleasedMoviesSuccess(movies: List<Movie>) {
-        val recentMoviesUi = movies.map { it.toPoster() }
         updateState { currentState ->
             currentState.copy(
                 recentlyReleased =
-                    currentState.recentlyReleased + recentMoviesUi,
+                    currentState.recentlyReleased + movies.map(Movie::toPoster),
                 isNoInternet = false,
                 isLoading = false
             )
@@ -203,11 +202,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetRecentlyReleasedSeriesSuccess(series: List<Series>) {
-        val recentSeriesUi = series.map { it.toPoster() }
         updateState { currentState ->
             currentState.copy(
                 recentlyReleased =
-                    currentState.recentlyReleased + recentSeriesUi,
+                    currentState.recentlyReleased + series.map(Series::toPoster),
                 isNoInternet = false,
                 isLoading = false
             )
@@ -223,10 +221,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetTopRatedSeriesSuccess(series: List<Series>) {
-        val topRatedUi = series.map { it.toPoster() }
         updateState { currentState ->
             currentState.copy(
-                topRated = currentState.topRated + topRatedUi,
+                topRated = currentState.topRated + series.map(Series::toPoster),
                 isNoInternet = false,
                 isLoading = false
             )
@@ -242,10 +239,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetUpcomingMoviesSuccess(movies: List<Movie>) {
-        val upcomingUi = movies.map { it.toPoster() }
         updateState { currentState ->
             currentState.copy(
-                upcomingMovies = currentState.upcomingMovies + upcomingUi,
+                upcomingMovies = currentState.upcomingMovies + movies.map(Movie::toPoster),
                 isNoInternet = false,
                 isLoading = false
             )

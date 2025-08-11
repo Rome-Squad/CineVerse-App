@@ -42,19 +42,13 @@ fun ShowMoreScreen(
     LaunchedEffect(Unit) {
         showMoreViewModel.effect.collect { effect ->
             when (effect) {
-                is ShowMoreEffect.NavigateToMovieDetails -> {
-                    navigateToMoviesDetailsScreen(effect.movieId)
-                }
+                is ShowMoreEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
 
-                is ShowMoreEffect.NavigateToSeriesDetails -> {
-                    navigateToSeriesDetailsScreen(effect.seriesId)
-                }
+                is ShowMoreEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
 
-                ShowMoreEffect.OnBackClick -> {
-                    onBackClick()
-                }
+                ShowMoreEffect.OnBackClick -> onBackClick()
 
-                is ShowMoreEffect.ShowError -> {context.showToast(effect.error.toStringRes())}
+                is ShowMoreEffect.ShowError -> context.showToast(effect.error.toStringRes())
             }
         }
     }

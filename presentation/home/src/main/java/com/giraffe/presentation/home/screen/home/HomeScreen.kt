@@ -63,19 +63,19 @@ fun HomeScreen(
             is HomeEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
             is HomeEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
             is HomeEffect.NavigateToExploreScreen -> navigateToExploreScreen()
-            is HomeEffect.NavigateToFeaturedCollection -> {
-                navigateToFeaturedCollection(effect.collectionId, effect.collectionTitle)
-            }
+            is HomeEffect.NavigateToFeaturedCollection -> navigateToFeaturedCollection(
+                effect.collectionId,
+                effect.collectionTitle
+            )
 
-            is HomeEffect.NavigateToCollection -> {
-                navigateToCollection(effect.collectionId, effect.collectionName)
-            }
+            is HomeEffect.NavigateToCollection -> navigateToCollection(
+                effect.collectionId,
+                effect.collectionName
+            )
 
             is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
             is HomeEffect.NavigateToMatchScreen -> navigateToMatchScreen()
-            is HomeEffect.NavigateToShowMore -> {
-                navigateToShowMoreScreen(effect.sectionType)
-            }
+            is HomeEffect.NavigateToShowMore -> navigateToShowMoreScreen(effect.sectionType)
 
             is HomeEffect.ShowError -> context.showToast(effect.error.toStringRes())
         }

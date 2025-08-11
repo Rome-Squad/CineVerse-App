@@ -23,10 +23,10 @@ import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.MatchApi
 import com.giraffe.presentation.home.navigation.home.HomeNavGraph
-import com.giraffe.presentation.home.navigation.main.routes.HomeRoute
-import com.giraffe.presentation.home.navigation.main.routes.HomeTab
 import com.giraffe.presentation.home.navigation.main.routes.ExploreRoute
 import com.giraffe.presentation.home.navigation.main.routes.ExploreTab
+import com.giraffe.presentation.home.navigation.main.routes.HomeRoute
+import com.giraffe.presentation.home.navigation.main.routes.HomeTab
 import com.giraffe.presentation.home.navigation.main.routes.MatchRoute
 import com.giraffe.presentation.home.navigation.main.routes.MatchTab
 import com.giraffe.presentation.home.navigation.main.routes.ProfileRoute
