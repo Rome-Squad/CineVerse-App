@@ -2,11 +2,9 @@ package com.giraffe.presentation.details.screens.moviedetails
 
 sealed interface MovieDetailsEffect {
 
-    object NavigateToCollection : MovieDetailsEffect
-
     object NavigateToLogin : MovieDetailsEffect
 
-    object NavigateUp : MovieDetailsEffect
+    object NavigateBack : MovieDetailsEffect
 
     data class NavigateToYouTubePlayer(val url: String) : MovieDetailsEffect
 

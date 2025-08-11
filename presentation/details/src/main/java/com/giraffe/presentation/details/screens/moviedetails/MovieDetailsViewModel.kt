@@ -62,7 +62,7 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = true,
-                isNetworkError = false,
+                isNoInternet = false,
             )
         }
 
@@ -162,7 +162,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onBackButtonClick() {
-        sendEffect(MovieDetailsEffect.NavigateUp)
+        sendEffect(MovieDetailsEffect.NavigateBack)
     }
 
     override fun onPlayButtonClick(url: String) {
@@ -420,7 +420,7 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                isNetworkError = isNetworkError
+                isNoInternet = isNetworkError
             )
         }
 
