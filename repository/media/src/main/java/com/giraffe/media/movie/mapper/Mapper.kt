@@ -58,7 +58,7 @@ fun Movie.toCacheDto() = MovieCacheDto(
             it else
             BASE_IMAGE_URL + it
     },
-    youtubeVideoId = youtubeVideoId.orEmpty(),
+    youtubeVideoId = youtubeVideoId,
     genresID = genresID,
     releaseDate = releaseYear.orEmpty(),
     duration = duration,
@@ -86,7 +86,7 @@ fun MovieDto.toEntity(
     }.orEmpty(),
     genresID = genresID.ifEmpty { genres.map { it.id } },
     releaseYear = releaseDate?.let { LocalDate.parse(it) },
-    youtubeVideoId = youtubeVideoId,
+    youtubeVideoId = youtubeVideoId.orEmpty(),
     recentViewedAt = recentViewedAt,
     popularity = popularity.orEmpty(),
     userRating = userRating

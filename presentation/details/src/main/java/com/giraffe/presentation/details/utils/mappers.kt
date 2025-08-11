@@ -68,7 +68,7 @@ fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     genresID = genresID,
     genres = genres.map { it.title },
     releaseYear = releaseYear.toFormattedDate(),
-    youtubeVideoId = youtubeVideoId.orEmpty(),
+    youtubeVideoId = youtubeVideoId,
 )
 
 fun MovieUi.toPoster() = Poster(

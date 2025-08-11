@@ -41,7 +41,7 @@ fun CollectionItemDto.toMovie() = Movie(
             it
         else BASE_IMAGE_URL + it
     }.orEmpty(),
-    youtubeVideoId = null,
+    youtubeVideoId = "",
     genresID = genreIds,
     releaseYear = releaseDate?.let { LocalDate.parse(it) },
     recentViewedAt = null,

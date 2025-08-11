@@ -13,7 +13,7 @@ data class Movie(
     val genresID: List<Int>,
     val releaseYear: LocalDate?,
     val duration: Int?,
-    val youtubeVideoId: String?,
+    val youtubeVideoId: String,
     val popularity: Float,
     val userRating: Float?,
     val recentViewedAt: Long?,
