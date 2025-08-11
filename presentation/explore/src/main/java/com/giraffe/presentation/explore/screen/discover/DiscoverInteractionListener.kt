@@ -10,4 +10,5 @@ interface DiscoverInteractionListener {
     fun onGenreSelected(genre: GenreUi)
     fun onPosterClick(mediaId: Int, selectedTab: SearchTab)
     fun onSearchClick()
+    fun retry()
 }

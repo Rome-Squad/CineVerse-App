@@ -20,7 +20,7 @@ fun NavGraphBuilder.castCreditRoute(
 ) {
     composable<CastCreditRoute> { backStackEntry ->
         CastCreditScreen(
-            onBackClick = onBackClick,
+            navigateBack = onBackClick,
             navigateToSeriesDetails = navigateToSeriesDetails,
             navigateToMovieDetails = navigateToMovieDetails
         )

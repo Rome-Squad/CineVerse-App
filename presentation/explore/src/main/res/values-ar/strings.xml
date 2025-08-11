@@ -27,5 +27,11 @@
     <string name="unknown_error">خطأ غير معروف</string>
     <string name="network_error">خطأ في الشبكة</string>
     <string name="network_timeout">انتهت مهلة الشبكة</string>
+    <string name="navigate">انتقال</string>
+    <string name="viewtoggleanimation">تحريك تبديل العرض</string>
+    <string name="explore_screen">شاشة الاستكشاف</string>
+    <string name="search_screen">شاشة البحث</string>
+    <string name="search_result_screen">شاشة نتائج البحث</string>
+
 
 </resources>

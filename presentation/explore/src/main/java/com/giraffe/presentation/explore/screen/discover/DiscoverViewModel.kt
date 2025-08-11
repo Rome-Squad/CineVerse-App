@@ -42,6 +42,8 @@ class DiscoverViewModel @Inject constructor(
 
 
     private fun getMovieGenres() {
+        updateState { it.copy(isLoading = true, isNoInternet = false) }
+
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
             onError = ::onError,
@@ -61,6 +63,8 @@ class DiscoverViewModel @Inject constructor(
     }
 
     private fun getSeriesGenres() {
+        updateState { it.copy(isLoading = true, isNoInternet = false) }
+
         safeExecute(
             onSuccess = ::getSeriesGenresSuccess,
             onError = ::onError,
@@ -72,20 +76,22 @@ class DiscoverViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                seriesGenres = genres.map(Genre::toUi)
+                seriesGenres = genres.map(Genre::toUi),
             )
         }
         getSeriesByGenre()
     }
 
     override fun getMoviesByGenre(genreId: Int) {
+        updateState { it.copy(isLoading = true, isNoInternet = false) }
+
         safeExecute(
             onError = ::onError,
             onSuccess = ::onGetMovieGenresSuccess
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
                 BasePagingSource(
-                    error = ::onError,
+                    onError = ::onError,
                 ) { page -> getMoviesByGenresUseCase(genreId, page) }
             }.flow.cachedIn(viewModelScope)
         }
@@ -96,21 +102,22 @@ class DiscoverViewModel @Inject constructor(
             pagingData.map { movie -> movie.toPoster(state.value.moviesGenres) }
         }
 
-        updateState { it.copy(moviesPosters = postersFlow) }
+        updateState { it.copy(moviesPosters = postersFlow, isLoading = false) }
+
         if (state.value.selectedTab == SearchTab.MOVIES) {
-            updateState { it.copy(selectedPosters = postersFlow) }
+            updateState { it.copy(selectedPosters = postersFlow, isLoading = false) }
         }
     }
 
     override fun getSeriesByGenre(genreId: Int) {
+        updateState { it.copy(isLoading = true, isNoInternet = false) }
+
         safeExecute(
             onError = ::onError,
             onSuccess = ::onGetSeriesGenresSuccess
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource(
-                    error = ::onError,
-                ) { page -> getSeriesByGenresUseCase(genreId, page) }
+                BasePagingSource { page -> getSeriesByGenresUseCase(genreId, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
@@ -120,14 +127,14 @@ class DiscoverViewModel @Inject constructor(
             pagingData.map { series -> series.toPoster(state.value.seriesGenres) }
         }
 
-        updateState { it.copy(seriesPosters = postersFlow) }
+        updateState { it.copy(seriesPosters = postersFlow, isLoading = false) }
         if (state.value.selectedTab == SearchTab.SERIES) {
-            updateState { it.copy(selectedPosters = postersFlow) }
+            updateState { it.copy(selectedPosters = postersFlow, isLoading = false) }
         }
     }
 
     override fun onViewChanged(isGrid: Boolean) {
-        updateState { it.copy(isGridSelected = isGrid) }
+        updateState { it.copy(isGridSelected = isGrid, isLoading = false) }
     }
 
     override fun onGenreSelected(genre: GenreUi) {
@@ -150,6 +157,11 @@ class DiscoverViewModel @Inject constructor(
 
     override fun onSearchClick() {
         sendEffect(DiscoverEffect.NavigateToSearchScreen)
+    }
+
+    override fun retry() {
+        getSeriesGenres()
+        getMovieGenres()
     }
 
     override fun onTabSelected(tabIndex: Int) {
@@ -175,7 +187,6 @@ class DiscoverViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun onError(error: Throwable) {
         updateState {

@@ -62,7 +62,8 @@ class SearchViewModel @Inject constructor(
         updateState {
             it.copy(
                 recentPosters = (it.recentPosters + movies.map(Movie::toPoster)).distinctBy { poster -> poster.id },
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
@@ -70,14 +71,16 @@ class SearchViewModel @Inject constructor(
     private fun onGetRecentlySeriesSuccess(series: List<Series>) {
         updateState {
             it.copy(
-                recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id }
+                recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id },
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
 
     private var searchJob: Job? = null
     override fun onQueryChange(query: String) {
-        updateState { it.copy(isNoInternet = false) }
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
         searchJob?.cancel()
         searchJob = safeExecute {
             updateState { it.copy(query) }
@@ -87,7 +90,9 @@ class SearchViewModel @Inject constructor(
                 updateState {
                     it.copy(
                         keywords = (keywords - recentKeywords).map { searchKeyword -> searchKeyword.keyword },
-                        recentKeywords = recentKeywords.map { searchKeyword -> searchKeyword.keyword }
+                        recentKeywords = (recentKeywords.map { searchKeyword -> searchKeyword.keyword }),
+                        isLoading = false,
+                        isNoInternet = false
                     )
                 }
             }
@@ -159,6 +164,11 @@ class SearchViewModel @Inject constructor(
 
     override fun onSearchClick(result: String) {
         sendEffect(SearchEffect.NavigateToSearchResult(result))
+    }
+
+    override fun retry() {
+        onQueryChange()
+        getRecentViewed()
     }
 
     private fun onError(error: Throwable) {

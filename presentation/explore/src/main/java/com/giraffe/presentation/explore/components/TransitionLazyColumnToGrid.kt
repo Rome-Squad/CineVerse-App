@@ -22,9 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.explore.R
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -73,7 +75,7 @@ fun TransitionLazyColumnToGrid(
         AnimatedContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             targetState = isListSelected,
-            label = "ViewToggleAnimation",
+            label = stringResource(R.string.viewtoggleanimation),
             transitionSpec = {
                 (fadeIn(animationSpec = tween(220, delayMillis = 90, easing = EaseIn)) +
                         scaleIn(

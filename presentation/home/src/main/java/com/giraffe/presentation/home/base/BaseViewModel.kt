@@ -1,24 +1,15 @@
 package com.giraffe.presentation.home.base
 
-import android.util.Log
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.giraffe.media.exception.AccessDeniedException
-import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.exception.NotFoundException
-import com.giraffe.media.exception.UnknownException
-import com.giraffe.media.exception.ValidationException
-import com.giraffe.presentation.home.R
-import com.giraffe.user.exception.FailedToGetUserName
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,6 +20,40 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
 
     private val _effect = Channel<E>()
     val effect = _effect.receiveAsFlow()
+
+    protected fun <T> safeExecute(
+        onError: (Throwable) -> Unit = {},
+        onSuccess: (T) -> Unit = {},
+        coroutineScope: CoroutineScope = viewModelScope,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        block: suspend CoroutineScope.() -> T
+    ) {
+        coroutineScope.launch(dispatcher) {
+            try {
+                onSuccess(block())
+            } catch (e: Throwable) {
+                onError(e)
+            }
+        }
+    }
+
+
+    protected fun <T> safeCollect(
+        onError: (Throwable) -> Unit = {},
+        onEmitNewValue: (T) -> Unit = {},
+        coroutineScope: CoroutineScope = viewModelScope,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        block: suspend () -> Flow<T>
+    ) {
+        coroutineScope.launch(dispatcher) {
+            block()
+                .catch {
+                    onError(it)
+                }.collect {
+                    onEmitNewValue(it)
+                }
+        }
+    }
 
     protected fun updateState(updater: (S) -> S) {
         _state.update(updater)
@@ -44,46 +69,4 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         }
     }
 
-    protected fun <T> safeExecute(
-        coroutineScope: CoroutineScope = viewModelScope,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        block: suspend CoroutineScope.() -> T
-    ): Job {
-        return coroutineScope.launch(dispatcher + handler()) {
-            block()
-        }
-    }
-
-    protected fun <T> safeExecute(
-        coroutineScope: CoroutineScope = viewModelScope,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-        onSuccess: suspend (T) -> Unit,
-        onError: (Int) -> Unit,
-        block: suspend () -> T
-    ): Job {
-        return coroutineScope.launch(dispatcher + handler(onError)) {
-            onSuccess(block())
-        }
-    }
-
-
-    private fun handler(onError: (Int) -> Unit = {}): CoroutineExceptionHandler {
-        return CoroutineExceptionHandler { _, throwable ->
-            Log.d("TAG", "handler: $throwable")
-            onError(mapExceptionToStringRes(throwable))
-        }
-    }
-
-    @StringRes
-    private fun mapExceptionToStringRes(throwable: Throwable): Int {
-        return when (throwable) {
-            is AccessDeniedException -> R.string.error_access_denied
-            is ValidationException -> R.string.error_validation
-            is NotFoundException -> R.string.error_not_found
-            is UnknownException -> R.string.error_unknown
-            is NoInternetException -> R.string.error_network
-            is FailedToGetUserName -> R.string.username_error
-            else -> R.string.error_unknown
-        }
-    }
 }

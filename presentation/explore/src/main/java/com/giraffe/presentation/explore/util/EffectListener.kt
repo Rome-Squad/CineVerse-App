@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.utils
+package com.giraffe.presentation.explore.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 @Composable
-fun <T>EventListener(
+fun <T> EffectListener(
     events: Flow<T>,
     key1: Any? = null,
     key2: Any? = null,

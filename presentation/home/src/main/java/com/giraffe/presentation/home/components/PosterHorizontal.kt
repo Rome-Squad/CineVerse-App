@@ -34,13 +34,13 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
-import com.giraffe.presentation.home.screen.show_more.PosterUiState
+import com.giraffe.presentation.home.model.ShowMorePoster
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PosterHorizontal(
-    poster: PosterUiState,
+    poster: ShowMorePoster,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,
@@ -113,13 +113,15 @@ fun PosterHorizontal(
                                     animatedVisibilityScope = animatedVisibilityScope
                                 )
                         )
-                        Text(
-                            text = poster.genres ?: stringResource(R.string.unknown_genre),
-                            style = Theme.textStyle.body.sm.regular,
-                            color = Theme.color.shade.secondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        if (poster.genres.isNotEmpty()) {
+                            Text(
+                                text = poster.genres.joinToString(separator = ", "),
+                                style = Theme.textStyle.body.sm.regular,
+                                color = Theme.color.shade.secondary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                     Rating(
                         value = poster.rating,

@@ -4,6 +4,6 @@ data class GalleryUiState (
     val actorId: Int? = null,
     val actorName: String = "",
     val imageUrls: List<String?> = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val isLoading: Boolean = true,
+    val isNoInternet: Boolean = false
 )

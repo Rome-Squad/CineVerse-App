@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.screens.castDetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.usecase.AddRecentPersonUseCase
 import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
@@ -12,6 +13,7 @@ import com.giraffe.presentation.details.screens.castCredit.MediaType
 import com.giraffe.presentation.details.utils.toSocialMediaUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class CastDetailsViewModel @Inject constructor(
@@ -46,6 +48,7 @@ class CastDetailsViewModel @Inject constructor(
             it.copy(
                 actorId = person.id,
                 isLoading = false,
+                isNoInternet = false,
                 actorImageUrl = person.imageUrl.orEmpty(),
                 actorName = person.name,
                 actorBirth = person.birthday.orEmpty(),
@@ -70,6 +73,8 @@ class CastDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = exception is NoInternetException ||
+                        exception is UserNoInternetException
             )
         }
 
@@ -103,12 +108,13 @@ class CastDetailsViewModel @Inject constructor(
         when (mediaType) {
             MediaType.MOVIE.value ->
                 sendEffect(CastDetailsEffect.NavigateToMovieDetails(mediaId))
+
             MediaType.TV.value ->
                 sendEffect(CastDetailsEffect.NavigateToSeriesDetails(mediaId))
         }
     }
 
-    override fun onBackArrowClick() {
-        sendEffect(CastDetailsEffect.NavigateUp)
+    override fun onBackClick() {
+        sendEffect(CastDetailsEffect.NavigateBack)
     }
 }

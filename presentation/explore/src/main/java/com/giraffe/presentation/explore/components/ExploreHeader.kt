@@ -11,8 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,11 +20,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.DefaultTextField
 import com.giraffe.designsystem.composable.Tabs
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.explore.R
 
@@ -81,7 +77,7 @@ fun ExploreHeader(
                 endIcon = {
                     Image(
                         painter = endIcon,
-                        contentDescription = "end_icon",
+                        contentDescription = stringResource(R.string.end_icon),
                         colorFilter = ColorFilter.tint(Theme.color.shade.primary),
                         modifier = Modifier
                             .size(40.dp)
@@ -109,19 +105,5 @@ fun ExploreHeader(
                 selectedTabIndex = selectedTabIndex,
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    val (searchText, onSearchTextChange) = remember { mutableStateOf("") }
-    CineVerseTheme(isDarkTheme = true) {
-        ExploreHeader(
-            endIcon = painterResource(Theme.icons.outline.microphone),
-            value = searchText,
-            onValueChange = onSearchTextChange,
-            placeholder = "search"
-        )
     }
 }

@@ -23,6 +23,16 @@ import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.MatchApi
 import com.giraffe.presentation.home.navigation.home.HomeNavGraph
+import com.giraffe.presentation.home.navigation.main.routes.ExploreRoute
+import com.giraffe.presentation.home.navigation.main.routes.ExploreTab
+import com.giraffe.presentation.home.navigation.main.routes.HomeRoute
+import com.giraffe.presentation.home.navigation.main.routes.HomeTab
+import com.giraffe.presentation.home.navigation.main.routes.MatchRoute
+import com.giraffe.presentation.home.navigation.main.routes.MatchTab
+import com.giraffe.presentation.home.navigation.main.routes.ProfileRoute
+import com.giraffe.presentation.home.navigation.main.routes.ProfileTab
+import com.giraffe.presentation.home.navigation.main.routes.navigateToExplore
+import com.giraffe.presentation.home.navigation.main.routes.navigateToMatch
 
 @Composable
 fun MainNavGraph(
@@ -78,9 +88,12 @@ fun MainNavGraph(
     }
 
     LaunchedEffect(currentRouteString) {
-        if (currentRouteString == HomeRoute.route) {
-            isBottomBarVisible = true
-        }
+        isBottomBarVisible == currentRouteString in listOf(
+            HomeRoute.route,
+            ExploreRoute.route,
+            MatchRoute.route,
+            ProfileRoute.route
+        )
     }
 
     Column(
@@ -105,7 +118,6 @@ fun MainNavGraph(
                 ) {
                     isBottomBarVisible = it
                 }
-
             }
 
 
@@ -147,6 +159,4 @@ fun MainNavGraph(
             }
         )
     }
-
-
 }

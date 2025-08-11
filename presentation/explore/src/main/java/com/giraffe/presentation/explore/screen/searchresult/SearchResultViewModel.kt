@@ -48,16 +48,39 @@ class SearchResultViewModel @Inject constructor(
     }
 
     override fun selectTap(tabIndex: Int) {
-        updateState { it.copy(selectedTab = SearchTab.entries[tabIndex]) }
+        updateState {
+            it.copy(
+                selectedTab = SearchTab.entries[tabIndex],
+                isNoInternet = false,
+                isLoading = true
+            )
+        }
         when (state.value.selectedTab) {
-            SearchTab.MOVIES -> updateState { it.copy(selectedPosters = state.value.moviesPosters) }
-            SearchTab.SERIES -> updateState { it.copy(selectedPosters = state.value.seriesPosters) }
-            SearchTab.ACTORS -> updateState { it.copy(selectedPosters = state.value.actorsPosters) }
+            SearchTab.MOVIES -> updateState {
+                it.copy(
+                    selectedPosters = state.value.moviesPosters,
+                    isLoading = false
+                )
+            }
+
+            SearchTab.SERIES -> updateState {
+                it.copy(
+                    selectedPosters = state.value.seriesPosters,
+                    isLoading = false
+                )
+            }
+
+            SearchTab.ACTORS -> updateState {
+                it.copy(
+                    selectedPosters = state.value.actorsPosters,
+                    isLoading = false
+                )
+            }
         }
     }
 
     override fun changeView(isGrid: Boolean) {
-        updateState { it.copy(isGridSelected = isGrid) }
+        updateState { it.copy(isGridSelected = isGrid, isLoading = true, isNoInternet = false) }
     }
 
     override fun retry() {
@@ -82,26 +105,41 @@ class SearchResultViewModel @Inject constructor(
 
 
     private fun getMoviesGenres() {
+        updateState { it.copy(isLoading = true, isNoInternet = false) }
         safeExecute(
             onSuccess = { genres ->
-                updateState { it.copy(moviesGenres = genres.map(Genre::toUi)) }
+                updateState {
+                    it.copy(
+                        moviesGenres = genres.map(Genre::toUi), isLoading = false,
+                        isNoInternet = false
+                    )
+                }
             },
             onError = ::onError,
-            block = { getMoviesGenresUseCase.invoke() }
+            block = { getMoviesGenresUseCase() }
         )
     }
 
     private fun getSeriesGenres() {
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
+
         safeExecute(
             onSuccess = { genres ->
-                updateState { it.copy(seriesGenres = genres.map(Genre::toUi)) }
+                updateState {
+                    it.copy(
+                        seriesGenres = genres.map(Genre::toUi), isLoading = false,
+                        isNoInternet = false
+                    )
+                }
             },
             onError = ::onError,
-            block = { getSeriesGenresUseCase.invoke() },
+            block = { getSeriesGenresUseCase() },
         )
     }
 
     private fun getMovies() {
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
+
         safeExecute(
             onSuccess = ::onGetMoviesSuccess,
             onError = ::onError,
@@ -117,7 +155,8 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     moviesPosters = posters,
-                    isNoInternet = false
+                    isNoInternet = false,
+                    isLoading = false
                 )
             }
             if (state.value.selectedTab == SearchTab.MOVIES) updateState {
@@ -127,6 +166,8 @@ class SearchResultViewModel @Inject constructor(
     }
 
     private fun getSeries() {
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
+
         safeExecute(
             onSuccess = ::onGetSeriesSuccess,
             onError = ::onError
@@ -142,7 +183,8 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     seriesPosters = posters,
-                    isNoInternet = false
+                    isNoInternet = false,
+                    isLoading = false
                 )
             }
             if (state.value.selectedTab == SearchTab.SERIES) updateState {
@@ -152,6 +194,8 @@ class SearchResultViewModel @Inject constructor(
     }
 
     private fun getActors() {
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
+
         safeExecute(
             onSuccess = ::onGetActorsSuccess,
             onError = ::onError
@@ -167,7 +211,8 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     actorsPosters = posters,
-                    isNoInternet = false
+                    isNoInternet = false,
+                    isLoading = false
                 )
             }
             if (state.value.selectedTab == SearchTab.ACTORS) updateState {
