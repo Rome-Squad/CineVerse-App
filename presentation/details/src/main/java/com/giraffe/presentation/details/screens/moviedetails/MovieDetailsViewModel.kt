@@ -17,7 +17,7 @@ import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMovieUseCase
+import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
@@ -35,7 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetails: GetMovieDetailsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    private val getRecommendedMovies: GetRecommendedMovieUseCase,
+    private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val getMediaMembersByMovieId: GetMediaMembersByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
@@ -378,8 +378,8 @@ class MovieDetailsViewModel @Inject constructor(
                 recommendedMovies = recommendedSeries.map { movie ->
                     Poster(
                         id = movie.id,
-                        name = movie.title,
-                        imageUrl = movie.posterUrl.orEmpty(),
+                        name = movie.name,
+                        imageUrl = movie.posterUrl,
                         rating = movie.rating
                     )
                 },

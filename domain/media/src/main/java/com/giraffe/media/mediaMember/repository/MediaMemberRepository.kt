@@ -21,7 +21,7 @@ interface MediaMemberRepository {
 
     suspend fun getImagesUrlById(id: Int): List<String>
 
-    suspend fun getCastDetailsByid(id: Int): CastMember
+    suspend fun getCastDetailsById(id: Int): CastMember
 
     suspend fun getCrewDetailsByCrewId(id: Int): CrewMember
 

@@ -21,7 +21,7 @@ fun createCrewMember(
     biography = biography,
     birthday = birthday,
     imageUrl = imageUrl,
-    otherImages = otherImages,
+    otherImages = otherImages ?: emptyList(),
     placeOfBirth = placeOfBirth,
     socialMedia = socialMedia,
 )

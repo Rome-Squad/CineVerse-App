@@ -112,7 +112,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCastDetailsByid(id: Int): CastMember {
+    override suspend fun getCastDetailsById(id: Int): CastMember {
         return SafeCall {
             withContext(Dispatchers.IO) {
                 val details = async { remoteDataSource.getPersonDetails(id) }

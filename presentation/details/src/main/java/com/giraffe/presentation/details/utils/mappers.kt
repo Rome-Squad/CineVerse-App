@@ -23,21 +23,21 @@ import com.giraffe.presentation.details.model.SocialMediaUi
 
 fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     id = id,
-    title = title,
-    description = description,
+    name = name,
+    overview = overview,
     rating = rating,
-    duration = duration?.toFormattedDuration(),
+    duration = duration?.toFormattedDuration().orEmpty(),
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genresID,
     genres = genres.map { it.title },
-    releaseYear = if (releaseYear != null) releaseYear.toString().toFormattedDate() else null,
-    youtubeVideoId = youtubeVideoId.orEmpty(),
+    releaseYear = if (releaseYear != null) releaseYear.toString() else "",
+    youtubeVideoId = youtubeVideoId,
 )
 
 fun MovieUi.toPoster() = Poster(
     id = id,
-    name = title,
+    name = name,
     imageUrl = posterUrl.orEmpty(),
     rating = rating,
     genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
@@ -77,7 +77,7 @@ fun Season.toUi() = SeasonUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear?.toString()?.toFormattedDate().orEmpty(),
+    releaseYear = releaseYear?.toString().orEmpty(),
     seasonNumber = seasonNumber,
     episodeCount = episodeCount
 )
@@ -91,7 +91,7 @@ fun Series.toUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear?.toString()?.toFormattedDate().orEmpty(),
+    releaseYear = releaseYear?.toString().orEmpty(),
     genres = genres.map { it.title },
     youtubeVideoId = youtubeVideoId.orEmpty()
 )

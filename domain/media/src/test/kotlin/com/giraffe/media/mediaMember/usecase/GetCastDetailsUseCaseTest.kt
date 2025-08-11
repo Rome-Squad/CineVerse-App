@@ -17,7 +17,7 @@ class GetCastDetailsUseCaseTest {
     fun `should return person details from repository`() = runTest {
         val personId = 3895
         val castDetails = TestDummyData.castMember1
-        coEvery { repository.getCastDetailsByid(any()) } returns castDetails
+        coEvery { repository.getCastDetailsById(any()) } returns castDetails
 
         val result = getCastDetailsUseCase(personId)
 

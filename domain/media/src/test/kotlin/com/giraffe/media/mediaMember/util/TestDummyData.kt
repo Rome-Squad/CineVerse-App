@@ -19,7 +19,9 @@ object TestDummyData {
         socialMedia = SocialMediaLinks(
             facebookLink = "michaelcaine",
             instagramLink = "michaelcaine_official",
-            youtubeLink = "UCV1n8z2d3a5b6c7d8e9f0g1h"
+            youtubeLink = "UCV1n8z2d3a5b6c7d8e9f0g1h",
+            twitterLink = "michaelcaine_official",
+            tiktokLink = "@michaelcaine",
         ),
         role = "Actor"
     )

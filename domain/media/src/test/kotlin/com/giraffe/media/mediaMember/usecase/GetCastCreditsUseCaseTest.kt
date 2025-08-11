@@ -22,20 +22,18 @@ class GetCastCreditsUseCaseTest {
             movies = listOf(
                 Movie(
                     id = 1,
-                    title = "Title",
+                    name = "Title",
                     rating = 8.5f,
-                    description = "",
+                    overview = "",
                     genresID = listOf(1, 2, 3),
                     popularity = 5f,
-                    posterUrl = null,
+                    posterUrl = "",
                     duration = null,
-                    backdropUrl = null,
+                    backdropUrl = "",
                     releaseYear = null,
-                    youtubeVideoId = null,
+                    youtubeVideoId = "",
                     recentViewedAt = null,
-                    recentReleasedAt = null,
-                    upcomingAt = null,
-                    userRating = null,
+                    userRating = null
                 )
             ),
             series = emptyList()
