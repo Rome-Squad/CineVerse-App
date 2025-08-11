@@ -77,7 +77,6 @@ class DiscoverViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 seriesGenres = genres.map(Genre::toUi),
-                selectedGenres = genres.map(Genre::toUi)
             )
         }
         getSeriesByGenre()

@@ -96,30 +96,35 @@ fun ExploreContent(
                         onTabSelected = interactions::onTabSelected
                     )
                 }
-                if (state.isLoading) {
-                    item {
-                        Box(
-                            Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) { Progress() }
+                when {
+                    state.isLoading -> {
+                        item {
+                            Box(
+                                Modifier.fillParentMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) { Progress() }
+                        }
                     }
-                } else {
-                    item {
-                        GenresAndCardsSection(
-                            modifier = Modifier.fillParentMaxHeight(),
-                            onPosterClicked = { id ->
-                                interactions.onPosterClick(id, state.selectedTab)
-                            },
-                            posters = posters,
-                            selectedGenre = state.selectedGenre
-                                ?: GenreUi(title = stringResource(R.string.all)),
-                            genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
-                            isGridSelected = state.isGridSelected,
-                            onGenreSelected = interactions::onGenreSelected,
-                        )
+
+                    else -> {
+                        item {
+                            GenresAndCardsSection(
+                                modifier = Modifier.fillParentMaxHeight(),
+                                onPosterClicked = { id ->
+                                    interactions.onPosterClick(id, state.selectedTab)
+                                },
+                                posters = posters,
+                                selectedGenre = state.selectedGenre
+                                    ?: GenreUi(title = stringResource(R.string.all)),
+                                genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
+                                isGridSelected = state.isGridSelected,
+                                onGenreSelected = interactions::onGenreSelected,
+                            )
+                        }
                     }
                 }
             }
+
             ViewToggle(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
