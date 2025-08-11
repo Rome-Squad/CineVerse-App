@@ -24,14 +24,14 @@ import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.home.screen.home.HomeUiModel
-import com.giraffe.presentation.home.screen.home.MediaType
+import com.giraffe.presentation.home.model.Poster
+import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
-fun HomeUiListSection(
+fun ListSection(
     title: String,
-    uiModels: List<HomeUiModel>,
+    uiModels: List<Poster>,
     modifier: Modifier = Modifier,
     endText: String? = null,
     paddingHorizontal: Int = 16,
@@ -65,7 +65,7 @@ fun HomeUiListSection(
 
 @Composable
 fun HomeItemVertically(
-    item: HomeUiModel,
+    item: Poster,
     modifier: Modifier = Modifier,
     onClick: (id: Int, type: MediaType) -> Unit
 ) {
