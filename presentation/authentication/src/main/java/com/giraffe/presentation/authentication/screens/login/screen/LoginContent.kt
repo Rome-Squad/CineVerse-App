@@ -1,5 +1,5 @@
 package com.giraffe.presentation.authentication.screens.login.screen
-
+/*
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -91,4 +91,4 @@ fun LoginContent(
             )
         }
     }
-}
+}*/
