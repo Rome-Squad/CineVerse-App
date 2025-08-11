@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.navigation.main
+package com.giraffe.presentation.home.navigation.main.routes
 
 import com.giraffe.designsystem.composable.navbar.BottomTab
 import com.giraffe.designsystem.composable.navbar.Route

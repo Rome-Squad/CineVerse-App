@@ -1,98 +1,92 @@
 package com.giraffe.presentation.home.utils
 
-import com.giraffe.presentation.home.screen.home.FeaturedCollectionUiModel
-import com.giraffe.presentation.home.screen.home.HomeUiModel
-import com.giraffe.presentation.home.screen.home.MediaType
-import com.giraffe.presentation.home.screen.home.PopularMediaUiModel
-import com.giraffe.presentation.home.screen.home.YourCollectionUiModel
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
-import com.giraffe.presentation.home.screen.show_more.PosterUiState
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.PopularMediaUi
+import com.giraffe.presentation.home.model.Poster
+import com.giraffe.presentation.home.model.ShowMorePoster
+import com.giraffe.presentation.home.model.YourCollectionUi
 
 
-fun Movie.toHomeUiModel(): HomeUiModel {
-    return HomeUiModel(
-        id = id,
-        title = title,
-        posterUrl = posterUrl.orEmpty(),
-        rating = rating,
-        mediaType = MediaType.MOVIE
-    )
-}
-
-fun Series.toHomeUiModel(): HomeUiModel {
-    return HomeUiModel(
-        id = id,
-        title = name,
-        posterUrl = posterUrl,
-        rating = rating,
-        mediaType = MediaType.SERIES
-    )
-}
-
-fun Series.toPosterUi(): PosterUiState {
-    return PosterUiState(
-        id = id,
-        name = name,
-        imageUri = posterUrl,
-        rating = rating,
-        date = releaseYear.toString(),
-        mediaType = MediaType.SERIES
-    )
-}
-
-fun Movie.toPosterUi(): PosterUiState {
-    return PosterUiState(
-        id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
-        rating = rating,
-        date = releaseYear.toString(),
-        mediaType = MediaType.MOVIE
-    )
-}
+fun Movie.toPoster() = Poster(
+    id = id,
+    title = title,
+    posterUrl = posterUrl.orEmpty(),
+    rating = rating,
+    mediaType = MediaType.MOVIE
+)
 
 
-fun Movie.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
-    return PopularMediaUiModel(
-        id = id,
-        title = title,
-        posterUrl = posterUrl.orEmpty(),
-        backdropUrl = backdropUrl.orEmpty(),
-        genres = genres,
-        rating = rating,
-        mediaType = MediaType.MOVIE
-    )
-}
+fun Series.toPoster() = Poster(
+    id = id,
+    title = name,
+    posterUrl = posterUrl,
+    rating = rating,
+    mediaType = MediaType.SERIES
+)
 
-fun Series.toPopularMediaUiModel(genres: List<String>): PopularMediaUiModel {
-    return PopularMediaUiModel(
-        id = id,
-        title = name,
-        posterUrl = posterUrl,
-        genres = genres,
-        rating = rating,
-        mediaType = MediaType.SERIES
-    )
-}
 
-fun Collection.toUiModel(): YourCollectionUiModel {
-    return YourCollectionUiModel(
-        id = id,
-        title = name,
-        numberOfItems = itemsCount
-    )
-}
+fun Series.toShowMorePoster(genres: List<String>) = ShowMorePoster(
+    id = id,
+    name = name,
+    imageUri = posterUrl,
+    rating = rating,
+    date = releaseYear.toString().toFormattedDate(),
+    mediaType = MediaType.SERIES,
+    genres = genres
+)
 
-fun Genre.toUiModel(): FeaturedCollectionUiModel {
-    return FeaturedCollectionUiModel(
-        id = id,
-        title = title,
-        backgroundImageUrl = GenreBackgroundImage.getImageUrlForGenre(title)
-    )
-}
+
+fun Movie.toShowMorePoster(genres: List<String>) = ShowMorePoster(
+    id = id,
+    name = title,
+    imageUri = posterUrl.orEmpty(),
+    rating = rating,
+    date = releaseYear.toString().toFormattedDate(),
+    mediaType = MediaType.MOVIE,
+    genres = genres,
+    time = duration.toString()
+)
+
+
+fun Movie.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
+    id = id,
+    title = title,
+    posterUrl = posterUrl.orEmpty(),
+    backdropUrl = backdropUrl.orEmpty(),
+    genres = genres,
+    rating = rating,
+    mediaType = MediaType.MOVIE
+)
+
+
+fun Series.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
+    id = id,
+    title = name,
+    posterUrl = posterUrl,
+    genres = genres,
+    rating = rating,
+    mediaType = MediaType.SERIES
+)
+
+
+fun Collection.toUi() = YourCollectionUi(
+    id = id,
+    title = name,
+    numberOfItems = itemsCount
+)
+
+
+fun Genre.toFeaturedCollectionUi() = FeaturedCollectionUi(
+    id = id,
+    title = title,
+    backgroundImageUrl = GenreBackgroundImage.getImageUrlForGenre(title)
+)
+
 
 enum class GenreBackgroundImage(
     val imageUrl: String,

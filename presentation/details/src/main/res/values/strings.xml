@@ -36,6 +36,7 @@
     <string name="you_might_also_like">You Might Also Like</string>
     <string name="star_cast">Star Cast</string>
     <string name="rate_the_movie">Rate the Movie</string>
+    <string name="rate_the_series">Rate the series</string>
     <string name="add_to_rate">Add Rating</string>
     <string name="add_to_collection">Add to Collection</string>
     <string name="movie">Movie</string>
@@ -75,4 +76,5 @@
     <string name="collection_name_cannot_be_blank">Collection name cannot be blank</string>
     <string name="validation_error">Validation Error!</string>
     <string name="collection_not_found">Collection not found!</string>
+    <string name="screen_info">Swipe left to remove the item</string>
 </resources>

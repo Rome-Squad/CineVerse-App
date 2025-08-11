@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.navigation.main
+package com.giraffe.presentation.home.navigation.main.routes
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
