@@ -94,7 +94,7 @@ fun LoginForm(
                     && state.usernameErrorMessage == null
                     && state.username.isNotBlank()
                     && state.password.isNotBlank(),
-            isLoading = state.isLoadingLogin,
+            isLoading = state.isLoading,
             onClick = {
                 focusManager.clearFocus()
                 interaction.onLoginClick()
