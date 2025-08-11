@@ -20,7 +20,8 @@ class IsOnBoardingFirstTimeUseCaseTest {
     }
 
     @Test
-    fun `should return true when first time, `() = runTest {
+    fun `should return true when first time`() = runTest {
+
         coEvery { onboardingRepository.isFirstTime() } returns true
 
         val result = isOnBoardingFirstTimeUseCase()
@@ -29,7 +30,8 @@ class IsOnBoardingFirstTimeUseCaseTest {
     }
 
     @Test
-    fun `should return false when not first time, `() = runTest {
+    fun `should return false when not first time`() = runTest {
+
         coEvery { onboardingRepository.isFirstTime() } returns false
 
         val result = isOnBoardingFirstTimeUseCase()

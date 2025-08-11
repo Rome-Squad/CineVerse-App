@@ -23,26 +23,22 @@ class GetDarkModeUseCaseTest {
 
     @Test
     fun `invoke should call isDarkMode on repository`() = runTest {
-        // given
-        every { settingsRepository.isDarkMode() } returns flowOf(true)
 
-        // when
+    every { settingsRepository.isDarkMode() } returns flowOf(true)
+
         getDarkModeUseCase()
 
-        // then
         verify(exactly = 1) { settingsRepository.isDarkMode() }
     }
 
     @Test
     fun `invoke should return dark mode state from repository`() = runTest {
-        // given
-        val isDark = true
+
+    val isDark = true
         every { settingsRepository.isDarkMode() } returns flowOf(isDark)
 
-        // when
         val resultFlow = getDarkModeUseCase()
 
-        // then
         assertThat(resultFlow.first()).isEqualTo(isDark)
     }
 

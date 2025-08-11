@@ -80,26 +80,14 @@ class LoginUseCaseTest {
         val username = "DoaaAbdelnaser"
         val password = "validPass123"
 
-        coEvery {
-            authRepository.login(
-                username = username,
-                password = password
-            )
-        } returns Unit
+        coEvery { authRepository.login(username, password) } returns Unit
 
-        loginUseCase(
-            password = password,
-            userInput = username
-        )
+        loginUseCase(password, username)
 
         coVerify(exactly = 1) {
-            authRepository.login(
-                username = username,
-                password = password
-            )
+            authRepository.login(username, password)
         }
     }
-
 
 
     @Test
@@ -107,24 +95,11 @@ class LoginUseCaseTest {
         val username = "user12"
         val password = "securePassword9"
 
-        coEvery {
-            authRepository.login(
-                username = username,
-                password = password
-            )
-        } returns Unit
+        coEvery { authRepository.login(username, password) } returns Unit
 
-        loginUseCase(
-            userInput = username,
-            password = password
-        )
+        loginUseCase(username, password)
 
-        coVerify {
-            authRepository.login(
-                username = username,
-                password = password
-            )
-        }
+        coVerify { authRepository.login(username, password) }
     }
 
     @Test
@@ -132,23 +107,10 @@ class LoginUseCaseTest {
         val username = "user23"
         val password = "S3cur3#Pass!"
 
-        coEvery {
-            authRepository.login(
-                username = username,
-                password = password
-            )
-        } returns Unit
+        coEvery { authRepository.login(username, password) } returns Unit
 
-        loginUseCase(
-            userInput = username,
-            password = password
-        )
+        loginUseCase(username, password)
 
-        coVerify {
-            authRepository.login(
-                username = username,
-                password = password
-            )
-        }
+        coVerify { authRepository.login(username, password) }
     }
 }
