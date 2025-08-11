@@ -36,6 +36,7 @@ import com.giraffe.presentation.authentication.screens.login.LoginInteractionLis
 import com.giraffe.presentation.authentication.screens.login.LoginScreenState
 import com.giraffe.presentation.authentication.screens.login.composable.LoginForm
 import com.giraffe.presentation.authentication.screens.login.composable.LogoSection
+import com.giraffe.presentation.authentication.utils.EffectListener
 
 
 @Composable
@@ -51,26 +52,24 @@ fun LoginScreen(
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsState()
-    val effectFlow = viewModel.effect
 
-    LaunchedEffect(Unit) {
-        effectFlow.collect { effect ->
-            when (effect) {
-                is LoginEffect.NavigateToWebViewScreen -> navigateToWebViewScreen()
+    EffectListener(viewModel.effect) {
 
-                is LoginEffect.NavigateToHomeScreen -> navigateToHomeScreen()
+        when (it) {
+            is LoginEffect.NavigateToWebViewScreen -> navigateToWebViewScreen()
 
-                is LoginEffect.NavigateToResetPasswordScreen -> navigateToResetPasswordScreen()
+            is LoginEffect.NavigateToHomeScreen -> navigateToHomeScreen()
 
-                is LoginEffect.PopBack -> onBackClick()
-                is LoginEffect.ShowErrorMessage -> {
-                    context.showToast(context.getString(effect.throwable.toStringResource()))
+            is LoginEffect.NavigateToResetPasswordScreen -> navigateToResetPasswordScreen()
 
-                }
+            is LoginEffect.PopBack -> onBackClick()
+            is LoginEffect.ShowErrorMessage ->
+                context.showToast(context.getString(it.throwable.toStringResource()))
 
-            }
+
         }
     }
+
 
     LoginContent(
         modifier = modifier,

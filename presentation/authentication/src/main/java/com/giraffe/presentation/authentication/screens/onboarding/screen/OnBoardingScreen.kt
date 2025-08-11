@@ -1,6 +1,5 @@
 package com.giraffe.presentation.authentication.screens.onboarding.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -26,6 +24,8 @@ import com.giraffe.presentation.authentication.screens.onboarding.composable.Ima
 import com.giraffe.presentation.authentication.screens.onboarding.composable.OnBoardingFooter
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.authentication.R
+import com.giraffe.presentation.authentication.utils.EffectListener
+import com.giraffe.presentation.authentication.utils.showToast
 import com.giraffe.presentation.authentication.utils.toStringResource
 
 @Composable
@@ -37,19 +37,16 @@ fun OnBoardingScreen(
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
+    EffectListener(events=viewModel.effect) {
+
+            when (it) {
                 is OnboardingEffect.NavigateToLogin -> navigateToLoginScreen()
-                is OnboardingEffect.ShowError -> {
-                    Toast.makeText(
-                        context,
-                        context.getString(effect.throwable.toStringResource()),
-                        Toast.LENGTH_SHORT
-                    ).show()                }
+                is OnboardingEffect.ShowError ->
+                    context.showToast(context.getString(it.throwable.toStringResource()))
             }
+
         }
-    }
+
 
     OnBoardingContent(
         modifier = modifier,
@@ -69,7 +66,7 @@ private fun OnBoardingContent(
     val previousPage = remember { mutableIntStateOf(pagerState.currentPage) }
     val direction = if (pagerState.currentPage > previousPage.intValue) 1 else -1
 
-    SideEffect{
+    LaunchedEffect(pagerState.currentPage) {
         previousPage.intValue = pagerState.currentPage
     }
     Box(
