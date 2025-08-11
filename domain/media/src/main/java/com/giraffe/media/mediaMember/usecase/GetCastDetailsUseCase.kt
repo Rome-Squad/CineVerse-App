@@ -8,6 +8,6 @@ class GetCastDetailsUseCase @Inject constructor(
     private val repository: MediaMemberRepository
 ) {
     suspend operator fun invoke(castId: Int): CastMember {
-        return repository.getCastDetailsById(castId)
+        return repository.getCastDetailsByid(castId)
     }
 }

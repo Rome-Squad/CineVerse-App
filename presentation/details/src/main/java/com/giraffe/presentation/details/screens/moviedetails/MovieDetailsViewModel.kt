@@ -35,7 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getRecommendedMovie: GetRecommendedMovieUseCase,
-    private val getPeopleByMovieId: GetMediaMembersByMovieIdUseCase,
+    private val getMediaMembersByMovieId: GetMediaMembersByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
@@ -374,7 +374,7 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMoviePeopleSuccess,
             onError = ::onError
         ) {
-            getPeopleByMovieId(movieId)
+            getMediaMembersByMovieId(movieId)
         }
     }
 

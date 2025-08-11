@@ -3,19 +3,20 @@ package com.giraffe.presentation.details.screens.castCredit
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.mediaMember.usecase.GetPeopleMediaCreditsUseCase
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.CastCreditRoute
 import com.giraffe.presentation.details.utils.toPoster
+import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class CastCreditViewModel @Inject constructor(
-    private val getPeopleMediaCredits: GetPeopleMediaCreditsUseCase,
+    private val getPeopleMediaCredits: GetCastCreditsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     savedStateHandle: SavedStateHandle
@@ -30,7 +31,6 @@ class CastCreditViewModel @Inject constructor(
         state.value.castId?.let {
             loadCastCredit(it)
         }
-
     }
 
     private fun loadCastCredit(castId: Int) {
@@ -43,24 +43,22 @@ class CastCreditViewModel @Inject constructor(
         )
     }
 
-    private fun loadCastCreditSuccess(personCredits: List<PersonCredit>) {
+    private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
         safeExecute(
             onError = ::loadCastCreditError,
             onSuccess = ::updateCastCreditPosters
         ) {
-
-            personCredits.map { personCredit ->
-                val mediaType = MediaType.from(personCredit.mediaType)
-
-                val genres = when (mediaType) {
-                    MediaType.MOVIE -> getMoviesGenresByIds(personCredit.genreIds)
-                    MediaType.TV -> getSeriesGenres(personCredit.genreIds)
-                    else -> emptyList()
-                }
-
-                personCredit.toPoster().copy(genres = genres.joinToString(", "))
+            val seriesPosters = castCredits.series.map {
+                val genres = getSeriesGenres(it.genreIDs)
+                it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
+            val moviesPosters = castCredits.movies.map {
+                val genres = getMoviesGenresByIds(it.genresID)
+                it.toUi().toPoster().copy(genres = genres.joinToString(", "))
+            }
+
+            seriesPosters + moviesPosters
         }
     }
 

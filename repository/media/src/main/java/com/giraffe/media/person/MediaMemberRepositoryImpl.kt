@@ -11,6 +11,7 @@ import com.giraffe.media.person.datasource.remote.dto.CastDto
 import com.giraffe.media.person.datasource.remote.dto.CreditsDto
 import com.giraffe.media.person.datasource.remote.dto.CrewDto
 import com.giraffe.media.person.datasource.remote.dto.MediaMemberDto
+import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import com.giraffe.media.person.datasource.remote.dto.ProfileDto
 import com.giraffe.media.person.mapper.mapToCast
 import com.giraffe.media.person.mapper.mapToCrew
@@ -19,6 +20,8 @@ import com.giraffe.media.person.mapper.toCacheDto
 import com.giraffe.media.person.mapper.toCastEntity
 import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageUrl
+import com.giraffe.media.person.mapper.toMovieEntity
+import com.giraffe.media.person.mapper.toSeriesEntity
 import com.giraffe.media.utils.SafeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -93,7 +96,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
         remoteDataSource.getPersonImages(id).profiles.map(ProfileDto::toImageUrl)
     }
 
-    override suspend fun getCastDetailsById(id: Int) = SafeCall {
+    override suspend fun getCastDetailsByid(id: Int) = SafeCall {
         withContext(Dispatchers.IO) {
             val details = async { remoteDataSource.getPersonDetails(id) }
             val images = async { remoteDataSource.getPersonImages(id) }
@@ -110,7 +113,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCrewDetailsById(id: Int) = SafeCall {
+    override suspend fun getCrewDetailsByCrewId(id: Int) = SafeCall {
         withContext(Dispatchers.IO) {
             val details = async { remoteDataSource.getPersonDetails(id) }
             val images = async { remoteDataSource.getPersonImages(id) }
@@ -141,16 +144,23 @@ class MediaMemberRepositoryImpl @Inject constructor(
         val crew = credits.crew.map(CrewDto::toEntity)
         val cast = credits.cast.map(CastDto::toEntity)
 
-        MediaMemberRepository.MediaMembers(crew = crew, cast = cast)
-            .also {
-                localDataSource.insertPeople(
-                    cast.map(CastMember::toCacheDto) + crew.map(CrewMember::toCacheDto)
-                )
-            }
+        MediaMemberRepository.MediaMembers(
+            crew = crew,
+            cast = cast
+        ).also {
+            localDataSource.insertPeople(
+                cast.map(CastMember::toCacheDto) + crew.map(CrewMember::toCacheDto)
+            )
+        }
     }
 
-//todo add this to movies and series !!
-//    override suspend fun getMoviesAndSeriesById(personId: Int) = SafeCall {
-//        remoteDataSource.getPersonMediaCredits(personId).map(PersonCreditDto::toEntity)
-//    }
+    override suspend fun getCastCreditsById(id: Int) = SafeCall {
+        val movies = remoteDataSource.getPersonMoviesById(id)
+        val series = remoteDataSource.getPersonSeriesById(id)
+
+        MediaMemberRepository.CastMedia(
+            movies = movies.map(PersonCreditDto::toMovieEntity),
+            series = series.map(PersonCreditDto::toSeriesEntity)
+        )
+    }
 }

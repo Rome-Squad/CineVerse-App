@@ -4,14 +4,17 @@ import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.entity.CrewMember
 import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheType
 import com.giraffe.media.person.datasource.remote.dto.CastDto
 import com.giraffe.media.person.datasource.remote.dto.CrewDto
 import com.giraffe.media.person.datasource.remote.dto.MediaMemberDto
+import com.giraffe.media.person.datasource.remote.dto.PersonCreditDto
 import com.giraffe.media.person.datasource.remote.dto.PersonDetailsDto
 import com.giraffe.media.person.datasource.remote.dto.PersonSocialMediaDto
 import com.giraffe.media.person.datasource.remote.dto.ProfileDto
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.utils.AT_SYMBOLS_URL
 import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.FACEBOOK_URL
@@ -19,6 +22,8 @@ import com.giraffe.media.utils.INSTAGRAM_URL
 import com.giraffe.media.utils.TIKTOK_URL
 import com.giraffe.media.utils.X_URL
 import com.giraffe.media.utils.YOUTUBE_URL
+import com.giraffe.media.utils.orEmpty
+import kotlinx.datetime.LocalDate
 
 fun mapToCast(
     personId: Int,
@@ -170,16 +175,53 @@ fun mapToMediaMembers(
     cast: List<PersonCacheDto>,
     crew: List<PersonCacheDto>
 ) = MediaMemberRepository.MediaMembers(
-    cast = cast
-        .orEmpty()
-        .map(PersonCacheDto::toCastMemberEntity),
-
-    crew = crew
-        .orEmpty()
-        .map(PersonCacheDto::toCrewMemberEntity)
+    cast = cast.map(PersonCacheDto::toCastMemberEntity),
+    crew = crew.map(PersonCacheDto::toCrewMemberEntity)
 )
 
 fun ProfileDto.toImageUrl(): String = BASE_IMAGE_URL + filePath
+
+fun PersonCreditDto.toMovieEntity() = Movie(
+    id = id,
+    title = title.orEmpty(),
+    description = overview.orEmpty(),
+    rating = voteAverage ?: 0f,
+    duration = null,
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
+    genresID = genreIds.orEmpty(),
+    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    popularity = popularity ?: 0f,
+    youtubeVideoId = null,
+    recentViewedAt = null,
+    recentReleasedAt = null,
+    upcomingAt = null,
+    userRating = null
+)
+
+fun PersonCreditDto.toSeriesEntity() = Series(
+    id = id,
+    name = name.orEmpty(),
+    overview = overview.orEmpty(),
+    rating = voteAverage.orEmpty(),
+    posterUrl = posterPath.orEmpty(),
+    backdropUrl = backdropPath.orEmpty(),
+    genreIDs = genreIds.orEmpty(),
+    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    seasons = emptyList(),
+    youtubeVideoId = null,
+    popularity = popularity.orEmpty(),
+    userRating = voteAverage.orEmpty(),
+    recentViewedAt = null
+)
 
 private fun PersonSocialMediaDto.toEntity(): SocialMediaLinks = SocialMediaLinks(
     facebookLink = facebookId.prependIfNotBlank(FACEBOOK_URL),

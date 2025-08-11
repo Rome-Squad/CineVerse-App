@@ -19,7 +19,9 @@ interface MediaMemberRemoteDataSource {
 
     suspend fun getPersonImages(personId: Int): PersonProfileImageDto
 
-    suspend fun getPersonMediaCredits(personId: Int): List<PersonCreditDto>
+    suspend fun getPersonMoviesById(personId: Int): List<PersonCreditDto>
+
+    suspend fun getPersonSeriesById(personId: Int): List<PersonCreditDto>
 
     suspend fun getPersonSocialMedia(personId: Int): PersonSocialMediaDto
 }

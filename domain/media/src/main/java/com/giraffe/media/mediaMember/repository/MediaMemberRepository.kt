@@ -2,6 +2,8 @@ package com.giraffe.media.mediaMember.repository
 
 import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.entity.CrewMember
+import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.series.entity.Series
 
 interface MediaMemberRepository {
 
@@ -19,17 +21,21 @@ interface MediaMemberRepository {
 
     suspend fun getImagesUrlById(id: Int): List<String>
 
-    suspend fun getCastDetailsById(id: Int): CastMember
+    suspend fun getCastDetailsByid(id: Int): CastMember
 
-    suspend fun getCrewDetailsById(id: Int): CrewMember
+    suspend fun getCrewDetailsByCrewId(id: Int): CrewMember
+
+    suspend fun getCastCreditsById(id: Int): CastMedia
 
     suspend fun searchForActorByName(name: String, page: Int): List<CastMember>
-
-    //todo add this to movies and series !!
-//    suspend fun getMoviesAndSeriesById(id: Int): List<PersonCredit>
 
     data class MediaMembers(
         val cast: List<CastMember>,
         val crew: List<CrewMember>
+    )
+
+    data class CastMedia(
+        val movies: List<Movie>,
+        val series: List<Series>,
     )
 }

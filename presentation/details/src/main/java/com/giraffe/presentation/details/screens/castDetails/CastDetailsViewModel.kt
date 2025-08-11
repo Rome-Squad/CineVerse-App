@@ -3,12 +3,16 @@ package com.giraffe.presentation.details.screens.castDetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.AddCastToRecentCastUseCase
+import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
 import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
 import com.giraffe.presentation.details.screens.castCredit.MediaType
+import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toSocialMediaUi
+import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,6 +20,7 @@ import javax.inject.Inject
 class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getCastDetailsUseCase: GetCastDetailsUseCase,
+    private val getCastCreditsUseCase: GetCastCreditsUseCase,
     private val storeRecentSeriesUseCase: AddCastToRecentCastUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(
     CastDetailsUiState(
@@ -25,6 +30,7 @@ class CastDetailsViewModel @Inject constructor(
     CastDetailsInteractionListener {
 
     init {
+        getCastCredits(state.value.actorId)
         getPersonDetails(state.value.actorId)
     }
 
@@ -35,6 +41,15 @@ class CastDetailsViewModel @Inject constructor(
             onSuccess = ::getPersonDetailsSuccess,
             onError = ::getPersonDetailsError,
             block = { getCastDetailsUseCase(personId) }
+        )
+    }
+
+
+    private fun getCastCredits(actorId: Int) {
+        safeExecute(
+            onSuccess = ::getCastCreditsSuccess,
+            onError = ::getCastCreditsError,
+            block = { getCastCreditsUseCase(actorId) }
         )
     }
 
@@ -53,22 +68,30 @@ class CastDetailsViewModel @Inject constructor(
                 actorGalleryImageUrls = castMember.otherImages.orEmpty(),
                 biographyInfo = castMember.biography.orEmpty(),
                 socialMediaUiList = castMember.socialMedia?.toSocialMediaUi() ?: emptyList(),
-                posters = emptyList(),
-
-//                    castMember.personCredits.map { personCredit ->
-//                    Poster(
-//                        id = personCredit.id,
-//                        name = personCredit.title,
-//                        imageUrl = personCredit.posterPath.orEmpty(),
-//                        rating = personCredit.voteAverage.toFloat(),
-//                        mediaTypeOfPoster = personCredit.mediaType
-//                    )
-//                }
             )
         }
     }
 
     private fun getPersonDetailsError(exception: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false,
+            )
+        }
+
+        sendEffect(CastDetailsEffect.ShowError(exception))
+    }
+
+    private fun getCastCreditsSuccess(media: MediaMemberRepository.CastMedia) {
+        val posters = media.series.map { it.toUi().toPoster() }
+            .plus(media.movies.map { it.toUi().toPoster() })
+
+        updateState {
+            it.copy(posters = posters)
+        }
+    }
+
+    private fun getCastCreditsError(exception: Throwable) {
         updateState {
             it.copy(
                 isLoading = false,
@@ -105,6 +128,7 @@ class CastDetailsViewModel @Inject constructor(
         when (mediaType) {
             MediaType.MOVIE.value ->
                 sendEffect(CastDetailsEffect.NavigateToMovieDetails(mediaId))
+
             MediaType.TV.value ->
                 sendEffect(CastDetailsEffect.NavigateToSeriesDetails(mediaId))
         }
