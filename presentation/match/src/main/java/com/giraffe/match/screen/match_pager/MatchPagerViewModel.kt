@@ -3,7 +3,6 @@ package com.giraffe.match.screen.match_pager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,9 +35,6 @@ class MatchPagerViewModel @Inject constructor() : ViewModel() {
             if (_state.value.currentPage < 4) {
                 _state.value = _state.value.copy(currentPage = _state.value.currentPage + 1)
             } else {
-                _state.value = _state.value.copy(isLoading = true)
-                delay(LOADING_DELAY)
-                _state.value = _state.value.copy(isLoading = false)
                 _effect.emit(MatchScreenEffect.FinishMatching)
             }
         }
@@ -59,9 +55,4 @@ class MatchPagerViewModel @Inject constructor() : ViewModel() {
     fun updateRecencySelections(selectedIds: List<Int>) {
         _state.value = _state.value.copy(recencySelections = selectedIds)
     }
-
-    companion object {
-        private const val LOADING_DELAY = 300L
-    }
-
 }

@@ -308,7 +308,6 @@ fun MatchPagerScreen(
                 } else {
                     stringResource(R.string.start_matching)
                 },
-                isLoading = state.isLoading,
                 onClick = {
                     coroutineScope.launch {
                         viewModel.onNextClicked()
