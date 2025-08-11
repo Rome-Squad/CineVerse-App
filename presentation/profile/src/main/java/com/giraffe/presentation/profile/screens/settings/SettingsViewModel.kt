@@ -17,6 +17,7 @@ import com.giraffe.user.usecase.SetDarkModeUseCase
 import com.giraffe.user.usecase.SetLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers
 
 
 @HiltViewModel
@@ -157,6 +158,7 @@ class SettingsViewModel @Inject constructor(
 
     override fun onLanguageChange(languageCode: String) {
         safeExecute(
+            dispatcher = Dispatchers.Main,
             onSuccess = {
                 LanguageHelper.updateAppLocale(languageCode)
                 onDismissSheet()

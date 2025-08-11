@@ -15,6 +15,7 @@
     <string name="add_rating">أضف تقييمًا</string>
     <string name="right_arrow">سهم يمين</string>
     <string name="you_rated_it">لقد قيّمته</string>
+    <string name="tap_to_add_your_name">انقر لإضافة اسمك</string>
     <string name="give_it_start">امنحه نجومًا!</string>
     <string name="tab_to_change_your_rating">اضغط على Tab لتغيير تقييمك</string>
     <string name="rate_it">أخبر العالم برأيك.</string>

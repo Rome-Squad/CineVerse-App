@@ -34,6 +34,7 @@ fun DeleteButton(modifier: Modifier = Modifier, onDeleteClick: () -> Unit = {}) 
         Icon(
             modifier = modifier.size(20.dp),
             painter = painterResource(Theme.icons.dueTone.trash),
+            tint = Theme.color.button.onPrimary,
             contentDescription = stringResource(R.string.trash)
         )
     }
