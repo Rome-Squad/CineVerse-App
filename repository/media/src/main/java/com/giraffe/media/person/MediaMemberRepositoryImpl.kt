@@ -3,7 +3,7 @@ package com.giraffe.media.person
 import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.entity.CrewMember
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
-import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.local.MediaMemberLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheType
 import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 class MediaMemberRepositoryImpl @Inject constructor(
     private val remoteDataSource: MediaMemberRemoteDataSource,
-    private val localDataSource: PersonLocalDataSource,
+    private val localDataSource: MediaMemberLocalDataSource,
 ) : MediaMemberRepository {
 
     override suspend fun searchForActorByName(name: String, page: Int) = SafeCall {

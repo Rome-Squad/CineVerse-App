@@ -1,7 +1,7 @@
 package com.giraffe.media.person
 
 import com.giraffe.media.exception.MediaException
-import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.local.MediaMemberLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
 import com.giraffe.media.person.mapper.toCastMemberEntity
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.assertThrows
 
 class CastMediaMemberRepositoryImplTest {
     private val remoteDataSource: MediaMemberRemoteDataSource = mockk(relaxed = true)
-    private val localDataSource: PersonLocalDataSource = mockk(relaxed = true)
+    private val localDataSource: MediaMemberLocalDataSource = mockk(relaxed = true)
     private val repository = MediaMemberRepositoryImpl(remoteDataSource, localDataSource)
     private val keyword = "Mohannad"
     private val dummyPersonCacheDto = PersonCacheDto(

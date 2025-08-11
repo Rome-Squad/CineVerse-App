@@ -1,13 +1,13 @@
 package com.giraffe.media.person
 
 import com.giraffe.media.person.dao.PersonDao
-import com.giraffe.media.person.datasource.local.PersonLocalDataSource
+import com.giraffe.media.person.datasource.local.MediaMemberLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.util.safeCall
 import javax.inject.Inject
 
-class PersonLocalDataSourceImp @Inject constructor(private val dao: PersonDao) :
-    PersonLocalDataSource {
+class MediaMemberLocalDataSourceImp @Inject constructor(private val dao: PersonDao) :
+    MediaMemberLocalDataSource {
     override suspend fun insertPerson(person: PersonCacheDto) = safeCall {
         dao.insertPerson(person)
     }
