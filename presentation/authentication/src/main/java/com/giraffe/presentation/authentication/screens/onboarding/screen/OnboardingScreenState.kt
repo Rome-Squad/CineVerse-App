@@ -1,5 +1,6 @@
 package com.giraffe.presentation.authentication.screens.onboarding.screen
 
-data class OnboardingUiState(
+data class OnboardingScreenState(
     val isError: Boolean = false
+
 )

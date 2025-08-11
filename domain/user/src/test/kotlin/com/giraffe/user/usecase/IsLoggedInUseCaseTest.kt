@@ -19,21 +19,21 @@ class IsLoggedInUseCaseTest {
 
     @Test
     fun `should return that user logged in when repository return true`() = runTest {
-        //given
+
         coEvery { repository.isLoggedIn() } returns true
-        //when
+
         val result = isLoggedInUseCase()
-        //then
+
         assertThat(result).isTrue()
     }
 
     @Test
     fun `should return that user is not logged in when repository return false`() = runTest {
-        //given
+
         coEvery { repository.isLoggedIn() } returns false
-        //when
+
         val result = isLoggedInUseCase()
-        //then
+
         assertThat(result).isFalse()
     }
 }

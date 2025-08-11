@@ -14,7 +14,7 @@ import com.giraffe.user.entity.User
 fun User.toUi() = UserUi(
     name = this.displayName,
     username = this.username,
-    imageUrl = this.avatarUrl ?: ""
+    imageUrl = this.avatarUrl.orEmpty()
 )
 
 fun Series.toRatedPoster(genres: List<Genre>) = RatedPoster(

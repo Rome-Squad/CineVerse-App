@@ -1,15 +1,15 @@
 package com.giraffe.media.explore
 
-import com.giraffe.media.explore.dao.ExploreSearchKeywordDao
-import com.giraffe.media.explore.datasource.local.LocalExploreDataSource
+import com.giraffe.media.explore.dao.SearchKeywordDao
+import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
 import javax.inject.Inject
 
-class LocalExploreDataSourceImpl @Inject constructor(
-    private val dao: ExploreSearchKeywordDao
-) : LocalExploreDataSource {
+class LocalSearchDataSourceImpl @Inject constructor(
+    private val dao: SearchKeywordDao
+) : LocalSearchDataSource {
     override fun getSearchHistory() = safeFlow {
         dao.getSearchHistory()
     }
@@ -26,8 +26,8 @@ class LocalExploreDataSourceImpl @Inject constructor(
         dao.insertSearchKeyword(searchKeyword)
     }
 
-    override suspend fun deleteKeyword(keyword: String) = safeCall {
-        dao.deleteKeyword(keyword)
+    override suspend fun deleteSearchKeyword(keyword: String) = safeCall {
+        dao.deleteSearchKeyword(keyword)
     }
 
     override suspend fun clearSearchHistory() = safeCall {

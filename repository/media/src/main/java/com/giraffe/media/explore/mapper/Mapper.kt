@@ -6,12 +6,12 @@ import com.giraffe.media.explore.entity.SearchKeyword
 
 fun SearchKeywordDto.toEntity() = SearchKeyword(
     keyword = name,
-    isRecent = false,
+    isFromHistory = false,
     searchedAt = System.currentTimeMillis()
 )
 
 fun SearchKeywordCacheDto.toEntity() = SearchKeyword(
     keyword = keyword,
-    isRecent = true,
+    isFromHistory = true,
     searchedAt = searchedAt
 )

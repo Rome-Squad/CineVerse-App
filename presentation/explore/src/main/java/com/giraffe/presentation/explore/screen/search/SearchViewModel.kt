@@ -4,7 +4,7 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
 import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
-import com.giraffe.media.explore.usecase.DeleteKeywordUseCase
+import com.giraffe.media.explore.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
@@ -28,7 +28,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val getSearchKeywords: GetSearchKeywordsUseCase,
     private val insertSearchKeyword: AddSearchKeywordUseCase,
-    private val deleteKeywordUseCase: DeleteKeywordUseCase,
+    private val deleteKeywordUseCase: DeleteSearchKeywordUseCase,
     private val clearSearchHistory: ClearSearchHistoryUseCase,
     private val clearRecentlyViewedSeriesUseCase: ClearRecentlyViewedSeriesUseCase,
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
@@ -86,7 +86,7 @@ class SearchViewModel @Inject constructor(
             updateState { it.copy(query) }
             delay(500)
             getSearchKeywords(query).collectLatest { keywords ->
-                val recentKeywords = keywords.filter { keyword -> keyword.isRecent }
+                val recentKeywords = keywords.filter { keyword -> keyword.isFromHistory }
                 updateState {
                     it.copy(
                         keywords = (keywords - recentKeywords).map { searchKeyword -> searchKeyword.keyword },
