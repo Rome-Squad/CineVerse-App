@@ -2,7 +2,6 @@ package com.giraffe.presentation.profile.screens.ratings
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.DeleteMovieRatingUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
@@ -54,8 +53,8 @@ class RatingViewModel @Inject constructor(
         )
     }
 
-    private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
+    private fun onFailure(error: Throwable, isNoInternet: Boolean) {
+        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
         sendEffect(RatingEffect.ShowError(error))
     }
 

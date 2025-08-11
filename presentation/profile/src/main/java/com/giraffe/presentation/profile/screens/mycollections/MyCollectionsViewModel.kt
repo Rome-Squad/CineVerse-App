@@ -3,7 +3,6 @@ package com.giraffe.presentation.profile.screens.mycollections
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.CollectionUi
 import com.giraffe.presentation.profile.utils.toEntity
@@ -89,8 +88,8 @@ class MyCollectionsViewModel @Inject constructor(
         getCollections()
     }
 
-    private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
+    private fun onFailure(error: Throwable, isNoInternet: Boolean) {
+        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
         sendEffect(MyCollectionsEffect.ShowError(error))
     }
 

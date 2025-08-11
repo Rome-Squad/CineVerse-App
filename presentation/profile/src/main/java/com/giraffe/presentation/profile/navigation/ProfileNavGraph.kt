@@ -10,9 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
-import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.authentication.AuthenticationApi
-import com.giraffe.explore.ExploreApi
+import com.giraffe.api.details.DetailsApi
+import com.giraffe.api.explore.ExploreApi
 import com.giraffe.presentation.profile.navigation.routes.ExploreRoute
 import com.giraffe.presentation.profile.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SeriesDetailsRoute
@@ -32,6 +32,7 @@ import com.giraffe.presentation.profile.navigation.routes.navigateToSeriesDetail
 import com.giraffe.presentation.profile.navigation.routes.ratingsRoute
 import com.giraffe.presentation.profile.navigation.routes.settingsScreenRoute
 import editProfileWebViewRoute
+
 
 @Composable
 internal fun ProfileNavGraph(

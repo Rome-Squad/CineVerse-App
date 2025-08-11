@@ -2,6 +2,7 @@ package com.giraffe.presentation.profile.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.media.exception.NoInternetException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
@@ -22,7 +24,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     val effect = _effect.receiveAsFlow()
 
     protected fun <T> safeExecute(
-        onError: (Throwable) -> Unit = {},
+        onError: (Throwable, Boolean) -> Unit = { _, _ -> },
         onSuccess: (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -32,13 +34,13 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
             runCatching {
                 onSuccess(block())
             }.onFailure {
-                onError(it)
+                onError(it, it is NoInternetException || it is UserNoInternetException)
             }
         }
     }
 
     protected fun <T> safeCollect(
-        onError: (Throwable) -> Unit = {},
+        onError: (Throwable, Boolean) -> Unit = { _, _ -> },
         onEmitNewValue: (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -46,7 +48,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     ) {
         coroutineScope.launch(dispatcher) {
             block().catch {
-                onError(it)
+                onError(it, it is NoInternetException || it is UserNoInternetException)
             }.collect {
                 onEmitNewValue(it)
             }

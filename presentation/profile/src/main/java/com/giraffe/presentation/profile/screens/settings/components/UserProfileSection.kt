@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
@@ -102,10 +103,10 @@ fun UserProfileSection(
         }
         Icon(
             painter = painterResource(
-                id = com.giraffe.designsystem.R.drawable.outline_alt_arrow_right
+                id = R.drawable.outline_alt_arrow_right
             ),
             contentDescription = stringResource(
-                id = com.giraffe.designsystem.R.string.right_arrow
+                id = R.string.right_arrow
             ),
             tint = Theme.color.shade.tertiary,
         )
