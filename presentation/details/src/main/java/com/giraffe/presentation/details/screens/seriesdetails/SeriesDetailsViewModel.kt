@@ -5,6 +5,7 @@ import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
@@ -21,9 +22,6 @@ import com.giraffe.presentation.details.model.groupByRole
 import com.giraffe.presentation.details.model.toCastUi
 import com.giraffe.presentation.details.model.toCrewUi
 import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
-import com.giraffe.presentation.details.utils.groupByRole
-import com.giraffe.presentation.details.utils.toCastUi
-import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
@@ -261,7 +259,6 @@ class SeriesDetailsViewModel @Inject constructor(
             )
         }
     }
-
 
     private fun loadSeriesPeople(seriesId: Int) {
         safeExecute(

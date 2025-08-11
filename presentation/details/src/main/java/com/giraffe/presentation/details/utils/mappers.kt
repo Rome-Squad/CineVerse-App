@@ -1,62 +1,19 @@
 package com.giraffe.presentation.details.utils
 
 import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
-import com.giraffe.media.mediaMember.entity.CastMember
-import com.giraffe.media.mediaMember.entity.CrewMember
 import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.person.entity.PersonCredit
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.model.CastUi
-import com.giraffe.presentation.details.model.CollectionUi
-import com.giraffe.presentation.details.model.CrewUi
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.model.ReviewUI
 import com.giraffe.presentation.details.model.SeasonUi
 import com.giraffe.presentation.details.model.SeriesUi
 import com.giraffe.presentation.details.model.SocialMediaPlatform
 import com.giraffe.presentation.details.model.SocialMediaUi
-
-fun PersonCredit.toPoster() = Poster(
-    id = id,
-    name = title,
-    imageUrl = posterPath.toString(),
-    rating = voteAverage.toFloat(),
-    date = releaseYear,
-    mediaTypeOfPoster = mediaType
-)
-
-
-fun CastMember.toCastUi() = CastUi(
-    id = id,
-    name = name,
-    role = role,
-    urlImage = imageUrl
-)
-
-
-fun Collection.toUi() = CollectionUi(
-    id = id,
-    title = name,
-    isLoading = false
-)
-
-
-fun CrewMember.toCrewUi() = CrewUi(
-    name = name,
-    role = role
-)
-
-
-fun List<CrewUi>.groupByRole(): Map<String, List<String>> {
-    return this.groupBy { it.role }.mapValues { it.value.map { member -> member.name } }
-}
-
 
 fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     id = id,
@@ -81,17 +38,6 @@ fun MovieUi.toPoster() = Poster(
     genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
     time = duration,
     date = releaseYear
-)
-
-
-fun ReviewUI.toEntity() = Review(
-    id = id,
-    authorImageUrl = authorImageUrl,
-    authorName = authorName,
-    authorUserName = authorUserName,
-    content = content,
-    rating = rating,
-    createdAt = createdAt
 )
 
 fun Review.toUi() = ReviewUI(
