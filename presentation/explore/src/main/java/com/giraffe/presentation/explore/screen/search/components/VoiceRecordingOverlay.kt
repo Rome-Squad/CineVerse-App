@@ -1,4 +1,4 @@
-package com.giraffe.presentation.explore.components
+package com.giraffe.presentation.explore.screen.search.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -25,6 +25,7 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.explore.R
+import kotlin.math.abs
 
 
 @Composable
@@ -74,7 +75,7 @@ fun PulseCircle(scale: Float, color: Color) {
     val animatedScale = remember { Animatable(1f) }
 
     LaunchedEffect(scale) {
-        if (kotlin.math.abs(animatedScale.value - scale) > 0.05f) {
+        if (abs(animatedScale.value - scale) > 0.05f) {
             animatedScale.animateTo(
                 targetValue = scale,
                 animationSpec = spring(

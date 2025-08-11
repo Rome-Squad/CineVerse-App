@@ -32,4 +32,9 @@
     <string name="unknown_error">Unknown error</string>
     <string name="network_error">Network error</string>
     <string name="network_timeout">Network timeout</string>
+    <string name="navigate">Navigate</string>
+    <string name="viewtoggleanimation">ViewToggleAnimation</string>
+    <string name="explore_screen">Explore Screen</string>
+    <string name="search_screen">Search Screen</string>
+    <string name="search_result_screen">Search Result Screen</string>
 </resources>

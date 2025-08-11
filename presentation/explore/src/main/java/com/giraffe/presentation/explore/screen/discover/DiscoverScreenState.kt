@@ -22,7 +22,7 @@ data class DiscoverScreenState(
     val selectedTab: SearchTab = SearchTab.MOVIES,
     val tabs: List<SearchTab> = listOf(SearchTab.MOVIES, SearchTab.SERIES),
     val isGridSelected: Boolean = true,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
 )
 
