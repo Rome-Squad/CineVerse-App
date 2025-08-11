@@ -12,4 +12,5 @@ data class RecommendedSeriesScreenState(
     val seriesGenres: List<Genre> = emptyList(),
     val recommendedSeriesFlow: Flow<PagingData<SeriesUi>> = flowOf(),
     val isLoading: Boolean = true,
+    val isNoInternet: Boolean = false
 )

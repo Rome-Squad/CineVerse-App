@@ -1,5 +1,6 @@
 package com.giraffe.presentation.details.screens.recommended.series
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -9,6 +10,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.exception.NoInternetException
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
@@ -52,6 +55,7 @@ class RecommendedSeriesViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 seriesGenres = genres
             )
         }
@@ -76,7 +80,9 @@ class RecommendedSeriesViewModel @Inject constructor(
                     initialLoadSize = 15
                 )
             ) {
-                BasePagingSource { page ->
+                BasePagingSource(
+                    onError = ::onError
+                ) { page ->
                     getRecommendedSeries(movieId, page)
                 }
             }
@@ -100,21 +106,38 @@ class RecommendedSeriesViewModel @Inject constructor(
         updateState {
             it.copy(
                 recommendedSeriesFlow = seriesUiFlow,
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
 
 
-    override fun navigateToSeriesDetailsScreen(seriesId: Int) {
+    override fun onSeriesClick(seriesId: Int) {
         sendEffect(RecommendedSeriesEffect.NavigateToSeriesDetails(seriesId))
+    }
+
+    override fun onBackClick() {
+        sendEffect(RecommendedSeriesEffect.NavigateBack)
+    }
+
+    override fun onRetryClick() {
+        state.value.seriesId?.let {
+            getRecommendedSeries(it)
+        }
     }
 
 
     private fun onError(error: Throwable) {
+        val isNoInternet = error is NoInternetException ||
+                error is UserNoInternetException
+
+        Log.d("Series", "onError: $error")
+
         updateState {
             it.copy(
-                isLoading = false
+                isLoading = false,
+                isNoInternet = isNoInternet || it.isNoInternet
             )
         }
 
