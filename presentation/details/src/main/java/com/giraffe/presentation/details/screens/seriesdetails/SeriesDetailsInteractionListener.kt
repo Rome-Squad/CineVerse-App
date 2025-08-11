@@ -28,7 +28,7 @@ interface SeriesDetailsInteractionListener {
 
     fun onLoginButtonClick()
 
-    fun onBackButtonClick()
+    fun onBackClick()
 
     fun onRetryClick()
 }

@@ -4,8 +4,10 @@ package com.giraffe.presentation.home.screen.show_more
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.presentation.home.base.BaseViewModel
-import com.giraffe.presentation.home.screen.home.MediaType
-
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.ShowMorePoster
+import com.giraffe.presentation.home.navigation.home.routes.ShowMoreRoute
+import com.giraffe.user.exception.NoInternetException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -13,7 +15,7 @@ import javax.inject.Inject
 class ShowMoreViewModel @Inject constructor(
     private val showMoreFactory: ShowMoreFactory,
     stateSavedStateHandle: SavedStateHandle
-) : BaseViewModel<ShowMoreState, ShowMoreEffect>(ShowMoreState()),
+) : BaseViewModel<ShowMoreScreenState, ShowMoreEffect>(ShowMoreScreenState()),
     ShowMoreInteractionListener {
 
     private val sectionType = stateSavedStateHandle.toRoute<ShowMoreRoute>().sectionType
@@ -23,11 +25,33 @@ class ShowMoreViewModel @Inject constructor(
     }
 
     private fun loadByStrategy() {
-        safeExecute {
-            updateState { it.copy(sectionType = sectionType,isLoading = true, errorMessage = null) }
-            val mediaList = showMoreFactory.createStrategy(sectionType).loadData()
-            updateState { it.copy(isLoading = false, mediaList = mediaList) }
+        safeExecute(
+            onError = ::onLoadByStrategyFail,
+            onSuccess = ::onLoadByStrategySuccess,
+        ) {
+            showMoreFactory.createStrategy(sectionType).loadData()
         }
+    }
+
+    private fun onLoadByStrategySuccess(media: List<ShowMorePoster>) {
+        updateState {
+            it.copy(
+                sectionType = sectionType,
+                mediaList = media,
+                isLoading = false,
+                isNoInternet = false
+            )
+        }
+    }
+
+    private fun onLoadByStrategyFail(exception: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                isNoInternet = exception is NoInternetException
+            )
+        }
+        sendEffect(ShowMoreEffect.ShowError(exception))
     }
 
 
@@ -45,5 +69,9 @@ class ShowMoreViewModel @Inject constructor(
             MediaType.MOVIE -> sendEffect(ShowMoreEffect.NavigateToMovieDetails(mediaId))
             MediaType.SERIES -> sendEffect(ShowMoreEffect.NavigateToSeriesDetails(mediaId))
         }
+    }
+
+    override fun onBackClick() {
+        sendEffect(ShowMoreEffect.NavigateBack)
     }
 }

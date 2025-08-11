@@ -25,14 +25,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.giraffe.presentation.home.screen.show_more.PosterUiState
-import com.giraffe.presentation.home.screen.home.MediaType
+import com.giraffe.presentation.home.model.ShowMorePoster
+import com.giraffe.presentation.home.model.MediaType
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TransitionLazyColumnToGrid(
-    poster: List<PosterUiState>,
+    poster: List<ShowMorePoster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
@@ -84,7 +84,7 @@ fun TransitionLazyColumnToGrid(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun PosterListView(
-    poster: List<PosterUiState>,
+    poster: List<ShowMorePoster>,
     listState: androidx.compose.foundation.lazy.LazyListState,
     contentPadding: PaddingValues,
     animatedVisibilityScope: androidx.compose.animation.AnimatedVisibilityScope,
@@ -110,7 +110,7 @@ private fun PosterListView(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun PosterGridView(
-    poster: List<PosterUiState>,
+    poster: List<ShowMorePoster>,
     gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
     contentPadding: PaddingValues,
     animatedVisibilityScope: androidx.compose.animation.AnimatedVisibilityScope,

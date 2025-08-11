@@ -5,6 +5,7 @@ import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.person.entity.Person
 import com.giraffe.media.person.entity.PersonType
 import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
@@ -24,10 +25,10 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class SeriesDetailsViewModel @Inject constructor(
@@ -59,7 +60,7 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = true,
-                isNetworkError = false,
+                isNoInternet = false,
             )
         }
 
@@ -135,17 +136,27 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     override fun onAddRateButtonClick() {
-        safeExecute {
-            if (isLoggedInUseCase()) {
+        executeIfLoggedIn(
+            block = {
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
-                addRatingUseCase(
-                    seriesId = state.value.seriesUi.id,
-                    rating = state.value.currentRating.toFloat()
-                )
-            } else {
-                updateState { it.copy(isVisibleLoginBottomSheet = true) }
+
+                safeExecute(
+                    onError = ::onError
+                ) {
+                    addRatingUseCase(
+                        seriesId = state.value.seriesUi.id,
+                        rating = state.value.currentRating.toFloat()
+                    )
+                }
+            },
+            ifNotLoggedIn = {
+                updateState {
+                    it.copy(
+                        isVisibleLoginBottomSheet = true
+                    )
+                }
             }
-        }
+        )
     }
 
     override fun onRateChange(rate: Int) {
@@ -172,7 +183,7 @@ class SeriesDetailsViewModel @Inject constructor(
         sendEffect(SeriesDetailsEffect.NavigateToLogIn)
     }
 
-    override fun onBackButtonClick() {
+    override fun onBackClick() {
         sendEffect(SeriesDetailsEffect.OnBackButtonClick)
     }
 
@@ -196,7 +207,8 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 seriesUi = series.toUi(),
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
         loadSeriesGenres(series.genreIDs)
@@ -225,6 +237,7 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 genres = genres.map { genre -> genre.title },
+                isLoading = false
             )
         }
     }
@@ -243,7 +256,8 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 seasons = season.map { season -> season.toUi() },
-                isLoading = false
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
@@ -252,10 +266,15 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesPeopleSuccess,
-            onError = ::onError
+            onError = ::loadSeriesPeopleError
         ) {
             getCastAndCrewOfSeries(seriesId)
         }
+    }
+
+    private fun loadSeriesPeopleError(error: Throwable) {
+        updateState { it.copy(isLoading = false) }
+        sendEffect(SeriesDetailsEffect.Error(error))
     }
 
     private fun loadSeriesPeopleSuccess(people: List<Person>) {
@@ -265,7 +284,9 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 cast = cast.map { cast -> cast.toCastUi() },
-                crew = mappedCrew.groupByRole()
+                crew = mappedCrew.groupByRole(),
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
@@ -291,6 +312,8 @@ class SeriesDetailsViewModel @Inject constructor(
                         rating = poster.rating
                     )
                 },
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
@@ -308,18 +331,47 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeriesReviewsSuccess(reviews: List<Review>) {
         updateState {
             it.copy(
-                seriesReviews = reviews.map { review -> review.toUi() }
+                seriesReviews = reviews.map { review -> review.toUi() },
+                isLoading = false,
+                isNoInternet = false
             )
         }
     }
 
+
+    private fun executeIfLoggedIn(
+        block: () -> Unit,
+        ifNotLoggedIn: () -> Unit
+    ) {
+        safeExecute(
+            onSuccess = { isLoggedIn ->
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        isNoInternet = false
+                    )
+                }
+
+                if (isLoggedIn) {
+                    block()
+                } else {
+                    ifNotLoggedIn()
+                }
+            },
+            onError = ::onError,
+            block = isLoggedInUseCase::invoke
+        )
+    }
+
+
     private fun onError(throwable: Throwable) {
-        val isNetworkError = throwable is NoInternetException
+        val isNetworkError =
+            throwable is NoInternetException || throwable is UserNoInternetException
 
         updateState {
             it.copy(
                 isLoading = false,
-                isNetworkError = isNetworkError
+                isNoInternet = isNetworkError || it.isNoInternet
             )
         }
 

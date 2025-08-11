@@ -1,20 +1,22 @@
 package com.giraffe.presentation.home.screen.home
 
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
+import com.giraffe.presentation.home.model.PopularMediaUi
+import com.giraffe.presentation.home.model.Poster
+import com.giraffe.presentation.home.model.YourCollectionUi
+
 
 data class HomeScreenState(
     val userName: String = "",
-    val matchVibes: List<HomeUiModel> = emptyList(),
-    val popularity: List<PopularMediaUiModel> = emptyList(),
-    val recentlyReleased: List<HomeUiModel> = emptyList(),
-    val topRated: List<HomeUiModel> = emptyList(),
-    val upcomingMovies: List<HomeUiModel> = emptyList(),
-    val recentlyViewed: List<HomeUiModel> = emptyList(),
-    val yourCollections: List<YourCollectionUiModel> = emptyList(),
-    val featuredCollections: List<FeaturedCollectionUiModel> = emptyList(),
+    val matchVibes: List<Poster> = emptyList(),
+    val popularity: List<PopularMediaUi> = emptyList(),
+    val recentlyReleased: List<Poster> = emptyList(),
+    val topRated: List<Poster> = emptyList(),
+    val upcomingMovies: List<Poster> = emptyList(),
+    val recentlyViewed: List<Poster> = emptyList(),
+    val yourCollections: List<YourCollectionUi> = emptyList(),
+    val featuredCollections: List<FeaturedCollectionUi> = emptyList(),
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val errorMsgRes: Int? = null,
-    val isGenericError: Boolean = false,
-    val isNetworkError: Boolean = false,
+    val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
 )
