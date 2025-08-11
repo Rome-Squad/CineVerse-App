@@ -9,5 +9,5 @@ data class SearchScreenState(
     val isVoiceRecording: Boolean = false,
     val isPermissionGranted: Boolean = false,
     val isNoInternet: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true
 )
