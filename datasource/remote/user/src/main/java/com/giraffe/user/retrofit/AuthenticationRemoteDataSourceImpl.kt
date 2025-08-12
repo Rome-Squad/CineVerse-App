@@ -4,7 +4,7 @@ import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.user.dto.DeleteSessionRequest
 import com.giraffe.user.dto.SessionRequestBody
 import com.giraffe.user.dto.TokenValidationBody
-import com.giraffe.user.util.safeCall
+import com.giraffe.user.utils.safeCall
 import javax.inject.Inject
 
 class AuthenticationRemoteDataSourceImpl @Inject constructor(

@@ -25,7 +25,6 @@ import com.giraffe.user.datastore.AuthenticationDatastore
 import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpl
 import com.giraffe.user.retrofit.UserApiService
 import com.giraffe.user.retrofit.UserRemoteDataSourceImpl
-import com.giraffe.user.util.RetrofitUserRequestBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -138,10 +137,16 @@ object NetworkModule {
     fun providePersonRequestBuilder(api: MediaMemberApiServiceRetrofit): RetrofitRequestBuilder<MediaMemberApiServiceRetrofit> =
         RetrofitRequestBuilder(api)
 
+
     @Provides
     @Singleton
-    fun provideUserRequestBuilder(api: UserApiService): RetrofitUserRequestBuilder<UserApiService> =
-        RetrofitUserRequestBuilder(api)
+    fun provideAuthenticationRemoteDataSource(api: UserApiService): AuthenticationRemoteDataSource =
+        AuthenticationRemoteDataSourceImpl(api)
+
+    @Provides
+    @Singleton
+    fun provideUserRemoteDataSource(api: UserApiService): UserRemoteDataSource =
+        UserRemoteDataSourceImpl(api)
 
     @Provides
     @Singleton
@@ -167,19 +172,6 @@ object NetworkModule {
     @Singleton
     fun provideSeriesRemoteDataSource(builder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>): SeriesRemoteDataSource =
         SeriesRemoteRetrofitDataSourceImp(builder)
-
-    @Provides
-    @Singleton
-    fun provideAuthenticationRemoteDataSource(
-        builder: RetrofitUserRequestBuilder<UserApiService>
-    ): AuthenticationRemoteDataSource {
-        return AuthenticationRemoteDataSourceImpl(builder)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiService>): UserRemoteDataSource =
-        UserRemoteDataSourceImpl(builder)
 
     @Provides
     @Singleton

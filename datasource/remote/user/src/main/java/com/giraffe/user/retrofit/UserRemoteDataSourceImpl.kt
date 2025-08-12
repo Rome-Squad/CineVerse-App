@@ -2,7 +2,7 @@ package com.giraffe.user.retrofit
 
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.repository.dto.UserDto
-import com.giraffe.user.util.safeCall
+import com.giraffe.user.utils.safeCall
 import javax.inject.Inject
 
 class UserRemoteDataSourceImpl @Inject constructor(
