@@ -15,6 +15,8 @@ interface MovieRepository {
 
     suspend fun getGenres(): List<Genre>
 
+    suspend fun getTopGenre(): Genre?
+
     suspend fun getByGenreId(genreId: Int, page: Int): List<Movie>
 
     fun getRecentlyViewed(): Flow<List<Movie>>

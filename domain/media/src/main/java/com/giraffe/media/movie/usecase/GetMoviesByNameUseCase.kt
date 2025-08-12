@@ -9,9 +9,8 @@ class GetMoviesByNameUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(movieName: String, page: Int): List<Movie> {
         val results = movieRepository.getByName(name = movieName, page = page)
-        val topGenre = movieRepository.getGenres().firstOrNull { it.rank != 0 }
-        return topGenre?.let { genre ->
-            results.sortedByDescending { it.genresID.contains(genre.id) }
+        return movieRepository.getTopGenre()?.let { genre ->
+            results.sortedByDescending { genre.id in it.genresID }
         } ?: results
     }
 }

@@ -7,43 +7,57 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class GetRatedMoviesUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var getUserUseCase: GetUserUseCase
-    private lateinit var useCase: GetRatedMoviesUseCase
+    private var repository: MovieRepository = mockk()
+    private var getUserUseCase: GetUserUseCase = mockk()
+    private var useCase: GetRatedMoviesUseCase = GetRatedMoviesUseCase(repository, getUserUseCase)
+    private val mockUser = User(
+        id = 123,
+        displayName = "",
+        username = "",
+        avatarUrl = ""
+    )
 
-    @BeforeEach
-    fun setUp() {
-        repository = mockk()
-        getUserUseCase = mockk()
-        useCase = GetRatedMoviesUseCase(repository, getUserUseCase)
+    @Test
+    fun `invoke should call getUserRated on repository`() = runTest {
+        // given
+        coEvery { repository.getUserRated(any()) } returns emptyList()
+        coEvery { getUserUseCase() } returns mockUser
+
+        // when
+        useCase()
+
+        // then
+        coVerify(exactly = 1) { repository.getUserRated(any()) }
+    }
+
+    @Test
+    fun `invoke should call getUserUseCase on GetRatedMoviesUseCase`() = runTest {
+        // given
+        coEvery { repository.getUserRated(any()) } returns emptyList()
+        coEvery { getUserUseCase() } returns mockUser
+
+        // when
+        useCase()
+
+        // then
+        coVerify(exactly = 1) { getUserUseCase() }
     }
 
     @Test
     fun `invoke should return rated movies for user`() = runTest {
         // Given
-        val accountId = 123
-        val mockUser = User(
-            id = accountId,
-            displayName = "",
-            username = "",
-            avatarUrl = ""
-        )
-
         coEvery { getUserUseCase() } returns mockUser
-        coEvery { repository.getUserRated(accountId) } returns fakeMovies
+        coEvery { repository.getUserRated(mockUser.id) } returns fakeMovies
 
         // When
         val result = useCase()
 
         // Then
-        coVerify { getUserUseCase() }
-        coVerify { repository.getUserRated(accountId) }
         assertEquals(fakeMovies, result)
     }
 }

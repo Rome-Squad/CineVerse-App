@@ -6,44 +6,32 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class GetMovieDetailsUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
-
-    private val fakeMovie = fakeMovie(
-        id = 1,
-        title = "Test Movie",
-    )
-
-    @BeforeEach
-    fun setup() {
-        repository = mockk()
-        getMovieDetailsUseCase = GetMovieDetailsUseCase(repository)
-    }
+    private var repository: MovieRepository = mockk()
+    private var getMovieDetailsUseCase: GetMovieDetailsUseCase = GetMovieDetailsUseCase(repository)
 
     @Test
-    fun `invoke should call getMovieDetails on repository with correct id`() = runTest {
+    fun `invoke should call getDetails on repository`() = runTest {
         // given
         coEvery { repository.getDetails(any()) } returns fakeMovie
 
         // when
-        getMovieDetailsUseCase(1)
+        getMovieDetailsUseCase(movieId)
 
         // then
-        coVerify(exactly = 1) { repository.getDetails(1) }
+        coVerify(exactly = 1) { repository.getDetails(any()) }
     }
 
     @Test
     fun `invoke should return movie details from repository`() = runTest {
         // given
-        coEvery { repository.getDetails(1) } returns fakeMovie
+        coEvery { repository.getDetails(movieId) } returns fakeMovie
 
         // when
-        val result = getMovieDetailsUseCase(1)
+        val result = getMovieDetailsUseCase(movieId)
 
         // then
         assertThat(result).isEqualTo(fakeMovie)

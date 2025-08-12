@@ -6,52 +6,35 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class GetRecommendedMovieUseCaseTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var getRecommendedMoviesUseCase: GetRecommendedMoviesUseCase
-
-    @BeforeEach
-    fun setUp() {
-        repository = mockk()
-        getRecommendedMoviesUseCase = GetRecommendedMoviesUseCase(repository)
-    }
+    private var repository: MovieRepository = mockk()
+    private var useCase: GetRecommendedMoviesUseCase =
+        GetRecommendedMoviesUseCase(repository)
 
     @Test
-    fun `invoke should call getRecommendedMovie on repository with correct id and page`() =
-        runTest {
-            // given
-            val movieId = 1
-            val page = 2
-            val limit = 10
-            coEvery { repository.getRecommended(movieId, page, limit) } returns emptyList()
+    fun `invoke should call getRecommended on repository`() = runTest {
+        // given
+        coEvery { repository.getRecommended(any(), any(), any()) } returns emptyList()
 
-            // when
-            getRecommendedMoviesUseCase(movieId, page, limit)
+        // when
+        useCase(movieId, page, limit)
 
-            // then
-            coVerify(exactly = 1) { repository.getRecommended(movieId, page, limit) }
-        }
+        // then
+        coVerify(exactly = 1) { repository.getRecommended(any(), any(), any()) }
+    }
 
     @Test
     fun `invoke should return list of recommended movies from repository`() = runTest {
         // given
-        val movieId = 1
-        val page = 1
-        val limit = 10
-        val expectedMovies = listOf(
-            fakeMovie(id = 101, title = "Recommended Movie 1"),
-            fakeMovie(id = 102, title = "Recommended Movie 2")
-        )
-        coEvery { repository.getRecommended(movieId, page, limit) } returns expectedMovies
+        coEvery { repository.getRecommended(movieId, page, limit) } returns fakeMovies
 
         // when
-        val result = getRecommendedMoviesUseCase(movieId, page, limit)
+        val result = useCase(movieId, page, limit)
 
         // then
-        assertThat(result).isEqualTo(expectedMovies)
+        assertThat(result).isEqualTo(fakeMovies)
     }
 }
