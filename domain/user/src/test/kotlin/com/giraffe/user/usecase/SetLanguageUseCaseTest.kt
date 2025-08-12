@@ -8,14 +8,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 class SetLanguageUseCaseTest {
-
     private var settingsRepository: SettingsRepository = mockk()
     private var setLanguageUseCase: SetLanguageUseCase = SetLanguageUseCase(settingsRepository)
 
     @Test
     fun `invoke should call setLanguage on repository with correct code`() = runTest {
 
-    val langCode = "ar"
+        val langCode = "ar"
         coEvery { settingsRepository.setLanguage(langCode) } returns Unit
 
         setLanguageUseCase(langCode)

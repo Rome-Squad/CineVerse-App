@@ -8,24 +8,17 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetLanguageUseCaseTest {
 
-    private lateinit var settingsRepository: SettingsRepository
-    private lateinit var getLanguageUseCase: GetLanguageUseCase
-
-    @BeforeEach
-    fun setUp() {
-        settingsRepository = mockk()
-        getLanguageUseCase = GetLanguageUseCase(settingsRepository)
-    }
+    private val settingsRepository: SettingsRepository = mockk()
+    private val getLanguageUseCase: GetLanguageUseCase = GetLanguageUseCase(settingsRepository)
 
     @Test
     fun `invoke should call getLanguage on repository`() = runTest {
 
-    every { settingsRepository.getLanguage() } returns flowOf("ar")
+        every { settingsRepository.getLanguage() } returns flowOf("ar")
 
         getLanguageUseCase()
 
@@ -35,7 +28,7 @@ class GetLanguageUseCaseTest {
     @Test
     fun `invoke should return language from repository`() = runTest {
 
-    val expectedLang = "ar"
+        val expectedLang = "ar"
         every { settingsRepository.getLanguage() } returns flowOf(expectedLang)
 
         val resultFlow = getLanguageUseCase()

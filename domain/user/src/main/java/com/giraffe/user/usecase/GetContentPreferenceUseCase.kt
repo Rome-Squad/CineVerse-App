@@ -6,7 +6,7 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
 class GetContentPreferenceUseCase @Inject constructor(
-    private val repo: SettingsRepository
+    private val settingsRepository: SettingsRepository
 ) {
-    operator fun invoke(): Flow<ContentPreference> = repo.getContentPreference()
+    operator fun invoke(): Flow<ContentPreference> = settingsRepository.getContentPreference()
 }
