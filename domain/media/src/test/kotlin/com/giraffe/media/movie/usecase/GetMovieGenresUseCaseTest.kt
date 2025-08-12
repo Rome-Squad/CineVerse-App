@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class GetMovieGenresUseCaseTest {
 
-    private var repository: MovieRepository = mockk(relaxed = true)
+    private var repository: MovieRepository = mockk()
     private var useCase: GetMoviesGenresByIdsUseCase = GetMoviesGenresByIdsUseCase(repository)
 
     private val genreIds = listOf(1, 2)

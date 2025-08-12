@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 class DeleteMovieUseCaseTest {
-    private var repository: MovieRepository = mockk(relaxed = true)
+    private var repository: MovieRepository = mockk(relaxUnitFun = true)
     private var useCase: DeleteMovieUseCase = DeleteMovieUseCase(repository)
 
     @Test

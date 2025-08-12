@@ -10,13 +10,8 @@ import kotlin.test.Test
 
 class GetMovieDetailsUseCaseTest {
 
-    private var repository: MovieRepository = mockk(relaxed = true)
+    private var repository: MovieRepository = mockk()
     private var getMovieDetailsUseCase: GetMovieDetailsUseCase = GetMovieDetailsUseCase(repository)
-
-    private val fakeMovie = fakeMovie(
-        id = movieId,
-        title = "Test Movie",
-    )
 
     @Test
     fun `invoke should call getDetails on repository`() = runTest {

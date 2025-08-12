@@ -4,9 +4,11 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import kotlinx.datetime.LocalDate
 
-val movieId = 1
-val page = 1
-val limit = 10
+const val movieId = 1
+const val page = 1
+const val limit = 10
+
+val fakeMovie = fakeMovie(id = movieId, title = "Test Movie")
 
 fun fakeMovie(
     id: Int,
@@ -35,8 +37,8 @@ fun fakeMovie(
 
 val fakeMovies: List<Movie> = listOf(
     fakeMovie(id = movieId, title = "title 1", popularity = 100.5f, userRating = 9.1f),
-    fakeMovie(id = 2, title = "title 2", popularity = 200f),
-    fakeMovie(id = 3, title = "title 3", popularity = 333f),
+    fakeMovie(id = 2, title = "title 2", popularity = 200f, genresID = listOf(28)),
+    fakeMovie(id = 3, title = "title 3", popularity = 333f, genresID = listOf(878)),
     fakeMovie(id = 4, title = "title 4", popularity = 50f),
     fakeMovie(id = 5, title = "title 5", popularity = 1f),
     fakeMovie(id = 6, title = "title 6", popularity = 1000333f),

@@ -12,12 +12,11 @@ import kotlin.test.assertEquals
 
 class GetRatedMoviesUseCaseTest {
 
-    private var repository: MovieRepository = mockk(relaxed = true)
-    private var getUserUseCase: GetUserUseCase = mockk(relaxed = true)
+    private var repository: MovieRepository = mockk()
+    private var getUserUseCase: GetUserUseCase = mockk()
     private var useCase: GetRatedMoviesUseCase = GetRatedMoviesUseCase(repository, getUserUseCase)
-    private val accountId = 123
     private val mockUser = User(
-        id = accountId,
+        id = 123,
         displayName = "",
         username = "",
         avatarUrl = ""
@@ -26,7 +25,8 @@ class GetRatedMoviesUseCaseTest {
     @Test
     fun `invoke should call getUserRated on repository`() = runTest {
         // given
-        coEvery { repository.getUserRated(any()) } returns fakeMovies
+        coEvery { repository.getUserRated(any()) } returns emptyList()
+        coEvery { getUserUseCase() } returns mockUser
 
         // when
         useCase()
@@ -38,6 +38,7 @@ class GetRatedMoviesUseCaseTest {
     @Test
     fun `invoke should call getUserUseCase on GetRatedMoviesUseCase`() = runTest {
         // given
+        coEvery { repository.getUserRated(any()) } returns emptyList()
         coEvery { getUserUseCase() } returns mockUser
 
         // when
@@ -51,7 +52,7 @@ class GetRatedMoviesUseCaseTest {
     fun `invoke should return rated movies for user`() = runTest {
         // Given
         coEvery { getUserUseCase() } returns mockUser
-        coEvery { repository.getUserRated(accountId) } returns fakeMovies
+        coEvery { repository.getUserRated(mockUser.id) } returns fakeMovies
 
         // When
         val result = useCase()

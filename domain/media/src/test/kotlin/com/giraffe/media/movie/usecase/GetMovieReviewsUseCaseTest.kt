@@ -12,7 +12,7 @@ import kotlin.test.Test
 
 class GetMovieReviewsUseCaseTest {
 
-    private var repository: MovieRepository = mockk(relaxed = true)
+    private var repository: MovieRepository = mockk()
     private var getMovieReviewsUseCase: GetMovieReviewsUseCase = GetMovieReviewsUseCase(repository)
     private val reviewId = 1
 

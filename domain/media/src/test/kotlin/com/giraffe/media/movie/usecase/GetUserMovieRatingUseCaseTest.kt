@@ -6,23 +6,18 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class GetUserMovieRatingUseCaseTest {
-    private lateinit var repository: MovieRepository
-    private lateinit var getUserMovieRatingUseCase: GetUserMovieRatingUseCase
-
-    @BeforeEach
-    fun setup() {
-        repository = mockk()
-        getUserMovieRatingUseCase = GetUserMovieRatingUseCase(repository)
-    }
+    private var repository: MovieRepository = mockk()
+    private var getUserMovieRatingUseCase: GetUserMovieRatingUseCase =
+        GetUserMovieRatingUseCase(repository)
+    private val expectedRating = 8.5f
 
     @Test
     fun `invoke should call getUserRatedById on repository`() = runTest {
         // given
-        coEvery { repository.getUserRatedById(any()) } returns 5.0f
+        coEvery { repository.getUserRatedById(any()) } returns expectedRating
 
         // when
         getUserMovieRatingUseCase(movieId)
@@ -34,7 +29,6 @@ class GetUserMovieRatingUseCaseTest {
     @Test
     fun `invoke should return rating from repository`() = runTest {
         // given
-        val expectedRating = 8.5f
         coEvery { repository.getUserRatedById(movieId) } returns expectedRating
 
         // when

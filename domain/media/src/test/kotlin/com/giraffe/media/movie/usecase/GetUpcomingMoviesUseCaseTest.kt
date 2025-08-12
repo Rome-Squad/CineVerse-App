@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class GetUpcomingMoviesUseCaseTest {
 
-    private var repository: MovieRepository = mockk(relaxed = true)
+    private var repository: MovieRepository = mockk()
     private var useCase: GetUpcomingMoviesUseCase = GetUpcomingMoviesUseCase(repository)
 
     @Test

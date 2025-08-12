@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 
 class GetRecentlyViewedMoviesUseCaseTest {
-    private var repository: MovieRepository = mockk(relaxed = true)
+    private var repository: MovieRepository = mockk()
     private var useCase: GetRecentlyViewedMoviesUseCase = GetRecentlyViewedMoviesUseCase(repository)
 
     @Test
