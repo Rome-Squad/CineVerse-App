@@ -22,9 +22,9 @@ import com.giraffe.media.util.RetrofitRequestBuilder
 import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
-import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpRetrofit
-import com.giraffe.user.retrofit.UserApiServiceRetrofit
-import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
+import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpl
+import com.giraffe.user.retrofit.UserApiService
+import com.giraffe.user.retrofit.UserRemoteDataSourceImpl
 import com.giraffe.user.util.RetrofitUserRequestBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -110,8 +110,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideUserApi(retrofit: Retrofit): UserApiServiceRetrofit =
-        retrofit.create(UserApiServiceRetrofit::class.java)
+    fun provideUserApi(retrofit: Retrofit): UserApiService =
+        retrofit.create(UserApiService::class.java)
 
     @Provides
     @Singleton
@@ -140,7 +140,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideUserRequestBuilder(api: UserApiServiceRetrofit): RetrofitUserRequestBuilder<UserApiServiceRetrofit> =
+    fun provideUserRequestBuilder(api: UserApiService): RetrofitUserRequestBuilder<UserApiService> =
         RetrofitUserRequestBuilder(api)
 
     @Provides
@@ -171,15 +171,15 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideAuthenticationRemoteDataSource(
-        builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>
+        builder: RetrofitUserRequestBuilder<UserApiService>
     ): AuthenticationRemoteDataSource {
-        return AuthenticationRemoteDataSourceImpRetrofit(builder)
+        return AuthenticationRemoteDataSourceImpl(builder)
     }
 
     @Provides
     @Singleton
-    fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>): UserRemoteDataSource =
-        UserRemoteDataSourceImplRetrofit(builder)
+    fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiService>): UserRemoteDataSource =
+        UserRemoteDataSourceImpl(builder)
 
     @Provides
     @Singleton
