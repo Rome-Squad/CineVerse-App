@@ -35,7 +35,6 @@ class SeriesRoomLocalDateSourceTest {
         it.copy(
             isRecentViewed = true,
             recentViewedAt = 9999L,
-            isRecentlyReleased = false,
             isRecommended = true,
             isTopRated = true,
         )
@@ -148,7 +147,6 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `insertPopularitySeries performs upsert with popularity flag`() = runTest {
-
         dataSource.insertPopularitySeries(sampleSeries)
 
         coVerify {
@@ -168,21 +166,11 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `insertRecentlyReleasedSeries performs upsert with recentlyReleased flag`() = runTest {
-        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
-
         dataSource.insertRecentlyReleasedSeries(sampleSeries)
 
         coVerify {
-            dao.upsertSeries(
-                match { mergedList ->
-                    mergedList.size == 1 &&
-                            mergedList[0].isRecentlyReleased &&
-                            mergedList[0].isRecentViewed == true &&
-                            mergedList[0].isRecommended == true &&
-                            mergedList[0].isTopRated == true &&
-                            mergedList[0].recentViewedAt == 9999L
-                }
-            )
+            dao.upsertSeries(sampleSeries)
+            dao.upsertRecentlyReleasedSeriesIDs(sampleSeries.map { it.toRecentlyReleasedSeriesCacheDto() })
         }
     }
 

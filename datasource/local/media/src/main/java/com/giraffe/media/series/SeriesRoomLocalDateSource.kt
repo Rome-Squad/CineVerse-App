@@ -3,6 +3,7 @@ package com.giraffe.media.series
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.util.safeCall
@@ -52,15 +53,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
     override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) = safeCall {
-        upsertWithMerge(series) { old, new ->
-            new.copy(
-                isRecentViewed = old.isRecentViewed,
-                recentViewedAt = old.recentViewedAt,
-                isRecommended = old.isRecommended,
-                isTopRated = old.isTopRated,
-                isRecentlyReleased = true
-            )
-        }
+        seriesDao.upsertSeries(series)
+        seriesDao.upsertRecentlyReleasedSeriesIDs(series.map { it.toRecentlyReleasedSeriesCacheDto() })
     }
 
     override suspend fun getRecentlyReleasedSeries(limit: Int) = safeCall {
@@ -74,7 +68,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
                 recentViewedAt = old.recentViewedAt,
                 isRecommended = old.isRecommended,
                 isTopRated = true,
-                isRecentlyReleased = old.isRecentlyReleased
             )
         }
     }
@@ -90,7 +83,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
                 recentViewedAt = old.recentViewedAt,
                 isRecommended = true,
                 isTopRated = old.isTopRated,
-                isRecentlyReleased = old.isRecentlyReleased
             )
         }
     }
@@ -141,5 +133,9 @@ class SeriesRoomLocalDateSource @Inject constructor(
 }
 
 fun SeriesCacheDto.toPopularSeriesCacheDto() = PopularSeriesCacheDto(
+    id = id,
+)
+
+fun SeriesCacheDto.toRecentlyReleasedSeriesCacheDto() = RecentlyReleasedSeriesCacheDto(
     id = id,
 )
