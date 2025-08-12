@@ -56,16 +56,13 @@ fun mapToDomainException(e: Throwable): UserException = when (e) {
     is SessionCreationException -> InvalidLoginException()
 
     is SessionNotFoundException -> InvalidUsernameMatchException()
-
     is InvalidIdDataException -> InvalidLoginException()
     is NotFoundDataException -> InvalidUsernameMatchException()
-
     is RequestTimeoutDataException,
     is NoInternetDataException,
     is UnknownNetworkDataException -> NoInternetException()
 
     is SerializationDataException -> UnknownException()
-
     is CorruptDatabaseDataException,
     is DiskAccessDataException -> AccessDeniedException()
 
