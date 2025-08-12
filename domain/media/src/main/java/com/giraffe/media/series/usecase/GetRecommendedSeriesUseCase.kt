@@ -6,7 +6,6 @@ import javax.inject.Inject
 class GetRecommendedSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
-    suspend operator fun invoke(seriesId: Int, page: Int, limit: Int = 10) =
-        seriesRepository.getRecommended(seriesId, page, limit)
-
+    suspend operator fun invoke(seriesId: Int, page: Int) =
+        seriesRepository.getRecommended(seriesId, page)
 }

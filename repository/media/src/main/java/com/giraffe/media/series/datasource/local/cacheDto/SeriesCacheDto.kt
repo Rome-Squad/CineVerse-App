@@ -19,7 +19,6 @@ data class SeriesCacheDto(
     val isRecentViewed: Boolean = false,
     val recentViewedAt: Long? = System.currentTimeMillis(),
     val popularity: Float? = null,
-    val isRecommended: Boolean = false,
     val userRating: Float? = null,
     val youtubeVideoId: String?,
     val cachedAt: Long = System.currentTimeMillis()

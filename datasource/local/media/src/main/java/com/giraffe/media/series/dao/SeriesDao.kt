@@ -45,10 +45,6 @@ interface SeriesDao {
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecentViewed = 1 ORDER BY recentViewedAt DESC")
     fun getRecentSeries(): Flow<List<SeriesCacheDto>>
 
-    @Query("UPDATE $SERIES_TABLE SET isRecommended = 0")
-    suspend fun resetSeriesCache()
-
-
     @Query(
         """
         SELECT * 
@@ -81,8 +77,6 @@ interface SeriesDao {
     )
     fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
 
-    @Query("SELECT * FROM $SERIES_TABLE WHERE isRecommended = 1 LIMIT :limit")
-    fun getRecommendedSeries(limit: Int): List<SeriesCacheDto>
 
     @Query("DELETE FROM $SERIES_TABLE WHERE id = :seriesId")
     suspend fun deleteSeriesById(seriesId: Int)

@@ -20,7 +20,7 @@ interface SeriesRepository {
 
     suspend fun getSeasons(seriesId: Int): List<Season>
 
-    suspend fun getRecommended(seriesId: Int, page: Int, limit: Int): List<Series>
+    suspend fun getRecommended(seriesId: Int, page: Int): List<Series>
 
     suspend fun getReviews(seriesId: Int, page: Int = 1): List<Review>
 
@@ -50,7 +50,6 @@ interface SeriesRepository {
 
     suspend fun addRecentlyViewed(series: Series)
 
-    suspend fun addRecommended(series: List<Series>)
 
     suspend fun addPopular(series: List<Series>)
 

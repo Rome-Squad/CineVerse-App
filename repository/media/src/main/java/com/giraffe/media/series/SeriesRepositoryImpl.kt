@@ -156,22 +156,10 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
 
-    override suspend fun getRecommended(seriesId: Int, page: Int, limit: Int) = SafeCall {
-        if (page > 1) {
-            seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).take(limit)
-                .map(SeriesDto::toEntity)
-        } else {
-            seriesLocalDateSource.getRecommendedSeries(limit).map { it.toEntity() }.ifEmpty {
-                seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).take(limit)
-                    .map(SeriesDto::toEntity)
-                    .also { addRecommended(it) }
-            }
-        }
+    override suspend fun getRecommended(seriesId: Int, page: Int) = SafeCall {
+        seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).map(SeriesDto::toEntity)
     }
 
-    override suspend fun addRecommended(series: List<Series>) = SafeCall {
-        seriesLocalDateSource.insertRecommendedSeries(series.map { it.toCacheDto() })
-    }
 
     override suspend fun getUserRated(accountId: Int) = SafeCall {
         seriesRemoteDataSource.getRatedSeries(accountId).map(SeriesDto::toEntity)

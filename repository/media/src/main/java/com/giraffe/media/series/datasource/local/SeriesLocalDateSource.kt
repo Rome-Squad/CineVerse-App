@@ -20,8 +20,6 @@ interface SeriesLocalDateSource {
     suspend fun getRecentlyReleasedSeries(limit: Int): List<SeriesCacheDto>
     suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>)
     suspend fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
-    suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>)
-    suspend fun getRecommendedSeries(limit: Int): List<SeriesCacheDto>
     suspend fun deleteSeriesById(seriesId: Int)
 
 }

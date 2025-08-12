@@ -31,14 +31,6 @@ class SeriesRoomLocalDateSourceTest {
             youtubeVideoId = "youtube"
         )
     )
-    private val oldSeries = sampleSeries.map {
-        it.copy(
-            isRecentViewed = true,
-            recentViewedAt = 9999L,
-            isRecommended = true,
-        )
-    }
-
     private val sampleGenres = listOf(
         SeriesGenreCacheDto(id = 1, name = "Action", count = 1)
     )
@@ -200,33 +192,4 @@ class SeriesRoomLocalDateSourceTest {
 
         assertThat(result).isEqualTo(sampleSeries)
     }
-
-    @Test
-    fun `insertRecommendedSeries performs upsert with recommended flag`() = runTest {
-        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
-
-        dataSource.insertRecommendedSeries(sampleSeries)
-
-        coVerify {
-            dao.upsertSeries(
-                match { mergedList ->
-                    mergedList.size == 1 &&
-                            mergedList[0].isRecommended &&
-                            mergedList[0].isRecentViewed == true &&
-                            mergedList[0].recentViewedAt == 9999L
-                }
-            )
-        }
-    }
-
-    @Test
-    fun `getRecommendedSeries returns series`() = runTest {
-        coEvery { dao.getRecommendedSeries(10) } returns sampleSeries
-
-        val result = dataSource.getRecommendedSeries(10)
-
-        assertThat(result).isEqualTo(sampleSeries)
-    }
-
-
 }

@@ -71,20 +71,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getTopRatedSeries(limit)
     }
 
-    override suspend fun insertRecommendedSeries(series: List<SeriesCacheDto>) = safeCall {
-        upsertWithMerge(series) { old, new ->
-            new.copy(
-                isRecentViewed = old.isRecentViewed,
-                recentViewedAt = old.recentViewedAt,
-                isRecommended = true,
-            )
-        }
-    }
-
-    override suspend fun getRecommendedSeries(limit: Int) = safeCall {
-        seriesDao.getRecommendedSeries(limit)
-    }
-
     override suspend fun deleteSeriesById(seriesId: Int) {
         seriesDao.deleteSeriesById(seriesId)
 
@@ -106,23 +92,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
 
     override suspend fun clearRecentSeries() = safeCall {
         seriesDao.clearRecentSeries()
-    }
-
-
-    private suspend fun upsertWithMerge(
-        series: List<SeriesCacheDto>,
-        merge: (old: SeriesCacheDto, new: SeriesCacheDto) -> SeriesCacheDto
-    ) {
-        if (series.isEmpty()) return
-
-        val existingMap = seriesDao.getSeriesByIds(series.map { it.id }).associateBy { it.id }
-
-        val merged = series.map { new ->
-            val old = existingMap[new.id]
-            if (old != null) merge(old, new) else new
-        }
-
-        seriesDao.upsertSeries(merged)
     }
 }
 
