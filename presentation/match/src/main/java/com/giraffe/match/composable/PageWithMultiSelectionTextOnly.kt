@@ -14,7 +14,7 @@ import com.giraffe.match.model.SelectionType
 import com.giraffe.match.screen.match_pager.SelectionOption
 
 @Composable
-fun SelectionPageTextOnly(
+fun PageWithMultiSelectionTextOnly(
     options: List<SelectionOption>,
     selectedItems: List<Int>,
     onSelectionChange: (List<Int>) -> Unit,
