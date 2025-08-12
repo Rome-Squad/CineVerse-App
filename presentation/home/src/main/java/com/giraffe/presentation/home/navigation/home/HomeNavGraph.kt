@@ -91,9 +91,6 @@ fun HomeNavGraph(
                 profileApi.YourCollectionsContainer(
                     navigateBack = {
                         navController.popBackStack()
-                    },
-                    onShowBottomBarChange = {
-                        onShowBottomBar(it)
                     }
                 )
             }
@@ -108,9 +105,7 @@ fun HomeNavGraph(
                     navigateBack = {
                         navController.popBackStack()
                     }
-                ) {
-                    onShowBottomBar(it)
-                }
+                )
             }
 
             composable<SeriesDetailsRoute> { backStackEntry ->
