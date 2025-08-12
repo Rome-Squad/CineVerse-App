@@ -98,7 +98,7 @@ fun MatchPagerScreen(
     ) {
         AppBar(
             showBackButton = true,
-            onBackButtonClick = { viewModel.onBackClicked() }
+            onBackButtonClick = viewModel::onBackClicked
         )
 
         ProgressIndicator(
