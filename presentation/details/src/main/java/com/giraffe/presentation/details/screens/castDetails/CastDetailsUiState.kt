@@ -10,7 +10,7 @@ data class CastDetailsUiState(
     val actorBirth: String = "",
     val actorPlace: String = "",
     val biographyInfo: String = "",
-    val actorGalleryImageUrls: List<String?> = emptyList(),
+    val actorGalleryImageUrls: List<String> = emptyList(),
     val posters: List<Poster> = emptyList(),
     val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,

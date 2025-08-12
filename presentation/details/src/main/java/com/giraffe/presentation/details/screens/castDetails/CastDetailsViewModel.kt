@@ -2,15 +2,18 @@ package com.giraffe.presentation.details.screens.castDetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.usecase.AddRecentPersonUseCase
-import com.giraffe.media.person.usecase.GetPersonDetailsUseCase
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.AddCastToRecentCastUseCase
+import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
+import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
 import com.giraffe.presentation.details.screens.castCredit.MediaType
+import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toSocialMediaUi
+import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
@@ -18,8 +21,9 @@ import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 @HiltViewModel
 class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getPersonDetailsUseCase: GetPersonDetailsUseCase,
-    private val storeRecentSeriesUseCase: AddRecentPersonUseCase
+    private val getCastDetailsUseCase: GetCastDetailsUseCase,
+    private val getCastCreditsUseCase: GetCastCreditsUseCase,
+    private val storeRecentSeriesUseCase: AddCastToRecentCastUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(
     CastDetailsUiState(
         actorId = savedStateHandle.toRoute<CastDetailsRoute>().id
@@ -28,43 +32,45 @@ class CastDetailsViewModel @Inject constructor(
     CastDetailsInteractionListener {
 
     init {
-        getPersonDetails(state.value.actorId)
+        getCastDetailsAndCredits(state.value.actorId)
     }
 
-    private fun getPersonDetails(personId: Int) {
+    private fun getCastDetailsAndCredits(personId: Int) {
         updateState { it.copy(isLoading = true) }
 
         safeExecute(
             onSuccess = ::getPersonDetailsSuccess,
             onError = ::getPersonDetailsError,
-            block = { getPersonDetailsUseCase(personId) }
+            block = { getCastDetailsUseCase(personId) }
+        )
+        getCastCredits(state.value.actorId)
+    }
+
+
+    private fun getCastCredits(actorId: Int) {
+        safeExecute(
+            onSuccess = ::getCastCreditsSuccess,
+            onError = ::getCastCreditsError,
+            block = { getCastCreditsUseCase(actorId) }
         )
     }
 
-    private fun getPersonDetailsSuccess(person: Person) {
-        safeExecute { storeRecentSeriesUseCase(person) }
+    private fun getPersonDetailsSuccess(castMember: CastMember) {
+        safeExecute { storeRecentSeriesUseCase(castMember) }
 
+        //todo we should get posters from new usecases which will get movies and series for personId
         updateState {
             it.copy(
-                actorId = person.id,
+                actorId = castMember.id,
                 isLoading = false,
                 isNoInternet = false,
-                actorImageUrl = person.imageUrl.orEmpty(),
-                actorName = person.name,
-                actorBirth = person.birthday.orEmpty(),
-                actorPlace = person.placeOfBirth.orEmpty(),
-                actorGalleryImageUrls = person.images,
-                biographyInfo = person.biography.orEmpty(),
-                socialMediaUiList = person.socialMedia?.toSocialMediaUi() ?: emptyList(),
-                posters = person.personCredits.map { personCredit ->
-                    Poster(
-                        id = personCredit.id,
-                        name = personCredit.title,
-                        imageUri = personCredit.posterPath.orEmpty(),
-                        rating = personCredit.voteAverage.toFloat(),
-                        mediaTypeOfPoster = personCredit.mediaType
-                    )
-                }
+                actorImageUrl = castMember.imageUrl.orEmpty(),
+                actorName = castMember.name,
+                actorBirth = castMember.birthday.orEmpty(),
+                actorPlace = castMember.placeOfBirth.orEmpty(),
+                actorGalleryImageUrls = castMember.otherImages.orEmpty(),
+                biographyInfo = castMember.biography.orEmpty(),
+                socialMediaUiList = castMember.socialMedia?.toSocialMediaUi() ?: emptyList(),
             )
         }
     }
@@ -75,6 +81,25 @@ class CastDetailsViewModel @Inject constructor(
                 isLoading = false,
                 isNoInternet = exception is NoInternetException ||
                         exception is UserNoInternetException
+            )
+        }
+
+        sendEffect(CastDetailsEffect.ShowError(exception))
+    }
+
+    private fun getCastCreditsSuccess(media: MediaMemberRepository.CastMedia) {
+        val posters = media.series.map { it.toUi().toPoster() }
+            .plus(media.movies.map { it.toUi().toPoster() })
+
+        updateState {
+            it.copy(posters = posters)
+        }
+    }
+
+    private fun getCastCreditsError(exception: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false,
             )
         }
 

@@ -5,10 +5,8 @@ import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
-import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.usecase.GetPeopleBySeriesIdUseCase
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetMediaMembersBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
@@ -25,6 +23,7 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -35,7 +34,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getSeriesDetails: GetSeriesDetailsUseCase,
     private val getLastSeasons: GetSeasonsUseCase,
     private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
-    private val getCastAndCrewOfSeries: GetPeopleBySeriesIdUseCase,
+    private val getCastAndCrewOfSeries: GetMediaMembersBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
     private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
@@ -212,7 +211,6 @@ class SeriesDetailsViewModel @Inject constructor(
             )
         }
         loadSeriesGenres(series.genreIDs)
-
         saveSeriesToRecent(series)
     }
 
@@ -262,7 +260,6 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-
     private fun loadSeriesPeople(seriesId: Int) {
         safeExecute(
             onSuccess = ::loadSeriesPeopleSuccess,
@@ -277,13 +274,15 @@ class SeriesDetailsViewModel @Inject constructor(
         sendEffect(SeriesDetailsEffect.Error(error))
     }
 
-    private fun loadSeriesPeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST }.take(10)
-        val crew = people.filter { it.type == PersonType.CREW }.take(10)
+    private fun loadSeriesPeopleSuccess(mediaMembers: MediaMemberRepository.MediaMembers) {
+        val cast = mediaMembers.cast.take(10)
+        val crew = mediaMembers.crew.take(10)
         val mappedCrew = crew.map { it.toCrewUi() }
+        val mappedCast = cast.map { it.toCastUi() }
+
         updateState {
             it.copy(
-                cast = cast.map { cast -> cast.toCastUi() },
+                cast = mappedCast,
                 crew = mappedCrew.groupByRole(),
                 isLoading = false,
                 isNoInternet = false
@@ -300,7 +299,6 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-
     private fun loadRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
         updateState {
             it.copy(
@@ -308,7 +306,7 @@ class SeriesDetailsViewModel @Inject constructor(
                     Poster(
                         id = poster.id,
                         name = poster.name,
-                        imageUri = poster.posterUrl,
+                        imageUrl = poster.posterUrl,
                         rating = poster.rating
                     )
                 },

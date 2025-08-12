@@ -48,7 +48,7 @@ fun PosterVertically(
                     .aspectRatio(0.74f), contentAlignment = Alignment.Center
             ) {
                 SafeIslamicImage(
-                    imageUrl = poster.imageUri,
+                    imageUrl = poster.imageUrl,
                     contentDescription = poster.name,
                     modifier = Modifier
                         .fillMaxSize()
