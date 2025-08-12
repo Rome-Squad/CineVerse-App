@@ -76,8 +76,15 @@ fun MatchPagerScreen(
         if (pagerState.currentPage != state.currentPage) {
             pagerState.scrollToPage(state.currentPage)
         }
-    }
 
+        if (
+            state.currentPage == pagerState.pageCount - 1 && !state.isLoading
+        ) {
+            viewModel.updateLoadingState(true)
+            kotlinx.coroutines.delay(500)
+            viewModel.onNextClicked()
+        }
+    }
     val moodOptions = getMoodOptions()
     val timeOptions = getTimeOptions()
     val recencyOptions = getRecencyOptions()
