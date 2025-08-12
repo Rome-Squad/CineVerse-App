@@ -70,11 +70,7 @@ class MatchPagerViewModel @Inject constructor(
             if (_state.value.currentPage < 4) {
                 _state.value = _state.value.copy(currentPage = _state.value.currentPage + 1)
             } else {
-                if (!_state.value.isLoading) {
-                    updateLoadingState(true)
-                    kotlinx.coroutines.delay(500)
-                    _effect.emit(MatchScreenEffect.FinishMatching)
-                }
+                _effect.emit(MatchScreenEffect.FinishMatching)
             }
         }
     }
