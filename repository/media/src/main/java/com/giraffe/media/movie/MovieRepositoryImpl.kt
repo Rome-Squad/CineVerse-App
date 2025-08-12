@@ -68,8 +68,9 @@ class MovieRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun getTopGenre(): Genre {
-        TODO("Not yet implemented")
+    override suspend fun getTopGenre(): Genre? {
+        //Not yet implemented
+        return null
     }
 
     override suspend fun getByGenreId(genreId: Int, page: Int) = SafeCall {
