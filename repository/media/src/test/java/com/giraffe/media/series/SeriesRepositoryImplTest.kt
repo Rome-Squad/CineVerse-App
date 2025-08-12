@@ -8,7 +8,6 @@ import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
-import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
@@ -42,24 +41,6 @@ class SeriesRepositoryImplTest {
             genreIds = listOf(1),
             originCountry = listOf("US"),
             originalLanguage = "en"
-        )
-    )
-
-    private val sampleSeries = listOf(
-        Series(
-            id = 1,
-            name = "Vikings",
-            overview = "desc",
-            rating = 8.0f,
-            posterUrl = "poster",
-            backdropUrl = "backdrop",
-            genreIDs = listOf(1),
-            releaseYear = null,
-            popularity = 90.0f,
-            youtubeVideoId = null,
-            userRating = null,
-            recentViewedAt = null,
-            seasons = emptyList()
         )
     )
 
