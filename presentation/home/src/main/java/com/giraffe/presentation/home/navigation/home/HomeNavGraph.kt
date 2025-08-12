@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -17,18 +16,17 @@ import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.navigation.home.routes.CollectionRoute
+import com.giraffe.presentation.home.navigation.home.routes.HomeRoute
 import com.giraffe.presentation.home.navigation.home.routes.MovieDetailsRoute
 import com.giraffe.presentation.home.navigation.home.routes.SeriesDetailsRoute
 import com.giraffe.presentation.home.navigation.home.routes.YourCollectionsRoute
+import com.giraffe.presentation.home.navigation.home.routes.homeRoute
 import com.giraffe.presentation.home.navigation.home.routes.navigateToCollection
 import com.giraffe.presentation.home.navigation.home.routes.navigateToMovieDetails
 import com.giraffe.presentation.home.navigation.home.routes.navigateToSeriesDetails
-import com.giraffe.presentation.home.navigation.home.routes.navigateToYourCollections
-import com.giraffe.presentation.home.navigation.home.routes.HomeRoute
-import com.giraffe.presentation.home.navigation.home.routes.homeRoute
 import com.giraffe.presentation.home.navigation.home.routes.navigateToShowMore
+import com.giraffe.presentation.home.navigation.home.routes.navigateToYourCollections
 import com.giraffe.presentation.home.navigation.home.routes.showMoreRoute
-
 
 
 @Composable
@@ -40,19 +38,13 @@ fun HomeNavGraph(
     onShowBottomBar: (Boolean) -> Unit,
 ) {
     val navController = rememberNavController()
+    val startDestination = HomeRoute
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination
-    val bottomBarRoutes = listOf(
-        HomeRoute::class,
-    )
-    val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
-        navDestination.route?.let { route ->
-            bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName.orEmpty())
-            }
-        } == true
-    } == true
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val isBottomBarVisible = currentRoute.orEmpty().endsWith(startDestination.toString())
+
     LaunchedEffect(currentRoute) {
         onShowBottomBar(isBottomBarVisible)
     }
@@ -64,10 +56,9 @@ fun HomeNavGraph(
     ) {
         NavHost(
             navController = navController,
-            startDestination = HomeRoute,
+            startDestination = startDestination,
             modifier = Modifier.weight(1f)
         ) {
-
             homeRoute(
                 navigateToShowMoreScreen = {
                     navController.navigateToShowMore(it)
@@ -100,9 +91,6 @@ fun HomeNavGraph(
                 profileApi.YourCollectionsContainer(
                     navigateBack = {
                         navController.popBackStack()
-                    },
-                    onShowBottomBarChange = {
-                        onShowBottomBar(it)
                     }
                 )
             }
@@ -117,9 +105,7 @@ fun HomeNavGraph(
                     navigateBack = {
                         navController.popBackStack()
                     }
-                ) {
-                    onShowBottomBar(it)
-                }
+                )
             }
 
             composable<SeriesDetailsRoute> { backStackEntry ->

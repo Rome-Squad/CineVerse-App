@@ -19,6 +19,7 @@ import com.giraffe.designsystem.theme.Theme
 @Composable
 fun BaseScreen(
     title: String,
+    caption: String? = null,
     isLoading: Boolean,
     isNoInternet: Boolean,
     onBackClick: () -> Unit,
@@ -36,6 +37,7 @@ fun BaseScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp),
             title = title,
+            caption = caption,
             showBackButton = true,
             onBackButtonClick = onBackClick
         )
@@ -43,7 +45,6 @@ fun BaseScreen(
             isLoading = isLoading,
             isNoInternet = isNoInternet,
             onRetryClick = onRetryClick
-
         ) {
             content()
         }
@@ -55,7 +56,7 @@ fun BaseScreen(
 private fun ScreenStates(
     isLoading: Boolean,
     isNoInternet: Boolean,
-    onRetryClick: () -> Unit = {},
+    onRetryClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     when {
@@ -63,7 +64,10 @@ private fun ScreenStates(
             Progress()
         }
 
-        isNoInternet -> NoInternetScreen(onRetryClick = onRetryClick)
+        isNoInternet -> NoInternetScreen(
+            onRetryClick = onRetryClick
+        )
+
         else -> content()
     }
 }

@@ -16,3 +16,8 @@ data class PersonCacheDto(
     val cachedAt: Long = System.currentTimeMillis(),
     val page:Int = 0
 )
+
+enum class PersonCacheType {
+    CAST,
+    CREW
+}

@@ -9,23 +9,17 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetContentPreferenceUseCaseTest {
-    private lateinit var settingsRepository: SettingsRepository
-    private lateinit var getContentPreferenceUseCase: GetContentPreferenceUseCase
-
-    @BeforeEach
-    fun setUp() {
-        settingsRepository = mockk()
-        getContentPreferenceUseCase = GetContentPreferenceUseCase(settingsRepository)
-    }
+    private val settingsRepository: SettingsRepository = mockk()
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase =
+        GetContentPreferenceUseCase(settingsRepository)
 
     @Test
     fun `invoke should call getContentPreference on repository`() = runTest {
 
-    every { settingsRepository.getContentPreference() } returns flowOf(ContentPreference.STRICT)
+        every { settingsRepository.getContentPreference() } returns flowOf(ContentPreference.STRICT)
 
         getContentPreferenceUseCase()
 
@@ -36,7 +30,7 @@ class GetContentPreferenceUseCaseTest {
     @Test
     fun `invoke should return content preference from repository`() = runTest {
 
-    val expectedPreference = ContentPreference.SHOW_ALL
+        val expectedPreference = ContentPreference.SHOW_ALL
         every { settingsRepository.getContentPreference() } returns flowOf(expectedPreference)
 
         val resultFlow = getContentPreferenceUseCase()

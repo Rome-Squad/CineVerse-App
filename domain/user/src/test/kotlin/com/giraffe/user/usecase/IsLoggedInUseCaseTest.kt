@@ -5,17 +5,11 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class IsLoggedInUseCaseTest {
-    private lateinit var isLoggedInUseCase: IsLoggedInUseCase
     private val repository: AuthRepository = mockk(relaxed = true)
-
-    @BeforeEach
-    fun setup() {
-        isLoggedInUseCase = IsLoggedInUseCase(repository)
-    }
+    private val isLoggedInUseCase: IsLoggedInUseCase = IsLoggedInUseCase(repository)
 
     @Test
     fun `should return that user logged in when repository return true`() = runTest {

@@ -7,19 +7,12 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class GetUserUseCaseTest {
 
-    private lateinit var userRepository: UserRepository
-    private lateinit var getUserUseCase: GetUserUseCase
-
-    @BeforeEach
-    fun setUp() {
-        userRepository = mockk()
-        getUserUseCase = GetUserUseCase(userRepository)
-    }
+    private val userRepository: UserRepository = mockk()
+    private val getUserUseCase: GetUserUseCase = GetUserUseCase(userRepository)
 
     @Test
     fun `invoke should call getAccountDetails on repository`() = runTest {

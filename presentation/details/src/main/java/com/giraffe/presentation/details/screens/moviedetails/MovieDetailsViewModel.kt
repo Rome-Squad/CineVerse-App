@@ -10,15 +10,14 @@ import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.mediaMember.usecase.GetMediaMembersByMovieIdUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.entity.PersonType
-import com.giraffe.media.person.usecase.GetPeopleByMovieIdUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
@@ -37,7 +36,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getRecommendedMovies: GetRecommendedMoviesUseCase,
-    private val getPeopleByMovieId: GetPeopleByMovieIdUseCase,
+    private val getMediaMembersByMovieId: GetMediaMembersByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
@@ -380,7 +379,7 @@ class MovieDetailsViewModel @Inject constructor(
                     Poster(
                         id = movie.id,
                         name = movie.name,
-                        imageUri = movie.posterUrl,
+                        imageUrl = movie.posterUrl,
                         rating = movie.rating
                     )
                 },
@@ -390,13 +389,12 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-
     private fun loadMoviePeople(movieId: Int) {
         safeExecute(
             onSuccess = ::loadMoviePeopleSuccess,
             onError = ::onLoadMoviePeopleError
         ) {
-            getPeopleByMovieId(movieId)
+            getMediaMembersByMovieId(movieId)
         }
     }
 
@@ -405,15 +403,17 @@ class MovieDetailsViewModel @Inject constructor(
         sendEffect(MovieDetailsEffect.Error(error))
     }
 
-    private fun loadMoviePeopleSuccess(people: List<Person>) {
-        val cast = people.filter { it.type == PersonType.CAST }.take(10)
-        val crew = people.filter { it.type == PersonType.CREW }.take(10)
-        val mappedCrew = crew.map(Person::toCrewUi)
+    private fun loadMoviePeopleSuccess(mediaMembers: MediaMemberRepository.MediaMembers) {
+        val cast = mediaMembers.cast.take(10)
+        val crew = mediaMembers.crew.take(10)
+        val mappedCrew = crew.map { it.toCrewUi() }
+        val mappedCast = cast.map { it.toCastUi() }
+
         updateState {
             it.copy(
                 isLoading = false,
                 isNoInternet = false,
-                cast = cast.map(Person::toCastUi),
+                cast = mappedCast,
                 crew = mappedCrew.groupByRole()
             )
         }

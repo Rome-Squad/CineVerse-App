@@ -53,6 +53,7 @@ fun HistoryScreen(
             is HistoryEffect.ShowError -> context.showToast(effect.error.toStringResource())
         }
     }
+
     HistoryContent(
         state = state,
         interaction = viewModel

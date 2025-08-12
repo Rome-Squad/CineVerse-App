@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,8 +11,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.api.details.DetailsApi
-import com.giraffe.api.explore.ExploreApi
-import com.giraffe.presentation.profile.navigation.routes.ExploreRoute
+import com.giraffe.api.home.HomeApi
 import com.giraffe.presentation.profile.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SettingsScreenRoute
@@ -23,7 +21,6 @@ import com.giraffe.presentation.profile.navigation.routes.loginRoute
 import com.giraffe.presentation.profile.navigation.routes.myCollectionsRoute
 import com.giraffe.presentation.profile.navigation.routes.navigateLoginScreen
 import com.giraffe.presentation.profile.navigation.routes.navigateToCollection
-import com.giraffe.presentation.profile.navigation.routes.navigateToExploreScreen
 import com.giraffe.presentation.profile.navigation.routes.navigateToHistory
 import com.giraffe.presentation.profile.navigation.routes.navigateToMovieDetails
 import com.giraffe.presentation.profile.navigation.routes.navigateToMyCollections
@@ -39,27 +36,18 @@ internal fun ProfileNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     startDestinationRoute: Any,
+    homeApi: HomeApi,
     authenticationApi: AuthenticationApi,
     detailsApi: DetailsApi,
-    exploreApi: ExploreApi,
-    onShowBottomBarChange: (Boolean) -> Unit,
+    onShowBottomBarChange: (Boolean) -> Unit = {},
     navigateBack: (() -> Unit)? = null,
 ) {
 
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination
-    val bottomBarRoutes = listOf(
-        ExploreRoute::class,
-        SettingsScreenRoute::class,
-    )
-    val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
-        navDestination.route?.let { route ->
-            bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName.orEmpty())
-            }
-        } == true
-    } == true
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val isBottomBarVisible = currentRoute.orEmpty().endsWith(SettingsScreenRoute.toString())
 
     LaunchedEffect(currentRoute) {
         onShowBottomBarChange(isBottomBarVisible)
@@ -86,7 +74,7 @@ internal fun ProfileNavGraph(
             onBackClicked = navController::navigateUp,
             navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
             navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails,
-            navigateToExploreScreen = navController::navigateToExploreScreen
+            navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
 
         ratingsRoute(
@@ -109,7 +97,7 @@ internal fun ProfileNavGraph(
                     collectionName = it.name
                 )
             },
-            navigateToExploreScreen = navController::navigateToExploreScreen
+            navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
 
         collectionRoute(
@@ -122,10 +110,6 @@ internal fun ProfileNavGraph(
             },
             navigateToMovieDetails = navController::navigateToMovieDetails
         )
-
-        composable<ExploreRoute> {
-            exploreApi.ExploreContainer { }
-        }
 
         composable<SeriesDetailsRoute> { backStackEntry ->
             val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId

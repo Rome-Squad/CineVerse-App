@@ -6,9 +6,9 @@ import com.giraffe.media.explore.cleaner.KeywordsCacheCleanerImp
 import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.movie.MovieLocalDataSourceImp
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
-import com.giraffe.media.person.PersonLocalDataSourceImp
-import com.giraffe.media.person.datasource.local.PersonLocalDataSource
-import com.giraffe.media.series.SeriesRoomLocalDateSource
+import com.giraffe.media.person.MediaMemberLocalDataSourceImp
+import com.giraffe.media.person.datasource.local.MediaMemberLocalDataSource
+import com.giraffe.media.series.SeriesLocalDataSourceImp
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.repository.datasource.local.OnboardingLocalDataSource
@@ -44,11 +44,11 @@ abstract class LocalDataSourceBindModule {
 
     @Binds
     @Singleton
-    abstract fun bindSeriesLocalDataSource(impl: SeriesRoomLocalDateSource): SeriesLocalDateSource
+    abstract fun bindSeriesLocalDataSource(impl: SeriesLocalDataSourceImp): SeriesLocalDateSource
 
     @Binds
     @Singleton
-    abstract fun bindPersonLocalDataSource(impl: PersonLocalDataSourceImp): PersonLocalDataSource
+    abstract fun bindPersonLocalDataSource(impl: MediaMemberLocalDataSourceImp): MediaMemberLocalDataSource
 
     @Binds
     @Singleton

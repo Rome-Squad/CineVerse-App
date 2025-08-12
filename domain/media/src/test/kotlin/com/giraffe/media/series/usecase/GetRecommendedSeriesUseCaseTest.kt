@@ -25,7 +25,6 @@ class GetRecommendedSeriesUseCaseTest {
         coEvery {
             seriesRepository.getRecommended(
                 any(),
-                any(),
                 any()
             )
         } returns recommendedSeries

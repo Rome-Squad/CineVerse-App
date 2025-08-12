@@ -8,12 +8,12 @@ import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImp
 import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
 import com.giraffe.media.explore.retrofit.SearchApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.SearchRemoteDataSourceImplRetrofit
+import com.giraffe.media.mediaMember.retrofit.MediaMemberApiServiceRetrofit
+import com.giraffe.media.mediaMember.retrofit.MediaMemberRemoteDataSourceImplRetrofit
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.retrofit.MoviesApiServiceRetrofit
 import com.giraffe.media.movie.retrofit.MoviesRemoteDataSourceImplRetrofit
-import com.giraffe.media.person.datasource.remote.PersonRemoteDataSource
-import com.giraffe.media.person.retrofit.PersonApiServiceRetrofit
-import com.giraffe.media.person.retrofit.PersonRemoteDataSourceImplRetrofit
+import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
@@ -105,8 +105,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePersonApi(retrofit: Retrofit): PersonApiServiceRetrofit =
-        retrofit.create(PersonApiServiceRetrofit::class.java)
+    fun providePersonApi(retrofit: Retrofit): MediaMemberApiServiceRetrofit =
+        retrofit.create(MediaMemberApiServiceRetrofit::class.java)
 
     @Provides
     @Singleton
@@ -135,7 +135,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePersonRequestBuilder(api: PersonApiServiceRetrofit): RetrofitRequestBuilder<PersonApiServiceRetrofit> =
+    fun providePersonRequestBuilder(api: MediaMemberApiServiceRetrofit): RetrofitRequestBuilder<MediaMemberApiServiceRetrofit> =
         RetrofitRequestBuilder(api)
 
     @Provides
@@ -160,8 +160,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePersonRemoteDataSource(builder: RetrofitRequestBuilder<PersonApiServiceRetrofit>): PersonRemoteDataSource =
-        PersonRemoteDataSourceImplRetrofit(builder)
+    fun providePersonRemoteDataSource(builder: RetrofitRequestBuilder<MediaMemberApiServiceRetrofit>): MediaMemberRemoteDataSource =
+        MediaMemberRemoteDataSourceImplRetrofit(builder)
 
     @Provides
     @Singleton

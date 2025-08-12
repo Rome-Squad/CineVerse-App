@@ -13,4 +13,3 @@ data class MovieUi(
     val releaseYear: String = "",
     val youtubeVideoId: String = ""
 )
-

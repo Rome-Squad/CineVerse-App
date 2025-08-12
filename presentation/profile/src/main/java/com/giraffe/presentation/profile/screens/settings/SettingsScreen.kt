@@ -165,7 +165,7 @@ private fun SettingsContent(
             Text(
                 modifier = Modifier
                     .padding(top = 24.dp),
-                text = stringResource(R.string.Version),
+                text = stringResource(R.string.app_version, state.appVersion),
                 color = Theme.color.shade.tertiary,
                 style = Theme.textStyle.body.sm.regular
             )

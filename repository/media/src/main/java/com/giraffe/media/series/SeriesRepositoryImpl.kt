@@ -13,6 +13,7 @@ import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toCacheDto
 import com.giraffe.media.series.mapper.toEntity
+import com.giraffe.media.series.mapper.toRecentViewedSeriesCacheDto
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
@@ -31,7 +32,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGenres(): List<Genre> = SafeCall {
-        seriesLocalDateSource.getCachedGenres()
+        seriesLocalDateSource.getGenres()
             .map(SeriesGenreCacheDto::toEntity)
             .ifEmpty {
                 seriesRemoteDataSource.getGenres()
@@ -42,26 +43,20 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun getRecentlyViewed() = SafeCall {
         seriesLocalDateSource.getRecentSeries().map { seriesList ->
-            seriesList.map { series ->
-                series.toEntity()
-            }
+            seriesList.map { series -> series.toEntity() }
         }
     }
 
     override suspend fun addRecentlyViewed(series: Series) = SafeCall {
-        seriesLocalDateSource.insertRecentSeries(series.id)
+        seriesLocalDateSource.insertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
     }
 
     override suspend fun clearRecentlyViewed() = SafeCall {
         seriesLocalDateSource.clearRecentSeries()
     }
 
-    override suspend fun clearAllExceptRecentlyViewed() = SafeCall {
-        seriesLocalDateSource.clearAllSeriesExceptRecentlyViewed()
-    }
-
     override suspend fun clearAll() = SafeCall {
-        seriesLocalDateSource.clearAllSeries()
+        seriesLocalDateSource.clearSeries()
     }
 
     override suspend fun getDetails(seriesId: Int): Series = SafeCall {
@@ -156,22 +151,10 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
 
-    override suspend fun getRecommended(seriesId: Int, page: Int, limit: Int) = SafeCall {
-        if (page > 1) {
-            seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).take(limit)
-                .map(SeriesDto::toEntity)
-        } else {
-            seriesLocalDateSource.getRecommendedSeries(limit).map { it.toEntity() }.ifEmpty {
-                seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).take(limit)
-                    .map(SeriesDto::toEntity)
-                    .also { addRecommended(it) }
-            }
-        }
+    override suspend fun getRecommended(seriesId: Int, page: Int) = SafeCall {
+        seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).map(SeriesDto::toEntity)
     }
 
-    override suspend fun addRecommended(series: List<Series>) = SafeCall {
-        seriesLocalDateSource.insertRecommendedSeries(series.map { it.toCacheDto() })
-    }
 
     override suspend fun getUserRated(accountId: Int) = SafeCall {
         seriesRemoteDataSource.getRatedSeries(accountId).map(SeriesDto::toEntity)

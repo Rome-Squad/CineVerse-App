@@ -36,7 +36,7 @@
     <string name="to_personalize_your_experience">لتحسين تجربتك</string>
     <string name="Language">اللغه</string>
     <string name="Logout">تسجيل الخروج</string>
-    <string name="Version">الاصدار ١.٠.١</string>
+    <string name="app_version">الإصدار %1$s</string>
     <string name="My_Profile">حسابى</string>
     <string name="settings_text">الأعدادات</string>
     <string name="back">رجوع للنافذة السابقة</string>

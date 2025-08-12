@@ -9,12 +9,10 @@ interface ProfileApi {
         collectionId: Int,
         collectionName: String,
         navigateBack: () -> Unit,
-        onShowBottomBarChange: (Boolean) -> Unit,
     )
 
     @Composable
     fun YourCollectionsContainer(
-        onShowBottomBarChange: (Boolean) -> Unit,
         navigateBack: () -> Unit,
     )
 

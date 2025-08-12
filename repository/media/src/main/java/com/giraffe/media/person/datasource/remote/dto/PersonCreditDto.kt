@@ -5,21 +5,30 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PersonCreditDto(
+    @SerialName("id")
     val id: Int,
+    @SerialName("name")
     val name: String? = null,
+    @SerialName("overview")
     val overview: String? = null,
-    val popularity: Double = 0.0,
+    @SerialName("popularity")
+    val popularity: Float? = null,
+    @SerialName("character")
     val character: String? = null,
+    @SerialName("title")
     val title: String? = null,
-    val video: Boolean? = null,
+    @SerialName("video")
+    val hasVideo: Boolean? = null,
+    @SerialName("order")
     val order: Int? = null,
-    val adult: Boolean? = null,
+    @SerialName("adult")
+    val isAdultContent: Boolean? = null,
     @SerialName("backdrop_path")
     val backdropPath: String? = null,
     @SerialName("genre_ids")
-    val genreIds: List<Int> = emptyList(),
+    val genreIds: List<Int>? = null,
     @SerialName("origin_country")
-    val originCountry: List<String> = emptyList(),
+    val originCountry: List<String>? = null,
     @SerialName("original_language")
     val originalLanguage: String? = null,
     @SerialName("original_name")
@@ -27,7 +36,7 @@ data class PersonCreditDto(
     @SerialName("original_title")
     val originalTitle: String? = null,
     @SerialName("media_type")
-    var mediaType: String? = null,
+    val mediaType: String? = null,
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("first_air_date")
@@ -37,11 +46,11 @@ data class PersonCreditDto(
     @SerialName("release_date")
     val releaseDate: String? = null,
     @SerialName("vote_average")
-    val voteAverage: Double = 0.0,
+    val voteAverage: Float? = null,
     @SerialName("vote_count")
-    val voteCount: Int = 0,
+    val voteCount: Int? = null,
     @SerialName("credit_id")
     val creditId: String? = null,
     @SerialName("episode_count")
-    val episodeCount: Int = 0,
+    val episodeCount: Int? = null,
 )

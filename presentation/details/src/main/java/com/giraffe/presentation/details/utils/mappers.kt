@@ -4,10 +4,10 @@ import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.entity.CrewMember
+import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.entity.PersonCredit
-import com.giraffe.media.person.entity.PersonSocialMediaLinks
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.details.R
@@ -21,66 +21,29 @@ import com.giraffe.presentation.details.model.SeriesUi
 import com.giraffe.presentation.details.model.SocialMediaPlatform
 import com.giraffe.presentation.details.model.SocialMediaUi
 
-fun PersonCredit.toPoster() = Poster(
-    id = id,
-    name = title,
-    imageUri = posterPath.toString(),
-    rating = voteAverage.toFloat(),
-    date = releaseYear,
-    mediaTypeOfPoster = mediaType
-)
-
-
-fun Person.toCastUi() = CastUi(
-    id = id,
-    name = name,
-    role = role,
-    urlImage = imageUrl
-)
-
-
-fun Collection.toUi() = CollectionUi(
-    id = id,
-    title = name,
-    isLoading = false
-)
-
-
-fun Person.toCrewUi() = CrewUi(
-    name = name,
-    role = role
-)
-
-
-fun List<CrewUi>.groupByRole(): Map<String, List<String>> {
-    return this.groupBy { it.role }.mapValues { it.value.map { member -> member.name } }
-}
-
-
 fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     id = id,
     name = name,
     overview = overview,
     rating = rating,
-    duration = duration.toFormattedDuration(),
+    duration = duration?.toFormattedDuration().orEmpty(),
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genresID,
     genres = genres.map { it.title },
-    releaseYear = releaseYear.toFormattedDate(),
+    releaseYear = if (releaseYear != null) releaseYear.toString() else "",
     youtubeVideoId = youtubeVideoId,
 )
 
 fun MovieUi.toPoster() = Poster(
     id = id,
     name = name,
-    imageUri = posterUrl.orEmpty(),
+    imageUrl = posterUrl.orEmpty(),
     rating = rating,
     genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
     time = duration,
     date = releaseYear
 )
-
 
 fun ReviewUI.toEntity() = Review(
     id = id,
@@ -90,6 +53,12 @@ fun ReviewUI.toEntity() = Review(
     content = content,
     rating = rating,
     createdAt = createdAt
+)
+
+fun Collection.toUi() = CollectionUi(
+    id = id,
+    title = name,
+    isLoading = false
 )
 
 fun Review.toUi() = ReviewUI(
@@ -108,7 +77,7 @@ fun Season.toUi() = SeasonUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear.toFormattedDate(),
+    releaseYear = releaseYear?.toString().orEmpty(),
     seasonNumber = seasonNumber,
     episodeCount = episodeCount
 )
@@ -122,7 +91,7 @@ fun Series.toUi(
     overview = overview,
     rating = rating,
     posterUrl = posterUrl,
-    releaseYear = releaseYear.toFormattedDate(),
+    releaseYear = releaseYear?.toString().orEmpty(),
     genres = genres.map { it.title },
     youtubeVideoId = youtubeVideoId.orEmpty()
 )
@@ -130,14 +99,14 @@ fun Series.toUi(
 fun SeriesUi.toPoster(): Poster = Poster(
     id = id,
     name = name,
-    imageUri = posterUrl.orEmpty(),
+    imageUrl = posterUrl.orEmpty(),
     rating = rating,
     genres = genres.joinToString(", "),
     date = releaseYear
 )
 
 
-fun PersonSocialMediaLinks.toSocialMediaUi(): List<SocialMediaUi> {
+fun SocialMediaLinks.toSocialMediaUi(): List<SocialMediaUi> {
     val socialMediaUiList: MutableList<SocialMediaUi> = mutableListOf()
     youtubeLink?.let { url ->
         socialMediaUiList.add(
@@ -196,3 +165,19 @@ fun PersonSocialMediaLinks.toSocialMediaUi(): List<SocialMediaUi> {
     return socialMediaUiList
 }
 
+fun CastMember.toCastUi() = CastUi(
+    id = id,
+    name = name,
+    role = role,
+    urlImage = imageUrl
+)
+
+fun CrewMember.toCrewUi() = CrewUi(
+    name = name,
+    role = role
+)
+
+
+fun List<CrewUi>.groupByRole(): Map<String, List<String>> {
+    return this.groupBy { it.role }.mapValues { it.value.map { member -> member.name } }
+}

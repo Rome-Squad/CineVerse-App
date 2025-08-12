@@ -15,6 +15,7 @@ data class SettingsScreenState(
     val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
     val showEditProfileSheet: Boolean = false,
     val showChangeLanguageSheet: Boolean = false,
+    val appVersion: String = "",
     val showLogoutSheet: Boolean = false,
     val showContentPreferencesSheet: Boolean = false
 )
