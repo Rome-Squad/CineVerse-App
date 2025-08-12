@@ -17,7 +17,7 @@ import org.junit.Test
 class SeriesRoomLocalDateSourceTest {
 
     private lateinit var dao: SeriesDao
-    private lateinit var dataSource: SeriesRoomLocalDateSource
+    private lateinit var dataSource: SeriesLocalDataSourceImp
 
     private val sampleSeries = listOf(
         SeriesCacheDto(
@@ -39,7 +39,7 @@ class SeriesRoomLocalDateSourceTest {
     @Before
     fun setup() {
         dao = mockk(relaxed = true)
-        dataSource = SeriesRoomLocalDateSource(dao)
+        dataSource = SeriesLocalDataSourceImp(dao)
     }
 
 

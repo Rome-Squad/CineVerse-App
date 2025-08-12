@@ -12,7 +12,7 @@ import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
 import javax.inject.Inject
 
-class SeriesRoomLocalDateSource @Inject constructor(
+class SeriesLocalDataSourceImp @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
