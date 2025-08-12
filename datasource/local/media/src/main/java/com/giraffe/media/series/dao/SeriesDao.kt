@@ -3,8 +3,10 @@ package com.giraffe.media.series.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.utils.DatabaseConstants.POPULAR_SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +15,9 @@ import kotlinx.coroutines.flow.Flow
 interface SeriesDao {
     @Upsert
     suspend fun upsertSeries(series: List<SeriesCacheDto>)
+
+    @Upsert
+    suspend fun upsertPopularSeriesIDs(seriesIDs: List<PopularSeriesCacheDto>)
 
     @Upsert
     suspend fun insertGenres(genres: List<SeriesGenreCacheDto>)
@@ -30,10 +35,19 @@ interface SeriesDao {
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecentViewed = 1 ORDER BY recentViewedAt DESC")
     fun getRecentSeries(): Flow<List<SeriesCacheDto>>
 
-    @Query("UPDATE $SERIES_TABLE SET isPopularity = 0 And isRecentlyReleased = 0 And isTopRated = 0 And isRecommended = 0")
+    @Query("UPDATE $SERIES_TABLE SET isRecentlyReleased = 0 And isTopRated = 0 And isRecommended = 0")
     suspend fun resetSeriesCache()
 
-    @Query("SELECT * FROM $SERIES_TABLE WHERE isPopularity = 1 ORDER BY popularity DESC LIMIT :limit")
+
+    @Query(
+        """
+        SELECT * 
+        FROM $SERIES_TABLE
+        WHERE id IN (SELECT id FROM $POPULAR_SERIES_TABLE)
+        ORDER BY popularity DESC
+        LIMIT :limit
+        """
+    )
     fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
 
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecentlyReleased = 1 LIMIT :limit")

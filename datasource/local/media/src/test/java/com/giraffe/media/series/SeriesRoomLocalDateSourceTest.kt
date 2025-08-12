@@ -20,14 +20,15 @@ class SeriesRoomLocalDateSourceTest {
 
     private val sampleSeries = listOf(
         SeriesCacheDto(
-            1,
-            "Vikings",
-            "desc",
-            8.0f,
-            "poster",
-            "backdrop",
-            listOf(1),
-            "2015"
+            id = 1,
+            name = "Vikings",
+            overview = "desc",
+            rate = 8.0f,
+            posterUrl = "poster",
+            backdropUrl = "backdrop",
+            genresID = listOf(1),
+            releaseYear = "2015",
+            youtubeVideoId = "youtube"
         )
     )
     private val oldSeries = sampleSeries.map {
@@ -37,7 +38,6 @@ class SeriesRoomLocalDateSourceTest {
             isRecentlyReleased = false,
             isRecommended = true,
             isTopRated = true,
-            isPopularity = false
         )
     }
 
@@ -148,21 +148,12 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `insertPopularitySeries performs upsert with popularity flag`() = runTest {
-        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
 
         dataSource.insertPopularitySeries(sampleSeries)
 
         coVerify {
-            dao.upsertSeries(
-                match { mergedList ->
-                    mergedList.size == 1 &&
-                            mergedList[0].isPopularity &&
-                            mergedList[0].isRecentViewed == true &&
-                            mergedList[0].isRecommended == true &&
-                            mergedList[0].isTopRated == true &&
-                            mergedList[0].recentViewedAt == 9999L
-                }
-            )
+            dao.upsertSeries(sampleSeries)
+            dao.upsertPopularSeriesIDs(sampleSeries.map { it.toPopularSeriesCacheDto() })
         }
     }
 

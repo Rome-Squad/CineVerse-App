@@ -2,6 +2,7 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.util.safeCall
@@ -42,16 +43,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
-        upsertWithMerge(series) { old, new ->
-            new.copy(
-                isRecentViewed = old.isRecentViewed,
-                recentViewedAt = old.recentViewedAt,
-                isRecentlyReleased = old.isRecentlyReleased,
-                isRecommended = old.isRecommended,
-                isTopRated = old.isTopRated,
-                isPopularity = true
-            )
-        }
+        seriesDao.upsertSeries(series)
+        seriesDao.upsertPopularSeriesIDs(series.map { it.toPopularSeriesCacheDto() })
     }
 
     override suspend fun getPopularitySeries(limit: Int) = safeCall {
@@ -63,7 +56,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
             new.copy(
                 isRecentViewed = old.isRecentViewed,
                 recentViewedAt = old.recentViewedAt,
-                isPopularity = old.isPopularity,
                 isRecommended = old.isRecommended,
                 isTopRated = old.isTopRated,
                 isRecentlyReleased = true
@@ -80,7 +72,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
             new.copy(
                 isRecentViewed = old.isRecentViewed,
                 recentViewedAt = old.recentViewedAt,
-                isPopularity = old.isPopularity,
                 isRecommended = old.isRecommended,
                 isTopRated = true,
                 isRecentlyReleased = old.isRecentlyReleased
@@ -97,7 +88,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
             new.copy(
                 isRecentViewed = old.isRecentViewed,
                 recentViewedAt = old.recentViewedAt,
-                isPopularity = old.isPopularity,
                 isRecommended = true,
                 isTopRated = old.isTopRated,
                 isRecentlyReleased = old.isRecentlyReleased
@@ -149,3 +139,7 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.upsertSeries(merged)
     }
 }
+
+fun SeriesCacheDto.toPopularSeriesCacheDto() = PopularSeriesCacheDto(
+    id = id,
+)
