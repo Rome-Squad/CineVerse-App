@@ -1,12 +1,12 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import javax.inject.Inject
 
 class GetUserMovieRatingUseCase @Inject constructor(
-    private val moviesRepository: MoviesRepository
+    private val movieRepository: MovieRepository
 ) {
-    suspend operator fun invoke(movieId: Int): Float {
-        return moviesRepository.getUserMovieRating(movieId)
-    }
+    suspend operator fun invoke(movieId: Int) =
+        movieRepository.getUserRatedById(movieId)
+
 }

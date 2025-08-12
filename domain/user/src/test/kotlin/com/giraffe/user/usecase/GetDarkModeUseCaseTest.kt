@@ -8,23 +8,16 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
 class GetDarkModeUseCaseTest {
-    private lateinit var settingsRepository: SettingsRepository
-    private lateinit var getDarkModeUseCase: GetDarkModeUseCase
-
-    @BeforeEach
-    fun setUp() {
-        settingsRepository = mockk()
-        getDarkModeUseCase = GetDarkModeUseCase(settingsRepository)
-    }
+    private val settingsRepository: SettingsRepository = mockk()
+    private val getDarkModeUseCase: GetDarkModeUseCase = GetDarkModeUseCase(settingsRepository)
 
     @Test
     fun `invoke should call isDarkMode on repository`() = runTest {
 
-    every { settingsRepository.isDarkMode() } returns flowOf(true)
+        every { settingsRepository.isDarkMode() } returns flowOf(true)
 
         getDarkModeUseCase()
 
@@ -34,7 +27,7 @@ class GetDarkModeUseCaseTest {
     @Test
     fun `invoke should return dark mode state from repository`() = runTest {
 
-    val isDark = true
+        val isDark = true
         every { settingsRepository.isDarkMode() } returns flowOf(isDark)
 
         val resultFlow = getDarkModeUseCase()

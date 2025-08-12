@@ -17,7 +17,7 @@ class SetContentPreferenceUseCaseTest {
     fun `invoke should call setContentPreference on repository with correct preference`() =
         runTest {
 
-        val preferenceToSet = ContentPreference.HIDE_EXPLICIT
+            val preferenceToSet = ContentPreference.HIDE_EXPLICIT
             coEvery { settingsRepository.setContentPreference(preferenceToSet) } returns Unit
 
             setContentPreferenceUseCase(preferenceToSet)

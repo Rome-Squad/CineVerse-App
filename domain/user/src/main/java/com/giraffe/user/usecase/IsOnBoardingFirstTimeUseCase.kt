@@ -4,7 +4,7 @@ import com.giraffe.user.repository.OnboardingRepository
 import javax.inject.Inject
 
 class IsOnBoardingFirstTimeUseCase @Inject constructor(
-    private val repository: OnboardingRepository
+    private val onboardingRepository: OnboardingRepository
 ) {
-    suspend operator fun invoke() = repository.isFirstTime()
+    suspend operator fun invoke() = onboardingRepository.isFirstTime()
 }

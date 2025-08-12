@@ -13,10 +13,12 @@ internal data class ReviewRoute(val movieId: Int?, val seriesId: Int?)
 fun NavController.navigateToReviews(movieId: Int? = null, seriesId: Int? = null) {
     navigate(ReviewRoute(movieId, seriesId))
 }
-fun NavGraphBuilder.reviewRoute(navController: NavController) {
+fun NavGraphBuilder.reviewRoute(
+    navigateBack: () -> Unit
+) {
     composable<ReviewRoute> { backStackEntry ->
         ReviewsScreen(
-            navController = navController
+            navigateBack = navigateBack
         )
     }
 }

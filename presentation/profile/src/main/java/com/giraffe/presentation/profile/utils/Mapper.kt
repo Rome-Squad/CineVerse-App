@@ -19,31 +19,31 @@ fun User.toUi() = UserUi(
 
 fun Series.toRatedPoster(genres: List<Genre>) = RatedPoster(
     poster = this.toPoster(genres),
-    rating = userRating ?: 0f,
+    rating = userRating.orEmpty(),
 )
 
 fun Series.toPoster(genres: List<Genre> = emptyList()) = Poster(
     id = id,
     name = name,
     genres = genres.joinToString(", ") { it.title },
-    imageUri = posterUrl,
+    imageUrl = posterUrl,
     rating = rating,
-    date = releaseYear.toString(),
+    date = releaseYear.orEmpty(),
     mediaTypeOfPoster = "series"
 )
 
 fun Movie.toRatedPoster(genres: List<Genre>) = RatedPoster(
     poster = this.toPoster(genres),
-    rating = userRating ?: 0f,
+    rating = userRating.orEmpty(),
 )
 
 fun Movie.toPoster(genres: List<Genre> = emptyList()) = Poster(
     id = id,
-    name = title,
+    name = name,
     genres = genres.joinToString(", ") { it.title },
-    imageUri = posterUrl.orEmpty(),
+    imageUrl = posterUrl.orEmpty(),
     rating = rating,
-    date = releaseYear.toString(),
+    date = releaseYear.orEmpty(),
     mediaTypeOfPoster = "movie"
 )
 
@@ -60,6 +60,7 @@ fun CollectionUi.toEntity() = Collection(
     itemsCount = itemCount,
     description = description
 )
+
 fun Movie.toSwipeablePoster(
     isSwiped: Boolean = false,
     genres: List<Genre> = emptyList()

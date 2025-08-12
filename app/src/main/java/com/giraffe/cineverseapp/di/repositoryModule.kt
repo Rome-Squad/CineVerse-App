@@ -1,15 +1,17 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.cineverseapp.util.AppVersionProviderImpl
 import com.giraffe.media.collections.CollectionsRepositoryImp
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.explore.SearchRepositoryImpl
 import com.giraffe.media.explore.repository.SearchRepository
-import com.giraffe.media.movie.MoviesRepositoryImpl
-import com.giraffe.media.movie.repository.MoviesRepository
-import com.giraffe.media.person.PersonRepositoryImpl
-import com.giraffe.media.person.repository.PersonRepository
+import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import com.giraffe.media.movie.MovieRepositoryImpl
+import com.giraffe.media.movie.repository.MovieRepository
+import com.giraffe.media.person.MediaMemberRepositoryImpl
 import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
+import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.repository.AuthenticationRepositoryImpl
 import com.giraffe.repository.OnboardingRepositoryImpl
 import com.giraffe.repository.SettingsRepositoryImpl
@@ -38,7 +40,11 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindMoviesRepository(impl: MoviesRepositoryImpl): MoviesRepository
+    abstract fun bindMovieRepository(impl: MovieRepositoryImpl): MovieRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAppVersionProvider(impl: AppVersionProviderImpl): AppVersionProvider
 
     @Binds
     @Singleton
@@ -46,7 +52,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindPersonRepository(impl: PersonRepositoryImpl): PersonRepository
+    abstract fun bindPersonRepository(impl: MediaMemberRepositoryImpl): MediaMemberRepository
 
     @Binds
     @Singleton

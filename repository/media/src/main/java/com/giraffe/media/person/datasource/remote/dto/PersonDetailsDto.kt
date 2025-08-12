@@ -5,24 +5,24 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PersonDetailsDto(
-    val adult: Boolean,
+    val id: Int? = null,
+    val adult: Boolean? = null,
     @SerialName("also_known_as")
-    val alsoKnownAs: List<String>,
-    val biography: String,
-    val birthday: String?,
-    val deathday: String?,
-    val gender: Int,
-    val homepage: String?,
-    val id: Int,
+    val alsoKnownAs: List<String>? = null,
+    val biography: String? = null,
+    val birthday: String? = null,
+    val deathday: String? = null,
+    val gender: Int? = null,
+    val homepage: String? = null,
     @SerialName("imdb_id")
-    val imdbId: String?,
+    val imdbId: String? = null,
     @SerialName("known_for_department")
-    val knownForDepartment: String,
+    val department: String? = null,
     @SerialName("name")
-    val name: String,
+    val name: String? = null,
     @SerialName("place_of_birth")
-    val placeOfBirth: String?,
-    val popularity: Double,
+    val placeOfBirth: String? = null,
+    val popularity: Double? = null,
     @SerialName("profile_path")
-    val profilePath: String?
+    val profilePath: String? = null
 )

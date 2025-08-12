@@ -30,7 +30,6 @@ import com.giraffe.presentation.authentication.utils.toStringResource
 
 @Composable
 fun OnBoardingScreen(
-    modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToLoginScreen: () -> Unit,
 ) {
@@ -49,7 +48,6 @@ fun OnBoardingScreen(
 
 
     OnBoardingContent(
-        modifier = modifier,
         pages = getPages(),
         interaction = viewModel
     )

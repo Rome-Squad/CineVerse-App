@@ -2,8 +2,8 @@ package com.giraffe.presentation.explore.util
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.person.entity.Person
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.explore.model.GenreUi
 
@@ -23,11 +23,11 @@ fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
 
     return Poster(
         id = id,
-        name = title,
-        imageUri = posterUrl.orEmpty(),
+        name = name,
+        imageUrl = posterUrl.orEmpty(),
         rating = rating,
         genres = genreTitles,
-        time = duration.toString(),
+        time = duration?.toString(),
         date = date,
         mediaTypeOfPoster = Poster.Type.MOVIE.value
     )
@@ -43,18 +43,18 @@ fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
     return Poster(
         id = id,
         name = name,
-        imageUri = "https://image.tmdb.org/t/p/w500$posterUrl",
+        imageUrl = "https://image.tmdb.org/t/p/w500$posterUrl",
         rating = rating,
         genres = genreTitles,
-        date = releaseYear.toString(),
+        date = releaseYear?.toString(),
         mediaTypeOfPoster = Poster.Type.SERIES.value
     )
 }
 
-fun Person.toPoster() = Poster(
+fun CastMember.toPoster() = Poster(
     id = id,
     name = name,
-    imageUri = imageUrl.toString(),
+    imageUrl = imageUrl.orEmpty(),
     rating = 0f,
     mediaTypeOfPoster = Poster.Type.PERSON.value
 )

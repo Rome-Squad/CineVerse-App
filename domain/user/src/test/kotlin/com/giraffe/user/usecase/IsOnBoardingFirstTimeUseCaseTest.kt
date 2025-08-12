@@ -6,18 +6,12 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class IsOnBoardingFirstTimeUseCaseTest {
-    private lateinit var onboardingRepository: OnboardingRepository
-    private lateinit var isOnBoardingFirstTimeUseCase: IsOnBoardingFirstTimeUseCase
-
-    @BeforeEach
-    fun setUp() {
-        onboardingRepository = mockk()
-        isOnBoardingFirstTimeUseCase = IsOnBoardingFirstTimeUseCase(onboardingRepository)
-    }
+    private val onboardingRepository: OnboardingRepository = mockk()
+    private val isOnBoardingFirstTimeUseCase: IsOnBoardingFirstTimeUseCase =
+        IsOnBoardingFirstTimeUseCase(onboardingRepository)
 
     @Test
     fun `should return true when first time`() = runTest {

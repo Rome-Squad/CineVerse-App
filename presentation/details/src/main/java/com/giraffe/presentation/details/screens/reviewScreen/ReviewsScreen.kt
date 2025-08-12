@@ -1,85 +1,82 @@
 package com.giraffe.presentation.details.screens.reviewScreen
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.giraffe.designsystem.composable.AppBar
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.components.LoadingView
+import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.ReviewCard
-import com.giraffe.presentation.details.model.ReviewUI
+import com.giraffe.presentation.details.utils.EventListener
+import com.giraffe.presentation.details.utils.showToast
+import com.giraffe.presentation.details.utils.toStringResource
 
 
 @Composable
 fun ReviewsScreen(
-    navController: NavController,
+    navigateBack: () -> Unit,
     reviewsViewModel: ReviewsViewModel = hiltViewModel()
 ) {
-    val state = reviewsViewModel.state.collectAsState().value
-    val reviews = state.reviewsFlow.collectAsLazyPagingItems()
-
-    AnimatedContent(
-        state.isLoading
+    val state by reviewsViewModel.state.collectAsState()
+    val context = LocalContext.current
+    EventListener(
+        events = reviewsViewModel.effect
     ) {
         when (it) {
-            true -> LoadingView()
-            false -> ReviewsContent(
-                reviewsList = reviews,
-                onBackArrowClick = { navController.navigateUp() }
+            is ReviewEffect.NavigateBack -> navigateBack()
+
+            is ReviewEffect.ShowError -> context.showToast(
+                it.error.toStringResource()
             )
         }
     }
+    ReviewsContent(
+        state = state,
+        interaction = reviewsViewModel,
+    )
 }
 
 @Composable
 private fun ReviewsContent(
-    reviewsList: LazyPagingItems<ReviewUI>,
-    onBackArrowClick: () -> Unit,
-    modifier: Modifier = Modifier
+    state: ReviewsScreenState,
+    interaction: ReviewsInteractionListener,
 ) {
-
-    LazyColumn(
-        modifier = modifier
-            .background(Theme.color.background.screen)
-            .systemBarsPadding()
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    val reviewsList = state.reviewsFlow.collectAsLazyPagingItems()
+    BaseScreen(
+        title = stringResource(R.string.reviews),
+        isLoading = state.isLoading,
+        isNoInternet = state.isNoInternet,
+        onBackClick = interaction::onBackClick,
+        onRetryClick = interaction::onRetryClick
     ) {
-        stickyHeader {
-            AppBar(
-                showBackButton = true,
-                title = stringResource(R.string.reviews),
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onBackButtonClick = onBackArrowClick
-            )
-        }
-        items(reviewsList.itemCount) { index ->
-            reviewsList[index]?.let { review ->
-                ReviewCard(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    rate = review.rating,
-                    reviewText = review.content,
-                    reviewDate = review.createdAt,
-                    reviewerImageUrl = review.authorImageUrl,
-                    reviewerName = review.authorName,
-                    reviewerUsername = review.authorUserName
-                )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(reviewsList.itemCount) { index ->
+                reviewsList[index]?.let { review ->
+                    ReviewCard(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        rate = review.rating,
+                        reviewText = review.content,
+                        reviewDate = review.createdAt,
+                        reviewerImageUrl = review.authorImageUrl,
+                        reviewerName = review.authorName,
+                        reviewerUsername = review.authorUserName
+                    )
+                }
             }
         }
     }

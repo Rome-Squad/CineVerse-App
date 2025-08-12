@@ -41,7 +41,6 @@ import com.giraffe.presentation.authentication.utils.EffectListener
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToHomeScreen: () -> Unit,
     navigateToWebViewScreen: () -> Unit,
@@ -72,7 +71,6 @@ fun LoginScreen(
 
 
     LoginContent(
-        modifier = modifier,
         state = state,
         interaction = viewModel
     )
@@ -83,7 +81,7 @@ fun LoginScreen(
 fun LoginContent(
     state: LoginScreenState,
     interaction: LoginInteractionListener,
-    modifier: Modifier,
+    modifier: Modifier=Modifier,
     scrollState: ScrollState = rememberScrollState()
 ) {
     Column(
@@ -95,16 +93,6 @@ fun LoginContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        if (state.isNoInternet) {
-            NoInternetScreen()
-        } else if (state.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Progress()
-            }
-        } else {
             LogoSection(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
             )
@@ -142,4 +130,3 @@ fun LoginContent(
             )
         }
     }
-}

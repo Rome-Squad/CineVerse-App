@@ -9,11 +9,11 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
+import com.giraffe.media.mediaMember.entity.CastMember
+import com.giraffe.media.mediaMember.usecase.GetMediaMembersByNameUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.SearchMovieByNameUseCase
-import com.giraffe.media.person.entity.Person
-import com.giraffe.media.person.usecase.SearchPeopleByNameUseCase
+import com.giraffe.media.movie.usecase.GetMoviesByNameUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
@@ -29,9 +29,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchResultViewModel @Inject constructor(
-    private val searchMovieByName: SearchMovieByNameUseCase,
+    private val getMoviesByNameUseCase: GetMoviesByNameUseCase,
     private val getSeriesByName: GetSeriesByNameUseCase,
-    private val searchPeopleByName: SearchPeopleByNameUseCase,
+    private val searchPeopleByName: GetMediaMembersByNameUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
@@ -145,7 +145,7 @@ class SearchResultViewModel @Inject constructor(
             onError = ::onError,
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource { page -> searchMovieByName(state.value.query, page) }
+                BasePagingSource { page -> getMoviesByNameUseCase(state.value.query, page) }
             }.flow.cachedIn(viewModelScope)
         }
     }
@@ -206,8 +206,8 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    private fun onGetActorsSuccess(actorsFlow: Flow<PagingData<Person>>) {
-        actorsFlow.map { actors -> actors.map(Person::toPoster) }.let { posters ->
+    private fun onGetActorsSuccess(actorsFlow: Flow<PagingData<CastMember>>) {
+        actorsFlow.map { actors -> actors.map(CastMember::toPoster) }.let { posters ->
             updateState {
                 it.copy(
                     actorsPosters = posters,

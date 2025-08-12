@@ -1,6 +1,6 @@
 package com.giraffe.media.movie.usecase
 
-import com.giraffe.media.movie.repository.MoviesRepository
+import com.giraffe.media.movie.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test
 
 class GetPopularityMoviesUseCaseTest {
 
-    private lateinit var repository: MoviesRepository
-    private lateinit var useCase: GetPopularityMoviesUseCase
+    private lateinit var repository: MovieRepository
+    private lateinit var useCase: GetPopularMoviesUseCase
 
     @BeforeEach
     fun setUp() {
         repository = mockk()
-        useCase = GetPopularityMoviesUseCase(repository)
+        useCase = GetPopularMoviesUseCase(repository)
     }
 
     @Test
@@ -26,13 +26,13 @@ class GetPopularityMoviesUseCaseTest {
         val expectedPopularityMovies = fakeMovies.filter { it.popularity > 0 }
         val page = 1
         val limit = 10
-        coEvery { repository.getPopularityMovies(page, limit) } returns expectedPopularityMovies
+        coEvery { repository.getPopular(page, limit) } returns expectedPopularityMovies
 
         // When
         val actualMovies = useCase(page,limit)
 
         // Then
-        coVerify(exactly = 1) { repository.getPopularityMovies(page, limit) }
+        coVerify(exactly = 1) { repository.getPopular(page, limit) }
         assertThat(actualMovies).isEqualTo(expectedPopularityMovies)
     }
 }

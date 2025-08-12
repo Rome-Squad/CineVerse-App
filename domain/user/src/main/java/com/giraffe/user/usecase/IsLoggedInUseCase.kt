@@ -4,7 +4,7 @@ import com.giraffe.user.repository.AuthRepository
 import javax.inject.Inject
 
 class IsLoggedInUseCase @Inject constructor(
-    private val repository: AuthRepository
+    private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke() = repository.isLoggedIn()
+    suspend operator fun invoke() = authRepository.isLoggedIn()
 }
