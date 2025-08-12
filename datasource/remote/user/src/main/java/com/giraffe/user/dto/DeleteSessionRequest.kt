@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeleteSessionRequest(
-    @SerialName("session_id") val sessionId: String
+    @SerialName("session_id")
+    val sessionId: String
 )
