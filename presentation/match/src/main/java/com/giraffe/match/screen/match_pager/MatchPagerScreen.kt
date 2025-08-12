@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,15 +31,17 @@ import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.components.ProgressIndicator
+import com.giraffe.match.composable.PageWithIconsSingleSelection
+import com.giraffe.match.composable.PageWithMultiSelectionTextOnly
 import com.giraffe.match.composable.ReadOnlyBlurWrapper
 import com.giraffe.match.composable.SectionWithTitle
-import com.giraffe.match.composable.SelectionPageTextOnly
 import com.giraffe.match.composable.SelectionPageWithIcons
-import com.giraffe.match.composable.SelectionPageWithIconsSingleRow
-import com.giraffe.match.composable.getGenreOptions
+import com.giraffe.match.composable.SingleSelectionPageTextOnly
 import com.giraffe.match.composable.getMoodOptions
-import com.giraffe.match.composable.getRecencyOptions
+import com.giraffe.match.composable.getReleasePeriodOptions
 import com.giraffe.match.composable.getTimeOptions
+import com.giraffe.match.utils.showToast
+import com.giraffe.match.utils.toStringResource
 import com.giraffe.presentation.match.R
 import kotlinx.coroutines.launch
 
@@ -57,12 +60,14 @@ fun MatchPagerScreen(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = state.currentPage, pageCount = { 5 })
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 MatchScreenEffect.NavigateBack -> onBackClick()
                 MatchScreenEffect.FinishMatching -> onFinish()
+                is MatchScreenEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
     }
@@ -71,12 +76,18 @@ fun MatchPagerScreen(
         if (pagerState.currentPage != state.currentPage) {
             pagerState.scrollToPage(state.currentPage)
         }
-    }
 
+        if (
+            state.currentPage == pagerState.pageCount - 1 && !state.isLoading
+        ) {
+            viewModel.updateLoadingState(true)
+            kotlinx.coroutines.delay(500)
+            viewModel.onNextClicked()
+        }
+    }
     val moodOptions = getMoodOptions()
-    val genreOptions = getGenreOptions()
     val timeOptions = getTimeOptions()
-    val recencyOptions = getRecencyOptions()
+    val recencyOptions = getReleasePeriodOptions()
 
     Column(
         modifier = modifier
@@ -87,9 +98,7 @@ fun MatchPagerScreen(
     ) {
         AppBar(
             showBackButton = true,
-            onBackButtonClick = {
-                viewModel.onBackClicked()
-            }
+            onBackButtonClick = viewModel::onBackClicked
         )
 
         ProgressIndicator(
@@ -113,6 +122,7 @@ fun MatchPagerScreen(
             ) {
                 HorizontalPager(
                     state = pagerState,
+                    userScrollEnabled = false,
                     modifier = Modifier
                         .fillMaxWidth()
                         .animateContentSize()
@@ -145,8 +155,8 @@ fun MatchPagerScreen(
                                     }
                                 }
                                 SectionWithTitle(stringResource(R.string.pick_a_genre_you_love)) {
-                                    SelectionPageTextOnly(
-                                        options = genreOptions,
+                                    PageWithMultiSelectionTextOnly(
+                                        options = state.genreOptions,
                                         selectedItems = state.genreSelections,
                                         onSelectionChange = viewModel::updateGenreSelections
                                     )
@@ -169,8 +179,8 @@ fun MatchPagerScreen(
                                 if (state.genreSelections.isNotEmpty()) {
                                     ReadOnlyBlurWrapper(readOnly = true) {
                                         SectionWithTitle(stringResource(R.string.pick_a_genre_you_love)) {
-                                            SelectionPageTextOnly(
-                                                options = genreOptions.filter { it.id in state.genreSelections },
+                                            PageWithMultiSelectionTextOnly(
+                                                options = state.genreOptions.filter { it.id in state.genreSelections },
                                                 selectedItems = state.genreSelections,
                                                 onSelectionChange = {},
                                                 readOnly = true
@@ -179,10 +189,10 @@ fun MatchPagerScreen(
                                     }
                                 }
                                 SectionWithTitle(stringResource(R.string.how_much_time_do_you_have)) {
-                                    SelectionPageWithIconsSingleRow(
+                                    PageWithIconsSingleSelection(
                                         options = timeOptions,
-                                        selectedItems = state.timeSelections,
-                                        onSelectionChange = viewModel::updateTimeSelections
+                                        selectedItem = state.timeSelection,
+                                        onSelectionChange = viewModel::updateTimeSelection
                                     )
                                 }
                             }
@@ -203,8 +213,8 @@ fun MatchPagerScreen(
                                 if (state.genreSelections.isNotEmpty()) {
                                     ReadOnlyBlurWrapper(readOnly = true) {
                                         SectionWithTitle(stringResource(R.string.pick_a_genre_you_love)) {
-                                            SelectionPageTextOnly(
-                                                options = genreOptions.filter { it.id in state.genreSelections },
+                                            PageWithMultiSelectionTextOnly(
+                                                options = state.genreOptions.filter { it.id in state.genreSelections },
                                                 selectedItems = state.genreSelections,
                                                 onSelectionChange = {},
                                                 readOnly = true
@@ -212,12 +222,12 @@ fun MatchPagerScreen(
                                         }
                                     }
                                 }
-                                if (state.timeSelections.isNotEmpty()) {
+                                if (state.timeSelection != null) {
                                     ReadOnlyBlurWrapper(readOnly = true) {
                                         SectionWithTitle(stringResource(R.string.how_much_time_do_you_have)) {
-                                            SelectionPageWithIconsSingleRow(
-                                                options = timeOptions.filter { it.id in state.timeSelections },
-                                                selectedItems = state.timeSelections,
+                                            PageWithIconsSingleSelection(
+                                                options = timeOptions.filter { it.id == state.timeSelection },
+                                                selectedItem = state.timeSelection,
                                                 onSelectionChange = {},
                                                 readOnly = true
                                             )
@@ -225,10 +235,12 @@ fun MatchPagerScreen(
                                     }
                                 }
                                 SectionWithTitle(stringResource(R.string.do_you_want_something_recent_or_classic)) {
-                                    SelectionPageTextOnly(
+                                    SingleSelectionPageTextOnly(
                                         options = recencyOptions,
-                                        selectedItems = state.recencySelections,
-                                        onSelectionChange = viewModel::updateRecencySelections
+                                        selectedItem = state.recencySelection,
+                                        onSelectionChange = { selectedId ->
+                                            selectedId?.let { viewModel.updateRecencySelection(it) }
+                                        }
                                     )
                                 }
                             }
@@ -249,8 +261,8 @@ fun MatchPagerScreen(
                                 if (state.genreSelections.isNotEmpty()) {
                                     ReadOnlyBlurWrapper(readOnly = true) {
                                         SectionWithTitle(stringResource(R.string.pick_a_genre_you_love)) {
-                                            SelectionPageTextOnly(
-                                                options = genreOptions.filter { it.id in state.genreSelections },
+                                            PageWithMultiSelectionTextOnly(
+                                                options = state.genreOptions.filter { it.id in state.genreSelections },
                                                 selectedItems = state.genreSelections,
                                                 onSelectionChange = {},
                                                 readOnly = true
@@ -258,26 +270,26 @@ fun MatchPagerScreen(
                                         }
                                     }
                                 }
-                                if (state.timeSelections.isNotEmpty()) {
+                                if (state.timeSelection != null) {
                                     ReadOnlyBlurWrapper(readOnly = true) {
                                         SectionWithTitle(stringResource(R.string.how_much_time_do_you_have)) {
-                                            SelectionPageWithIconsSingleRow(
-                                                options = timeOptions.filter { it.id in state.timeSelections },
-                                                selectedItems = state.timeSelections,
+                                            PageWithIconsSingleSelection(
+                                                options = timeOptions.filter { it.id == state.timeSelection },
+                                                selectedItem = state.timeSelection,
                                                 onSelectionChange = {},
                                                 readOnly = true
                                             )
                                         }
                                     }
                                 }
-                                if (state.recencySelections.isNotEmpty()) {
+                                if (state.recencySelection != null) {
                                     ReadOnlyBlurWrapper(readOnly = true) {
                                         SectionWithTitle(stringResource(R.string.do_you_want_something_recent_or_classic)) {
-                                            SelectionPageTextOnly(
-                                                readOnly = true,
-                                                options = recencyOptions.filter { it.id in state.recencySelections },
-                                                selectedItems = state.recencySelections,
-                                                onSelectionChange = {}
+                                            SingleSelectionPageTextOnly(
+                                                options = recencyOptions.filter { it.id == state.recencySelection },
+                                                selectedItem = state.recencySelection,
+                                                onSelectionChange = {},
+                                                readOnly = true
                                             )
                                         }
                                     }
@@ -308,6 +320,8 @@ fun MatchPagerScreen(
                 } else {
                     stringResource(R.string.start_matching)
                 },
+                enabled = viewModel.isPageEnabled(state),
+                isLoading = state.isLoading,
                 onClick = {
                     coroutineScope.launch {
                         viewModel.onNextClicked()

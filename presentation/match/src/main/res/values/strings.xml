@@ -18,9 +18,9 @@
     <string name="time_long">Long</string>
     <string name="time_long_description">(more than 120 min)</string>
 
-    <string name="recency_recent">Recent</string>
-    <string name="recency_classic">Classic</string>
-    <string name="recency_both">Both</string>
+    <string name="ReleasePeriod_recent">Recent</string>
+    <string name="ReleasePeriod_classic">Classic</string>
+    <string name="ReleasePeriod_both">Both</string>
     <!-- Genre Options -->
     <string name="genre_action">Action</string>
     <string name="genre_comedy">Comedy</string>
@@ -44,4 +44,8 @@
     <string name="media_type_movie">Movie</string>
     <string name="media_type_series">Series</string>
     <string name="view_details">View Details</string>
+    <string name="error_unknown">Something went wrong. Please try again later.</string>
+    <string name="error_network">Please check your internet connection.</string>
+    <string name="access_denied_error">Access Denied Error!</string>
+
 </resources>

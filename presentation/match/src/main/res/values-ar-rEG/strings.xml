@@ -18,9 +18,9 @@
     <string name="time_long">طويل</string>
     <string name="time_long_description">(أكثر من ١٢٠ دقيقة)</string>
 
-    <string name="recency_recent">حديث</string>
-    <string name="recency_classic">كلاسيكي</string>
-    <string name="recency_both">كلاهما</string>
+    <string name="ReleasePeriod_recent">حديث</string>
+    <string name="ReleasePeriod_classic">كلاسيكي</string>
+    <string name="ReleasePeriod_both">كلاهما</string>
     <!-- Genre Options -->
     <string name="genre_action">حركة</string>
     <string name="genre_comedy">كوميديا</string>
@@ -45,4 +45,7 @@
     <string name="media_type_series">مسلسل</string>
     <string name="icon_description">أيقونة مرفقة مع النص</string>
     <string name="view_details">عرض التفاصيل</string>
+    <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
+    <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
+    <string name="access_denied_error">خطأ : تم رفض الوصول!</string>
 </resources>
