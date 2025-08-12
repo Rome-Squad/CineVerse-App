@@ -140,7 +140,7 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun getMatchesYourVibe(page: Int, limit: Int) = SafeCall {
         val topGenreCount = getTopGenreCount()
-        if (topGenreCount.rank > 0) {
+        if (topGenreCount != null) {
             if (page > 1) {
                 seriesRemoteDataSource.getSeriesByGenre(genreId = topGenreCount.id, page = page)
                     .take(limit)
@@ -187,8 +187,8 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.deleteSeriesRating(seriesId)
     }
 
-    private suspend fun getTopGenreCount() = SafeCall {
-        seriesLocalDateSource.getTopGenreCount().toEntity()
+    override suspend fun getTopGenreCount() = SafeCall {
+        seriesLocalDateSource.getTopGenreCount()?.toEntity()
     }
 
     private suspend fun addMatchesYourVibe(series: List<Series>) = SafeCall {

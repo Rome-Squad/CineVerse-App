@@ -39,7 +39,7 @@ interface SeriesLocalDateSource {
 
     suspend fun deleteSeriesById(seriesId: Int)
 
-    suspend fun getTopGenreCount(): SeriesGenreCacheDto
+    suspend fun getTopGenreCount(): SeriesGenreCacheDto?
 
     suspend fun insertMatchesYourVibe(series: List<SeriesCacheDto>)
 

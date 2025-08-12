@@ -101,8 +101,8 @@ interface SeriesDao {
     @Query("UPDATE series_genre SET count = count + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
-    @Query("SELECT * FROM $SERIES_GENRE_TABLE ORDER BY count DESC LIMIT 1")
-    suspend fun getTopGenreCount(): SeriesGenreCacheDto
+    @Query("SELECT * FROM $SERIES_GENRE_TABLE WHERE count > 0 ORDER BY count DESC LIMIT 1")
+    suspend fun getTopGenreCount(): SeriesGenreCacheDto?
 
 
     @Query("DELETE FROM $SERIES_TABLE")

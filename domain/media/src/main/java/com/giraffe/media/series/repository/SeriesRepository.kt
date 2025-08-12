@@ -47,4 +47,6 @@ interface SeriesRepository {
     suspend fun addRecentlyViewed(series: Series)
 
     suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Series>
+
+    suspend fun getTopGenreCount(): Genre?
 }
