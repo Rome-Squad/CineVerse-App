@@ -36,10 +36,6 @@ fun MatchResultScreen(
     timeSelection: Int?,
     releasePeriodSelection: String?
 ) {
-    println("Selected Genres: $selectedGenres")
-    println("Mood Selections: $moodSelections")
-    println("Time Selection: $timeSelection")
-    println("Release Period: $releasePeriodSelection")
     MatchResultContent(
         state = MatchResultScreenState(
             matchItems = listOf(
