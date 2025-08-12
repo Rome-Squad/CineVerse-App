@@ -47,13 +47,19 @@ val fakeMovies: List<Movie> = listOf(
     fakeMovie(id = 9, title = "title 9", userRating = 0.9f),
 )
 
+val fakeTopGenre = Genre(
+    id = 1, title = "Action",
+    rank = 2
+)
+
+val genreWithZeroRank = Genre(id = 2, title = "Sci-Fi", rank = 0)
+
+
 val fakeGenres = listOf(
+    fakeTopGenre,
+    genreWithZeroRank,
     Genre(
-        id = 1, title = "Action",
-        rank = 0
-    ),
-    Genre(
-        id = 2, title = "Comedy",
+        id = 3, title = "Comedy",
         rank = 0
     )
 )
