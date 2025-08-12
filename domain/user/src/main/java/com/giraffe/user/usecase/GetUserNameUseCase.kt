@@ -1,13 +1,12 @@
 package com.giraffe.user.usecase
 
-import com.giraffe.user.repository.UserRepository
 import jakarta.inject.Inject
 
 class GetUserNameUseCase @Inject constructor(
-    private val userRepository: UserRepository
+    private val getUserUseCase: GetUserUseCase
 ) {
     suspend operator fun invoke(): String {
-        val user = userRepository.getUser()
+        val user = getUserUseCase.invoke()
         val name = if (user.displayName.isEmpty()) {
             user.username
         } else {
