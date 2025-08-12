@@ -3,6 +3,7 @@ package com.giraffe.media.series
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
@@ -36,11 +37,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
 
     override suspend fun clearAllGenres() {
         seriesDao.clearAllGenres()
-    }
-
-
-    override suspend fun clearAllSeriesExceptRecentlyViewed() = safeCall {
-        seriesDao.clearAllSeriesExceptRecentlyViewed()
     }
 
     override suspend fun clearAllSeries() {
@@ -85,11 +81,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
 
-    override suspend fun insertRecentSeries(seriesId: Int) = safeCall {
-        seriesDao.markSeriesAsViewed(
-            seriesId = seriesId,
-            currentTime = System.currentTimeMillis()
-        )
+    override suspend fun insertRecentViewedSeries(series: RecentViewedSeriesCacheDto) = safeCall {
+        seriesDao.upsertRecentViewedSeries(series)
     }
 
 

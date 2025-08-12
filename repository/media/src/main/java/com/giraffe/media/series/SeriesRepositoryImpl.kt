@@ -13,6 +13,7 @@ import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toCacheDto
 import com.giraffe.media.series.mapper.toEntity
+import com.giraffe.media.series.mapper.toRecentViewedSeriesCacheDto
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.SafeCall
@@ -42,22 +43,16 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun getRecentlyViewed() = SafeCall {
         seriesLocalDateSource.getRecentSeries().map { seriesList ->
-            seriesList.map { series ->
-                series.toEntity()
-            }
+            seriesList.map { series -> series.toEntity() }
         }
     }
 
     override suspend fun addRecentlyViewed(series: Series) = SafeCall {
-        seriesLocalDateSource.insertRecentSeries(series.id)
+        seriesLocalDateSource.insertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
     }
 
     override suspend fun clearRecentlyViewed() = SafeCall {
         seriesLocalDateSource.clearRecentSeries()
-    }
-
-    override suspend fun clearAllExceptRecentlyViewed() = SafeCall {
-        seriesLocalDateSource.clearAllSeriesExceptRecentlyViewed()
     }
 
     override suspend fun clearAll() = SafeCall {

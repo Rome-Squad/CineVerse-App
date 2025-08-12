@@ -4,12 +4,14 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
 import com.giraffe.media.utils.DatabaseConstants.POPULAR_SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.RECENTLY_RELEASED_SERIES_TABLE
+import com.giraffe.media.utils.DatabaseConstants.RECENT_VIEWED_SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.TOP_RATED_SERIES_TABLE
@@ -30,17 +32,14 @@ interface SeriesDao {
     suspend fun upsertTopRatedSeriesIDs(seriesIDs: List<TopRatedSeriesCacheDto>)
 
     @Upsert
+    suspend fun upsertRecentViewedSeries(series: RecentViewedSeriesCacheDto)
+
+    @Upsert
     suspend fun upsertGenres(genres: List<SeriesGenreCacheDto>)
 
 
-    @Query("UPDATE $SERIES_TABLE SET isRecentViewed = 1 AND recentViewedAt = :currentTime WHERE id = :seriesId")
-    suspend fun markSeriesAsViewed(seriesId: Int, currentTime: Long)
-
-    @Query("UPDATE $SERIES_TABLE SET isRecentViewed = 0")
-    suspend fun clearRecentSeries()
-
-    @Query("SELECT * FROM $SERIES_TABLE WHERE isRecentViewed = 1 ORDER BY recentViewedAt DESC")
-    fun getRecentSeries(): Flow<List<SeriesCacheDto>>
+    @Query("SELECT * FROM $RECENT_VIEWED_SERIES_TABLE ORDER BY recentViewedAt DESC")
+    fun getRecentSeries(): Flow<List<RecentViewedSeriesCacheDto>>
 
     @Query(
         """
@@ -88,12 +87,12 @@ interface SeriesDao {
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
 
-    @Query("DELETE FROM $SERIES_TABLE WHERE isRecentViewed = 0")
-    suspend fun clearAllSeriesExceptRecentlyViewed()
-
     @Query("DELETE FROM $SERIES_TABLE")
     suspend fun clearAllSeries()
 
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
     suspend fun clearAllGenres()
+
+    @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE")
+    suspend fun clearRecentSeries()
 }

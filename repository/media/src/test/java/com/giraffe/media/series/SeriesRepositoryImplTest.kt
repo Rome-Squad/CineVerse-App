@@ -1,6 +1,7 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
@@ -9,6 +10,7 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toEntity
+import com.giraffe.media.series.mapper.toRecentViewedSeriesCacheDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -79,7 +81,23 @@ class SeriesRepositoryImplTest {
             popularity = 90.0f,
             youtubeVideoId = null,
             userRating = null,
-            recentViewedAt = null
+        )
+    )
+
+    private val recentViewedSeriesCacheDto = listOf(
+        RecentViewedSeriesCacheDto(
+            id = 1,
+            name = "Vikings",
+            overview = "desc",
+            rate = 8.0f,
+            posterUrl = "poster",
+            backdropUrl = "backdrop",
+            genresID = listOf(1),
+            releaseYear = null,
+            popularity = 90.0f,
+            youtubeVideoId = null,
+            userRating = null,
+            recentViewedAt = 99
         )
     )
 
@@ -143,7 +161,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getRecentSeries should return mapped cached series`() = runTest {
-        coEvery { local.getRecentSeries() } returns flowOf(cachedSeries)
+        coEvery { local.getRecentSeries() } returns flowOf(recentViewedSeriesCacheDto)
 
         val result = repository.getRecentlyViewed().first()
 
@@ -167,7 +185,7 @@ class SeriesRepositoryImplTest {
     @Test
     fun `storeRecentSeries should call local storage`() = runTest {
         repository.addRecentlyViewed(sampleSeries[0])
-        coVerify { local.insertRecentSeries(1) }
+        coVerify { local.insertRecentViewedSeries(sampleSeries[0].toRecentViewedSeriesCacheDto()) }
     }
 
     @Test

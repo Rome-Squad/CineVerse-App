@@ -38,8 +38,6 @@ interface SeriesRepository {
 
     suspend fun clearAll()
 
-    suspend fun clearAllExceptRecentlyViewed()
-
     suspend fun deleteById(seriesId: Int)
 
     suspend fun getRecentlyViewed(): Flow<List<Series>>
@@ -49,7 +47,6 @@ interface SeriesRepository {
     suspend fun addGenres(genres: List<Genre>)
 
     suspend fun addRecentlyViewed(series: Series)
-
 
     suspend fun addPopular(series: List<Series>)
 

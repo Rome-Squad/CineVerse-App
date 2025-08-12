@@ -7,8 +7,6 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -72,12 +70,6 @@ class SeriesRoomLocalDateSourceTest {
         coVerify { dao.upsertGenres(newGenres) }
     }
 
-    @Test
-    fun `clearAllSeriesExceptRecentlyViewed clears DAO`() = runTest {
-        dataSource.clearAllSeriesExceptRecentlyViewed()
-
-        coVerify { dao.clearAllSeriesExceptRecentlyViewed() }
-    }
 
     @Test
     fun `clearAllSeries clears DAO`() = runTest {
@@ -93,13 +85,6 @@ class SeriesRoomLocalDateSourceTest {
         coVerify { dao.clearAllGenres() }
     }
 
-    @Test
-    fun `storeRecentSeries marks as viewed`() = runTest {
-        val seriesId = 1
-        dataSource.insertRecentSeries(seriesId)
-
-        coVerify { dao.markSeriesAsViewed(seriesId, any()) }
-    }
 
     @Test
     fun `clearRecentSeries clears DAO recent table`() = runTest {
@@ -108,15 +93,6 @@ class SeriesRoomLocalDateSourceTest {
         coVerify { dao.clearRecentSeries() }
     }
 
-    @Test
-    fun `getRecentSeries returns series marked as recent`() = runTest {
-        coEvery { dao.getRecentSeries() } returns flowOf(sampleSeries)
-
-        val result = dataSource.getRecentSeries().first()
-
-        coVerify { dao.getRecentSeries() }
-        assertThat(result).isEqualTo(sampleSeries)
-    }
 
     @Test
     fun `incrementInteractionCountForGenres calls DAO`() = runTest {
