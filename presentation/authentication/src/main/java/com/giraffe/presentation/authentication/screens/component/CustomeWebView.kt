@@ -1,4 +1,4 @@
-package com.giraffe.presentation.authentication.screens.signup
+package com.giraffe.presentation.authentication.screens.component
 
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -11,23 +11,27 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.giraffe.presentation.authentication.utils.WebViewConstants.LOGIN_PATH
-import com.giraffe.presentation.authentication.utils.WebViewConstants.SIGN_UP_URL
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.authentication.R
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
 @Composable
-fun AuthWebViewScreen(onBack: () -> Unit) {
-    var webViewState = rememberWebViewState(url = SIGN_UP_URL)
+fun CustomWebView(
+    url: String,
+    title: String,
+    onBack: () -> Unit,
+    onPageFinished: (String?) -> Unit,
+    onShouldOverrideUrlLoading: (WebResourceRequest?) -> Boolean
+) {
+    val webViewState = rememberWebViewState(url = url)
     val isLoading = webViewState.loadingState is LoadingState.Loading
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -38,9 +42,9 @@ fun AuthWebViewScreen(onBack: () -> Unit) {
 
         Column(modifier = Modifier.fillMaxSize()) {
             AppBar(
-                title = stringResource(R.string.sign_up),
+                title = title,
                 showBackButton = true,
-                onBackButtonClick = { onBack() },
+                onBackButtonClick = { onBack() }
             )
 
             WebView(
@@ -52,24 +56,14 @@ fun AuthWebViewScreen(onBack: () -> Unit) {
                 client = object : AccompanistWebViewClient() {
                     override fun onPageFinished(view: WebView, url: String?) {
                         super.onPageFinished(view, url)
-                        if (url?.contains(LOGIN_PATH) == true) {
-                            onBack()
-                        }
+                        onPageFinished(url)
                     }
 
                     override fun shouldOverrideUrlLoading(
                         view: WebView?,
                         request: WebResourceRequest?
                     ): Boolean {
-                        request?.url?.let {
-                            if (it.toString().contains(LOGIN_PATH)) {
-                                onBack()
-                                return true
-                            } else if (it.toString() != SIGN_UP_URL) {
-                                return true
-                            }
-                        }
-                        return super.shouldOverrideUrlLoading(view, request)
+                        return onShouldOverrideUrlLoading(request)
                     }
                 }
             )

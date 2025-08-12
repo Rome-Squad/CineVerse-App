@@ -148,6 +148,10 @@ fun MainNavGraph(
             selectedTabRoute = currentRoute,
             isBottomBarVisible = isBottomBarVisible,
             onTabSelected = { tab ->
+                if (currentRoute == tab.route) {
+                    return@BottomNavigationBar
+                }
+
                 navController.navigate(tab.route.route) {
                     popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true

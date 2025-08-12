@@ -12,7 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.api.details.DetailsApi
-import com.giraffe.api.explore.ExploreApi
+import com.giraffe.api.home.HomeApi
 import com.giraffe.presentation.profile.navigation.routes.ExploreRoute
 import com.giraffe.presentation.profile.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SeriesDetailsRoute
@@ -23,7 +23,6 @@ import com.giraffe.presentation.profile.navigation.routes.loginRoute
 import com.giraffe.presentation.profile.navigation.routes.myCollectionsRoute
 import com.giraffe.presentation.profile.navigation.routes.navigateLoginScreen
 import com.giraffe.presentation.profile.navigation.routes.navigateToCollection
-import com.giraffe.presentation.profile.navigation.routes.navigateToExploreScreen
 import com.giraffe.presentation.profile.navigation.routes.navigateToHistory
 import com.giraffe.presentation.profile.navigation.routes.navigateToMovieDetails
 import com.giraffe.presentation.profile.navigation.routes.navigateToMyCollections
@@ -39,9 +38,9 @@ internal fun ProfileNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     startDestinationRoute: Any,
+    homeApi: HomeApi,
     authenticationApi: AuthenticationApi,
     detailsApi: DetailsApi,
-    exploreApi: ExploreApi,
     onShowBottomBarChange: (Boolean) -> Unit,
     navigateBack: (() -> Unit)? = null,
 ) {
@@ -86,7 +85,7 @@ internal fun ProfileNavGraph(
             onBackClicked = navController::navigateUp,
             navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
             navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails,
-            navigateToExploreScreen = navController::navigateToExploreScreen
+            navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
 
         ratingsRoute(
@@ -109,7 +108,7 @@ internal fun ProfileNavGraph(
                     collectionName = it.name
                 )
             },
-            navigateToExploreScreen = navController::navigateToExploreScreen
+            navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
 
         collectionRoute(
@@ -122,10 +121,6 @@ internal fun ProfileNavGraph(
             },
             navigateToMovieDetails = navController::navigateToMovieDetails
         )
-
-        composable<ExploreRoute> {
-            exploreApi.ExploreContainer { }
-        }
 
         composable<SeriesDetailsRoute> { backStackEntry ->
             val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId

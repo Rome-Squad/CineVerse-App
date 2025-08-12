@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.screens.recommended.movie
+package com.giraffe.presentation.details.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
@@ -26,21 +26,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.giraffe.presentation.details.components.PosterHorizontal
-import com.giraffe.presentation.details.components.PosterVertically
-import com.giraffe.presentation.details.model.MovieUi
-import com.giraffe.presentation.details.utils.toPoster
+import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.presentation.details.utils.ObserveScrollDirection
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun TransitionLazyColumnToGridMovie(
-    lazyPagingItems: LazyPagingItems<MovieUi>,
+fun TransitionLazyColumnToGridPoster(
+    lazyPagingItems: LazyPagingItems<Poster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
     onItemClick: (Int) -> Unit,
-    ) {
+) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
 
@@ -50,6 +47,7 @@ fun TransitionLazyColumnToGridMovie(
         { it.firstVisibleItemScrollOffset },
         onScroll
     )
+
     ObserveScrollDirection(
         gridState,
         { it.firstVisibleItemIndex },
@@ -57,9 +55,11 @@ fun TransitionLazyColumnToGridMovie(
         onScroll
     )
 
+
     SharedTransitionLayout {
         AnimatedContent(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp),
             targetState = isListSelected,
             label = "ViewToggleAnimation",
             transitionSpec = {
@@ -73,20 +73,20 @@ fun TransitionLazyColumnToGridMovie(
         ) { isList ->
             val animatedScope = this
             if (isList) {
-                MovieListView(
+                PostersListView(
                     lazyPagingItems = lazyPagingItems,
                     listState = listState,
                     contentPadding = contentPadding,
-                    onItemClick = { movie -> onItemClick(movie.id) },
+                    onItemClick = { poster -> onItemClick(poster.id) },
                     animatedContentScope = animatedScope,
                     sharedTransitionScope = this@SharedTransitionLayout
                 )
             } else {
-                MovieGridView(
+                PostersGridView(
                     lazyPagingItems = lazyPagingItems,
                     gridState = gridState,
                     contentPadding = contentPadding,
-                    onItemClick = { movie -> onItemClick(movie.id) },
+                    onItemClick = { poster -> onItemClick(poster.id) },
                     animatedContentScope = animatedScope,
                     sharedTransitionScope = this@SharedTransitionLayout
                 )
@@ -97,11 +97,11 @@ fun TransitionLazyColumnToGridMovie(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun MovieListView(
-    lazyPagingItems: LazyPagingItems<MovieUi>,
+private fun PostersListView(
+    lazyPagingItems: LazyPagingItems<Poster>,
     listState: LazyListState,
     contentPadding: PaddingValues,
-    onItemClick: (MovieUi) -> Unit,
+    onItemClick: (Poster) -> Unit,
     animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
 ) {
@@ -113,7 +113,7 @@ private fun MovieListView(
         items(lazyPagingItems.itemCount) { index ->
             lazyPagingItems[index]?.let { poster ->
                 PosterHorizontal(
-                    poster = poster.toPoster(),
+                    poster = poster,
                     animatedVisibilityScope = animatedContentScope,
                     sharedTransitionScope = sharedTransitionScope,
                     onClick = { onItemClick(poster) }
@@ -125,11 +125,11 @@ private fun MovieListView(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun MovieGridView(
-    lazyPagingItems: LazyPagingItems<MovieUi>,
+private fun PostersGridView(
+    lazyPagingItems: LazyPagingItems<Poster>,
     gridState: LazyGridState,
     contentPadding: PaddingValues,
-    onItemClick: (MovieUi) -> Unit,
+    onItemClick: (Poster) -> Unit,
     animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope
 ) {
@@ -143,7 +143,7 @@ private fun MovieGridView(
         items(lazyPagingItems.itemCount) { index ->
             lazyPagingItems[index]?.let { poster ->
                 PosterVertically(
-                    poster = poster.toPoster(),
+                    poster = poster,
                     animatedVisibilityScope = animatedContentScope,
                     sharedTransitionScope = sharedTransitionScope,
                     onClick = { onItemClick(poster) }

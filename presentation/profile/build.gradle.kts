@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":api:authentication"))
     implementation(project(":api:explore"))
     implementation(project(":api:details"))
+    implementation(project(":api:home"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
