@@ -1,5 +1,9 @@
 package com.giraffe.presentation.details.screens.recommended.series
 
 interface RecommendedInteractionListener {
-    fun navigateToSeriesDetailsScreen(seriesId: Int)
+    fun onSeriesClick(seriesId: Int)
+
+    fun onBackClick()
+
+    fun onRetryClick()
 }

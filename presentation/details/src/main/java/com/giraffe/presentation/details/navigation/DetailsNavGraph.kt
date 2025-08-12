@@ -78,7 +78,9 @@ internal fun DetailsNavGraph(
         youTubePlayerRouteRoute(
             onBackClick = { navController.navigateUp() }
         )
-        reviewRoute(navController)
+        reviewRoute(
+            navigateBack = navController::navigateUp
+        )
         loginRoute(authApi)
     }
 }
