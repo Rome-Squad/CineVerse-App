@@ -78,7 +78,7 @@ interface SeriesDao {
     suspend fun deleteSeriesById(seriesId: Int)
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
-    suspend fun getAllGenres(): List<SeriesGenreCacheDto>
+    suspend fun getGenres(): List<SeriesGenreCacheDto>
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  WHERE id IN (:genreIds)")
     suspend fun getGenresByIds(genreIds: List<Int>): List<SeriesGenreCacheDto>
@@ -88,10 +88,10 @@ interface SeriesDao {
 
 
     @Query("DELETE FROM $SERIES_TABLE")
-    suspend fun clearAllSeries()
+    suspend fun clearSeries()
 
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
-    suspend fun clearAllGenres()
+    suspend fun clearGenres()
 
     @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE")
     suspend fun clearRecentSeries()

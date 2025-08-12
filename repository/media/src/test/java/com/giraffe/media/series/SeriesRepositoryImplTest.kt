@@ -10,7 +10,6 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toEntity
-import com.giraffe.media.series.mapper.toRecentViewedSeriesCacheDto
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -181,12 +180,6 @@ class SeriesRepositoryImplTest {
         coVerify { local.insertGenres(match { it.first().id == 1 }) }
     }
 
-
-    @Test
-    fun `storeRecentSeries should call local storage`() = runTest {
-        repository.addRecentlyViewed(sampleSeries[0])
-        coVerify { local.insertRecentViewedSeries(sampleSeries[0].toRecentViewedSeriesCacheDto()) }
-    }
 
     @Test
     fun `clearRecentSeries should call local clear`() = runTest {

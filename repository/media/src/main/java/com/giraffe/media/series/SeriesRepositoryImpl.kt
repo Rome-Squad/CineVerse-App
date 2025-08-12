@@ -56,7 +56,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun clearAll() = SafeCall {
-        seriesLocalDateSource.clearAllSeries()
+        seriesLocalDateSource.clearSeries()
     }
 
     override suspend fun getDetails(seriesId: Int): Series = SafeCall {

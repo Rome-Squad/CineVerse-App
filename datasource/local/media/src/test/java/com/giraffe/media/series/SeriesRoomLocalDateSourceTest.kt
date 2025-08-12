@@ -3,6 +3,9 @@ package com.giraffe.media.series
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.mapper.toPopularSeriesCacheDto
+import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
+import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -42,7 +45,7 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `getCachedGenres returns genres if cache is valid`() = runTest {
-        coEvery { dao.getAllGenres() } returns sampleGenres
+        coEvery { dao.getGenres() } returns sampleGenres
 
         val result = dataSource.getGenres()
 
@@ -51,7 +54,7 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `getCachedGenres returns empty if cache expired`() = runTest {
-        coEvery { dao.getAllGenres() } returns emptyList()
+        coEvery { dao.getGenres() } returns emptyList()
 
         val result = dataSource.getGenres()
 
@@ -73,16 +76,16 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `clearAllSeries clears DAO`() = runTest {
-        dataSource.clearAllSeries()
+        dataSource.clearSeries()
 
-        coVerify { dao.clearAllSeries() }
+        coVerify { dao.clearSeries() }
     }
 
     @Test
     fun `clearAllGenres clears DAO`() = runTest {
-        dataSource.clearAllGenres()
+        dataSource.clearGenres()
 
-        coVerify { dao.clearAllGenres() }
+        coVerify { dao.clearGenres() }
     }
 
 

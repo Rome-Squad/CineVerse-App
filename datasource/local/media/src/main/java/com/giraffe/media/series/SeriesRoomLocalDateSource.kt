@@ -2,15 +2,14 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
-import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
-import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
+import com.giraffe.media.series.mapper.toPopularSeriesCacheDto
+import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
+import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
-import com.giraffe.media.utils.SafeCall
 import javax.inject.Inject
 
 class SeriesRoomLocalDateSource @Inject constructor(
@@ -18,29 +17,29 @@ class SeriesRoomLocalDateSource @Inject constructor(
 ) : SeriesLocalDateSource {
 
     override suspend fun getGenres(): List<SeriesGenreCacheDto> = safeCall {
-        seriesDao.getAllGenres()
+        seriesDao.getGenres()
     }
 
     override suspend fun insertGenres(genres: List<SeriesGenreCacheDto>) = safeCall {
         seriesDao.upsertGenres(genres)
     }
 
-    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = SafeCall {
+    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = safeCall {
         if (genreIds.isNotEmpty()) {
             seriesDao.incrementInteractionCountForGenres(genreIds)
         }
     }
 
-    override suspend fun getGenresByIDs(genreIds: List<Int>) = SafeCall {
+    override suspend fun getGenresByIDs(genreIds: List<Int>) = safeCall {
         seriesDao.getGenresByIds(genreIds)
     }
 
-    override suspend fun clearAllGenres() {
-        seriesDao.clearAllGenres()
+    override suspend fun clearGenres() = safeCall {
+        seriesDao.clearGenres()
     }
 
-    override suspend fun clearAllSeries() {
-        seriesDao.clearAllSeries()
+    override suspend fun clearSeries() = safeCall {
+        seriesDao.clearSeries()
     }
 
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
@@ -70,9 +69,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.getTopRatedSeries(limit)
     }
 
-    override suspend fun deleteSeriesById(seriesId: Int) {
+    override suspend fun deleteSeriesById(seriesId: Int) = safeCall {
         seriesDao.deleteSeriesById(seriesId)
-
     }
 
 
@@ -90,15 +88,3 @@ class SeriesRoomLocalDateSource @Inject constructor(
         seriesDao.clearRecentSeries()
     }
 }
-
-fun SeriesCacheDto.toPopularSeriesCacheDto() = PopularSeriesCacheDto(
-    id = id,
-)
-
-fun SeriesCacheDto.toRecentlyReleasedSeriesCacheDto() = RecentlyReleasedSeriesCacheDto(
-    id = id,
-)
-
-fun SeriesCacheDto.toTopRatedSeriesCacheDto() = TopRatedSeriesCacheDto(
-    id = id,
-)
