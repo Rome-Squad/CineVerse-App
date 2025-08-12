@@ -1,8 +1,12 @@
 package com.giraffe.designsystem.composable.navbar
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,8 +36,8 @@ fun BottomNavigationBar(
 ) {
     AnimatedVisibility(
         visible = isBottomBarVisible,
-        enter = slideInVertically(),
-        exit = slideOutVertically()
+        enter = fadeIn(animationSpec = tween(500, easing = LinearEasing)),
+        exit = fadeOut(animationSpec = tween(500, easing = LinearEasing))
     ) {
         Column(
             modifier = modifier
