@@ -35,8 +35,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:media"))
-    implementation(project(":domain:user"))
+    implementation(projects.domain.media)
+    implementation(projects.domain.user)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
     implementation(libs.room.runtime)

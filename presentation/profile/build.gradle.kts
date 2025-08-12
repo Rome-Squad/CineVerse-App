@@ -39,14 +39,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":designsystem"))
-    implementation(project(":imageviewer"))
-    implementation(project(":domain:media"))
-    implementation(project(":domain:user"))
-    implementation(project(":api:profile"))
-    implementation(project(":api:authentication"))
-    implementation(project(":api:explore"))
-    implementation(project(":api:details"))
+    implementation(projects.designsystem)
+    implementation(projects.imageviewer)
+    implementation(projects.domain.media)
+    implementation(projects.domain.user)
+    implementation(projects.api.profile)
+    implementation(projects.api.authentication)
+    implementation(projects.api.explore)
+    implementation(projects.api.details)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

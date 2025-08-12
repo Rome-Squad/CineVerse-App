@@ -39,11 +39,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":designsystem"))
-    implementation(project(":imageviewer"))
-    implementation(project(":domain:media"))
-    implementation(project(":api:match"))
-    implementation(project(":api:details"))
+    implementation(projects.designsystem)
+    implementation(projects.imageviewer)
+    implementation(projects.domain.media)
+    implementation(projects.api.match)
+    implementation(projects.api.details)
 
 
     //android youtube player

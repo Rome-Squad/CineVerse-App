@@ -40,15 +40,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":designsystem"))
-    implementation(project(":imageviewer"))
-    implementation(project(":domain:media"))
-    implementation(project(":domain:user"))
-    implementation(project(":api:details"))
-    implementation(project(":api:home"))
-    implementation(project(":api:explore"))
-    implementation(project(":api:match"))
-    implementation(project(":api:profile"))
+    implementation(projects.designsystem)
+    implementation(projects.imageviewer)
+    implementation(projects.domain.media)
+    implementation(projects.domain.user)
+    implementation(projects.api.details)
+    implementation(projects.api.home)
+    implementation(projects.api.explore)
+    implementation(projects.api.match)
+    implementation(projects.api.profile)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

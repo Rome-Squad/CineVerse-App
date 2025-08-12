@@ -40,11 +40,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":designsystem"))
-    implementation(project(":imageviewer"))
-    implementation(project(":api:authentication"))
-    implementation(project(":domain:user"))
-    implementation(project(":api:home"))
+    implementation(projects.designsystem)
+    implementation(projects.imageviewer)
+    implementation(projects.api.authentication)
+    implementation(projects.domain.user)
+    implementation(projects.api.home)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

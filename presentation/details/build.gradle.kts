@@ -41,12 +41,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":designsystem"))
-    implementation(project(":imageviewer"))
-    implementation(project(":domain:media"))
-    implementation(project(":domain:user"))
-    implementation(project(":api:details"))
-    implementation(project(":api:authentication"))
+    implementation(projects.designsystem)
+    implementation(projects.imageviewer)
+    implementation(projects.domain.media)
+    implementation(projects.domain.user)
+    implementation(projects.api.details)
+    implementation(projects.api.authentication)
 
     //android youtube player
     implementation(libs.core)

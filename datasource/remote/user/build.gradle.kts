@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":repository:user"))
+    implementation(projects.repository.user)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.bundles.test)
     implementation(libs.retrofit)

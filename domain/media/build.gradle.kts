@@ -16,7 +16,7 @@ kotlin {
 
 dependencies {
 
-    implementation(project(":domain:user"))
+    implementation(projects.domain.user)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.test)

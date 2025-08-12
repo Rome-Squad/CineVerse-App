@@ -6,6 +6,7 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
+    enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
@@ -13,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CineVerse App"
+rootProject.name = "CineVerseApp"
 include(":app")
 include(":presentation:authentication")
 include(":presentation:home")

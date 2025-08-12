@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain:user"))
+    implementation(projects.domain.user)
     testImplementation(libs.bundles.test)
     implementation(libs.kotlinx.serialization.json)
     // Hilt DI

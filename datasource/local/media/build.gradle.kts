@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":repository:media"))
+    implementation(projects.repository.media)
     implementation(libs.kotlinx.datetime)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
