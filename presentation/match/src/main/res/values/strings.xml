@@ -44,4 +44,8 @@
     <string name="media_type_movie">Movie</string>
     <string name="media_type_series">Series</string>
     <string name="view_details">View Details</string>
+    <string name="error_unknown">Something went wrong. Please try again later.</string>
+    <string name="error_network">Please check your internet connection.</string>
+    <string name="access_denied_error">Access Denied Error!</string>
+
 </resources>

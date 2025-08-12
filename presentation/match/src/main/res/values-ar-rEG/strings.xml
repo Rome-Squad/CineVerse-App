@@ -45,4 +45,7 @@
     <string name="media_type_series">مسلسل</string>
     <string name="icon_description">أيقونة مرفقة مع النص</string>
     <string name="view_details">عرض التفاصيل</string>
+    <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
+    <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
+    <string name="access_denied_error">خطأ : تم رفض الوصول!</string>
 </resources>
