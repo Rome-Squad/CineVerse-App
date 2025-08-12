@@ -1,6 +1,5 @@
 package com.giraffe.media.series
 
-import android.util.Log
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.mapper.toEntity
@@ -49,6 +48,9 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addRecentlyViewed(series: Series) = SafeCall {
+        if (series.genreIDs.isNotEmpty()) {
+            seriesLocalDateSource.incrementInteractionCountForGenres(series.genreIDs)
+        }
         seriesLocalDateSource.insertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
     }
 
@@ -78,9 +80,6 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGenresByIds(genreIDs: List<Int>) = SafeCall {
-        if (genreIDs.isNotEmpty()) {
-            seriesLocalDateSource.incrementInteractionCountForGenres(genreIDs)
-        }
         seriesLocalDateSource.getGenresByIDs(genreIDs).map { it.toEntity() }
             .ifEmpty {
                 seriesRemoteDataSource.getGenres().filter { it.id in genreIDs }
@@ -141,7 +140,6 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun getMatchesYourVibe(page: Int, limit: Int) = SafeCall {
         val topGenreCount = getTopGenreCount()
-        Log.d("topGenreCount", "getMatchesYourVibe: $topGenreCount")
         if (topGenreCount.rank > 0) {
             if (page > 1) {
                 seriesRemoteDataSource.getSeriesByGenre(genreId = topGenreCount.id, page = page)
@@ -158,8 +156,6 @@ class SeriesRepositoryImpl @Inject constructor(
                             .map(SeriesDto::toEntity)
                             .also { addMatchesYourVibe(it) }
                     }
-                Log.d("topGenreCountresult", "result: ${result.isEmpty()}")
-
                 result
             }
         } else emptyList()
