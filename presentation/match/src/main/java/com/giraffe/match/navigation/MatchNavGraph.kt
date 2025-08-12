@@ -3,7 +3,6 @@ package com.giraffe.match.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,20 +27,16 @@ internal fun MatchNavGraph(
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination
-    val bottomBarRoutes = listOf(
-        MatchRouteStart::class
-    )
-    val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
-        navDestination.route?.let { route ->
-            bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName.orEmpty())
-            }
-        } == true
-    } == true
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val startDestination = MatchRouteStart
+
+    val isBottomBarVisible = currentRoute.orEmpty().endsWith(startDestination.toString())
+
     LaunchedEffect(currentRoute) {
         onShowBottomBarChange(isBottomBarVisible)
     }
+
     NavHost(
         navController = navController,
         startDestination = MatchRouteStart

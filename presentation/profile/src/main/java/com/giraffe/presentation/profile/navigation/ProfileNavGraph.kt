@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,7 +12,6 @@ import androidx.navigation.toRoute
 import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.home.HomeApi
-import com.giraffe.presentation.profile.navigation.routes.ExploreRoute
 import com.giraffe.presentation.profile.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SettingsScreenRoute
@@ -41,24 +39,15 @@ internal fun ProfileNavGraph(
     homeApi: HomeApi,
     authenticationApi: AuthenticationApi,
     detailsApi: DetailsApi,
-    onShowBottomBarChange: (Boolean) -> Unit,
+    onShowBottomBarChange: (Boolean) -> Unit = {},
     navigateBack: (() -> Unit)? = null,
 ) {
 
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination
-    val bottomBarRoutes = listOf(
-        ExploreRoute::class,
-        SettingsScreenRoute::class,
-    )
-    val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
-        navDestination.route?.let { route ->
-            bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName.orEmpty())
-            }
-        } == true
-    } == true
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val isBottomBarVisible = currentRoute.orEmpty().endsWith(SettingsScreenRoute.toString())
 
     LaunchedEffect(currentRoute) {
         onShowBottomBarChange(isBottomBarVisible)
