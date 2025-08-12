@@ -18,9 +18,9 @@
     <string name="time_long">Long</string>
     <string name="time_long_description">(more than 120 min)</string>
 
-    <string name="recency_recent">Recent</string>
-    <string name="recency_classic">Classic</string>
-    <string name="recency_both">Both</string>
+    <string name="ReleasePeriod_recent">Recent</string>
+    <string name="ReleasePeriod_classic">Classic</string>
+    <string name="ReleasePeriod_both">Both</string>
     <!-- Genre Options -->
     <string name="genre_action">Action</string>
     <string name="genre_comedy">Comedy</string>

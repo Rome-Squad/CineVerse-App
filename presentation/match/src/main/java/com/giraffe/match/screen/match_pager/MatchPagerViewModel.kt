@@ -70,11 +70,14 @@ class MatchPagerViewModel @Inject constructor(
             if (_state.value.currentPage < 4) {
                 _state.value = _state.value.copy(currentPage = _state.value.currentPage + 1)
             } else {
-                _effect.emit(MatchScreenEffect.FinishMatching)
+                if (!_state.value.isLoading) {
+                    updateLoadingState(true)
+                    kotlinx.coroutines.delay(500)
+                    _effect.emit(MatchScreenEffect.FinishMatching)
+                }
             }
         }
     }
-
     fun updateMoodSelections(selectedIds: List<Int>) {
         _state.value = _state.value.copy(moodSelections = selectedIds)
     }

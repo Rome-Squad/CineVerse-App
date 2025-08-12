@@ -38,7 +38,7 @@ import com.giraffe.match.composable.SectionWithTitle
 import com.giraffe.match.composable.SelectionPageWithIcons
 import com.giraffe.match.composable.SingleSelectionPageTextOnly
 import com.giraffe.match.composable.getMoodOptions
-import com.giraffe.match.composable.getRecencyOptions
+import com.giraffe.match.composable.getReleasePeriodOptions
 import com.giraffe.match.composable.getTimeOptions
 import com.giraffe.match.utils.showToast
 import com.giraffe.match.utils.toStringResource
@@ -87,7 +87,7 @@ fun MatchPagerScreen(
     }
     val moodOptions = getMoodOptions()
     val timeOptions = getTimeOptions()
-    val recencyOptions = getRecencyOptions()
+    val recencyOptions = getReleasePeriodOptions()
 
     Column(
         modifier = modifier

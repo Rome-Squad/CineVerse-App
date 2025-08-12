@@ -41,10 +41,10 @@ fun getTimeOptions(): List<SelectionOption> {
     )
 }
 @Composable
-fun getRecencyOptions(): List<SelectionOption> {
+fun getReleasePeriodOptions(): List<SelectionOption> {
     return listOf(
-        SelectionOption(1, stringResource(id = R.string.recency_recent)),
-        SelectionOption(2, stringResource(id = R.string.recency_classic)),
-        SelectionOption(3, stringResource(id = R.string.recency_both))
+        SelectionOption(1, stringResource(id = R.string.ReleasePeriod_recent)),
+        SelectionOption(2, stringResource(id = R.string.ReleasePeriod_classic)),
+        SelectionOption(3, stringResource(id = R.string.ReleasePeriod_both))
     )
 }
