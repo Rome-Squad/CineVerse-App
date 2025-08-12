@@ -12,16 +12,8 @@ class ClearSeriesCacheUseCaseTest {
 
     @Test
     fun `should call clearSeriesCache form repository to clear all series cache`() = runTest {
-        useCase.clearAll()
+        useCase()
 
         coVerify(exactly = 1) { repository.clearAll() }
     }
-
-    @Test
-    fun `should call clearSeriesCache form repository to clear series cache except recently viewed`() =
-        runTest {
-            useCase.clearAllExceptRecentlyViewed()
-
-            coVerify(exactly = 1) { repository.clearAllExceptRecentlyViewed() }
-        }
 }
