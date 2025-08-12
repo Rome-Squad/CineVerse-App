@@ -6,6 +6,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
 import com.giraffe.media.utils.SafeCall
@@ -62,14 +63,8 @@ class SeriesRoomLocalDateSource @Inject constructor(
     }
 
     override suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>) = safeCall {
-        upsertWithMerge(series.map { it.copy(isTopRated = true) }) { old, new ->
-            new.copy(
-                isRecentViewed = old.isRecentViewed,
-                recentViewedAt = old.recentViewedAt,
-                isRecommended = old.isRecommended,
-                isTopRated = true,
-            )
-        }
+        seriesDao.upsertSeries(series)
+        seriesDao.upsertTopRatedSeriesIDs(series.map { it.toTopRatedSeriesCacheDto() })
     }
 
     override suspend fun getTopRatedSeries(limit: Int) = safeCall {
@@ -82,7 +77,6 @@ class SeriesRoomLocalDateSource @Inject constructor(
                 isRecentViewed = old.isRecentViewed,
                 recentViewedAt = old.recentViewedAt,
                 isRecommended = true,
-                isTopRated = old.isTopRated,
             )
         }
     }
@@ -137,5 +131,9 @@ fun SeriesCacheDto.toPopularSeriesCacheDto() = PopularSeriesCacheDto(
 )
 
 fun SeriesCacheDto.toRecentlyReleasedSeriesCacheDto() = RecentlyReleasedSeriesCacheDto(
+    id = id,
+)
+
+fun SeriesCacheDto.toTopRatedSeriesCacheDto() = TopRatedSeriesCacheDto(
     id = id,
 )

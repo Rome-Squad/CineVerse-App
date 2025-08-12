@@ -7,10 +7,12 @@ import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
 import com.giraffe.media.utils.DatabaseConstants.POPULAR_SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.RECENTLY_RELEASED_SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.SERIES_TABLE
+import com.giraffe.media.utils.DatabaseConstants.TOP_RATED_SERIES_TABLE
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,6 +25,9 @@ interface SeriesDao {
 
     @Upsert
     suspend fun upsertRecentlyReleasedSeriesIDs(seriesIDs: List<RecentlyReleasedSeriesCacheDto>)
+
+    @Upsert
+    suspend fun upsertTopRatedSeriesIDs(seriesIDs: List<TopRatedSeriesCacheDto>)
 
     @Upsert
     suspend fun insertGenres(genres: List<SeriesGenreCacheDto>)
@@ -40,7 +45,7 @@ interface SeriesDao {
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecentViewed = 1 ORDER BY recentViewedAt DESC")
     fun getRecentSeries(): Flow<List<SeriesCacheDto>>
 
-    @Query("UPDATE $SERIES_TABLE SET isTopRated = 0 And isRecommended = 0")
+    @Query("UPDATE $SERIES_TABLE SET isRecommended = 0")
     suspend fun resetSeriesCache()
 
 
@@ -65,7 +70,15 @@ interface SeriesDao {
     )
     fun getRecentlyReleasedSeries(limit: Int): List<SeriesCacheDto>
 
-    @Query("SELECT * FROM $SERIES_TABLE WHERE isTopRated = 1 ORDER BY rate DESC LIMIT :limit")
+    @Query(
+        """
+        SELECT * 
+        FROM $SERIES_TABLE
+        WHERE id IN (SELECT id FROM $TOP_RATED_SERIES_TABLE)
+        ORDER BY rate DESC 
+        LIMIT :limit
+        """
+    )
     fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
 
     @Query("SELECT * FROM $SERIES_TABLE WHERE isRecommended = 1 LIMIT :limit")

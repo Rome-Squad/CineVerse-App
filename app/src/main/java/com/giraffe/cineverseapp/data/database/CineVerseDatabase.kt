@@ -18,6 +18,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
 
 @Database(
     entities = [
@@ -28,6 +29,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
         SeriesGenreCacheDto::class,
         PopularSeriesCacheDto::class,
         RecentlyReleasedSeriesCacheDto::class,
+        TopRatedSeriesCacheDto::class,
         PersonCacheDto::class,
         MoviePersonCrossRef::class,
         SeriesPersonCrossRef::class

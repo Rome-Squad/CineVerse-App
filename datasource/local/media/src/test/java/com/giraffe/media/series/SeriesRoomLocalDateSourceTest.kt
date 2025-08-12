@@ -36,7 +36,6 @@ class SeriesRoomLocalDateSourceTest {
             isRecentViewed = true,
             recentViewedAt = 9999L,
             isRecommended = true,
-            isTopRated = true,
         )
     }
 
@@ -185,20 +184,11 @@ class SeriesRoomLocalDateSourceTest {
 
     @Test
     fun `insertTopRatedSeries performs upsert with topRated flag`() = runTest {
-        coEvery { dao.getSeriesByIds(listOf(1)) } returns oldSeries
-
         dataSource.insertTopRatedSeries(sampleSeries)
 
         coVerify {
-            dao.upsertSeries(
-                match { mergedList ->
-                    mergedList.size == 1 &&
-                            mergedList[0].isTopRated &&
-                            mergedList[0].isRecentViewed == true &&
-                            mergedList[0].isRecommended == true &&
-                            mergedList[0].recentViewedAt == 9999L
-                }
-            )
+            dao.upsertSeries(sampleSeries)
+            dao.upsertTopRatedSeriesIDs(sampleSeries.map { it.toTopRatedSeriesCacheDto() })
         }
     }
 
@@ -223,7 +213,6 @@ class SeriesRoomLocalDateSourceTest {
                     mergedList.size == 1 &&
                             mergedList[0].isRecommended &&
                             mergedList[0].isRecentViewed == true &&
-                            mergedList[0].isTopRated == true &&
                             mergedList[0].recentViewedAt == 9999L
                 }
             )
