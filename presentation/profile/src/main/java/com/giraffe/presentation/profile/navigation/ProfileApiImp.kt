@@ -23,7 +23,6 @@ class ProfileApiImp @Inject constructor(
         collectionId: Int,
         collectionName: String,
         navigateBack: () -> Unit,
-        onShowBottomBarChange: (Boolean) -> Unit,
     ) {
         val navController: NavHostController = rememberNavController()
         ProfileNavGraph(
@@ -35,14 +34,12 @@ class ProfileApiImp @Inject constructor(
             homeApi = homeApi,
             authenticationApi = authApiProvider.get(),
             detailsApi = detailsApi,
-            onShowBottomBarChange = onShowBottomBarChange,
             navigateBack = navigateBack
         )
     }
 
     @Composable
     override fun YourCollectionsContainer(
-        onShowBottomBarChange: (Boolean) -> Unit,
         navigateBack: () -> Unit,
     ) {
         val navController: NavHostController = rememberNavController()
@@ -52,7 +49,6 @@ class ProfileApiImp @Inject constructor(
             homeApi = homeApi,
             authenticationApi = authApiProvider.get(),
             detailsApi = detailsApi,
-            onShowBottomBarChange = onShowBottomBarChange,
             navigateBack = navigateBack
         )
     }

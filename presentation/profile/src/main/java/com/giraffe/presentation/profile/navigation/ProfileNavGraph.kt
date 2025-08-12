@@ -41,7 +41,7 @@ internal fun ProfileNavGraph(
     homeApi: HomeApi,
     authenticationApi: AuthenticationApi,
     detailsApi: DetailsApi,
-    onShowBottomBarChange: (Boolean) -> Unit,
+    onShowBottomBarChange: (Boolean) -> Unit = {},
     navigateBack: (() -> Unit)? = null,
 ) {
 
