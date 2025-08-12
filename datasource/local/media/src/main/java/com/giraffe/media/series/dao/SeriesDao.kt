@@ -30,11 +30,8 @@ interface SeriesDao {
     suspend fun upsertTopRatedSeriesIDs(seriesIDs: List<TopRatedSeriesCacheDto>)
 
     @Upsert
-    suspend fun insertGenres(genres: List<SeriesGenreCacheDto>)
+    suspend fun upsertGenres(genres: List<SeriesGenreCacheDto>)
 
-
-    @Query("SELECT * FROM $SERIES_TABLE WHERE id IN (:ids)")
-    suspend fun getSeriesByIds(ids: List<Int>): List<SeriesCacheDto>
 
     @Query("UPDATE $SERIES_TABLE SET isRecentViewed = 1 AND recentViewedAt = :currentTime WHERE id = :seriesId")
     suspend fun markSeriesAsViewed(seriesId: Int, currentTime: Long)

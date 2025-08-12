@@ -46,7 +46,7 @@ class SeriesRoomLocalDateSourceTest {
     fun `getCachedGenres returns genres if cache is valid`() = runTest {
         coEvery { dao.getAllGenres() } returns sampleGenres
 
-        val result = dataSource.getCachedGenres()
+        val result = dataSource.getGenres()
 
         assertThat(result).isEqualTo(sampleGenres)
     }
@@ -55,7 +55,7 @@ class SeriesRoomLocalDateSourceTest {
     fun `getCachedGenres returns empty if cache expired`() = runTest {
         coEvery { dao.getAllGenres() } returns emptyList()
 
-        val result = dataSource.getCachedGenres()
+        val result = dataSource.getGenres()
 
         assertThat(result).isEmpty()
     }
@@ -69,27 +69,28 @@ class SeriesRoomLocalDateSourceTest {
 
         dataSource.insertGenres(newGenres)
 
-        coVerify { dao.insertGenres(newGenres) }
+        coVerify { dao.upsertGenres(newGenres) }
     }
 
     @Test
     fun `clearAllSeriesExceptRecentlyViewed clears DAO`() = runTest {
         dataSource.clearAllSeriesExceptRecentlyViewed()
 
-        coVerify {
-            dao.clearAllSeriesExceptRecentlyViewed()
-            dao.clearAllGenres()
-        }
+        coVerify { dao.clearAllSeriesExceptRecentlyViewed() }
     }
 
     @Test
     fun `clearAllSeries clears DAO`() = runTest {
         dataSource.clearAllSeries()
 
-        coVerify {
-            dao.clearAllSeries()
-            dao.clearAllGenres()
-        }
+        coVerify { dao.clearAllSeries() }
+    }
+
+    @Test
+    fun `clearAllGenres clears DAO`() = runTest {
+        dataSource.clearAllGenres()
+
+        coVerify { dao.clearAllGenres() }
     }
 
     @Test

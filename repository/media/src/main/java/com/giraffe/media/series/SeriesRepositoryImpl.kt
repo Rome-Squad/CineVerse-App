@@ -31,7 +31,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGenres(): List<Genre> = SafeCall {
-        seriesLocalDateSource.getCachedGenres()
+        seriesLocalDateSource.getGenres()
             .map(SeriesGenreCacheDto::toEntity)
             .ifEmpty {
                 seriesRemoteDataSource.getGenres()

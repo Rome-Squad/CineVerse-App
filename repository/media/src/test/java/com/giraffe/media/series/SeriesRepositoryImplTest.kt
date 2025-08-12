@@ -57,7 +57,8 @@ class SeriesRepositoryImplTest {
             popularity = 90.0f,
             youtubeVideoId = null,
             userRating = null,
-            recentViewedAt = null
+            recentViewedAt = null,
+            seasons = emptyList()
         )
     )
 
@@ -119,7 +120,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getSeriesGenres returns cached if valid`() = runTest {
-        coEvery { local.getCachedGenres() } returns cachedGenres
+        coEvery { local.getGenres() } returns cachedGenres
 
         val result = repository.getGenres()
 
@@ -152,7 +153,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getSeriesGenres fetches from remote if cache empty and saves`() = runTest {
-        coEvery { local.getCachedGenres() } returns emptyList()
+        coEvery { local.getGenres() } returns emptyList()
         coEvery { remote.getGenres() } returns remoteGenres
 
         val result = repository.getGenres()
@@ -177,7 +178,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `SeriesRepository should return Series`() = runTest {
-        repository.getRecommended(1, 1, 10)
+        repository.getRecommended(1, 1)
         coVerify { remote.getSeriesRecommendations(1, 1) }
     }
 
@@ -264,38 +265,15 @@ class SeriesRepositoryImplTest {
         coVerify(exactly = 0) { local.getTopRatedSeries(any()) }
     }
 
-    @Test
-    fun `getRecommendedSeries returns cached if page is 1 and cache is not empty`() = runTest {
-        coEvery { local.getRecommendedSeries(10) } returns cachedSeries
-
-        val result = repository.getRecommended(1, 1, 10)
-
-        assertThat(result.first().name).isEqualTo(cachedSeries.first().name)
-        coVerify(exactly = 0) { remote.getSeriesRecommendations(any(), any()) }
-    }
 
     @Test
-    fun `getRecommendedSeries fetches from remote if cache is empty`() = runTest {
+    fun `getRecommendedSeries fetches from remote`() = runTest {
         val seriesId = 1
-        coEvery { local.getRecommendedSeries(10) } returns emptyList()
-        coEvery { remote.getSeriesRecommendations(seriesId, 1) } returns remoteSeriesDto
+        val page = 1
+        coEvery { remote.getSeriesRecommendations(seriesId, page) } returns remoteSeriesDto
 
-        val result = repository.getRecommended(seriesId, 1, 10)
+        val result = repository.getRecommended(seriesId, page)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
-        coVerify { local.insertRecommendedSeries(any()) }
     }
-
-    @Test
-    fun `getRecommendedSeries fetches from remote if page is greater than 1`() = runTest {
-        val seriesId = 1
-        coEvery { remote.getSeriesRecommendations(seriesId, 2) } returns remoteSeriesDto
-
-        val result = repository.getRecommended(seriesId, 2, 10)
-
-        assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
-        coVerify(exactly = 0) { local.getRecommendedSeries(any()) }
-    }
-
-
 }

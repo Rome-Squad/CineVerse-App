@@ -16,32 +16,35 @@ class SeriesRoomLocalDateSource @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
-    override suspend fun getCachedGenres(): List<SeriesGenreCacheDto> = safeCall {
+    override suspend fun getGenres(): List<SeriesGenreCacheDto> = safeCall {
         seriesDao.getAllGenres()
     }
 
-
     override suspend fun insertGenres(genres: List<SeriesGenreCacheDto>) = safeCall {
-        seriesDao.insertGenres(genres)
+        seriesDao.upsertGenres(genres)
+    }
+
+    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = SafeCall {
+        if (genreIds.isNotEmpty()) {
+            seriesDao.incrementInteractionCountForGenres(genreIds)
+        }
+    }
+
+    override suspend fun getGenresByIDs(genreIds: List<Int>) = SafeCall {
+        seriesDao.getGenresByIds(genreIds)
+    }
+
+    override suspend fun clearAllGenres() {
+        seriesDao.clearAllGenres()
     }
 
 
     override suspend fun clearAllSeriesExceptRecentlyViewed() = safeCall {
         seriesDao.clearAllSeriesExceptRecentlyViewed()
-        seriesDao.clearAllGenres()
     }
 
     override suspend fun clearAllSeries() {
         seriesDao.clearAllSeries()
-        seriesDao.clearAllGenres()
-    }
-
-    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) {
-        seriesDao.incrementInteractionCountForGenres(genreIds)
-    }
-
-    override suspend fun getGenresByIDs(genreIds: List<Int>) = SafeCall {
-        seriesDao.getGenresByIds(genreIds)
     }
 
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
