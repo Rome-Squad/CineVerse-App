@@ -18,19 +18,6 @@ fun getMoodOptions(): List<SelectionOption> {
 }
 
 @Composable
-fun getGenreOptions(): List<SelectionOption> {
-    return listOf(
-        SelectionOption(1, stringResource(id = R.string.genre_action)),
-        SelectionOption(2, stringResource(id = R.string.genre_comedy)),
-        SelectionOption(3, stringResource(id = R.string.genre_drama)),
-        SelectionOption(4, stringResource(id = R.string.genre_romance)),
-        SelectionOption(5, stringResource(id = R.string.genre_scifi)),
-        SelectionOption(6, stringResource(id = R.string.genre_thriller)),
-        SelectionOption(7, stringResource(id = R.string.genre_animation)),
-        SelectionOption(8, stringResource(id = R.string.genre_mystery))
-    )
-}
-@Composable
 fun getTimeOptions(): List<SelectionOption> {
     return listOf(
         SelectionOption(
