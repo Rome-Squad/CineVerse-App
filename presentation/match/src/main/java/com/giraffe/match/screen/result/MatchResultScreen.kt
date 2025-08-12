@@ -31,7 +31,15 @@ fun MatchResultScreen(
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToYouTubePlayer: (String) -> Unit,
+    selectedGenres: List<Int>,
+    moodSelections: List<Int>,
+    timeSelection: Int?,
+    releasePeriodSelection: String?
 ) {
+    println("Selected Genres: $selectedGenres")
+    println("Mood Selections: $moodSelections")
+    println("Time Selection: $timeSelection")
+    println("Release Period: $releasePeriodSelection")
     MatchResultContent(
         state = MatchResultScreenState(
             matchItems = listOf(
