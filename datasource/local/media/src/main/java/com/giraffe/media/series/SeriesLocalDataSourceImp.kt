@@ -41,6 +41,10 @@ class SeriesLocalDataSourceImp @Inject constructor(
 
     override suspend fun clearSeries() = safeCall {
         seriesDao.clearSeries()
+        seriesDao.clearPopularSeriesTable()
+        seriesDao.clearRecentlyReleasedSeriesTable()
+        seriesDao.clearTopRatedSeriesTable()
+        seriesDao.clearMatchesYourVibeSeriesTable()
     }
 
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {

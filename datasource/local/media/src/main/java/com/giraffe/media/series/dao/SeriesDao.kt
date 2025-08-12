@@ -113,4 +113,17 @@ interface SeriesDao {
 
     @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE")
     suspend fun clearRecentSeries()
+
+
+    @Query("DELETE FROM $POPULAR_SERIES_TABLE")
+    suspend fun clearPopularSeriesTable()
+
+    @Query("DELETE FROM $RECENTLY_RELEASED_SERIES_TABLE")
+    suspend fun clearRecentlyReleasedSeriesTable()
+
+    @Query("DELETE FROM $TOP_RATED_SERIES_TABLE")
+    suspend fun clearTopRatedSeriesTable()
+
+    @Query("DELETE FROM $MATCHES_YOUR_VIBE_SERIES_TABLE")
+    suspend fun clearMatchesYourVibeSeriesTable()
 }
