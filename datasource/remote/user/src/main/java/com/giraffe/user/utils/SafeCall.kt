@@ -1,4 +1,4 @@
-package com.giraffe.user.util
+package com.giraffe.user.utils
 
 import com.giraffe.repository.exceptions.ApiDataException
 import com.giraffe.repository.exceptions.InvalidIdDataException
