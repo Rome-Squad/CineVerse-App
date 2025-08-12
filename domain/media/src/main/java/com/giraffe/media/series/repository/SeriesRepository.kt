@@ -44,13 +44,7 @@ interface SeriesRepository {
 
     suspend fun clearRecentlyViewed()
 
-    suspend fun addGenres(genres: List<Genre>)
-
     suspend fun addRecentlyViewed(series: Series)
 
-    suspend fun addPopular(series: List<Series>)
-
-    suspend fun addRecentlyReleased(series: List<Series>)
-
-    suspend fun addTopRated(series: List<Series>)
+    suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Series>
 }

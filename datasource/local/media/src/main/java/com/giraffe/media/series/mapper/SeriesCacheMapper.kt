@@ -1,5 +1,6 @@
 package com.giraffe.media.series.mapper
 
+import com.giraffe.media.series.datasource.local.cacheDto.MatchesYourVibeSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
@@ -14,5 +15,9 @@ fun SeriesCacheDto.toRecentlyReleasedSeriesCacheDto() = RecentlyReleasedSeriesCa
 )
 
 fun SeriesCacheDto.toTopRatedSeriesCacheDto() = TopRatedSeriesCacheDto(
+    id = id,
+)
+
+fun SeriesCacheDto.toMatchesYourVibeSeriesCacheDto() = MatchesYourVibeSeriesCacheDto(
     id = id,
 )

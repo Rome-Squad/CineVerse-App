@@ -1,5 +1,6 @@
 package com.giraffe.media.series
 
+import android.util.Log
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.mapper.toEntity
@@ -88,7 +89,7 @@ class SeriesRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun addGenres(genres: List<Genre>) = SafeCall {
+    private suspend fun addGenres(genres: List<Genre>) = SafeCall {
         seriesLocalDateSource.insertGenres(genres.map(Genre::toCacheDto))
     }
 
@@ -100,7 +101,7 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addPopular(series: List<Series>) = SafeCall {
+    private suspend fun addPopular(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertPopularitySeries(series.map { it.toCacheDto() })
     }
 
@@ -117,7 +118,7 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addRecentlyReleased(series: List<Series>) = SafeCall {
+    private suspend fun addRecentlyReleased(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertRecentlyReleasedSeries(series.map { it.toCacheDto() })
     }
 
@@ -134,8 +135,34 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addTopRated(series: List<Series>) = SafeCall {
+    private suspend fun addTopRated(series: List<Series>) = SafeCall {
         seriesLocalDateSource.insertTopRatedSeries(series.map { it.toCacheDto() })
+    }
+
+    override suspend fun getMatchesYourVibe(page: Int, limit: Int) = SafeCall {
+        val topGenreCount = getTopGenreCount()
+        Log.d("topGenreCount", "getMatchesYourVibe: $topGenreCount")
+        if (topGenreCount.rank > 0) {
+            if (page > 1) {
+                seriesRemoteDataSource.getSeriesByGenre(genreId = topGenreCount.id, page = page)
+                    .take(limit)
+                    .map(SeriesDto::toEntity)
+            } else {
+                val result =
+                    seriesLocalDateSource.getMatchesYourVibe(limit).map { it.toEntity() }.ifEmpty {
+                        seriesRemoteDataSource.getSeriesByGenre(
+                            genreId = topGenreCount.id,
+                            page = page
+                        )
+                            .take(limit)
+                            .map(SeriesDto::toEntity)
+                            .also { addMatchesYourVibe(it) }
+                    }
+                Log.d("topGenreCountresult", "result: ${result.isEmpty()}")
+
+                result
+            }
+        } else emptyList()
     }
 
     override suspend fun addRating(seriesId: Int, rating: Float) = SafeCall {
@@ -162,5 +189,13 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun deleteRating(seriesId: Int) = SafeCall {
         seriesRemoteDataSource.deleteSeriesRating(seriesId)
+    }
+
+    private suspend fun getTopGenreCount() = SafeCall {
+        seriesLocalDateSource.getTopGenreCount().toEntity()
+    }
+
+    private suspend fun addMatchesYourVibe(series: List<Series>) = SafeCall {
+        seriesLocalDateSource.insertMatchesYourVibe(series.map { it.toCacheDto() })
     }
 }
