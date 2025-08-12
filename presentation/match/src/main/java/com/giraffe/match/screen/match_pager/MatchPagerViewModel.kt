@@ -73,7 +73,7 @@ class MatchPagerViewModel @Inject constructor(
     }
 
     fun updateRecencySelection(selectedId: Int) {
-        updateState { it.copy(recencySelection = selectedId) }
+        updateState { it.copy(releasePeriodSelection = selectedId) }
     }
 
     fun updateLoadingState(isLoading: Boolean) {
@@ -85,7 +85,7 @@ class MatchPagerViewModel @Inject constructor(
             0 -> state.moodSelections.isNotEmpty()
             1 -> state.genreSelections.isNotEmpty()
             2 -> state.timeSelection != null
-            3 -> state.recencySelection != null
+            3 -> state.releasePeriodSelection != null
             else -> true
         }
     }

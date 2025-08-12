@@ -53,7 +53,7 @@ data class SelectionOption(
 fun MatchPagerScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    onFinish: () -> Unit = {},
+    onFinish: (selectedGenres: List<Int>, moodSelections: List<Int>, timeSelection: Int?, releasePeriodSelection: String?) -> Unit = { _, _, _, _ -> },
     viewModel: MatchPagerViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -61,12 +61,25 @@ fun MatchPagerScreen(
     val pagerState = rememberPagerState(initialPage = state.currentPage, pageCount = { 5 })
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+    val moodOptions = getMoodOptions()
+    val timeOptions = getTimeOptions()
+    val releasePeriodOptions = getReleasePeriodOptions()
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 MatchScreenEffect.NavigateBack -> onBackClick()
-                MatchScreenEffect.FinishMatching -> onFinish()
+                MatchScreenEffect.FinishMatching -> {
+                    val releasePeriodLabel = state.releasePeriodSelection?.let { id ->
+                        releasePeriodOptions.find { it.id == id }?.label
+                    }
+                    onFinish(
+                        state.genreSelections,
+                        state.moodSelections,
+                        state.timeSelection,
+                        releasePeriodLabel
+                    )
+                }
                 is MatchScreenEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
@@ -85,9 +98,7 @@ fun MatchPagerScreen(
             viewModel.onNextClicked()
         }
     }
-    val moodOptions = getMoodOptions()
-    val timeOptions = getTimeOptions()
-    val recencyOptions = getReleasePeriodOptions()
+
 
     Column(
         modifier = modifier
@@ -236,8 +247,8 @@ fun MatchPagerScreen(
                                 }
                                 SectionWithTitle(stringResource(R.string.do_you_want_something_recent_or_classic)) {
                                     SingleSelectionPageTextOnly(
-                                        options = recencyOptions,
-                                        selectedItem = state.recencySelection,
+                                        options = releasePeriodOptions,
+                                        selectedItem = state.releasePeriodSelection,
                                         onSelectionChange = { selectedId ->
                                             selectedId?.let { viewModel.updateRecencySelection(it) }
                                         }
@@ -282,12 +293,12 @@ fun MatchPagerScreen(
                                         }
                                     }
                                 }
-                                if (state.recencySelection != null) {
+                                if (state.releasePeriodSelection != null) {
                                     ReadOnlyBlurWrapper(readOnly = true) {
                                         SectionWithTitle(stringResource(R.string.do_you_want_something_recent_or_classic)) {
                                             SingleSelectionPageTextOnly(
-                                                options = recencyOptions.filter { it.id == state.recencySelection },
-                                                selectedItem = state.recencySelection,
+                                                options = releasePeriodOptions.filter { it.id == state.releasePeriodSelection },
+                                                selectedItem = state.releasePeriodSelection,
                                                 onSelectionChange = {},
                                                 readOnly = true
                                             )
