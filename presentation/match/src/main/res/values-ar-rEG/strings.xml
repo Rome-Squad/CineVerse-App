@@ -48,4 +48,27 @@
     <string name="error_network">من فضلك تحقق من اتصال الإنترنت.</string>
     <string name="error_unknown">حدث خطأ غير متوقع. حاول لاحقًا.</string>
     <string name="access_denied_error">خطأ : تم رفض الوصول!</string>
+    <string name="error_timeout">انتهت مهلة الاتصال. حاول مرة أخرى.</string>
+    <string name="error_server">حدث خطأ في الخادم. حاول لاحقًا.</string>
+    <string name="error_unauthorized">أنت غير مصرح لك. يرجى تسجيل الدخول مرة أخرى.</string>
+    <string name="error_access_denied">تم رفض الوصول. ليس لديك صلاحية.</string>
+    <string name="error_validation">مدخلات غير صحيحة. تحقق من البيانات.</string>
+    <string name="error_invalid_method">طريقة الطلب غير صالحة. تواصل مع الدعم.</string>
+    <string name="error_not_found">العنصر المطلوب غير موجود.</string>
+    <string name="username_error">لقد حدث شئ ما اثناء جلب اسم المستخدم و حاول مرة اخرى</string>
+    <string name="error_infrastructure">.حدث خطأ داخلي في النظام. يُرجى المحاولة مرة أخرى لاحقًا</string>
+    <string name="you_re_almost_there">أنت على وشك الانتهاء!</string>
+    <string name="log_in_to_save_movies_create_collections_and_get_personalized_recommendations"> </string>
+    <string name="not_now">ليس الآن</string>
+    <string name="log_in">تسجيل الدخول</string>
+    <string name="folder_icon">أيقونة المجلد</string>
+    <string name="collection_name">اسم المجموعه</string>
+    <string name="add_to_collection">اضافة الى مجموعة </string>
+    <string name="cancel">الغاء</string>
+    <string name="create">انشاء مجموعه</string>
+    <string name="video_library_icon">أيقونة مكتبة الفيديو</string>
+    <string name="no_collections_yet">لا توجد مجموعات بعد</string>
+    <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">أنشئ مجموعة جديدة لبدء حفظ أفلامك ومسلسلاتك المفضلة.</string>
+    <string name="create_collection">انشاء مجموعة</string>
+
 </resources>

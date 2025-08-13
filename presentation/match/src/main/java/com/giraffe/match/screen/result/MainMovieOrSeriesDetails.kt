@@ -94,13 +94,14 @@ fun MainMovieOrSeriesDetails(
                             colorOfIcon = Theme.color.additional.primary.yellow
                         )
                     }
-                    if (!duration.isNullOrEmpty()) {
+                    if (!duration.isNullOrBlank()) {
                         IconWithText(
                             icon = painterResource(Theme.icons.dueTone.clock),
                             text = duration,
                             colorOfIcon = Theme.color.shade.secondary
                         )
                     }
+
                     if (releaseDate.isNotEmpty()) {
                         IconWithText(
                             icon = painterResource(Theme.icons.dueTone.calendar),
