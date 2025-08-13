@@ -1,6 +1,5 @@
 package com.giraffe.repository
 
-import android.util.Base64
 import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
 import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.encryption.SecretKeyAliasEnum
@@ -22,11 +21,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
         val validatedToken = authRemoteDataSource.validateTokenWithLogin(requestToken, username, password)
         val sessionId = authRemoteDataSource.createSession(validatedToken)
 
-        val encryptedBase64 = encryptionService
-            .encrypt(SecretKeyAliasEnum.SESSION_ID, sessionId.toByteArray(Charsets.UTF_8))
-            .base64Encode()
-
-        localDataSource.saveSessionId(encryptedBase64)
+        localDataSource.saveSessionId(
+            encryptSessionId(sessionId)
+        )
     }
 
     override suspend fun isLoggedIn() = safeCall { localDataSource.isLoggedIn() }
@@ -34,13 +31,23 @@ class AuthenticationRepositoryImpl @Inject constructor(
     override suspend fun logout() = safeCall {
         val encryptedBase64 = localDataSource.getSessionId()
         if (encryptedBase64 != null) {
-            val decrypted = encryptionService.decrypt(
-                SecretKeyAliasEnum.SESSION_ID,
-                encryptedBase64.base64Decode()
-            )
-            val sessionId = String(decrypted, Charsets.UTF_8)
+            val sessionId = decryptSessionId(encryptedBase64)
             authRemoteDataSource.deleteSession(sessionId)
         }
         localDataSource.clearSessionId()
+    }
+
+    private fun encryptSessionId(sessionId: String): String {
+        return encryptionService
+            .encrypt(SecretKeyAliasEnum.SESSION_ID, sessionId.toByteArray(Charsets.UTF_8))
+            .base64Encode()
+    }
+
+    private fun decryptSessionId(encryptedBase64: String): String {
+        val decrypted = encryptionService.decrypt(
+            SecretKeyAliasEnum.SESSION_ID,
+            encryptedBase64.base64Decode()
+        )
+        return String(decrypted, Charsets.UTF_8)
     }
 }
