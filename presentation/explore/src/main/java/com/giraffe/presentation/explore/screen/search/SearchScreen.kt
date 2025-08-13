@@ -204,7 +204,7 @@ private fun SearchContent(
                     PosterListSection(
                         modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
                         endText = stringResource(R.string.clear_all),
-                        title = stringResource(R.string.you_recent_viewed),
+                        title = stringResource(R.string.you_recent_viewed_history),
                         posters = state.recentPosters,
                         onClickEndText = interactions::clearAllRecentViewedPosters,
                         onClickPoster = interactions::onClickPoster
