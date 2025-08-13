@@ -24,7 +24,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
 
     protected open fun <T> safeExecute(
         onError: suspend (Throwable, Boolean) -> Unit = { _, _ -> },
-        onSuccess: (T) -> Unit = {},
+        onSuccess: suspend (T) -> Unit = {},
         coroutineScope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         block: suspend () -> T
