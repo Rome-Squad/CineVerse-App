@@ -31,7 +31,7 @@ interface MoviesRemoteDataSource {
 
     suspend fun getUserMovieRating(
         movieId: Int
-    ): Float
+    ): Float?
 
     suspend fun getPopularityMovies(page: Int): List<MovieDto>
 

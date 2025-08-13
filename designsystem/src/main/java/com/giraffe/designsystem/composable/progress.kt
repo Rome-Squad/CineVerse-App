@@ -39,7 +39,7 @@ fun Progress(
         )
     )
 
-    Canvas(modifier = modifier.size(size)) {
+    Canvas(modifier = modifier.padding(strokeWidth).size(size + strokeWidth * 2)) {
         rotate(rotation) {
             drawArc(
                 brush = Brush.sweepGradient(gradientColors),

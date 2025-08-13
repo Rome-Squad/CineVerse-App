@@ -1,6 +1,7 @@
 package com.giraffe.presentation.details.utils
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.designsystem.uimodel.Poster.Type
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
@@ -26,12 +27,13 @@ fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     name = name,
     overview = overview,
     rating = rating,
+    userRating = userRating ?: 0f,
     duration = duration?.toFormattedDuration().orEmpty(),
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genresID,
     genres = genres.map { it.title },
-    releaseYear = if (releaseYear != null) releaseYear.toString() else "",
+    releaseYear = releaseYear?.toFormattedDate().orEmpty(),
     youtubeVideoId = youtubeVideoId,
 )
 
@@ -42,7 +44,8 @@ fun MovieUi.toPoster() = Poster(
     rating = rating,
     genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
     time = duration,
-    date = releaseYear
+    date = releaseYear,
+    mediaTypeOfPoster = Type.MOVIE.name
 )
 
 fun ReviewUI.toEntity() = Review(
@@ -90,19 +93,21 @@ fun Series.toUi(
     name = name,
     overview = overview,
     rating = rating,
+    userRating = userRating ?: 0f,
     posterUrl = posterUrl,
-    releaseYear = releaseYear?.toString().orEmpty(),
+    releaseYear = releaseYear?.toFormattedDate().orEmpty(),
     genres = genres.map { it.title },
     youtubeVideoId = youtubeVideoId.orEmpty()
 )
 
-fun SeriesUi.toPoster(): Poster = Poster(
+fun SeriesUi.toPoster() = Poster(
     id = id,
     name = name,
     imageUrl = posterUrl.orEmpty(),
     rating = rating,
     genres = genres.joinToString(", "),
-    date = releaseYear
+    date = releaseYear,
+    mediaTypeOfPoster = Type.SERIES.name
 )
 
 

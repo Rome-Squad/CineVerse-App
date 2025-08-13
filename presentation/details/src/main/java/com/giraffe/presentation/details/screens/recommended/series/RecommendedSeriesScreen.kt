@@ -81,7 +81,7 @@ private fun RecommendedSeriesContent(
             TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = !isGridSelected,
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(vertical = 16.dp),
                 onItemClick = interaction::onSeriesClick
             )
 

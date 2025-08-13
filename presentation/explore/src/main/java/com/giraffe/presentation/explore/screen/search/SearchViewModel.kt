@@ -163,10 +163,11 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onSearchClick(result: String) {
-        sendEffect(SearchEffect.NavigateToSearchResult(result))
+        if (result.isNotEmpty())
+            sendEffect(SearchEffect.NavigateToSearchResult(result))
     }
 
-    override fun retry() {
+    override fun onRetryClick() {
         onQueryChange()
         getRecentViewed()
     }

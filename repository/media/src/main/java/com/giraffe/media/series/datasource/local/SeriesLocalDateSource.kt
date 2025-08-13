@@ -1,6 +1,5 @@
 package com.giraffe.media.series.datasource.local
 
-import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import kotlinx.coroutines.flow.Flow
@@ -17,9 +16,9 @@ interface SeriesLocalDateSource {
 
     suspend fun clearGenres()
 
-    suspend fun getRecentSeries(): Flow<List<RecentViewedSeriesCacheDto>>
+    fun getRecentSeries(): Flow<List<SeriesCacheDto>>
 
-    suspend fun insertRecentViewedSeries(series: RecentViewedSeriesCacheDto)
+    suspend fun insertRecentViewedSeries(series: SeriesCacheDto)
 
     suspend fun clearRecentSeries()
 
@@ -37,5 +36,11 @@ interface SeriesLocalDateSource {
 
     suspend fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
 
-    suspend fun deleteSeriesById(seriesId: Int)
+    suspend fun deleteSeriesFromHistoryById(seriesId: Int)
+
+    suspend fun getTopGenreCount(): SeriesGenreCacheDto?
+
+    suspend fun insertMatchesYourVibe(series: List<SeriesCacheDto>)
+
+    suspend fun getMatchesYourVibe(limit: Int): List<SeriesCacheDto>
 }

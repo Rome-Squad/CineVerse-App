@@ -47,8 +47,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-    EffectListener(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+    EffectListener(viewModel.effect) { effect ->
             when (effect) {
                 SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
                 SettingsEffect.NavigateToHistory -> onNavigateToHistory()
@@ -58,7 +57,6 @@ fun SettingsScreen(
                 is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
-    }
     SettingsContent(
         state = state,
         interaction = viewModel
@@ -139,6 +137,7 @@ private fun SettingsContent(
                     isDanger = false,
                     hasBottomDivider = true,
                 )
+
                 MenuItem(
                     icon = Theme.icons.dueTone.colorSwitch,
                     title = stringResource(R.string.content_preferences),
@@ -146,9 +145,10 @@ private fun SettingsContent(
                     hasButton = true,
                     onRowItemClick = interaction::onContentPreferencesClick,
                     isDanger = false,
-                    hasBottomDivider = true,
+                    hasBottomDivider = state.isLoggedIn,
                     onSwitchChange = {},
                 )
+
                 if (state.isLoggedIn) {
                     MenuItem(
                         icon = Theme.icons.dueTone.logout,

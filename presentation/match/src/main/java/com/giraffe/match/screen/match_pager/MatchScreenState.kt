@@ -6,7 +6,7 @@ data class MatchScreenState(
     val genreSelections: List<Int> = emptyList(),
     val genreOptions: List<SelectionOption> = emptyList(),
     val timeSelection: Int? = null,
-    val recencySelection: Int? = null,
+    val releasePeriodSelection: Int? = null,
     val isLoading: Boolean = false,
     val isNoInternet: Boolean = false,
 )

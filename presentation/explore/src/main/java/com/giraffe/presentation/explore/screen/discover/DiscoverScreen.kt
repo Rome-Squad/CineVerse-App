@@ -68,7 +68,7 @@ fun ExploreContent(
 
 
     if (state.isNoInternet)
-        NoInternetScreen(onRetryClick = interactions::retry)
+        NoInternetScreen(onRetryClick = interactions::onRetryClick)
     else {
         Box {
             LazyColumn(

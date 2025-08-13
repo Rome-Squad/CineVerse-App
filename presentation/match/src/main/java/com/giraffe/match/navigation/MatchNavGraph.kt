@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.api.details.DetailsApi
 import com.giraffe.match.screen.MatchRouteStart
 import com.giraffe.match.screen.matchRouteStart
@@ -23,6 +24,7 @@ import com.giraffe.match.screen.videoPlayer.youTubePlayerRouteRoute
 internal fun MatchNavGraph(
     navController: NavHostController,
     detailsApi: DetailsApi,
+    authApi: AuthenticationApi,
     onShowBottomBarChange: (Boolean) -> Unit
 ) {
 
@@ -47,7 +49,9 @@ internal fun MatchNavGraph(
 
         matchPagerRoute(
             onBackClick = navController::popBackStack,
-            onFinish = navController::navigateToMatchResult
+            onFinish = { genres, moods, time, period ->
+                navController.navigateToMatchResult(genres, moods, time, period)
+            }
         )
 
         matchRouteResult(
@@ -60,7 +64,8 @@ internal fun MatchNavGraph(
             },
             navigateToYouTubePlayer = { videoId ->
                 navController.navigateToYouTubePlayer(videoId)
-            }
+            },
+            navigateToLoginScreen = navController::navigateLoginScreen
         )
 
         composable<SeriesDetailsRoute> { backStackEntry ->
@@ -69,6 +74,8 @@ internal fun MatchNavGraph(
                 navController.popBackStack()
             }
         }
+
+        loginRoute(authApi)
 
         composable<MovieDetailsRoute> { backStackEntry ->
             val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId

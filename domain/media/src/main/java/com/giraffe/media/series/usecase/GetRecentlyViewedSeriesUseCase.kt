@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetRecentlyViewedSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
-    suspend operator fun invoke() = seriesRepository.getRecentlyViewed()
+    operator fun invoke() = seriesRepository.getRecentlyViewed()
 }

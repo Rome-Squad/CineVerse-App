@@ -20,7 +20,7 @@ import com.giraffe.media.movie.mapper.toRecentReleasedMovieCacheDto
 import com.giraffe.media.movie.mapper.toRecentlyViewedMovieCacheDto
 import com.giraffe.media.movie.mapper.toUpcomingMovieCacheDto
 import com.giraffe.media.movie.repository.MovieRepository
-import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.utils.safeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -32,17 +32,17 @@ class MovieRepositoryImpl @Inject constructor(
     private val movieLocal: MoviesLocalDataSource,
     private val movieRemote: MoviesRemoteDataSource,
 ) : MovieRepository {
-    override suspend fun addRating(movieId: Int, rating: Float) = SafeCall {
+    override suspend fun addRating(movieId: Int, rating: Float) = safeCall {
         val requestBody = RatingRequest(value = rating)
         movieRemote.addRating(movieId, requestBody)
     }
 
     // region Movie Genres
     private suspend fun addMovieGenres(genres: List<Genre>) =
-        SafeCall { movieLocal.addMovieGenres(genres.map(Genre::toDto)) }
+        safeCall { movieLocal.addMovieGenres(genres.map(Genre::toDto)) }
 
     override suspend fun getGenres(): List<Genre> {
-        return SafeCall {
+        return safeCall {
             getLocalGenres()
                 .ifEmpty {
                     getRemoteGenres()
@@ -62,8 +62,8 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGenresByIds(genreIds: List<Int>): List<Genre> {
-        return SafeCall {
-            if (genreIds.isEmpty()) return@SafeCall emptyList()
+        return safeCall {
+            if (genreIds.isEmpty()) return@safeCall emptyList()
             movieLocal.getMovieGenresByIds(genreIds)
                 .map(MovieGenreCacheDto::toEntity)
                 .ifEmpty {
@@ -79,15 +79,15 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.clearMovieGenres()
     // endregion
 
-    override suspend fun getByName(name: String, page: Int) = SafeCall {
+    override suspend fun getByName(name: String, page: Int) = safeCall {
         movieRemote.getMoviesByName(name, page).map(MovieDto::toEntity)
     }
 
-    override suspend fun getByGenreId(genreId: Int, page: Int) = SafeCall {
+    override suspend fun getByGenreId(genreId: Int, page: Int) = safeCall {
         movieRemote.getMoviesByGenre(genreId, page).map(MovieDto::toEntity)
     }
 
-    override suspend fun getDetails(movieId: Int) = SafeCall {
+    override suspend fun getDetails(movieId: Int) = safeCall {
         withContext(Dispatchers.IO) {
             val youtubeVideoId = async { movieRemote.getMovieTrailerUrl(movieId) }
             val movieDetails = async { movieRemote.getMovieById(movieId) }.await()
@@ -100,7 +100,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
-        return SafeCall {
+        return safeCall {
             movieRemote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
         }
     }
@@ -108,9 +108,9 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getReviews(
         movieId: Int,
         page: Int
-    ) = SafeCall { movieRemote.getMovieReviews(movieId, page = page).map(ReviewDto::toEntity) }
+    ) = safeCall { movieRemote.getMovieReviews(movieId, page = page).map(ReviewDto::toEntity) }
 
-    override suspend fun getUserRatedById(movieId: Int) = SafeCall {
+    override suspend fun getUserRatedById(movieId: Int) = safeCall {
         movieRemote.getUserMovieRating(movieId)
     }
 
@@ -118,13 +118,13 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.deleteMovieById(movieId)
     }
 
-    override suspend fun getUserRated(accountId: Int) = SafeCall {
+    override suspend fun getUserRated(accountId: Int) = safeCall {
         movieRemote.getRatedMovies(accountId).map(MovieDto::toEntity)
     }
 
     // region Popular
     override suspend fun getPopular(page: Int, limit: Int): List<Movie> {
-        return SafeCall {
+        return safeCall {
             when (page) {
                 1 -> {
                     getLocalPopular(limit).ifEmpty {
@@ -163,7 +163,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     // region Recently Released
     override suspend fun getRecentlyReleased(page: Int, limit: Int): List<Movie> {
-        return SafeCall {
+        return safeCall {
             when (page) {
                 1 -> {
                     getLocalRecentlyReleased(limit).ifEmpty {
@@ -202,7 +202,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     // region Upcoming
     override suspend fun getUpcoming(page: Int, limit: Int): List<Movie> {
-        return SafeCall {
+        return safeCall {
             when (page) {
                 1 -> getLocalUpcoming(limit).ifEmpty {
                     getRemoteUpcoming(page = page, limit = limit)
@@ -254,11 +254,11 @@ class MovieRepositoryImpl @Inject constructor(
     }
     // endregion
 
-    override suspend fun deleteRating(movieId: Int) = SafeCall {
+    override suspend fun deleteRating(movieId: Int) = safeCall {
         movieRemote.deleteMovieRating(movieId)
     }
 
-    override suspend fun clearAll() = SafeCall {
+    override suspend fun clearAll() = safeCall {
         movieLocal.clearMovieCache()
     }
 

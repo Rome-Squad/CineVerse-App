@@ -7,5 +7,6 @@ import kotlinx.serialization.Serializable
 data class TokenValidationBody(
     val username: String,
     val password: String,
-    @SerialName("request_token") val requestToken: String
+    @SerialName("request_token")
+    val requestToken: String
 )

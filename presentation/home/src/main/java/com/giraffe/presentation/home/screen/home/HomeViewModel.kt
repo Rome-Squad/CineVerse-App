@@ -14,10 +14,10 @@ import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
+import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getRecommendedMoviesUseCase: GetRecommendedMoviesUseCase,
-    private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
+    private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
@@ -283,7 +283,7 @@ class HomeViewModel @Inject constructor(
                 isLoading = false
             )
         }
-        getRecommendedSeries(series)
+        getMatchesYourVibeSeries(series)
 
     }
 
@@ -308,21 +308,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getRecommendedSeries(series: List<Series>) {
+    private fun getMatchesYourVibeSeries(series: List<Series>) {
         series.firstOrNull()?.let { seriesList ->
             safeExecute(
-                onSuccess = ::onGetRecommendedSeriesSuccess,
+                onSuccess = ::onGetMatchesYourVibeSeriesSuccess,
                 onError = ::onFail,
             ) {
-                getRecommendedSeriesUseCase(seriesList.id, 1)
+                getMatchesYourVibeSeriesUseCase(1, 20)
             }
         }
     }
 
-    private fun onGetRecommendedSeriesSuccess(recommendedSeries: List<Series>) {
+    private fun onGetMatchesYourVibeSeriesSuccess(matchesYourVibeSeries: List<Series>) {
         updateState {
             it.copy(
-                matchVibes = (it.matchVibes + recommendedSeries.map(Series::toPoster)).distinctBy { series -> series.id },
+                matchVibes = (it.matchVibes + matchesYourVibeSeries.map(Series::toPoster)).distinctBy { series -> series.id },
                 isNoInternet = false,
                 isLoading = false
             )

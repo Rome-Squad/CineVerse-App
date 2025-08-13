@@ -83,7 +83,7 @@ fun RecommendedMovieContent(
             TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = isListSelected,
-                contentPadding = PaddingValues(vertical = 5.dp),
+                contentPadding = PaddingValues(vertical = 16.dp),
                 onItemClick = interaction::onMovieClick
             )
 

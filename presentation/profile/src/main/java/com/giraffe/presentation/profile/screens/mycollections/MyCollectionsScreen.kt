@@ -26,12 +26,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.CollectionItem
+import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.screens.mycollections.components.CreateCollectionSection
-import com.giraffe.presentation.profile.screens.mycollections.components.NoCollectionsPlaceholder
 import com.giraffe.presentation.profile.utils.EffectListener
 import com.giraffe.presentation.profile.utils.showToast
 import com.giraffe.presentation.profile.utils.toStringResource
@@ -78,11 +78,20 @@ private fun MyCollectionsScreenContent(
                 .fillMaxSize()
         ) {
             if (state.collections.isEmpty()) {
-                NoCollectionsPlaceholder(
+                MessageInfoBox(
                     modifier = Modifier
-                        .padding(60.dp)
-                        .align(Alignment.Center),
-                    onStartCollectingClick = interaction::onStartCollectingClick
+                        .align(Alignment.Center)
+                        .padding(60.dp),
+                    title = stringResource(ProfileResources.string.no_collections_yet),
+                    caption = stringResource(ProfileResources.string.start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember),
+                    icon = painterResource(id = Theme.icons.dueTone.history),
+                    buttonBackgroundColor = Theme.color.brand.primary,
+                    iconBackgroundColor = Theme.color.button.disabled,
+                    iconTintColor = Theme.color.brand.primary,
+                    titlePrimaryButton = stringResource(ProfileResources.string.start_collecting),
+                    isButtonsVisible = true,
+                    isSecondaryButtonVisible = false,
+                    onClickPrimaryButton = interaction::onStartCollectingClick,
                 )
             } else {
                 LazyColumn(
@@ -113,29 +122,31 @@ private fun MyCollectionsScreenContent(
                     }
                 }
             }
-            Box(
-                modifier = Modifier
-                    .padding(end = 24.dp, bottom = 36.dp)
-                    .size(56.dp)
-                    .align(Alignment.BottomEnd)
-                    .clip(
-                        shape = RoundedCornerShape(Theme.radius.lg)
+            if (!state.collections.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .padding(end = 24.dp, bottom = 36.dp)
+                        .size(56.dp)
+                        .align(Alignment.BottomEnd)
+                        .clip(
+                            shape = RoundedCornerShape(Theme.radius.lg)
+                        )
+                        .clickable(
+                            onClick = {
+                                interaction.onCreateNewCollectionClick()
+                            }
+                        )
+                        .background(Theme.color.brand.primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(Theme.icons.outline.plus),
+                        contentDescription = stringResource(
+                            id = ProfileResources.string.create_new_collection
+                        ),
+                        tint = Theme.color.button.onPrimary
                     )
-                    .clickable(
-                        onClick = {
-                            interaction.onCreateNewCollectionClick()
-                        }
-                    )
-                    .background(Theme.color.brand.primary),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(Theme.icons.outline.add),
-                    contentDescription = stringResource(
-                        id = ProfileResources.string.create_new_collection
-                    ),
-                    tint = Theme.color.button.onPrimary
-                )
+                }
             }
             BaseBottomSheet(
                 modifier = Modifier
