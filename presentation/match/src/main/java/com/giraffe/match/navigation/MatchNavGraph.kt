@@ -65,9 +65,7 @@ internal fun MatchNavGraph(
             navigateToYouTubePlayer = { videoId ->
                 navController.navigateToYouTubePlayer(videoId)
             },
-            navigateToLoginScreen = {
-                navController.navigateLoginScreen()
-            }
+            navigateToLoginScreen = navController::navigateLoginScreen
         )
 
         composable<SeriesDetailsRoute> { backStackEntry ->

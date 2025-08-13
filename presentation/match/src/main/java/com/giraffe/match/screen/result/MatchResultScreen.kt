@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +26,7 @@ import com.giraffe.match.components.HeroCarousel
 import com.giraffe.match.components.LoginBottomSheet
 import com.giraffe.match.components.collectionBottomSheet.MovieCollectionsBottomSheet
 import com.giraffe.match.composable.BaseScreenWithStates
+import com.giraffe.match.utils.EffectListener
 import com.giraffe.match.utils.showToast
 import com.giraffe.match.utils.toStringResource
 import com.giraffe.presentation.match.R
@@ -43,39 +43,45 @@ fun MatchResultScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(viewModel.effect) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is MatchResultScreenEffect.ShowError -> context.showToast(effect.error.toStringResource())
-                MatchResultScreenEffect.NavigateBack -> navigateBack()
-                MatchResultScreenEffect.NavigateToLogin -> navigateToLoginScreen()
-                is MatchResultScreenEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(
-                    effect.movieId
-                )
+    EffectListener(viewModel.effect) { effect ->
+        when (effect) {
+            is MatchResultScreenEffect.ShowError ->
+                context.showToast(effect.error.toStringResource())
 
-                is MatchResultScreenEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(
-                    effect.seriesId
-                )
+            MatchResultScreenEffect.NavigateBack ->
+                navigateBack()
 
-                is MatchResultScreenEffect.NavigateToYouTubePlayer -> navigateToYouTubePlayer(effect.youtubeVideoId)
-            }
+            MatchResultScreenEffect.NavigateToLogin ->
+                navigateToLoginScreen()
+
+            is MatchResultScreenEffect.NavigateToMovieDetails ->
+                navigateToMoviesDetailsScreen(effect.movieId)
+
+            is MatchResultScreenEffect.NavigateToSeriesDetails ->
+                navigateToSeriesDetailsScreen(effect.seriesId)
+
+            is MatchResultScreenEffect.NavigateToYouTubePlayer ->
+                navigateToYouTubePlayer(effect.youtubeVideoId)
         }
     }
 
+
     BaseScreenWithStates(
         isLoading = state.isLoading,
-        isNoInternet = state.isNetworkError
+        isNoInternet = state.isNoInternet,
+        onRetryClick = viewModel::onRetryClick,
     ) {
         Box(Modifier.fillMaxSize()) {
             MatchResultContent(
                 state = state,
                 onPageChanged = viewModel::onCarouselPageChanged,
-                navigateBack = navigateBack,
-                navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
-                navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
-                navigateToYouTubePlayer = navigateToYouTubePlayer,
+                navigateBack = viewModel::onBackClick,
+                navigateToMoviesDetailsScreen = viewModel::navigateToMoviesDetailsScreen,
+                navigateToSeriesDetailsScreen = viewModel::navigateToSeriesDetailsScreen,
+                navigateToYouTubePlayer = viewModel::navigateToYouTubePlayer,
                 onAddToCollection = viewModel::onAddToCollection,
             )
+
 
             if (state.collectionBottomSheet != null) {
                 MovieCollectionsBottomSheet(
