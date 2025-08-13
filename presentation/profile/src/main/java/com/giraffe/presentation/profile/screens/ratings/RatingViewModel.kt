@@ -45,7 +45,7 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
-        updateState { it.copy(isLoading = false, isNoInternet = false, movieGenres = genres) }
+        updateState { it.copy(isLoading = true, isNoInternet = false, movieGenres = genres) }
         safeExecute(
             onSuccess = ::onGetRatedMoviesSuccess,
             onError = ::onFailure,
@@ -59,7 +59,7 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
-        updateState { it.copy(isLoading = false, isNoInternet = false, seriesGenres = genres) }
+        updateState { it.copy(isLoading = true, isNoInternet = false, seriesGenres = genres) }
         safeExecute(
             onSuccess = ::onGetRatedSeriesSuccess,
             onError = ::onFailure,
@@ -129,6 +129,10 @@ class RatingViewModel @Inject constructor(
         if (ratedPoster.poster.mediaTypeOfPoster == Poster.Type.SERIES.value) {
             deleteSeriesRating(ratedPoster)
         }
+    }
+
+    override fun onStartRatingClick() {
+        sendEffect(RatingEffect.NavigateToExplore)
     }
 
     private fun deleteMovieRating(ratedPoster: RatedPoster) {

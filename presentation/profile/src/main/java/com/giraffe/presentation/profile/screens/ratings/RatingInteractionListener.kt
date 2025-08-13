@@ -8,4 +8,5 @@ interface RatingInteractionListener {
     fun onBackClick()
     fun onTabSelected(tabIndex: Int)
     fun onDeleteRatedPosterClick(ratedPoster: RatedPoster)
+    fun onStartRatingClick()
 }
