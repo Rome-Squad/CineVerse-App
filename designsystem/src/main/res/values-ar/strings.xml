@@ -40,6 +40,10 @@
     <string name="home">الرئيسيه</string>
     <string name="placeholder">صوره غير موجوده</string>
     <string name="forgot_password">نسيت كلمة المرور ؟</string>
+    <string name="no_internet_icon">ايقونه عدم الاتصال بالانترنت</string>
+    <string name="looks_like_you_re_offline_let_s_reconnect_so_you_don_t_miss_out">يبدو أنك غير متصل بالإنترنت. فلنعاود الاتصال حتى لا تفوتك أي فرصة!</string>
+    <string name="oops_no_internet">عذرًا! لا يوجد اتصال بالإنترنت</string>
+    <string name="try_again">حاول مرة اخرى</string>
     <string name="password_visibility_icon">ايقونه الرؤية</string>
     <string name="danger_triangle_icon">ايقونه الخطر</string>
     <string name="user_icon">ايقونه المستخدم</string>
