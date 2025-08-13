@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -136,6 +137,7 @@ private fun MovieDetailsContent(
 
             LazyColumn(
                 state = scrollState,
+                contentPadding = PaddingValues(bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -223,8 +225,7 @@ private fun MovieDetailsContent(
                     item {
                         Column(
                             modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 24.dp),
+                                .padding(horizontal = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             SectionTitle(
