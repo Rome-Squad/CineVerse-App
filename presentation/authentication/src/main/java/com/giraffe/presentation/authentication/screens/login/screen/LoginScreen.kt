@@ -27,8 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
-import com.giraffe.designsystem.composable.NoInternetScreen
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.authentication.R
