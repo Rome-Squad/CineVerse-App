@@ -41,7 +41,6 @@ class SeasonsViewModel @Inject constructor(
     }
 
     private fun loadSeasonsSuccess(seasons: List<Season>) {
-        Log.d("SeasonsViewModel", "loadSeasonsSuccess: $seasons")
         updateState {
             it.copy(
                 seasons = seasons.map(Season::toUi),
