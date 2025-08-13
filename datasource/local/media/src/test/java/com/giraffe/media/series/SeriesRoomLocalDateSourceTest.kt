@@ -78,7 +78,7 @@ class SeriesRoomLocalDateSourceTest {
     fun `clearAllSeries clears DAO`() = runTest {
         dataSource.clearSeries()
 
-        coVerify { dao.clearSeries() }
+        coVerify { dao.clearSeriesExceptRecentViewed() }
     }
 
     @Test

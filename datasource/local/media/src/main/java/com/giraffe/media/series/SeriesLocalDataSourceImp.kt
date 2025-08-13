@@ -2,15 +2,16 @@ package com.giraffe.media.series
 
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.mapper.toMatchesYourVibeSeriesCacheDto
 import com.giraffe.media.series.mapper.toPopularSeriesCacheDto
+import com.giraffe.media.series.mapper.toRecentViewedSeriesCacheDto
 import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class SeriesLocalDataSourceImp @Inject constructor(
@@ -40,7 +41,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
     override suspend fun clearSeries() = safeCall {
-        seriesDao.clearSeries()
+        seriesDao.clearSeriesExceptRecentViewed()
         seriesDao.clearPopularSeriesTable()
         seriesDao.clearRecentlyReleasedSeriesTable()
         seriesDao.clearTopRatedSeriesTable()
@@ -48,7 +49,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
-        seriesDao.upsertSeries(series)
+        insertSeries(series)
         seriesDao.upsertPopularSeriesIDs(series.map(SeriesCacheDto::toPopularSeriesCacheDto))
     }
 
@@ -57,7 +58,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
     override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) = safeCall {
-        seriesDao.upsertSeries(series)
+        insertSeries(series)
         seriesDao.upsertRecentlyReleasedSeriesIDs(series.map(SeriesCacheDto::toRecentlyReleasedSeriesCacheDto))
     }
 
@@ -66,7 +67,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
     override suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>) = safeCall {
-        seriesDao.upsertSeries(series)
+        insertSeries(series)
         seriesDao.upsertTopRatedSeriesIDs(series.map(SeriesCacheDto::toTopRatedSeriesCacheDto))
     }
 
@@ -83,7 +84,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
     override suspend fun insertMatchesYourVibe(series: List<SeriesCacheDto>) = safeCall {
-        seriesDao.upsertSeries(series)
+        insertSeries(series)
         seriesDao.upsertMatchesYourVibeSeries(series.map(SeriesCacheDto::toMatchesYourVibeSeriesCacheDto))
     }
 
@@ -93,16 +94,21 @@ class SeriesLocalDataSourceImp @Inject constructor(
 
 
     override fun getRecentSeries() = safeFlow {
-        seriesDao.getRecentSeries()
+        seriesDao.getRecentSeries().onStart { seriesDao.syncRecentViewedTime() }
     }
 
 
-    override suspend fun insertRecentViewedSeries(series: RecentViewedSeriesCacheDto) = safeCall {
-        seriesDao.upsertRecentViewedSeries(series)
+    override suspend fun insertRecentViewedSeries(series: SeriesCacheDto) = safeCall {
+        insertSeries(listOf(series))
+        seriesDao.upsertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
     }
 
 
     override suspend fun clearRecentSeries() = safeCall {
         seriesDao.clearRecentSeries()
+    }
+
+    private suspend fun insertSeries(series: List<SeriesCacheDto>) = safeCall {
+        seriesDao.upsertSeries(series)
     }
 }

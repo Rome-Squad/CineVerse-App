@@ -13,7 +13,6 @@ import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toCacheDto
 import com.giraffe.media.series.mapper.toEntity
-import com.giraffe.media.series.mapper.toRecentViewedSeriesCacheDto
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.media.utils.safeCall
@@ -50,9 +49,13 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun addRecentlyViewed(series: Series) = safeCall {
         if (series.genreIDs.isNotEmpty()) {
-            seriesLocalDateSource.incrementInteractionCountForGenres(series.genreIDs)
+            incrementGenreCount(series.genreIDs)
         }
-        seriesLocalDateSource.insertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
+        seriesLocalDateSource.insertRecentViewedSeries(series.toCacheDto())
+    }
+
+    private suspend fun incrementGenreCount(genreIds: List<Int>) {
+        seriesLocalDateSource.incrementInteractionCountForGenres(genreIds)
     }
 
     override suspend fun clearRecentlyViewed() = safeCall {
@@ -147,17 +150,15 @@ class SeriesRepositoryImpl @Inject constructor(
                     .take(limit)
                     .map(SeriesDto::toEntity)
             } else {
-                val result =
-                    seriesLocalDateSource.getMatchesYourVibe(limit).map { it.toEntity() }.ifEmpty {
-                        seriesRemoteDataSource.getSeriesByGenre(
-                            genreId = topGenreCount.id,
-                            page = page
-                        )
-                            .take(limit)
-                            .map(SeriesDto::toEntity)
-                            .also { addMatchesYourVibe(it) }
-                    }
-                result
+                seriesLocalDateSource.getMatchesYourVibe(limit).map { it.toEntity() }.ifEmpty {
+                    seriesRemoteDataSource.getSeriesByGenre(
+                        genreId = topGenreCount.id,
+                        page = page
+                    )
+                        .take(limit)
+                        .map(SeriesDto::toEntity)
+                        .also { addMatchesYourVibe(it) }
+                }
             }
         } else emptyList()
     }

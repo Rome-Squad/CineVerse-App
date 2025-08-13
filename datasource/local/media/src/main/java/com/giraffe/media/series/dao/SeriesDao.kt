@@ -42,9 +42,28 @@ interface SeriesDao {
     @Upsert
     suspend fun upsertGenres(genres: List<SeriesGenreCacheDto>)
 
+    @Query(
+        """
+            UPDATE $SERIES_TABLE
+            SET recentViewedAt = (
+                SELECT r.recentViewedAt 
+                FROM $RECENT_VIEWED_SERIES_TABLE r
+                WHERE r.id = id
+            )
+            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
+        """
+    )
+    suspend fun syncRecentViewedTime()
 
-    @Query("SELECT * FROM $RECENT_VIEWED_SERIES_TABLE ORDER BY recentViewedAt DESC")
-    fun getRecentSeries(): Flow<List<RecentViewedSeriesCacheDto>>
+    @Query(
+        """
+            SELECT * 
+            FROM $SERIES_TABLE
+            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
+            ORDER BY recentViewedAt ASC
+        """
+    )
+    fun getRecentSeries(): Flow<List<SeriesCacheDto>>
 
     @Query(
         """
@@ -105,8 +124,13 @@ interface SeriesDao {
     suspend fun getTopGenreCount(): SeriesGenreCacheDto?
 
 
-    @Query("DELETE FROM $SERIES_TABLE")
-    suspend fun clearSeries()
+    @Query(
+        """
+        DELETE FROM $SERIES_TABLE 
+        WHERE id NOT IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
+        """
+    )
+    suspend fun clearSeriesExceptRecentViewed()
 
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
     suspend fun clearGenres()
