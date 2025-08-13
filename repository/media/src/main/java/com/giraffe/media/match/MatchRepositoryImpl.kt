@@ -6,7 +6,7 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.mapper.toEntity
-import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.utils.safeCall
 import jakarta.inject.Inject
 
 class MatchRepositoryImpl @Inject constructor(
@@ -18,7 +18,7 @@ class MatchRepositoryImpl @Inject constructor(
         maxRuntime: Int?,
         earliestFirstAirDate: String?,
         latestFirstAirDate: String?
-    ): List<Movie> = SafeCall {
+    ): List<Movie> = safeCall {
         remoteDataSource.getMatchingMovies(
             genreIds, minRuntime, maxRuntime, earliestFirstAirDate, latestFirstAirDate
         ).map { it.toEntity() }
@@ -30,7 +30,7 @@ class MatchRepositoryImpl @Inject constructor(
         maxRuntime: Int?,
         earliestFirstAirDate: String?,
         latestFirstAirDate: String?
-    ): List<Series> = SafeCall {
+    ): List<Series> = safeCall {
         remoteDataSource.getMatchingSeries(
             genreIds, minRuntime, maxRuntime, earliestFirstAirDate, latestFirstAirDate
         ).map { it.toEntity() }

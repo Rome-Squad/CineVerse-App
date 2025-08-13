@@ -61,17 +61,17 @@ class MatchPagerViewModel @Inject constructor(
         updateState { it.copy(genreOptions = genreOptions) }
     }
 
-    fun onBackClicked() {
-        viewModelScope.launch {
-            if (_state.value.currentPage > 0) {
-                val newPage = _state.value.currentPage - 1
-                updateState { it.copy(currentPage = newPage) }
-                savedStateHandle["currentPage"] = newPage
-            } else {
-                sendEffect(MatchScreenEffect.NavigateBack)
-            }
+    fun onBackClicked() = safeExecute {
+        val currentPage = state.value.currentPage
+        if (currentPage > 0) {
+            val newPage = currentPage - 1
+            updateState { it.copy(currentPage = newPage) }
+            savedStateHandle["currentPage"] = newPage
+        } else {
+            sendEffect(MatchScreenEffect.NavigateBack)
         }
     }
+
 
     fun onNextClicked() {
         viewModelScope.launch {

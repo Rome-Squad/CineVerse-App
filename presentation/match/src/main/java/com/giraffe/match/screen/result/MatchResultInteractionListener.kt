@@ -14,4 +14,7 @@ interface MatchResultInteractionListener {
     fun onConfirmCreateNewCollectionClick()
     fun onCancelCreateNewCollectionClick()
     fun onDismissLoginBottomSheet()
+    fun navigateToMoviesDetailsScreen(movieId: Int)
+    fun navigateToSeriesDetailsScreen(seriesId: Int)
+    fun navigateToYouTubePlayer(videoId: String)
 }
