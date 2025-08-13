@@ -27,7 +27,7 @@ interface MovieRepository {
 
     suspend fun getReviews(movieId: Int, page: Int): List<Review>
 
-    suspend fun getUserRatedById(movieId: Int): Float
+    suspend fun getUserRatedById(movieId: Int): Float?
 
     suspend fun getUserRated(accountId: Int): List<Movie>
 

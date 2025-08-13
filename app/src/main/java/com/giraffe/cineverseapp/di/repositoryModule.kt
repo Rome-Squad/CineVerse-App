@@ -5,6 +5,8 @@ import com.giraffe.media.collections.CollectionsRepositoryImp
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.explore.SearchRepositoryImpl
 import com.giraffe.media.explore.repository.SearchRepository
+import com.giraffe.media.match.MatchRepositoryImpl
+import com.giraffe.media.match.repository.MatchRepository
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.movie.MovieRepositoryImpl
 import com.giraffe.media.movie.repository.MovieRepository
@@ -69,4 +71,9 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindCollectionsRepositoryRepository(impl: CollectionsRepositoryImp): CollectionsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMatchRepository(impl: MatchRepositoryImpl): MatchRepository
+
 }

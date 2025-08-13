@@ -1,6 +1,9 @@
 package com.giraffe.match.navigation
 
-@kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializable
+
+
+@Serializable
 internal data class MatchRouteResult(
     val selectedGenres: List<Int>,
     val moodSelections: List<Int>,
