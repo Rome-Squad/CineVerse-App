@@ -118,26 +118,19 @@ class MatchResultViewModel @Inject constructor(
     }
 
     private suspend fun mapMoviesToMatchResult(movies: List<Movie>): List<MatchResultModel> {
-        return movies.mapNotNull { movie ->
-            try {
+        return movies.map { movie ->
                 val details = getMovieDetailsUseCase(movie.id)
                 val genres = getMoviesGenresByIdsUseCase(details.genresID).map { it.title }
                 details.toMatchResultModel(genres)
-            } catch (_: Exception) {
-                null
-            }
         }
     }
 
     private suspend fun mapSeriesToMatchResult(seriesList: List<Series>): List<MatchResultModel> {
-        return seriesList.mapNotNull { series ->
-            try {
+        return seriesList.map { series ->
                 val details = getSeriesDetailsUseCase(series.id)
                 val genres = getSeriesGenresByIdsUseCase(details.genreIDs).map { it.title }
                 details.toMatchResultModel(genres, details.rating, details.youtubeVideoId)
-            } catch (_: Exception) {
-                null
-            }
+
         }
     }
 
