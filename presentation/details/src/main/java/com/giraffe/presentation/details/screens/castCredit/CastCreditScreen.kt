@@ -33,17 +33,11 @@ fun CastCreditScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
-    EventListener(
-        events = viewModel.effect,
-    ) {
+    EventListener(events = viewModel.effect) {
         when (it) {
-            is CastCreditEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(
-                it.seriesId,
-            )
+            is CastCreditEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
 
-            is CastCreditEffect.NavigateToMovieDetails -> navigateToMovieDetails(
-                it.movieId,
-            )
+            is CastCreditEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
 
             is CastCreditEffect.Error -> {
                 context.showToast(it.error.toStringResource())
@@ -54,6 +48,7 @@ fun CastCreditScreen(
             }
         }
     }
+
 
     CastCreditContent(
         state = state,
@@ -72,7 +67,6 @@ private fun CastCreditContent(
     interaction: CastCreditInteractionListener,
     modifier: Modifier = Modifier
 ) {
-
     BaseScreen(
         title = stringResource(R.string.best_of_, state.actorName),
         isLoading = state.isLoading,

@@ -210,8 +210,12 @@ fun PersonCreditDto.toSeriesEntity() = Series(
     name = name.orEmpty(),
     overview = overview.orEmpty(),
     rating = voteAverage.orEmpty(),
-    posterUrl = posterPath.orEmpty(),
-    backdropUrl = backdropPath.orEmpty(),
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    }.orEmpty(),
     genreIDs = genreIds ?: emptyList(),
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
     seasons = emptyList(),
