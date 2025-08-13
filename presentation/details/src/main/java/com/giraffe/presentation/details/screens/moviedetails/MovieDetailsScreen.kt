@@ -152,7 +152,7 @@ private fun MovieDetailsContent(
                             genres = state.movieGenres,
                             rating = state.movie.rating,
                             duration = state.movie.duration,
-                            releaseDate = state.movie.releaseYear.orEmpty(),
+                            releaseDate = state.movie.releaseYear,
                             onClickAdd = interaction::onShowAddToCollectionBottomSheet,
                             onClickPlay = { interaction.onPlayButtonClick(state.movie.youtubeVideoId) },
                             isPlayButtonEnabled = state.movie.youtubeVideoId.isNotBlank(),

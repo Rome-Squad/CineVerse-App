@@ -1,11 +1,13 @@
 package com.giraffe.media.movie.response
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.floatOrNull
 
+@Serializable
 data class MovieRateResponse(
     val id: Int,
     @SerialName("rated")
