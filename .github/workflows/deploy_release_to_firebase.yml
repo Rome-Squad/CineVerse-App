@@ -60,5 +60,9 @@ jobs:
          serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
          groups: testers
          file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
-         releaseNotes: "Test & Coverage | Branch: ${{ github.ref_name }} | Commit: ${{ github.sha }} | By: ${{ github.actor }}"
-
+         releaseNotes: |
+          Branch: ${{ github.ref_name }}
+          Commit: ${{ github.sha }}
+          By: ${{ github.actor }}
+          Title: ${{ github.event.pull_request.title }}
+          PR Description: ${{ github.event.pull_request.body }}
