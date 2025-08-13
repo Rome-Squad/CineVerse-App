@@ -6,7 +6,7 @@
     <string name="search_suggestions" translatable="false">اقتراحات البحث</string>
     <string name="voice_permission_granted" translatable="false">تم منح إذن الصوت</string>
     <string name="voice_permission_denied" translatable="false">تم رفض إذن الصوت</string>
-    <string name="search">يبحث…</string>
+    <string name="search">بحث...</string>
     <string name="back">رجوع</string>
     <string name="end_icon">أيقونة النهاية</string>
     <string name="movies">أفلام</string>
