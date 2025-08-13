@@ -1,7 +1,6 @@
 package com.giraffe.match.screen.result
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.giraffe.match.base.BaseViewModel
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
@@ -17,7 +16,6 @@ import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,46 +30,42 @@ class MatchResultViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
-
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MatchResultScreenState, MatchResultScreenEffect>(MatchResultScreenState()),
     MatchResultInteractionListener {
 
-    private var _genreIds: List<Int> = emptyList()
-    private var _runtime: Int? = null
-    private var _releaseDate: String? = null
-    private var minRt: Int? = null
-    private var maxRt: Int? = null
-    private var earliest: String? = null
-    private var latest: String? = null
-
-    private var currentSelectedItemId: Int? = null
-    private var currentSelectedMediaType: MediaType? = null
-
     init {
-        _genreIds = savedStateHandle.get<List<Int>>("genreSelections")
-            ?: savedStateHandle.get<IntArray>("selectedGenres")?.toList() ?: emptyList()
-        _runtime = savedStateHandle.get<Int>("minRuntime")
+        val genreIds = savedStateHandle.get<List<Int>>("genreSelections")
+            ?: savedStateHandle.get<IntArray>("selectedGenres")?.toList()
+            ?: emptyList()
+        val runtime = savedStateHandle.get<Int>("minRuntime")
             ?: savedStateHandle.get<Int>("timeSelection")
-        _releaseDate = savedStateHandle.get<String>("earliestDate")
+        val releaseDate = savedStateHandle.get<String>("earliestDate")
             ?: savedStateHandle.get<String>("releasePeriodSelection")
 
-        val (minRuntime, maxRuntime) = mapTimeSelectionToRuntimeRange(_runtime)
-        val (earliestDate, latestDate) = mapReleasePeriodToDateRange(_releaseDate)
+        val (minRuntime, maxRuntime) = mapTimeSelectionToRuntimeRange(runtime)
+        val (earliestDate, latestDate) = mapReleasePeriodToDateRange(releaseDate)
 
-        minRt = minRuntime
-        maxRt = maxRuntime
-        earliest = earliestDate
-        latest = latestDate
+        updateState {
+            it.copy(
+                genreIds = genreIds,
+                runtime = runtime,
+                releaseDate = releaseDate,
+                minRuntime = minRuntime,
+                maxRuntime = maxRuntime,
+                earliestDate = earliestDate,
+                latestDate = latestDate
+            )
+        }
 
         checkLoginStatus()
 
         loadMatchingResults(
-            genreIds = _genreIds,
-            minRuntime = minRt,
-            maxRuntime = maxRt,
-            earliestDate = earliest,
-            latestDate = latest
+            genreIds = genreIds,
+            minRuntime = minRuntime,
+            maxRuntime = maxRuntime,
+            earliestDate = earliestDate,
+            latestDate = latestDate
         )
     }
 
@@ -82,23 +76,13 @@ class MatchResultViewModel @Inject constructor(
         earliestDate: String?,
         latestDate: String?
     ) {
-        updateState { it.copy(isLoading = true, isError = false) }
+        updateState { it.copy(isLoading = true) }
 
         safeExecute(
-            onSuccess = { data ->
-                val (movieItems, seriesItems) = data
-                updateState {
-                    it.copy(
-                        matchItems = movieItems + seriesItems,
-                        isLoading = false
-                    )
-                }
-            },
-            onError = { throwable, isNoInternet ->
-                onError(throwable, isNoInternet)
-            },
+            onSuccess = ::handleLoadResultsSuccess,
+            onError = ::onError,
             block = {
-                val genresQuery = genreIds.joinToString(separator = ",")
+                val genresQuery = genreIds.joinToString(",")
 
                 val movies = getMatchingMoviesUseCase(
                     genreIds = genresQuery,
@@ -107,7 +91,6 @@ class MatchResultViewModel @Inject constructor(
                     earliestFirstAirDate = earliestDate,
                     latestFirstAirDate = latestDate
                 ).take(10)
-
                 val movieItems = mapMoviesToMatchResult(movies)
 
                 val seriesList = getMatchingSeriesUseCase(
@@ -117,12 +100,21 @@ class MatchResultViewModel @Inject constructor(
                     earliestFirstAirDate = earliestDate,
                     latestFirstAirDate = latestDate
                 ).take(10)
-
                 val seriesItems = mapSeriesToMatchResult(seriesList)
 
                 Pair(movieItems, seriesItems)
             }
         )
+    }
+
+    private fun handleLoadResultsSuccess(data: Pair<List<MatchResultModel>, List<MatchResultModel>>) {
+        val (movieItems, seriesItems) = data
+        updateState {
+            it.copy(
+                matchItems = movieItems + seriesItems,
+                isLoading = false
+            )
+        }
     }
 
     private suspend fun mapMoviesToMatchResult(movies: List<Movie>): List<MatchResultModel> {
@@ -131,7 +123,7 @@ class MatchResultViewModel @Inject constructor(
                 val details = getMovieDetailsUseCase(movie.id)
                 val genres = getMoviesGenresByIdsUseCase(details.genresID).map { it.title }
                 details.toMatchResultModel(genres)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 null
             }
         }
@@ -143,50 +135,38 @@ class MatchResultViewModel @Inject constructor(
                 val details = getSeriesDetailsUseCase(series.id)
                 val genres = getSeriesGenresByIdsUseCase(details.genreIDs).map { it.title }
                 details.toMatchResultModel(genres, details.rating, details.youtubeVideoId)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 null
             }
         }
     }
 
     override fun onRetryClick() {
-        loadMatchingResults(
-            genreIds = _genreIds,
-            minRuntime = minRt,
-            maxRuntime = maxRt,
-            earliestDate = earliest,
-            latestDate = latest
-        )
+        with(state.value) {
+            loadMatchingResults(
+                genreIds = genreIds,
+                minRuntime = minRuntime,
+                maxRuntime = maxRuntime,
+                earliestDate = earliestDate,
+                latestDate = latestDate
+            )
+        }
     }
 
-
     override fun onAddToCollection(itemId: Int, mediaType: MediaType) {
-        currentSelectedItemId = itemId
-        currentSelectedMediaType = mediaType
+        updateState {
+            it.copy(
+                currentSelectedItemId = itemId,
+                currentSelectedMediaType = mediaType
+            )
+        }
 
         executeIfLoggedIn(
             block = {
                 safeExecute(
-                    onSuccess = { collections ->
-                        updateState {
-                            it.copy(
-                                collections = collections.map { it.toUi() },
-                                collectionBottomSheet = if (collections.isNotEmpty()) {
-                                    MatchResultScreenState.CollectionBottomSheet.AddToCollection
-                                } else {
-                                    MatchResultScreenState.CollectionBottomSheet.NoCollections
-                                },
-                                isLoading = false
-                            )
-                        }
-                    },
-                    onError = { throwable, _ ->
-                        updateState { it.copy(isLoading = false) }
-                        sendEffect(MatchResultScreenEffect.ShowError(throwable))
-                    },
-                    block = {
-                        getCollectionsUseCase()
-                    }
+                    onSuccess = ::handleGetCollectionsSuccess,
+                    onError = ::onError,
+                    block = { getCollectionsUseCase() }
                 )
             },
             ifNotLoggedIn = {
@@ -195,16 +175,31 @@ class MatchResultViewModel @Inject constructor(
         )
     }
 
+    private fun handleGetCollectionsSuccess(collections: List<Collection>) {
+        updateState {
+            it.copy(
+                collections = collections.map { it.toUi() },
+                collectionBottomSheet = if (collections.isNotEmpty()) {
+                    MatchResultScreenState.CollectionBottomSheet.AddToCollection
+                } else {
+                    MatchResultScreenState.CollectionBottomSheet.NoCollections
+                },
+                isLoading = false
+            )
+        }
+    }
+
+
     override fun onCollectionBottomSheetDismiss() {
         updateState {
             it.copy(
                 collectionBottomSheet = null,
                 collections = emptyList(),
-                newCollectionName = ""
+                newCollectionName = "",
+                currentSelectedItemId = null,
+                currentSelectedMediaType = null
             )
         }
-        currentSelectedItemId = null
-        currentSelectedMediaType = null
     }
 
     override fun onLoginButtonClick() {
@@ -252,7 +247,6 @@ class MatchResultViewModel @Inject constructor(
 
     override fun onConfirmCreateNewCollectionClick() {
         val newName = state.value.newCollectionName.trim()
-
         safeExecute(
             onSuccess = {
                 val collections = getCollectionsUseCase()
@@ -282,30 +276,29 @@ class MatchResultViewModel @Inject constructor(
         updateState { it.copy(isVisibleLoginBottomSheet = false) }
     }
 
+    override fun navigateToMoviesDetailsScreen(movieId: Int) {
+        sendEffect(MatchResultScreenEffect.NavigateToMovieDetails(movieId))
+    }
+
+    override fun navigateToSeriesDetailsScreen(seriesId: Int) {
+        sendEffect(MatchResultScreenEffect.NavigateToSeriesDetails(seriesId))
+    }
+
+    override fun navigateToYouTubePlayer(videoId: String) {
+        sendEffect(MatchResultScreenEffect.NavigateToYouTubePlayer(videoId))
+    }
+
     override fun onCollectionClick(collectionId: Int) {
-        val itemId = currentSelectedItemId ?: return
-        val mediaType = currentSelectedMediaType ?: return
+        val itemId = state.value.currentSelectedItemId ?: return
 
         safeExecute(
-            onSuccess = {
-                updateState {
-                    it.copy(
-                        collections = it.collections.map { coll ->
-                            if (coll.id == collectionId) coll.copy(isLoading = false) else coll
-                        },
-                        collectionBottomSheet = null
-                    )
-                }
-            },
-            onError = { throwable, _ ->
-                updateState {
-                    it.copy(
-                        collections = it.collections.map { coll ->
-                            if (coll.id == collectionId) coll.copy(isLoading = false) else coll
-                        }
-                    )
-                }
-                sendEffect(MatchResultScreenEffect.ShowError(throwable))
+            onSuccess = { handleCollectionSuccess(collectionId) },
+            onError = { throwable, isNoInternet ->
+                handleCollectionError(
+                    collectionId,
+                    throwable,
+                    isNoInternet
+                )
             },
             block = {
                 updateState {
@@ -315,38 +308,57 @@ class MatchResultViewModel @Inject constructor(
                         }
                     )
                 }
-
-                if (mediaType == MediaType.MOVIE) {
-                    addMovieToCollectionUseCase(collectionId, itemId)
-                } else {
-                    addMovieToCollectionUseCase(collectionId, itemId)
-                }
+                addMovieToCollectionUseCase(collectionId, itemId)
             }
         )
+    }
+
+    private fun handleCollectionSuccess(collectionId: Int) {
+        updateState {
+            it.copy(
+                collections = it.collections.map { coll ->
+                    if (coll.id == collectionId) coll.copy(isLoading = false) else coll
+                },
+                collectionBottomSheet = null
+            )
+        }
+    }
+
+    private fun handleCollectionError(
+        collectionId: Int,
+        throwable: Throwable,
+        isNoInternet: Boolean
+    ) {
+        updateState {
+            it.copy(
+                collections = it.collections.map { coll ->
+                    if (coll.id == collectionId) coll.copy(isLoading = false) else coll
+                },
+                isNoInternet = isNoInternet
+            )
+        }
+        sendEffect(MatchResultScreenEffect.ShowError(throwable))
     }
 
     private fun executeIfLoggedIn(
         block: () -> Unit,
         ifNotLoggedIn: () -> Unit = { updateState { it.copy(isVisibleLoginBottomSheet = true) } }
     ) {
-        viewModelScope.launch {
-            try {
+        safeExecute(
+            block = {
                 val loggedIn = isLoggedInUseCase()
-                if (loggedIn) {
-                    block()
-                } else {
-                    ifNotLoggedIn()
-                }
-            } catch (e: Exception) {
+                if (loggedIn) block() else ifNotLoggedIn()
+            },
+            onError = { _, _ ->
                 ifNotLoggedIn()
             }
-        }
+        )
     }
 
+
+
     private fun onError(error: Throwable, isNoInternet: Boolean) {
-        updateState {
-            it.copy(isLoading = false, isError = true, isNetworkError = isNoInternet)
-        }
+        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
         sendEffect(MatchResultScreenEffect.ShowError(error))
     }
 
@@ -368,10 +380,9 @@ class MatchResultViewModel @Inject constructor(
     }
 
     private fun checkLoginStatus() {
-        viewModelScope.launch {
+        safeExecute {
             val loggedIn = isLoggedInUseCase()
             updateState { it.copy(isLoggedIn = loggedIn) }
         }
     }
-
 }

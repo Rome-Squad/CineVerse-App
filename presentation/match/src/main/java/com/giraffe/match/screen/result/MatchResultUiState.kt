@@ -13,15 +13,21 @@ data class MatchResultScreenState(
     val matchItems: List<MatchResultModel> = emptyList(),
     val currentCarouselPage: Int = 0,
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val errorMsgRes: Int? = null,
-    val isGenericError: Boolean = false,
-    val isNetworkError: Boolean = false,
+    val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,
     val collectionBottomSheet: CollectionBottomSheet? = null,
     val collections: List<CollectionUi> = emptyList(),
-    val newCollectionName: String = ""
+    val newCollectionName: String = "",
+    val genreIds: List<Int> = emptyList(),
+    val runtime: Int? = null,
+    val releaseDate: String? = null,
+    val minRuntime: Int? = null,
+    val maxRuntime: Int? = null,
+    val earliestDate: String? = null,
+    val latestDate: String? = null,
+    val currentSelectedItemId: Int? = null,
+    val currentSelectedMediaType: MediaType? = null
 ) {
     @Stable
     sealed class CollectionBottomSheet {
