@@ -92,7 +92,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
 
-    override suspend fun getRecentSeries() = safeFlow {
+    override fun getRecentSeries() = safeFlow {
         seriesDao.getRecentSeries()
     }
 

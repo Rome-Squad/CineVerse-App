@@ -40,7 +40,7 @@ interface SeriesRepository {
 
     suspend fun deleteById(seriesId: Int)
 
-    suspend fun getRecentlyViewed(): Flow<List<Series>>
+    fun getRecentlyViewed(): Flow<List<Series>>
 
     suspend fun clearRecentlyViewed()
 

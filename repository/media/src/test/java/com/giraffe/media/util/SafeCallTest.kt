@@ -7,7 +7,7 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.UnknownException
 import com.giraffe.media.exception.ValidationException
-import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.utils.safeCall
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.SerializationException
@@ -20,7 +20,7 @@ class SafeCallTest {
 
     @Before
     fun setup() {
-        safeCall = SafeCall
+        this@SafeCallTest.safeCall = safeCall
     }
 
     @Test

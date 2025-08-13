@@ -17,7 +17,7 @@ interface SeriesLocalDateSource {
 
     suspend fun clearGenres()
 
-    suspend fun getRecentSeries(): Flow<List<RecentViewedSeriesCacheDto>>
+    fun getRecentSeries(): Flow<List<RecentViewedSeriesCacheDto>>
 
     suspend fun insertRecentViewedSeries(series: RecentViewedSeriesCacheDto)
 

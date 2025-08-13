@@ -114,7 +114,6 @@ interface SeriesDao {
     @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE")
     suspend fun clearRecentSeries()
 
-
     @Query("DELETE FROM $POPULAR_SERIES_TABLE")
     suspend fun clearPopularSeriesTable()
 

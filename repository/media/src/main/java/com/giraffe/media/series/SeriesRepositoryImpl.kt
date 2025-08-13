@@ -16,7 +16,8 @@ import com.giraffe.media.series.mapper.toEntity
 import com.giraffe.media.series.mapper.toRecentViewedSeriesCacheDto
 import com.giraffe.media.series.mapper.toSeasonEntity
 import com.giraffe.media.series.repository.SeriesRepository
-import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.utils.safeCall
+import com.giraffe.media.utils.safeFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.map
@@ -27,11 +28,11 @@ class SeriesRepositoryImpl @Inject constructor(
     private val seriesRemoteDataSource: SeriesRemoteDataSource,
     private val seriesLocalDateSource: SeriesLocalDateSource
 ) : SeriesRepository {
-    override suspend fun getByName(name: String, page: Int) = SafeCall {
+    override suspend fun getByName(name: String, page: Int) = safeCall {
         seriesRemoteDataSource.getSeriesByName(name, page).map(SeriesDto::toEntity)
     }
 
-    override suspend fun getGenres(): List<Genre> = SafeCall {
+    override suspend fun getGenres(): List<Genre> = safeCall {
         seriesLocalDateSource.getGenres()
             .map(SeriesGenreCacheDto::toEntity)
             .ifEmpty {
@@ -41,28 +42,28 @@ class SeriesRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun getRecentlyViewed() = SafeCall {
+    override fun getRecentlyViewed() = safeFlow {
         seriesLocalDateSource.getRecentSeries().map { seriesList ->
             seriesList.map { series -> series.toEntity() }
         }
     }
 
-    override suspend fun addRecentlyViewed(series: Series) = SafeCall {
+    override suspend fun addRecentlyViewed(series: Series) = safeCall {
         if (series.genreIDs.isNotEmpty()) {
             seriesLocalDateSource.incrementInteractionCountForGenres(series.genreIDs)
         }
         seriesLocalDateSource.insertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
     }
 
-    override suspend fun clearRecentlyViewed() = SafeCall {
+    override suspend fun clearRecentlyViewed() = safeCall {
         seriesLocalDateSource.clearRecentSeries()
     }
 
-    override suspend fun clearAll() = SafeCall {
+    override suspend fun clearAll() = safeCall {
         seriesLocalDateSource.clearSeries()
     }
 
-    override suspend fun getDetails(seriesId: Int): Series = SafeCall {
+    override suspend fun getDetails(seriesId: Int): Series = safeCall {
         withContext(Dispatchers.IO) {
             val youtubeVideoId = async { seriesRemoteDataSource.getSeriesTrailerUrl(seriesId) }
             val seriesDetails = async { seriesRemoteDataSource.getSeriesDetails(seriesId) }
@@ -71,15 +72,15 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSeasons(seriesId: Int): List<Season> = SafeCall {
+    override suspend fun getSeasons(seriesId: Int): List<Season> = safeCall {
         seriesRemoteDataSource.getSeriesDetails(seriesId).toSeasonEntity()
     }
 
-    override suspend fun getByGenreId(genreId: Int, page: Int) = SafeCall {
+    override suspend fun getByGenreId(genreId: Int, page: Int) = safeCall {
         seriesRemoteDataSource.getSeriesByGenre(genreId, page).map { it.toEntity() }
     }
 
-    override suspend fun getGenresByIds(genreIDs: List<Int>) = SafeCall {
+    override suspend fun getGenresByIds(genreIDs: List<Int>) = safeCall {
         seriesLocalDateSource.getGenresByIDs(genreIDs).map { it.toEntity() }
             .ifEmpty {
                 seriesRemoteDataSource.getGenres().filter { it.id in genreIDs }
@@ -88,11 +89,11 @@ class SeriesRepositoryImpl @Inject constructor(
             }
     }
 
-    private suspend fun addGenres(genres: List<Genre>) = SafeCall {
+    private suspend fun addGenres(genres: List<Genre>) = safeCall {
         seriesLocalDateSource.insertGenres(genres.map(Genre::toCacheDto))
     }
 
-    override suspend fun getPopular(page: Int, limit: Int) = SafeCall {
+    override suspend fun getPopular(page: Int, limit: Int) = safeCall {
         seriesLocalDateSource.getPopularitySeries(limit).map { it.toEntity() }.ifEmpty {
             seriesRemoteDataSource.getPopularitySeries(page).take(limit)
                 .map(SeriesDto::toEntity)
@@ -100,11 +101,11 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun addPopular(series: List<Series>) = SafeCall {
+    private suspend fun addPopular(series: List<Series>) = safeCall {
         seriesLocalDateSource.insertPopularitySeries(series.map { it.toCacheDto() })
     }
 
-    override suspend fun getRecentlyReleased(page: Int, limit: Int) = SafeCall {
+    override suspend fun getRecentlyReleased(page: Int, limit: Int) = safeCall {
         if (page > 1) {
             seriesRemoteDataSource.getRecentlyReleasedSeries(page).take(limit)
                 .map(SeriesDto::toEntity)
@@ -117,11 +118,11 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun addRecentlyReleased(series: List<Series>) = SafeCall {
+    private suspend fun addRecentlyReleased(series: List<Series>) = safeCall {
         seriesLocalDateSource.insertRecentlyReleasedSeries(series.map { it.toCacheDto() })
     }
 
-    override suspend fun getTopRated(page: Int, limit: Int) = SafeCall {
+    override suspend fun getTopRated(page: Int, limit: Int) = safeCall {
         if (page > 1) {
             seriesRemoteDataSource.getTopRatedSeries(page).take(limit)
                 .map(SeriesDto::toEntity)
@@ -134,11 +135,11 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun addTopRated(series: List<Series>) = SafeCall {
+    private suspend fun addTopRated(series: List<Series>) = safeCall {
         seriesLocalDateSource.insertTopRatedSeries(series.map { it.toCacheDto() })
     }
 
-    override suspend fun getMatchesYourVibe(page: Int, limit: Int) = SafeCall {
+    override suspend fun getMatchesYourVibe(page: Int, limit: Int) = safeCall {
         val topGenreCount = getTopGenreCount()
         if (topGenreCount != null) {
             if (page > 1) {
@@ -161,37 +162,37 @@ class SeriesRepositoryImpl @Inject constructor(
         } else emptyList()
     }
 
-    override suspend fun addRating(seriesId: Int, rating: Float) = SafeCall {
+    override suspend fun addRating(seriesId: Int, rating: Float) = safeCall {
         val requestBody = RatingRequest(value = rating)
         seriesRemoteDataSource.addRating(seriesId, requestBody)
     }
 
-    override suspend fun deleteById(seriesId: Int) = SafeCall {
+    override suspend fun deleteById(seriesId: Int) = safeCall {
         seriesLocalDateSource.deleteSeriesById(seriesId)
     }
 
-    override suspend fun getReviews(seriesId: Int, page: Int) = SafeCall {
+    override suspend fun getReviews(seriesId: Int, page: Int) = safeCall {
         seriesRemoteDataSource.getSeriesReviews(seriesId, page).map(ReviewDto::toEntity)
     }
 
-    override suspend fun getRecommended(seriesId: Int, page: Int) = SafeCall {
+    override suspend fun getRecommended(seriesId: Int, page: Int) = safeCall {
         seriesRemoteDataSource.getSeriesRecommendations(seriesId, page).map(SeriesDto::toEntity)
     }
 
 
-    override suspend fun getUserRated(accountId: Int) = SafeCall {
+    override suspend fun getUserRated(accountId: Int) = safeCall {
         seriesRemoteDataSource.getRatedSeries(accountId).map(SeriesDto::toEntity)
     }
 
-    override suspend fun deleteRating(seriesId: Int) = SafeCall {
+    override suspend fun deleteRating(seriesId: Int) = safeCall {
         seriesRemoteDataSource.deleteSeriesRating(seriesId)
     }
 
-    override suspend fun getTopGenreCount() = SafeCall {
+    override suspend fun getTopGenreCount() = safeCall {
         seriesLocalDateSource.getTopGenreCount()?.toEntity()
     }
 
-    private suspend fun addMatchesYourVibe(series: List<Series>) = SafeCall {
+    private suspend fun addMatchesYourVibe(series: List<Series>) = safeCall {
         seriesLocalDateSource.insertMatchesYourVibe(series.map { it.toCacheDto() })
     }
 }
