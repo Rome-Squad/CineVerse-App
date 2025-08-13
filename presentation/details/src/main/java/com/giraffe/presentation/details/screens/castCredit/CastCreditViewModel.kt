@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.screens.castCredit
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.designsystem.uimodel.Poster.Type
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
@@ -46,23 +47,17 @@ class CastCreditViewModel @Inject constructor(
     }
 
     private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
-        updateState {
-            it.copy(
-                isLoading = false,
-                isNoInternet = false
-            )
-        }
         safeExecute(
-            onError = ::loadCastCreditError,
-            onSuccess = ::updateCastCreditPosters
+            onSuccess = ::updateCastCreditPosters,
+            onError = ::loadCastCreditError
         ) {
             val seriesPosters = castCredits.series.map {
-                val genres = getSeriesGenres(it.genreIDs)
+                val genres = getSeriesGenres(it.genreIDs).map { genre -> genre.title }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
             val moviesPosters = castCredits.movies.map {
-                val genres = getMoviesGenresByIds(it.genresID)
+                val genres = getMoviesGenresByIds(it.genresID).map { genre -> genre.title }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
@@ -74,10 +69,10 @@ class CastCreditViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
+                isNoInternet = false,
                 posters = posters,
             )
         }
-
     }
 
 
@@ -99,8 +94,8 @@ class CastCreditViewModel @Inject constructor(
     override fun onPosterClick(mediaId: Int, mediaType: String) {
         sendEffect(
             effect = when (mediaType) {
-                MediaType.MOVIE.value -> CastCreditEffect.NavigateToMovieDetails(mediaId)
-                MediaType.TV.value -> CastCreditEffect.NavigateToSeriesDetails(mediaId)
+                Type.MOVIE.name -> CastCreditEffect.NavigateToMovieDetails(mediaId)
+                Type.SERIES.name -> CastCreditEffect.NavigateToSeriesDetails(mediaId)
                 else -> return
             }
         )
@@ -108,5 +103,11 @@ class CastCreditViewModel @Inject constructor(
 
     override fun changeView(isGrid: Boolean) {
         updateState { it.copy(isGridSelected = isGrid) }
+    }
+
+    override fun onRetryClick() {
+        state.value.castId?.let {
+            loadCastCredit(it)
+        }
     }
 }

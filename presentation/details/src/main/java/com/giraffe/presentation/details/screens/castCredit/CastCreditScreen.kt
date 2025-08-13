@@ -1,10 +1,14 @@
 package com.giraffe.presentation.details.screens.castCredit
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.giraffe.designsystem.composable.NoInternetScreen
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
@@ -33,17 +39,11 @@ fun CastCreditScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
-    EventListener(
-        events = viewModel.effect,
-    ) {
+    EventListener(events = viewModel.effect) {
         when (it) {
-            is CastCreditEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(
-                it.seriesId,
-            )
+            is CastCreditEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
 
-            is CastCreditEffect.NavigateToMovieDetails -> navigateToMovieDetails(
-                it.movieId,
-            )
+            is CastCreditEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
 
             is CastCreditEffect.Error -> {
                 context.showToast(it.error.toStringResource())
@@ -55,14 +55,36 @@ fun CastCreditScreen(
         }
     }
 
-    CastCreditContent(
-        state = state,
-        interaction = viewModel,
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .systemBarsPadding()
-    )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            AnimatedVisibility(state.isNoInternet) {
+                NoInternetScreen(
+                    onRetryClick = viewModel::onRetryClick
+                )
+            }
+            AnimatedVisibility(state.isLoading) {
+                Progress(modifier = Modifier.size(40.dp))
+            }
+        }
+        AnimatedVisibility(
+            visible = !state.isLoading && !state.isNoInternet,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            CastCreditContent(
+                state = state,
+                interaction = viewModel
+            )
+        }
+    }
 }
 
 
@@ -72,7 +94,6 @@ private fun CastCreditContent(
     interaction: CastCreditInteractionListener,
     modifier: Modifier = Modifier
 ) {
-
     BaseScreen(
         title = stringResource(R.string.best_of_, state.actorName),
         isLoading = state.isLoading,

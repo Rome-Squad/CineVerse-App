@@ -68,17 +68,18 @@ fun PosterVertically(
 //
 //                }
 
-                Rating(
-                    value = poster.rating,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(end = 8.dp, top = 8.dp)
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
-
-                )
+                if (poster.rating != 0f) {
+                    Rating(
+                        value = poster.rating,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(end = 8.dp, top = 8.dp)
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                    )
+                }
             }
 
 
