@@ -64,13 +64,13 @@ fun AddToCollectionItem(
             )
         }
 
-        Box(Modifier.align(Alignment.CenterEnd)) {
-            AnimatedVisibility(isLoading) {
-                Progress(
-                    modifier = Modifier.size(24.dp),
-                )
-            }
+        if( isLoading ) {
+            Progress(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+            )
         }
+
     }
 }
 
