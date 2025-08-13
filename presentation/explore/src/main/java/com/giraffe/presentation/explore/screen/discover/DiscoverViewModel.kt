@@ -159,7 +159,7 @@ class DiscoverViewModel @Inject constructor(
         sendEffect(DiscoverEffect.NavigateToSearchScreen)
     }
 
-    override fun retry() {
+    override fun onRetryClick() {
         getSeriesGenres()
         getMovieGenres()
     }
