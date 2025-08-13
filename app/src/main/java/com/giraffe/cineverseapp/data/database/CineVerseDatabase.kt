@@ -9,6 +9,10 @@ import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.PopularMovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.RecentReleasedMovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.RecentlyViewedMovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.UpcomingMovieCacheDto
 import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.MoviePersonCrossRef
@@ -26,6 +30,10 @@ import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
         SearchKeywordCacheDto::class,
         MovieCacheDto::class,
         MovieGenreCacheDto::class,
+        PopularMovieCacheDto::class,
+        RecentReleasedMovieCacheDto::class,
+        UpcomingMovieCacheDto::class,
+        RecentlyViewedMovieCacheDto::class,
         SeriesCacheDto::class,
         SeriesGenreCacheDto::class,
         PopularSeriesCacheDto::class,

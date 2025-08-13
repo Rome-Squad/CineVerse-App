@@ -11,11 +11,13 @@ interface MovieRepository {
 
     suspend fun getByName(name: String, page: Int): List<Movie>
 
-    suspend fun getGenresByIds(genreIds: List<Int>): List<Genre>
-
     suspend fun getGenres(): List<Genre>
 
+    suspend fun getGenresByIds(genreIds: List<Int>): List<Genre>
+
     suspend fun getTopGenre(): Genre?
+
+    suspend fun clearGenres()
 
     suspend fun getByGenreId(genreId: Int, page: Int): List<Movie>
 
@@ -23,7 +25,7 @@ interface MovieRepository {
 
     suspend fun getDetails(movieId: Int): Movie
 
-    suspend fun getRecommended(movieId: Int, page: Int, limit: Int): List<Movie>
+    suspend fun getRecommended(movieId: Int, page: Int): List<Movie>
 
     suspend fun getReviews(movieId: Int, page: Int): List<Review>
 
@@ -46,6 +48,4 @@ interface MovieRepository {
     suspend fun clearRecentlyViewed()
 
     suspend fun clearExceptRecentlyViewed()
-
-    suspend fun clearGenres()
 }

@@ -4,6 +4,10 @@ import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.PopularMovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.RecentReleasedMovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.RecentlyViewedMovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.UpcomingMovieCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
 import javax.inject.Inject
@@ -12,117 +16,67 @@ import javax.inject.Inject
 class MovieLocalDataSourceImp @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
-    override suspend fun addMovieGenres(movieGenres: List<MovieGenreCacheDto>) = safeCall {
-        movieDao.insertMovieGenres(movieGenres)
-    }
+    override suspend fun addMovies(movies: List<MovieCacheDto>) =
+        safeCall { movieDao.insertMovies(movies) }
 
-    override suspend fun setMovie(
-        movie: MovieCacheDto,
-        transformer: ((MovieCacheDto) -> MovieCacheDto)?
-    ) = safeCall {
-        val existingMovie = movieDao.getMovieById(movie.id)
-        val mergedMovie = movie.mergeWith(existingMovie)
-        val finalMovie = transformer?.invoke(mergedMovie) ?: mergedMovie
-        movieDao.upsertMovie(finalMovie)
-    }
+    override suspend fun addMovie(movie: MovieCacheDto) =
+        safeCall { movieDao.insertMovie(movie) }
 
-    override suspend fun setMovies(
-        movies: List<MovieCacheDto>,
-        transformer: ((MovieCacheDto) -> MovieCacheDto)?
-    ) {
-        if (movies.isEmpty()) return
-        val incomingMovieIds = movies.map { it.id }
-        val existingMoviesById = movieDao.getMoviesByIds(incomingMovieIds).associateBy { it.id }
-        val mergedMovies = if (existingMoviesById.isEmpty()) {
-            movies
-        } else {
-            movies.map { incomingMovie ->
-                existingMoviesById[incomingMovie.id]?.let { existingMovie ->
-                    incomingMovie.mergeWith(existingMovie)
-                } ?: incomingMovie
-            }
-        }
-        val finalMovies = transformer?.let { mergedMovies.map(it) } ?: mergedMovies
-        movieDao.upsertMovies(finalMovies)
-    }
+    // region Movie Genres
+    override suspend fun addMovieGenres(movieGenres: List<MovieGenreCacheDto>) =
+        safeCall { movieDao.insertMovieGenres(movieGenres) }
 
-    /**
-     * Merges the current [MovieCacheDto] with an existing one.
-     *
-     * - If [existing] is null, returns the current object as is.
-     * - Otherwise, returns a new [MovieCacheDto] where:
-     *   - Non-null fields in the current object take precedence.
-     *   - If a field in the current object is null, the corresponding value from [existing] is used.
-     *   - Some fields (e.g. `recentViewedAt`, `recommendedId`, etc.) are always taken from [existing].
-     *
-     * This is useful for preserving metadata fields from a cached movie
-     * while updating other fields with newer data.
-     */
-    private fun MovieCacheDto.mergeWith(existing: MovieCacheDto?): MovieCacheDto {
-        if (existing == null) return this
-        return this.copy(
-            posterPath = this.posterPath ?: existing.posterPath,
-            backdropPath = this.backdropPath ?: existing.backdropPath,
-            youtubeVideoId = this.youtubeVideoId ?: existing.youtubeVideoId,
-            releaseDate = this.releaseDate ?: existing.releaseDate,
-            duration = this.duration ?: existing.duration,
-            recentViewedAt = existing.recentViewedAt,
-            recentReleasedAt = existing.recentReleasedAt,
-            upcomingAt = existing.upcomingAt,
-            recommendedId = existing.recommendedId
-        )
-    }
+    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) =
+        safeCall { movieDao.incrementInteractionCountForGenres(genreIds) }
 
-    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = safeCall {
-        movieDao.incrementInteractionCountForGenres(genreIds)
-    }
+    override suspend fun getMovieGenresByIds(ids: List<Int>) =
+        safeCall { movieDao.getMovieGenresByIds(ids) }
 
-    override suspend fun getPopularityMovies(limit: Int) = safeCall {
-        movieDao.getPopularityMovies(limit = limit)
-    }
+    override suspend fun getMoviesGenres() =
+        safeCall { movieDao.getMoviesGenres() }
 
-    override suspend fun getRecentlyReleasedMovies(limit: Int) = safeCall {
-        movieDao.getRecentlyReleasedMovies(limit)
-    }
+    override suspend fun getTopGenre() =
+        safeCall { movieDao.getTopGenre() }
 
-    override suspend fun getRecommendedMovies(movieId: Int, limit: Int) = safeCall {
-        movieDao.getRecommendedMovies(movieId, limit)
-    }
+    override suspend fun clearMovieGenres() =
+        safeCall { movieDao.clearMovieGenres() }
+    // endregion Movie Genres
 
-    override suspend fun getMovieGenresByIds(ids: List<Int>) = safeCall {
-        movieDao.getMovieGenresByIds(ids)
-    }
+    // region Popularity, Recently Released, Upcoming, Match, Recently Viewed
+    override suspend fun addPopularityMovies(movies: List<PopularMovieCacheDto>) =
+        safeCall { movieDao.insertPopularMovies(movies) }
 
-    override suspend fun getMoviesGenres() = safeCall {
-        movieDao.getMoviesGenres()
-    }
+    override suspend fun getPopularityMovies(limit: Int) =
+        safeCall { movieDao.getPopularityMovies(limit = limit) }
 
-    override suspend fun getUpcomingMovies(limit: Int) = safeCall {
-        movieDao.getUpcomingMovies(limit)
-    }
+    override suspend fun addRecentlyReleasedMovies(movies: List<RecentReleasedMovieCacheDto>) =
+        safeCall { movieDao.insertRecentlyReleasedMovies(movies) }
 
-    override fun getRecentlyViewedMovies() = safeFlow {
-        movieDao.getRecentlyViewedMovies()
-    }
+    override suspend fun getRecentlyReleasedMovies(limit: Int) =
+        safeCall { movieDao.getRecentlyReleasedMovies(limit) }
 
-    override suspend fun clearMovieCache() = safeCall {
-        movieDao.clearMovieCache()
-    }
+    override suspend fun addUpcomingMovies(movies: List<UpcomingMovieCacheDto>) =
+        safeCall { movieDao.insertUpcomingMovies(movies) }
 
-    override suspend fun clearMovieCacheWithOutRecentViewed() {
-        movieDao.clearMovieCacheWithOutRecentViewed()
-        movieDao.resetMoviesCache()
-    }
+    override suspend fun getUpcomingMovies(limit: Int) =
+        safeCall { movieDao.getUpcomingMovies(limit) }
 
-    override suspend fun clearRecentlyViewedMovies() = safeCall {
-        movieDao.clearRecentlyViewedMovies()
-    }
+    override suspend fun addRecentlyViewedMovie(movie: RecentlyViewedMovieCacheDto) =
+        safeCall { movieDao.insertRecentlyViewedMovie(movie) }
 
-    override suspend fun clearMovieGenres() = safeCall {
-        movieDao.clearMovieGenres()
-    }
+    override fun getRecentlyViewedMovies() =
+        safeFlow { movieDao.getRecentlyViewedMovies() }
+    // endregion Popularity, Recently Released, Upcoming, Match, Recently Viewed
 
-    override suspend fun deleteMovieById(movieId: Int) = safeCall {
-        movieDao.deleteMovieById(movieId)
-    }
+    override suspend fun clearMovieCache() =
+        safeCall { movieDao.clearMovieCache() }
+
+    override suspend fun clearExceptRecentlyViewed() =
+        safeCall { movieDao.clearExceptRecentlyViewed() }
+
+    override suspend fun clearRecentlyViewedMovies() =
+        safeCall { movieDao.clearRecentlyViewedMovies() }
+
+    override suspend fun deleteMovieById(movieId: Int) =
+        safeCall { movieDao.deleteMovieById(movieId) }
 }
