@@ -2,7 +2,7 @@
 <resources>
     <string name="history">سجلات</string>
     <string name="clear_all" translatable="false">مسح الكل</string>
-    <string name="you_recent_viewed" translatable="false">لقد شاهدت مؤخرا</string>
+    <string name="you_recent_viewed_history" translatable="false">لقد شاهدت مؤخرا</string>
     <string name="search_suggestions" translatable="false">اقتراحات البحث</string>
     <string name="voice_permission_granted" translatable="false">تم منح إذن الصوت</string>
     <string name="voice_permission_denied" translatable="false">تم رفض إذن الصوت</string>
@@ -32,6 +32,7 @@
     <string name="explore_screen">شاشة الاستكشاف</string>
     <string name="search_screen">شاشة البحث</string>
     <string name="search_result_screen">شاشة نتائج البحث</string>
+    <string name="speech_recognition_not_available_on_this_device">البحث عبر الميكروفون غير متاح لهذا الهاتف</string>
 
 
 </resources>
