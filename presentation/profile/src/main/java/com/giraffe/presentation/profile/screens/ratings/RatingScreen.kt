@@ -34,6 +34,7 @@ import com.giraffe.presentation.profile.utils.toStringResource
 fun RatingScreen(
     navigateToMovieDetails: (Int) -> Unit = {},
     navigateToSeriesDetails: (Int) -> Unit = {},
+    navigateToExploreScreen: () -> Unit = {},
     navigateBack: () -> Unit = {},
     viewModel: RatingViewModel = hiltViewModel()
 ) {
@@ -46,6 +47,7 @@ fun RatingScreen(
             RatingEffect.NavigateBack -> navigateBack()
             is RatingEffect.NavigateToMovieDetails -> navigateToMovieDetails(effect.movieId)
             is RatingEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(effect.seriesId)
+            is RatingEffect.NavigateToExplore -> navigateToExploreScreen()
             is RatingEffect.ShowError -> context.showToast(effect.error.toStringResource())
         }
     }

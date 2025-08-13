@@ -132,6 +132,7 @@ class RatingViewModel @Inject constructor(
     }
 
     override fun onStartRatingClick() {
+        sendEffect(RatingEffect.NavigateToExplore)
     }
 
     private fun deleteMovieRating(ratedPoster: RatedPoster) {
