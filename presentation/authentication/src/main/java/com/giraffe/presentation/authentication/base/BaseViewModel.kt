@@ -5,19 +5,28 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
+abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
 
-    private val _effect = Channel<E>()
-    val effect = _effect.receiveAsFlow()
+    private val _effect = MutableSharedFlow<E>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val effect = _effect
+        .asSharedFlow()
+        .throttleFirst(500L)
 
     protected fun <T> safeExecute(
         onError: (Throwable) -> Unit = {},
@@ -45,10 +54,21 @@ abstract class BaseViewModel<S, E>(initialState: S): ViewModel() {
         dispatcher: CoroutineDispatcher = Dispatchers.Main,
     ) {
         coroutineScope.launch(dispatcher) {
-            _effect.send(effect)
+            _effect.tryEmit(effect)
         }
     }
 
-
+    private fun Flow<E>.throttleFirst(
+        throttleDurationMillis: Long
+    ): Flow<E> = flow {
+        var lastEmit = 0L
+        collect { value ->
+            val now = System.currentTimeMillis()
+            if (now - lastEmit >= throttleDurationMillis) {
+                emit(value)
+                lastEmit = now
+            }
+        }
+    }
 
 }
