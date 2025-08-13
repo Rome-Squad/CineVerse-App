@@ -259,10 +259,7 @@ class MatchResultViewModel @Inject constructor(
                     )
                 }
             },
-            onError = { throwable, _ ->
-                updateState { it.copy(isLoading = false) }
-                sendEffect(MatchResultScreenEffect.ShowError(throwable))
-            },
+            onError = ::onError,
             block = {
                 updateState { it.copy(isLoading = true) }
                 addCollectionUseCase(
