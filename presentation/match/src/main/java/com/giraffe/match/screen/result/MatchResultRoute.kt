@@ -6,10 +6,20 @@ import androidx.navigation.compose.composable
 import com.giraffe.match.navigation.MatchRouteResult
 import com.giraffe.match.screen.match_pager.MatchRoutePager
 
-internal fun NavController.navigateToMatchResult() {
-    navigate(
-        MatchRouteResult
-    ) {
+internal fun NavController.navigateToMatchResult(
+    selectedGenres: List<Int>,
+    moodSelections: List<Int>,
+    timeSelection: Int? = null,
+    releasePeriodSelection: String? = null
+) {
+
+    val routeObject = MatchRouteResult(
+        selectedGenres = selectedGenres,
+        moodSelections = moodSelections,
+        timeSelection = timeSelection,
+        releasePeriodSelection = releasePeriodSelection
+    )
+    navigate(routeObject) {
         popUpTo(MatchRoutePager) { inclusive = true }
     }
 }

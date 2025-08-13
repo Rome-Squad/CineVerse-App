@@ -53,7 +53,7 @@ data class SelectionOption(
 fun MatchPagerScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    onFinish: () -> Unit = { },
+    onFinish: (selectedGenres: List<Int>, moodSelections: List<Int>, timeSelection: Int?, releasePeriodSelection: String?) -> Unit = { _, _, _, _ -> },
     viewModel: MatchPagerViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -70,7 +70,15 @@ fun MatchPagerScreen(
             when (effect) {
                 MatchScreenEffect.NavigateBack -> onBackClick()
                 MatchScreenEffect.FinishMatching -> {
-                    onFinish()
+                    val releasePeriodLabel = state.releasePeriodSelection?.let { id ->
+                        releasePeriodOptions.find { it.id == id }?.label
+                    }
+                    onFinish(
+                        state.genreSelections,
+                        state.moodSelections,
+                        state.timeSelection,
+                        releasePeriodLabel
+                    )
                 }
                 is MatchScreenEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }

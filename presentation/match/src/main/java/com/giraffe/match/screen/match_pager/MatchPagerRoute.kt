@@ -14,7 +14,7 @@ internal fun NavController.navigateToMatchPager() {
 
 fun NavGraphBuilder.matchPagerRoute(
     onBackClick: () -> Unit,
-    onFinish: () -> Unit
+    onFinish: (selectedGenres: List<Int>, moodSelections: List<Int>, timeSelection: Int?, releasePeriodSelection: String?) -> Unit
 ) {
     composable<MatchRoutePager> {
         MatchPagerScreen(

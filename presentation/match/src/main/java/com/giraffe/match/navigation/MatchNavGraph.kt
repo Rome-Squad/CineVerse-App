@@ -49,7 +49,9 @@ internal fun MatchNavGraph(
 
         matchPagerRoute(
             onBackClick = navController::popBackStack,
-            onFinish = { navController.navigateToMatchResult() }
+            onFinish = { genres, moods, time, period ->
+                navController.navigateToMatchResult(genres, moods, time, period)
+            }
         )
 
         matchRouteResult(
