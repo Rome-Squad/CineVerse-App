@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
@@ -333,8 +332,6 @@ class MovieDetailsViewModel @Inject constructor(
         ) {
             val userRating = getUserRatingUseCase(movieId)
             val movie = getMovieDetails(movieId)
-            Log.d("RatingVM", "loadMovieDetails: $movie")
-            Log.d("RatingVM", "loadMovieDetails: $userRating")
             movie.copy(
                 userRating = userRating
             )

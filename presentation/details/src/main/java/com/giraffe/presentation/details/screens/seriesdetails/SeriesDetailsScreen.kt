@@ -200,9 +200,9 @@ private fun SeriesDetailsContent(
                             isPlayButtonEnabled = state.seriesUi.youtubeVideoId.isNotBlank(),
                             animationProgress = animationProgress,
                             modifier = Modifier
+                                .background(Theme.color.background.screen)
                                 .padding(top = 16.dp * (1f - animationProgress))
                                 .padding(horizontal = 16.dp)
-                                .background(Theme.color.background.screen)
                         )
                     }
                 }

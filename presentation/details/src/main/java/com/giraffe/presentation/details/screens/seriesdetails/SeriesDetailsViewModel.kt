@@ -24,7 +24,7 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.user.exception.NoInternetException
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
