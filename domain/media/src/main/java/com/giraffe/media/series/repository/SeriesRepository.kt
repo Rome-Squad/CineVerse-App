@@ -49,4 +49,6 @@ interface SeriesRepository {
     suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Series>
 
     suspend fun getTopGenreCount(): Genre?
+
+    suspend fun getUserRating(seriesId: Int): Float?
 }

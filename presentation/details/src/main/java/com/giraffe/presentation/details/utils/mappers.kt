@@ -27,12 +27,13 @@ fun Movie.toUi(genres: List<Genre> = emptyList()) = MovieUi(
     name = name,
     overview = overview,
     rating = rating,
+    userRating = userRating ?: 0f,
     duration = duration?.toFormattedDuration().orEmpty(),
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
     genresID = genresID,
     genres = genres.map { it.title },
-    releaseYear = releaseYear?.toString() ?: "",
+    releaseYear = releaseYear?.toFormattedDate().orEmpty(),
     youtubeVideoId = youtubeVideoId,
 )
 
@@ -92,8 +93,9 @@ fun Series.toUi(
     name = name,
     overview = overview,
     rating = rating,
+    userRating = userRating ?: 0f,
     posterUrl = posterUrl,
-    releaseYear = releaseYear?.toString().orEmpty(),
+    releaseYear = releaseYear?.toFormattedDate().orEmpty(),
     genres = genres.map { it.title },
     youtubeVideoId = youtubeVideoId.orEmpty()
 )

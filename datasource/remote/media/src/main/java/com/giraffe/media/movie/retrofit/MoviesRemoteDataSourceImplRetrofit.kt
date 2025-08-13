@@ -44,8 +44,7 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         retrofitRequestBuilder.post { rateMovie(movieId, request) }
 
     override suspend fun getUserMovieRating(movieId: Int) =
-        retrofitRequestBuilder.get { getMovieRating(movieId) }
-            .results.firstOrNull { it.id == movieId }?.rating?.toFloat() ?: 0f
+        retrofitRequestBuilder.get { getUserMovieRating(movieId) }.getRating()
 
     override suspend fun getPopularityMovies(page: Int): List<MovieDto> =
         retrofitRequestBuilder.get { getPopularMovies(page) }.results
@@ -68,4 +67,5 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
 
     override suspend fun deleteMovieRating(movieId: Int) =
         retrofitRequestBuilder.delete { deleteMovieRating(movieId) }
+
 }

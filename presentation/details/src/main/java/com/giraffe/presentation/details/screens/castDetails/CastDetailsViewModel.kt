@@ -68,7 +68,7 @@ class CastDetailsViewModel @Inject constructor(
                 actorName = castMember.name,
                 actorBirth = castMember.birthday.orEmpty(),
                 actorPlace = castMember.placeOfBirth.orEmpty(),
-                actorGalleryImageUrls = castMember.otherImages.orEmpty(),
+                actorGalleryImageUrls = castMember.otherImages,
                 biographyInfo = castMember.biography.orEmpty(),
                 socialMediaUiList = castMember.socialMedia?.toSocialMediaUi() ?: emptyList(),
             )
@@ -141,5 +141,9 @@ class CastDetailsViewModel @Inject constructor(
 
     override fun onBackClick() {
         sendEffect(CastDetailsEffect.NavigateBack)
+    }
+
+    override fun onRetryClick() {
+        getCastDetailsAndCredits(state.value.actorId)
     }
 }

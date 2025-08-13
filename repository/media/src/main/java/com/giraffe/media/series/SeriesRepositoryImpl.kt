@@ -196,4 +196,9 @@ class SeriesRepositoryImpl @Inject constructor(
     private suspend fun addMatchesYourVibe(series: List<Series>) = safeCall {
         seriesLocalDateSource.insertMatchesYourVibe(series.map { it.toCacheDto() })
     }
+
+    override suspend fun getUserRating(seriesId: Int): Float? = safeCall {
+        seriesRemoteDataSource.getUserSeriesRating(seriesId)
+    }
+
 }
