@@ -1,6 +1,7 @@
 package com.giraffe.match.screen.result
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,19 +12,24 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.components.HeroCarousel
+import com.giraffe.match.components.LoginBottomSheet
+import com.giraffe.match.components.collectionBottomSheet.MovieCollectionsBottomSheet
+import com.giraffe.match.composable.BaseScreenWithStates
+import com.giraffe.match.utils.showToast
+import com.giraffe.match.utils.toStringResource
 import com.giraffe.presentation.match.R
-
 
 @Composable
 fun MatchResultScreen(
@@ -31,80 +37,87 @@ fun MatchResultScreen(
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToYouTubePlayer: (String) -> Unit,
-    selectedGenres: List<Int>,
-    moodSelections: List<Int>,
-    timeSelection: Int?,
-    releasePeriodSelection: String?
+    navigateToLoginScreen: () -> Unit,
+    viewModel: MatchResultViewModel = hiltViewModel()
 ) {
-    MatchResultContent(
-        state = MatchResultScreenState(
-            matchItems = listOf(
-                MatchResultModel(
-                    id = 27205,
-                    title = "Inception",
-                    posterUrl = "https://image.tmdb.org/t/p/w500/gqby0RhyehP3uRrzmdyUZ0CgPPe.jpg",
-                    genres = listOf("Action", "Sci-Fi", "Thriller"),
-                    rating = 8.8f,
-                    mediaType = MediaType.MOVIE,
-                    duration = "2h 28m",
-                    releaseDate = "2010-07-16",
-                    youtubeVideoId = "mpj9dL7swwk"
-                ),
-                MatchResultModel(
-                    id = 155,
-                    title = "The Dark Knight",
-                    posterUrl = "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-                    genres = listOf("Action", "Crime", "Drama"),
-                    rating = 9.0f,
-                    mediaType = MediaType.MOVIE,
-                    duration = "2h 32m",
-                    releaseDate = "2008-07-18",
-                    youtubeVideoId = "7pVaGNOp5Vc"
-                ),
-                MatchResultModel(
-                    id = 1396,
-                    title = "Breaking Bad",
-                    posterUrl = "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-                    genres = listOf("Crime", "Drama", "Thriller"),
-                    rating = 9.5f,
-                    mediaType = MediaType.SERIES,
-                    duration = "5 Seasons",
-                    releaseDate = "2008-01-20",
-                    youtubeVideoId = "XZ8daibM3AE"
-                ),
-                MatchResultModel(
-                    id = 66732,
-                    title = "Stranger Things",
-                    posterUrl = "https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
-                    genres = listOf("Drama", "Fantasy", "Horror"),
-                    rating = 8.7f,
-                    mediaType = MediaType.SERIES,
-                    duration = "4 Seasons",
-                    releaseDate = "2016-07-15",
-                    youtubeVideoId = "mnd7sFt5c3A"
-                )
-            ),
-            isLoading = false,
-            isError = false
-        ),
-        navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
-        navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
-        navigateBack = navigateBack,
-        navigateToYouTubePlayer = navigateToYouTubePlayer,
-    )
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is MatchResultScreenEffect.ShowError -> context.showToast(effect.error.toStringResource())
+                MatchResultScreenEffect.NavigateBack -> navigateBack()
+                MatchResultScreenEffect.NavigateToLogin -> navigateToLoginScreen()
+                is MatchResultScreenEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(
+                    effect.movieId
+                )
+
+                is MatchResultScreenEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(
+                    effect.seriesId
+                )
+
+                is MatchResultScreenEffect.NavigateToYouTubePlayer -> navigateToYouTubePlayer(effect.youtubeVideoId)
+            }
+        }
+    }
+
+    BaseScreenWithStates(
+        isLoading = state.isLoading,
+        isNoInternet = state.isNetworkError
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            MatchResultContent(
+                state = state,
+                onPageChanged = viewModel::onCarouselPageChanged,
+                navigateBack = navigateBack,
+                navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
+                navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
+                navigateToYouTubePlayer = navigateToYouTubePlayer,
+                onAddToCollection = viewModel::onAddToCollection,
+            )
+
+            if (state.collectionBottomSheet != null) {
+                MovieCollectionsBottomSheet(
+                    isVisible = true,
+                    onDismiss = viewModel::onCollectionBottomSheetDismiss,
+                    targetState = state.collectionBottomSheet,
+                    collections = state.collections,
+                    onNewCollectionClick = viewModel::onCreateCollectionButtonClick,
+                    onCollectionClick = viewModel::onCollectionClick,
+                    onCreateCollectionButtonClick = viewModel::onCreateCollectionButtonClick,
+                    newCollectionName = state.newCollectionName,
+                    onNewCollectionNameChange = viewModel::onNewCollectionNameChange,
+                    onConfirmCreateNewCollectionClick = viewModel::onConfirmCreateNewCollectionClick,
+                    onCancelCreateNewCollectionClick = viewModel::onCancelCreateNewCollectionClick,
+                    modifier = Modifier.padding(12.dp)
+                )
+            }
+
+
+            if (state.isVisibleLoginBottomSheet) {
+                LoginBottomSheet(
+                    isVisible = true,
+                    onLogInClick = viewModel::onLoginButtonClick,
+                    onDismiss = viewModel::onDismissLoginBottomSheet
+                )
+            }
+        }
+    }
 }
 
 @Composable
 private fun MatchResultContent(
     state: MatchResultScreenState,
     navigateBack: () -> Unit,
+    onPageChanged: (Int) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToYouTubePlayer: (String) -> Unit,
+    onAddToCollection: (Int, MediaType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    val selectedIndex = state.currentCarouselPage
     val scrollState = rememberScrollState()
     Column(
         modifier
@@ -123,7 +136,7 @@ private fun MatchResultContent(
 
         HeroCarousel(
             items = state.matchItems.map { it.posterUrl },
-            onPageChanged = { newIndex -> selectedIndex = newIndex },
+            onPageChanged = { newIndex -> onPageChanged(newIndex) },
             onItemClick = { clickedIndex ->
                 val clickedItem = state.matchItems.getOrNull(clickedIndex)
                 clickedItem?.let {
@@ -149,7 +162,9 @@ private fun MatchResultContent(
                 releaseDate = it.releaseDate,
                 isPlayButtonEnabled = true,
                 onClickPlay = { navigateToYouTubePlayer(it.youtubeVideoId) },
-                onClickAdd = {},
+                onClickAdd = {
+                    onAddToCollection(it.id, it.mediaType)
+                },
             )
         }
 
@@ -168,5 +183,4 @@ private fun MatchResultContent(
         }
     }
 }
-
 
