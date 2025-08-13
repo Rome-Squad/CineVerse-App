@@ -124,11 +124,9 @@ private fun MatchResultContent(
     modifier: Modifier = Modifier
 ) {
     val selectedIndex = state.currentCarouselPage
-    val scrollState = rememberScrollState()
     Column(
         modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
             .statusBarsPadding()
             .background(Theme.color.background.screen)
     ) {
@@ -139,51 +137,55 @@ private fun MatchResultContent(
             onBackButtonClick = navigateBack,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
+        Column(
+            Modifier.verticalScroll(rememberScrollState())
+        ) {
 
-        HeroCarousel(
-            items = state.matchItems.map { it.posterUrl },
-            onPageChanged = { newIndex -> onPageChanged(newIndex) },
-            onItemClick = { clickedIndex ->
-                val clickedItem = state.matchItems.getOrNull(clickedIndex)
-                clickedItem?.let {
+            HeroCarousel(
+                items = state.matchItems.map { it.posterUrl },
+                onPageChanged = { newIndex -> onPageChanged(newIndex) },
+                onItemClick = { clickedIndex ->
+                    val clickedItem = state.matchItems.getOrNull(clickedIndex)
+                    clickedItem?.let {
+                        when (it.mediaType) {
+                            MediaType.MOVIE -> navigateToMoviesDetailsScreen(it.id)
+                            MediaType.SERIES -> navigateToSeriesDetailsScreen(it.id)
+                        }
+                    }
+                }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            val match = state.matchItems.getOrNull(selectedIndex)
+            match?.let {
+                MainMovieOrSeriesDetails(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    type = stringResource(id = it.mediaType.labelRes),
+                    name = it.title,
+                    genres = it.genres,
+                    rating = it.rating,
+                    duration = it.duration,
+                    releaseDate = it.releaseDate,
+                    isPlayButtonEnabled = true,
+                    onClickPlay = { navigateToYouTubePlayer(it.youtubeVideoId) },
+                    onClickAdd = {
+                        onAddToCollection(it.id, it.mediaType)
+                    },
+                )
+            }
+
+            PrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 32.dp),
+                text = stringResource(R.string.view_details),
+            ) {
+                match?.let {
                     when (it.mediaType) {
                         MediaType.MOVIE -> navigateToMoviesDetailsScreen(it.id)
                         MediaType.SERIES -> navigateToSeriesDetailsScreen(it.id)
                     }
-                }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        val match = state.matchItems.getOrNull(selectedIndex)
-        match?.let {
-            MainMovieOrSeriesDetails(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                type = stringResource(id = it.mediaType.labelRes),
-                name = it.title,
-                genres = it.genres,
-                rating = it.rating,
-                duration = it.duration,
-                releaseDate = it.releaseDate,
-                isPlayButtonEnabled = true,
-                onClickPlay = { navigateToYouTubePlayer(it.youtubeVideoId) },
-                onClickAdd = {
-                    onAddToCollection(it.id, it.mediaType)
-                },
-            )
-        }
-
-        PrimaryButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 32.dp),
-            text = stringResource(R.string.view_details),
-        ) {
-            match?.let {
-                when (it.mediaType) {
-                    MediaType.MOVIE -> navigateToMoviesDetailsScreen(it.id)
-                    MediaType.SERIES -> navigateToSeriesDetailsScreen(it.id)
                 }
             }
         }
