@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.screens.seasons
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.series.entity.Season
@@ -51,7 +50,6 @@ class SeasonsViewModel @Inject constructor(
     }
 
     private fun loadSeasonsError(error: Throwable) {
-        Log.d("SeasonsViewModel", "loadSeasonsError: $error")
         val isNoInternetError = error is UserInternetException || error is MediaNoInternetException
 
         updateState {
