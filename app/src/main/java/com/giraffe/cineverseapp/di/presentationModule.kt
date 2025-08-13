@@ -25,6 +25,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PresentationModule {
+
     @Provides
     @Singleton
     fun provideRecentlyReleasedStrategy(
@@ -32,32 +33,27 @@ object PresentationModule {
         getRecentlyReleasedSeries: GetRecentlyReleasedSeriesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-    ): RecentlyReleasedStrategy {
-        return RecentlyReleasedStrategy(
+    ): RecentlyReleasedStrategy =
+        RecentlyReleasedStrategy(
             getRecentlyReleasedMovies,
             getRecentlyReleasedSeries,
             getMovieGenresUseCase,
             getSeriesGenresUseCase
         )
-    }
 
     @Provides
     @Singleton
     fun provideTopRatedTvShowsStrategy(
         getTopRatedSeries: GetTopRatedSeriesUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-    ): TopRatedTvShowsStrategy {
-        return TopRatedTvShowsStrategy(getTopRatedSeries, getSeriesGenresUseCase)
-    }
+    ): TopRatedTvShowsStrategy = TopRatedTvShowsStrategy(getTopRatedSeries, getSeriesGenresUseCase)
 
     @Provides
     @Singleton
     fun provideUpcomingMoviesStrategy(
         getUpcomingMovies: GetUpcomingMoviesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
-    ): UpcomingMoviesStrategy {
-        return UpcomingMoviesStrategy(getUpcomingMovies, getMovieGenresUseCase)
-    }
+    ): UpcomingMoviesStrategy = UpcomingMoviesStrategy(getUpcomingMovies, getMovieGenresUseCase)
 
     @Provides
     @Singleton
@@ -66,14 +62,13 @@ object PresentationModule {
         getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-    ): RecentlyViewedStrategy {
-        return RecentlyViewedStrategy(
+    ): RecentlyViewedStrategy =
+        RecentlyViewedStrategy(
             getRecentlyViewedMovies,
             getRecentlySeriesUseCase,
             getMovieGenresUseCase,
             getSeriesGenresUseCase
         )
-    }
 
     @Provides
     @Singleton
@@ -84,8 +79,8 @@ object PresentationModule {
         getRecommendedSeries: GetRecommendedSeriesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-    ): MatchesYourVibesStrategy {
-        return MatchesYourVibesStrategy(
+    ): MatchesYourVibesStrategy =
+        MatchesYourVibesStrategy(
             getRecentlyViewedMovies,
             getRecentlySeriesUseCase,
             getRecommendedMovie,
@@ -93,7 +88,6 @@ object PresentationModule {
             getMovieGenresUseCase,
             getSeriesGenresUseCase
         )
-    }
 
     @Provides
     @Singleton
@@ -103,13 +97,12 @@ object PresentationModule {
         upcomingMoviesStrategy: UpcomingMoviesStrategy,
         recentlyViewedStrategy: RecentlyViewedStrategy,
         matchesYourVibesStrategy: MatchesYourVibesStrategy
-    ): ShowMoreFactory {
-        return ShowMoreFactory(
+    ): ShowMoreFactory =
+        ShowMoreFactory(
             recentlyReleasedStrategy,
             topRatedTvShowsStrategy,
             upcomingMoviesStrategy,
             recentlyViewedStrategy,
             matchesYourVibesStrategy
         )
-    }
 }

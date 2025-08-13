@@ -32,9 +32,7 @@ fun <T> safeFlow(block: () -> Flow<T>): Flow<T> {
     }
 }
 
-
 private fun mapToUserException(throwable: Throwable): UserDataException = when (throwable) {
-
     is SQLiteException,
     is SQLException,
     is CursorIndexOutOfBoundsException,
@@ -46,6 +44,5 @@ private fun mapToUserException(throwable: Throwable): UserDataException = when (
     is IllegalStateException -> InvalidIdDataException()
 
     is NullPointerException -> CorruptDatabaseDataException()
-
     else -> UnknownNetworkDataException()
 }
