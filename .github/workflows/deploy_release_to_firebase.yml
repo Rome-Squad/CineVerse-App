@@ -2,7 +2,7 @@ name: Deploy release to Firebase
 
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
     branches: [ main, develop ]
   workflow_dispatch:
 
@@ -56,9 +56,9 @@ jobs:
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
-          groups: testers
-          file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
-          releaseNotes: "Automatic release build from develop branch"
+         appId: ${{ secrets.FIREBASE_APP_ID }}
+         serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
+         groups: testers
+         file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+         releaseNotes: "Test & Coverage | Branch: ${{ github.ref_name }} | Commit: ${{ github.sha::0:7 }} | By: ${{ github.actor }}"
 
