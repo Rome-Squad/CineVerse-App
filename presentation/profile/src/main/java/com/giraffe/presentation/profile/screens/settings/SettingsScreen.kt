@@ -47,8 +47,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-    EffectListener(viewModel.effect) {
-        viewModel.effect.collect { effect ->
+    EffectListener(viewModel.effect) { effect ->
             when (effect) {
                 SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
                 SettingsEffect.NavigateToHistory -> onNavigateToHistory()
@@ -58,7 +57,6 @@ fun SettingsScreen(
                 is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
-    }
     SettingsContent(
         state = state,
         interaction = viewModel
