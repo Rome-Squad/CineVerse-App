@@ -4,6 +4,7 @@ import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.RatedMoviesResponse
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.response.GenreResponse
+import com.giraffe.media.movie.response.MovieRateResponse
 import com.giraffe.media.movie.response.MoviesListResponse
 import com.giraffe.media.response.AllReviewsResponse
 import com.giraffe.media.response.TrailerResponse
@@ -116,4 +117,9 @@ interface MoviesApiServiceRetrofit {
         @Path(ACCOUNT_ID_PATH) accountId: Int
     ): Response<MoviesListResponse<MovieDto>>
 
+    @GET("$MOVIE_END_POINT/{$MOVIE_ID}/account_states")
+    @Headers("$NEEDS_SESSION: true")
+    suspend fun getUserMovieRating(
+        @Path(MOVIE_ID) movieId: Int
+    ): Response<MovieRateResponse>
 }

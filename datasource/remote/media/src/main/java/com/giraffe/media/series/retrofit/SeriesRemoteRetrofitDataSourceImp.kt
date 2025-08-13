@@ -57,4 +57,7 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
     override suspend fun addRating(serisId: Int, request: RatingRequest) {
         retrofitRequestBuilder.post { rateSeries(serisId, request) }
     }
+
+    override suspend fun getUserSeriesRating(seriesId: Int) =
+        retrofitRequestBuilder.get { getUserSeriesRating(seriesId) }.getRating()
 }

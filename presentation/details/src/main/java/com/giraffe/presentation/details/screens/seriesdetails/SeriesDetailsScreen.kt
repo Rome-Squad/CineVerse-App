@@ -299,6 +299,7 @@ private fun SeriesDetailsContent(
                 item {
                     RatingSection(
                         modifier = Modifier.padding(horizontal = 16.dp),
+                        rate = state.seriesUi.userRating.toInt(),
                         onClickCard = interaction::onGiveStarsCardClick
                     )
                 }

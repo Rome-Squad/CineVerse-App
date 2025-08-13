@@ -5,6 +5,7 @@ data class MovieUi(
     val name: String = "",
     val overview: String = "",
     val rating: Float = 0.0f,
+    val userRating: Float = 0f,
     val duration: String = "",
     val genresID: List<Int> = emptyList(),
     val genres: List<String> = emptyList(),

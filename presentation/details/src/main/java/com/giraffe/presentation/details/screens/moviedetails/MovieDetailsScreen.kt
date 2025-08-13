@@ -215,6 +215,7 @@ private fun MovieDetailsContent(
                 item {
                     RatingSection(
                         modifier = Modifier.padding(horizontal = 16.dp),
+                        rate = state.movie.userRating.toInt(),
                         onClickCard = interaction::onGiveStarsCardClick
                     )
                 }

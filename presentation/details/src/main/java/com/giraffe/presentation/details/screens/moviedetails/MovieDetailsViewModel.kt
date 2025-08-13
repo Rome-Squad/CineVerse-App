@@ -1,5 +1,6 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
@@ -18,6 +19,7 @@ import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
+import com.giraffe.media.movie.usecase.GetUserMovieRatingUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
@@ -42,6 +44,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
+    private val getUserRatingUseCase: GetUserMovieRatingUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState(
@@ -328,7 +331,13 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::onError
         ) {
-            getMovieDetails(movieId)
+            val userRating = getUserRatingUseCase(movieId)
+            val movie = getMovieDetails(movieId)
+            Log.d("RatingVM", "loadMovieDetails: $movie")
+            Log.d("RatingVM", "loadMovieDetails: $userRating")
+            movie.copy(
+                userRating = userRating
+            )
         }
     }
 

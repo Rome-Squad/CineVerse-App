@@ -16,6 +16,7 @@ import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
+import com.giraffe.media.series.usecase.GetUserSeriesRatingUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.SeriesUi
 import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
@@ -40,6 +41,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     private val addRatingUseCase: AddSeriesRatingUseCase,
+    private val getUserRatingUseCase: GetUserSeriesRatingUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
     SeriesDetailsScreenState(
@@ -197,7 +199,11 @@ class SeriesDetailsViewModel @Inject constructor(
             onSuccess = ::loadSeriesDetailsSuccess,
             onError = ::onError
         ) {
-            getSeriesDetails(seriesId)
+            val userRating = getUserRatingUseCase(seriesId)
+            val series = getSeriesDetails(seriesId)
+            series.copy(
+                userRating = userRating
+            )
         }
     }
 
