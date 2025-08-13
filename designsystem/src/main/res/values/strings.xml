@@ -40,4 +40,7 @@
     <string name="home">Home</string>
     <string name="placeholder">Placeholder</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="password_visibility_icon">password visibility icon</string>
+    <string name="danger_triangle_icon">Danger_Triangle_Icon</string>
+    <string name="user_icon">User_Icon</string>
 </resources>

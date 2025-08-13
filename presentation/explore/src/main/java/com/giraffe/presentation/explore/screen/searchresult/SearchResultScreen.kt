@@ -108,7 +108,7 @@ private fun SearchResultContent(
 
                     when {
                         posters.loadState.refresh is LoadState.Loading -> Progress(size = 32.dp)
-                        state.isNoInternet -> NoInternetScreen(onRetryClick = interactions::retry)
+                        state.isNoInternet -> NoInternetScreen(onRetryClick = interactions::onRetryClick)
                         posters.itemCount == 0 -> NothingFound()
                         state.isLoading -> Box(
                             Modifier.fillParentMaxSize(),

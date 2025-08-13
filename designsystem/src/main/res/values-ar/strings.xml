@@ -40,4 +40,7 @@
     <string name="home">الرئيسيه</string>
     <string name="placeholder">صوره غير موجوده</string>
     <string name="forgot_password">نسيت كلمة المرور ؟</string>
+    <string name="password_visibility_icon">ايقونه الرؤية</string>
+    <string name="danger_triangle_icon">ايقونه الخطر</string>
+    <string name="user_icon">ايقونه المستخدم</string>
 </resources>

@@ -44,17 +44,22 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.giraffe.designsystem.R
 import com.giraffe.designsystem.modifier.noHoverClickable
-import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
@@ -90,6 +95,14 @@ fun DefaultTextField(
         else if (isFocused) Theme.color.brand.primary
         else Theme.color.stroke.primary
     )
+    var textFieldValue by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = value,
+                selection = TextRange(value.length)
+            )
+        )
+    }
 
     LaunchedEffect(isFocused) {
         onFocusChanged(isFocused)
@@ -132,7 +145,7 @@ fun DefaultTextField(
                     else Modifier
                 ),
                 painter = checkLeftIcon,
-                contentDescription = "User_Icon",
+                contentDescription = stringResource(R.string.user_icon),
                 tint = Theme.color.shade.tertiary
             )
 
@@ -149,15 +162,18 @@ fun DefaultTextField(
                     ),
                 interactionSource = interactionSource,
                 enabled = enabled,
-                value = value,
+                value = textFieldValue,
                 maxLines = maxLines,
                 singleLine = singleLine,
                 onValueChange = { newValue ->
-                    if (newValue.length <= maxCharacters) {
-                        if (newValue.contains("\n")) onValueChange(
-                            newValue.replace("\n", " ")
-                        )
-                        else onValueChange(newValue)
+                    if (newValue.text.length <= maxCharacters) {
+                        if (newValue.text.contains("\n")) {
+                            textFieldValue = newValue.copy(text = newValue.text.replace("\n", " "))
+                        } else {
+                            textFieldValue = newValue
+                        }
+
+                        onValueChange(textFieldValue.text)
                     }
                 },
                 textStyle = Theme.textStyle.body.md.medium,
@@ -189,7 +205,7 @@ fun DefaultTextField(
             ) {
                 Icon(
                     painter = painterResource(Theme.icons.outline.dangerTriangle),
-                    contentDescription = "Danger_Triangle_Icon",
+                    contentDescription = stringResource(R.string.danger_triangle_icon),
                     tint = Theme.color.additional.primary.red
                 )
             }
@@ -199,7 +215,7 @@ fun DefaultTextField(
                     painter = if (showPassword) painterResource(Theme.icons.outline.eyeOpened)
                     else painterResource(Theme.icons.outline.eyeClosed),
                     tint = Theme.color.shade.secondary,
-                    contentDescription = "password visibility icon",
+                    contentDescription = stringResource(R.string.password_visibility_icon),
                     modifier = Modifier
                         .noHoverClickable { showPassword = !showPassword }
                 )
@@ -233,8 +249,8 @@ data class TextFieldColors(
 @Composable
 private fun TextField(
     modifier: Modifier = Modifier,
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
     placeholder: @Composable() (() -> Unit)? = null,
     enabled: Boolean = true,
@@ -250,13 +266,15 @@ private fun TextField(
     interactionSource: MutableInteractionSource? = null,
     alignment: Alignment = Alignment.CenterStart,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val source = interactionSource ?: remember { MutableInteractionSource() }
     val focused = source.collectIsFocusedAsState().value
     val borderCol = if (focused) colors.focusedBorderColor else colors.unfocusedBorderColor
     val mergedTextStyle = textStyle.merge(
         TextStyle(
             color = textStyle.color.takeOrElse { colors.textColor },
-            textDirection = TextDirection.ContentOrLtr
+            textDirection = TextDirection.ContentOrLtr,
+            textAlign = if (layoutDirection == LayoutDirection.Rtl) TextAlign.Right else TextAlign.Left
         )
     )
 
@@ -287,27 +305,10 @@ private fun TextField(
                 maxLines = maxLines,
                 minLines = minLines,
                 decorationBox = { innerTextField ->
-                    if (value.isEmpty() && placeholder != null) placeholder()
+                    if (value.text.isEmpty() && placeholder != null) placeholder()
                     innerTextField()
                 }
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun TextFieldPreview() {
-    var text by remember { mutableStateOf("") }
-
-    CineVerseTheme(isDarkTheme = true) {
-        DefaultTextField(
-            placeholder = "Enter your username",
-            startIcon = painterResource(Theme.icons.outline.user),
-            value = text,
-            singleLine = true,
-            onValueChange = { text = it },
-            maxCharacters = 300
-        )
     }
 }

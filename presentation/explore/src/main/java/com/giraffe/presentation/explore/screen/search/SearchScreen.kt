@@ -156,7 +156,7 @@ private fun SearchContent(
         }
     }
 
-    if (state.isNoInternet) NoInternetScreen(onRetryClick = interactions::retry)
+    if (state.isNoInternet) NoInternetScreen(onRetryClick = interactions::onRetryClick)
     else {
         LazyColumn(
             modifier = Modifier
