@@ -8,9 +8,6 @@ import com.giraffe.media.explore.dao.SearchKeywordDao
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.series.dao.SeriesDao
-import com.giraffe.user.datastore.AuthenticationDatastore
-import com.giraffe.user.datastore.OnboardingDatastore
-import com.giraffe.user.datastore.SettingsDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,55 +17,38 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DatabaseModule {
+object DatabaseModule {
 
-    companion object {
-        @Provides
-        @Singleton
-        fun provideDataStorePreferences(@ApplicationContext context: Context): DataStorePreferences =
-            DataStorePreferences(context)
+    @Provides
+    @Singleton
+    fun provideDataStorePreferences(@ApplicationContext context: Context): DataStorePreferences =
+        DataStorePreferences(context)
 
-        @Provides
-        @Singleton
-        fun provideAuthenticationDatastore(@ApplicationContext context: Context): AuthenticationDatastore =
-            AuthenticationDatastore(context)
+    @Provides
+    @Singleton
+    fun provideExploreSearchKeywordDao(database: CineVerseDatabase): SearchKeywordDao =
+        database.exploreSearchKeywordDao()
 
+    @Provides
+    @Singleton
+    fun provideMovieDao(database: CineVerseDatabase): MovieDao = database.movieDao()
 
-        @Provides
-        @Singleton
-        fun provideOnboardingDatastore(@ApplicationContext context: Context): OnboardingDatastore =
-            OnboardingDatastore(context)
+    @Provides
+    @Singleton
+    fun provideSeriesDao(database: CineVerseDatabase): SeriesDao = database.seriesDao()
 
-        @Provides
-        @Singleton
-        fun provideSettingsDataStore(@ApplicationContext context: Context): SettingsDataStore =
-            SettingsDataStore(context)
+    @Provides
+    @Singleton
+    fun providePersonDao(database: CineVerseDatabase): PersonDao = database.personDao()
 
-        @Provides
-        @Singleton
-        fun provideExploreSearchKeywordDao(database: CineVerseDatabase): SearchKeywordDao =
-            database.exploreSearchKeywordDao()
+    @Provides
+    @Singleton
+    fun provideCineVerseDatabase(@ApplicationContext context: Context): CineVerseDatabase =
+        Room.databaseBuilder(
+            context,
+            CineVerseDatabase::class.java,
+            "CineVerseDataBase"
+        ).build()
 
-        @Provides
-        @Singleton
-        fun provideMovieDao(database: CineVerseDatabase): MovieDao = database.movieDao()
-
-        @Provides
-        @Singleton
-        fun provideSeriesDao(database: CineVerseDatabase): SeriesDao = database.seriesDao()
-
-        @Provides
-        @Singleton
-        fun providePersonDao(database: CineVerseDatabase): PersonDao = database.personDao()
-
-        @Provides
-        @Singleton
-        fun provideCineVerseDatabase(@ApplicationContext context: Context): CineVerseDatabase =
-            Room.databaseBuilder(
-                context,
-                CineVerseDatabase::class.java,
-                "CineVerseDataBase"
-            ).build()
-
-    }
 }
+
