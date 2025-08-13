@@ -23,13 +23,12 @@ class SettingsRepositoryImpl @Inject constructor(
     override suspend fun setLanguage(languageCode: String) =
         safeCall { localDataSource.setLanguage(languageCode) }
 
-    override fun getContentPreference(): Flow<ContentPreference> = safeFlow {
-        localDataSource.getContentPreference().map { preferenceName ->
-            ContentPreference.valueOf(preferenceName)
+    override fun getContentPreference(): Flow<ContentPreference> =
+        safeFlow {
+            localDataSource.getContentPreference()
+                .map { preferenceName -> ContentPreference.valueOf(preferenceName) }
         }
-    }
 
-    override suspend fun setContentPreference(preference: ContentPreference) {
-        localDataSource.setContentPreference(preference.name)
-    }
+    override suspend fun setContentPreference(preference: ContentPreference) =
+        safeCall { localDataSource.setContentPreference(preference.name) }
 }

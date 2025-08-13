@@ -40,17 +40,13 @@ interface SeriesRepository {
 
     suspend fun deleteById(seriesId: Int)
 
-    suspend fun getRecentlyViewed(): Flow<List<Series>>
+    fun getRecentlyViewed(): Flow<List<Series>>
 
     suspend fun clearRecentlyViewed()
 
-    suspend fun addGenres(genres: List<Genre>)
-
     suspend fun addRecentlyViewed(series: Series)
 
-    suspend fun addPopular(series: List<Series>)
+    suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Series>
 
-    suspend fun addRecentlyReleased(series: List<Series>)
-
-    suspend fun addTopRated(series: List<Series>)
+    suspend fun getTopGenreCount(): Genre?
 }

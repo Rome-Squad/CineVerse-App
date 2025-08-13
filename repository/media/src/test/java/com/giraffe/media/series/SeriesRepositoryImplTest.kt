@@ -67,16 +67,6 @@ class SeriesRepositoryImplTest {
     private val recentViewedSeriesCacheDto = listOf(
         RecentViewedSeriesCacheDto(
             id = 1,
-            name = "Vikings",
-            overview = "desc",
-            rate = 8.0f,
-            posterUrl = "poster",
-            backdropUrl = "backdrop",
-            genresID = listOf(1),
-            releaseYear = null,
-            popularity = 90.0f,
-            youtubeVideoId = null,
-            userRating = null,
             recentViewedAt = 99
         )
     )
@@ -141,7 +131,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getRecentSeries should return mapped cached series`() = runTest {
-        coEvery { local.getRecentSeries() } returns flowOf(recentViewedSeriesCacheDto)
+        coEvery { local.getRecentSeries() } returns flowOf(cachedSeries)
 
         val result = repository.getRecentlyViewed().first()
 

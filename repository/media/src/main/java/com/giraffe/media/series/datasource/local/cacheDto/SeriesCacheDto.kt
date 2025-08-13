@@ -19,5 +19,6 @@ data class SeriesCacheDto(
     val popularity: Float? = null,
     val userRating: Float? = null,
     val youtubeVideoId: String?,
+    val recentViewedAt: Long? = null,
     val cachedAt: Long = System.currentTimeMillis()
 )

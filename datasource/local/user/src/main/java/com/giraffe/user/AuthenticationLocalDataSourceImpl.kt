@@ -8,19 +8,16 @@ import javax.inject.Inject
 class AuthenticationLocalDataSourceImpl @Inject constructor(
     private val authenticationDatastore: AuthenticationDatastore
 ) : AuthenticationLocalDataSource {
-    override suspend fun saveSessionId(sessionId: String) = safeCall {
-        authenticationDatastore.saveSessionId(sessionId)
-    }
+    override suspend fun saveSessionId(sessionId: String) =
+        safeCall { authenticationDatastore.saveSessionId(sessionId) }
 
-    override suspend fun getSessionId(): String? = safeCall {
-        authenticationDatastore.getSessionId()
-    }
-    override suspend fun isLoggedIn(): Boolean = safeCall {
-        authenticationDatastore.getSessionId() != null
-    }
+    override suspend fun getSessionId(): String? =
+        safeCall { authenticationDatastore.getSessionId() }
 
-    override suspend fun clearSessionId() = safeCall {
-        authenticationDatastore.clearSessionId()
-    }
+    override suspend fun isLoggedIn(): Boolean =
+        safeCall { authenticationDatastore.getSessionId() != null }
+
+    override suspend fun clearSessionId() =
+        safeCall { authenticationDatastore.clearSessionId() }
 
 }

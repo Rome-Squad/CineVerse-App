@@ -27,14 +27,21 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isLoggedIn() = safeCall { localDataSource.isLoggedIn() }
-
+  
     override suspend fun logout() = safeCall {
+
         val encryptedBase64 = localDataSource.getSessionId()
+
         if (encryptedBase64 != null) {
+
             val sessionId = decryptSessionId(encryptedBase64)
+
             authRemoteDataSource.deleteSession(sessionId)
+
         }
+
         localDataSource.clearSessionId()
+
     }
 
     private fun encryptSessionId(sessionId: String): String {
