@@ -12,6 +12,8 @@ import com.giraffe.api.details.DetailsApi
 import com.giraffe.presentation.explore.navigation.routes.CastDetailsRoute
 import com.giraffe.presentation.explore.navigation.routes.DiscoverRoute
 import com.giraffe.presentation.explore.navigation.routes.MovieDetailsRoute
+import com.giraffe.presentation.explore.navigation.routes.SearchResultRoute
+import com.giraffe.presentation.explore.navigation.routes.SearchRoute
 import com.giraffe.presentation.explore.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.explore.navigation.routes.discoverRoute
 import com.giraffe.presentation.explore.navigation.routes.navigateToCastDetails
@@ -33,7 +35,10 @@ internal fun ExploreNavGraph(
 
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val isBottomBarVisible = currentRoute.orEmpty().endsWith(startDestination.toString())
+    val isBottomBarVisible =
+        currentRoute.orEmpty().endsWith(startDestination.toString()) ||
+                currentRoute.orEmpty().endsWith(SearchRoute.toString()) ||
+                currentRoute.orEmpty().startsWith(SearchResultRoute.toString().substringBefore('$'))
 
     LaunchedEffect(currentRoute) {
         onShowBottomBarChange(isBottomBarVisible)
