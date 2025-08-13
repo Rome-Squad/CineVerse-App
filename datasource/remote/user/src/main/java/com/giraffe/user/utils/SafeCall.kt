@@ -7,10 +7,13 @@ import com.giraffe.repository.exceptions.RequestTimeoutDataException
 import com.giraffe.repository.exceptions.SerializationDataException
 import com.giraffe.repository.exceptions.UnknownNetworkDataException
 import com.giraffe.repository.exceptions.UserDataException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.io.IOException
 import java.net.SocketTimeoutException
-
 
 suspend fun <T> safeCall(execute: suspend () -> Response<T>): T {
     return try {
@@ -24,6 +27,16 @@ suspend fun <T> safeCall(execute: suspend () -> Response<T>): T {
         throw mapToMediaException(e)
     }
 }
+
+
+fun <T> safeFlow(block: () -> Flow<T>): Flow<T> {
+    return flow {
+        emitAll(block())
+    }.catch { e ->
+        throw mapToMediaException(e)
+    }
+}
+
 
 fun mapToMediaException(e: Throwable): UserDataException = when (e) {
     is UserDataException -> e
