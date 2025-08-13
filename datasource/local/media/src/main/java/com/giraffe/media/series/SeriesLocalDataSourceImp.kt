@@ -75,8 +75,8 @@ class SeriesLocalDataSourceImp @Inject constructor(
         seriesDao.getTopRatedSeries(limit)
     }
 
-    override suspend fun deleteSeriesById(seriesId: Int) = safeCall {
-        seriesDao.deleteSeriesById(seriesId)
+    override suspend fun deleteSeriesFromHistoryById(seriesId: Int) = safeCall {
+        seriesDao.deleteSeriesFromHistoryById(seriesId)
     }
 
     override suspend fun getTopGenreCount() = safeCall {

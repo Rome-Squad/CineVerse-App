@@ -169,7 +169,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteById(seriesId: Int) = safeCall {
-        seriesLocalDateSource.deleteSeriesById(seriesId)
+        seriesLocalDateSource.deleteSeriesFromHistoryById(seriesId)
     }
 
     override suspend fun getReviews(seriesId: Int, page: Int) = safeCall {

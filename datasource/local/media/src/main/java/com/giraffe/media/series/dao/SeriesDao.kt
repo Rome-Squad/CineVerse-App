@@ -108,8 +108,8 @@ interface SeriesDao {
     fun getMatchesYourVibeSeries(limit: Int): List<SeriesCacheDto>
 
 
-    @Query("DELETE FROM $SERIES_TABLE WHERE id = :seriesId")
-    suspend fun deleteSeriesById(seriesId: Int)
+    @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE WHERE id = :seriesId")
+    suspend fun deleteSeriesFromHistoryById(seriesId: Int)
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
     suspend fun getGenres(): List<SeriesGenreCacheDto>
