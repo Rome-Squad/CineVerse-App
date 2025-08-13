@@ -34,7 +34,7 @@ fun CreateCollectionSection(
         CollectionsButtons(
             createButtonClick = createButtonClick,
             cancelButtonClick = cancelButtonClick,
-            enableCreate = true
+            enableCreate = value.isNotBlank()
         )
     }
 }
