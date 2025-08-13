@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.presentation.authentication.base.BaseViewModel
 import com.giraffe.presentation.authentication.nav.routes.LoginRoute
-import com.giraffe.user.exception.NoInternetException
+import com.giraffe.presentation.authentication.utils.toStringResource
+import com.giraffe.user.exception.EmptyUsernameException
+import com.giraffe.user.exception.InvalidPasswordException
 import com.giraffe.user.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -53,7 +55,16 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun onFailure(error: Throwable) {
-        updateState { it.copy(isLoading = false, isNoInternet = error is NoInternetException) }
+        val errorMessageRes = error.toStringResource()
+        updateState {
+            it.copy(
+                isLoading = false,
+                usernameErrorMessage = if (error is EmptyUsernameException) errorMessageRes else null,
+                passwordErrorMessage = if (error is InvalidPasswordException) errorMessageRes else null,
+                screenErrorMessage = if (error !is EmptyUsernameException && error !is InvalidPasswordException) errorMessageRes else null
+            )
+        }
+
         sendEffect(LoginEffect.ShowErrorMessage(error))
     }
 

@@ -13,20 +13,17 @@ class SettingsLocalDataSourceImpl @Inject constructor(
 
     override fun isDarkMode(): Flow<Boolean> = safeFlow { settingsDataStore.isDarkMode() }
 
-    override suspend fun setDarkMode(isDark: Boolean) = safeCall {
-        settingsDataStore.setDarkMode(isDark)
-    }
+    override suspend fun setDarkMode(isDark: Boolean) =
+        safeCall { settingsDataStore.setDarkMode(isDark) }
 
     override fun getLanguage(): Flow<String> = safeFlow { settingsDataStore.getLanguage() }
 
-    override suspend fun setLanguage(languageCode: String) = safeCall {
-        settingsDataStore.setLanguage(languageCode)
-    }
+    override suspend fun setLanguage(languageCode: String) =
+        safeCall { settingsDataStore.setLanguage(languageCode) }
 
     override fun getContentPreference(): Flow<String> =
         safeFlow { settingsDataStore.getContentPreference() }
 
-    override suspend fun setContentPreference(preferenceName: String) = safeCall {
-        settingsDataStore.setContentPreference(preferenceName)
-    }
+    override suspend fun setContentPreference(preferenceName: String) =
+        safeCall { settingsDataStore.setContentPreference(preferenceName) }
 }

@@ -9,11 +9,9 @@ class OnboardingRepositoryImpl @Inject constructor(
     private val localDataSource: OnboardingLocalDataSource
 ) : OnboardingRepository {
 
-    override suspend fun setFirstTimeStatus() = safeCall {
-        localDataSource.setOnBoardingFirstTime()
-    }
+    override suspend fun setFirstTimeStatus() =
+        safeCall { localDataSource.setOnBoardingFirstTime() }
 
-    override suspend fun isFirstTime(): Boolean = safeCall {
-        localDataSource.isOnBoardingFirstTime()
-    }
+    override suspend fun isFirstTime(): Boolean =
+        safeCall { localDataSource.isOnBoardingFirstTime() }
 }
