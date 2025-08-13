@@ -163,12 +163,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMatchRequestBuilder(
-        api: MatchApiService
-    ): RetrofitRequestBuilder<MatchApiService> = RetrofitRequestBuilder(api)
-
-    @Provides
-    @Singleton
     fun provideExploreRemoteDataSource(builder: RetrofitRequestBuilder<SearchApiServiceRetrofit>): SearchRemoteDataSource =
         SearchRemoteDataSourceImplRetrofit(builder)
 
@@ -195,8 +189,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMatchRemoteDataSource(
-        builder: RetrofitRequestBuilder<MatchApiService>
+        api: MatchApiService
     ): MatchRemoteDataSource {
-        return MatchRemoteDataSourceImplRetrofit(builder)
+        return MatchRemoteDataSourceImplRetrofit(api)
     }
+
 }
