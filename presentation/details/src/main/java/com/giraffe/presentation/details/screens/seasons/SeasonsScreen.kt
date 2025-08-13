@@ -73,10 +73,9 @@ private fun SeasonsContent(
                     overview = state.seasons[index].overview,
                     rating = state.seasons[index].rating,
                     episodes = state.seasons[index].episodeCount,
-                    year = if (state.seasons[index].releaseYear != null) state.seasons[index].releaseYear.split(
-                        ","
-                    ).first().toInt()
-                    else null,
+                    year = state.seasons[index].releaseYear.split(
+                        "-"
+                    ).first().toInt(),
                 )
             }
         }

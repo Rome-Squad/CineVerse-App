@@ -1,5 +1,6 @@
 package com.giraffe.presentation.details.screens.seasons
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.series.entity.Season
@@ -39,10 +40,11 @@ class SeasonsViewModel @Inject constructor(
         }
     }
 
-    private fun loadSeasonsSuccess(season: List<Season>) {
+    private fun loadSeasonsSuccess(seasons: List<Season>) {
+        Log.d("SeasonsViewModel", "loadSeasonsSuccess: $seasons")
         updateState {
             it.copy(
-                seasons = season.map(Season::toUi),
+                seasons = seasons.map(Season::toUi),
                 isLoading = false,
                 isNoInternet = false
             )
@@ -50,6 +52,7 @@ class SeasonsViewModel @Inject constructor(
     }
 
     private fun loadSeasonsError(error: Throwable) {
+        Log.d("SeasonsViewModel", "loadSeasonsError: $error")
         val isNoInternetError = error is UserInternetException || error is MediaNoInternetException
 
         updateState {
