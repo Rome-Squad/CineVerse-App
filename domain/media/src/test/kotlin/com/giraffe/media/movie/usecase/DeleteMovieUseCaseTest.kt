@@ -4,24 +4,14 @@ import com.giraffe.media.movie.repository.MovieRepository
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class DeleteMovieUseCaseTest {
-    private lateinit var repository: MovieRepository
-    private lateinit var useCase: DeleteMovieUseCase
-
-    @BeforeEach
-    fun setUp() {
-        repository = mockk(relaxed = true)
-        useCase = DeleteMovieUseCase(repository)
-    }
+    private var repository: MovieRepository = mockk(relaxUnitFun = true)
+    private var useCase: DeleteMovieUseCase = DeleteMovieUseCase(repository)
 
     @Test
-    fun `invoke should call deleteMovieById method on repository`() = runTest {
-        // Given
-        val movieId = 101
-
+    fun `invoke should call deleteById method on repository`() = runTest {
         // When
         useCase(movieId)
 

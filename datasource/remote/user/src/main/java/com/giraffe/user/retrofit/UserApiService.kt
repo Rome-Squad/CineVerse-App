@@ -13,29 +13,24 @@ import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface UserApiServiceRetrofit {
+interface UserApiService {
 
-    @GET(TOKEN_NEW)
+    @GET("$AUTHENTICATION/token/new")
     suspend fun createRequestToken(): Response<RequestTokenResponse>
 
-    @POST(VALIDATE_WITH_LOGIN)
+    @POST("$AUTHENTICATION/token/validate_with_login")
     suspend fun validateTokenWithLogin(@Body requestBody: TokenValidationBody): Response<RequestTokenResponse>
 
-    @POST(SESSION_NEW)
+    @POST("$AUTHENTICATION/session/new")
     suspend fun createSession(@Body requestBody: SessionRequestBody): Response<SessionResponse>
 
-    @GET(ACCOUNT)
-    suspend fun getUser(@Query(SESSION_ID) sessionId: String): Response<UserDto>
+    @GET("account")
+    suspend fun getUser(@Query("session_id") sessionId: String): Response<UserDto>
 
     @HTTP(method = "DELETE", path = "authentication/session", hasBody = true)
     suspend fun deleteSession(@Body requestBody: DeleteSessionRequest): Response<Unit>
 
     companion object {
         private const val AUTHENTICATION = "authentication"
-        const val TOKEN_NEW = "$AUTHENTICATION/token/new"
-        const val ACCOUNT = "account"
-        const val SESSION_ID = "session_id"
-        const val VALIDATE_WITH_LOGIN = "$AUTHENTICATION/token/validate_with_login"
-        const val SESSION_NEW = "$AUTHENTICATION/session/new"
     }
 }

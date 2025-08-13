@@ -2,7 +2,7 @@ name: Deploy release to Firebase
 
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
     branches: [ main, develop ]
   workflow_dispatch:
 
@@ -20,6 +20,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: 📦 Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
@@ -42,7 +52,7 @@ jobs:
           echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
 
       - name: Assemble Release APK
-        run: ./gradlew :app:assembleRelease
+        run: ./gradlew :app:assembleRelease --build-cache --parallel --warning-mode=all
 
       - name: Sign Release APK
         uses: r0adkll/sign-android-release@v1
@@ -60,5 +70,9 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
           file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
-          releaseNotes: "Automatic release build from develop branch"
-
+          releaseNotes: |
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            By: ${{ github.actor }}
+            Title: ${{ github.event.pull_request.title }}
+            PR Description: ${{ github.event.pull_request.body }}

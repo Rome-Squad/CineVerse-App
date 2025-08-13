@@ -50,7 +50,7 @@ fun LazyListScope.keywordsSection(
             SearchItem(
                 text = keyWord,
                 isRecent = true,
-                postfixIcon = if (isKeyboardVisible) painterResource(Theme.icons.outline.arrowRightUp)
+                postfixIcon = if (query.isNotEmpty()) painterResource(Theme.icons.outline.arrowLeftUp)
                 else painterResource(Theme.icons.outline.close),
                 onClickItem = onKeywordsClick,
                 onClickIcon = {
@@ -66,7 +66,7 @@ fun LazyListScope.keywordsSection(
             SearchItem(
                 text = keyWord,
                 isRecent = false,
-                postfixIcon = painterResource(Theme.icons.outline.arrowRightUp),
+                postfixIcon = painterResource(Theme.icons.outline.arrowLeftUp),
                 onClickItem = onKeywordsClick,
                 onClickIcon = { onKeywordArrowClick(keyWord) }
             )

@@ -13,10 +13,12 @@ data class UserDto(
 
 @Serializable
 data class AvatarDto(
-    @SerialName("tmdb") val tmdb: TmdbAvatarDto
+    @SerialName("tmdb")
+    val tmdb: TmdbAvatarDto
 )
 
 @Serializable
 data class TmdbAvatarDto(
-    @SerialName("avatar_path") val avatarPath: String?
+    @SerialName("avatar_path")
+    val avatarPath: String?
 )
