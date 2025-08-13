@@ -139,6 +139,7 @@ private fun SettingsContent(
                     isDanger = false,
                     hasBottomDivider = true,
                 )
+
                 MenuItem(
                     icon = Theme.icons.dueTone.colorSwitch,
                     title = stringResource(R.string.content_preferences),
@@ -146,9 +147,10 @@ private fun SettingsContent(
                     hasButton = true,
                     onRowItemClick = interaction::onContentPreferencesClick,
                     isDanger = false,
-                    hasBottomDivider = true,
+                    hasBottomDivider = state.isLoggedIn,
                     onSwitchChange = {},
                 )
+
                 if (state.isLoggedIn) {
                     MenuItem(
                         icon = Theme.icons.dueTone.logout,
