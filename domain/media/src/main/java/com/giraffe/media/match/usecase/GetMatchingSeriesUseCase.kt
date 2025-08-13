@@ -5,7 +5,7 @@ import com.giraffe.media.series.entity.Series
 import javax.inject.Inject
 
 class GetMatchingSeriesUseCase @Inject constructor(
-    private val repository: MatchRepository
+    private val matchRepository: MatchRepository
 ) {
     suspend operator fun invoke(
         genreIds: String,
@@ -14,7 +14,7 @@ class GetMatchingSeriesUseCase @Inject constructor(
         earliestFirstAirDate: String? = null,
         latestFirstAirDate: String? = null
     ): List<Series> {
-        return repository.getMatchingSeries(
+        return matchRepository.getMatchingSeries(
             genreIds = genreIds,
             minRuntime = minRuntime,
             maxRuntime = maxRuntime,
