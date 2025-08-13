@@ -11,4 +11,6 @@ interface CastDetailsInteractionListener {
     fun onPosterClick(mediaId: Int, mediaType: String)
 
     fun onBackClick()
+
+    fun onRetryClick()
 }
