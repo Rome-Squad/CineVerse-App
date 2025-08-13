@@ -167,9 +167,9 @@ class SeriesLocalDataSourceImpTest {
     @Test
     fun `deleteSeriesById should delete series by ID`() = runTest {
         val seriesId = 1
-        dataSource.deleteSeriesById(seriesId)
+        dataSource.deleteSeriesFromHistoryById(seriesId)
 
-        coVerify { seriesDao.deleteSeriesById(seriesId) }
+        coVerify { seriesDao.deleteSeriesFromHistoryById(seriesId) }
     }
 
     @Test

@@ -36,7 +36,7 @@ interface SeriesLocalDateSource {
 
     suspend fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
 
-    suspend fun deleteSeriesById(seriesId: Int)
+    suspend fun deleteSeriesFromHistoryById(seriesId: Int)
 
     suspend fun getTopGenreCount(): SeriesGenreCacheDto?
 
