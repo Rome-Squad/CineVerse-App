@@ -1,18 +1,19 @@
 package com.giraffe.presentation.details.screens.videoPlayer
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.giraffe.designsystem.composable.AppBar
-import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.details.base.BaseScreen
+import com.giraffe.presentation.details.utils.hasInternet
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -23,18 +24,18 @@ fun YouTubePlayerScreen(
     onBackClick: () -> Unit
 ) {
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .navigationBarsPadding()
-            .systemBarsPadding()
-            .statusBarsPadding()
+    val context = LocalContext.current
+    var isNoInternet by rememberSaveable { mutableStateOf(!hasInternet(context)) }
+
+    BaseScreen(
+        title = "",
+        isLoading = false,
+        isNoInternet = isNoInternet,
+        onBackClick = onBackClick,
+        onRetryClick = {
+            isNoInternet = !hasInternet(context)
+        }
     ) {
-        AppBar(
-            showBackButton = true,
-            onBackButtonClick = onBackClick
-        )
         AndroidView(
             modifier = Modifier,
             factory = { context ->
