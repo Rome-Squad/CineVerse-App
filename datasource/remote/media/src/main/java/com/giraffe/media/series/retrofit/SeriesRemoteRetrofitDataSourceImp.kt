@@ -43,7 +43,8 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
 
     override suspend fun getSeriesTrailerUrl(seriesId: Int): String {
         val results = retrofitRequestBuilder.get { getSeriesTrailerUrl(seriesId) }.results
-        return results.firstOrNull { it.type == "Trailer" }?.key ?: results.first().key.orEmpty()
+        return results.firstOrNull { it.type == "Trailer" }?.key
+            ?: results.firstOrNull()?.key.orEmpty()
     }
 
     override suspend fun getRatedSeries(
