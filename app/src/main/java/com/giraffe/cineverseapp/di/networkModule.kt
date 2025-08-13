@@ -8,6 +8,9 @@ import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImp
 import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
 import com.giraffe.media.explore.retrofit.SearchApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.SearchRemoteDataSourceImplRetrofit
+import com.giraffe.media.match.datasource.MatchRemoteDataSource
+import com.giraffe.media.match.retrofit.MatchApiService
+import com.giraffe.media.match.retrofit.MatchRemoteDataSourceImplRetrofit
 import com.giraffe.media.mediaMember.retrofit.MediaMemberApiServiceRetrofit
 import com.giraffe.media.mediaMember.retrofit.MediaMemberRemoteDataSourceImplRetrofit
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
@@ -115,6 +118,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideMatchApi(retrofit: Retrofit): MatchApiService =
+        retrofit.create(MatchApiService::class.java)
+
+    @Provides
+    @Singleton
     fun provideCollectionsApi(retrofit: Retrofit): CollectionsApiServiceRetrofit =
         retrofit.create(CollectionsApiServiceRetrofit::class.java)
 
@@ -147,6 +155,12 @@ object NetworkModule {
     @Singleton
     fun provideCollectionsRequestBuilder(api: CollectionsApiServiceRetrofit): RetrofitRequestBuilder<CollectionsApiServiceRetrofit> =
         RetrofitRequestBuilder(api)
+
+    @Provides
+    @Singleton
+    fun provideMatchRequestBuilder(
+        api: MatchApiService
+    ): RetrofitRequestBuilder<MatchApiService> = RetrofitRequestBuilder(api)
 
     @Provides
     @Singleton
@@ -185,4 +199,12 @@ object NetworkModule {
     @Singleton
     fun provideCollectionsRemoteDataSource(builder: RetrofitRequestBuilder<CollectionsApiServiceRetrofit>): CollectionsRemoteDataSource =
         CollectionsRemoteDataSourceImp(builder)
+
+    @Provides
+    @Singleton
+    fun provideMatchRemoteDataSource(
+        builder: RetrofitRequestBuilder<MatchApiService>
+    ): MatchRemoteDataSource {
+        return MatchRemoteDataSourceImplRetrofit(builder)
+    }
 }
