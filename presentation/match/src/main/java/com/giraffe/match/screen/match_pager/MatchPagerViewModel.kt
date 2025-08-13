@@ -1,31 +1,51 @@
 package com.giraffe.match.screen.match_pager
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giraffe.match.base.BaseViewModel
+import com.giraffe.media.entity.Genre
+import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MatchPagerViewModel @Inject constructor() : ViewModel() {
+class MatchPagerViewModel @Inject constructor(
+    private val getMoviesGenresUseCase: GetMoviesGenresUseCase
+) : BaseViewModel<MatchScreenState, MatchScreenEffect>(MatchScreenState()) {
 
-    private val _state = MutableStateFlow(MatchScreenState())
-    val state: StateFlow<MatchScreenState> = _state.asStateFlow()
+    init {
+        loadGenres()
+    }
 
-    private val _effect = MutableSharedFlow<MatchScreenEffect>()
-    val effect = _effect.asSharedFlow()
+    private fun loadGenres() {
+        safeExecute(
+            onSuccess = ::onGetMoviesGenresSuccess,
+            onError = ::onFailure,
+            block = getMoviesGenresUseCase::invoke
+        )
+    }
+
+    private fun onFailure(error: Throwable, isNoInternet: Boolean) {
+        updateState { it.copy(isNoInternet = isNoInternet) }
+        sendEffect(MatchScreenEffect.ShowError(error))
+    }
+
+    private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
+        val genreOptions = genres.map { genre ->
+            SelectionOption(
+                id = genre.id,
+                label = genre.title
+            )
+        }
+        updateState { it.copy(genreOptions = genreOptions) }
+    }
 
     fun onBackClicked() {
         viewModelScope.launch {
             if (_state.value.currentPage > 0) {
-                _state.value = _state.value.copy(currentPage = _state.value.currentPage - 1)
+                updateState { it.copy(currentPage = it.currentPage - 1) }
             } else {
-                _effect.emit(MatchScreenEffect.NavigateBack)
+                sendEffect(MatchScreenEffect.NavigateBack)
             }
         }
     }
@@ -33,26 +53,40 @@ class MatchPagerViewModel @Inject constructor() : ViewModel() {
     fun onNextClicked() {
         viewModelScope.launch {
             if (_state.value.currentPage < 4) {
-                _state.value = _state.value.copy(currentPage = _state.value.currentPage + 1)
+                updateState { it.copy(currentPage = it.currentPage + 1) }
             } else {
-                _effect.emit(MatchScreenEffect.FinishMatching)
+                sendEffect(MatchScreenEffect.FinishMatching)
             }
         }
     }
 
     fun updateMoodSelections(selectedIds: List<Int>) {
-        _state.value = _state.value.copy(moodSelections = selectedIds)
+        updateState { it.copy(moodSelections = selectedIds) }
     }
 
     fun updateGenreSelections(selectedIds: List<Int>) {
-        _state.value = _state.value.copy(genreSelections = selectedIds)
+        updateState { it.copy(genreSelections = selectedIds) }
     }
 
-    fun updateTimeSelections(selectedIds: List<Int>) {
-        _state.value = _state.value.copy(timeSelections = selectedIds)
+    fun updateTimeSelection(selectedId: Int) {
+        updateState { it.copy(timeSelection = selectedId) }
     }
 
-    fun updateRecencySelections(selectedIds: List<Int>) {
-        _state.value = _state.value.copy(recencySelections = selectedIds)
+    fun updateRecencySelection(selectedId: Int) {
+        updateState { it.copy(releasePeriodSelection = selectedId) }
+    }
+
+    fun updateLoadingState(isLoading: Boolean) {
+        updateState { it.copy(isLoading = isLoading) }
+    }
+
+    fun isPageEnabled(state: MatchScreenState): Boolean {
+        return when (state.currentPage) {
+            0 -> state.moodSelections.isNotEmpty()
+            1 -> state.genreSelections.isNotEmpty()
+            2 -> state.timeSelection != null
+            3 -> state.releasePeriodSelection != null
+            else -> true
+        }
     }
 }

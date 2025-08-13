@@ -12,13 +12,12 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.match.components.SelectionItem
 import com.giraffe.match.model.SelectionType
 import com.giraffe.match.screen.match_pager.SelectionOption
-import kotlin.collections.forEach
 
 @Composable
-fun SelectionPageWithIconsSingleRow(
+fun PageWithIconsSingleSelection(
     options: List<SelectionOption>,
-    selectedItems: List<Int>,
-    onSelectionChange: (List<Int>) -> Unit,
+    selectedItem: Int?,
+    onSelectionChange: (Int) -> Unit,
     readOnly: Boolean = false
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -35,16 +34,12 @@ fun SelectionPageWithIconsSingleRow(
                     description = option.label,
                     secondDescription = option.secondLabel,
                     icon = option.icon,
-                    isSelected = option.id in selectedItems,
+                    isSelected = option.id == selectedItem,
                     isSecondaryCardType = option.secondLabel != null,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         if (!readOnly) {
-                            val current = selectedItems.toMutableList()
-                            if (option.id in current) current.remove(option.id) else current.add(
-                                option.id
-                            )
-                            onSelectionChange(current)
+                            onSelectionChange(option.id)
                         }
                     }
                 )

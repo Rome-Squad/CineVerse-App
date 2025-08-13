@@ -14,7 +14,7 @@ fun String?.toLocalDateTime(): LocalDateTime? {
 
     return try {
         Instant.parse(this).toLocalDateTime(TimeZone.UTC)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         null
     }
 }

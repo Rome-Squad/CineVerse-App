@@ -53,7 +53,8 @@ class MovieRepositoryImpl @Inject constructor(
         }
         movieLocal.getMovieGenresByIds(genreIds).filter { it.id in genreIds }.map { it.toEntity() }
             .ifEmpty {
-                movieRemote.getMovieGenres().filter { it.id in genreIds }.map(MovieGenreDto::toEntity)
+                movieRemote.getMovieGenres().filter { it.id in genreIds }
+                    .map(MovieGenreDto::toEntity)
             }
     }
 
@@ -65,6 +66,11 @@ class MovieRepositoryImpl @Inject constructor(
                     .map(MovieGenreDto::toEntity)
                     .also { addMovieGenres(it) }
             }
+    }
+
+    override suspend fun getTopGenre(): Genre? {
+        //Not yet implemented
+        return null
     }
 
     override suspend fun getByGenreId(genreId: Int, page: Int) = SafeCall {
@@ -122,11 +128,12 @@ class MovieRepositoryImpl @Inject constructor(
             when {
                 page > 1 -> getPopularityMoviesFromRemote(page, limit)
                 else -> {
-                    movieLocal.getPopularityMovies(limit = limit).map(MovieCacheDto::toEntity).ifEmpty {
-                        getPopularityMoviesFromRemote(page, limit).also {
-                            movieLocal.setMovies(it.map(Movie::toCacheDto))
+                    movieLocal.getPopularityMovies(limit = limit).map(MovieCacheDto::toEntity)
+                        .ifEmpty {
+                            getPopularityMoviesFromRemote(page, limit).also {
+                                movieLocal.setMovies(it.map(Movie::toCacheDto))
+                            }
                         }
-                    }
                 }
             }
         }

@@ -68,6 +68,7 @@ fun Series.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
     id = id,
     title = name,
     posterUrl = posterUrl,
+    backdropUrl = backdropUrl,
     genres = genres,
     rating = rating,
     mediaType = MediaType.SERIES

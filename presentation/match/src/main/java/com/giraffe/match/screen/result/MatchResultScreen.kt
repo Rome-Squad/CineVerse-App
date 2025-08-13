@@ -31,6 +31,10 @@ fun MatchResultScreen(
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToYouTubePlayer: (String) -> Unit,
+    selectedGenres: List<Int>,
+    moodSelections: List<Int>,
+    timeSelection: Int?,
+    releasePeriodSelection: String?
 ) {
     MatchResultContent(
         state = MatchResultScreenState(
