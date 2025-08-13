@@ -6,8 +6,8 @@ import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.SearchRepository
-import com.giraffe.media.utils.SafeCall
-import com.giraffe.media.utils.SafeCall.mapToDomainException
+import com.giraffe.media.utils.mapToDomainException
+import com.giraffe.media.utils.safeCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -20,17 +20,17 @@ class SearchRepositoryImpl @Inject constructor(
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
         return if (query.isBlank()) {
-            SafeCall {
+            safeCall {
                 local.getSearchHistory().map { it.map { cacheDto -> cacheDto.toEntity() } }
             }
         } else {
             // Get history from local data source
-            val history = SafeCall {
+            val history = safeCall {
                 local.getSearchKeywords(query).map { it.map { cacheDto -> cacheDto.toEntity() } }
             }
 
             // Get remote search keywords
-            val remoteResults = SafeCall {
+            val remoteResults = safeCall {
                 remote.getSearchKeywords(query).map { it.toEntity() }
             }
 
@@ -46,18 +46,18 @@ class SearchRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun addSearchKeyword(searchKeyword: String) = SafeCall {
+    override suspend fun addSearchKeyword(searchKeyword: String) = safeCall {
         val cachedKeyword =
             local.getSearchKeyword(searchKeyword)?.copy(searchedAt = System.currentTimeMillis())
                 ?: SearchKeywordCacheDto(searchKeyword)
         local.insertSearchKeyword(cachedKeyword)
     }
 
-    override suspend fun deleteSearchKeyword(keyword: String) = SafeCall {
+    override suspend fun deleteSearchKeyword(keyword: String) = safeCall {
         local.deleteSearchKeyword(keyword)
     }
 
-    override suspend fun clearSearchHistory() = SafeCall {
+    override suspend fun clearSearchHistory() = safeCall {
         local.clearSearchHistory()
     }
 

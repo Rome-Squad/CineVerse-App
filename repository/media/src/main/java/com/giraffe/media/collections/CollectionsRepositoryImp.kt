@@ -7,7 +7,7 @@ import com.giraffe.media.collections.mapper.toEntity
 import com.giraffe.media.collections.mapper.toMovie
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.utils.safeCall
 import javax.inject.Inject
 
 class CollectionsRepositoryImp @Inject constructor(
@@ -16,39 +16,39 @@ class CollectionsRepositoryImp @Inject constructor(
 
     override suspend fun getCollections(
         accountId: Int
-    ): List<Collection> = SafeCall {
+    ): List<Collection> = safeCall {
         collectionsRemoteDataSource.getCollections(accountId).map { it.toEntity() }
     }
 
 
     override suspend fun getCollectionDetails(
         collectionId: Int
-    ): Collection = SafeCall {
+    ): Collection = safeCall {
         collectionsRemoteDataSource.getCollectionDetails(collectionId).toEntity()
     }
 
     override suspend fun addCollection(
         collection: Collection
-    ) = SafeCall {
+    ) = safeCall {
         collectionsRemoteDataSource.addCollection(collection.toDto())
     }
 
     override suspend fun removeCollection(
         collectionId: Int
-    ) = SafeCall {
+    ) = safeCall {
         collectionsRemoteDataSource.removeCollection(collectionId)
     }
 
     override suspend fun clearCollection(
         collectionId: Int
-    ) = SafeCall {
+    ) = safeCall {
         collectionsRemoteDataSource.clearCollection(collectionId)
     }
 
     override suspend fun addMovieToCollection(
         collectionId: Int,
         movieId: Int
-    ) = SafeCall {
+    ) = safeCall {
         collectionsRemoteDataSource.addMovieToCollection(
             collectionId,
             movieId
@@ -58,7 +58,7 @@ class CollectionsRepositoryImp @Inject constructor(
     override suspend fun removeMovieFromCollection(
         collectionId: Int,
         movieId: Int
-    ) = SafeCall {
+    ) = safeCall {
         collectionsRemoteDataSource.removeMovieFromCollection(
             collectionId,
             movieId
@@ -67,7 +67,7 @@ class CollectionsRepositoryImp @Inject constructor(
 
     override suspend fun getCollectionMovies(
         collectionId: Int
-    ): List<Movie> = SafeCall {
+    ): List<Movie> = safeCall {
         collectionsRemoteDataSource.getCollectionMovies(collectionId).map { it.toMovie() }
     }
 

@@ -3,8 +3,9 @@ package com.giraffe.media.series.usecase
 import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
-class GetRecentlyViewedSeriesUseCase @Inject constructor(
+class GetMatchesYourVibeSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
-    operator fun invoke() = seriesRepository.getRecentlyViewed()
+    suspend operator fun invoke(page: Int, limit: Int) =
+        seriesRepository.getMatchesYourVibe(page, limit)
 }

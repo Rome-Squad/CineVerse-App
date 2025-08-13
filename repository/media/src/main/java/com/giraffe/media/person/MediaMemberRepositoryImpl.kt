@@ -22,7 +22,7 @@ import com.giraffe.media.person.mapper.toEntity
 import com.giraffe.media.person.mapper.toImageUrl
 import com.giraffe.media.person.mapper.toMovieEntity
 import com.giraffe.media.person.mapper.toSeriesEntity
-import com.giraffe.media.utils.SafeCall
+import com.giraffe.media.utils.safeCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -34,14 +34,14 @@ class MediaMemberRepositoryImpl @Inject constructor(
 ) : MediaMemberRepository {
 
     override suspend fun getActorByName(name: String, page: Int): List<CastMember> {
-        return SafeCall {
+        return safeCall {
             remoteDataSource.searchForActorByName(name, page)
                 .map(MediaMemberDto::toCastEntity)
         }
     }
 
     override suspend fun addCastToRecentViewed(castMember: CastMember) {
-        return SafeCall {
+        return safeCall {
             localDataSource.insertPerson(
                 castMember.toCacheDto().copy(isRecent = true)
             )
@@ -49,7 +49,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addCrewToRecentViewed(crewMember: CrewMember) {
-        return SafeCall {
+        return safeCall {
             localDataSource.insertPerson(
                 crewMember.toCacheDto().copy(isRecent = true)
             )
@@ -57,7 +57,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecentMediaMembers(): MediaMemberRepository.MediaMembers {
-        return SafeCall {
+        return safeCall {
             localDataSource.getRecentPeople()
                 .groupBy { it.type }
                 .run {
@@ -67,16 +67,16 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun clearRecentViewed() {
-        return SafeCall {
+        return safeCall {
             localDataSource.clearRecentPeople()
         }
     }
 
     override suspend fun getMediaMembersByMovieId(movieId: Int): MediaMemberRepository.MediaMembers {
-        return SafeCall {
+        return safeCall {
             localDataSource.getPeopleByMovieId(movieId)
                 .ifEmpty {
-                    return@SafeCall remoteDataSource.getCreditsByMovieId(movieId)
+                    return@safeCall remoteDataSource.getCreditsByMovieId(movieId)
                         .run { storeMediaMembersInCache(this) }
                 }
                 .groupBy { it.type }
@@ -90,10 +90,10 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMediaMembersBySeriesId(seriesId: Int): MediaMemberRepository.MediaMembers {
-        return SafeCall {
+        return safeCall {
             localDataSource.getPeopleBySeriesId(seriesId)
                 .ifEmpty {
-                    return@SafeCall remoteDataSource.getCreditsBySeriesId(seriesId)
+                    return@safeCall remoteDataSource.getCreditsBySeriesId(seriesId)
                         .run { storeMediaMembersInCache(this) }
                 }
                 .groupBy { it.type }
@@ -107,13 +107,13 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getImagesUrlById(id: Int): List<String> {
-        return SafeCall {
+        return safeCall {
             remoteDataSource.getPersonImages(id).profiles.map(ProfileDto::toImageUrl)
         }
     }
 
     override suspend fun getCastDetailsById(id: Int): CastMember {
-        return SafeCall {
+        return safeCall {
             withContext(Dispatchers.IO) {
                 val details = async { remoteDataSource.getPersonDetails(id) }
                 val images = async { remoteDataSource.getPersonImages(id) }
@@ -132,7 +132,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCrewDetailsByCrewId(id: Int): CrewMember {
-        return SafeCall {
+        return safeCall {
             withContext(Dispatchers.IO) {
                 val details = async { remoteDataSource.getPersonDetails(id) }
                 val images = async { remoteDataSource.getPersonImages(id) }
@@ -161,7 +161,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     private suspend fun storeMediaMembersInCache(credits: CreditsDto): MediaMemberRepository.MediaMembers {
-        return SafeCall {
+        return safeCall {
             val crew = credits.crew.map(CrewDto::toEntity)
             val cast = credits.cast.map(CastDto::toEntity)
 
@@ -177,7 +177,7 @@ class MediaMemberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCastCreditsById(id: Int): MediaMemberRepository.CastMedia {
-        return SafeCall {
+        return safeCall {
             val movies = remoteDataSource.getPersonMoviesById(id)
             val series = remoteDataSource.getPersonSeriesById(id)
 
