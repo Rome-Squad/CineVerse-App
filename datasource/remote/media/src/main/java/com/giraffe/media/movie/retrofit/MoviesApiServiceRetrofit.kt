@@ -10,9 +10,9 @@ import com.giraffe.media.response.AllReviewsResponse
 import com.giraffe.media.response.TrailerResponse
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_STATES
+import com.giraffe.media.util.NetworkConstants.DISCOVER_MOVIE_URL
 import com.giraffe.media.util.NetworkConstants.GENRES_URL
 import com.giraffe.media.util.NetworkConstants.ID
-import com.giraffe.media.util.NetworkConstants.MOVIES_BY_GENRE_URL
 import com.giraffe.media.util.NetworkConstants.MOVIES_BY_NAME_URL
 import com.giraffe.media.util.NetworkConstants.MOVIE_END_POINT
 import com.giraffe.media.util.NetworkConstants.MOVIE_ID
@@ -25,10 +25,15 @@ import com.giraffe.media.util.NetworkConstants.RATED_END_POINT
 import com.giraffe.media.util.NetworkConstants.RATING
 import com.giraffe.media.util.NetworkConstants.RECOMMENDATIONS
 import com.giraffe.media.util.NetworkConstants.REVIEWS_END_POINT
+import com.giraffe.media.util.NetworkConstants.SORT_BY
+import com.giraffe.media.util.NetworkConstants.SORT_BY_DEFAULT
 import com.giraffe.media.util.NetworkConstants.UPCOMING_MOVIES_URL
 import com.giraffe.media.util.NetworkConstants.USER_END_POINT
 import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
+import com.giraffe.media.util.NetworkConstants.VOTE_AVERAGE
+import com.giraffe.media.util.NetworkConstants.VOTE_COUNT
 import com.giraffe.media.util.NetworkConstants.WITH_GENRES
+import com.giraffe.media.util.NetworkConstants.WITH_KEYWORDS
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -54,9 +59,13 @@ interface MoviesApiServiceRetrofit {
     @GET(GENRES_URL)
     suspend fun getGenres(): Response<GenreResponse>
 
-    @GET(MOVIES_BY_GENRE_URL)
-    suspend fun getMoviesByGenre(
-        @Query(WITH_GENRES) genreId: String,
+    @GET(DISCOVER_MOVIE_URL)
+    suspend fun getMovies(
+        @Query(WITH_GENRES) genreId: String? = null,
+        @Query(WITH_KEYWORDS) keywords: String? = null,
+        @Query(VOTE_AVERAGE) minVote: Float? = null,
+        @Query(VOTE_COUNT) minVoteCount: Int? = null,
+        @Query(SORT_BY) sortBy: String? = SORT_BY_DEFAULT,
         @Query(PAGE) page: Int
     ): Response<MoviesListResponse<MovieDto>>
 

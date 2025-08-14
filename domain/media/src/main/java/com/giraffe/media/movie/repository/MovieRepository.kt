@@ -19,6 +19,14 @@ interface MovieRepository {
 
     suspend fun getByGenreId(genreId: Int, page: Int): List<Movie>
 
+    suspend fun getMoviesCollection(
+        genreId: Int? = null,
+        keywords: String? = null,
+        minVote: Float? = null,
+        sortBy: String = "popularity.desc",
+        page: Int
+    ): List<Movie>
+
     fun getRecentlyViewed(): Flow<List<Movie>>
 
     suspend fun getDetails(movieId: Int): Movie

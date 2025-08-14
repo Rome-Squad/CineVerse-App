@@ -77,6 +77,22 @@ class MovieRepositoryImpl @Inject constructor(
         movieRemote.getMoviesByGenre(genreId, page).map(MovieDto::toEntity)
     }
 
+    override suspend fun getMoviesCollection(
+        genreId: Int?,
+        keywords: String?,
+        minVote: Float?,
+        sortBy: String,
+        page: Int
+    ) = safeCall {
+        movieRemote.getMoviesCollection(
+            genreId = genreId,
+            keywords = keywords,
+            minVote = minVote,
+            sortBy = sortBy,
+            page = page
+        ).map(MovieDto::toEntity)
+    }
+
     override fun getRecentlyViewed() =
         movieLocal.getRecentlyViewedMovies().map { movies ->
             movies.map(MovieCacheDto::toEntity)

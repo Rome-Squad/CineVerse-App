@@ -22,8 +22,26 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
 
     override suspend fun getMoviesByGenre(genreId: Int, page: Int) =
         retrofitRequestBuilder.get {
-            getMoviesByGenre(
-                if (genreId == -1) "" else genreId.toString(), page
+            getMovies(
+                genreId = if (genreId == -1) "" else genreId.toString(),
+                page = page
+            )
+        }.results
+
+    override suspend fun getMoviesCollection(
+        genreId: Int?,
+        keywords: String?,
+        minVote: Float?,
+        sortBy: String,
+        page: Int
+    ) =
+        retrofitRequestBuilder.get {
+            getMovies(
+                genreId = if (genreId == -1) "" else genreId.toString(),
+                keywords = keywords,
+                minVote = minVote,
+                sortBy = sortBy,
+                page = page
             )
         }.results
 
