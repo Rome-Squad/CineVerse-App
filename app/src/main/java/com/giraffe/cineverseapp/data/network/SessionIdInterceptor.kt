@@ -28,7 +28,6 @@ class SessionIdInterceptor(
 
         val sessionId = runBlocking {
             val sessionId = authenticationDatastore.getSessionId()?.let { decryptSessionId(it) }
-            Log.d("TAG", "intercept: $sessionId||||||||||||||||||||||||||||||")
             sessionId
         } ?: return chain.proceed(cleanRequest.build())
 
