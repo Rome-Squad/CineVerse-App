@@ -4,6 +4,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.kotlin
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
@@ -62,7 +63,7 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
         tasks.withType<JacocoCoverageVerification> {
             dependsOn("test")
             doFirst {
-                val config = extensions.getByType(CoverageConfigExtension::class.java)
+                val config = extensions.getByType<CoverageConfigExtension>()
                 classDirectories.setFrom(
                     files(classDirectories.files.map {
                         fileTree(it) {
