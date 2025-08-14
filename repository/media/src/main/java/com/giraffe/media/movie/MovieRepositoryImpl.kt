@@ -305,6 +305,7 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.clearRecentlyReleasedMovies()
         movieLocal.clearUpcomingMovies()
         movieLocal.clearMatchesYourVibeMovies()
+        movieLocal.clearRecentlyViewedMovies()
     }
 
     override suspend fun clearExceptRecentlyViewed() {

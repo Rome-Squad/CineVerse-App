@@ -1,5 +1,6 @@
 package com.giraffe.presentation.profile.screens.settings
 
+import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.presentation.profile.utils.Language
@@ -31,6 +32,7 @@ class SettingsViewModel @Inject constructor(
     private val getLanguageUseCase: GetLanguageUseCase,
     private val appVersionProvider: AppVersionProvider,
     private val logoutUseCase: LogoutUseCase,
+    private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
 ) : BaseViewModel<SettingsScreenState, SettingsEffect>(SettingsScreenState()),
@@ -186,12 +188,18 @@ class SettingsViewModel @Inject constructor(
     override fun onConfirmLogout() {
         onDismissSheet()
         safeExecute(
-            onSuccess = {
-                sendEffect(SettingsEffect.NavigateToLogin)
-            },
+            onSuccess = onConfirmLogoutSuccess(),
             onError = ::onFailure,
             block = logoutUseCase::invoke
         )
+    }
+
+    private fun onConfirmLogoutSuccess(): (Unit) -> Unit = {
+        safeExecute(
+            onError = ::onFailure,
+            block = clearMoviesCacheUseCase::clearAll
+        )
+        sendEffect(SettingsEffect.NavigateToLogin)
     }
 
     override fun onGoToWebsiteClick() {
