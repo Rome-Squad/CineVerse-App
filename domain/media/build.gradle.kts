@@ -1,5 +1,6 @@
 plugins {
-    id("java-library")
+    //noinspection JavaPluginLanguageLevel
+    `java-library`
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.cineVerse.kotlin.library)
     alias(libs.plugins.ksp)
