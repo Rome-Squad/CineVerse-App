@@ -14,6 +14,7 @@ import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
 import com.giraffe.presentation.home.utils.toShowMorePoster
 import kotlinx.coroutines.flow.first
+import java.util.Locale
 
 interface ShowMoreStrategy {
     suspend fun loadData(): List<ShowMorePoster>
@@ -27,14 +28,20 @@ class RecentlyReleasedStrategy(
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
     override suspend fun loadData(): List<ShowMorePoster> {
+        val language = Locale.getDefault().language
+
         val recentMovies =
             getRecentlyReleasedMovies(page = 1).map { movie ->
-                movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title })
+                movie.toShowMorePoster(
+                    getMovieGenresUseCase(
+                        movie.genresID,
+                        language
+                    ).map { it.title })
             }
         val recentSeries =
             getRecentlyReleasedSeries(page = 1, limit = 10).map { series ->
                 series.toShowMorePoster(
-                    getSeriesGenresUseCase(series.genreIDs).map { it.title })
+                    getSeriesGenresUseCase(series.genreIDs, language).map { it.title })
             }
         return recentMovies + recentSeries
     }
@@ -46,9 +53,11 @@ class TopRatedTvShowsStrategy(
     private val getTopRatedSeries: GetTopRatedSeriesUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
+    val language = Locale.getDefault().language
+
     override suspend fun loadData() = getTopRatedSeries(page = 1, limit = 10).map { series ->
         series.toShowMorePoster(
-            getSeriesGenresUseCase(series.genreIDs).map { it.title })
+            getSeriesGenresUseCase(series.genreIDs, language).map { it.title })
     }
 
     override fun getSectionType() = ShowMoreSectionType.TOP_RATED_TV_SHOWS
@@ -58,9 +67,11 @@ class UpcomingMoviesStrategy(
     private val getUpcomingMovies: GetUpcomingMoviesUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
 ) : ShowMoreStrategy {
+    val language = Locale.getDefault().language
+
     override suspend fun loadData() = getUpcomingMovies(page = 1).map { movie ->
         movie.toShowMorePoster(
-            getMovieGenresUseCase(movie.genresID).map { it.title })
+            getMovieGenresUseCase(movie.genresID, language).map { it.title })
     }
 
     override fun getSectionType() = ShowMoreSectionType.UPCOMING_MOVIES
@@ -74,10 +85,24 @@ class RecentlyViewedStrategy(
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
     override suspend fun loadData(): List<ShowMorePoster> {
+        val language = Locale.getDefault().language
+
         val recentMovies = getRecentlyViewedMovies().first()
-            .map { movie -> movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title }) }
+            .map { movie ->
+                movie.toShowMorePoster(
+                    getMovieGenresUseCase(
+                        movie.genresID,
+                        language
+                    ).map { it.title })
+            }
         val recentSeries = getRecentlySeriesUseCase().first()
-            .map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) }
+            .map { series ->
+                series.toShowMorePoster(
+                    getSeriesGenresUseCase(
+                        series.genreIDs,
+                        language
+                    ).map { it.title })
+            }
         return (recentMovies + recentSeries).distinctBy { it.id }
     }
 
@@ -93,6 +118,8 @@ class MatchesYourVibesStrategy(
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
     override suspend fun loadData(): List<ShowMorePoster> {
+        val language = Locale.getDefault().language
+
         val recentMovieId = getRecentlyViewedMovies().first().firstOrNull()?.id
         val recentSeriesId = getRecentlySeriesUseCase().first().firstOrNull()?.id
 
@@ -104,9 +131,16 @@ class MatchesYourVibesStrategy(
         return (recommendedMovies.map { movie ->
             movie.toShowMorePoster(
                 getMovieGenresUseCase(
-                    movie.genresID
+                    movie.genresID,
+                    language
                 ).map { it.title })
-        } + recommendedSeries.map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) })
+        } + recommendedSeries.map { series ->
+            series.toShowMorePoster(
+                getSeriesGenresUseCase(
+                    series.genreIDs,
+                    language
+                ).map { it.title })
+        })
             .distinctBy { it.id }
     }
 
