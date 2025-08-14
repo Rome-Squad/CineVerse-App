@@ -1,11 +1,11 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.media.explore.LocalSearchDataSourceImpl
-import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.movie.MovieLocalDataSourceImp
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.person.MediaMemberLocalDataSourceImp
 import com.giraffe.media.person.datasource.local.MediaMemberLocalDataSource
+import com.giraffe.media.search.LocalSearchDataSourceImpl
+import com.giraffe.media.search.datasource.local.LocalSearchDataSource
 import com.giraffe.media.series.SeriesLocalDataSourceImp
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.repository.datasource.local.AuthenticationLocalDataSource
