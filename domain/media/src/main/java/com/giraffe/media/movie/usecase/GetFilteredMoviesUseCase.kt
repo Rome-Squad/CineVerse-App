@@ -7,7 +7,7 @@ class GetFilteredMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
     suspend operator fun invoke(
-        genreId: Int? = null,
+        genreId: List<Int>? = null,
         keywords: String? = null,
         sortBy: String = "popularity.desc",
         page: Int

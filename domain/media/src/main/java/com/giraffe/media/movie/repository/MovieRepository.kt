@@ -22,7 +22,7 @@ interface MovieRepository {
     suspend fun getByGenreId(genreId: Int, page: Int): List<Movie>
 
     suspend fun discoverMovies(
-        genreId: Int? = null,
+        genreId: List<Int>? = null,
         keywords: String? = null,
         sortBy: String = "popularity.desc",
         page: Int

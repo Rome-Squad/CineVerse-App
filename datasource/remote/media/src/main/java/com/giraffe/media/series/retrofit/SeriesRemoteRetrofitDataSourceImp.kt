@@ -20,7 +20,7 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
         }.results
 
     override suspend fun discoverSeries(
-        genreId: Int?,
+        genreId: List<Int>?,
         keywords: String?,
         sortBy: String,
         page: Int

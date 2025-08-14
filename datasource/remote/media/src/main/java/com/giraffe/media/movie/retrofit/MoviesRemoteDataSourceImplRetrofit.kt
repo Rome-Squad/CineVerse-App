@@ -29,7 +29,7 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         }.results
 
     override suspend fun discoverMovies(
-        genreId: Int?,
+        genreId: List<Int>?,
         keywords: String?,
         sortBy: String,
         page: Int

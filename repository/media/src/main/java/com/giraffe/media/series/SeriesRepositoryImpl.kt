@@ -84,7 +84,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun discoverSeries(
-        genreId: Int?,
+        genreId: List<Int>?,
         keywords: String?,
         sortBy: String,
         page: Int
