@@ -14,7 +14,7 @@ import com.giraffe.media.util.safeFlow
 import javax.inject.Inject
 
 
-class MovieLocalDataSourceImp @Inject constructor(
+class MovieLocalDataSourceImpl @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
 
