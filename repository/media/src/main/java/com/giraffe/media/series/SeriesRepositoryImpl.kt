@@ -41,8 +41,8 @@ class SeriesRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getRecentlyViewed() = safeFlow {
-        seriesLocalDateSource.getRecentSeries().map { seriesList ->
+    override fun getRecentlyViewed(page: Int, pageSize: Int) = safeFlow {
+        seriesLocalDateSource.getRecentSeries(page, pageSize).map { seriesList ->
             seriesList.map { series -> series.toEntity() }
         }
     }

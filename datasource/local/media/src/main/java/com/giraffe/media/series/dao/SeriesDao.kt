@@ -61,9 +61,10 @@ interface SeriesDao {
             FROM $SERIES_TABLE
             WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
             ORDER BY recentViewedAt ASC
+        LIMIT :pageSize OFFSET (:page - 1) * :pageSize
         """
     )
-    fun getRecentSeries(): Flow<List<SeriesCacheDto>>
+    fun getRecentSeries(page: Int, pageSize: Int): Flow<List<SeriesCacheDto>>
 
     @Query(
         """
