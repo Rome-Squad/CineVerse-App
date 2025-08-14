@@ -18,8 +18,8 @@ class SeriesLocalDataSourceImp @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
-    override suspend fun getGenres(): List<SeriesGenreCacheDto> = safeCall {
-        seriesDao.getGenres()
+    override suspend fun getGenres(language: String): List<SeriesGenreCacheDto> = safeCall {
+        seriesDao.getGenres(language)
     }
 
     override suspend fun insertGenres(genres: List<SeriesGenreCacheDto>) = safeCall {

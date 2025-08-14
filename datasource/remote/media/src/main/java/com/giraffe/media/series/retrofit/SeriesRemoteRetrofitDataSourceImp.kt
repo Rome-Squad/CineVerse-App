@@ -19,8 +19,8 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
             getSeriesByGenre(if (genreId == -1) "" else genreId.toString(), page)
         }.results
 
-    override suspend fun getGenres() =
-        retrofitRequestBuilder.get { getGenres() }.genres
+    override suspend fun getGenres(language: String) =
+        retrofitRequestBuilder.get { getGenres(language) }.genres
 
     override suspend fun getSeriesDetails(seriesId: Int): SeriesDetailsDto =
         retrofitRequestBuilder.get { getSeriesDetails(seriesId) }

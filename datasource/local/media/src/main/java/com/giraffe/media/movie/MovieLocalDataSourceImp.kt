@@ -93,8 +93,8 @@ class MovieLocalDataSourceImp @Inject constructor(
         movieDao.getMovieGenresByIds(ids)
     }
 
-    override suspend fun getMoviesGenres() = safeCall {
-        movieDao.getMoviesGenres()
+    override suspend fun getMoviesGenres(language: String) = safeCall {
+        movieDao.getMoviesGenres(language)
     }
 
     override suspend fun getUpcomingMovies(limit: Int) = safeCall {

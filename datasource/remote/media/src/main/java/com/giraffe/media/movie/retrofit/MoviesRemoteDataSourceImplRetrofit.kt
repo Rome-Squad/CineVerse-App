@@ -17,8 +17,8 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
     override suspend fun getMoviesByName(movieName: String, page: Int) =
         retrofitRequestBuilder.get { getMoviesByName(movieName, page) }.results
 
-    override suspend fun getMovieGenres() =
-        retrofitRequestBuilder.get { getGenres() }.genres
+    override suspend fun getMovieGenres(language: String) =
+        retrofitRequestBuilder.get { getGenres(language) }.genres
 
     override suspend fun getMoviesByGenre(genreId: Int, page: Int) =
         retrofitRequestBuilder.get {
