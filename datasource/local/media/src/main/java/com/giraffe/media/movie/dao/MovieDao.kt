@@ -50,8 +50,8 @@ interface MovieDao {
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
 
-    @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY count DESC")
-    suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
+    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE language = :language ORDER BY count DESC ")
+    suspend fun getMoviesGenres(language: String): List<MovieGenreCacheDto>
 
     @Query("SELECT * FROM $MOVIE_TABLE WHERE upcomingAt IS NOT NULL AND upcomingAt > 0 ORDER BY upcomingAt DESC LIMIT :limit")
     fun getUpcomingMovies(limit: Int): List<MovieCacheDto>

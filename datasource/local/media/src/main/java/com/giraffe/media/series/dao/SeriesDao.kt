@@ -111,8 +111,8 @@ interface SeriesDao {
     @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE WHERE id = :seriesId")
     suspend fun deleteSeriesFromHistoryById(seriesId: Int)
 
-    @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
-    suspend fun getGenres(): List<SeriesGenreCacheDto>
+    @Query("SELECT * FROM $SERIES_GENRE_TABLE WHERE language = :language ORDER BY count DESC")
+    suspend fun getGenres(language: String): List<SeriesGenreCacheDto>
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  WHERE id IN (:genreIds)")
     suspend fun getGenresByIds(genreIds: List<Int>): List<SeriesGenreCacheDto>
