@@ -15,11 +15,6 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.mapper.toCacheDto
 import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
-import com.giraffe.media.movie.mapper.toMatchesYourVibeMovieCacheDto
-import com.giraffe.media.movie.mapper.toPopularMovieCacheDto
-import com.giraffe.media.movie.mapper.toRecentReleasedMovieCacheDto
-import com.giraffe.media.movie.mapper.toRecentlyViewedMovieCacheDto
-import com.giraffe.media.movie.mapper.toUpcomingMovieCacheDto
 import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.utils.safeCall
 import kotlinx.coroutines.Dispatchers
@@ -142,8 +137,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     private suspend fun addPopular(page: Int, movies: List<Movie>) {
         if (page == 1) {
-            movieLocal.addMovies(movies.map(Movie::toCacheDto))
-            movieLocal.addPopularityMovies(movies.map(Movie::toPopularMovieCacheDto))
+            movieLocal.addPopularityMovies(movies.map(Movie::toCacheDto))
         }
     }
 
@@ -181,8 +175,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     private suspend fun addRecentlyReleased(page: Int, movies: List<Movie>) {
         if (page == 1) {
-            movieLocal.addMovies(movies.map(Movie::toCacheDto))
-            movieLocal.addRecentlyReleasedMovies(movies.map(Movie::toRecentReleasedMovieCacheDto))
+            movieLocal.addRecentlyReleasedMovies(movies.map(Movie::toCacheDto))
         }
     }
 
@@ -218,8 +211,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     private suspend fun addUpcoming(page: Int, movies: List<Movie>) {
         if (page == 1) {
-            movieLocal.addMovies(movies.map(Movie::toCacheDto))
-            movieLocal.addUpcomingMovies(movies.map(Movie::toUpcomingMovieCacheDto))
+            movieLocal.addUpcomingMovies(movies.map(Movie::toCacheDto))
         }
     }
 
@@ -261,8 +253,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     private suspend fun addMatchesYourVibe(page: Int, movies: List<Movie>) {
         if (page == 1) {
-            movieLocal.addMovies(movies.map(Movie::toCacheDto))
-            movieLocal.addMatchesYourVibeMovies(movies.map(Movie::toMatchesYourVibeMovieCacheDto))
+            movieLocal.addMatchesYourVibeMovies(movies.map(Movie::toCacheDto))
         }
     }
 
@@ -272,8 +263,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     // region Recently Viewed
     private suspend fun addRecentlyViewed(movie: Movie) {
-        movieLocal.addMovie(movie.toCacheDto())
-        movieLocal.addRecentlyViewedMovie(movie.toRecentlyViewedMovieCacheDto())
+        movieLocal.addRecentlyViewedMovie(movie.toCacheDto())
     }
 
     override fun getRecentlyViewed(): Flow<List<Movie>> {
