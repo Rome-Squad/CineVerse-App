@@ -1,6 +1,5 @@
 import java.util.Properties
 
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,10 +8,73 @@ plugins {
     alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.google.firebase.firebase.perf)
     alias(libs.plugins.ksp)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.cineVerse.android.application)
 }
 
-fun getSecret(key: String): String {
+android {
+    namespace = "com.giraffe.cineverseapp"
+
+    defaultConfig {
+        buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+        buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
+        }
+
+        release {
+            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
+        }
+    }
+
+    bundle {
+        language {
+            enableSplit = true
+        }
+    }
+}
+
+dependencies {
+    projectModules()
+    networkDependencies()
+    localDatabaseDependencies()
+
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    //firebase
+    implementation(libs.bundles.firebase)
+    //data store
+    implementation(libs.datastore.preferences)
+    //serialization
+    implementation(libs.kotlinx.serialization.json)
+    //worker
+    implementation(libs.androidx.work.runtime.ktx)
+    //room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.firebase.perf.ktx)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
+    // Hilt DI
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    //splash screen api
+    implementation(libs.androidx.core.splashscreen)
+}
+
+private fun getSecret(key: String): String {
     val secretsProps = File(rootDir, "app/secrets.properties")
     if (!secretsProps.exists()) {
         throw GradleException("Missing secrets.properties file at app/secrets.properties")
@@ -26,147 +88,43 @@ fun getSecret(key: String): String {
         ?: throw GradleException("Missing required secret key: $key in secrets.properties")
 }
 
-
-android {
-    namespace = "com.giraffe.cineverseapp"
-    compileSdk = 36
-    defaultConfig {
-        applicationId = "com.giraffe.cineverseapp"
-        minSdk = 24
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-
-        buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
-        buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
-        buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
-    }
-    buildTypes {
-        debug {
-            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
-            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
-            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
-        }
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-
-            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
-            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
-            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        buildConfig = true
-        compose = true
-    }
-    bundle {
-        language {
-            enableSplit = true
-        }
-    }
+private fun DependencyHandlerScope.projectModules() {
+    implementation(projects.presentation.home)
+    implementation(projects.presentation.authentication)
+    implementation(projects.presentation.details)
+    implementation(projects.presentation.explore)
+    implementation(projects.presentation.match)
+    implementation(projects.presentation.profile)
+    implementation(projects.designsystem)
+    implementation(projects.imageviewer)
+    implementation(projects.domain.user)
+    implementation(projects.domain.media)
+    implementation(projects.repository.user)
+    implementation(projects.repository.media)
+    implementation(projects.datasource.remote.user)
+    implementation(projects.datasource.remote.media)
+    implementation(projects.datasource.local.user)
+    implementation(projects.datasource.local.media)
+    implementation(projects.api.details)
+    implementation(projects.api.explore)
+    implementation(projects.api.home)
+    implementation(projects.api.match)
+    implementation(projects.api.profile)
+    implementation(projects.api.authentication)
 }
 
-dependencies {
-    implementation(project(":presentation:home"))
-    implementation(project(":presentation:authentication"))
-    implementation(project(":presentation:details"))
-    implementation(project(":presentation:explore"))
-    implementation(project(":presentation:match"))
-    implementation(project(":presentation:profile"))
-
-    implementation(project(":designsystem"))
-    implementation(project(":imageviewer"))
-
-    implementation(project(":domain:user"))
-    implementation(project(":domain:media"))
-
-    implementation(project(":repository:user"))
-    implementation(project(":repository:media"))
-
-    implementation(project(":datasource:remote:user"))
-    implementation(project(":datasource:remote:media"))
-
-    implementation(project(":datasource:local:user"))
-    implementation(project(":datasource:local:media"))
-
-
-    implementation(project(":api:details"))
-    implementation(project(":api:explore"))
-    implementation(project(":api:home"))
-    implementation(project(":api:match"))
-    implementation(project(":api:profile"))
-    implementation(project(":api:authentication"))
-
-    implementation(libs.androidx.core.splashscreen)
-
-
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
-    //datastore
-    implementation(libs.datastore.preferences)
-
-
-    //serialization
-    implementation(libs.gson)
-    implementation(libs.kotlinx.serialization.json)
-
-    //room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    implementation(libs.firebase.perf.ktx)
-    ksp(libs.room.compiler)
-    annotationProcessor(libs.room.compiler)
-
-    //worker
-    implementation(libs.androidx.work.runtime.ktx)
-
-    implementation(libs.androidx.navigation.compose)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(libs.androidx.navigation.compose)
-
+private fun DependencyHandlerScope.networkDependencies() {
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     // OkHttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    // Hilt DI
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.work)
-    ksp(libs.androidx.hilt.compiler)
-    implementation(libs.androidx.hilt.lifecycle.viewmodel)
-    implementation(libs.androidx.hilt.work)
+}
+
+private fun DependencyHandlerScope.localDatabaseDependencies() {
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.firebase.perf.ktx)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
 }

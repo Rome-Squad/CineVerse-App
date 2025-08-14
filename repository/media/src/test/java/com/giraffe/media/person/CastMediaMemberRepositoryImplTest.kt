@@ -4,13 +4,16 @@ import com.giraffe.media.exception.MediaException
 import com.giraffe.media.person.datasource.local.MediaMemberLocalDataSource
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
+import com.giraffe.media.person.mapper.mapToMediaMembers
 import com.giraffe.media.person.mapper.toCastMemberEntity
 import com.google.common.truth.Truth.assertThat
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
@@ -57,14 +60,17 @@ class CastMediaMemberRepositoryImplTest {
         assertThrows<MediaException> { repository.addCastToRecentViewed(dummyPersonCacheDto.toCastMemberEntity()) }
     }
 
-
     @Test
     fun `should get recent people when local data source has recent people`() = runTest {
-        coEvery { localDataSource.getRecentPeople() } returns dummyPeopleDto
+        mockkStatic("com.giraffe.media.person.mapper.personMappers")
+        val cast = dummyPeopleDto
+        val mediaMembers = mapToMediaMembers(cast, emptyList())
+        coEvery { localDataSource.getRecentPeople() } returns cast
+        every { mapToMediaMembers(any(), any()) } returns mediaMembers
 
         val result = repository.getRecentMediaMembers()
 
-        assertThat(result).isEqualTo(dummyPersonCacheDto)
+        assertThat(result).isEqualTo(mediaMembers)
     }
 
     @Test

@@ -1,3 +1,4 @@
+@file:JvmName("personMappers")
 package com.giraffe.media.person.mapper
 
 import com.giraffe.media.mediaMember.entity.CastMember

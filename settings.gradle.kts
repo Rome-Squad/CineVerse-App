@@ -6,13 +6,15 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
     }
 }
+
+includeBuild("build-logic")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "CineVerseApp"
 include(":app")

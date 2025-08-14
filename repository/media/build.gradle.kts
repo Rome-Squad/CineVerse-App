@@ -44,7 +44,7 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.kotlinx.serialization.json)
     annotationProcessor(libs.room.compiler)
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.bundles.unit.test)
     // Hilt DI
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
