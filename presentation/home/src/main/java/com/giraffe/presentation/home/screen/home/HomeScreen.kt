@@ -175,7 +175,7 @@ fun HomeContent(
                         uiModels = state.matchVibes,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
-                            interactionListener.onWhatShouldIWatchClicked(
+                            interactionListener.onMatchYourVibeClicked(
                                 sectionType = ShowMoreSectionType.MATCHES_YOUR_VIBES
                             )
                         }
@@ -275,7 +275,7 @@ fun HomeContentPreview() {
 
         override fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType) {}
 
-        override fun onWhatShouldIWatchClicked(sectionType: ShowMoreSectionType) {}
+        override fun onMatchYourVibeClicked(sectionType: ShowMoreSectionType) {}
 
         override fun onFeaturedCollectionClicked(
             collectionId: Int,

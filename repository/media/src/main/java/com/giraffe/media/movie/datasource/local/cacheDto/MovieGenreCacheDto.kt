@@ -9,7 +9,7 @@ import com.giraffe.media.utils.DatabaseConstants.MOVIE_GENRE_TABLE
 data class MovieGenreCacheDto(
 
     @PrimaryKey(autoGenerate = false)
-    val id : Int,
-    val name : String,
-    val count: Int = 0
+    val id: Int,
+    val name: String,
+    val rank: Int = 0
 )

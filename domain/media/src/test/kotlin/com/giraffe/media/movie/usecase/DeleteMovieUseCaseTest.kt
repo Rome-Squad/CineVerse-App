@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class DeleteMovieUseCaseTest {
     private var repository: MovieRepository = mockk(relaxUnitFun = true)
-    private var useCase: DeleteMovieUseCase = DeleteMovieUseCase(repository)
+    private var useCase: DeleteRecentlyViewedMovieByIdUseCase = DeleteRecentlyViewedMovieByIdUseCase(repository)
 
     @Test
     fun `invoke should call deleteById method on repository`() = runTest {
@@ -16,6 +16,6 @@ class DeleteMovieUseCaseTest {
         useCase(movieId)
 
         // Then
-        coVerify { repository.deleteById(movieId) }
+        coVerify { repository.deleteRecentlyViewedMovieById(movieId) }
     }
 }

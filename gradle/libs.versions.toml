@@ -190,7 +190,8 @@ room = [
 
 firebase = [
     "firebase-crashlytics",
-    "firebase-analytics"
+    "firebase-analytics",
+    "firebase-perf-ktx"
 ]
 
 unit-test = [
