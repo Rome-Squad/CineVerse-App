@@ -95,7 +95,10 @@ private fun PosterListView(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = contentPadding
     ) {
-        items(posters.itemCount) { index ->
+        items(
+            count = posters.itemCount,
+            key = { index -> posters[index]?.id ?: index }
+        ) { index ->
             posters[index]?.let { poster ->
                 PosterHorizontal(
                     poster = poster,
@@ -125,7 +128,10 @@ private fun PosterGridView(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = contentPadding
     ) {
-        items(posters.itemCount) { index ->
+        items(
+            count = posters.itemCount,
+            key = { index -> posters[index]?.id ?: index }
+        ) { index ->
             posters[index]?.let { poster ->
                 PosterVertically(
                     poster = poster,
