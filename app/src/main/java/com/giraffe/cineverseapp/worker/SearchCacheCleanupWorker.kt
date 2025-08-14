@@ -19,7 +19,15 @@ class SearchCacheCleanupWorker @AssistedInject constructor(
             clearExpiredSearchHistoryUseCase()
             Result.success()
         } catch (_: Exception) {
-            Result.retry()
+            if (runAttemptCount < MAX_RETRY_ATTEMPTS) {
+                Result.retry()
+            } else {
+                Result.failure()
+            }
         }
+    }
+
+    companion object {
+        private const val MAX_RETRY_ATTEMPTS = 3
     }
 }
