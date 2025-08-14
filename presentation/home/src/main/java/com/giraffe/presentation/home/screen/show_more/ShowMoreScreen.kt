@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
@@ -63,6 +64,7 @@ fun ShowMoreContent(
     state: ShowMoreScreenState,
     showMoreInteractionListener: ShowMoreInteractionListener,
 ) {
+    val lazyMediaPosters = state.mediaFlow.collectAsLazyPagingItems()
     BaseScreenWithStates(
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet
@@ -85,7 +87,7 @@ fun ShowMoreContent(
                         .fillMaxWidth()
                 ) {
                     TransitionLazyColumnToGrid(
-                        poster = state.mediaList,
+                        posters = lazyMediaPosters,
                         isListSelected = state.isListSelected,
                         onClickItem = showMoreInteractionListener::onMediaClicked,
                     )

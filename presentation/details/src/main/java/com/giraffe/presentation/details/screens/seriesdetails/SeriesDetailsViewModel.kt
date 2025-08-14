@@ -5,6 +5,7 @@ import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
@@ -24,7 +25,6 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -142,6 +142,7 @@ class SeriesDetailsViewModel @Inject constructor(
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
 
                 safeExecute(
+                    onSuccess = { loadSeriesDetails(state.value.seriesUi.id) },
                     onError = ::onError
                 ) {
                     addRatingUseCase(
