@@ -80,7 +80,10 @@ class RecentlyViewedStrategy(
             .map { movie -> movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title }) }
         val recentSeries = getRecentlySeriesUseCase(page, pageSize).first()
             .map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) }
-        return (recentMovies + recentSeries).distinctBy { it.id }
+        return (recentMovies + recentSeries)
+            .distinctBy { it.id }
+            .filter { it.recentViewedAt != null}
+            .sortedByDescending { it.recentViewedAt }
     }
 
     override fun getSectionType() = ShowMoreSectionType.RECENTLY_VIEWED
