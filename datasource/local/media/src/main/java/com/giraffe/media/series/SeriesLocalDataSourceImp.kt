@@ -93,8 +93,8 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
 
-    override fun getRecentSeries() = safeFlow {
-        seriesDao.getRecentSeries().onStart { seriesDao.syncRecentViewedTime() }
+    override fun getRecentSeries(page: Int, pageSize: Int) = safeFlow {
+        seriesDao.getRecentSeries(page, pageSize).onStart { seriesDao.syncRecentViewedTime() }
     }
 
 

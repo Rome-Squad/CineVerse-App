@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetRecentlyViewedSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
-    operator fun invoke() = seriesRepository.getRecentlyViewed()
+    operator fun invoke(page: Int = 1, pageSize: Int = 10) = seriesRepository.getRecentlyViewed(page, pageSize)
 }

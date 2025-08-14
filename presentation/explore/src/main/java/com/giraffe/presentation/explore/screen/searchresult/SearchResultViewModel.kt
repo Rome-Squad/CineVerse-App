@@ -103,6 +103,10 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
+    override fun onRecordingClick() {
+        sendEffect(SearchResultEffect.NavigateToSearchScreen)
+    }
+
 
     private fun getMoviesGenres() {
         updateState { it.copy(isLoading = true, isNoInternet = false) }

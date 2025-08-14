@@ -41,8 +41,8 @@ class SeriesRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getRecentlyViewed() = safeFlow {
-        seriesLocalDateSource.getRecentSeries().map { seriesList ->
+    override fun getRecentlyViewed(page: Int, pageSize: Int) = safeFlow {
+        seriesLocalDateSource.getRecentSeries(page, pageSize).map { seriesList ->
             seriesList.map { series -> series.toEntity() }
         }
     }
@@ -81,6 +81,20 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun getByGenreId(genreId: Int, page: Int) = safeCall {
         seriesRemoteDataSource.getSeriesByGenre(genreId, page).map { it.toEntity() }
+    }
+
+    override suspend fun discoverSeries(
+        genreId: List<Int>?,
+        keywords: String?,
+        sortBy: String,
+        page: Int
+    ) = safeCall {
+        seriesRemoteDataSource.discoverSeries(
+            genreId = genreId,
+            keywords = keywords,
+            sortBy = sortBy,
+            page = page
+        ).map(SeriesDto::toEntity)
     }
 
     override suspend fun getGenresByIds(genreIDs: List<Int>) = safeCall {

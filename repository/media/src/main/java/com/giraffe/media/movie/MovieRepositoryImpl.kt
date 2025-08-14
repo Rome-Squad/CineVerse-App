@@ -58,6 +58,22 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
+
+    override suspend fun discoverMovies(
+        genreId: List<Int>?,
+        keywords: String?,
+        sortBy: String,
+        page: Int
+    ) = safeCall {
+        movieRemote.discoverMovies(
+            genreId = genreId,
+            keywords = keywords,
+            sortBy = sortBy,
+            page = page
+        ).map(MovieDto::toEntity)
+    }
+
+
     override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
         return safeCall {
             movieRemote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
@@ -283,8 +299,8 @@ class MovieRepositoryImpl @Inject constructor(
     private suspend fun addRecentlyViewed(movie: Movie) =
         movieLocal.addRecentlyViewedMovie(movie.toCacheDto())
 
-    override fun getRecentlyViewed(): Flow<List<Movie>> {
-        return movieLocal.getRecentlyViewedMovies().map { movies ->
+    override fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>> {
+        return movieLocal.getRecentlyViewedMovies(page, pageSize).map { movies ->
             movies.map(MovieWithRecentlyViewedAt::toEntity)
         }
     }

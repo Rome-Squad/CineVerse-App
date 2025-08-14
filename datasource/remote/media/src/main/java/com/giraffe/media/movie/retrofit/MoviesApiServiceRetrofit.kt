@@ -27,9 +27,12 @@ import com.giraffe.media.util.NetworkConstants.RATING
 import com.giraffe.media.util.NetworkConstants.RECOMMENDATIONS
 import com.giraffe.media.util.NetworkConstants.REVIEWS
 import com.giraffe.media.util.NetworkConstants.SEARCH
+import com.giraffe.media.util.NetworkConstants.SORT_BY
+import com.giraffe.media.util.NetworkConstants.SORT_BY_DEFAULT
 import com.giraffe.media.util.NetworkConstants.UPCOMING
 import com.giraffe.media.util.NetworkConstants.VIDEOS
 import com.giraffe.media.util.NetworkConstants.WITH_GENRES
+import com.giraffe.media.util.NetworkConstants.WITH_KEYWORDS
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -56,8 +59,10 @@ interface MoviesApiServiceRetrofit {
     suspend fun getGenres(): Response<GenreResponse>
 
     @GET("$DISCOVER/$MOVIE")
-    suspend fun getMoviesByGenre(
-        @Query(WITH_GENRES) genreId: String,
+    suspend fun discoverMovies(
+        @Query(WITH_GENRES) genreId: String? = null,
+        @Query(WITH_KEYWORDS) keywords: String? = null,
+        @Query(SORT_BY) sortBy: String? = SORT_BY_DEFAULT,
         @Query(PAGE) page: Int
     ): Response<MoviesListResponse<MovieDto>>
 
