@@ -97,7 +97,7 @@ private fun PosterListView(
     ) {
         items(
             count = posters.itemCount,
-            key = { index -> posters[index]?.id ?: index }
+            key = { index -> "${posters[index]?.id} + $index" }
         ) { index ->
             posters[index]?.let { poster ->
                 PosterHorizontal(
@@ -130,7 +130,7 @@ private fun PosterGridView(
     ) {
         items(
             count = posters.itemCount,
-            key = { index -> posters[index]?.id ?: index }
+            key = { index -> "${posters[index]?.id} + $index" }
         ) { index ->
             posters[index]?.let { poster ->
                 PosterVertically(
