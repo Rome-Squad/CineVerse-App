@@ -13,4 +13,6 @@ interface SearchRepository {
 
     suspend fun clearSearchHistory()
 
+    suspend fun clearExpiredSearch()
+
 }

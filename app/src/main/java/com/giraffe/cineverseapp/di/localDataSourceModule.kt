@@ -1,8 +1,6 @@
 package com.giraffe.cineverseapp.di
 
 import com.giraffe.media.explore.LocalSearchDataSourceImpl
-import com.giraffe.media.explore.cleaner.KeywordsCacheCleaner
-import com.giraffe.media.explore.cleaner.KeywordsCacheCleanerImp
 import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.movie.MovieLocalDataSourceImp
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
@@ -25,10 +23,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class LocalDataSourceBindModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindKeywordsCacheCleaner(impl: KeywordsCacheCleanerImp): KeywordsCacheCleaner
 
     @Binds
     @Singleton

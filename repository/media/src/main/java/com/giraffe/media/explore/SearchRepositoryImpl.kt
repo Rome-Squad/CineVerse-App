@@ -3,13 +3,12 @@ package com.giraffe.media.explore
 import com.giraffe.media.explore.datasource.local.LocalSearchDataSource
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
+import com.giraffe.media.explore.datasource.remote.dto.SearchKeywordDto
 import com.giraffe.media.explore.entity.SearchKeyword
 import com.giraffe.media.explore.mapper.toEntity
 import com.giraffe.media.explore.repository.SearchRepository
-import com.giraffe.media.utils.mapToDomainException
 import com.giraffe.media.utils.safeCall
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -19,48 +18,57 @@ class SearchRepositoryImpl @Inject constructor(
 ) : SearchRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
-        return if (query.isBlank()) {
-            safeCall {
-                local.getSearchHistory().map { it.map { cacheDto -> cacheDto.toEntity() } }
+        return safeCall {
+            if (query.isBlank()) {
+                getSearchHistoryWhenQueryIsBlank()
+            } else {
+                getSearchHistoryWhenHasQuery(query)
             }
-        } else {
-            // Get history from local data source
-            val history = safeCall {
-                local.getSearchKeywords(query).map { it.map { cacheDto -> cacheDto.toEntity() } }
-            }
-
-            // Get remote search keywords
-            val remoteResults = safeCall {
-                remote.getSearchKeywords(query).map { it.toEntity() }
-            }
-
-            // Combine both flows and sort the results
-
-            return history.map { historyList ->
-                (historyList + remoteResults)
-                    .distinctBy { it.keyword }
-                    .sortedByDescending { it.searchedAt }
-            }.catch { throw mapToDomainException(it) }
-
         }
-
     }
 
-    override suspend fun addSearchKeyword(searchKeyword: String) = safeCall {
-        val cachedKeyword =
-            local.getSearchKeyword(searchKeyword)?.copy(searchedAt = System.currentTimeMillis())
-                ?: SearchKeywordCacheDto(searchKeyword)
-        local.insertSearchKeyword(cachedKeyword)
+    private suspend fun getSearchHistoryWhenHasQuery(query: String): Flow<List<SearchKeyword>> {
+        val history = getLocalSearchKeywords(query)
+        val remoteResults = getRemoteSearchKeywords(query)
+        return history.map { historyList ->
+            (historyList + remoteResults)
+                .distinctBy { it.keyword }
+                .sortedByDescending { it.searchedAt }
+        }
     }
 
-    override suspend fun deleteSearchKeyword(keyword: String) = safeCall {
+    private fun getSearchHistoryWhenQueryIsBlank(): Flow<List<SearchKeyword>> {
+        return local.getSearchHistory()
+            .map { it.map(SearchKeywordCacheDto::toEntity) }
+    }
+
+    private suspend fun getRemoteSearchKeywords(query: String): List<SearchKeyword> {
+        return remote.getSearchKeywords(query)
+            .map(SearchKeywordDto::toEntity)
+    }
+
+    private fun getLocalSearchKeywords(query: String): Flow<List<SearchKeyword>> {
+        return local.getSearchKeywords(query)
+            .map { it.map(SearchKeywordCacheDto::toEntity) }
+    }
+
+    override suspend fun addSearchKeyword(searchKeyword: String) {
+        safeCall {
+            val cachedKeyword =
+                local.getSearchKeyword(searchKeyword)?.copy(searchedAt = System.currentTimeMillis())
+                    ?: SearchKeywordCacheDto(searchKeyword)
+            local.insertSearchKeyword(cachedKeyword)
+        }
+    }
+
+    override suspend fun deleteSearchKeyword(keyword: String) =
         local.deleteSearchKeyword(keyword)
-    }
 
-    override suspend fun clearSearchHistory() = safeCall {
+    override suspend fun clearSearchHistory() =
         local.clearSearchHistory()
-    }
 
+    override suspend fun clearExpiredSearch() =
+        local.clearExpiredSearch()
 
-    }
+}
 

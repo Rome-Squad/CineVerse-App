@@ -10,4 +10,5 @@ interface LocalSearchDataSource {
     suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto)
     suspend fun deleteSearchKeyword(keyword: String)
     suspend fun clearSearchHistory()
+    suspend fun clearExpiredSearch()
 }

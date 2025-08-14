@@ -8,29 +8,26 @@ import com.giraffe.media.util.safeFlow
 import javax.inject.Inject
 
 class LocalSearchDataSourceImpl @Inject constructor(
-    private val dao: SearchKeywordDao
+    private val searchKeywordDao: SearchKeywordDao
 ) : LocalSearchDataSource {
-    override fun getSearchHistory() = safeFlow {
-        dao.getSearchHistory()
-    }
+    override suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto) =
+        safeCall { searchKeywordDao.insertSearchKeyword(searchKeyword) }
 
-    override  fun getSearchKeywords(query: String) = safeFlow {
-        dao.getSearchKeywords(query)
-    }
+    override fun getSearchHistory() =
+        safeFlow { searchKeywordDao.getSearchHistory() }
 
-    override suspend fun getSearchKeyword(query: String) = safeCall {
-        dao.getSearchKeyword(query)
-    }
+    override fun getSearchKeywords(query: String) =
+        safeFlow { searchKeywordDao.getSearchKeywords(query) }
 
-    override suspend fun insertSearchKeyword(searchKeyword: SearchKeywordCacheDto) = safeCall {
-        dao.insertSearchKeyword(searchKeyword)
-    }
+    override suspend fun getSearchKeyword(query: String) =
+        safeCall { searchKeywordDao.getSearchKeyword(query) }
 
-    override suspend fun deleteSearchKeyword(keyword: String) = safeCall {
-        dao.deleteSearchKeyword(keyword)
-    }
+    override suspend fun deleteSearchKeyword(keyword: String) =
+        safeCall { searchKeywordDao.deleteSearchKeyword(keyword) }
 
-    override suspend fun clearSearchHistory() = safeCall {
-        dao.clearSearchHistory()
-    }
+    override suspend fun clearSearchHistory() =
+        safeCall { searchKeywordDao.clearSearchHistory() }
+
+    override suspend fun clearExpiredSearch() =
+        safeCall { searchKeywordDao.clearExpiredSearch(currentTime = System.currentTimeMillis()) }
 }
