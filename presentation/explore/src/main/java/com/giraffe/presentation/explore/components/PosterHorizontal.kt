@@ -91,23 +91,27 @@ fun PosterHorizontal(
                             color = Theme.color.shade.primary,
                             maxLines = 1,
                             modifier = Modifier.sharedElement(
-                                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
-                                    animatedVisibilityScope = animatedVisibilityScope
+                                sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                        )
+                        poster.genres?.let {
+                            if (it.isNotEmpty()) {
+                                Text(
+                                    text = poster.genres ?: stringResource(R.string.unknown_genre),
+                                    style = Theme.textStyle.body.sm.regular,
+                                    color = Theme.color.shade.secondary,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
-                        )
-                        Text(
-                            text = poster.genres ?: stringResource(R.string.unknown_genre),
-                            style = Theme.textStyle.body.sm.regular,
-                            color = Theme.color.shade.secondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                            }
+                        }
                     }
                     Rating(
                         value = poster.rating, modifier = Modifier.sharedElement(
-                                sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            )
+                            sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
                     )
                 }
                 poster.date?.let {
