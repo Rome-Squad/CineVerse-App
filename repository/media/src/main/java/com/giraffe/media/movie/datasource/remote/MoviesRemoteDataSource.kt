@@ -18,17 +18,13 @@ interface MoviesRemoteDataSource {
     suspend fun getMoviesByGenre(genreId: Int, page: Int): List<MovieDto>
 
     suspend fun addRating(movieId: Int, request: RatingRequest)
+
     suspend fun discoverMovies(
         genreId: Int? = null,
         keywords: String? = null,
         sortBy: String = "popularity.desc",
         page: Int
     ): List<MovieDto>
-
-    suspend fun getMovieReviews(
-        movieId: Int,
-        page: Int
-    ): List<ReviewDto>
 
     suspend fun getUserMovieRating(movieId: Int): Float?
 

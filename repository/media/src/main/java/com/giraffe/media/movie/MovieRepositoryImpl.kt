@@ -55,24 +55,9 @@ class MovieRepositoryImpl @Inject constructor(
                 addRecentlyViewed(movie)
                 movie
             }
-    override suspend fun getGenres() = safeCall {
-        movieLocal.getMoviesGenres()
-            .map(MovieGenreCacheDto::toEntity)
-            .ifEmpty {
-                movieRemote.getMovieGenres()
-                    .map(MovieGenreDto::toEntity)
-                    .also { addMovieGenres(it) }
-            }
+        }
     }
 
-    override suspend fun getTopGenre(): Genre? {
-        //Not yet implemented
-        return null
-    }
-
-    override suspend fun getByGenreId(genreId: Int, page: Int) = safeCall {
-        movieRemote.getMoviesByGenre(genreId, page).map(MovieDto::toEntity)
-    }
 
     override suspend fun discoverMovies(
         genreId: Int?,
@@ -88,21 +73,6 @@ class MovieRepositoryImpl @Inject constructor(
         ).map(MovieDto::toEntity)
     }
 
-    override fun getRecentlyViewed() =
-        movieLocal.getRecentlyViewedMovies().map { movies ->
-            movies.map(MovieCacheDto::toEntity)
-        }.catch { throw mapToDomainException(it) }
-
-    override suspend fun getDetails(movieId: Int) = safeCall {
-        withContext(Dispatchers.IO) {
-            val youtubeVideoId = async { movieRemote.getMovieTrailerUrl(movieId) }
-            val movieDetails = async { movieRemote.getMovieById(movieId) }.await()
-            movieDetails.youtubeVideoId = youtubeVideoId.await()
-            val movie = movieDetails.toEntity()
-            setMovieRecent(movie)
-            movie
-        }
-    }
 
     override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
         return safeCall {

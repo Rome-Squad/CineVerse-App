@@ -28,8 +28,6 @@ interface MovieRepository {
         page: Int
     ): List<Movie>
 
-    fun getRecentlyViewed(): Flow<List<Movie>>
-
     suspend fun getDetails(movieId: Int): Movie
 
     suspend fun getRecommended(movieId: Int, page: Int): List<Movie>
