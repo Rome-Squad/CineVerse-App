@@ -115,8 +115,8 @@ class MovieRepositoryImpl @Inject constructor(
         movieRemote.getUserMovieRating(movieId)
     }
 
-    override suspend fun deleteById(movieId: Int) {
-        movieLocal.deleteMovieById(movieId)
+    override suspend fun deleteRecentlyViewedMovieById(movieId: Int) {
+        movieLocal.deleteRecentlyViewedMovieById(movieId)
     }
 
     override suspend fun getUserRated(accountId: Int) = safeCall {
@@ -281,22 +281,31 @@ class MovieRepositoryImpl @Inject constructor(
             movies.map(MovieWithRecentlyViewedAt::toEntity)
         }
     }
+
+    override suspend fun clearRecentlyViewed() {
+        movieLocal.clearRecentlyViewedMovies()
+    }
     // endregion
 
     override suspend fun deleteRating(movieId: Int) = safeCall {
         movieRemote.deleteMovieRating(movieId)
     }
 
-    override suspend fun clearAll() = safeCall {
+    override suspend fun clearAll() {
         movieLocal.clearMovieCache()
-    }
-
-    override suspend fun clearRecentlyViewed() {
-        movieLocal.clearRecentlyViewedMovies()
+        movieLocal.clearMovieGenres()
+        movieLocal.clearPopularMovies()
+        movieLocal.clearRecentlyReleasedMovies()
+        movieLocal.clearUpcomingMovies()
+        movieLocal.clearMatchesYourVibeMovies()
     }
 
     override suspend fun clearExceptRecentlyViewed() {
         movieLocal.clearExceptRecentlyViewed()
+        movieLocal.clearPopularMovies()
+        movieLocal.clearRecentlyReleasedMovies()
+        movieLocal.clearUpcomingMovies()
+        movieLocal.clearMatchesYourVibeMovies()
     }
 
 }

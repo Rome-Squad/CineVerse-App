@@ -44,6 +44,8 @@ interface MovieDao {
     )
     suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
 
+    @Query("DELETE FROM $POPULAR_MOVIE_TABLE")
+    suspend fun clearPopularMovies()
     // endregion
 
     // region Recently Released
@@ -60,6 +62,8 @@ interface MovieDao {
     )
     suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
 
+    @Query("DELETE FROM $RECENTLY_RELEASED_MOVIE_TABLE")
+    suspend fun clearRecentlyReleasedMovies()
     // endregion
 
     // region Upcoming
@@ -76,6 +80,8 @@ interface MovieDao {
     )
     suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
 
+    @Query("DELETE FROM $UPCOMING_MOVIE_TABLE")
+    suspend fun clearUpcomingMovies()
     // endregion
 
     // region Match
@@ -91,7 +97,10 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    fun getMatchesYourVibeMovies(limit: Int): List<MovieCacheDto>
+    suspend fun getMatchesYourVibeMovies(limit: Int): List<MovieCacheDto>
+
+    @Query("DELETE FROM $MATCHES_YOUR_VIBE_MOVIE_TABLE")
+    suspend fun clearMatchesYourVibeMovies()
     // endregion
 
     //region Recently Viewed
@@ -108,13 +117,19 @@ interface MovieDao {
         """
     )
     fun getRecentlyViewedMovies(): Flow<List<MovieWithRecentlyViewedAt>>
+
+    @Query("DELETE FROM $RECENTLY_VIEWED_MOVIE_TABLE WHERE id = :movieId")
+    suspend fun deleteRecentlyViewedMovieById(movieId: Int)
+
+    @Query("DELETE FROM $RECENTLY_VIEWED_MOVIE_TABLE")
+    suspend fun clearRecentlyViewedMovies()
     //endregion
 
     // region Movie Genres
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieGenres(movies: List<MovieGenreCacheDto>)
 
-    @Query("UPDATE movie_genre SET rank = rank + 1 WHERE id IN (:genreIds)")
+    @Query("UPDATE $MOVIE_GENRE_TABLE SET rank = rank + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
@@ -130,18 +145,6 @@ interface MovieDao {
     suspend fun clearMovieGenres()
     // endregion
 
-    @Query("DELETE FROM $MOVIE_TABLE WHERE id = :movieId")
-    suspend fun deleteMovieById(movieId: Int)
-
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE id IN (:ids)")
-    suspend fun getMoviesByIds(ids: List<Int>): List<MovieCacheDto>
-
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE id =:movieId")
-    suspend fun getMovieById(movieId: Int): MovieCacheDto?
-
-    @Query("SELECT * FROM $MOVIE_TABLE WHERE title LIKE '%' || :movieName || '%'")
-    suspend fun getMovieByName(movieName: String): List<MovieCacheDto>
-
     @Query("DELETE FROM $MOVIE_TABLE")
     suspend fun clearMovieCache()
 
@@ -154,7 +157,4 @@ interface MovieDao {
         """
     )
     suspend fun clearExceptRecentlyViewed()
-
-    @Query("DELETE FROM $RECENTLY_VIEWED_MOVIE_TABLE")
-    suspend fun clearRecentlyViewedMovies()
 }

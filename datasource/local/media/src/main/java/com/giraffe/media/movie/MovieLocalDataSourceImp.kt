@@ -50,11 +50,17 @@ class MovieLocalDataSourceImp @Inject constructor(
     override suspend fun getPopularityMovies(limit: Int) =
         safeCall { movieDao.getPopularityMovies(limit = limit) }
 
+    override suspend fun clearPopularMovies() =
+        safeCall { movieDao.clearPopularMovies() }
+
     override suspend fun addRecentlyReleasedMovies(movies: List<RecentReleasedMovieCacheDto>) =
         safeCall { movieDao.insertRecentlyReleasedMovies(movies) }
 
     override suspend fun getRecentlyReleasedMovies(limit: Int) =
         safeCall { movieDao.getRecentlyReleasedMovies(limit) }
+
+    override suspend fun clearRecentlyReleasedMovies() =
+        safeCall { movieDao.clearRecentlyReleasedMovies() }
 
     override suspend fun addUpcomingMovies(movies: List<UpcomingMovieCacheDto>) =
         safeCall { movieDao.insertUpcomingMovies(movies) }
@@ -62,17 +68,30 @@ class MovieLocalDataSourceImp @Inject constructor(
     override suspend fun getUpcomingMovies(limit: Int) =
         safeCall { movieDao.getUpcomingMovies(limit) }
 
+    override suspend fun clearUpcomingMovies() =
+        safeCall { movieDao.clearUpcomingMovies() }
+
     override suspend fun addMatchesYourVibeMovies(movies: List<MatchesYourVibeMovieCacheDto>) =
         safeCall { movieDao.insertMatchesYourVibeMovies(movies) }
 
     override suspend fun getMatchesYourVibeMovies(limit: Int) =
         safeCall { movieDao.getMatchesYourVibeMovies(limit) }
 
+    override suspend fun clearMatchesYourVibeMovies() =
+        safeCall { movieDao.clearMatchesYourVibeMovies() }
+
     override suspend fun addRecentlyViewedMovie(movie: RecentlyViewedMovieCacheDto) =
         safeCall { movieDao.insertRecentlyViewedMovie(movie) }
 
     override fun getRecentlyViewedMovies() =
         safeFlow { movieDao.getRecentlyViewedMovies() }
+
+    override suspend fun deleteRecentlyViewedMovieById(movieId: Int) =
+        safeCall { movieDao.deleteRecentlyViewedMovieById(movieId) }
+
+    override suspend fun clearRecentlyViewedMovies() =
+        safeCall { movieDao.clearRecentlyViewedMovies() }
+
     // endregion Popularity, Recently Released, Upcoming, Match, Recently Viewed
 
     override suspend fun clearMovieCache() =
@@ -80,10 +99,4 @@ class MovieLocalDataSourceImp @Inject constructor(
 
     override suspend fun clearExceptRecentlyViewed() =
         safeCall { movieDao.clearExceptRecentlyViewed() }
-
-    override suspend fun clearRecentlyViewedMovies() =
-        safeCall { movieDao.clearRecentlyViewedMovies() }
-
-    override suspend fun deleteMovieById(movieId: Int) =
-        safeCall { movieDao.deleteMovieById(movieId) }
 }

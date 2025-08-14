@@ -31,27 +31,35 @@ interface MoviesLocalDataSource {
 
     suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
 
+    suspend fun clearPopularMovies()
+
     suspend fun addRecentlyReleasedMovies(movies: List<RecentReleasedMovieCacheDto>)
 
     suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
+
+    suspend fun clearRecentlyReleasedMovies()
 
     suspend fun addUpcomingMovies(movies: List<UpcomingMovieCacheDto>)
 
     suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
 
+    suspend fun clearUpcomingMovies()
+
     suspend fun addMatchesYourVibeMovies(movies: List<MatchesYourVibeMovieCacheDto>)
 
     suspend fun getMatchesYourVibeMovies(limit: Int): List<MovieCacheDto>
+
+    suspend fun clearMatchesYourVibeMovies()
 
     suspend fun addRecentlyViewedMovie(movie: RecentlyViewedMovieCacheDto)
 
     fun getRecentlyViewedMovies(): Flow<List<MovieWithRecentlyViewedAt>>
 
-    suspend fun clearMovieCache()
-
-    suspend fun clearExceptRecentlyViewed()
+    suspend fun deleteRecentlyViewedMovieById(movieId: Int)
 
     suspend fun clearRecentlyViewedMovies()
 
-    suspend fun deleteMovieById(movieId: Int)
+    suspend fun clearMovieCache()
+
+    suspend fun clearExceptRecentlyViewed()
 }
