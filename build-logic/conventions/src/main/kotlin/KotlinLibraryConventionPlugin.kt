@@ -9,6 +9,7 @@ import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
+import org.gradle.testing.jacoco.tasks.JacocoReportBase
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 open class CoverageConfigExtension {
@@ -59,18 +60,18 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             }
         }
 
-        tasks.withType<JacocoCoverageVerification>().configureEach {
+        tasks.withType<JacocoReportBase> {
+            classDirectories.setFrom(
+                files(classDirectories.files.map {
+                    fileTree(it) {
+                        config.includes.forEach { inc -> include(inc) }
+                        config.excludes.forEach { exc -> exclude(exc) }
+                    }
+                })
+            )
+        }
+        tasks.withType<JacocoCoverageVerification>() {
             dependsOn("test")
-            doFirst {
-                classDirectories.from(
-                    files(classDirectories.files.map {
-                        fileTree(it) {
-                            config.includes.forEach { inc -> include(inc) }
-                            config.excludes.forEach { exc -> exclude(exc) }
-                        }
-                    })
-                )
-            }
             violationRules {
                 listOf(
                     Triple(null, null, "0.8"),
