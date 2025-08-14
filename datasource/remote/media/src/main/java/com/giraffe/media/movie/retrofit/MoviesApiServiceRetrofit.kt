@@ -12,6 +12,7 @@ import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_STATES
 import com.giraffe.media.util.NetworkConstants.GENRES_URL
 import com.giraffe.media.util.NetworkConstants.ID
+import com.giraffe.media.util.NetworkConstants.LANGUAGE
 import com.giraffe.media.util.NetworkConstants.MOVIES_BY_GENRE_URL
 import com.giraffe.media.util.NetworkConstants.MOVIES_BY_NAME_URL
 import com.giraffe.media.util.NetworkConstants.MOVIE_END_POINT
@@ -52,7 +53,9 @@ interface MoviesApiServiceRetrofit {
     ): Response<MoviesListResponse<MovieDto>>
 
     @GET(GENRES_URL)
-    suspend fun getGenres(): Response<GenreResponse>
+    suspend fun getGenres(
+        @Query(LANGUAGE) language: String
+    ): Response<GenreResponse>
 
     @GET(MOVIES_BY_GENRE_URL)
     suspend fun getMoviesByGenre(

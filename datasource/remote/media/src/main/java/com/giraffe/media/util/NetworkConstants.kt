@@ -1,10 +1,12 @@
 package com.giraffe.media.util
 
+
 object NetworkConstants {
     const val MOVIE_END_POINT = "movie"
     const val REVIEWS_END_POINT = "reviews"
     const val MOVIES_BY_NAME_URL = "search/movie"
     const val GENRES_URL = "genre/movie/list"
+    const val LANGUAGE = "language"
     const val MOVIES_BY_GENRE_URL = "discover/movie"
     const val POPULAR_MOVIES_URL = "movie/popular"
     const val UPCOMING_MOVIES_URL = "movie/upcoming"

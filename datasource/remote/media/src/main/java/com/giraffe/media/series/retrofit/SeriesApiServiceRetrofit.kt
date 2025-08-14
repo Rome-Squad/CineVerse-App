@@ -9,6 +9,7 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.response.GenresResponse
 import com.giraffe.media.series.response.SeriesResponse
 import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
+import com.giraffe.media.util.NetworkConstants.LANGUAGE
 import com.giraffe.media.util.NetworkConstants.NEEDS_SESSION
 import com.giraffe.media.util.NetworkConstants.RATING
 import com.giraffe.media.util.NetworkConstants.TV_END_POINT
@@ -38,7 +39,9 @@ interface SeriesApiServiceRetrofit {
     ): Response<SeriesResponse<SeriesDto>>
 
     @GET(GENRE_TV_LIST)
-    suspend fun getGenres(): Response<GenresResponse>
+    suspend fun getGenres(
+        @Query(LANGUAGE) language: String
+    ): Response<GenresResponse>
 
     @GET("$TV/{$SERIES_ID}")
     suspend fun getSeriesDetails(
