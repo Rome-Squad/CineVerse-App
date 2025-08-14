@@ -14,6 +14,7 @@ import com.giraffe.presentation.details.navigation.routes.CastCreditRoute
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
@@ -47,17 +48,19 @@ class CastCreditViewModel @Inject constructor(
     }
 
     private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
+        val language = Locale.getDefault().language
         safeExecute(
             onSuccess = ::updateCastCreditPosters,
             onError = ::loadCastCreditError
         ) {
             val seriesPosters = castCredits.series.map {
-                val genres = getSeriesGenres(it.genreIDs).map { genre -> genre.title }
+                val genres = getSeriesGenres(it.genreIDs, language).map { genre -> genre.title }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
             val moviesPosters = castCredits.movies.map {
-                val genres = getMoviesGenresByIds(it.genresID).map { genre -> genre.title }
+                val genres =
+                    getMoviesGenresByIds(it.genresID, language).map { genre -> genre.title }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 

@@ -24,6 +24,7 @@ import com.giraffe.presentation.explore.util.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,11 +44,12 @@ class DiscoverViewModel @Inject constructor(
 
     private fun getMovieGenres() {
         updateState { it.copy(isLoading = true, isNoInternet = false) }
+        val language = Locale.getDefault().language
 
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
             onError = ::onError,
-            block = { getMoviesGenresUseCase() }
+            block = { getMoviesGenresUseCase(language) }
         )
     }
 
@@ -63,12 +65,14 @@ class DiscoverViewModel @Inject constructor(
     }
 
     private fun getSeriesGenres() {
+        val language = Locale.getDefault().language
+
         updateState { it.copy(isLoading = true, isNoInternet = false) }
 
         safeExecute(
             onSuccess = ::getSeriesGenresSuccess,
             onError = ::onError,
-            block = { getSeriesGenresUseCase() }
+            block = { getSeriesGenresUseCase(language) }
         )
     }
 

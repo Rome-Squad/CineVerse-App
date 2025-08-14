@@ -16,6 +16,7 @@ import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -118,17 +119,20 @@ class MatchResultViewModel @Inject constructor(
     }
 
     private suspend fun mapMoviesToMatchResult(movies: List<Movie>): List<MatchResultModel> {
+        val language = Locale.getDefault().language
         return movies.map { movie ->
                 val details = getMovieDetailsUseCase(movie.id)
-                val genres = getMoviesGenresByIdsUseCase(details.genresID).map { it.title }
+            val genres = getMoviesGenresByIdsUseCase(details.genresID, language).map { it.title }
                 details.toMatchResultModel(genres)
         }
     }
 
     private suspend fun mapSeriesToMatchResult(seriesList: List<Series>): List<MatchResultModel> {
+        val language = Locale.getDefault().language
+
         return seriesList.map { series ->
                 val details = getSeriesDetailsUseCase(series.id)
-                val genres = getSeriesGenresByIdsUseCase(details.genreIDs).map { it.title }
+            val genres = getSeriesGenresByIdsUseCase(details.genreIDs, language).map { it.title }
                 details.toMatchResultModel(genres, details.rating, details.youtubeVideoId)
 
         }

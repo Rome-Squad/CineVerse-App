@@ -9,6 +9,7 @@ import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.toSwipeablePoster
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,10 +32,12 @@ class CollectionDetailsViewModel @Inject constructor(
     }
 
     private fun getMoviesGenres() {
+        val language = Locale.getDefault().language
+
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
-            block = getMoviesGenresUseCase::invoke
+            block = { getMoviesGenresUseCase.invoke(language) }
         )
     }
 

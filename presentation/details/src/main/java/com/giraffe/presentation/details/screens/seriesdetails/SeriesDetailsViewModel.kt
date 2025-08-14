@@ -5,6 +5,7 @@ import androidx.navigation.toRoute
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
@@ -24,9 +25,9 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
@@ -229,11 +230,13 @@ class SeriesDetailsViewModel @Inject constructor(
 
 
     private fun loadSeriesGenres(genreIDs: List<Int>) {
+        val language = Locale.getDefault().language
+
         safeExecute(
             onSuccess = ::loadSeriesGenresSuccess,
             onError = ::onError
         ) {
-            getSeriesGenres(genreIDs)
+            getSeriesGenres(genreIDs, language)
         }
     }
 

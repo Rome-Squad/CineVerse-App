@@ -14,6 +14,7 @@ import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.utils.toRatedPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,15 +33,18 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun getGenres() {
+        val language = Locale.getDefault().language
+
+
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
-            block = getMoviesGenresUseCase::invoke
+            block = { getMoviesGenresUseCase.invoke(language) }
         )
         safeExecute(
             onSuccess = ::onGetSeriesGenresSuccess,
             onError = ::onFailure,
-            block = getSeriesGenresUseCase::invoke
+            block = { getSeriesGenresUseCase(language) }
         )
     }
 

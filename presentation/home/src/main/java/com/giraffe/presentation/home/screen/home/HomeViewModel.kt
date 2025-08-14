@@ -32,6 +32,7 @@ import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -110,10 +111,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getFeaturedCollection() {
+        val language = Locale.getDefault().language
+
         safeExecute(
             onSuccess = ::onGetFeaturedCollectionSuccess,
             onError = ::onFail,
-            block = { getMoviesGenresUseCase() })
+            block = { getMoviesGenresUseCase(language) })
     }
 
     private fun onGetFeaturedCollectionSuccess(genres: List<Genre>) {
@@ -142,9 +145,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetPopularityMoviesSuccess(movies: List<Movie>) {
+        val language = Locale.getDefault().language
+
         safeExecute {
             val popularMoviesUi = movies.map { movie ->
-                val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                val genres = getMoviesGenresByIdsUseCase(movie.genresID, language).map { it.title }
                 movie.toPopularMediaUi(genres)
             }
             updateState { currentState ->
@@ -159,9 +164,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetPopularitySeriesSuccess(series: List<Series>) {
+        val language = Locale.getDefault().language
+
         safeExecute {
             val popularSeriesUi = series.map { seriesList ->
-                val genres = getSeriesGenresByIdsUseCase(seriesList.genreIDs).map { it.title }
+                val genres =
+                    getSeriesGenresByIdsUseCase(seriesList.genreIDs, language).map { it.title }
                 seriesList.toPopularMediaUi(genres)
             }
             updateState { currentState ->

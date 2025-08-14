@@ -7,6 +7,7 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,10 +40,12 @@ class MatchPagerViewModel @Inject constructor(
     }
 
     private fun loadGenres() {
+        val language = Locale.getDefault().language
+
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
-            block = getMoviesGenresUseCase::invoke
+            block = { getMoviesGenresUseCase.invoke(language) }
         )
     }
 

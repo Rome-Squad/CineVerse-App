@@ -10,7 +10,6 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
@@ -24,7 +23,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.util.Locale
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class RecommendedMoviesViewModel @Inject constructor(
@@ -46,10 +47,12 @@ class RecommendedMoviesViewModel @Inject constructor(
     }
 
     private fun getMoviesGenres() {
+        val language = Locale.getDefault().language
+
         safeExecute(
             onSuccess = ::onGetMoviesGenresSuccess,
             onError = ::onError,
-            block = getMoviesGenresUseCase::invoke
+            block = { getMoviesGenresUseCase.invoke(language) }
         )
     }
 

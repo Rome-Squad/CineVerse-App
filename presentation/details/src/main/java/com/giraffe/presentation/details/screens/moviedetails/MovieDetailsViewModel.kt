@@ -28,6 +28,7 @@ import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
@@ -351,11 +352,13 @@ class MovieDetailsViewModel @Inject constructor(
 
 
     private fun loadMovieGenres(genresIds: List<Int>) {
+        val language = Locale.getDefault().language
+
         safeExecute(
             onSuccess = ::loadMovieGenresSuccess,
             onError = ::onError
         ) {
-            getMoviesGenresByIds(genresIds)
+            getMoviesGenresByIds(genresIds, language)
         }
     }
 

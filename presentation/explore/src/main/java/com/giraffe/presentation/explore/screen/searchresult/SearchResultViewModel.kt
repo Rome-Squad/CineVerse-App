@@ -25,6 +25,7 @@ import com.giraffe.presentation.explore.util.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -105,6 +106,8 @@ class SearchResultViewModel @Inject constructor(
 
 
     private fun getMoviesGenres() {
+        val language = Locale.getDefault().language
+
         updateState { it.copy(isLoading = true, isNoInternet = false) }
         safeExecute(
             onSuccess = { genres ->
@@ -116,12 +119,13 @@ class SearchResultViewModel @Inject constructor(
                 }
             },
             onError = ::onError,
-            block = { getMoviesGenresUseCase() }
+            block = { getMoviesGenresUseCase(language) }
         )
     }
 
     private fun getSeriesGenres() {
         updateState { it.copy(isNoInternet = false, isLoading = true) }
+        val language = Locale.getDefault().language
 
         safeExecute(
             onSuccess = { genres ->
@@ -133,7 +137,7 @@ class SearchResultViewModel @Inject constructor(
                 }
             },
             onError = ::onError,
-            block = { getSeriesGenresUseCase() },
+            block = { getSeriesGenresUseCase(language) },
         )
     }
 
@@ -167,13 +171,14 @@ class SearchResultViewModel @Inject constructor(
 
     private fun getSeries() {
         updateState { it.copy(isNoInternet = false, isLoading = true) }
+        val language = Locale.getDefault().language
 
         safeExecute(
             onSuccess = ::onGetSeriesSuccess,
             onError = ::onError
         ) {
             Pager(PagingConfig(pageSize = 15, prefetchDistance = 5, initialLoadSize = 15)) {
-                BasePagingSource { page -> getSeriesByName(state.value.query, page) }
+                BasePagingSource { page -> getSeriesByName(state.value.query, page, language) }
             }.flow.cachedIn(viewModelScope)
         }
     }
