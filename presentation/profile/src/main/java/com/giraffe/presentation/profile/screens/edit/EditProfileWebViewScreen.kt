@@ -7,8 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,35 +35,41 @@ fun EditProfileWebViewScreen(onBack: () -> Unit) {
     val isLoading = webViewState.loadingState is LoadingState.Loading
     val webViewClient = remember { RestrictedWebViewClient() }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
-            .systemBarsPadding()
+            .navigationBarsPadding()
+            .imePadding()
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            AppBar(
-                title = stringResource(R.string.edit_profile_title),
-                showBackButton = true,
-                onBackButtonClick = onBack,
-            )
-
+        AppBar(
+            title = stringResource(R.string.edit_profile_title),
+            showBackButton = true,
+            onBackButtonClick = onBack,
+            modifier = Modifier.statusBarsPadding()
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
             WebView(
                 state = webViewState,
                 client = webViewClient,
+                modifier = Modifier.fillMaxSize(),
                 onCreated = {
                     it.settings.javaScriptEnabled = true
                     it.setBackgroundColor(Color.TRANSPARENT)
                 }
             )
-        }
 
-        if (isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Progress(modifier = Modifier.size(40.dp))
+            if (isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Progress(modifier = Modifier.size(40.dp))
+                }
             }
         }
     }
