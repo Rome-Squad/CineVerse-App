@@ -3,6 +3,7 @@ package com.giraffe.media.movie.mapper
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieWithRecentlyViewedAt
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.media.movie.entity.Movie
@@ -10,7 +11,7 @@ import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.orEmpty
 import kotlinx.datetime.LocalDate
 
-fun MovieGenreCacheDto.toEntity() = Genre(id, name, count)
+fun MovieGenreCacheDto.toEntity() = Genre(id, name, rank)
 
 fun Genre.toDto() = MovieGenreCacheDto(id, title, rank)
 
@@ -18,6 +19,30 @@ fun MovieGenreDto.toEntity() = Genre(
     id = id,
     title = name,
     rank = 0
+)
+
+fun MovieWithRecentlyViewedAt.toEntity() = Movie(
+    id = movie.id,
+    name = movie.title,
+    overview = movie.overview,
+    rating = movie.voteAverage,
+    duration = movie.duration,
+    posterUrl = movie.posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    backdropUrl = movie.backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    }.orEmpty(),
+    youtubeVideoId = movie.youtubeVideoId.orEmpty(),
+    genresID = movie.genresID,
+    popularity = movie.popularity,
+    userRating = null,
+    recentViewedAt = recentViewedAt,
+    releaseYear = movie.releaseDate?.let { LocalDate.parse(it) }
 )
 
 fun MovieCacheDto.toEntity() =
@@ -39,9 +64,9 @@ fun MovieCacheDto.toEntity() =
         }.orEmpty(),
         youtubeVideoId = youtubeVideoId.orEmpty(),
         genresID = genresID,
-        recentViewedAt = recentViewedAt,
         popularity = popularity,
         userRating = null,
+        recentViewedAt = null,
         releaseYear = releaseDate?.let { LocalDate.parse(it) }
     )
 
@@ -63,7 +88,6 @@ fun Movie.toCacheDto() = MovieCacheDto(
     releaseDate = releaseYear.orEmpty(),
     duration = duration,
     popularity = popularity,
-    recentViewedAt = recentViewedAt,
 )
 
 fun MovieDto.toEntity(

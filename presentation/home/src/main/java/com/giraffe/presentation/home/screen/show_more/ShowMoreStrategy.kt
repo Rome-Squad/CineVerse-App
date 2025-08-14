@@ -1,13 +1,13 @@
 package com.giraffe.presentation.home.screen.show_more
 
+import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.model.ShowMorePoster
@@ -46,10 +46,11 @@ class TopRatedTvShowsStrategy(
     private val getTopRatedSeries: GetTopRatedSeriesUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(page: Int) = getTopRatedSeries(page = page, limit = 10).map { series ->
-        series.toShowMorePoster(
-            getSeriesGenresUseCase(series.genreIDs).map { it.title })
-    }
+    override suspend fun loadData(page: Int) =
+        getTopRatedSeries(page = page, limit = 10).map { series ->
+            series.toShowMorePoster(
+                getSeriesGenresUseCase(series.genreIDs).map { it.title })
+        }
 
     override fun getSectionType() = ShowMoreSectionType.TOP_RATED_TV_SHOWS
 }
@@ -85,28 +86,27 @@ class RecentlyViewedStrategy(
 }
 
 class MatchesYourVibesStrategy(
-    private val getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-    private val getRecommendedMovies: GetRecommendedMoviesUseCase,
-    private val getRecommendedSeries: GetRecommendedSeriesUseCase,
+    private val getMatchesYourVibeMovies: GetMatchesYourVibeMoviesUseCase,
+    private val getMatchesYourVibeSeries: GetMatchesYourVibeSeriesUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
     override suspend fun loadData(page: Int): List<ShowMorePoster> {
-        val recentMovieId = getRecentlyViewedMovies().first().firstOrNull()?.id
-        val recentSeriesId = getRecentlySeriesUseCase().first().firstOrNull()?.id
 
-        val recommendedMovies =
-            recentMovieId?.let { getRecommendedMovies(it, page = page) } ?: emptyList()
-        val recommendedSeries =
-            recentSeriesId?.let { getRecommendedSeries(it, page = page) } ?: emptyList()
+        val matchesYourVibeMovies = getMatchesYourVibeMovies(page = 1, limit = 20)
+        val matchesYourVibeSeries = getMatchesYourVibeSeries(page = 1, limit = 20)
 
-        return (recommendedMovies.map { movie ->
+        return (matchesYourVibeMovies.map { movie ->
             movie.toShowMorePoster(
                 getMovieGenresUseCase(
                     movie.genresID
                 ).map { it.title })
-        } + recommendedSeries.map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) })
+        } + matchesYourVibeSeries.map { series ->
+            series.toShowMorePoster(
+                getSeriesGenresUseCase(
+                    series.genreIDs
+                ).map { it.title })
+        })
             .distinctBy { it.id }
     }
 

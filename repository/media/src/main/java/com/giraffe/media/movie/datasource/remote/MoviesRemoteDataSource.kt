@@ -7,31 +7,23 @@ import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 
 interface MoviesRemoteDataSource {
 
-    suspend fun getMovieById(
-        movieId: Int
-    ): MovieDto
+    suspend fun getMovieById(movieId: Int): MovieDto
 
     suspend fun getMoviesByName(movieName: String, page: Int): List<MovieDto>
+
+    suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto>
 
     suspend fun getMovieGenres(): List<MovieGenreDto>
 
     suspend fun getMoviesByGenre(genreId: Int, page: Int): List<MovieDto>
 
-    suspend fun getMovieReviews(
-        movieId: Int,
-        page: Int
-    ): List<ReviewDto>
+    suspend fun addRating(movieId: Int, request: RatingRequest)
 
-    suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto>
+    suspend fun getUserMovieRating(movieId: Int): Float?
 
-    suspend fun addRating(
-        movieId: Int,
-        request: RatingRequest
-    )
+    suspend fun getRatedMovies(accountId: Int): List<MovieDto>
 
-    suspend fun getUserMovieRating(
-        movieId: Int
-    ): Float?
+    suspend fun getMovieReviews(movieId: Int, page: Int): List<ReviewDto>
 
     suspend fun getPopularityMovies(page: Int): List<MovieDto>
 
@@ -40,10 +32,6 @@ interface MoviesRemoteDataSource {
     suspend fun getUpcomingMovies(page: Int): List<MovieDto>
 
     suspend fun getMovieTrailerUrl(movieId: Int): String
-
-    suspend fun getRatedMovies(
-        accountId: Int
-    ): List<MovieDto>
 
     suspend fun deleteMovieRating(movieId: Int)
 }
