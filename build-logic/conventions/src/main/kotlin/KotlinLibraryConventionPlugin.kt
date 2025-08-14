@@ -1,112 +1,88 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
+open class CoverageConfigExtension {
+    var includes: List<String> = emptyList()
+    var excludes: List<String> = emptyList()
+}
+
 class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = with(project) {
-        pluginManager.apply {
-            apply(libs.plugins.jetbrains.kotlin.jvm.get().pluginId)
-            apply("jacoco")
-        }
+        pluginManager.apply("java-library")
+        pluginManager.apply("org.jetbrains.kotlin.jvm")
+        pluginManager.apply("jacoco")
 
-        applyDependencies()
+        extensions.create<CoverageConfigExtension>("coverageConfig")
 
-        extensions.configure<KotlinJvmProjectExtension> {
-            compilerOptions {
-                jvmTarget.set(ProjectConfig.jvmTarget)
-            }
-        }
-
-        extensions.getByType<JavaPluginExtension>().apply {
+        extensions.configure<JavaPluginExtension> {
             sourceCompatibility = ProjectConfig.javaVersion
             targetCompatibility = ProjectConfig.javaVersion
         }
 
-        extensions.configure<JacocoPluginExtension>() {
+        extensions.configure<KotlinJvmProjectExtension> {
+            compilerOptions.jvmTarget.set(ProjectConfig.jvmTarget)
+        }
+
+        extensions.configure<JacocoPluginExtension> {
             toolVersion = "0.8.13"
         }
 
-        val jacocoReportType = tasks.withType<JacocoReport>()
-        val testType = tasks.withType<Test> {
+        tasks.withType<Test>().configureEach {
             useJUnitPlatform()
-            testLogging {
-                showStandardStreams = true
-            }
-            finalizedBy(jacocoReportType)
+            testLogging { showStandardStreams = true }
+            finalizedBy("jacocoTestReport")
         }
 
-        tasks.withType<JacocoReport> {
-            dependsOn(testType)
+        tasks.withType<JacocoReport>().configureEach {
+            dependsOn("test")
             reports {
                 xml.required.set(true)
                 csv.required.set(true)
-                html.required.set(true) // Added HTML report
+                html.required.set(true)
             }
             doLast {
-                println("Coverage report: file://${layout.buildDirectory}/reports/jacoco/test/html/index.html") // Adds clickable report link after test
+                println("Coverage report: file://${layout.buildDirectory.get()}/reports/jacoco/test/html/index.html")
             }
         }
 
-        tasks.withType<JacocoCoverageVerification>() {
-            dependsOn("org.gradle.api.tasks.testing")
-            violationRules {
+        tasks.withType<JacocoCoverageVerification>().configureEach {
+            dependsOn("test")
+            doFirst {
+                val config = extensions.getByType(CoverageConfigExtension::class.java)
                 classDirectories.setFrom(
-                    classDirectories.files.map {
+                    files(classDirectories.files.map {
                         fileTree(it) {
-                            include("**/explore/usecase/**")
-                            include("**/movies/usecase/**")
-                            include("**/series/usecase/**")
-                            include("**/person/usecase/**")
-                            exclude("**/explore/usecase/ExploreUseCases.class")
-                            exclude("**/movies/usecase/MoviesUseCases.class")
+                            config.includes.forEach { inc -> include(inc) }
+                            config.excludes.forEach { exc -> exclude(exc) }
+                        }
+                    })
+                )
+            }
+            violationRules {
+                listOf(
+                    Triple(null, null, "0.8"),
+                    Triple("LINE", "COVEREDRATIO", "0.8"),
+                    Triple("BRANCH", "COVEREDRATIO", "0.8"),
+                    Triple("METHOD", "COVEREDRATIO", "0.8")
+                ).forEach { (counter, value, min) ->
+                    rule {
+                        limit {
+                            counter?.let { this.counter = it }
+                            value?.let { this.value = it }
+                            minimum = min.toBigDecimal()
                         }
                     }
-                )
-
-                rule {
-                    limit {
-                        minimum = "0.8".toBigDecimal()
-                    }
-                }
-                rule {
-                    limit {
-                        counter = "LINE"
-                        value = "COVEREDRATIO"
-                        minimum = "0.8".toBigDecimal()
-                    }
-                }
-                rule {
-                    limit {
-                        counter = "BRANCH"
-                        value = "COVEREDRATIO"
-                        minimum = "0.8".toBigDecimal()
-                    }
-                }
-                rule {
-                    limit {
-                        counter = "METHOD"
-                        value = "COVEREDRATIO"
-                        minimum = "0.8".toBigDecimal()
-                    }
                 }
             }
-        }
-    }
-
-    private fun Project.applyDependencies() {
-        dependencies.apply {
-            add("testImplementation", libs.bundles.unit.test)
-            add("testImplementation", project.dependencies.kotlin("test"))
         }
     }
 }
