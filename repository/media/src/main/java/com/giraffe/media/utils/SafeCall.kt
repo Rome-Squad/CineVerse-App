@@ -33,7 +33,7 @@ suspend fun <T> safeCall(execute: suspend () -> T): T {
     }
 }
 
-fun <T> safeFlow(block: () -> Flow<T>): Flow<T> {
+fun <T> safeFlow(block: suspend () -> Flow<T>): Flow<T> {
     return flow {
         emitAll(block())
     }.catch { e ->

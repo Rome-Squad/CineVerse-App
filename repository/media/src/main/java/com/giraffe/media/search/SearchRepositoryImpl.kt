@@ -8,6 +8,7 @@ import com.giraffe.media.search.entity.SearchKeyword
 import com.giraffe.media.search.mapper.toEntity
 import com.giraffe.media.search.repository.SearchRepository
 import com.giraffe.media.utils.safeCall
+import com.giraffe.media.utils.safeFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class SearchRepositoryImpl @Inject constructor(
 ) : SearchRepository {
 
     override suspend fun getSearchKeywords(query: String): Flow<List<SearchKeyword>> {
-        return safeCall {
+        return safeFlow {
             if (query.isBlank()) {
                 getSearchHistoryWhenQueryIsBlank()
             } else {
@@ -28,8 +29,8 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getSearchHistoryWhenHasQuery(query: String): Flow<List<SearchKeyword>> {
-        val history = getLocalSearchKeywords(query)
-        val remoteResults = getRemoteSearchKeywords(query)
+        val history: Flow<List<SearchKeyword>> = getLocalSearchKeywords(query)
+        val remoteResults: List<SearchKeyword> = getRemoteSearchKeywords(query)
         return history.map { historyList ->
             (historyList + remoteResults)
                 .distinctBy { it.keyword }
