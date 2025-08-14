@@ -25,6 +25,7 @@ import com.giraffe.media.util.RetrofitRequestBuilder
 import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
+import com.giraffe.user.encryption.IEncryptionService
 import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpl
 import com.giraffe.user.retrofit.UserApiService
 import com.giraffe.user.retrofit.UserRemoteDataSourceImpl
@@ -59,12 +60,14 @@ object NetworkModule {
     fun provideOkHttpClient(
         @Named("AccessToken") accessToken: String,
         authenticationDatastore: AuthenticationDatastore,
+        encryptionService: IEncryptionService,
         networkInterceptor: NetworkInterceptor
     ): OkHttpClient {
         return createRetrofitClient(
             accessToken = accessToken,
             authenticationDatastore = authenticationDatastore,
-            networkInterceptor = networkInterceptor
+            networkInterceptor = networkInterceptor,
+            encryptionService = encryptionService
         )
     }
 

@@ -37,18 +37,13 @@ class RetrofitRequestBuilder<API>(
         suspend inline fun <reified T> safeCall(
             crossinline execute: suspend () -> Response<T>
         ): T {
-            return try {
                 val response = execute()
                 if (response.isSuccessful) {
                     val body = response.body()
-                    body ?: throw SerializationDataException()
+                    return body ?: throw SerializationDataException()
                 } else {
                     throw ApiDataException(response.code())
                 }
-            } catch (e: Throwable) {
-                Log.e("RetrofitRequestBuilder", "Error during API call: ${e}", e)
-                throw mapToMediaException(e)
-            }
         }
 
         fun mapToMediaException(e: Throwable): MediaDataException = when (e) {

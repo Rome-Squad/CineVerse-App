@@ -4,7 +4,9 @@ import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.media.util.AuthInterceptor
 import com.giraffe.media.util.LanguageInterceptor
 import com.giraffe.media.util.NetworkInterceptor
+import com.giraffe.repository.encryption.EncryptionService
 import com.giraffe.user.datastore.AuthenticationDatastore
+import com.giraffe.user.encryption.IEncryptionService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,6 +14,7 @@ import retrofit2.Retrofit
 fun createRetrofitClient(
     accessToken: String,
     authenticationDatastore: AuthenticationDatastore,
+    encryptionService: IEncryptionService,
     networkInterceptor: NetworkInterceptor
 ): OkHttpClient {
     val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -23,7 +26,7 @@ fun createRetrofitClient(
         .addInterceptor(AuthInterceptor(accessToken))
         .addInterceptor(loggingInterceptor)
         .addInterceptor(LanguageInterceptor())
-        .addInterceptor(SessionIdInterceptor(authenticationDatastore))
+        .addInterceptor(SessionIdInterceptor(authenticationDatastore, encryptionService))
         .addInterceptor(networkInterceptor)
         .build()
 }

@@ -307,6 +307,7 @@ class MovieDetailsViewModel @Inject constructor(
                 updateState { it.copy(isVisibleGiveStarsBottomSheet = false) }
 
                 safeExecute(
+                    onSuccess = { loadMovieDetails(state.value.movie.id) },
                     onError = ::onError
                 ) {
                     addRatingUseCase(
