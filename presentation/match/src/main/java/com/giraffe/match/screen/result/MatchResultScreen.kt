@@ -161,7 +161,7 @@ private fun MatchResultContent(
             match?.let {
                 MainMovieOrSeriesDetails(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    type = stringResource(id = it.mediaType.labelRes),
+                    type = it.mediaType,
                     name = it.title,
                     genres = it.genres,
                     rating = it.rating,
