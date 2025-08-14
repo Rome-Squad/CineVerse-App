@@ -46,9 +46,9 @@ dependencies {
     projectModules()
     networkDependencies()
     localDatabaseDependencies()
-
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    hiltDiDependencies()
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     //firebase
@@ -59,17 +59,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     //worker
     implementation(libs.androidx.work.runtime.ktx)
-    //room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    implementation(libs.firebase.perf.ktx)
-    ksp(libs.room.compiler)
-    annotationProcessor(libs.room.compiler)
-    // Hilt DI
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.work)
-    ksp(libs.hilt.compiler)
-    ksp(libs.androidx.hilt.compiler)
     //splash screen api
     implementation(libs.androidx.core.splashscreen)
 }
@@ -116,7 +105,6 @@ private fun DependencyHandlerScope.projectModules() {
 private fun DependencyHandlerScope.networkDependencies() {
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
-    // OkHttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
 }
@@ -124,7 +112,13 @@ private fun DependencyHandlerScope.networkDependencies() {
 private fun DependencyHandlerScope.localDatabaseDependencies() {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    implementation(libs.firebase.perf.ktx)
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
+}
+
+private fun DependencyHandlerScope.hiltDiDependencies() {
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
 }
