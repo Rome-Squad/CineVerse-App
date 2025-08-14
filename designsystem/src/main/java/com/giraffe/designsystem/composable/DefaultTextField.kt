@@ -95,22 +95,14 @@ fun DefaultTextField(
         else if (isFocused) Theme.color.brand.primary
         else Theme.color.stroke.primary
     )
-    var textFieldValue by remember {
+
+    var textFieldValue = remember(value) {
         mutableStateOf(
             TextFieldValue(
                 text = value,
                 selection = TextRange(value.length)
             )
         )
-    }
-
-    LaunchedEffect(value) {
-        if (value != textFieldValue.text) {
-            textFieldValue = TextFieldValue(
-                text = value,
-                selection = TextRange(value.length)
-            )
-        }
     }
 
     LaunchedEffect(isFocused) {
@@ -171,18 +163,19 @@ fun DefaultTextField(
                     ),
                 interactionSource = interactionSource,
                 enabled = enabled,
-                value = textFieldValue,
+                value = textFieldValue.value,
                 maxLines = maxLines,
                 singleLine = singleLine,
                 onValueChange = { newValue ->
                     if (newValue.text.length <= maxCharacters) {
                         if (newValue.text.contains("\n")) {
-                            textFieldValue = newValue.copy(text = newValue.text.replace("\n", " "))
+                            textFieldValue.value =
+                                newValue.copy(text = newValue.text.replace("\n", " "))
                         } else {
-                            textFieldValue = newValue
+                            textFieldValue.value = newValue
                         }
 
-                        onValueChange(textFieldValue.text)
+                        onValueChange(textFieldValue.value.text)
                     }
                 },
                 textStyle = Theme.textStyle.body.md.medium,
