@@ -69,6 +69,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //pagination
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose)
+    
     // Hilt DI
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
