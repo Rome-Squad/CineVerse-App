@@ -104,6 +104,15 @@ fun DefaultTextField(
         )
     }
 
+    LaunchedEffect(value) {
+        if (value != textFieldValue.text) {
+            textFieldValue = TextFieldValue(
+                text = value,
+                selection = TextRange(value.length)
+            )
+        }
+    }
+
     LaunchedEffect(isFocused) {
         onFocusChanged(isFocused)
         if (isFocused && readOnly) focusManager.clearFocus()
