@@ -1,28 +1,20 @@
 package com.giraffe.media.collections.usecase
 
+import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.fake.createFakeCollection
 import com.giraffe.media.collections.repository.CollectionsRepository
-import com.giraffe.media.collections.entity.Collection
 import com.giraffe.user.usecase.GetUserUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetCollectionsUseCaseTest {
 
-    private lateinit var collectionsRepository: CollectionsRepository
-    private lateinit var getUserUseCase: GetUserUseCase
-    private lateinit var getCollectionsUseCase: GetCollectionsUseCase
-
-    @BeforeEach
-    fun setUp() {
-        collectionsRepository = mockk()
-        getUserUseCase = mockk()
-        getCollectionsUseCase = GetCollectionsUseCase(collectionsRepository, getUserUseCase)
-    }
+    private val collectionsRepository: CollectionsRepository = mockk()
+    private val getUserUseCase: GetUserUseCase = mockk()
+    private val getCollectionsUseCase = GetCollectionsUseCase(collectionsRepository, getUserUseCase)
 
     @Test
     fun `should return list of collections when GetCollectionsUseCase invoked`() = runTest {

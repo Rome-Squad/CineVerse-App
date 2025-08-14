@@ -3,12 +3,19 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.kotlin
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+
+open class CoverageConfigExtension {
+    var includes: List<String> = emptyList()
+    var excludes: List<String> = emptyList()
+}
 
 class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = with(project) {
@@ -19,6 +26,8 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
         }
 
         applyDependencies()
+
+        extensions.create<CoverageConfigExtension>("coverageConfig")
 
         extensions.configure<JavaPluginExtension> {
             sourceCompatibility = ProjectConfig.javaVersion
@@ -53,6 +62,17 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
 
         tasks.withType<JacocoCoverageVerification> {
             dependsOn("test")
+            doFirst {
+                val config = extensions.getByType<CoverageConfigExtension>()
+                classDirectories.setFrom(
+                    files(classDirectories.files.map {
+                        fileTree(it) {
+                            config.includes.forEach { inc -> include(inc) }
+                            config.excludes.forEach { exc -> exclude(exc) }
+                        }
+                    })
+                )
+            }
             violationRules {
                 listOf(
                     Triple(null, null, "0.8"),
