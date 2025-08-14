@@ -43,7 +43,7 @@ class CineVerseApp : Application(), Configuration.Provider {
 
     private fun setupSearchCacheCleanupWorker() {
         val workRequest = PeriodicWorkRequestBuilder<SearchCacheCleanupWorker>(
-            15, TimeUnit.MINUTES
+            1, TimeUnit.HOURS
         ).build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "SearchCacheCleanupWorker",
