@@ -4,6 +4,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.kotlin
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
@@ -17,9 +18,13 @@ open class CoverageConfigExtension {
 
 class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = with(project) {
-        pluginManager.apply("java-library")
-        pluginManager.apply("org.jetbrains.kotlin.jvm")
-        pluginManager.apply("jacoco")
+        pluginManager.apply {
+            apply("java-library")
+            apply("jacoco")
+            apply(libs.plugins.jetbrains.kotlin.jvm.get().pluginId)
+        }
+
+        applyDependencies()
 
         extensions.create<CoverageConfigExtension>("coverageConfig")
 
@@ -36,13 +41,13 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             toolVersion = "0.8.13"
         }
 
-        tasks.withType<Test>().configureEach {
+        tasks.withType<Test> {
             useJUnitPlatform()
             testLogging { showStandardStreams = true }
             finalizedBy("jacocoTestReport")
         }
 
-        tasks.withType<JacocoReport>().configureEach {
+        tasks.withType<JacocoReport> {
             dependsOn("test")
             reports {
                 xml.required.set(true)
@@ -54,7 +59,7 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             }
         }
 
-        tasks.withType<JacocoCoverageVerification>().configureEach {
+        tasks.withType<JacocoCoverageVerification> {
             dependsOn("test")
             doFirst {
                 val config = extensions.getByType(CoverageConfigExtension::class.java)
@@ -83,6 +88,13 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
                     }
                 }
             }
+        }
+    }
+
+    private fun Project.applyDependencies() {
+        dependencies.apply {
+            add("testImplementation", libs.bundles.unit.test)
+            add("testImplementation", project.dependencies.kotlin("test"))
         }
     }
 }
