@@ -11,5 +11,6 @@ data class MovieGenreCacheDto(
     @PrimaryKey(autoGenerate = false)
     val id : Int,
     val name : String,
+    val language: String,
     val count: Int = 0
 )

@@ -46,22 +46,25 @@ fun Series.toCacheDto() = SeriesCacheDto(
 // endregion
 
 // region Series Genre
-fun GenreDto.toEntity() = Genre(
+fun GenreDto.toEntity(language: String) = Genre(
     id = id,
     title = name,
-    rank = 0
+    rank = 0,
+    language = language,
 )
 
 fun SeriesGenreCacheDto.toEntity() = Genre(
     id = id,
     title = name,
-    rank = count
+    rank = count,
+    language = language
 )
 
 fun Genre.toCacheDto() = SeriesGenreCacheDto(
     id = id,
     name = title,
-    count = rank
+    count = rank,
+    language = language
 )
 // endregion
 

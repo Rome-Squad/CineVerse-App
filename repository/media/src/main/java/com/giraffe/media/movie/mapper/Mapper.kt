@@ -10,13 +10,14 @@ import com.giraffe.media.utils.BASE_IMAGE_URL
 import com.giraffe.media.utils.orEmpty
 import kotlinx.datetime.LocalDate
 
-fun MovieGenreCacheDto.toEntity() = Genre(id, name, count)
+fun MovieGenreCacheDto.toEntity() = Genre(id, name, language, count)
 
-fun Genre.toDto() = MovieGenreCacheDto(id, title, rank)
+fun Genre.toDto() = MovieGenreCacheDto(id, title, language, rank)
 
-fun MovieGenreDto.toEntity() = Genre(
+fun MovieGenreDto.toEntity(language: String) = Genre(
     id = id,
     title = name,
+    language = language,
     rank = 0
 )
 
