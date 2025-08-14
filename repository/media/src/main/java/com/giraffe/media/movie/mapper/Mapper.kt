@@ -1,6 +1,7 @@
 package com.giraffe.media.movie.mapper
 
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.movie.datasource.local.cacheDto.MatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieWithRecentlyViewedAt
@@ -99,6 +100,8 @@ fun Movie.toPopularMovieCacheDto() = PopularMovieCacheDto(id = id)
 fun Movie.toRecentReleasedMovieCacheDto() = RecentReleasedMovieCacheDto(id = id)
 
 fun Movie.toUpcomingMovieCacheDto() = UpcomingMovieCacheDto(id = id)
+
+fun Movie.toMatchesYourVibeMovieCacheDto() = MatchesYourVibeMovieCacheDto(id = id)
 
 fun Movie.toRecentlyViewedMovieCacheDto() = RecentlyViewedMovieCacheDto(id = id)
 

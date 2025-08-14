@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.giraffe.media.movie.datasource.local.cacheDto.MatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieWithRecentlyViewedAt
@@ -11,6 +12,7 @@ import com.giraffe.media.movie.datasource.local.cacheDto.PopularMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.RecentReleasedMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.RecentlyViewedMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.UpcomingMovieCacheDto
+import com.giraffe.media.utils.DatabaseConstants.MATCHES_YOUR_VIBE_MOVIE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.MOVIE_GENRE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
 import com.giraffe.media.utils.DatabaseConstants.POPULAR_MOVIE_TABLE
@@ -74,6 +76,22 @@ interface MovieDao {
     )
     suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
 
+    // endregion
+
+    // region Match
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMatchesYourVibeMovies(movies: List<MatchesYourVibeMovieCacheDto>)
+
+    @Query(
+        """
+        SELECT m.*  FROM $MOVIE_TABLE m
+        INNER JOIN $MATCHES_YOUR_VIBE_MOVIE_TABLE r 
+        ON m.id = r.id
+        ORDER BY r.createdAt DESC
+        LIMIT :limit
+        """
+    )
+    fun getMatchesYourVibeMovies(limit: Int): List<MovieCacheDto>
     // endregion
 
     //region Recently Viewed

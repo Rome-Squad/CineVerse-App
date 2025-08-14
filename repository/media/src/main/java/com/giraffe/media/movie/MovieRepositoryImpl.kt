@@ -15,6 +15,7 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.mapper.toCacheDto
 import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
+import com.giraffe.media.movie.mapper.toMatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.mapper.toPopularMovieCacheDto
 import com.giraffe.media.movie.mapper.toRecentReleasedMovieCacheDto
 import com.giraffe.media.movie.mapper.toRecentlyViewedMovieCacheDto
@@ -238,7 +239,35 @@ class MovieRepositoryImpl @Inject constructor(
     // endregion
 
     // region Match
+    override suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Movie> {
+        return safeCall {
+            getTopGenre()?.let { topGenre ->
+                when (page) {
+                    1 -> getLocalMatchesYourVibe(limit).map(MovieCacheDto::toEntity).ifEmpty {
+                        getRemoteMatchesYourVibe(topGenre, page).take(limit)
+                    }
 
+                    else -> getRemoteMatchesYourVibe(topGenre, page)
+                }
+            } ?: emptyList()
+        }
+    }
+
+    private suspend fun getRemoteMatchesYourVibe(topGenre: Genre, page: Int): List<Movie> {
+        return getByGenreId(genreId = topGenre.id, page = page).also {
+            addMatchesYourVibe(page = page, movies = it)
+        }
+    }
+
+    private suspend fun addMatchesYourVibe(page: Int, movies: List<Movie>) {
+        if (page == 1) {
+            movieLocal.addMovies(movies.map(Movie::toCacheDto))
+            movieLocal.addMatchesYourVibeMovies(movies.map(Movie::toMatchesYourVibeMovieCacheDto))
+        }
+    }
+
+    private suspend fun getLocalMatchesYourVibe(limit: Int) =
+        safeCall { movieLocal.getMatchesYourVibeMovies(limit) }
     // endregion
 
     // region Recently Viewed

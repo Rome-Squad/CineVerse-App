@@ -39,6 +39,8 @@ interface MovieRepository {
 
     suspend fun getUpcoming(page: Int, limit: Int): List<Movie>
 
+    suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Movie>
+
     suspend fun deleteById(movieId: Int)
 
     suspend fun deleteRating(movieId: Int)

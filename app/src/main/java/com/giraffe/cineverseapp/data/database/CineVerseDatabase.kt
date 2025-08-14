@@ -7,6 +7,7 @@ import com.giraffe.cineverseapp.data.database.converter.Converters
 import com.giraffe.media.explore.dao.SearchKeywordDao
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.movie.dao.MovieDao
+import com.giraffe.media.movie.datasource.local.cacheDto.MatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.PopularMovieCacheDto
@@ -35,6 +36,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
         RecentReleasedMovieCacheDto::class,
         UpcomingMovieCacheDto::class,
         RecentlyViewedMovieCacheDto::class,
+        MatchesYourVibeMovieCacheDto::class,
         SeriesCacheDto::class,
         SeriesGenreCacheDto::class,
         PopularSeriesCacheDto::class,

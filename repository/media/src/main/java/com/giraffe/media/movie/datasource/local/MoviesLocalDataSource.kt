@@ -1,5 +1,6 @@
 package com.giraffe.media.movie.datasource.local
 
+import com.giraffe.media.movie.datasource.local.cacheDto.MatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieWithRecentlyViewedAt
@@ -37,6 +38,10 @@ interface MoviesLocalDataSource {
     suspend fun addUpcomingMovies(movies: List<UpcomingMovieCacheDto>)
 
     suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
+
+    suspend fun addMatchesYourVibeMovies(movies: List<MatchesYourVibeMovieCacheDto>)
+
+    suspend fun getMatchesYourVibeMovies(limit: Int): List<MovieCacheDto>
 
     suspend fun addRecentlyViewedMovie(movie: RecentlyViewedMovieCacheDto)
 

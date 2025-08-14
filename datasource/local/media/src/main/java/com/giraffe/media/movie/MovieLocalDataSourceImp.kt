@@ -2,6 +2,7 @@ package  com.giraffe.media.movie
 
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
+import com.giraffe.media.movie.datasource.local.cacheDto.MatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.PopularMovieCacheDto
@@ -60,6 +61,12 @@ class MovieLocalDataSourceImp @Inject constructor(
 
     override suspend fun getUpcomingMovies(limit: Int) =
         safeCall { movieDao.getUpcomingMovies(limit) }
+
+    override suspend fun addMatchesYourVibeMovies(movies: List<MatchesYourVibeMovieCacheDto>) =
+        safeCall { movieDao.insertMatchesYourVibeMovies(movies) }
+
+    override suspend fun getMatchesYourVibeMovies(limit: Int) =
+        safeCall { movieDao.getMatchesYourVibeMovies(limit) }
 
     override suspend fun addRecentlyViewedMovie(movie: RecentlyViewedMovieCacheDto) =
         safeCall { movieDao.insertRecentlyViewedMovie(movie) }
