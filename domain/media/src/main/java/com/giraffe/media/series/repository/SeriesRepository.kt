@@ -12,9 +12,9 @@ interface SeriesRepository {
 
     suspend fun getByGenreId(genreId: Int, page: Int): List<Series>
 
-    suspend fun getGenres(): List<Genre>
+    suspend fun getGenres(language: String): List<Genre>
 
-    suspend fun getGenresByIds(genreIDs: List<Int>): List<Genre>
+    suspend fun getGenresByIds(genreIDs: List<Int>, language: String): List<Genre>
 
     suspend fun getDetails(seriesId: Int): Series
 

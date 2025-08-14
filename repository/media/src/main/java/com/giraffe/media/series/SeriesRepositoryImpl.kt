@@ -7,7 +7,6 @@ import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
-import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
@@ -31,12 +30,12 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.getSeriesByName(name, page).map(SeriesDto::toEntity)
     }
 
-    override suspend fun getGenres(): List<Genre> = safeCall {
-        seriesLocalDateSource.getGenres()
+    override suspend fun getGenres(language: String): List<Genre> = safeCall {
+        seriesLocalDateSource.getGenres(language)
             .map(SeriesGenreCacheDto::toEntity)
             .ifEmpty {
-                seriesRemoteDataSource.getGenres()
-                    .map(GenreDto::toEntity)
+                seriesRemoteDataSource.getGenres(language)
+                    .map { it.toEntity(language) }
                     .also { addGenres(it) }
             }
     }
@@ -83,11 +82,11 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.getSeriesByGenre(genreId, page).map { it.toEntity() }
     }
 
-    override suspend fun getGenresByIds(genreIDs: List<Int>) = safeCall {
+    override suspend fun getGenresByIds(genreIDs: List<Int>, language: String) = safeCall {
         seriesLocalDateSource.getGenresByIDs(genreIDs).map { it.toEntity() }
             .ifEmpty {
-                seriesRemoteDataSource.getGenres().filter { it.id in genreIDs }
-                    .map(GenreDto::toEntity)
+                seriesRemoteDataSource.getGenres(language).filter { it.id in genreIDs }
+                    .map { it.toEntity(language) }
                     .also { addGenres(it) }
             }
     }

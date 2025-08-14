@@ -11,9 +11,9 @@ interface MovieRepository {
 
     suspend fun getByName(name: String, page: Int): List<Movie>
 
-    suspend fun getGenresByIds(genreIds: List<Int>): List<Genre>
+    suspend fun getGenresByIds(genreIds: List<Int>, language: String): List<Genre>
 
-    suspend fun getGenres(): List<Genre>
+    suspend fun getGenres(language: String): List<Genre>
 
     suspend fun getTopGenre(): Genre?
 

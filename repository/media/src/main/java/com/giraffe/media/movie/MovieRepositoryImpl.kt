@@ -8,7 +8,6 @@ import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
-import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.mapper.toCacheDto
@@ -47,23 +46,23 @@ class MovieRepositoryImpl @Inject constructor(
         movieRemote.getMoviesByName(name, page).map(MovieDto::toEntity)
     }
 
-    override suspend fun getGenresByIds(genreIds: List<Int>) = safeCall {
+    override suspend fun getGenresByIds(genreIds: List<Int>, language: String) = safeCall {
         if (genreIds.isNotEmpty()) {
             movieLocal.incrementInteractionCountForGenres(genreIds)
         }
         movieLocal.getMovieGenresByIds(genreIds).filter { it.id in genreIds }.map { it.toEntity() }
             .ifEmpty {
-                movieRemote.getMovieGenres().filter { it.id in genreIds }
-                    .map(MovieGenreDto::toEntity)
+                movieRemote.getMovieGenres(language).filter { it.id in genreIds }
+                    .map { it.toEntity(language) }
             }
     }
 
-    override suspend fun getGenres() = safeCall {
-        movieLocal.getMoviesGenres()
+    override suspend fun getGenres(language: String) = safeCall {
+        movieLocal.getMoviesGenres(language)
             .map(MovieGenreCacheDto::toEntity)
             .ifEmpty {
-                movieRemote.getMovieGenres()
-                    .map(MovieGenreDto::toEntity)
+                movieRemote.getMovieGenres(language)
+                    .map { it.toEntity(language) }
                     .also { addMovieGenres(it) }
             }
     }
