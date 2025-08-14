@@ -31,7 +31,7 @@ import com.giraffe.presentation.match.R
 
 @Composable
 fun MainMovieOrSeriesDetails(
-    type: String,
+    type: MediaType,
     name: String,
     genres: List<String>,
     rating: Float,
@@ -63,7 +63,7 @@ fun MainMovieOrSeriesDetails(
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Text(
-                    text = type.uppercase(),
+                    text = stringResource(type.labelRes),
                     style = Theme.textStyle.label.md.medium,
                     color = Theme.color.brand.primary
                 )
@@ -136,22 +136,24 @@ fun MainMovieOrSeriesDetails(
                         )
                         .padding(10.dp)
                 )
+                if (type == MediaType.MOVIE) {
 
-                onClickAdd?.let {
-                    Icon(
-                        painter = painterResource(Theme.icons.dueTone.add),
-                        contentDescription = stringResource(R.string.add_Icon),
-                        tint = Theme.color.shade.primary,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(Theme.radius.md))
-                            .background(
-                                color = Theme.color.button.secondary,
-                                shape = RoundedCornerShape(Theme.radius.md)
-                            )
-                            .clickable(onClick = onClickAdd)
-                            .padding(10.dp)
-                    )
+                    onClickAdd?.let {
+                        Icon(
+                            painter = painterResource(Theme.icons.dueTone.add),
+                            contentDescription = stringResource(R.string.add_Icon),
+                            tint = Theme.color.shade.primary,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(RoundedCornerShape(Theme.radius.md))
+                                .background(
+                                    color = Theme.color.button.secondary,
+                                    shape = RoundedCornerShape(Theme.radius.md)
+                                )
+                                .clickable(onClick = onClickAdd)
+                                .padding(10.dp)
+                        )
+                    }
                 }
             }
 
