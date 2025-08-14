@@ -3,7 +3,7 @@ package com.giraffe.media.series.usecase
 import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
-class GetSeriesCollectionUseCase @Inject constructor(
+class GetFilteredSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(
@@ -12,7 +12,7 @@ class GetSeriesCollectionUseCase @Inject constructor(
         sortBy: String = "popularity.desc",
         page: Int
     ) =
-        seriesRepository.getSeriesCollection(
+        seriesRepository.discoverSeries(
             genreId = genreId,
             keywords = keywords,
             sortBy = sortBy,

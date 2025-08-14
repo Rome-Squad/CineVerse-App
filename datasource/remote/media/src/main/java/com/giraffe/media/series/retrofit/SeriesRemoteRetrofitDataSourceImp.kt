@@ -19,15 +19,15 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
             getSeriesByGenre(if (genreId == -1) "" else genreId.toString(), page)
         }.results
 
-    override suspend fun getSeriesCollection(
+    override suspend fun discoverSeries(
         genreId: Int?,
         keywords: String?,
         sortBy: String,
         page: Int
     ) =
         retrofitRequestBuilder.get {
-            getSeriesCollection(
-                genreId = if (genreId == -1) "" else genreId.toString(),
+            discoverSeries(
+                genreId = genreId?.toString(),
                 keywords = keywords,
                 sortBy = sortBy,
                 page = page

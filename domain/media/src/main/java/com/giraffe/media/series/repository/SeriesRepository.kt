@@ -12,7 +12,7 @@ interface SeriesRepository {
 
     suspend fun getByGenreId(genreId: Int, page: Int): List<Series>
 
-    suspend fun getSeriesCollection(
+    suspend fun discoverSeries(
         genreId: Int? = null,
         keywords: String? = null,
         sortBy: String = "popularity.desc",

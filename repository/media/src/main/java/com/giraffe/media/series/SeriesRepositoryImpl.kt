@@ -83,13 +83,13 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.getSeriesByGenre(genreId, page).map { it.toEntity() }
     }
 
-    override suspend fun getSeriesCollection(
+    override suspend fun discoverSeries(
         genreId: Int?,
         keywords: String?,
         sortBy: String,
         page: Int
     ) = safeCall {
-        seriesRemoteDataSource.getSeriesCollection(
+        seriesRemoteDataSource.discoverSeries(
             genreId = genreId,
             keywords = keywords,
             sortBy = sortBy,

@@ -3,7 +3,7 @@ package com.giraffe.media.movie.usecase
 import com.giraffe.media.movie.repository.MovieRepository
 import javax.inject.Inject
 
-class GetMoviesCollectionUseCase @Inject constructor(
+class GetFilteredMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
     suspend operator fun invoke(
@@ -12,7 +12,7 @@ class GetMoviesCollectionUseCase @Inject constructor(
         sortBy: String = "popularity.desc",
         page: Int
     ) =
-        movieRepository.getMoviesCollection(
+        movieRepository.discoverMovies(
             genreId = genreId,
             keywords = keywords,
             sortBy = sortBy,

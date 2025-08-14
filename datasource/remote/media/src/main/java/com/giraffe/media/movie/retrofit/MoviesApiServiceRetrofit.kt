@@ -58,7 +58,7 @@ interface MoviesApiServiceRetrofit {
     suspend fun getGenres(): Response<GenreResponse>
 
     @GET(DISCOVER_MOVIE_URL)
-    suspend fun getMoviesCollection(
+    suspend fun discoverMovies(
         @Query(WITH_GENRES) genreId: String? = null,
         @Query(WITH_KEYWORDS) keywords: String? = null,
         @Query(SORT_BY) sortBy: String? = SORT_BY_DEFAULT,

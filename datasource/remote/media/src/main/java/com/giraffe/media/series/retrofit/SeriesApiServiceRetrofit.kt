@@ -38,7 +38,7 @@ interface SeriesApiServiceRetrofit {
     ): Response<SeriesResponse<SeriesDto>>
 
     @GET(DISCOVER_TV)
-    suspend fun getSeriesCollection(
+    suspend fun discoverSeries(
         @Query(WITH_GENRES) genreId: String? = null,
         @Query(WITH_KEYWORDS) keywords: String? = null,
         @Query(SORT_BY) sortBy: String = SORT_BY_DEFAULT,
