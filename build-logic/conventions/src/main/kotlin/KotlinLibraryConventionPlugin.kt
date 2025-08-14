@@ -59,10 +59,10 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             }
         }
 
-        tasks.withType<JacocoCoverageVerification> {
+        tasks.withType<JacocoCoverageVerification>().configureEach {
             dependsOn("test")
             doFirst {
-                classDirectories.setFrom(
+                classDirectories.from(
                     files(classDirectories.files.map {
                         fileTree(it) {
                             config.includes.forEach { inc -> include(inc) }
