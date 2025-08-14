@@ -67,6 +67,7 @@ internal fun ExploreNavGraph(
             navigateToMovieDetails = navController::navigateToMovieDetails,
             navigateToSeriesDetails = navController::navigateToSeriesDetails,
             navigateToCastDetails = navController::navigateToCastDetails,
+            navigateToSearchScreen = navController::navigateToSearch,
             onBackClick = navController::popBackStack
         )
 
