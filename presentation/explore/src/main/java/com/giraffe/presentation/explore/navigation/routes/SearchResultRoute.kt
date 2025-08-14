@@ -17,6 +17,7 @@ fun NavGraphBuilder.searchResultRoute(
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
+    navigateToSearchScreen: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     composable<SearchResultRoute> { backStackEntry ->
@@ -24,6 +25,7 @@ fun NavGraphBuilder.searchResultRoute(
             navigateToMovieDetails = navigateToMovieDetails,
             navigateToSeriesDetails = navigateToSeriesDetails,
             navigateToCastDetails = navigateToCastDetails,
+            navigateToSearchScreen = navigateToSearchScreen,
             onBackClick = onBackClick
         )
     }
