@@ -8,4 +8,5 @@ interface SearchResultInteractionListener {
     fun onRetryClick()
     fun onBackClick()
     fun onPosterClick(mediaId: Int, selectedTab: SearchTab)
+    fun onRecordingClick()
 }
