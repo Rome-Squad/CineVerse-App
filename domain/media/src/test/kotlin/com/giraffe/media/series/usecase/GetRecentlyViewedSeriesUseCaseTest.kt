@@ -38,7 +38,7 @@ class GetRecentlyViewedSeriesUseCaseTest {
                 )
             )
         }
-        coEvery { repository.getRecentlyViewed() } returns expectedSeries
+        coEvery { repository.getRecentlyViewed(any(), any()) } returns expectedSeries
 
         val result = useCase()
 
