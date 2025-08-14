@@ -9,7 +9,7 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 interface SeriesRemoteDataSource {
     suspend fun getSeriesByName(name: String, page: Int = 1): List<SeriesDto>
     suspend fun getSeriesByGenre(genreId: Int, page: Int = 1): List<SeriesDto>
-    suspend fun getGenres(): List<GenreDto>
+    suspend fun getGenres(language: String): List<GenreDto>
     suspend fun getSeriesDetails(seriesId: Int): SeriesDetailsDto
     suspend fun getSeriesRecommendations(seriesId: Int, page: Int): List<SeriesDto>
     suspend fun getSeriesReviews(seriesId: Int, page: Int = 1): List<ReviewDto>

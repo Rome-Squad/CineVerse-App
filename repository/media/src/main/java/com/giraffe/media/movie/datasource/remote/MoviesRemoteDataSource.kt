@@ -13,7 +13,7 @@ interface MoviesRemoteDataSource {
 
     suspend fun getMoviesByName(movieName: String, page: Int): List<MovieDto>
 
-    suspend fun getMovieGenres(): List<MovieGenreDto>
+    suspend fun getMovieGenres(language: String): List<MovieGenreDto>
 
     suspend fun getMoviesByGenre(genreId: Int, page: Int): List<MovieDto>
 

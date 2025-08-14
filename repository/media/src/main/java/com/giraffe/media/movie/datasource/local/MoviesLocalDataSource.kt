@@ -1,7 +1,7 @@
 package com.giraffe.media.movie.datasource.local
 
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
-import  com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
 import kotlinx.coroutines.flow.Flow
 
 interface MoviesLocalDataSource {
@@ -27,7 +27,7 @@ interface MoviesLocalDataSource {
 
     suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
 
-    suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
+    suspend fun getMoviesGenres(language: String): List<MovieGenreCacheDto>
 
     suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
 

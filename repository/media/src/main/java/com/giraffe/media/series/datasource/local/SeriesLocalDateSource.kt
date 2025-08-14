@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SeriesLocalDateSource {
 
-    suspend fun getGenres(): List<SeriesGenreCacheDto>
+    suspend fun getGenres(language: String): List<SeriesGenreCacheDto>
 
     suspend fun insertGenres(genres: List<SeriesGenreCacheDto>)
 
