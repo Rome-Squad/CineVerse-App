@@ -2,6 +2,7 @@ package com.giraffe.media.movie
 
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Genre
+import com.giraffe.media.entity.Review
 import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
@@ -28,10 +29,41 @@ class MovieRepositoryImpl @Inject constructor(
     private val movieLocal: MoviesLocalDataSource,
     private val movieRemote: MoviesRemoteDataSource,
 ) : MovieRepository {
-    override suspend fun addRating(movieId: Int, rating: Float) = safeCall {
-        val requestBody = RatingRequest(value = rating)
-        movieRemote.addRating(movieId, requestBody)
+
+    override suspend fun getByName(name: String, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMoviesByName(name, page)
+                .map(MovieDto::toEntity)
+        }
     }
+
+    override suspend fun getByGenreId(genreId: Int, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMoviesByGenre(genreId, page)
+                .map(MovieDto::toEntity)
+        }
+    }
+
+    override suspend fun getDetails(movieId: Int): Movie {
+        return safeCall {
+            withContext(Dispatchers.IO) {
+                val youtubeVideoId = async { movieRemote.getMovieTrailerUrl(movieId) }
+                val movieDetails = async { movieRemote.getMovieById(movieId) }.await()
+                movieDetails.youtubeVideoId = youtubeVideoId.await()
+                val movie = movieDetails.toEntity()
+                movieLocal.incrementInteractionCountForGenres(movie.genresID)
+                addRecentlyViewed(movie)
+                movie
+            }
+        }
+    }
+
+    override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
+        }
+    }
+
 
     // region Movie Genres
     private suspend fun addMovieGenres(genres: List<Genre>) =
@@ -75,48 +107,34 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.clearMovieGenres()
     // endregion
 
-    override suspend fun getByName(name: String, page: Int) = safeCall {
-        movieRemote.getMoviesByName(name, page).map(MovieDto::toEntity)
-    }
-
-    override suspend fun getByGenreId(genreId: Int, page: Int) = safeCall {
-        movieRemote.getMoviesByGenre(genreId, page).map(MovieDto::toEntity)
-    }
-
-    override suspend fun getDetails(movieId: Int) = safeCall {
-        withContext(Dispatchers.IO) {
-            val youtubeVideoId = async { movieRemote.getMovieTrailerUrl(movieId) }
-            val movieDetails = async { movieRemote.getMovieById(movieId) }.await()
-            movieDetails.youtubeVideoId = youtubeVideoId.await()
-            val movie = movieDetails.toEntity()
-            movieLocal.incrementInteractionCountForGenres(movie.genresID)
-            addRecentlyViewed(movie)
-            movie
+    // region Rating
+    override suspend fun addRating(movieId: Int, rating: Float) {
+        safeCall {
+            val requestBody = RatingRequest(value = rating)
+            movieRemote.addRating(movieId, requestBody)
         }
     }
 
-    override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
+    override suspend fun getReviews(movieId: Int, page: Int): List<Review> {
         return safeCall {
-            movieRemote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
+            movieRemote.getMovieReviews(movieId, page = page)
+                .map(ReviewDto::toEntity)
         }
     }
 
-    override suspend fun getReviews(
-        movieId: Int,
-        page: Int
-    ) = safeCall { movieRemote.getMovieReviews(movieId, page = page).map(ReviewDto::toEntity) }
+    override suspend fun getUserRatedById(movieId: Int) =
+        safeCall { movieRemote.getUserMovieRating(movieId) }
 
-    override suspend fun getUserRatedById(movieId: Int) = safeCall {
-        movieRemote.getUserMovieRating(movieId)
+    override suspend fun getUserRated(accountId: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getRatedMovies(accountId)
+                .map(MovieDto::toEntity)
+        }
     }
 
-    override suspend fun deleteRecentlyViewedMovieById(movieId: Int) {
-        movieLocal.deleteRecentlyViewedMovieById(movieId)
-    }
-
-    override suspend fun getUserRated(accountId: Int) = safeCall {
-        movieRemote.getRatedMovies(accountId).map(MovieDto::toEntity)
-    }
+    override suspend fun deleteRating(movieId: Int) =
+        safeCall { movieRemote.deleteMovieRating(movieId) }
+    // endregion
 
     // region Popular
     override suspend fun getPopular(page: Int, limit: Int): List<Movie> {
@@ -262,9 +280,8 @@ class MovieRepositoryImpl @Inject constructor(
     // endregion
 
     // region Recently Viewed
-    private suspend fun addRecentlyViewed(movie: Movie) {
+    private suspend fun addRecentlyViewed(movie: Movie) =
         movieLocal.addRecentlyViewedMovie(movie.toCacheDto())
-    }
 
     override fun getRecentlyViewed(): Flow<List<Movie>> {
         return movieLocal.getRecentlyViewedMovies().map { movies ->
@@ -272,14 +289,14 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteRecentlyViewedMovieById(movieId: Int) {
+        movieLocal.deleteRecentlyViewedMovieById(movieId)
+    }
+
     override suspend fun clearRecentlyViewed() {
         movieLocal.clearRecentlyViewedMovies()
     }
     // endregion
-
-    override suspend fun deleteRating(movieId: Int) = safeCall {
-        movieRemote.deleteMovieRating(movieId)
-    }
 
     override suspend fun clearAll() {
         movieLocal.clearMovieCache()
