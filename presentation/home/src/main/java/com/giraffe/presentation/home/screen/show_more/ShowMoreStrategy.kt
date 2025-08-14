@@ -76,7 +76,7 @@ class RecentlyViewedStrategy(
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
     override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
-        val recentMovies = getRecentlyViewedMovies().first()
+        val recentMovies = getRecentlyViewedMovies(page, pageSize).first()
             .map { movie -> movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title }) }
         val recentSeries = getRecentlySeriesUseCase(page, pageSize).first()
             .map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) }
