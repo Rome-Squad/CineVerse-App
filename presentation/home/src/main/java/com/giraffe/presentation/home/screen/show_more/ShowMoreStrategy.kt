@@ -16,7 +16,7 @@ import com.giraffe.presentation.home.utils.toShowMorePoster
 import kotlinx.coroutines.flow.first
 
 interface ShowMoreStrategy {
-    suspend fun loadData(page: Int): List<ShowMorePoster>
+    suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster>
     fun getSectionType(): ShowMoreSectionType
 }
 
@@ -26,13 +26,13 @@ class RecentlyReleasedStrategy(
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(page: Int): List<ShowMorePoster> {
+    override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
         val recentMovies =
-            getRecentlyReleasedMovies(page = 1).map { movie ->
+            getRecentlyReleasedMovies(page = page, limit = pageSize).map { movie ->
                 movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title })
             }
         val recentSeries =
-            getRecentlyReleasedSeries(page = page, limit = 10).map { series ->
+            getRecentlyReleasedSeries(page = page, limit = pageSize).map { series ->
                 series.toShowMorePoster(
                     getSeriesGenresUseCase(series.genreIDs).map { it.title })
             }
@@ -46,8 +46,8 @@ class TopRatedTvShowsStrategy(
     private val getTopRatedSeries: GetTopRatedSeriesUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(page: Int) =
-        getTopRatedSeries(page = page, limit = 10).map { series ->
+    override suspend fun loadData(page: Int, pageSize: Int) =
+        getTopRatedSeries(page = page, limit = pageSize).map { series ->
             series.toShowMorePoster(
                 getSeriesGenresUseCase(series.genreIDs).map { it.title })
         }
@@ -59,10 +59,11 @@ class UpcomingMoviesStrategy(
     private val getUpcomingMovies: GetUpcomingMoviesUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
 ) : ShowMoreStrategy {
-    override suspend fun loadData(page: Int) = getUpcomingMovies(page = page).map { movie ->
-        movie.toShowMorePoster(
-            getMovieGenresUseCase(movie.genresID).map { it.title })
-    }
+    override suspend fun loadData(page: Int, pageSize: Int) =
+        getUpcomingMovies(page = page, pageSize).map { movie ->
+            movie.toShowMorePoster(
+                getMovieGenresUseCase(movie.genresID).map { it.title })
+        }
 
     override fun getSectionType() = ShowMoreSectionType.UPCOMING_MOVIES
 }
@@ -74,12 +75,15 @@ class RecentlyViewedStrategy(
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(page: Int): List<ShowMorePoster> {
-        val recentMovies = getRecentlyViewedMovies().first()
+    override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
+        val recentMovies = getRecentlyViewedMovies(page, pageSize).first()
             .map { movie -> movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title }) }
-        val recentSeries = getRecentlySeriesUseCase().first()
+        val recentSeries = getRecentlySeriesUseCase(page, pageSize).first()
             .map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) }
-        return (recentMovies + recentSeries).distinctBy { it.id }
+        return (recentMovies + recentSeries)
+            .distinctBy { it.id }
+            .filter { it.recentViewedAt != null}
+            .sortedByDescending { it.recentViewedAt }
     }
 
     override fun getSectionType() = ShowMoreSectionType.RECENTLY_VIEWED
@@ -91,10 +95,10 @@ class MatchesYourVibesStrategy(
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : ShowMoreStrategy {
-    override suspend fun loadData(page: Int): List<ShowMorePoster> {
+    override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
 
-        val matchesYourVibeMovies = getMatchesYourVibeMovies(page = 1, limit = 20)
-        val matchesYourVibeSeries = getMatchesYourVibeSeries(page = 1, limit = 20)
+        val matchesYourVibeMovies = getMatchesYourVibeMovies(page = page, limit = pageSize)
+        val matchesYourVibeSeries = getMatchesYourVibeSeries(page = page, limit = pageSize)
 
         return (matchesYourVibeMovies.map { movie ->
             movie.toShowMorePoster(

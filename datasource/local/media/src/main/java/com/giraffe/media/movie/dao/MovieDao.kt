@@ -114,9 +114,10 @@ interface MovieDao {
         INNER JOIN $RECENTLY_VIEWED_MOVIE_TABLE AS r 
         ON m.id = r.id
         ORDER BY r.createdAt DESC
+        LIMIT :pageSize OFFSET (:page - 1) * :pageSize
         """
     )
-    fun getRecentlyViewedMovies(): Flow<List<MovieWithRecentlyViewedAt>>
+    fun getRecentlyViewedMovies(page: Int, pageSize: Int): Flow<List<MovieWithRecentlyViewedAt>>
 
     @Query("DELETE FROM $RECENTLY_VIEWED_MOVIE_TABLE WHERE id = :movieId")
     suspend fun deleteRecentlyViewedMovieById(movieId: Int)

@@ -98,8 +98,8 @@ class MovieLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override fun getRecentlyViewedMovies() =
-        safeFlow { movieDao.getRecentlyViewedMovies() }
+    override fun getRecentlyViewedMovies(page: Int, pageSize: Int) =
+        safeFlow { movieDao.getRecentlyViewedMovies(page, pageSize) }
 
     override suspend fun deleteRecentlyViewedMovieById(movieId: Int) =
         safeCall { movieDao.deleteRecentlyViewedMovieById(movieId) }

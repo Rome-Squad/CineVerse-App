@@ -283,8 +283,8 @@ class MovieRepositoryImpl @Inject constructor(
     private suspend fun addRecentlyViewed(movie: Movie) =
         movieLocal.addRecentlyViewedMovie(movie.toCacheDto())
 
-    override fun getRecentlyViewed(): Flow<List<Movie>> {
-        return movieLocal.getRecentlyViewedMovies().map { movies ->
+    override fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>> {
+        return movieLocal.getRecentlyViewedMovies(page, pageSize).map { movies ->
             movies.map(MovieWithRecentlyViewedAt::toEntity)
         }
     }

@@ -44,7 +44,7 @@ interface MoviesLocalDataSource {
 
     suspend fun addRecentlyViewedMovie(movie: MovieCacheDto)
 
-    fun getRecentlyViewedMovies(): Flow<List<MovieWithRecentlyViewedAt>>
+    fun getRecentlyViewedMovies(page: Int, pageSize: Int): Flow<List<MovieWithRecentlyViewedAt>>
 
     suspend fun deleteRecentlyViewedMovieById(movieId: Int)
 

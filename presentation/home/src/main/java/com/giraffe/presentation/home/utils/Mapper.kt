@@ -37,7 +37,8 @@ fun Series.toShowMorePoster(genres: List<String>) = ShowMorePoster(
     rating = rating,
     date = releaseYear.orEmpty(),
     mediaType = MediaType.SERIES,
-    genres = genres
+    genres = genres,
+    recentViewedAt = recentViewedAt?.toLong()
 )
 
 
@@ -49,7 +50,8 @@ fun Movie.toShowMorePoster(genres: List<String>) = ShowMorePoster(
     date = releaseYear.orEmpty(),
     mediaType = MediaType.MOVIE,
     genres = genres,
-    time = duration.toString()
+    time = duration.toString(),
+    recentViewedAt = recentViewedAt
 )
 
 

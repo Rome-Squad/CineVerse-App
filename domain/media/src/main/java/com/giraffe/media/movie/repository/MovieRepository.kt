@@ -39,7 +39,7 @@ interface MovieRepository {
 
     suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Movie>
 
-    fun getRecentlyViewed(): Flow<List<Movie>>
+    fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>>
 
     suspend fun clearRecentlyViewed()
 

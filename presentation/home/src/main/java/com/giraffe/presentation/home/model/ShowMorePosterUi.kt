@@ -8,5 +8,6 @@ data class ShowMorePoster(
     val genres: List<String>,
     val time: String? = null,
     val date: String? = null,
-    val mediaType: MediaType
+    val mediaType: MediaType,
+    val recentViewedAt: Long? = null
 )
