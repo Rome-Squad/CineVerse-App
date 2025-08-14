@@ -1,7 +1,5 @@
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
@@ -12,35 +10,26 @@ import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = with(project) {
-        val versionCatalog = rootProject.extensions
-            .getByType<VersionCatalogsExtension>()
-            .named("libs")
-
-        val requiredJvmTarget = versionCatalog.findVersion("jvmTarget").get().toString()
-        val javaVersion =
-            JavaVersion.toVersion(versionCatalog.findVersion("javaVersion").get().toString())
-
         pluginManager.apply {
-            apply(versionCatalog.findPlugin("jetbrains.kotlin.jvm").get().get().pluginId)
+            apply(libs.plugins.jetbrains.kotlin.jvm.get().pluginId)
             apply("jacoco")
         }
 
-        applyDependencies(versionCatalog)
+        applyDependencies()
 
         extensions.configure<KotlinJvmProjectExtension> {
             compilerOptions {
-                jvmTarget.set(JvmTarget.valueOf(requiredJvmTarget))
+                jvmTarget.set(ProjectConfig.jvmTarget)
             }
         }
 
         extensions.getByType<JavaPluginExtension>().apply {
-            sourceCompatibility = javaVersion
-            targetCompatibility = javaVersion
+            sourceCompatibility = ProjectConfig.javaVersion
+            targetCompatibility = ProjectConfig.javaVersion
         }
 
         extensions.configure<JacocoPluginExtension>() {
@@ -114,9 +103,9 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.applyDependencies(versionCatalog: VersionCatalog) {
+    private fun Project.applyDependencies() {
         dependencies.apply {
-            add("testImplementation", versionCatalog.findBundle("unit.test").get())
+            add("testImplementation", libs.bundles.unit.test)
             add("testImplementation", project.dependencies.kotlin("test"))
         }
     }
