@@ -16,23 +16,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.giraffe.presentation.home.model.ShowMorePoster
+import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.ShowMorePoster
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TransitionLazyColumnToGrid(
-    poster: List<ShowMorePoster>,
+    posters: LazyPagingItems<ShowMorePoster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
@@ -60,7 +59,7 @@ fun TransitionLazyColumnToGrid(
         ) { isListView ->
             if (isListView) {
                 PosterListView(
-                    poster = poster,
+                    posters = posters,
                     listState = listState,
                     contentPadding = contentPadding,
                     animatedVisibilityScope = this@AnimatedContent,
@@ -69,7 +68,7 @@ fun TransitionLazyColumnToGrid(
                 )
             } else {
                 PosterGridView(
-                    poster = poster,
+                    posters = posters,
                     gridState = gridState,
                     contentPadding = contentPadding,
                     animatedVisibilityScope = this@AnimatedContent,
@@ -84,7 +83,7 @@ fun TransitionLazyColumnToGrid(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun PosterListView(
-    poster: List<ShowMorePoster>,
+    posters: LazyPagingItems<ShowMorePoster>,
     listState: androidx.compose.foundation.lazy.LazyListState,
     contentPadding: PaddingValues,
     animatedVisibilityScope: androidx.compose.animation.AnimatedVisibilityScope,
@@ -96,13 +95,15 @@ private fun PosterListView(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = contentPadding
     ) {
-        items(items = poster, key = { poster -> poster.id }) { poster ->
-            PosterHorizontal(
-                poster = poster,
-                animatedVisibilityScope = animatedVisibilityScope,
-                sharedTransitionScope = sharedTransitionScope,
-                onClick = { onClickItem(poster.id, poster.mediaType) }
-            )
+        items(posters.itemCount) { index ->
+            posters[index]?.let { poster ->
+                PosterHorizontal(
+                    poster = poster,
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    sharedTransitionScope = sharedTransitionScope,
+                    onClick = { onClickItem(poster.id, poster.mediaType) }
+                )
+            }
         }
     }
 }
@@ -110,7 +111,7 @@ private fun PosterListView(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun PosterGridView(
-    poster: List<ShowMorePoster>,
+    posters: LazyPagingItems<ShowMorePoster>,
     gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
     contentPadding: PaddingValues,
     animatedVisibilityScope: androidx.compose.animation.AnimatedVisibilityScope,
@@ -124,13 +125,15 @@ private fun PosterGridView(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = contentPadding
     ) {
-        items(items = poster, key = { poster -> poster.id }) { poster ->
-            PosterVertically(
-                poster = poster,
-                animatedVisibilityScope = animatedVisibilityScope,
-                sharedTransitionScope = sharedTransitionScope,
-                onClick = { onClickItem(poster.id, poster.mediaType) }
-            )
+        items(posters.itemCount) { index ->
+            posters[index]?.let { poster ->
+                PosterVertically(
+                    poster = poster,
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    sharedTransitionScope = sharedTransitionScope,
+                    onClick = { onClickItem(poster.id, poster.mediaType) }
+                )
+            }
         }
     }
 }
