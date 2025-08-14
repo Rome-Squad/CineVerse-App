@@ -1,14 +1,16 @@
 package com.giraffe.media.util
 
 object NetworkConstants {
-    const val MOVIE_END_POINT = "movie"
-    const val REVIEWS_END_POINT = "reviews"
-    const val MOVIES_BY_NAME_URL = "search/movie"
-    const val GENRES_URL = "genre/movie/list"
-    const val MOVIES_BY_GENRE_URL = "discover/movie"
-    const val POPULAR_MOVIES_URL = "movie/popular"
-    const val UPCOMING_MOVIES_URL = "movie/upcoming"
-    const val NOW_PLAYING_MOVIES_URL = "movie/now_playing"
+    const val MOVIE = "movie"
+    const val MOVIES = "movies"
+    const val REVIEWS = "reviews"
+    const val SEARCH = "search"
+    const val GENRES = "genre"
+    const val LIST = "list"
+    const val DISCOVER = "discover"
+    const val POPULAR = "popular"
+    const val UPCOMING = "upcoming"
+    const val NOW_PLAYING = "now_playing"
     const val WITH_GENRES = "with_genres"
     const val PAGE = "page"
     const val QUERY = "query"
@@ -19,7 +21,7 @@ object NetworkConstants {
     const val MOVIE_ID = "movie_id"
     const val NEEDS_SESSION = "need_session_id"
     const val SESSION_ID = "session_id"
-    const val VIDEOS_END_POINT = "videos"
+    const val VIDEOS = "videos"
 
     //collections
     const val COLLECTIONS_END_POINT = "lists"
@@ -31,14 +33,13 @@ object NetworkConstants {
     const val CONFIRM_CLEAR_COLLECTION = "confirm"
 
     //user
-    const val USER_END_POINT = "account"
-    const val ACCOUNT_ID_PATH = "account_id"
+    const val ACCOUNT = "account"
+    const val ACCOUNT_ID = "account_id"
 
     //rated
-    const val RATED_END_POINT = "rated/movies"
+    const val RATED = "rated"
 
     //series
-    const val SERIES_ID = "series_id"
     const val TV_END_POINT = "tv"
 
 
