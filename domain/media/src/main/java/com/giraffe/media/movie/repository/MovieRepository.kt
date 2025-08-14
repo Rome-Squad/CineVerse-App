@@ -22,7 +22,6 @@ interface MovieRepository {
     suspend fun getMoviesCollection(
         genreId: Int? = null,
         keywords: String? = null,
-        minVote: Float? = null,
         sortBy: String = "popularity.desc",
         page: Int
     ): List<Movie>

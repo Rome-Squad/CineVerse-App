@@ -11,8 +11,6 @@ object NetworkConstants {
     const val NOW_PLAYING_MOVIES_URL = "movie/now_playing"
     const val WITH_GENRES = "with_genres"
     const val WITH_KEYWORDS = "with_keywords"
-    const val VOTE_AVERAGE = "vote_average.gte"
-    const val VOTE_COUNT = "vote_count.gte"
     const val SORT_BY = "sort_by"
     const val SORT_BY_DEFAULT = "popularity.desc"
     const val PAGE = "page"

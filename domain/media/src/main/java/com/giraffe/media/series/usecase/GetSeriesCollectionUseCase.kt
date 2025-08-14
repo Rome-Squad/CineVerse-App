@@ -1,10 +1,10 @@
-package com.giraffe.media.movie.usecase
+package com.giraffe.media.series.usecase
 
-import com.giraffe.media.movie.repository.MovieRepository
+import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
 
-class GetMoviesCollectionUseCase @Inject constructor(
-    private val movieRepository: MovieRepository
+class GetSeriesCollectionUseCase @Inject constructor(
+    private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(
         genreId: Int? = null,
@@ -12,7 +12,7 @@ class GetMoviesCollectionUseCase @Inject constructor(
         sortBy: String = "popularity.desc",
         page: Int
     ) =
-        movieRepository.getMoviesCollection(
+        seriesRepository.getSeriesCollection(
             genreId = genreId,
             keywords = keywords,
             sortBy = sortBy,

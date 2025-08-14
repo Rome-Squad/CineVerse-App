@@ -30,8 +30,6 @@ import com.giraffe.media.util.NetworkConstants.SORT_BY_DEFAULT
 import com.giraffe.media.util.NetworkConstants.UPCOMING_MOVIES_URL
 import com.giraffe.media.util.NetworkConstants.USER_END_POINT
 import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
-import com.giraffe.media.util.NetworkConstants.VOTE_AVERAGE
-import com.giraffe.media.util.NetworkConstants.VOTE_COUNT
 import com.giraffe.media.util.NetworkConstants.WITH_GENRES
 import com.giraffe.media.util.NetworkConstants.WITH_KEYWORDS
 import retrofit2.Response
@@ -60,11 +58,9 @@ interface MoviesApiServiceRetrofit {
     suspend fun getGenres(): Response<GenreResponse>
 
     @GET(DISCOVER_MOVIE_URL)
-    suspend fun getMovies(
+    suspend fun getMoviesCollection(
         @Query(WITH_GENRES) genreId: String? = null,
         @Query(WITH_KEYWORDS) keywords: String? = null,
-        @Query(VOTE_AVERAGE) minVote: Float? = null,
-        @Query(VOTE_COUNT) minVoteCount: Int? = null,
         @Query(SORT_BY) sortBy: String? = SORT_BY_DEFAULT,
         @Query(PAGE) page: Int
     ): Response<MoviesListResponse<MovieDto>>

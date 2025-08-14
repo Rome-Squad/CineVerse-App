@@ -37,6 +37,14 @@ interface SeriesApiServiceRetrofit {
         @Query(PAGE) page: Int = 1
     ): Response<SeriesResponse<SeriesDto>>
 
+    @GET(DISCOVER_TV)
+    suspend fun getSeriesCollection(
+        @Query(WITH_GENRES) genreId: String? = null,
+        @Query(WITH_KEYWORDS) keywords: String? = null,
+        @Query(SORT_BY) sortBy: String = SORT_BY_DEFAULT,
+        @Query(PAGE) page: Int = 1
+    ): Response<SeriesResponse<SeriesDto>>
+
     @GET(GENRE_TV_LIST)
     suspend fun getGenres(): Response<GenresResponse>
 
@@ -118,6 +126,9 @@ interface SeriesApiServiceRetrofit {
         const val QUERY = "query"
         const val PAGE = "page"
         const val WITH_GENRES = "with_genres"
+        const val WITH_KEYWORDS = "with_keywords"
+        const val SORT_BY = "sort_by"
+        const val SORT_BY_DEFAULT = "popularity.desc"
 
         const val SERIES_ID = "seriesId"
         const val REVIEWS = "reviews"

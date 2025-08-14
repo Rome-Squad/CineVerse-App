@@ -22,7 +22,7 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
 
     override suspend fun getMoviesByGenre(genreId: Int, page: Int) =
         retrofitRequestBuilder.get {
-            getMovies(
+            getMoviesCollection(
                 genreId = if (genreId == -1) "" else genreId.toString(),
                 page = page
             )
@@ -31,15 +31,13 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
     override suspend fun getMoviesCollection(
         genreId: Int?,
         keywords: String?,
-        minVote: Float?,
         sortBy: String,
         page: Int
     ) =
         retrofitRequestBuilder.get {
-            getMovies(
+            getMoviesCollection(
                 genreId = if (genreId == -1) "" else genreId.toString(),
                 keywords = keywords,
-                minVote = minVote,
                 sortBy = sortBy,
                 page = page
             )
