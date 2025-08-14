@@ -8,12 +8,12 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.response.GenresResponse
 import com.giraffe.media.series.response.SeriesResponse
-import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID_PATH
+import com.giraffe.media.util.NetworkConstants.ACCOUNT
+import com.giraffe.media.util.NetworkConstants.ACCOUNT_ID
 import com.giraffe.media.util.NetworkConstants.NEEDS_SESSION
 import com.giraffe.media.util.NetworkConstants.RATING
 import com.giraffe.media.util.NetworkConstants.TV_END_POINT
-import com.giraffe.media.util.NetworkConstants.USER_END_POINT
-import com.giraffe.media.util.NetworkConstants.VIDEOS_END_POINT
+import com.giraffe.media.util.NetworkConstants.VIDEOS
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -81,16 +81,16 @@ interface SeriesApiServiceRetrofit {
         @Query(PAGE) page: Int = 1
     ): Response<SeriesResponse<SeriesDto>>
 
-    @GET("$TV/{$SERIES_ID}/$VIDEOS_END_POINT")
+    @GET("$TV/{$SERIES_ID}/$VIDEOS")
     suspend fun getSeriesTrailerUrl(
         @Path(SERIES_ID) seriesId: Int
     ): Response<SeriesResponse<TrailerResponse>>
 
 
-    @GET("$USER_END_POINT/{$ACCOUNT_ID_PATH}/$RATED/$TV")
+    @GET("$ACCOUNT/{$ACCOUNT_ID}/$RATED/$TV")
     @Headers("$NEEDS_SESSION: true")
     suspend fun getRatedSeries(
-        @Path(ACCOUNT_ID_PATH) accountId: Int
+        @Path(ACCOUNT_ID) accountId: Int
     ): Response<SeriesResponse<SeriesDto>>
 
 
@@ -134,7 +134,5 @@ interface SeriesApiServiceRetrofit {
         const val REVIEWS = "reviews"
         const val RECOMMENDATIONS = "recommendations"
         const val RATED = "rated"
-
-        const val SERIES_ID_PATH = "series_id"
     }
 }

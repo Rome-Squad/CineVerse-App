@@ -17,22 +17,22 @@ class GetRecommendedMovieUseCaseTest {
     @Test
     fun `invoke should call getRecommended on repository`() = runTest {
         // given
-        coEvery { repository.getRecommended(any(), any(), any()) } returns emptyList()
+        coEvery { repository.getRecommended(any(), any()) } returns emptyList()
 
         // when
-        useCase(movieId, page, limit)
+        useCase(movieId, page)
 
         // then
-        coVerify(exactly = 1) { repository.getRecommended(any(), any(), any()) }
+        coVerify(exactly = 1) { repository.getRecommended(any(), any()) }
     }
 
     @Test
     fun `invoke should return list of recommended movies from repository`() = runTest {
         // given
-        coEvery { repository.getRecommended(movieId, page, limit) } returns fakeMovies
+        coEvery { repository.getRecommended(movieId, page) } returns fakeMovies
 
         // when
-        val result = useCase(movieId, page, limit)
+        val result = useCase(movieId, page)
 
         // then
         assertThat(result).isEqualTo(fakeMovies)

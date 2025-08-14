@@ -1,13 +1,13 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.screen.show_more.MatchesYourVibesStrategy
@@ -73,18 +73,14 @@ object PresentationModule {
     @Provides
     @Singleton
     fun provideMatchesYourVibesStrategy(
-        getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
-        getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-        getRecommendedMovie: GetRecommendedMoviesUseCase,
-        getRecommendedSeries: GetRecommendedSeriesUseCase,
+        getMatchesYourVibeMovies: GetMatchesYourVibeMoviesUseCase,
+        getMatchesYourVibeSeries: GetMatchesYourVibeSeriesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
     ): MatchesYourVibesStrategy =
         MatchesYourVibesStrategy(
-            getRecentlyViewedMovies,
-            getRecentlySeriesUseCase,
-            getRecommendedMovie,
-            getRecommendedSeries,
+            getMatchesYourVibeMovies,
+            getMatchesYourVibeSeries,
             getMovieGenresUseCase,
             getSeriesGenresUseCase
         )
