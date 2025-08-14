@@ -30,7 +30,7 @@
     <string name="logout_dialog_caption">You can always sign back in with your account.</string>
     <string name="logout_dialog_primary_button">Logout</string>
     <string name="Logout">Logout</string>
-    <string name="Version">Version 1.0.1</string>
+    <string name="app_version">Version %1$s</string>
     <string name="login_or_sign_up">Login or Sign up</string>
     <string name="My_Profile">My Profile</string>
     <string name="to_personalize_your_experience">to personalize your experience!</string>
@@ -51,6 +51,9 @@
     <string name="validation_error">Validation Error!</string>
     <string name="collection_not_found">Collection not found!</string>
     <string name="no_collections">No Collections</string>
+    <string name="no_rating_yet">No Ratings Yet</string>
+    <string name="Rate_movies_and_series">Rate movies and series you’ve watched to track what you love, and what you don’t.</string>
+    <string name="start_rating">Start Rating</string>
     <string name="no_collections_yet">No Collections Yet</string>
     <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">Start building your personal library by saving movies or series you want to remember.</string>
     <string name="start_collecting">Start collecting</string>

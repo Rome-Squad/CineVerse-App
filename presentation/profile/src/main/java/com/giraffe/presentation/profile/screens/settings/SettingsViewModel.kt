@@ -1,6 +1,7 @@
 package com.giraffe.presentation.profile.screens.settings
 
 import com.giraffe.presentation.profile.base.BaseViewModel
+import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.presentation.profile.utils.Language
 import com.giraffe.presentation.profile.utils.LanguageHelper
 import com.giraffe.presentation.profile.utils.toUi
@@ -28,6 +29,7 @@ class SettingsViewModel @Inject constructor(
     private val setDarkModeUseCase: SetDarkModeUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
     private val getLanguageUseCase: GetLanguageUseCase,
+    private val appVersionProvider: AppVersionProvider,
     private val logoutUseCase: LogoutUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
@@ -39,6 +41,12 @@ class SettingsViewModel @Inject constructor(
         observeTheme()
         observeLanguage()
         observeContentPreference()
+        loadAppVersion()
+    }
+
+    private fun loadAppVersion() {
+        val versionName = appVersionProvider.getVersionName()
+        updateState { it.copy(appVersion = versionName) }
     }
 
     private fun checkLoginStatus() {

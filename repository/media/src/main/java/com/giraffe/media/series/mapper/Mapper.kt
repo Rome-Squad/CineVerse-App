@@ -42,7 +42,6 @@ fun Series.toCacheDto() = SeriesCacheDto(
     popularity = popularity,
     youtubeVideoId = youtubeVideoId,
     userRating = userRating,
-    recentViewedAt = recentViewedAt?.toLong()
 )
 // endregion
 

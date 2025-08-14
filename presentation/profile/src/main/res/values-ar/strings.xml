@@ -36,7 +36,7 @@
     <string name="to_personalize_your_experience">لتحسين تجربتك</string>
     <string name="Language">اللغه</string>
     <string name="Logout">تسجيل الخروج</string>
-    <string name="Version">الاصدار ١.٠.١</string>
+    <string name="app_version">الإصدار %1$s</string>
     <string name="My_Profile">حسابى</string>
     <string name="settings_text">الأعدادات</string>
     <string name="back">رجوع للنافذة السابقة</string>
@@ -55,6 +55,9 @@
     <string name="no_collections_yet">لا يوجد مجموعات بعد</string>
     <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">ابدأ ببناء مكتبتك و حفظ الأفلام اللتي تريد تذكرها</string>
     <string name="start_collecting">ابدأ بالتصفح</string>
+    <string name="no_rating_yet">لا يوجد تقيمات</string>
+    <string name="Rate_movies_and_series">قم بتقييم ما شاهدته من أفلام ومسلسلات، واحتفظ بسجلٍّ لما تحبه وما لا تحبه.</string>
+    <string name="start_rating">أبدأ التقييم</string>
     <string name="create_new_collection">انشاء مجموعة جديدة</string>
     <string name="collection_name">اسم المجموعة</string>
     <string name="movies">أفلام</string>

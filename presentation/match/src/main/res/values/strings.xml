@@ -18,9 +18,9 @@
     <string name="time_long">Long</string>
     <string name="time_long_description">(more than 120 min)</string>
 
-    <string name="recency_recent">Recent</string>
-    <string name="recency_classic">Classic</string>
-    <string name="recency_both">Both</string>
+    <string name="ReleasePeriod_recent">Recent</string>
+    <string name="ReleasePeriod_classic">Classic</string>
+    <string name="ReleasePeriod_both">Both</string>
     <!-- Genre Options -->
     <string name="genre_action">Action</string>
     <string name="genre_comedy">Comedy</string>
@@ -44,4 +44,31 @@
     <string name="media_type_movie">Movie</string>
     <string name="media_type_series">Series</string>
     <string name="view_details">View Details</string>
+    <string name="error_unknown">Something went wrong. Please try again later.</string>
+    <string name="error_network">Please check your internet connection.</string>
+    <string name="access_denied_error">Access Denied Error!</string>
+    <string name="error_timeout">The request timed out. Please try again.</string>
+    <string name="error_server">Server error. Please try again later.</string>
+    <string name="error_unauthorized">You\'re not authorized. Please login again.</string>
+    <string name="error_access_denied">Access denied. You don’t have permission.</string>
+    <string name="error_validation">Invalid input. Please check your data.</string>
+    <string name="error_invalid_method">Invalid request method. Contact support.</string>
+    <string name="error_not_found">Resource not found.</string>
+    <string name="username_error">Something happen while getting username,please try again</string>
+    <string name="error_infrastructure">An internal system error has occurred. Please try again later.</string>
+    <string name="you_re_almost_there">You\'re Almost There!</string>
+    <string name="log_in_to_save_movies_create_collections_and_get_personalized_recommendations">Log in to save movies, create collections, and get personalized recommendations.</string>
+    <string name="not_now">Not Now</string>
+    <string name="log_in">Log In</string>
+    <string name="folder_icon">folder icon</string>
+    <string name="collection_name">collection name</string>
+    <string name="add_to_collection">Add to Collection</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">create</string>
+    <string name="video_library_icon">Video library icon</string>
+    <string name="no_collections_yet">No Collections Yet</string>
+    <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">Create a new collection to start saving your favorite movies and series.</string>
+    <string name="create_collection">Create collection</string>
+
+
 </resources>

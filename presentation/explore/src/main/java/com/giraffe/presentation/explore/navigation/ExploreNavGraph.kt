@@ -3,7 +3,6 @@ package com.giraffe.presentation.explore.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,19 +31,15 @@ internal fun ExploreNavGraph(
     onShowBottomBarChange: (Boolean) -> Unit
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var currentRoute = navBackStackEntry?.destination
-    val bottomBarRoutes = listOf(
-        DiscoverRoute::class,
-        SearchRoute::class,
-        SearchResultRoute::class
-    )
-    val isBottomBarVisible = currentRoute?.hierarchy?.any { navDestination ->
-        navDestination.route?.let { route ->
-            bottomBarRoutes.any { klass ->
-                route.contains(klass.simpleName .orEmpty())
-            }
-        } == true
-    } == true
+    val startDestination = DiscoverRoute
+
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val isBottomBarVisible =
+        currentRoute.orEmpty().endsWith(startDestination.toString()) ||
+                currentRoute.orEmpty().endsWith(SearchRoute.toString()) ||
+                currentRoute.orEmpty().startsWith(SearchResultRoute.toString().substringBefore('$'))
+
     LaunchedEffect(currentRoute) {
         onShowBottomBarChange(isBottomBarVisible)
     }

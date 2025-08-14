@@ -39,10 +39,10 @@ class SeasonsViewModel @Inject constructor(
         }
     }
 
-    private fun loadSeasonsSuccess(season: List<Season>) {
+    private fun loadSeasonsSuccess(seasons: List<Season>) {
         updateState {
             it.copy(
-                seasons = season.map(Season::toUi),
+                seasons = seasons.map(Season::toUi),
                 isLoading = false,
                 isNoInternet = false
             )

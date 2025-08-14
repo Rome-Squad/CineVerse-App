@@ -20,7 +20,7 @@ class CacheCleanupWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         return try {
             clearMoviesCacheUseCase.clearExceptRecentlyViewed()
-            clearSeriesCacheUseCase.clearAllExceptRecentlyViewed()
+            clearSeriesCacheUseCase()
             Result.success()
         } catch (_: Exception) {
             Result.retry()

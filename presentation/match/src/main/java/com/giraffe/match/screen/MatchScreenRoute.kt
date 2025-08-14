@@ -5,7 +5,7 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
 @Serializable
-object MatchRouteStart
+data object MatchRouteStart
 
 fun NavGraphBuilder.matchRouteStart(
     onStartMatchingClick: () -> Unit

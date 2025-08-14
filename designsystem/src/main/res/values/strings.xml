@@ -40,4 +40,11 @@
     <string name="home">Home</string>
     <string name="placeholder">Placeholder</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="no_internet_icon">No Internet Icon</string>
+    <string name="oops_no_internet">Oops! No Internet</string>
+    <string name="looks_like_you_re_offline_let_s_reconnect_so_you_don_t_miss_out">Looks like you\'re offline. Let\'s reconnect so you don\'t miss out!</string>
+    <string name="try_again">Try Again</string>
+    <string name="password_visibility_icon">password visibility icon</string>
+    <string name="danger_triangle_icon">Danger_Triangle_Icon</string>
+    <string name="user_icon">User_Icon</string>
 </resources>

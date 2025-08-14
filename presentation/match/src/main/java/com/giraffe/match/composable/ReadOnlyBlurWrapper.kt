@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun ReadOnlyBlurWrapper(
@@ -14,7 +12,6 @@ fun ReadOnlyBlurWrapper(
 ) {
     val modifier = if (readOnly) {
         Modifier
-            .blur(8.dp)
             .alpha(0.6f)
     } else Modifier
 

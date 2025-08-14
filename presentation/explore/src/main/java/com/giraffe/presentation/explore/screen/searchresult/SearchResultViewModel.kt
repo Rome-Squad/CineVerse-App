@@ -12,8 +12,8 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersByNameUseCase
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.GetMoviesByNameUseCase
+import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
@@ -83,7 +83,7 @@ class SearchResultViewModel @Inject constructor(
         updateState { it.copy(isGridSelected = isGrid, isLoading = true, isNoInternet = false) }
     }
 
-    override fun retry() {
+    override fun onRetryClick() {
         getMoviesGenres()
         getSeriesGenres()
         getMovies()

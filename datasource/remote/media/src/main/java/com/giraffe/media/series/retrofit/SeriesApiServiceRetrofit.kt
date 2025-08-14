@@ -1,6 +1,7 @@
 package com.giraffe.media.series.retrofit
 
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
+import com.giraffe.media.movie.response.MovieRateResponse
 import com.giraffe.media.response.AllReviewsResponse
 import com.giraffe.media.response.TrailerResponse
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
@@ -98,6 +99,12 @@ interface SeriesApiServiceRetrofit {
         @Path(SERIES_ID) seriesId: Int,
         @Body request: RatingRequest
     ): Response<Unit>
+
+    @GET("$TV/{$SERIES_ID}/account_states")
+    @Headers("$NEEDS_SESSION: true")
+    suspend fun getUserSeriesRating(
+        @Path(SERIES_ID) seriesId: Int
+    ): Response<MovieRateResponse>
 
     companion object {
         const val SEARCH_TV = "search/tv"

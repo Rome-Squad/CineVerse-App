@@ -32,7 +32,9 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
+import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterListSection
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.components.MainDetails
@@ -52,6 +54,7 @@ fun CastDetailsScreen(
 ) {
     val state by castDetailsViewModel.state.collectAsState()
     val context = LocalContext.current
+
     EventListener(
         events = castDetailsViewModel.effect,
     ) {
@@ -142,85 +145,108 @@ fun CastDetailsContent(
             .systemBarsPadding()
             .nestedScroll(nestedScrollConnection)
     ) {
-        LazyColumn(
-            state = scrollState,
-            verticalArrangement = Arrangement.spacedBy(innerColumnSpacing)
-        ) {
-            stickyHeader {
-                Box(Modifier.background(Theme.color.background.screen)) {
-                    AppBar(
-                        showBackButton = true,
-                        hasBackground = false,
-                        onBackButtonClick = interaction::onBackClick,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
+        if (state.isNoInternet) {
+            NoInternetScreen(
+                modifier = Modifier
+                    .align(Alignment.Center),
+                onRetryClick = interaction::onRetryClick
+            )
+        }
 
-                    MainDetails(
-                        actorName = state.actorName,
-                        actorBirthday = state.actorBirth,
-                        actorPlaceOfBirth = state.actorPlace,
-                        socialMediaUiList = state.socialMediaUiList,
-                        onLinkClick = interaction::onSocialMediaLinkClick,
-                        actorImageUrl = state.actorImageUrl,
-                        animationProgress = animationProgress,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 72.dp - 72.dp * animationProgress)
-                    )
+        if (state.isLoading) {
+            Progress(
+                modifier = Modifier
+                    .align(Alignment.Center)
+            )
+        }
 
-                    if (animationProgress == 1f) {
-                        Box(
-                            modifier = Modifier
-                                .height(1.dp)
-                                .fillMaxWidth()
-                                .background(Theme.color.stroke.primary)
-                                .align(Alignment.BottomStart)
+        if (!(state.isLoading || state.isNoInternet)) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Theme.color.background.screen)
+                    .systemBarsPadding(),
+
+                state = scrollState,
+                verticalArrangement = Arrangement.spacedBy(innerColumnSpacing)
+            ) {
+                stickyHeader {
+                    Box(Modifier.background(Theme.color.background.screen)) {
+                        AppBar(
+                            showBackButton = true,
+                            hasBackground = false,
+                            onBackButtonClick = interaction::onBackClick,
+                            modifier = Modifier.padding(horizontal = 8.dp)
                         )
+
+                        MainDetails(
+                            actorName = state.actorName,
+                            actorBirthday = state.actorBirth,
+                            actorPlaceOfBirth = state.actorPlace,
+                            socialMediaUiList = state.socialMediaUiList,
+                            onLinkClick = interaction::onSocialMediaLinkClick,
+                            actorImageUrl = state.actorImageUrl,
+                            animationProgress = animationProgress,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(top = 72.dp - 72.dp * animationProgress)
+                        )
+
+                        if (animationProgress == 1f) {
+                            Box(
+                                modifier = Modifier
+                                    .height(1.dp)
+                                    .fillMaxWidth()
+                                    .background(Theme.color.stroke.primary)
+                                    .align(Alignment.BottomStart)
+                            )
+                        }
                     }
                 }
-            }
 
-            item {
-                PosterListSection(
-                    title = stringResource(R.string.best_of) + " " + state.actorName,
-                    endText = stringResource(R.string.show_more),
-                    posters = state.posters,
-                    onClickPoster = {
-                        interaction.onPosterClick(
-                            mediaId = it.id,
-                            mediaType = it.mediaTypeOfPoster.toString()
-                        )
-                    },
-                    onClickEndText = {
-                        interaction.onShowMoreCastCreditsTextClick(
-                            state.actorId,
-                            state.actorName
-                        )
-                    }
-                )
-            }
+                item {
+                    PosterListSection(
+                        title = stringResource(R.string.best_of) + " " + state.actorName,
+                        endText = stringResource(R.string.show_more),
+                        posters = state.posters,
+                        onClickPoster = {
+                            interaction.onPosterClick(
+                                mediaId = it.id,
+                                mediaType = it.mediaTypeOfPoster.toString()
+                            )
+                        },
+                        onClickEndText = {
+                            interaction.onShowMoreCastCreditsTextClick(
+                                state.actorId,
+                                state.actorName
+                            )
+                        }
+                    )
+                }
 
-            item {
-                GallerySection(
-                    modifier = Modifier
-                        .height(314.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = padding16),
-                    imageUrls = state.actorGalleryImageUrls,
-                    onShowMoreClick = interaction::onShowMoreGalleryTextClick
-                )
-            }
+                item {
+                    GallerySection(
+                        modifier = Modifier
+                            .height(314.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = padding16),
+                        imageUrls = state.actorGalleryImageUrls,
+                        onShowMoreClick = interaction::onShowMoreGalleryTextClick
+                    )
+                }
 
-            item {
-                InfoSection(
-                    modifier = Modifier
-                        .padding(horizontal = padding16)
-                        .padding(bottom = bottomSpacingHeight.dp),
-                    title = stringResource(R.string.biography),
-                    description = state.biographyInfo
-                )
+                item {
+                    InfoSection(
+                        modifier = Modifier
+                            .padding(horizontal = padding16)
+                            .padding(bottom = bottomSpacingHeight.dp),
+                        title = stringResource(R.string.biography),
+                        description = state.biographyInfo
+                    )
+                }
             }
         }
+
     }
 
 }

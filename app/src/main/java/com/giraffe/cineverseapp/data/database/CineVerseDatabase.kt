@@ -14,8 +14,13 @@ import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.MoviePersonCrossRef
 import com.giraffe.media.person.relations.SeriesPersonCrossRef
 import com.giraffe.media.series.dao.SeriesDao
+import com.giraffe.media.series.datasource.local.cacheDto.MatchesYourVibeSeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
 
 @Database(
     entities = [
@@ -24,6 +29,11 @@ import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
         MovieGenreCacheDto::class,
         SeriesCacheDto::class,
         SeriesGenreCacheDto::class,
+        PopularSeriesCacheDto::class,
+        RecentlyReleasedSeriesCacheDto::class,
+        TopRatedSeriesCacheDto::class,
+        RecentViewedSeriesCacheDto::class,
+        MatchesYourVibeSeriesCacheDto::class,
         PersonCacheDto::class,
         MoviePersonCrossRef::class,
         SeriesPersonCrossRef::class

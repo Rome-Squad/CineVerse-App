@@ -1,16 +1,12 @@
 package com.giraffe.presentation.details.screens.seriesdetails
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -32,9 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.PosterListSection
-import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
@@ -63,7 +57,6 @@ fun SeriesDetailsScreen(
     navigateToYouTubePlayer: (String) -> Unit,
     navigateToLogIn: () -> Unit,
     navigateToReviews: (Int) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: SeriesDetailsViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -94,37 +87,11 @@ fun SeriesDetailsScreen(
         }
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Theme.color.background.screen)
-            .systemBarsPadding(),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            AnimatedVisibility(state.isNoInternet) {
-                NoInternetScreen(
-                    onRetryClick = viewModel::onRetryClick
-                )
-            }
-            AnimatedVisibility(state.isLoading) {
-                Progress(modifier = Modifier.size(40.dp))
-            }
-        }
-        AnimatedVisibility(
-            visible = !state.isLoading && !state.isNoInternet,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            SeriesDetailsContent(
-                state = state,
-                interaction = viewModel,
-            )
-        }
-    }
+
+    SeriesDetailsContent(
+        state = state,
+        interaction = viewModel,
+    )
 }
 
 
@@ -176,9 +143,9 @@ private fun SeriesDetailsContent(
                 .fillMaxSize()
                 .nestedScroll(nestedScrollConnection)
         ) {
-
             LazyColumn(
                 state = scrollState,
+                contentPadding = PaddingValues(bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -200,9 +167,9 @@ private fun SeriesDetailsContent(
                             isPlayButtonEnabled = state.seriesUi.youtubeVideoId.isNotBlank(),
                             animationProgress = animationProgress,
                             modifier = Modifier
+                                .background(Theme.color.background.screen)
                                 .padding(top = 16.dp * (1f - animationProgress))
                                 .padding(horizontal = 16.dp)
-                                .background(Theme.color.background.screen)
                         )
                     }
                 }
@@ -299,6 +266,7 @@ private fun SeriesDetailsContent(
                 item {
                     RatingSection(
                         modifier = Modifier.padding(horizontal = 16.dp),
+                        rate = state.seriesUi.userRating.toInt(),
                         onClickCard = interaction::onGiveStarsCardClick
                     )
                 }

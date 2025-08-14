@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SessionRequestBody(
-    @SerialName("request_token") val requestToken: String
+    @SerialName("request_token")
+    val requestToken: String
 )

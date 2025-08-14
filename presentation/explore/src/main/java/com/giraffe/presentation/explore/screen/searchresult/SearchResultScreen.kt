@@ -107,13 +107,16 @@ private fun SearchResultContent(
                 ) {
 
                     when {
-                        posters.loadState.refresh is LoadState.Loading -> Progress(size = 32.dp)
-                        state.isNoInternet -> NoInternetScreen(onRetryClick = interactions::retry)
-                        posters.itemCount == 0 -> NothingFound()
-                        state.isLoading -> Box(
-                            Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) { Progress() }
+                        posters.loadState.refresh is LoadState.Loading || state.isLoading -> Progress(
+                            size = 32.dp
+                        )
+
+                        state.isNoInternet -> NoInternetScreen(onRetryClick = interactions::onRetryClick)
+                        posters.itemCount == 0 -> NothingFound(
+                            modifier = Modifier.padding(
+                                horizontal = 60.dp
+                            )
+                        )
 
                         else -> if (state.selectedTab == SearchTab.ACTORS) {
                             ActorsSection(

@@ -8,6 +8,9 @@ import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImp
 import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
 import com.giraffe.media.explore.retrofit.SearchApiServiceRetrofit
 import com.giraffe.media.explore.retrofit.SearchRemoteDataSourceImplRetrofit
+import com.giraffe.media.match.datasource.MatchRemoteDataSource
+import com.giraffe.media.match.retrofit.MatchApiService
+import com.giraffe.media.match.retrofit.MatchRemoteDataSourceImplRetrofit
 import com.giraffe.media.mediaMember.retrofit.MediaMemberApiServiceRetrofit
 import com.giraffe.media.mediaMember.retrofit.MediaMemberRemoteDataSourceImplRetrofit
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
@@ -22,10 +25,9 @@ import com.giraffe.media.util.RetrofitRequestBuilder
 import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
-import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpRetrofit
-import com.giraffe.user.retrofit.UserApiServiceRetrofit
-import com.giraffe.user.retrofit.UserRemoteDataSourceImplRetrofit
-import com.giraffe.user.util.RetrofitUserRequestBuilder
+import com.giraffe.user.retrofit.AuthenticationRemoteDataSourceImpl
+import com.giraffe.user.retrofit.UserApiService
+import com.giraffe.user.retrofit.UserRemoteDataSourceImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -110,8 +112,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideUserApi(retrofit: Retrofit): UserApiServiceRetrofit =
-        retrofit.create(UserApiServiceRetrofit::class.java)
+    fun provideUserApi(retrofit: Retrofit): UserApiService =
+        retrofit.create(UserApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMatchApi(retrofit: Retrofit): MatchApiService =
+        retrofit.create(MatchApiService::class.java)
 
     @Provides
     @Singleton
@@ -138,10 +145,16 @@ object NetworkModule {
     fun providePersonRequestBuilder(api: MediaMemberApiServiceRetrofit): RetrofitRequestBuilder<MediaMemberApiServiceRetrofit> =
         RetrofitRequestBuilder(api)
 
+
     @Provides
     @Singleton
-    fun provideUserRequestBuilder(api: UserApiServiceRetrofit): RetrofitUserRequestBuilder<UserApiServiceRetrofit> =
-        RetrofitUserRequestBuilder(api)
+    fun provideAuthenticationRemoteDataSource(api: UserApiService): AuthenticationRemoteDataSource =
+        AuthenticationRemoteDataSourceImpl(api)
+
+    @Provides
+    @Singleton
+    fun provideUserRemoteDataSource(api: UserApiService): UserRemoteDataSource =
+        UserRemoteDataSourceImpl(api)
 
     @Provides
     @Singleton
@@ -170,19 +183,15 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthenticationRemoteDataSource(
-        builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>
-    ): AuthenticationRemoteDataSource {
-        return AuthenticationRemoteDataSourceImpRetrofit(builder)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRemoteDataSource(builder: RetrofitUserRequestBuilder<UserApiServiceRetrofit>): UserRemoteDataSource =
-        UserRemoteDataSourceImplRetrofit(builder)
-
-    @Provides
-    @Singleton
     fun provideCollectionsRemoteDataSource(builder: RetrofitRequestBuilder<CollectionsApiServiceRetrofit>): CollectionsRemoteDataSource =
         CollectionsRemoteDataSourceImp(builder)
+
+    @Provides
+    @Singleton
+    fun provideMatchRemoteDataSource(
+        api: MatchApiService
+    ): MatchRemoteDataSource {
+        return MatchRemoteDataSourceImplRetrofit(api)
+    }
+
 }
