@@ -8,18 +8,14 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 fun Project.configureAndroidLibrary(
     testRunner: String = "androidx.test.runner.AndroidJUnitRunner",
-    versionCatalog: VersionCatalog,
     isComposeLibrary: Boolean = false
 ) {
-    val jvmTarget = versionCatalog.findVersion("jvmTarget").get().toString()
-    val javaVersion =
-        JavaVersion.toVersion(versionCatalog.findVersion("javaVersion").get().toString())
     extensions.configure<LibraryExtension> {
-        compileSdk = versionCatalog.findVersion("compileSdk").get().toString().toInt()
+        compileSdk = ProjectConfig.compileSdk
 
         defaultConfig {
-            minSdk = versionCatalog.findVersion("minSdk").get().toString().toInt()
-            testOptions.targetSdk = versionCatalog.findVersion("targetSdk").get().toString().toInt()
+            minSdk = ProjectConfig.minSdk
+            testOptions.targetSdk = ProjectConfig.targetSdk
             testInstrumentationRunner = testRunner
             consumerProguardFiles("consumer-rules.pro")
         }
@@ -39,8 +35,8 @@ fun Project.configureAndroidLibrary(
         }
 
         compileOptions {
-            sourceCompatibility = javaVersion
-            targetCompatibility = javaVersion
+            sourceCompatibility = ProjectConfig.javaVersion
+            targetCompatibility = ProjectConfig.javaVersion
         }
 
         if (isComposeLibrary) {
@@ -50,14 +46,14 @@ fun Project.configureAndroidLibrary(
         }
     }
 
-    configureKotlinCompiler(jvmTarget)
+    configureKotlinCompiler(ProjectConfig.jvmTarget)
 }
 
 
-fun Project.configureKotlinCompiler(javaVersion: String) {
+fun Project.configureKotlinCompiler(target: JvmTarget) {
     extensions.configure<KotlinAndroidProjectExtension> {
         compilerOptions {
-            jvmTarget.set(JvmTarget.valueOf(javaVersion))
+            jvmTarget.set(target)
         }
     }
 }
