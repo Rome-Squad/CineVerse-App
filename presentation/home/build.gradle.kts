@@ -19,4 +19,7 @@ dependencies {
     implementation(projects.api.explore)
     implementation(projects.api.match)
     implementation(projects.api.profile)
+    //pagination
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose)
 }

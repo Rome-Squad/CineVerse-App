@@ -2,13 +2,22 @@ package com.giraffe.presentation.home.screen.show_more
 
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.giraffe.presentation.home.base.BasePagingSource
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreRoute
 import com.giraffe.user.exception.NoInternetException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,15 +38,37 @@ class ShowMoreViewModel @Inject constructor(
             onError = ::onLoadByStrategyFail,
             onSuccess = ::onLoadByStrategySuccess,
         ) {
-            showMoreFactory.createStrategy(sectionType).loadData()
+            val pager = Pager(
+                config = PagingConfig(
+                    pageSize = 15,
+                    prefetchDistance = 5,
+                    initialLoadSize = 15
+                )
+            ) {
+                BasePagingSource(
+                    onError = ::onLoadByStrategyFail
+                ) { page ->
+                    showMoreFactory.createStrategy(sectionType).loadData(page)
+                }
+            }
+
+            pager
+                .flow
+                .cachedIn(viewModelScope)
+                .stateIn(
+                    viewModelScope,
+                    SharingStarted.Lazily,
+                    PagingData.empty()
+                )
+
         }
     }
 
-    private fun onLoadByStrategySuccess(media: List<ShowMorePoster>) {
+    private fun onLoadByStrategySuccess(mediaFlow: Flow<PagingData<ShowMorePoster>>) {
         updateState {
             it.copy(
                 sectionType = sectionType,
-                mediaList = media,
+                mediaFlow = mediaFlow,
                 isLoading = false,
                 isNoInternet = false
             )
