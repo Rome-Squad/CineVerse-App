@@ -58,6 +58,22 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
+
+    override suspend fun discoverMovies(
+        genreId: List<Int>?,
+        keywords: String?,
+        sortBy: String,
+        page: Int
+    ) = safeCall {
+        movieRemote.discoverMovies(
+            genreId = genreId,
+            keywords = keywords,
+            sortBy = sortBy,
+            page = page
+        ).map(MovieDto::toEntity)
+    }
+
+
     override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
         return safeCall {
             movieRemote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
