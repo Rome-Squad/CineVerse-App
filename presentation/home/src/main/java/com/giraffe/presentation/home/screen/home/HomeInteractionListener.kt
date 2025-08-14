@@ -9,7 +9,7 @@ interface HomeInteractionListener {
     fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType)
     fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType)
     fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType)
-    fun onWhatShouldIWatchClicked(sectionType: ShowMoreSectionType)
+    fun onMatchYourVibeClicked(sectionType: ShowMoreSectionType)
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)
     fun onYourCollectionClicked()
     fun onExploreSectionClicked()

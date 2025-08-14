@@ -1,6 +1,6 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.media.movie.MovieLocalDataSourceImp
+import com.giraffe.media.movie.MovieLocalDataSourceImpl
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.person.MediaMemberLocalDataSourceImp
 import com.giraffe.media.person.datasource.local.MediaMemberLocalDataSource
@@ -34,7 +34,7 @@ abstract class LocalDataSourceBindModule {
 
     @Binds
     @Singleton
-    abstract fun bindMoviesLocalDataSource(impl: MovieLocalDataSourceImp): MoviesLocalDataSource
+    abstract fun bindMoviesLocalDataSource(impl: MovieLocalDataSourceImpl): MoviesLocalDataSource
 
     @Binds
     @Singleton

@@ -41,6 +41,7 @@ fun SearchResultScreen(
     navigateToMovieDetails: (Int) -> Unit,
     navigateToSeriesDetails: (Int) -> Unit,
     navigateToCastDetails: (Int) -> Unit,
+    navigateToSearchScreen: () -> Unit,
     onBackClick: () -> Unit,
     viewModel: SearchResultViewModel = hiltViewModel(),
 ) {
@@ -56,6 +57,7 @@ fun SearchResultScreen(
             is SearchResultEffect.NavigateToMovieDetail -> navigateToMovieDetails(effect.movieId)
             is SearchResultEffect.NavigateToSeriesDetail -> navigateToSeriesDetails(effect.seriesId)
             is SearchResultEffect.NavigateBack -> onBackClick()
+            is SearchResultEffect.NavigateToSearchScreen -> navigateToSearchScreen()
         }
     }
 
@@ -89,7 +91,8 @@ private fun SearchResultContent(
                     showBackButton = true,
                     value = state.query,
                     onTextFieldClicked = interactions::onBackClick,
-                    onBackClick = interactions::onBackClick
+                    onBackClick = interactions::onBackClick,
+                    onEndIconClick = interactions::onRecordingClick
                 )
             }
             stickyHeader {

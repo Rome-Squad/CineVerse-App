@@ -6,12 +6,12 @@ import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.GetPopularMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-    private val getRecommendedMoviesUseCase: GetRecommendedMoviesUseCase,
+    private val getMatchesYourVibeMoviesUseCase: GetMatchesYourVibeMoviesUseCase,
     private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
@@ -62,6 +62,8 @@ class HomeViewModel @Inject constructor(
         getRecentlyReleased()
         getTopRatedSeries()
         getUpcomingMovies()
+        getMatchesYourVibeMovies()
+        getMatchesYourVibeSeries()
         getUserName()
         isLoggedIn()
         getYourCollections()
@@ -272,7 +274,6 @@ class HomeViewModel @Inject constructor(
                 isLoading = false
             )
         }
-        getRecommendedMovies(movies)
     }
 
     private fun onGetRecentlySeriesSuccess(series: List<Series>) {
@@ -283,39 +284,33 @@ class HomeViewModel @Inject constructor(
                 isLoading = false
             )
         }
-        getMatchesYourVibeSeries(series)
-
     }
 
-    private fun getRecommendedMovies(movies: List<Movie>) {
-        movies.firstOrNull()?.let { movie ->
-            safeExecute(
-                onSuccess = ::onGetRecommendedMoviesSuccess,
-                onError = ::onFail,
-            ) {
-                getRecommendedMoviesUseCase(movie.id, 1)
-            }
+    private fun getMatchesYourVibeMovies() {
+        safeExecute(
+            onSuccess = ::onGetMatchesYourVibeMoviesSuccess,
+            onError = ::onFail,
+        ) {
+            getMatchesYourVibeMoviesUseCase(page = 1, limit = 10)
         }
     }
 
-    private fun onGetRecommendedMoviesSuccess(recommendedMovies: List<Movie>) {
+    private fun onGetMatchesYourVibeMoviesSuccess(movies: List<Movie>) {
         updateState {
             it.copy(
-                matchVibes = (it.matchVibes + recommendedMovies.map(Movie::toPoster)).distinctBy { movie -> movie.id },
+                matchVibes = (it.matchVibes + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id },
                 isNoInternet = false,
                 isLoading = false
             )
         }
     }
 
-    private fun getMatchesYourVibeSeries(series: List<Series>) {
-        series.firstOrNull()?.let { seriesList ->
-            safeExecute(
-                onSuccess = ::onGetMatchesYourVibeSeriesSuccess,
-                onError = ::onFail,
-            ) {
-                getMatchesYourVibeSeriesUseCase(1, 20)
-            }
+    private fun getMatchesYourVibeSeries() {
+        safeExecute(
+            onSuccess = ::onGetMatchesYourVibeSeriesSuccess,
+            onError = ::onFail,
+        ) {
+            getMatchesYourVibeSeriesUseCase(1, 10)
         }
     }
 
@@ -344,7 +339,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    override fun onWhatShouldIWatchClicked(sectionType: ShowMoreSectionType) {
+    override fun onMatchYourVibeClicked(sectionType: ShowMoreSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
