@@ -1,6 +1,8 @@
 package com.giraffe.presentation.profile.screens.edit
 
 import android.graphics.Color
+import android.net.Uri
+import android.webkit.ValueCallback
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.compose.foundation.background
@@ -22,18 +24,22 @@ import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
+import com.giraffe.presentation.profile.utils.FilePicker
+import com.google.accompanist.web.AccompanistWebChromeClient
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
 private const val EDIT_PROFILE_URL = "https://www.themoviedb.org/settings/profile"
+private const val LOGIN_URL = "https://www.themoviedb.org/login"
 
 @Composable
 fun EditProfileWebViewScreen(onBack: () -> Unit) {
     val webViewState = rememberWebViewState(url = EDIT_PROFILE_URL)
     val isLoading = webViewState.loadingState is LoadingState.Loading
     val webViewClient = remember { RestrictedWebViewClient() }
+    val chromeClient = remember { FileChooserWebChromeClient() }
 
     Column(
         modifier = Modifier
@@ -56,6 +62,7 @@ fun EditProfileWebViewScreen(onBack: () -> Unit) {
             WebView(
                 state = webViewState,
                 client = webViewClient,
+                chromeClient = chromeClient,
                 modifier = Modifier.fillMaxSize(),
                 onCreated = {
                     it.settings.javaScriptEnabled = true
@@ -81,6 +88,19 @@ private class RestrictedWebViewClient : AccompanistWebViewClient() {
         request: WebResourceRequest?
     ): Boolean {
         val clickedUrl = request?.url?.toString() ?: return false
-        return !clickedUrl.startsWith(EDIT_PROFILE_URL)
+        val isAllowed = clickedUrl.startsWith(EDIT_PROFILE_URL) || clickedUrl.startsWith(LOGIN_URL)
+        return !isAllowed
+    }
+}
+
+private class FileChooserWebChromeClient : AccompanistWebChromeClient() {
+    override fun onShowFileChooser(
+        webView: WebView?,
+        filePathCallback: ValueCallback<Array<Uri>>?,
+        fileChooserParams: FileChooserParams?
+    ): Boolean {
+        FilePicker.filePathCallback = filePathCallback
+        FilePicker.openFileChooser?.invoke()
+        return true
     }
 }
