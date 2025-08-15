@@ -1,15 +1,15 @@
 package com.giraffe.presentation.home.screen.home
 
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
+import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 
 interface HomeInteractionListener {
     fun onMediaClicked(mediaId: Int, mediaType: MediaType)
-    fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType)
-    fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType)
-    fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType)
-    fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType)
-    fun onMatchYourVibeClicked(sectionType: ShowMoreSectionType)
+    fun onSeeAllRecentlyReleasedClicked(sectionType: MixedMediaSectionType)
+    fun onSeeAllTopRatedClicked(sectionType: MixedMediaSectionType)
+    fun onSeeAllUpcomingClicked(sectionType: MixedMediaSectionType)
+    fun onSeeAllRecentlyViewedClicked(sectionType: MixedMediaSectionType)
+    fun onMatchYourVibeClicked(sectionType: MixedMediaSectionType)
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)
     fun onYourCollectionClicked()
     fun onExploreSectionClicked()
@@ -19,4 +19,7 @@ interface HomeInteractionListener {
         collectionId: Int,
         collectionName: String
     )
+
+    fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType)
+
 }
