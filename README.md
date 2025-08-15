@@ -39,6 +39,34 @@ But you can see the last updated version here:
 
 ---
 
+## Getting Started
+
+You will need to do some Installation steps first to start your tour in CineVerse
+
+### Installation
+1. Get a free API Key at [TMDB](https://www.themoviedb.org/subscription)
+2. You will find your API Key and Access Token here at [TMDB settings](https://www.themoviedb.org/settings/api)
+
+    <img width="1897" height="825" alt="image" src="https://github.com/user-attachments/assets/0320735c-f842-44d5-9fb9-712a75a8c07f" />
+  
+3. Clone the repo
+   ```sh
+   git clone https://github.com/Rome-Squad/CineVerse-App.git
+   ```
+   
+4. Create `secrets.properties` file in `app` module
+
+     <img width="732" height="276" alt="image" src="https://github.com/user-attachments/assets/0f52558f-556c-48b1-86c8-83be7f9a27bc" />
+
+5. Enter your API Key and Access Token in `secrets.properties`
+
+    <img width="735" height="186" alt="image" src="https://github.com/user-attachments/assets/8f52d45a-9ac3-41cb-9110-0db474571566" />
+
+5. Now you can run app and start yout tour!
+
+    <img width="1218" height="537" alt="image" src="https://github.com/user-attachments/assets/47cd20ec-61dd-4187-8c58-1499c4b8c384" />
+
+   
 ## 🧠 Key Concepts
 
 This app is a practical demonstration of:
