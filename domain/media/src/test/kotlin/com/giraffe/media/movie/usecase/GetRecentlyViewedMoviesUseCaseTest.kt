@@ -1,6 +1,7 @@
 package com.giraffe.media.movie.usecase
 
 import com.giraffe.media.movie.repository.MovieRepository
+import com.giraffe.media.movie.util.fakeMovies
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -17,13 +18,13 @@ class GetRecentlyViewedMoviesUseCaseTest {
     @Test
     fun `invoke should call getRecentlyViewed on repository`() = runTest {
         // given
-        coEvery { repository.getRecentlyViewed() } returns flow { emit(emptyList()) }
+        coEvery { repository.getRecentlyViewed(any(), any()) } returns flow { emit(emptyList()) }
 
         // when
         useCase()
 
         // then
-        coVerify(exactly = 1) { repository.getRecentlyViewed() }
+        coVerify(exactly = 1) { repository.getRecentlyViewed(any(), any()) }
     }
 
 
@@ -31,7 +32,7 @@ class GetRecentlyViewedMoviesUseCaseTest {
     fun `given recently viewed movies, when invoke is called, then return movie list`() = runTest {
         // given
         val expectedMovies = flow { emit(fakeMovies) }
-        coEvery { repository.getRecentlyViewed() } returns expectedMovies
+        coEvery { repository.getRecentlyViewed(any(), any()) } returns expectedMovies
 
         // when
         val result = useCase.invoke()

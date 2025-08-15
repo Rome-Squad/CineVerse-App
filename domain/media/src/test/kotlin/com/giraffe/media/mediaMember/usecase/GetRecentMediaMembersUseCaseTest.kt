@@ -9,7 +9,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
-class GetRecentCastMediaMembersUseCaseTest {
+class GetRecentMediaMembersUseCaseTest {
     private val repository: MediaMemberRepository = mockk(relaxed = true)
     private val getRecentMediaMembersUseCase = GetRecentMediaMembersUseCase(repository)
 
