@@ -1,12 +1,5 @@
-<div align="center">
-  <h1>
-    <img src="https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25" 
-         alt="CineVerse Logo" 
-         width="50" 
-         style="vertical-align: middle; margin-right: 10px;" />
-    CineVerse – Where Every Story Finds Its Star
-  </h1>
-</div>
+# <img src="https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25" alt="CineVerse Logo" width="50" /> CineVerse – Where Every Story Finds Its Star
+![Image](https://github.com/user-attachments/assets/991d2735-8995-471b-a293-c967f5b30f3f)
 
 ## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) Download Cineverse APK
 
