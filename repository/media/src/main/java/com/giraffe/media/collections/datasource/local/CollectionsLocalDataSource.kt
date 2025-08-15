@@ -11,7 +11,7 @@ interface CollectionsLocalDataSource {
 
     suspend fun insertCollections(collections: List<CollectionCacheDto>)
 
-    suspend fun deleteCollection(collectionId: Int): Boolean
+    suspend fun deleteCollection(collectionId: Int)
 
     suspend fun increaseCollectionItemCount(collectionId: Int)
 

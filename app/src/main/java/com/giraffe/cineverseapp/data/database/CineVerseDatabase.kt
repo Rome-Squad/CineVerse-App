@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.giraffe.cineverseapp.data.database.converter.Converters
+import com.giraffe.media.collections.dao.CollectionsDao
 import com.giraffe.media.collections.datasource.local.cache.CollectionCacheDto
 import com.giraffe.media.explore.dao.SearchKeywordDao
 import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
@@ -58,4 +59,6 @@ abstract class CineVerseDatabase : RoomDatabase() {
     abstract fun seriesDao(): SeriesDao
     abstract fun personDao(): PersonDao
     abstract fun exploreSearchKeywordDao(): SearchKeywordDao
+
+    abstract fun collectionsDao(): CollectionsDao
 }

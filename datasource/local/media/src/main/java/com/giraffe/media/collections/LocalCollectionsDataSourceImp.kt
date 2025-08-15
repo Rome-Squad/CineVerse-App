@@ -21,7 +21,7 @@ class LocalCollectionsDataSourceImp @Inject constructor(
 
     override suspend fun deleteCollection(
         collectionId: Int
-    ): Boolean = collectionsDao.deleteCollection(collectionId)
+    ) = collectionsDao.deleteCollection(collectionId)
 
     override suspend fun increaseCollectionItemCount(
         collectionId: Int

@@ -23,7 +23,7 @@ class CollectionsRepositoryImp @Inject constructor(
     private val collectionsLocalDataSource: CollectionsLocalDataSource
 ) : CollectionsRepository {
 
-    override suspend fun getCollections(
+    override fun getCollections(
         accountId: Int
     ): Flow<List<Collection>> = safeFlow {
         collectionsLocalDataSource.getCollections()

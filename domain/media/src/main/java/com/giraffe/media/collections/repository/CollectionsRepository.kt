@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CollectionsRepository {
 
-    suspend fun getCollections(accountId: Int): Flow<List<Collection>>
+    fun getCollections(accountId: Int): Flow<List<Collection>>
 
 
     suspend fun getCollectionDetails(collectionId: Int): Collection

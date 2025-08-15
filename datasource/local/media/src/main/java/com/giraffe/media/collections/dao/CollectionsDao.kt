@@ -20,7 +20,7 @@ interface CollectionsDao {
     suspend fun insertCollections(collections: List<CollectionCacheDto>)
 
     @Query("DELETE FROM ${DatabaseConstants.COLLECTIONS_TABLE} WHERE id = :collectionId")
-    suspend fun deleteCollection(collectionId: Int): Boolean
+    suspend fun deleteCollection(collectionId: Int)
 
     @Query(
         """
