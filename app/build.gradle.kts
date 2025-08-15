@@ -52,7 +52,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     //firebase
-    implementation(libs.bundles.firebase)
+    releaseImplementation(libs.bundles.firebase)
     //data store
     implementation(libs.datastore.preferences)
     //serialization
