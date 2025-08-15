@@ -63,13 +63,13 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteSearchKeyword(keyword: String) =
-        local.deleteSearchKeyword(keyword)
+        safeCall { local.deleteSearchKeyword(keyword) }
 
     override suspend fun clearSearchHistory() =
-        local.clearSearchHistory()
+        safeCall { local.clearSearchHistory() }
 
     override suspend fun clearExpiredSearch() =
-        local.clearExpiredSearch()
+        safeCall { local.clearExpiredSearch() }
 
 }
 
