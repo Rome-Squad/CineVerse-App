@@ -6,22 +6,6 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-coverageConfig {
-    includes = listOf(
-        "**/explore/usecase/**",
-        "**/movies/usecase/**",
-        "**/series/usecase/**",
-        "**/person/usecase/**"
-    )
-    excludes = listOf(
-        "**/explore/usecase/ExploreUseCases.class",
-        "**/movies/usecase/MoviesUseCases.class",
-        "**/entity/**",
-        "**/exception/**",
-        "**/repository/**"
-    )
-}
-
 dependencies {
     implementation(projects.domain.user)
     implementation(libs.kotlinx.datetime)

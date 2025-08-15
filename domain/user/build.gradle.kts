@@ -6,15 +6,6 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-coverageConfig {
-    includes = listOf("**/usecase/**")
-    excludes = listOf(
-        "**/entity/**",
-        "**/exception/**",
-        "**/repository/**"
-    )
-}
-
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.dagger)
