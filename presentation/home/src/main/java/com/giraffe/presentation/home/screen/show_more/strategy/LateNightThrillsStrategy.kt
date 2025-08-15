@@ -1,8 +1,8 @@
 package com.giraffe.presentation.home.screen.show_more.strategy
 
-import com.giraffe.media.movie.usecase.GetFilteredMoviesUseCase
+import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetFilteredSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
@@ -10,9 +10,9 @@ import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class LateNightThrillsStrategy(
-    private val getSeriesByGenresUseCase: GetFilteredSeriesUseCase,
+    private val getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase,
-    private val getMoviesByGenresUseCase: GetFilteredMoviesUseCase,
+    private val getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase
 ) : MixedMediaStrategy {
     override suspend fun loadData(
@@ -24,7 +24,7 @@ class LateNightThrillsStrategy(
         val moviesResult =
             getMoviesByGenresUseCase(
                 page = page,
-                genreId = listOf(genreIdForHorror, genreIdForThriller)
+                genreIds = listOf(genreIdForHorror, genreIdForThriller)
             ).map { movie ->
                 movie.toShowMorePoster(
                     getMovieGenresUseCase(movie.genresID).map { it.title }
@@ -33,7 +33,7 @@ class LateNightThrillsStrategy(
         val seriesResult =
             getSeriesByGenresUseCase(
                 page = page,
-                genreId = listOf(genreIdForHorror, genreIdForThriller)
+                genreIds = listOf(genreIdForHorror, genreIdForThriller)
             ).map { series ->
                 series.toShowMorePoster(
                     getSeriesGenresUseCase(series.genreIDs).map { it.title }

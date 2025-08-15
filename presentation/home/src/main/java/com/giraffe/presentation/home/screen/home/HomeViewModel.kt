@@ -20,8 +20,6 @@ import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
-import com.giraffe.presentation.home.model.FeaturedCollectionType
-import com.giraffe.presentation.home.model.FeaturedCollectionUi
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.utils.toPopularMediaUi
@@ -56,7 +54,6 @@ class HomeViewModel @Inject constructor(
     HomeInteractionListener {
 
     init {
-        getFeaturedCollection()
         getRecentViewed()
         getPopularity()
         getRecentlyReleased()
@@ -107,14 +104,6 @@ class HomeViewModel @Inject constructor(
                 yourCollections = collections.map(Collection::toUi),
                 isNoInternet = false,
                 isLoading = false
-            )
-        }
-    }
-
-    private fun getFeaturedCollection() {
-        updateState {
-            it.copy(
-                featuredCollections = FeaturedCollectionType.entries.map { FeaturedCollectionUi(it) }
             )
         }
     }
