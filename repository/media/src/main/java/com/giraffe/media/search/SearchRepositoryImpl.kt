@@ -28,11 +28,10 @@ class SearchRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getSearchHistoryWhenHasQuery(query: String): Flow<List<SearchKeyword>> {
-        val history: Flow<List<SearchKeyword>> = getLocalSearchKeywords(query)
-        val remoteResults: List<SearchKeyword> = getRemoteSearchKeywords(query)
-        return history.map { historyList ->
-            (historyList + remoteResults)
+    private fun getSearchHistoryWhenHasQuery(query: String): Flow<List<SearchKeyword>> {
+        return getLocalSearchKeywords(query).map { searchKeywords ->
+            val remoteResults: List<SearchKeyword> = getRemoteSearchKeywords(query)
+            (searchKeywords + remoteResults)
                 .distinctBy { it.keyword }
                 .sortedByDescending { it.searchedAt }
         }
