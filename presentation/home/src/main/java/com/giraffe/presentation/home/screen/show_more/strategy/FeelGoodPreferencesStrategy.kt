@@ -42,6 +42,6 @@ class FeelGoodPreferencesStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.MIND_BENDING_STORIES
+    override fun getSectionType() = MixedMediaSectionType.FEEL_GOOD_PREFERENCES
 
 }

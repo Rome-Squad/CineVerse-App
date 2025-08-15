@@ -186,9 +186,7 @@ fun HomeContent(
                 CollectionListSection(
                     modifier = Modifier.padding(vertical = 16.dp),
                     collectionItems = state.featuredCollections,
-                    onCollectionItemClick = {
-                        interactionListener.onLateNightThrillsFeatureClicked(sectionType = MixedMediaSectionType.LATE_NIGHT_THRILLS)
-                    },
+                    onCollectionItemClick = interactionListener::onLateNightThrillsFeatureClicked
                 )
 
                 if (state.topRated.isNotEmpty()) {

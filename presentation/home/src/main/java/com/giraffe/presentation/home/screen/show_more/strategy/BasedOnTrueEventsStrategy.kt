@@ -41,6 +41,6 @@ class BasedOnTrueEventsStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.MIND_BENDING_STORIES
+    override fun getSectionType() = MixedMediaSectionType.BASED_ON_TRUE_EVENTS
 
 }

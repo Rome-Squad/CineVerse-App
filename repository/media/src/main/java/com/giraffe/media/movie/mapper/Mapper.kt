@@ -110,7 +110,7 @@ fun MovieDto.toEntity(
             BASE_IMAGE_URL + it
     }.orEmpty(),
     genresID = genresID.ifEmpty { genres.map { it.id } },
-    releaseYear = releaseDate?.let { LocalDate.parse(it) },
+    releaseYear = releaseDate?.let { if (it.isEmpty() || it.isBlank()) null else LocalDate.parse(it) },
     youtubeVideoId = youtubeVideoId.orEmpty(),
     recentViewedAt = recentViewedAt,
     popularity = popularity.orZero(),

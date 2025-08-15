@@ -41,6 +41,6 @@ class CinematicMasterpiecesStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.MIND_BENDING_STORIES
+    override fun getSectionType() = MixedMediaSectionType.CINEMATIC_MASTERPIECE
 
 }

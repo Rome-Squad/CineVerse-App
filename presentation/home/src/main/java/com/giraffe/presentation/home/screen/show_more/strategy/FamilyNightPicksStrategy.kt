@@ -42,6 +42,6 @@ class FamilyNightPicksStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.MIND_BENDING_STORIES
+    override fun getSectionType() = MixedMediaSectionType.FAMILY_NIGHT_PICKS
 
 }
