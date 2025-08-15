@@ -8,6 +8,11 @@ plugins {
 
 coverageConfig {
     includes = listOf("**/usecase/**")
+    excludes = listOf(
+        "**/entity/**",
+        "**/exception/**",
+        "**/repository/**"
+    )
 }
 
 dependencies {

@@ -15,7 +15,10 @@ coverageConfig {
     )
     excludes = listOf(
         "**/explore/usecase/ExploreUseCases.class",
-        "**/movies/usecase/MoviesUseCases.class"
+        "**/movies/usecase/MoviesUseCases.class",
+        "**/entity/**",
+        "**/exception/**",
+        "**/repository/**"
     )
 }
 
