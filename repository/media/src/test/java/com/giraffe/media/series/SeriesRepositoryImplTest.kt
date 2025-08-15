@@ -1,7 +1,6 @@
 package com.giraffe.media.series
 
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
-import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
@@ -14,14 +13,12 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SeriesRepositoryImplTest {
     private lateinit var local: SeriesLocalDateSource
     private lateinit var remote: SeriesRemoteDataSource
@@ -63,14 +60,6 @@ class SeriesRepositoryImplTest {
             userRating = null,
         )
     )
-
-    private val recentViewedSeriesCacheDto = listOf(
-        RecentViewedSeriesCacheDto(
-            id = 1,
-            recentViewedAt = 99
-        )
-    )
-
     private val cachedGenres = listOf(
         SeriesGenreCacheDto(1, "Action", 0)
     )
@@ -131,12 +120,16 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getRecentSeries should return mapped cached series`() = runTest {
-        coEvery { local.getRecentSeries() } returns flowOf(cachedSeries)
+        val page = 1
+        val pageSize = 10
+        coEvery { local.getRecentSeries(page = page, pageSize = pageSize) } returns flowOf(
+            cachedSeries
+        )
 
-        val result = repository.getRecentlyViewed().first()
+        val result = repository.getRecentlyViewed(page = page, pageSize = pageSize).first()
 
         assertThat(result.first().name).isEqualTo("Vikings")
-        coVerify { local.getRecentSeries() }
+        coVerify { local.getRecentSeries(page = page, pageSize = pageSize) }
     }
 
     @Test

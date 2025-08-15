@@ -17,13 +17,17 @@ class GetRecentlyViewedMoviesUseCaseTest {
     @Test
     fun `invoke should call getRecentlyViewed on repository`() = runTest {
         // given
-        coEvery { repository.getRecentlyViewed() } returns flow { emit(emptyList()) }
+        coEvery { repository.getRecentlyViewed(page = page, pageSize = limit) } returns flow {
+            emit(
+                emptyList()
+            )
+        }
 
         // when
         useCase()
 
         // then
-        coVerify(exactly = 1) { repository.getRecentlyViewed() }
+        coVerify(exactly = 1) { repository.getRecentlyViewed(page = page, pageSize = limit) }
     }
 
 
@@ -31,7 +35,12 @@ class GetRecentlyViewedMoviesUseCaseTest {
     fun `given recently viewed movies, when invoke is called, then return movie list`() = runTest {
         // given
         val expectedMovies = flow { emit(fakeMovies) }
-        coEvery { repository.getRecentlyViewed() } returns expectedMovies
+        coEvery {
+            repository.getRecentlyViewed(
+                page = page,
+                pageSize = limit
+            )
+        } returns expectedMovies
 
         // when
         val result = useCase.invoke()
