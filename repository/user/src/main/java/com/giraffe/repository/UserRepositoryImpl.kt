@@ -32,15 +32,6 @@ class UserRepositoryImpl @Inject constructor(
 
         val decryptedBytes = decryptSessionId(encryptedBase64)
         val userResponse = userRemoteDataSource.getUser(decryptedBytes).toEntity()
-        userResponse
-    }
-
-    private fun decryptSessionId(encryptedBase64: String): String {
-        val decrypted = encryptionService.decrypt(
-            SecretKeyAliasEnum.SESSION_ID,
-            encryptedBase64.base64Decode()
-        )
-        return decrypted.decodeToString()
 
         val localUser = getUser().firstOrNull()
 
@@ -50,6 +41,16 @@ class UserRepositoryImpl @Inject constructor(
             localDataSource.saveDisplayName(userResponse.displayName)
             localDataSource.saveAvatarUrl(userResponse.avatarUrl)
         }
+        userResponse
+    }
+
+    private fun decryptSessionId(encryptedBase64: String): String {
+        val decrypted = encryptionService.decrypt(
+            SecretKeyAliasEnum.SESSION_ID,
+            encryptedBase64.base64Decode()
+        )
+        return decrypted.decodeToString()
+    }
 
         override fun getUser(): Flow<User?> = safeFlow {
             combine(
@@ -69,5 +70,5 @@ class UserRepositoryImpl @Inject constructor(
                     null
                 }
             }
-    }
+        }
 }
