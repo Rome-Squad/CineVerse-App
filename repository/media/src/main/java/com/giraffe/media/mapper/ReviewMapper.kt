@@ -3,6 +3,7 @@ package com.giraffe.media.mapper
 import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.entity.Review
 import com.giraffe.media.utils.BASE_IMAGE_URL
+import com.giraffe.media.utils.orZero
 import com.giraffe.media.utils.toLocalDateTime
 import kotlin.time.ExperimentalTime
 
@@ -15,6 +16,6 @@ fun ReviewDto.toEntity() = Review(
     authorName = authorDetails.name?.takeIf { it.isNotBlank() } ?: author,
     authorUserName = authorDetails.username,
     content = content,
-    rating = (authorDetails.rating ?: 0f).toInt(),
+    rating = (authorDetails.rating.orZero()).toInt(),
     createdAt = createdAt.toLocalDateTime(),
 )
