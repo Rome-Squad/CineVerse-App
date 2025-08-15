@@ -1,10 +1,11 @@
 package com.giraffe.media.collections.datasource.local
 
 import com.giraffe.media.collections.datasource.local.cache.CollectionCacheDto
+import kotlinx.coroutines.flow.Flow
 
 interface CollectionsLocalDataSource {
 
-    suspend fun getCollections(): List<CollectionCacheDto>
+    fun getCollections(): Flow<List<CollectionCacheDto>>
 
     suspend fun insertCollection(collection: CollectionCacheDto)
 

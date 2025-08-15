@@ -2,8 +2,9 @@ package com.giraffe.media.collections.datasource.local.cache
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.giraffe.media.utils.DatabaseConstants
 
-@Entity
+@Entity(tableName = DatabaseConstants.COLLECTIONS_TABLE)
 data class CollectionCacheDto(
     @PrimaryKey(autoGenerate = false)
     val id: Int = 0,

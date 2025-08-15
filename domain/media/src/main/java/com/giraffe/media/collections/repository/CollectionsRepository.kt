@@ -2,10 +2,11 @@ package com.giraffe.media.collections.repository
 
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.movie.entity.Movie
+import kotlinx.coroutines.flow.Flow
 
 interface CollectionsRepository {
 
-    suspend fun getCollections(accountId: Int): List<Collection>
+    suspend fun getCollections(accountId: Int): Flow<List<Collection>>
 
 
     suspend fun getCollectionDetails(collectionId: Int): Collection

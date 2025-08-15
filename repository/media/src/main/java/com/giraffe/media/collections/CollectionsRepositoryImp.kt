@@ -13,6 +13,9 @@ import com.giraffe.media.collections.mapper.toMovie
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.safeCall
+import com.giraffe.media.utils.safeFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CollectionsRepositoryImp @Inject constructor(
@@ -22,16 +25,18 @@ class CollectionsRepositoryImp @Inject constructor(
 
     override suspend fun getCollections(
         accountId: Int
-    ): List<Collection> = safeCall {
+    ): Flow<List<Collection>> = safeFlow {
         collectionsLocalDataSource.getCollections()
-            .map(CollectionCacheDto::toEntity)
-            .ifEmpty {
-                collectionsRemoteDataSource.getCollections(accountId)
-                    .map(CollectionDto::toEntity)
-                    .also {
-                        collectionsLocalDataSource.insertCollections(
-                            it.map(Collection::toCacheDto)
-                        )
+            .map {
+                it.map(CollectionCacheDto::toEntity)
+                    .ifEmpty {
+                        collectionsRemoteDataSource.getCollections(accountId)
+                            .map(CollectionDto::toEntity)
+                            .also { collections ->
+                                collectionsLocalDataSource.insertCollections(
+                                    collections.map(Collection::toCacheDto)
+                                )
+                            }
                     }
             }
     }
@@ -98,5 +103,6 @@ class CollectionsRepositoryImp @Inject constructor(
             .map(CollectionItemDto::toMovie)
     }
 
-    override suspend fun clearCollectionsCache() = collectionsLocalDataSource.clearCollectionsCache()
+    override suspend fun clearCollectionsCache() =
+        collectionsLocalDataSource.clearCollectionsCache()
 }
