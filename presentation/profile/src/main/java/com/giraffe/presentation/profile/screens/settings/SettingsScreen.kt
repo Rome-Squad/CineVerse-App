@@ -25,7 +25,6 @@ import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
-import com.giraffe.presentation.profile.components.ScreenStates
 import com.giraffe.presentation.profile.screens.settings.components.ContentPreferences
 import com.giraffe.presentation.profile.screens.settings.components.LanguageSelector
 import com.giraffe.presentation.profile.screens.settings.components.MenuItem
@@ -80,96 +79,91 @@ private fun SettingsContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             title = stringResource(R.string.My_Profile),
         )
-        ScreenStates(
-            isLoading = state.isLoading,
-            isNoInternet = state.isNoInternet,
-        ) {
-            UserProfileSection(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp)
-                    .clip(
-                        shape = RoundedCornerShape(
-                            size = Theme.radius.lg
-                        )
+        UserProfileSection(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp)
+                .clip(
+                    shape = RoundedCornerShape(
+                        size = Theme.radius.lg
                     )
-                    .background(
-                        color = Theme.color.background.screen
-                    ),
-                userProfileImage = if (state.isLoggedIn) state.user.imageUrl else "",
-                userDisplayName = if (state.isLoggedIn) state.user.name else stringResource(R.string.login_or_sign_up),
-                username = if (state.isLoggedIn) "@${state.user.username}" else stringResource(R.string.to_personalize_your_experience),
-                onRowClick = {
-                    if (state.isLoggedIn) interaction.onEditProfileClick() else interaction.onLoginClick()
-                }
-            )
-            ProfileShortcuts(
-                modifier = Modifier
-                    .padding(top = 16.dp),
-                onNavigateToHistory = interaction::onNavigateToHistory,
-                onNavigateToRatings = interaction::onNavigateToRatings,
-                onNavigateToMyCollections = interaction::onNavigateToMyCollections
-            )
-            SettingsSection(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 24.dp),
-                title = stringResource(R.string.settings_text)
-            ) {
-                MenuItem(
-                    icon = Theme.icons.dueTone.moon,
-                    title = stringResource(R.string.Dark_Mode),
-                    hasSwitch = true,
-                    hasButton = false,
-                    isSwitchOn = state.isDarkMode,
-                    onSwitchChange = interaction::onToggleDarkMode,
-                    onRowItemClick = {},
-                    isDanger = false,
-                    hasBottomDivider = true,
                 )
-                MenuItem(
-                    icon = Theme.icons.dueTone.language,
-                    title = stringResource(R.string.Language),
-                    hasSwitch = false,
-                    onSwitchChange = {},
-                    hasButton = true,
-                    onRowItemClick = interaction::onLanguageClick,
-                    isDanger = false,
-                    hasBottomDivider = true,
-                )
-
-                MenuItem(
-                    icon = Theme.icons.dueTone.colorSwitch,
-                    title = stringResource(R.string.content_preferences),
-                    hasSwitch = false,
-                    hasButton = true,
-                    onRowItemClick = interaction::onContentPreferencesClick,
-                    isDanger = false,
-                    hasBottomDivider = state.isLoggedIn,
-                    onSwitchChange = {},
-                )
-
-                if (state.isLoggedIn) {
-                    MenuItem(
-                        icon = Theme.icons.dueTone.logout,
-                        title = stringResource(R.string.Logout),
-                        hasSwitch = false,
-                        onSwitchChange = {},
-                        hasButton = true,
-                        onRowItemClick = interaction::onLogoutClick,
-                        isDanger = true,
-                        hasBottomDivider = false,
-                    )
-                }
+                .background(
+                    color = Theme.color.background.screen
+                ),
+            userProfileImage = if (state.isLoggedIn) state.user.imageUrl else "",
+            userDisplayName = if (state.isLoggedIn) state.user.name else stringResource(R.string.login_or_sign_up),
+            username = if (state.isLoggedIn) "@${state.user.username}" else stringResource(R.string.to_personalize_your_experience),
+            onRowClick = {
+                if (state.isLoggedIn) interaction.onEditProfileClick() else interaction.onLoginClick()
             }
-            Text(
-                modifier = Modifier
-                    .padding(top = 24.dp),
-                text = stringResource(R.string.app_version, state.appVersion),
-                color = Theme.color.shade.tertiary,
-                style = Theme.textStyle.body.sm.regular
+        )
+        ProfileShortcuts(
+            modifier = Modifier
+                .padding(top = 16.dp),
+            onNavigateToHistory = interaction::onNavigateToHistory,
+            onNavigateToRatings = interaction::onNavigateToRatings,
+            onNavigateToMyCollections = interaction::onNavigateToMyCollections
+        )
+        SettingsSection(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 24.dp),
+            title = stringResource(R.string.settings_text)
+        ) {
+            MenuItem(
+                icon = Theme.icons.dueTone.moon,
+                title = stringResource(R.string.Dark_Mode),
+                hasSwitch = true,
+                hasButton = false,
+                isSwitchOn = state.isDarkMode,
+                onSwitchChange = interaction::onToggleDarkMode,
+                onRowItemClick = {},
+                isDanger = false,
+                hasBottomDivider = true,
             )
+            MenuItem(
+                icon = Theme.icons.dueTone.language,
+                title = stringResource(R.string.Language),
+                hasSwitch = false,
+                onSwitchChange = {},
+                hasButton = true,
+                onRowItemClick = interaction::onLanguageClick,
+                isDanger = false,
+                hasBottomDivider = true,
+            )
+
+            MenuItem(
+                icon = Theme.icons.dueTone.colorSwitch,
+                title = stringResource(R.string.content_preferences),
+                hasSwitch = false,
+                hasButton = true,
+                onRowItemClick = interaction::onContentPreferencesClick,
+                isDanger = false,
+                hasBottomDivider = state.isLoggedIn,
+                onSwitchChange = {},
+            )
+
+            if (state.isLoggedIn) {
+                MenuItem(
+                    icon = Theme.icons.dueTone.logout,
+                    title = stringResource(R.string.Logout),
+                    hasSwitch = false,
+                    onSwitchChange = {},
+                    hasButton = true,
+                    onRowItemClick = interaction::onLogoutClick,
+                    isDanger = true,
+                    hasBottomDivider = false,
+                )
+            }
         }
+        Text(
+            modifier = Modifier
+                .padding(top = 24.dp),
+            text = stringResource(R.string.app_version, state.appVersion),
+            color = Theme.color.shade.tertiary,
+            style = Theme.textStyle.body.sm.regular
+        )
     }
     BaseBottomSheet(
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 28.dp),
