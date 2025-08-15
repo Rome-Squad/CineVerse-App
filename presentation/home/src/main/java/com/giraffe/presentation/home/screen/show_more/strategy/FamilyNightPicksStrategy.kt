@@ -9,7 +9,7 @@ import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionTyp
 import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
-class LateNightThrillsStrategy(
+class FamilyNightPicksStrategy(
     private val getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
@@ -19,12 +19,12 @@ class LateNightThrillsStrategy(
         page: Int,
         pageSize: Int
     ): List<ShowMorePoster> {
-        val genreIdForHorror = 27
-        val genreIdForThriller = 53
+        val genreIdForFamily = 10751
+        val genreIdForAnimation = 16
         val moviesResult =
             getMoviesByGenresUseCase(
                 page = page,
-                genreIds = listOf(genreIdForHorror, genreIdForThriller)
+                genreIds = listOf(genreIdForFamily, genreIdForAnimation)
             ).map { movie ->
                 movie.toShowMorePoster(
                     getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
@@ -33,7 +33,7 @@ class LateNightThrillsStrategy(
         val seriesResult =
             getSeriesByGenresUseCase(
                 page = page,
-                genreIds = listOf(genreIdForHorror, genreIdForThriller)
+                genreIds = listOf(genreIdForFamily, genreIdForAnimation)
             ).map { series ->
                 series.toShowMorePoster(
                     getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
@@ -42,6 +42,6 @@ class LateNightThrillsStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.LATE_NIGHT_THRILLS
+    override fun getSectionType() = MixedMediaSectionType.MIND_BENDING_STORIES
 
 }

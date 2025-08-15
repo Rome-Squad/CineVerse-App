@@ -2,6 +2,8 @@ package com.giraffe.cineverseapp.di
 
 import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
+import com.giraffe.media.movie.usecase.GetMoviesByKeywordsIdUseCase
+import com.giraffe.media.movie.usecase.GetMoviesBySortUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
@@ -10,11 +12,18 @@ import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
+import com.giraffe.media.series.usecase.GetSeriesByKeywordsIdUseCase
+import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.screen.show_more.MixedMediaFactory
+import com.giraffe.presentation.home.screen.show_more.strategy.BasedOnTrueEventsStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.CinematicMasterpiecesStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.FamilyNightPicksStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.FeelGoodPreferencesStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.LateNightThrillsStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.MatchesYourVibesStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.MindBendingStoriesStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyReleasedStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyViewedStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.TopRatedTvShowsStrategy
@@ -92,15 +101,91 @@ object PresentationModule {
     @Singleton
     fun provideLateNightThrillsStrategy(
         getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
-        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase,
+        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
         getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
-        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase
+        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
     ): LateNightThrillsStrategy =
         LateNightThrillsStrategy(
             getSeriesByGenresUseCase,
-            getSeriesGenresUseCase,
+            getSeriesGenresByIdsUseCase,
             getMoviesByGenresUseCase,
-            getMovieGenresUseCase
+            getMoviesGenresByIdsUseCase
+        )
+
+    @Provides
+    @Singleton
+    fun provideFamilyNightPicksStrategy(
+        getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
+        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
+        getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
+        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
+    ): FamilyNightPicksStrategy =
+        FamilyNightPicksStrategy(
+            getSeriesByGenresUseCase,
+            getSeriesGenresByIdsUseCase,
+            getMoviesByGenresUseCase,
+            getMoviesGenresByIdsUseCase
+        )
+
+    @Provides
+    @Singleton
+    fun provideMindBendingStoriesStrategy(
+        getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
+        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
+        getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
+        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
+    ): MindBendingStoriesStrategy =
+        MindBendingStoriesStrategy(
+            getSeriesByGenresUseCase,
+            getSeriesGenresByIdsUseCase,
+            getMoviesByGenresUseCase,
+            getMoviesGenresByIdsUseCase
+        )
+
+    @Provides
+    @Singleton
+    fun provideBasedOnTrueEventsStrategy(
+        getSeriesByKeywordsIdUseCase: GetSeriesByKeywordsIdUseCase,
+        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
+        getMoviesByKeywordsIdUseCase: GetMoviesByKeywordsIdUseCase,
+        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
+    ): BasedOnTrueEventsStrategy =
+        BasedOnTrueEventsStrategy(
+            getSeriesByKeywordsIdUseCase,
+            getSeriesGenresByIdsUseCase,
+            getMoviesByKeywordsIdUseCase,
+            getMoviesGenresByIdsUseCase
+        )
+
+    @Provides
+    @Singleton
+    fun provideCinematicMasterpiecesStrategy(
+        getSeriesBySortUseCase: GetSeriesBySortUseCase,
+        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
+        getMoviesBySortUseCase: GetMoviesBySortUseCase,
+        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
+    ): CinematicMasterpiecesStrategy =
+        CinematicMasterpiecesStrategy(
+            getSeriesBySortUseCase,
+            getSeriesGenresByIdsUseCase,
+            getMoviesBySortUseCase,
+            getMoviesGenresByIdsUseCase
+        )
+
+
+    @Provides
+    @Singleton
+    fun provideFeelGoodPreferencesStrategy(
+        getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
+        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
+        getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
+        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
+    ): FeelGoodPreferencesStrategy =
+        FeelGoodPreferencesStrategy(
+            getSeriesByGenresUseCase,
+            getSeriesGenresByIdsUseCase,
+            getMoviesByGenresUseCase,
+            getMoviesGenresByIdsUseCase
         )
 
     @Provides
@@ -111,7 +196,12 @@ object PresentationModule {
         upcomingMoviesStrategy: UpcomingMoviesStrategy,
         recentlyViewedStrategy: RecentlyViewedStrategy,
         matchesYourVibesStrategy: MatchesYourVibesStrategy,
-        lateNightThrillsStrategy: LateNightThrillsStrategy
+        lateNightThrillsStrategy: LateNightThrillsStrategy,
+        familyNightPicksStrategy: FamilyNightPicksStrategy,
+        mindBendingStoriesStrategy: MindBendingStoriesStrategy,
+        basedOnTrueEventsStrategy: BasedOnTrueEventsStrategy,
+        cinematicMasterpiecesStrategy: CinematicMasterpiecesStrategy,
+        feelGoodPreferencesStrategy: FeelGoodPreferencesStrategy
     ): MixedMediaFactory =
         MixedMediaFactory(
             recentlyReleasedStrategy,
@@ -119,6 +209,11 @@ object PresentationModule {
             upcomingMoviesStrategy,
             recentlyViewedStrategy,
             matchesYourVibesStrategy,
-            lateNightThrillsStrategy
+            lateNightThrillsStrategy,
+            familyNightPicksStrategy,
+            mindBendingStoriesStrategy,
+            basedOnTrueEventsStrategy,
+            cinematicMasterpiecesStrategy,
+            feelGoodPreferencesStrategy
         )
 }

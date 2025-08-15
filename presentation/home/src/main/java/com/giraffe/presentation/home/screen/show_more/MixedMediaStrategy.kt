@@ -2,8 +2,13 @@ package com.giraffe.presentation.home.screen.show_more
 
 import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.screen.show_more.strategy.BasedOnTrueEventsStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.CinematicMasterpiecesStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.FamilyNightPicksStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.FeelGoodPreferencesStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.LateNightThrillsStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.MatchesYourVibesStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.MindBendingStoriesStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyReleasedStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyViewedStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.TopRatedTvShowsStrategy
@@ -21,7 +26,12 @@ class MixedMediaFactory(
     private val upcomingMoviesStrategy: UpcomingMoviesStrategy,
     private val recentlyViewedStrategy: RecentlyViewedStrategy,
     private val matchesYourVibesStrategy: MatchesYourVibesStrategy,
-    private val lateNightThrillsStrategy: LateNightThrillsStrategy
+    private val lateNightThrillsStrategy: LateNightThrillsStrategy,
+    private val familyNightPicksStrategy: FamilyNightPicksStrategy,
+    private val mindBendingStoriesStrategy: MindBendingStoriesStrategy,
+    private val basedOnTrueEventsStrategy: BasedOnTrueEventsStrategy,
+    private val cinematicMasterpiecesStrategy: CinematicMasterpiecesStrategy,
+    private val feelGoodPreferencesStrategy: FeelGoodPreferencesStrategy
 ) {
     fun createStrategy(sectionType: MixedMediaSectionType): MixedMediaStrategy {
         return when (sectionType) {
@@ -31,11 +41,11 @@ class MixedMediaFactory(
             MixedMediaSectionType.RECENTLY_VIEWED -> recentlyViewedStrategy
             MixedMediaSectionType.MATCHES_YOUR_VIBES -> matchesYourVibesStrategy
             MixedMediaSectionType.LATE_NIGHT_THRILLS -> lateNightThrillsStrategy
-            MixedMediaSectionType.FAMILY_NIGHT_PICKS -> TODO()
-            MixedMediaSectionType.MIND_BENDING_STORIES -> TODO()
-            MixedMediaSectionType.BASED_ON_TRUE_EVENTS -> TODO()
-            MixedMediaSectionType.CINEMATIC_MASTERPIECE -> TODO()
-            MixedMediaSectionType.FEEL_GOOD_PREFERENCES -> TODO()
+            MixedMediaSectionType.FAMILY_NIGHT_PICKS -> familyNightPicksStrategy
+            MixedMediaSectionType.MIND_BENDING_STORIES -> mindBendingStoriesStrategy
+            MixedMediaSectionType.BASED_ON_TRUE_EVENTS -> basedOnTrueEventsStrategy
+            MixedMediaSectionType.CINEMATIC_MASTERPIECE -> cinematicMasterpiecesStrategy
+            MixedMediaSectionType.FEEL_GOOD_PREFERENCES -> feelGoodPreferencesStrategy
         }
     }
 }
