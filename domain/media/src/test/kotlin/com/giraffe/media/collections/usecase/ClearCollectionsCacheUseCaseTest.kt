@@ -11,7 +11,7 @@ class ClearCollectionsCacheUseCaseTest {
     private val clearCollectionsCacheUseCase = ClearCollectionsCacheUseCase(collectionsRepository)
 
     @Test
-    fun `should call repository when invoked`() = runTest {
+    fun `should call clear collection cache method in repository when invoke the usecase `() = runTest {
 
         clearCollectionsCacheUseCase()
 
