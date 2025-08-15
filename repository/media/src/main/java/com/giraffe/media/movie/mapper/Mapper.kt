@@ -8,7 +8,8 @@ import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
-import com.giraffe.media.utils.orEmpty
+import com.giraffe.media.utils.orEmptyString
+import com.giraffe.media.utils.orZero
 import kotlinx.datetime.LocalDate
 
 fun MovieGenreCacheDto.toEntity() = Genre(id, name, rank)
@@ -85,7 +86,7 @@ fun Movie.toCacheDto() = MovieCacheDto(
     },
     youtubeVideoId = youtubeVideoId,
     genresID = genresID,
-    releaseDate = releaseYear.orEmpty(),
+    releaseDate = releaseYear.orEmptyString(),
     duration = duration,
     popularity = popularity,
 )
@@ -96,7 +97,7 @@ fun MovieDto.toEntity(
     id = id,
     name = title.orEmpty(),
     overview = overview.orEmpty(),
-    rating = voteAverage.orEmpty(),
+    rating = voteAverage.orZero(),
     duration = runtime,
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL))
@@ -112,6 +113,6 @@ fun MovieDto.toEntity(
     releaseYear = releaseDate?.let { LocalDate.parse(it) },
     youtubeVideoId = youtubeVideoId.orEmpty(),
     recentViewedAt = recentViewedAt,
-    popularity = popularity.orEmpty(),
+    popularity = popularity.orZero(),
     userRating = userRating
 )

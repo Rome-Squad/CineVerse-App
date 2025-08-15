@@ -7,11 +7,22 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.presentation.profile.R
+import kotlinx.datetime.LocalDate
+import java.text.SimpleDateFormat
+import java.util.Locale
 
+fun LocalDate?.toFormattedDate(): String {
+    return this?.let {
+        val dateString = it.toString()
+        val inputFormat = SimpleDateFormat("yyyy-M-dd", Locale.ENGLISH)
+        val date = inputFormat.parse(dateString) ?: return dateString
 
-fun Any?.orEmpty(): String = this?.toString() ?: ""
+        val outputFormat = SimpleDateFormat("yyyy, MMM d", Locale.ENGLISH)
+        return outputFormat.format(date)
+    } ?: ""
+}
 
-fun Float?.orEmpty() = this ?: 0f
+fun Float?.orZero() = this ?: 0f
 
 fun Throwable.toStringResource() = when (this) {
     is NoInternetException -> R.string.error_network
