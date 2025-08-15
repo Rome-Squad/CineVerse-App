@@ -47,7 +47,7 @@ fun CollectionListSection(
             items(collectionItems) { item ->
                 CollectionItem(
                     collectionItemData = item,
-                    onClick = { onCollectionItemClick(item.id, item.title) }
+                    onClick = { }
                 )
             }
         }

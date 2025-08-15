@@ -85,6 +85,7 @@ fun HomeScreen(
         state = state,
         interactionListener = viewModel
     )
+
 }
 
 @Composable
@@ -181,13 +182,13 @@ fun HomeContent(
                         }
                     )
                 }
-                if (state.featuredCollections.isNotEmpty()) {
-                    CollectionListSection(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        collectionItems = state.featuredCollections,
-                        onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,
-                    )
-                }
+
+                CollectionListSection(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    collectionItems = state.featuredCollections,
+                    onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,
+                )
+
                 if (state.topRated.isNotEmpty()) {
                     ListSection(
                         modifier = Modifier

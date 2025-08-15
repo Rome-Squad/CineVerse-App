@@ -1,6 +1,7 @@
 package com.giraffe.presentation.home.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
-import coil3.compose.AsyncImage
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
@@ -48,10 +49,9 @@ fun CollectionItem(
                 .height(80.dp),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize(),
-                model = collectionItemData.backgroundImageUrl,
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(collectionItemData.type.imageRes),
                 contentDescription = stringResource(R.string.collection_item_image),
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.TopCenter
@@ -64,9 +64,8 @@ fun CollectionItem(
                     .background(color = Theme.color.overlay.primary)
             ) {
                 Text(
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                    text = collectionItemData.title,
+                    modifier = Modifier.align(Alignment.Center),
+                    text = stringResource(collectionItemData.type.titleRes),
                     style = Theme.textStyle.body.sm.medium,
                     color = Theme.color.shade.primary
                 )

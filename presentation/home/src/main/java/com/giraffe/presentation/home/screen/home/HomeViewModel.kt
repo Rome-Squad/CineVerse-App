@@ -4,7 +4,6 @@ import android.accounts.NetworkErrorException
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
-import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
@@ -21,9 +20,10 @@ import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
+import com.giraffe.presentation.home.model.FeaturedCollectionType
+import com.giraffe.presentation.home.model.FeaturedCollectionUi
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
-import com.giraffe.presentation.home.utils.toFeaturedCollectionUi
 import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
@@ -112,21 +112,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getFeaturedCollection() {
-        safeExecute(
-            onSuccess = ::onGetFeaturedCollectionSuccess,
-            onError = ::onFail,
-            block = { getMoviesGenresUseCase() })
-    }
-
-    private fun onGetFeaturedCollectionSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
-                featuredCollections = genres.map(Genre::toFeaturedCollectionUi),
-                isNoInternet = false,
-                isLoading = false
+                featuredCollections = FeaturedCollectionType.entries.map { FeaturedCollectionUi(it) }
             )
         }
     }
+
 
     private fun getPopularity() {
         viewModelScope.launch(Dispatchers.IO) {
