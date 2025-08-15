@@ -40,12 +40,12 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         }.results
 
     override suspend fun getMoviesByKeywordsId(
-        keywords: String,
+        keywords: Int,
         page: Int
     ) =
         retrofitRequestBuilder.get {
             discoverMovies(
-                keywords = keywords,
+                keywords = keywords.toString(),
                 page = page
             )
         }.results

@@ -69,7 +69,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMoviesByKeywordsId(
-        keywords: String,
+        keywords: Int,
         page: Int
     ) = safeCall {
         movieRemote.getMoviesByKeywordsId(
