@@ -10,16 +10,20 @@ interface AuthenticationLocalDataSource {
 
     suspend fun isLoggedIn(): Boolean
 
-    suspend fun clearSessionId()
-
     fun getAccountId(): Flow<Int?>
+
     fun getUsername(): Flow<String?>
+
     fun getDisplayName(): Flow<String?>
+
     fun getAvatarUrl(): Flow<String?>
 
     suspend fun saveAccountId(id: Int)
+
     suspend fun saveUsername(username: String)
+
     suspend fun saveDisplayName(name: String)
+
     suspend fun saveAvatarUrl(url: String?)
 
     suspend fun clearAllData()
