@@ -26,13 +26,16 @@ class UserRepositoryImpl @Inject constructor(
             throw InvalidIdDataException()
         }
 
-        val decryptedBytes = encryptionService.decrypt(
+        val decryptedBytes = decryptSessionId(encryptedBase64)
+        val userResponse = userRemoteDataSource.getUser(decryptedBytes)
+        userResponse.toEntity()
+    }
+
+    private fun decryptSessionId(encryptedBase64: String): String {
+        val decrypted = encryptionService.decrypt(
             SecretKeyAliasEnum.SESSION_ID,
             encryptedBase64.base64Decode()
         )
-        val sessionId = String(decryptedBytes, Charsets.UTF_8)
-
-        val userResponse = userRemoteDataSource.getUser(sessionId)
-        userResponse.toEntity()
+        return decrypted.decodeToString()
     }
 }
