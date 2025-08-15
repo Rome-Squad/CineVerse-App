@@ -1,7 +1,6 @@
 #  CineVerse – Where Every Story Finds Its Star
 
-<img width="2400" height="816" alt="Frame" src="https://github.com/user-attachments/assets/e6c7973c-8425-4885-b964-6a2aec8f0577" />
-
+![Image](https://github.com/user-attachments/assets/991d2735-8995-471b-a293-c967f5b30f3f)
 
 ---
 
