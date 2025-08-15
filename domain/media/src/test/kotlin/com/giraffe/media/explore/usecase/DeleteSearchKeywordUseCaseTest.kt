@@ -1,7 +1,7 @@
 package com.giraffe.media.explore.usecase
 
-import com.giraffe.media.explore.dummydata.searchDummyData
 import com.giraffe.media.explore.repository.SearchRepository
+import com.giraffe.media.explore.util.searchDummyData
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

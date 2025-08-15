@@ -1,4 +1,4 @@
-package com.giraffe.media.collections.fake
+package com.giraffe.media.collections.util
 
 import com.giraffe.media.entity.Review
 

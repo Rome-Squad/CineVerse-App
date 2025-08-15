@@ -1,6 +1,7 @@
 package com.giraffe.media.movie.usecase
 
 import com.giraffe.media.movie.repository.MovieRepository
+import com.giraffe.media.movie.util.fakeMovies
 import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetUserUseCase
 import io.mockk.coEvery

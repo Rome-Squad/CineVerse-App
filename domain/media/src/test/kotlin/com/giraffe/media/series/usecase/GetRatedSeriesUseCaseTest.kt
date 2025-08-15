@@ -1,6 +1,6 @@
 package com.giraffe.media.series.usecase
 
-import com.giraffe.media.collections.fake.createFakeSeries
+import com.giraffe.media.collections.util.createFakeSeries
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetUserUseCase

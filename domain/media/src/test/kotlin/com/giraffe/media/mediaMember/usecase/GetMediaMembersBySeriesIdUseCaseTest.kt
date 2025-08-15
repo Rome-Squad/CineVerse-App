@@ -8,7 +8,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class GetCastMediaMembersBySeriesIdUseCaseTest {
+class GetMediaMembersBySeriesIdUseCaseTest {
     private val repository: MediaMemberRepository = mockk()
     private val getMediaMembersBySeriesIdUseCase = GetMediaMembersBySeriesIdUseCase(repository)
 

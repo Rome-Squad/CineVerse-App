@@ -20,9 +20,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
-import coil3.compose.AsyncImage
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
 
@@ -48,14 +48,15 @@ fun CollectionItem(
                 .height(80.dp),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
+            SafeIslamicImage(
                 modifier = Modifier
                     .fillMaxSize(),
-                model = collectionItemData.backgroundImageUrl,
+                imageUrl = collectionItemData.backgroundImageUrl,
                 contentDescription = stringResource(R.string.collection_item_image),
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.TopCenter
             )
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
