@@ -14,7 +14,7 @@ interface SeriesRepository {
 
     suspend fun getSeriesByGenreIds(genreIds: List<Int>, page: Int): List<Series>
 
-    suspend fun getSeriesByKeywordsId(keywords: String, page: Int): List<Series>
+    suspend fun getSeriesByKeywordsId(keywords: Int, page: Int): List<Series>
 
     suspend fun getSeriesBySort(sortBy: String, page: Int): List<Series>
 

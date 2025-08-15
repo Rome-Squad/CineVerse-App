@@ -14,7 +14,7 @@ interface SeriesRemoteDataSource {
 
     suspend fun getSeriesByGenreIds(genreIds: List<Int>, page: Int): List<SeriesDto>
 
-    suspend fun getSeriesByKeywordsId(keywords: String, page: Int): List<SeriesDto>
+    suspend fun getSeriesByKeywordsId(keywords: Int, page: Int): List<SeriesDto>
 
     suspend fun getSeriesBySort(sortBy: String, page: Int): List<SeriesDto>
 

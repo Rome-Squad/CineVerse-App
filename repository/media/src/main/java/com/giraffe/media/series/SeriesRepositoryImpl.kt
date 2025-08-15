@@ -96,7 +96,7 @@ class SeriesRepositoryImpl @Inject constructor(
 
 
     override suspend fun getSeriesByKeywordsId(
-        keywords: String,
+        keywords: Int,
         page: Int
     ) = safeCall {
         seriesRemoteDataSource.getSeriesByKeywordsId(

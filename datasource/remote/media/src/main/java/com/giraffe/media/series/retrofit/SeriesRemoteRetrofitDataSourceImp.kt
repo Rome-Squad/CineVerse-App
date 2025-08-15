@@ -31,12 +31,12 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
         }.results
 
     override suspend fun getSeriesByKeywordsId(
-        keywords: String,
+        keywords: Int,
         page: Int
     ) =
         retrofitRequestBuilder.get {
             discoverSeries(
-                keywords = keywords,
+                keywords = keywords.toString(),
                 page = page
             )
         }.results
