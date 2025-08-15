@@ -78,8 +78,8 @@ class MovieDetailsViewModel @Inject constructor(
     override fun onShowAddToCollectionBottomSheet() {
         executeIfLoggedIn(
             block = {
-                safeExecute(
-                    onSuccess = ::onGetCollectionsSuccess,
+                safeCollect(
+                    onEmitNewValue = ::onGetCollectionsSuccess,
                     onError = ::onGetCollectionsError,
                     block = getCollectionsUseCase::invoke
                 )
@@ -192,20 +192,6 @@ class MovieDetailsViewModel @Inject constructor(
                 isLoading = false,
                 isNoInternet = false
             )
-        }
-
-        safeExecute(
-            onSuccess = ::onGetCollectionsSuccess,
-            onError = ::onGetCollectionsError
-        ) {
-            val collections = getCollectionsUseCase()
-            updateState {
-                it.copy(
-                    collectionBottomSheet = MovieDetailsScreenState.CollectionBottomSheet.AddToCollection,
-                    newCollectionName = ""
-                )
-            }
-            collections
         }
     }
 

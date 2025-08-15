@@ -75,8 +75,8 @@ class MatchPagerViewModel @Inject constructor(
 
     fun onNextClicked() {
         viewModelScope.launch {
-            if (_state.value.currentPage < 4) {
-                val newPage = _state.value.currentPage + 1
+            if (state.value.currentPage < 4) {
+                val newPage = state.value.currentPage + 1
                 updateState { it.copy(currentPage = newPage) }
                 savedStateHandle["currentPage"] = newPage
             } else {
@@ -87,7 +87,7 @@ class MatchPagerViewModel @Inject constructor(
     }
 
     private fun saveAllDataToSavedState() {
-        val currentState = _state.value
+        val currentState = state.value
         savedStateHandle["genreSelections"] = currentState.genreSelections
         savedStateHandle["moodSelections"] = currentState.moodSelections
         savedStateHandle["timeSelection"] = currentState.timeSelection

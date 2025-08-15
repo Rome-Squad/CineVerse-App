@@ -91,10 +91,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getYourCollections() {
-        safeExecute(
-            onSuccess = ::onGetYourCollectionsSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetYourCollectionsSuccess,
             onError = ::onFail,
-            block = { getCollectionsUseCase() }
+            block = getCollectionsUseCase::invoke
         )
     }
 

@@ -1,5 +1,6 @@
 package com.giraffe.media.collections.mapper
 
+import com.giraffe.media.collections.datasource.local.cache.CollectionCacheDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionItemDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionMediaTypeString
@@ -47,6 +48,22 @@ fun CollectionItemDto.toMovie() = Movie(
     recentViewedAt = null,
     popularity = 0f,
     userRating = null
+)
+
+fun CollectionCacheDto.toEntity() = Collection(
+    id = id,
+    name = name,
+    description = description,
+    itemsCount = itemsCount,
+    type = type.toCollectionType()
+)
+
+fun Collection.toCacheDto() = CollectionCacheDto(
+    id = id,
+    name = name,
+    description = description,
+    itemsCount = itemsCount,
+    type = type.name
 )
 
 fun CollectionMediaTypeString.toCollectionType() = when (this) {
