@@ -19,7 +19,7 @@ fun User.toUi() = UserUi(
 
 fun Series.toRatedPoster(genres: List<Genre>) = RatedPoster(
     poster = this.toPoster(genres),
-    rating = userRating.orEmpty(),
+    rating = userRating.orZero(),
 )
 
 fun Series.toPoster(genres: List<Genre> = emptyList()) = Poster(
@@ -28,22 +28,22 @@ fun Series.toPoster(genres: List<Genre> = emptyList()) = Poster(
     genres = genres.joinToString(", ") { it.title },
     imageUrl = posterUrl,
     rating = rating,
-    date = releaseYear.orEmpty(),
+    date = releaseYear.orEmptyString(),
     mediaTypeOfPoster = "series"
 )
 
 fun Movie.toRatedPoster(genres: List<Genre>) = RatedPoster(
     poster = this.toPoster(genres),
-    rating = userRating.orEmpty(),
+    rating = userRating.orZero(),
 )
 
 fun Movie.toPoster(genres: List<Genre> = emptyList()) = Poster(
     id = id,
     name = name,
     genres = genres.joinToString(", ") { it.title },
-    imageUrl = posterUrl.orEmpty(),
+    imageUrl = posterUrl,
     rating = rating,
-    date = releaseYear.orEmpty(),
+    date = releaseYear.orEmptyString(),
     mediaTypeOfPoster = "movie"
 )
 

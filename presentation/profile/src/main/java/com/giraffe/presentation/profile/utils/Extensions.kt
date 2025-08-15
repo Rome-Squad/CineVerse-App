@@ -7,11 +7,12 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.exception.NotFoundException
 import com.giraffe.media.exception.ValidationException
 import com.giraffe.presentation.profile.R
+import kotlinx.datetime.LocalDate
 
 
-fun Any?.orEmpty(): String = this?.toString() ?: ""
+fun LocalDate?.orEmptyString(): String = this?.toString() ?: ""
 
-fun Float?.orEmpty() = this ?: 0f
+fun Float?.orZero() = this ?: 0f
 
 fun Throwable.toStringResource() = when (this) {
     is NoInternetException -> R.string.error_network
