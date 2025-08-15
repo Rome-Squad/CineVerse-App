@@ -6,20 +6,23 @@ import com.giraffe.media.exception.NoInternetException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
 
-    protected val _state = MutableStateFlow(initialState)
+    private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> = _state.asStateFlow()
 
-    protected val _effect = MutableSharedFlow<E>()
+    private val _effect = MutableSharedFlow<E>()
     val effect = _effect.asSharedFlow()
 
     protected open fun <T> safeExecute(
@@ -37,6 +40,24 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
             }
         }
     }
+
+
+    protected fun <T> safeCollect(
+        onError: (Throwable, Boolean) -> Unit = { _, _ -> },
+        onEmitNewValue: (T) -> Unit = {},
+        coroutineScope: CoroutineScope = viewModelScope,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+        block: suspend () -> Flow<T>
+    ) {
+        coroutineScope.launch(dispatcher) {
+            block().catch {
+                onError(it, it is NoInternetException || it is UserNoInternetException)
+            }.collect {
+                onEmitNewValue(it)
+            }
+        }
+    }
+
     protected fun updateState(updater: (S) -> S) {
         _state.update(updater)
     }
