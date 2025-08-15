@@ -40,15 +40,15 @@ class ShowMoreViewModel @Inject constructor(
         ) {
             val pager = Pager(
                 config = PagingConfig(
-                    pageSize = 15,
-                    prefetchDistance = 5,
-                    initialLoadSize = 15
+                    pageSize = PAGE_SIZE,
+                    prefetchDistance = PREFETCH_DISTANCE,
+                    initialLoadSize = INITIAL_LOAD_SIZE
                 )
             ) {
                 BasePagingSource(
                     onError = ::onLoadByStrategyFail
                 ) { page ->
-                    showMoreFactory.createStrategy(sectionType).loadData(page)
+                    showMoreFactory.createStrategy(sectionType).loadData(page, PAGE_SIZE)
                 }
             }
 
@@ -104,5 +104,11 @@ class ShowMoreViewModel @Inject constructor(
 
     override fun onBackClick() {
         sendEffect(ShowMoreEffect.NavigateBack)
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 15
+        private const val PREFETCH_DISTANCE = 5
+        private const val INITIAL_LOAD_SIZE = 15
     }
 }
