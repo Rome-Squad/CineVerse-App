@@ -23,16 +23,16 @@ fun MovieGenreDto.toEntity() = Genre(
 
 fun MovieWithRecentlyViewedAt.toEntity() = Movie(
     id = movie.id,
-    name = movie.title,
+    name = movie.name,
     overview = movie.overview,
-    rating = movie.voteAverage,
+    rating = movie.rating,
     duration = movie.duration,
-    posterUrl = movie.posterPath?.let {
+    posterUrl = movie.posterUrl?.let {
         if (it.contains(BASE_IMAGE_URL))
             it
         else BASE_IMAGE_URL + it
     }.orEmpty(),
-    backdropUrl = movie.backdropPath?.let {
+    backdropUrl = movie.backdropUrl?.let {
         if (it.contains(BASE_IMAGE_URL))
             it else
             BASE_IMAGE_URL + it
@@ -42,22 +42,22 @@ fun MovieWithRecentlyViewedAt.toEntity() = Movie(
     popularity = movie.popularity,
     userRating = null,
     recentViewedAt = recentViewedAt,
-    releaseYear = movie.releaseDate?.let { LocalDate.parse(it) }
+    releaseYear = movie.releaseYear?.let { LocalDate.parse(it) }
 )
 
 fun MovieCacheDto.toEntity() =
     Movie(
         id = id,
-        name = title,
+        name = name,
         overview = overview,
-        rating = voteAverage,
+        rating = rating,
         duration = duration,
-        posterUrl = posterPath?.let {
+        posterUrl = posterUrl?.let {
             if (it.contains(BASE_IMAGE_URL))
                 it
             else BASE_IMAGE_URL + it
         }.orEmpty(),
-        backdropUrl = backdropPath?.let {
+        backdropUrl = backdropUrl?.let {
             if (it.contains(BASE_IMAGE_URL))
                 it else
                 BASE_IMAGE_URL + it
@@ -67,25 +67,25 @@ fun MovieCacheDto.toEntity() =
         popularity = popularity,
         userRating = null,
         recentViewedAt = null,
-        releaseYear = releaseDate?.let { LocalDate.parse(it) }
+        releaseYear = releaseYear?.let { LocalDate.parse(it) }
     )
 
 fun Movie.toCacheDto() = MovieCacheDto(
     id = id,
-    title = name,
+    name = name,
     overview = overview,
-    voteAverage = rating,
-    posterPath = posterUrl.let {
+    rating = rating,
+    posterUrl = posterUrl.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
-    backdropPath = backdropUrl.let {
+    backdropUrl = backdropUrl.let {
         if (it.contains(BASE_IMAGE_URL))
             it else
             BASE_IMAGE_URL + it
     },
     youtubeVideoId = youtubeVideoId,
     genresID = genresID,
-    releaseDate = releaseYear.orEmpty(),
+    releaseYear = releaseYear.orEmpty(),
     duration = duration,
     popularity = popularity,
 )
