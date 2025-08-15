@@ -28,7 +28,7 @@ fun Series.toPoster(genres: List<Genre> = emptyList()) = Poster(
     genres = genres.joinToString(", ") { it.title },
     imageUrl = posterUrl,
     rating = rating,
-    date = releaseYear.orEmptyString(),
+    date = releaseYear.toFormattedDate(),
     mediaTypeOfPoster = "series"
 )
 
@@ -43,7 +43,7 @@ fun Movie.toPoster(genres: List<Genre> = emptyList()) = Poster(
     genres = genres.joinToString(", ") { it.title },
     imageUrl = posterUrl,
     rating = rating,
-    date = releaseYear.orEmptyString(),
+    date = releaseYear.toFormattedDate(),
     mediaTypeOfPoster = "movie"
 )
 
