@@ -25,14 +25,16 @@ import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
+import com.giraffe.presentation.home.model.FeaturedCollectionType
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
+import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun CollectionItem(
     modifier: Modifier = Modifier,
     collectionItemData: FeaturedCollectionUi,
-    onClick: () -> Unit
+    onClick: (MixedMediaSectionType) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -40,7 +42,18 @@ fun CollectionItem(
     Column(
         modifier = modifier
             .widthIn(min = screenWidth * 0.5f, max = screenWidth * 0.75f)
-            .clickable(onClick = dropUnlessResumed { onClick() })
+            .clickable(onClick = dropUnlessResumed {
+                onClick(
+                    when (collectionItemData.type) {
+                        FeaturedCollectionType.LATE_NIGHT_THRILLS -> MixedMediaSectionType.LATE_NIGHT_THRILLS
+                        FeaturedCollectionType.FAMILY_NIGHT_PICKS -> MixedMediaSectionType.FAMILY_NIGHT_PICKS
+                        FeaturedCollectionType.MIND_BENDING_STORIES -> MixedMediaSectionType.MIND_BENDING_STORIES
+                        FeaturedCollectionType.BASED_ON_TRUE_EVENTS -> MixedMediaSectionType.BASED_ON_TRUE_EVENTS
+                        FeaturedCollectionType.CINEMATIC_MASTERPIECE -> MixedMediaSectionType.CINEMATIC_MASTERPIECE
+                        FeaturedCollectionType.FEEL_GOOD_PREFERENCES -> MixedMediaSectionType.FEEL_GOOD_PREFERENCES
+                    }
+                )
+            })
     ) {
         Box(
             Modifier

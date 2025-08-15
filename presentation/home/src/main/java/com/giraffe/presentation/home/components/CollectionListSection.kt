@@ -48,7 +48,7 @@ fun CollectionListSection(
             items(collectionItems) { item ->
                 CollectionItem(
                     collectionItemData = item,
-                    onClick = { onCollectionItemClick(MixedMediaSectionType.LATE_NIGHT_THRILLS) }
+                    onClick = { onCollectionItemClick(it) }
                 )
             }
         }
