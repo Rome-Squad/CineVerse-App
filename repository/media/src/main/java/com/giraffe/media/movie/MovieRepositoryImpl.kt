@@ -58,28 +58,34 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-
-    override suspend fun discoverMovies(
-        genreId: List<Int>?,
-        keywords: String?,
-        sortBy: String,
+    override suspend fun getMoviesByGenreIds(
+        genreIds: List<Int>,
         page: Int
     ) = safeCall {
-        val result = movieRemote.discoverMovies(
-            genreId = genreId,
-            keywords = keywords,
-            sortBy = sortBy,
+        val result = movieRemote.getMoviesByGenreIds(
+            genreIds = genreIds,
             page = page
         ).map(MovieDto::toEntity)
         result
     }
 
-    override suspend fun getMoviesByGenreIds(
-        genreIds: List<Int>,
+    override suspend fun getMoviesByKeywordsId(
+        keywords: String,
         page: Int
     ) = safeCall {
-        val result = movieRemote.discoverMovies(
-            genreId = genreIds,
+        val result = movieRemote.getMoviesByKeywordsId(
+            keywords = keywords,
+            page = page
+        ).map(MovieDto::toEntity)
+        result
+    }
+
+    override suspend fun getMoviesBySort(
+        sortBy: String,
+        page: Int
+    ) = safeCall {
+        val result = movieRemote.getMoviesBySort(
+            sortBy = sortBy,
             page = page
         ).map(MovieDto::toEntity)
         result
