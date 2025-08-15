@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,6 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
@@ -46,6 +50,22 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refreshUserProfile()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     EffectListener(viewModel.effect) { effect ->
             when (effect) {
                 SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
@@ -91,11 +111,16 @@ private fun SettingsContent(
                 .background(
                     color = Theme.color.background.screen
                 ),
-            userProfileImage = if (state.isLoggedIn) state.user.imageUrl else "",
-            userDisplayName = if (state.isLoggedIn) state.user.name else stringResource(R.string.login_or_sign_up),
-            username = if (state.isLoggedIn) "@${state.user.username}" else stringResource(R.string.to_personalize_your_experience),
+            userProfileImage = state.user?.imageUrl ?: "",
+            userDisplayName = state.user?.name ?: stringResource(R.string.login_or_sign_up),
+            username = state.user?.let { "@${it.username}" }
+                ?: stringResource(R.string.to_personalize_your_experience),
             onRowClick = {
-                if (state.isLoggedIn) interaction.onEditProfileClick() else interaction.onLoginClick()
+                if (state.user != null) {
+                    interaction.onEditProfileClick()
+                } else {
+                    interaction.onLoginClick()
+                }
             }
         )
         ProfileShortcuts(

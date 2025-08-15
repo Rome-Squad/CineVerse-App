@@ -1,5 +1,6 @@
 package com.giraffe.presentation.profile.screens.settings
 
+import androidx.lifecycle.viewModelScope
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
@@ -7,25 +8,27 @@ import com.giraffe.presentation.profile.utils.Language
 import com.giraffe.presentation.profile.utils.LanguageHelper
 import com.giraffe.presentation.profile.utils.toUi
 import com.giraffe.user.entity.ContentPreference
-import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
-import com.giraffe.user.usecase.IsLoggedInUseCase
 import com.giraffe.user.usecase.LogoutUseCase
+import com.giraffe.user.usecase.RefreshUserUseCase
 import com.giraffe.user.usecase.SetContentPreferenceUseCase
 import com.giraffe.user.usecase.SetDarkModeUseCase
 import com.giraffe.user.usecase.SetLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val isLoggedInUseCase: IsLoggedInUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val refreshUserUseCase: RefreshUserUseCase,
     private val getDarkModeUseCase: GetDarkModeUseCase,
     private val setDarkModeUseCase: SetDarkModeUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
@@ -39,8 +42,9 @@ class SettingsViewModel @Inject constructor(
     SettingsInteractionListener {
 
     init {
-        checkLoginStatus()
         observeTheme()
+        observeUserProfile()
+        loadInitialProfile()
         observeLanguage()
         observeContentPreference()
         loadAppVersion()
@@ -51,17 +55,37 @@ class SettingsViewModel @Inject constructor(
         updateState { it.copy(appVersion = versionName) }
     }
 
-    private fun checkLoginStatus() {
-        safeExecute(
-            onSuccess = ::handleLoginStatusSuccess,
-            onError = ::onFailure,
-            block = isLoggedInUseCase::invoke
-        )
+    private fun observeUserProfile() {
+        getUserUseCase()
+            .onEach { user ->
+                updateState {
+                    it.copy(
+                        isLoggedIn = user != null,
+                        user = user?.toUi()
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
-    private fun handleLoginStatusSuccess(isLoggedIn: Boolean) {
-        updateState { it.copy(isLoading = false, isNoInternet = false, isLoggedIn = isLoggedIn) }
-        if (isLoggedIn) getUserProfile()
+    private fun loadInitialProfile() {
+        viewModelScope.launch {
+            updateState { it.copy(isLoading = true) }
+            try {
+                refreshUserUseCase()
+            } catch (error: Throwable) {
+                onFailure(error, true)
+            } finally {
+                updateState { it.copy(isLoading = false) }
+            }
+        }
+    }
+
+    internal fun refreshUserProfile() {
+        safeExecute(
+            onError = ::onFailure,
+            block = refreshUserUseCase::invoke
+        )
     }
 
     private fun observeTheme() {
@@ -103,18 +127,6 @@ class SettingsViewModel @Inject constructor(
 
     fun onContentPreferenceChangedSuccess(preference: ContentPreference) {
         updateState { it.copy(contentPreference = preference) }
-    }
-
-    private fun getUserProfile() {
-        safeExecute(
-            onSuccess = ::handleGetUserProfileSuccess,
-            onError = ::onFailure,
-            block = getUserUseCase::invoke
-        )
-    }
-
-    private fun handleGetUserProfileSuccess(user: User) {
-        updateState { it.copy(isLoading = false, isNoInternet = false, user = user.toUi()) }
     }
 
     private fun onFailure(error: Throwable, isNoInternet: Boolean) {
