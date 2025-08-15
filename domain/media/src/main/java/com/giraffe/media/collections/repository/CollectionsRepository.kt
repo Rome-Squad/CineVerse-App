@@ -24,4 +24,5 @@ interface CollectionsRepository {
     suspend fun getCollectionMovies(collectionId: Int): List<Movie>
 
 
+    suspend fun clearCollectionsCache()
 }
