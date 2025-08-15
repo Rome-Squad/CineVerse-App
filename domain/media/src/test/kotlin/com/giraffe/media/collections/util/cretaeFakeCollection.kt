@@ -1,7 +1,7 @@
-package com.giraffe.media.collections.fake
+package com.giraffe.media.collections.util
 
-import com.giraffe.media.collections.entity.CollectionMediaType
 import com.giraffe.media.collections.entity.Collection
+import com.giraffe.media.collections.entity.CollectionMediaType
 
 fun createFakeCollection(
     id: Int = 1,

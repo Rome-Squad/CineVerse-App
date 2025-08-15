@@ -8,7 +8,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class SearchByNameUseCaseTest {
+class GetMediaMembersByNameUseCaseTest {
     private val repository: MediaMemberRepository = mockk()
     private val getMediaMembersByNameUseCase = GetMediaMembersByNameUseCase(repository)
 

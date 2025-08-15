@@ -1,4 +1,4 @@
-package com.giraffe.media.movie.usecase
+package com.giraffe.media.movie.util
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
