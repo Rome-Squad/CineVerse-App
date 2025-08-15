@@ -50,5 +50,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     testImplementation(libs.androidx.core.testing)
 
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.bundles.unit.test)
 }

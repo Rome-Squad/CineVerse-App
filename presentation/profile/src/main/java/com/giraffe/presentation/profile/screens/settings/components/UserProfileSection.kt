@@ -18,12 +18,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.imageviewer.component.SafeIslamicImage
 
 @Composable
 fun UserProfileSection(
@@ -58,8 +58,8 @@ fun UserProfileSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (userProfileImage.isNotBlank()) {
-                AsyncImage(
-                    model = userProfileImage,
+                SafeIslamicImage(
+                    imageUrl = userProfileImage,
                     contentDescription = userDisplayName,
                     modifier = Modifier
                         .clip(CircleShape)

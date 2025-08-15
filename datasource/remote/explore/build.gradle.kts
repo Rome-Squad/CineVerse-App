@@ -53,5 +53,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
 
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.bundles.unit.test)
 }
