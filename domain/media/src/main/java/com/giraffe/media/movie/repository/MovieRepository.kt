@@ -28,6 +28,8 @@ interface MovieRepository {
         page: Int
     ): List<Movie>
 
+    suspend fun getMoviesByGenreIds(genreIds: List<Int>, page: Int): List<Movie>
+
     suspend fun getDetails(movieId: Int): Movie
 
     suspend fun getRecommended(movieId: Int, page: Int): List<Movie>

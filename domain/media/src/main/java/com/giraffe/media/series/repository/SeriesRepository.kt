@@ -19,6 +19,7 @@ interface SeriesRepository {
         page: Int
     ): List<Series>
 
+    suspend fun getSeriesByGenreIds(genreIds: List<Int>, page: Int): List<Series>
 
     suspend fun getGenres(): List<Genre>
 
