@@ -17,12 +17,13 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
+import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 
 @Composable
 fun CollectionListSection(
     modifier: Modifier = Modifier,
     collectionItems: List<FeaturedCollectionUi>,
-    onCollectionItemClick: (Int, String) -> Unit
+    onCollectionItemClick: (MixedMediaSectionType) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -47,7 +48,7 @@ fun CollectionListSection(
             items(collectionItems) { item ->
                 CollectionItem(
                     collectionItemData = item,
-                    onClick = { }
+                    onClick = { onCollectionItemClick(MixedMediaSectionType.LATE_NIGHT_THRILLS) }
                 )
             }
         }

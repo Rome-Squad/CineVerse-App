@@ -23,7 +23,7 @@ import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.FeaturedCollectionType
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
+import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
@@ -331,7 +331,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    override fun onMatchYourVibeClicked(sectionType: ShowMoreSectionType) {
+    override fun onMatchYourVibeClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -371,7 +371,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {
+    override fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -379,7 +379,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType) {
+    override fun onSeeAllRecentlyReleasedClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -387,7 +387,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType) {
+    override fun onSeeAllTopRatedClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -395,7 +395,15 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType) {
+    override fun onSeeAllUpcomingClicked(sectionType: MixedMediaSectionType) {
+        sendEffect(
+            HomeEffect.NavigateToShowMore(
+                sectionType = sectionType
+            )
+        )
+    }
+
+    override fun onSeeAllRecentlyViewedClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType

@@ -36,7 +36,7 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
     ) =
         retrofitRequestBuilder.get {
             discoverMovies(
-                genreId = genreId?.toString(),
+                genreId = genreId?.joinToString(","),
                 keywords = keywords,
                 sortBy = sortBy,
                 page = page

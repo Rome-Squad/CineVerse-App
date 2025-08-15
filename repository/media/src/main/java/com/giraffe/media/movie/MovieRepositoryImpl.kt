@@ -65,12 +65,13 @@ class MovieRepositoryImpl @Inject constructor(
         sortBy: String,
         page: Int
     ) = safeCall {
-        movieRemote.discoverMovies(
+        val result = movieRemote.discoverMovies(
             genreId = genreId,
             keywords = keywords,
             sortBy = sortBy,
             page = page
         ).map(MovieDto::toEntity)
+        result
     }
 
 

@@ -27,7 +27,7 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
     ) =
         retrofitRequestBuilder.get {
             discoverSeries(
-                genreId = genreId?.toString(),
+                genreId = genreId?.joinToString(","),
                 keywords = keywords,
                 sortBy = sortBy,
                 page = page

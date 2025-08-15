@@ -1,21 +1,24 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.media.movie.usecase.GetFilteredMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.series.usecase.GetFilteredSeriesUseCase
 import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
-import com.giraffe.presentation.home.screen.show_more.MatchesYourVibesStrategy
-import com.giraffe.presentation.home.screen.show_more.RecentlyReleasedStrategy
-import com.giraffe.presentation.home.screen.show_more.RecentlyViewedStrategy
-import com.giraffe.presentation.home.screen.show_more.ShowMoreFactory
-import com.giraffe.presentation.home.screen.show_more.TopRatedTvShowsStrategy
-import com.giraffe.presentation.home.screen.show_more.UpcomingMoviesStrategy
+import com.giraffe.presentation.home.screen.show_more.MixedMediaFactory
+import com.giraffe.presentation.home.screen.show_more.strategy.LateNightThrillsStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.MatchesYourVibesStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyReleasedStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyViewedStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.TopRatedTvShowsStrategy
+import com.giraffe.presentation.home.screen.show_more.strategy.UpcomingMoviesStrategy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -87,18 +90,35 @@ object PresentationModule {
 
     @Provides
     @Singleton
+    fun provideLateNightThrillsStrategy(
+        getSeriesByGenresUseCase: GetFilteredSeriesUseCase,
+        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase,
+        getMoviesByGenresUseCase: GetFilteredMoviesUseCase,
+        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase
+    ): LateNightThrillsStrategy =
+        LateNightThrillsStrategy(
+            getSeriesByGenresUseCase,
+            getSeriesGenresUseCase,
+            getMoviesByGenresUseCase,
+            getMovieGenresUseCase
+        )
+
+    @Provides
+    @Singleton
     fun provideShowMoreFactory(
         recentlyReleasedStrategy: RecentlyReleasedStrategy,
         topRatedTvShowsStrategy: TopRatedTvShowsStrategy,
         upcomingMoviesStrategy: UpcomingMoviesStrategy,
         recentlyViewedStrategy: RecentlyViewedStrategy,
-        matchesYourVibesStrategy: MatchesYourVibesStrategy
-    ): ShowMoreFactory =
-        ShowMoreFactory(
+        matchesYourVibesStrategy: MatchesYourVibesStrategy,
+        lateNightThrillsStrategy: LateNightThrillsStrategy
+    ): MixedMediaFactory =
+        MixedMediaFactory(
             recentlyReleasedStrategy,
             topRatedTvShowsStrategy,
             upcomingMoviesStrategy,
             recentlyViewedStrategy,
-            matchesYourVibesStrategy
+            matchesYourVibesStrategy,
+            lateNightThrillsStrategy
         )
 }
