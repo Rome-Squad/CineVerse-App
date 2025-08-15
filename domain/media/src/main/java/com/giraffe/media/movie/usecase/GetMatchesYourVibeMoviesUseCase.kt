@@ -6,6 +6,9 @@ import javax.inject.Inject
 class GetMatchesYourVibeMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
-    suspend operator fun invoke(page: Int, limit: Int = 10) =
-        movieRepository.getMatchesYourVibe(page, limit)
+    fun getLocalMatchesYourVibe(limit: Int = 10) =
+        movieRepository.getLocalMatchesYourVibe(limit)
+
+    suspend fun getRemoteMatchesYourVibe(page: Int = 1, limit: Int) =
+        movieRepository.getRemoteMatchesYourVibe(page = page, limit = limit)
 }

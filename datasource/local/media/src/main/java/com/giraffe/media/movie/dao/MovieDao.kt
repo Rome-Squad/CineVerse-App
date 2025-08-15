@@ -42,7 +42,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
+    fun getPopularityMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $POPULAR_MOVIE_TABLE")
     suspend fun clearPopularMovies()
@@ -60,7 +60,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
+    fun getRecentlyReleasedMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $RECENTLY_RELEASED_MOVIE_TABLE")
     suspend fun clearRecentlyReleasedMovies()
@@ -78,7 +78,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
+    fun getUpcomingMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $UPCOMING_MOVIE_TABLE")
     suspend fun clearUpcomingMovies()
@@ -97,7 +97,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getMatchesYourVibeMovies(limit: Int): List<MovieCacheDto>
+    fun getMatchesYourVibeMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $MATCHES_YOUR_VIBE_MOVIE_TABLE")
     suspend fun clearMatchesYourVibeMovies()
@@ -118,6 +118,17 @@ interface MovieDao {
         """
     )
     fun getRecentlyViewedMovies(page: Int, pageSize: Int): Flow<List<MovieWithRecentlyViewedAt>>
+
+    @Query(
+        """
+        SELECT m.*, r.createdAt AS recentViewedAt
+        FROM $MOVIE_TABLE AS m
+        INNER JOIN $RECENTLY_VIEWED_MOVIE_TABLE AS r 
+        ON m.id = r.id
+        ORDER BY r.createdAt DESC
+        """
+    )
+    suspend fun getAllRecentlyViewedMovies(): List<MovieWithRecentlyViewedAt>
 
     @Query("DELETE FROM $RECENTLY_VIEWED_MOVIE_TABLE WHERE id = :movieId")
     suspend fun deleteRecentlyViewedMovieById(movieId: Int)

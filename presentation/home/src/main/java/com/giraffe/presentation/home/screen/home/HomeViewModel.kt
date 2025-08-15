@@ -130,10 +130,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getPopularity() {
         viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::onGetPopularityMoviesSuccess,
+            safeCollect(
+                onEmitNewValue = ::onGetPopularityMoviesSuccess,
                 onError = ::onFail,
-                block = { getPopularMoviesUseCase(page = 1) }
+                block = getPopularMoviesUseCase::invoke
             )
             safeExecute(
                 onSuccess = ::onGetPopularitySeriesSuccess,
@@ -151,8 +151,7 @@ class HomeViewModel @Inject constructor(
             }
             updateState { currentState ->
                 currentState.copy(
-                    popularity =
-                        currentState.popularity + popularMoviesUi,
+                    popularity = (popularMoviesUi + currentState.popularity).distinctBy { it.id },
                     isNoInternet = false,
                     isLoading = false
                 )
@@ -179,10 +178,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getRecentlyReleased() {
         viewModelScope.launch(Dispatchers.IO) {
-            safeExecute(
-                onSuccess = ::onGetRecentlyReleasedMoviesSuccess,
+            safeCollect(
+                onEmitNewValue = ::onGetRecentlyReleasedMoviesSuccess,
                 onError = ::onFail,
-                block = { getRecentlyReleasedMoviesUseCase(page = 1) }
+                block = getRecentlyReleasedMoviesUseCase::getLocalRecentlyReleased
             )
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
@@ -195,8 +194,7 @@ class HomeViewModel @Inject constructor(
     private fun onGetRecentlyReleasedMoviesSuccess(movies: List<Movie>) {
         updateState { currentState ->
             currentState.copy(
-                recentlyReleased =
-                    currentState.recentlyReleased + movies.map(Movie::toPoster),
+                recentlyReleased = (movies.map(Movie::toPoster) + currentState.recentlyReleased).distinctBy { it.id },
                 isNoInternet = false,
                 isLoading = false
             )
@@ -233,17 +231,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getUpcomingMovies() {
-        safeExecute(
-            onSuccess = ::onGetUpcomingMoviesSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetUpcomingMoviesSuccess,
             onError = ::onFail,
-            block = { getUpcomingMoviesUseCase(page = 1) }
+            block = getUpcomingMoviesUseCase::getLocalUpcoming
         )
     }
 
     private fun onGetUpcomingMoviesSuccess(movies: List<Movie>) {
         updateState { currentState ->
             currentState.copy(
-                upcomingMovies = currentState.upcomingMovies + movies.map(Movie::toPoster),
+                upcomingMovies = (movies.map(Movie::toPoster) + currentState.upcomingMovies).distinctBy { it.id },
                 isNoInternet = false,
                 isLoading = false
             )
@@ -268,8 +266,7 @@ class HomeViewModel @Inject constructor(
     private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
         updateState {
             it.copy(
-                recentlyViewed = (
-                        it.recentlyViewed + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id },
+                recentlyViewed = (movies.map(Movie::toPoster) + it.recentlyViewed).distinctBy { movie -> movie.id },
                 isNoInternet = false,
                 isLoading = false
             )
@@ -287,18 +284,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getMatchesYourVibeMovies() {
-        safeExecute(
-            onSuccess = ::onGetMatchesYourVibeMoviesSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMatchesYourVibeMoviesSuccess,
             onError = ::onFail,
-        ) {
-            getMatchesYourVibeMoviesUseCase(page = 1, limit = 10)
-        }
+            block = getMatchesYourVibeMoviesUseCase::getLocalMatchesYourVibe
+        )
     }
 
     private fun onGetMatchesYourVibeMoviesSuccess(movies: List<Movie>) {
         updateState {
             it.copy(
-                matchVibes = (it.matchVibes + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id },
+                matchVibes = (movies.map(Movie::toPoster) + it.matchVibes).distinctBy { movie -> movie.id },
                 isNoInternet = false,
                 isLoading = false
             )

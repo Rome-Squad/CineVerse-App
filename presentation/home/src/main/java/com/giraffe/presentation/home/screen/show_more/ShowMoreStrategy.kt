@@ -28,9 +28,10 @@ class RecentlyReleasedStrategy(
 ) : ShowMoreStrategy {
     override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
         val recentMovies =
-            getRecentlyReleasedMovies(page = page, limit = pageSize).map { movie ->
-                movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title })
-            }
+            getRecentlyReleasedMovies.getRemoteRecentlyReleased(page = page, limit = pageSize)
+                .map { movie ->
+                    movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title })
+                }
         val recentSeries =
             getRecentlyReleasedSeries(page = page, limit = pageSize).map { series ->
                 series.toShowMorePoster(
@@ -60,7 +61,7 @@ class UpcomingMoviesStrategy(
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
 ) : ShowMoreStrategy {
     override suspend fun loadData(page: Int, pageSize: Int) =
-        getUpcomingMovies(page = page, pageSize).map { movie ->
+        getUpcomingMovies.getRemoteUpcoming(page = page, pageSize).map { movie ->
             movie.toShowMorePoster(
                 getMovieGenresUseCase(movie.genresID).map { it.title })
         }
@@ -82,7 +83,7 @@ class RecentlyViewedStrategy(
             .map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) }
         return (recentMovies + recentSeries)
             .distinctBy { it.id }
-            .filter { it.recentViewedAt != null}
+            .filter { it.recentViewedAt != null }
             .sortedByDescending { it.recentViewedAt }
     }
 
@@ -97,7 +98,7 @@ class MatchesYourVibesStrategy(
 ) : ShowMoreStrategy {
     override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
 
-        val matchesYourVibeMovies = getMatchesYourVibeMovies(page = page, limit = pageSize)
+        val matchesYourVibeMovies = getMatchesYourVibeMovies.getRemoteMatchesYourVibe(page = page, limit = pageSize)
         val matchesYourVibeSeries = getMatchesYourVibeSeries(page = page, limit = pageSize)
 
         return (matchesYourVibeMovies.map { movie ->

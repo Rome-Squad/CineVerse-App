@@ -38,15 +38,23 @@ interface MovieRepository {
 
     suspend fun getUserRated(accountId: Int): List<Movie>
 
-    suspend fun getPopular(page: Int, limit: Int): List<Movie>
+    fun getLocalPopular(limit: Int): Flow<List<Movie>>
 
-    suspend fun getRecentlyReleased(page: Int, limit: Int): List<Movie>
+    fun getLocalRecentlyReleased(limit: Int): Flow<List<Movie>>
 
-    suspend fun getUpcoming(page: Int, limit: Int): List<Movie>
+    suspend fun getRemoteRecentlyReleased(page: Int, limit: Int): List<Movie>
 
-    suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Movie>
+    fun getLocalUpcoming(limit: Int): Flow<List<Movie>>
+
+    suspend fun getRemoteUpcoming(page: Int, limit: Int): List<Movie>
+
+    fun getLocalMatchesYourVibe(limit: Int): Flow<List<Movie>>
+
+    suspend fun getRemoteMatchesYourVibe(page: Int, limit: Int): List<Movie>
 
     fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>>
+
+    suspend fun syncRecentlyViewedMovies()
 
     suspend fun clearRecentlyViewed()
 

@@ -90,6 +90,26 @@ fun Movie.toCacheDto() = MovieCacheDto(
     popularity = popularity,
 )
 
+fun MovieDto.toCacheDto() = MovieCacheDto(
+    id = id,
+    title = title.orEmpty(),
+    overview = overview.orEmpty(),
+    voteAverage = voteAverage.orEmpty(),
+    posterPath = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    },
+    backdropPath = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
+    youtubeVideoId = youtubeVideoId,
+    genresID = genresID,
+    releaseDate = releaseDate,
+    duration = runtime,
+    popularity = popularity.orEmpty(),
+)
+
 fun MovieDto.toEntity(
     recentViewedAt: Long? = null,
 ) = Movie(

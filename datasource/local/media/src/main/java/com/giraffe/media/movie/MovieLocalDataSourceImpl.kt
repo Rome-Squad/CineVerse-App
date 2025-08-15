@@ -4,6 +4,7 @@ import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
+import com.giraffe.media.movie.datasource.local.cacheDto.MovieWithRecentlyViewedAt
 import com.giraffe.media.movie.mapper.toMatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.mapper.toPopularMovieCacheDto
 import com.giraffe.media.movie.mapper.toRecentReleasedMovieCacheDto
@@ -17,6 +18,9 @@ import javax.inject.Inject
 class MovieLocalDataSourceImpl @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
+    override suspend fun addMovie(movie: MovieCacheDto) {
+        movieDao.insertMovie(movie)
+    }
 
     // region Movie Genres
     override suspend fun addMovieGenres(movieGenres: List<MovieGenreCacheDto>) =
@@ -46,8 +50,8 @@ class MovieLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPopularityMovies(limit: Int) =
-        safeCall { movieDao.getPopularityMovies(limit = limit) }
+    override fun getPopularityMovies(limit: Int) =
+        safeFlow { movieDao.getPopularityMovies(limit = limit) }
 
     override suspend fun clearPopularMovies() =
         safeCall { movieDao.clearPopularMovies() }
@@ -59,8 +63,8 @@ class MovieLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRecentlyReleasedMovies(limit: Int) =
-        safeCall { movieDao.getRecentlyReleasedMovies(limit) }
+    override fun getRecentlyReleasedMovies(limit: Int) =
+        safeFlow { movieDao.getRecentlyReleasedMovies(limit) }
 
     override suspend fun clearRecentlyReleasedMovies() =
         safeCall { movieDao.clearRecentlyReleasedMovies() }
@@ -72,8 +76,8 @@ class MovieLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUpcomingMovies(limit: Int) =
-        safeCall { movieDao.getUpcomingMovies(limit) }
+    override fun getUpcomingMovies(limit: Int) =
+        safeFlow { movieDao.getUpcomingMovies(limit) }
 
     override suspend fun clearUpcomingMovies() =
         safeCall { movieDao.clearUpcomingMovies() }
@@ -85,21 +89,25 @@ class MovieLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMatchesYourVibeMovies(limit: Int) =
-        safeCall { movieDao.getMatchesYourVibeMovies(limit) }
+    override fun getMatchesYourVibeMovies(limit: Int) =
+        safeFlow { movieDao.getMatchesYourVibeMovies(limit) }
 
     override suspend fun clearMatchesYourVibeMovies() =
         safeCall { movieDao.clearMatchesYourVibeMovies() }
 
     override suspend fun addRecentlyViewedMovie(movie: MovieCacheDto) {
         safeCall {
-            movieDao.insertMovie(movie)
+            addMovie(movie)
             movieDao.insertRecentlyViewedMovie(movie.toRecentlyViewedMovieCacheDto())
         }
     }
 
     override fun getRecentlyViewedMovies(page: Int, pageSize: Int) =
         safeFlow { movieDao.getRecentlyViewedMovies(page, pageSize) }
+
+    override suspend fun getAllRecentlyViewedMovies(): List<MovieWithRecentlyViewedAt> =
+        safeCall { movieDao.getAllRecentlyViewedMovies() }
+
 
     override suspend fun deleteRecentlyViewedMovieById(movieId: Int) =
         safeCall { movieDao.deleteRecentlyViewedMovieById(movieId) }
