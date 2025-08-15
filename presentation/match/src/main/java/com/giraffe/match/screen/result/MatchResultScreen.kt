@@ -167,7 +167,7 @@ private fun MatchResultContent(
                     rating = it.rating,
                     duration = it.duration,
                     releaseDate = it.releaseDate,
-                    isPlayButtonEnabled = true,
+                    isPlayButtonEnabled = it.youtubeVideoId.isNotBlank(),
                     onClickPlay = { navigateToYouTubePlayer(it.youtubeVideoId) },
                     onClickAdd = {
                         onAddToCollection(it.id, it.mediaType)
