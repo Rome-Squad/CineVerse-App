@@ -23,8 +23,8 @@ class MyCollectionsViewModel @Inject constructor(
     }
 
     private fun getCollections() {
-        safeExecute(
-            onSuccess = ::onGetCollectionsSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetCollectionsSuccess,
             onError = ::onFailure,
             block = getCollectionsUseCase::invoke
         )

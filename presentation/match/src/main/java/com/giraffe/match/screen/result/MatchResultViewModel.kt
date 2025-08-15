@@ -119,17 +119,17 @@ class MatchResultViewModel @Inject constructor(
 
     private suspend fun mapMoviesToMatchResult(movies: List<Movie>): List<MatchResultModel> {
         return movies.map { movie ->
-                val details = getMovieDetailsUseCase(movie.id)
-                val genres = getMoviesGenresByIdsUseCase(details.genresID).map { it.title }
-                details.toMatchResultModel(genres)
+            val details = getMovieDetailsUseCase(movie.id)
+            val genres = getMoviesGenresByIdsUseCase(details.genresID).map { it.title }
+            details.toMatchResultModel(genres)
         }
     }
 
     private suspend fun mapSeriesToMatchResult(seriesList: List<Series>): List<MatchResultModel> {
         return seriesList.map { series ->
-                val details = getSeriesDetailsUseCase(series.id)
-                val genres = getSeriesGenresByIdsUseCase(details.genreIDs).map { it.title }
-                details.toMatchResultModel(genres, details.rating, details.youtubeVideoId)
+            val details = getSeriesDetailsUseCase(series.id)
+            val genres = getSeriesGenresByIdsUseCase(details.genreIDs).map { it.title }
+            details.toMatchResultModel(genres, details.rating, details.youtubeVideoId)
 
         }
     }
@@ -156,10 +156,10 @@ class MatchResultViewModel @Inject constructor(
 
         executeIfLoggedIn(
             block = {
-                safeExecute(
-                    onSuccess = ::handleGetCollectionsSuccess,
+                safeCollect(
+                    onEmitNewValue = ::handleGetCollectionsSuccess,
                     onError = ::onError,
-                    block = { getCollectionsUseCase() }
+                    block = getCollectionsUseCase::invoke
                 )
             },
             ifNotLoggedIn = {
@@ -171,7 +171,7 @@ class MatchResultViewModel @Inject constructor(
     private fun handleGetCollectionsSuccess(collections: List<Collection>) {
         updateState {
             it.copy(
-                collections = collections.map { it.toUi() },
+                collections = collections.map (Collection::toUi),
                 collectionBottomSheet = if (collections.isNotEmpty()) {
                     MatchResultScreenState.CollectionBottomSheet.AddToCollection
                 } else {
@@ -241,17 +241,6 @@ class MatchResultViewModel @Inject constructor(
     override fun onConfirmCreateNewCollectionClick() {
         val newName = state.value.newCollectionName.trim()
         safeExecute(
-            onSuccess = {
-                val collections = getCollectionsUseCase()
-                updateState {
-                    it.copy(
-                        collections = collections.map { it.toUi() },
-                        collectionBottomSheet = MatchResultScreenState.CollectionBottomSheet.AddToCollection,
-                        newCollectionName = "",
-                        isLoading = false
-                    )
-                }
-            },
             onError = ::onError,
             block = {
                 updateState { it.copy(isLoading = true) }
@@ -344,7 +333,6 @@ class MatchResultViewModel @Inject constructor(
             }
         )
     }
-
 
 
     private fun onError(error: Throwable, isNoInternet: Boolean) {
