@@ -40,7 +40,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
         }
 
-        localDataSource.clearSessionId()
+        localDataSource.clearAllData()
 
     }
 
