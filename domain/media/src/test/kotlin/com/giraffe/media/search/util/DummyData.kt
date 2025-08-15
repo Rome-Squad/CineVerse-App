@@ -1,4 +1,4 @@
-package com.giraffe.media.search.dummydata
+package com.giraffe.media.search.util
 
 import com.giraffe.media.search.entity.SearchKeyword
 

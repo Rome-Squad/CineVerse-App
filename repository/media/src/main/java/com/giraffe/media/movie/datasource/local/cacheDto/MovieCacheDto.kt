@@ -9,14 +9,14 @@ import com.giraffe.media.utils.DatabaseConstants.MOVIE_TABLE
 data class MovieCacheDto(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
-    val title: String,
+    val name: String,
     val overview: String,
-    val posterPath: String?,
-    val backdropPath: String?,
+    val posterUrl: String?,
+    val backdropUrl: String?,
     val youtubeVideoId: String?,
-    val voteAverage: Float,
+    val rating: Float,
     val genresID: List<Int>,
-    val releaseDate: String?,
+    val releaseYear: String?,
     val duration: Int?,
     val popularity: Float,
 )

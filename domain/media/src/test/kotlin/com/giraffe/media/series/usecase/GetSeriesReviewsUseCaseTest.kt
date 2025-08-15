@@ -1,6 +1,6 @@
 package com.giraffe.media.series.usecase
 
-import com.giraffe.media.collections.fake.createFakeReview
+import com.giraffe.media.collections.util.createFakeReview
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery

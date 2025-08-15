@@ -1,7 +1,7 @@
 package com.giraffe.media.search.usecase
 
-import com.giraffe.media.search.dummydata.expected
 import com.giraffe.media.search.repository.SearchRepository
+import com.giraffe.media.search.util.expected
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify

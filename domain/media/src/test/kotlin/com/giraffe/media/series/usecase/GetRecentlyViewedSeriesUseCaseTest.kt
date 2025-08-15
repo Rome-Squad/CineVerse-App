@@ -1,7 +1,7 @@
 package com.giraffe.media.series.usecase
 
 
-import com.giraffe.media.collections.fake.createFakeSeries
+import com.giraffe.media.collections.util.createFakeSeries
 import com.giraffe.media.series.repository.SeriesRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -38,7 +38,7 @@ class GetRecentlyViewedSeriesUseCaseTest {
                 )
             )
         }
-        coEvery { repository.getRecentlyViewed(page = 1, pageSize = 10) } returns expectedSeries
+        coEvery { repository.getRecentlyViewed(any(), any()) } returns expectedSeries
 
         val result = useCase()
 

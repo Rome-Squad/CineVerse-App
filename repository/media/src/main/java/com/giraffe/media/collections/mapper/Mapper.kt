@@ -7,7 +7,7 @@ import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.entity.CollectionMediaType
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
-import com.giraffe.media.utils.orEmpty
+import com.giraffe.media.utils.orZero
 import kotlinx.datetime.LocalDate
 
 fun CollectionDto.toEntity() = Collection(
@@ -29,7 +29,7 @@ fun CollectionItemDto.toMovie() = Movie(
     id = id,
     name = title.orEmpty(),
     overview = description.orEmpty(),
-    rating = rating?.toFloat().orEmpty(),
+    rating = rating.orZero(),
     duration = null,
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL))

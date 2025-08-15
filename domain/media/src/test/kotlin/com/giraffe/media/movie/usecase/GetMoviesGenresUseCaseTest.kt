@@ -1,6 +1,7 @@
 package com.giraffe.media.movie.usecase
 
 import com.giraffe.media.movie.repository.MovieRepository
+import com.giraffe.media.movie.util.fakeGenres
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
