@@ -30,42 +30,44 @@ class UserRepositoryImpl @Inject constructor(
             throw InvalidIdDataException()
         }
 
-        val decryptedBytes = encryptionService.decrypt(
+        val decryptedBytes = decryptSessionId(encryptedBase64)
+        val userResponse = userRemoteDataSource.getUser(decryptedBytes).toEntity()
+        userResponse
+    }
+
+    private fun decryptSessionId(encryptedBase64: String): String {
+        val decrypted = encryptionService.decrypt(
             SecretKeyAliasEnum.SESSION_ID,
             encryptedBase64.base64Decode()
         )
-        val sessionId = String(decryptedBytes, Charsets.UTF_8)
-
-        val remoteUser = userRemoteDataSource.getUser(sessionId).toEntity()
+        return decrypted.decodeToString()
 
         val localUser = getUser().firstOrNull()
 
-        if (remoteUser != localUser) {
-            localDataSource.saveAccountId(remoteUser.id)
-            localDataSource.saveUsername(remoteUser.username)
-            localDataSource.saveDisplayName(remoteUser.displayName)
-            localDataSource.saveAvatarUrl(remoteUser.avatarUrl)
+        if (userResponse != localUser) {
+            localDataSource.saveAccountId(userResponse.id)
+            localDataSource.saveUsername(userResponse.username)
+            localDataSource.saveDisplayName(userResponse.displayName)
+            localDataSource.saveAvatarUrl(userResponse.avatarUrl)
         }
-        remoteUser
-    }
 
-    override fun getUser(): Flow<User?> = safeFlow {
-        combine(
-            localDataSource.getAccountId(),
-            localDataSource.getUsername(),
-            localDataSource.getDisplayName(),
-            localDataSource.getAvatarUrl()
-        ) { id, username, displayName, avatarUrl ->
-            if (id != null && username != null) {
-                User(
-                    id = id,
-                    username = username,
-                    displayName = displayName.orEmpty(),
-                    avatarUrl = avatarUrl
-                )
-            } else {
-                null
+        override fun getUser(): Flow<User?> = safeFlow {
+            combine(
+                localDataSource.getAccountId(),
+                localDataSource.getUsername(),
+                localDataSource.getDisplayName(),
+                localDataSource.getAvatarUrl()
+            ) { id, username, displayName, avatarUrl ->
+                if (id != null && username != null) {
+                    User(
+                        id = id,
+                        username = username,
+                        displayName = displayName.orEmpty(),
+                        avatarUrl = avatarUrl
+                    )
+                } else {
+                    null
+                }
             }
-        }
     }
 }

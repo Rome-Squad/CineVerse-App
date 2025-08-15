@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.cineverseapp.data.preference.DataStorePreferences
+import com.giraffe.media.collections.dao.CollectionsDao
 import com.giraffe.media.explore.dao.SearchKeywordDao
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.person.dao.PersonDao
@@ -40,6 +41,11 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun providePersonDao(database: CineVerseDatabase): PersonDao = database.personDao()
+
+    @Provides
+    @Singleton
+    fun provideCollectionsDao(database: CineVerseDatabase): CollectionsDao =
+        database.collectionsDao()
 
     @Provides
     @Singleton

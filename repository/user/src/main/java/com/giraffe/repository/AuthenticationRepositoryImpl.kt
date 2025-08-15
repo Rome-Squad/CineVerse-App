@@ -46,7 +46,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     private fun encryptSessionId(sessionId: String): String {
         return encryptionService
-            .encrypt(SecretKeyAliasEnum.SESSION_ID, sessionId.toByteArray(Charsets.UTF_8))
+            .encrypt(SecretKeyAliasEnum.SESSION_ID, sessionId.encodeToByteArray())
             .base64Encode()
     }
 
@@ -55,6 +55,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
             SecretKeyAliasEnum.SESSION_ID,
             encryptedBase64.base64Decode()
         )
-        return String(decrypted, Charsets.UTF_8)
+        return decrypted.decodeToString()
     }
 }
