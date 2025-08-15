@@ -9,7 +9,7 @@ data class SeriesDto(
     val name: String? = null,
     val adult: Boolean = false,
     val overview: String? = null,
-    val popularity: Double? = null,
+    val popularity: Float? = null,
     val seasons: List<SeasonDto> = emptyList(),
     @SerialName("original_name")
     val originalName: String? = null,
@@ -20,7 +20,7 @@ data class SeriesDto(
     @SerialName("backdrop_path")
     val backdropUrl: String? = null,
     @SerialName("vote_average")
-    val voteAverage: Double? = null,
+    val voteAverage: Float? = null,
     @SerialName("vote_count")
     val voteCount: Int? = null,
     @SerialName("rating")
