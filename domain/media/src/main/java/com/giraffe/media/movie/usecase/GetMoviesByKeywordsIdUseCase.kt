@@ -10,7 +10,7 @@ class GetMoviesByKeywordsIdUseCase @Inject constructor(
         keywords: Int,
         page: Int
     ) =
-        movieRepository.getMoviesByKeywordsId(
+        movieRepository.getByKeywordsId(
             keywords = keywords,
             page = page
         )

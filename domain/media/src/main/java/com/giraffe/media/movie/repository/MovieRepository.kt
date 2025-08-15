@@ -21,11 +21,11 @@ interface MovieRepository {
 
     suspend fun getByGenreId(genreId: Int, page: Int): List<Movie>
 
-    suspend fun getMoviesByGenreIds(genreIds: List<Int>, page: Int): List<Movie>
+    suspend fun getByGenreIds(genreIds: List<Int>, page: Int): List<Movie>
 
-    suspend fun getMoviesByKeywordsId(keywords: Int, page: Int): List<Movie>
+    suspend fun getByKeywordsId(keywords: Int, page: Int): List<Movie>
 
-    suspend fun getMoviesBySort(sortBy: String, page: Int): List<Movie>
+    suspend fun getBySort(sortBy: String, page: Int): List<Movie>
 
     suspend fun getDetails(movieId: Int): Movie
 

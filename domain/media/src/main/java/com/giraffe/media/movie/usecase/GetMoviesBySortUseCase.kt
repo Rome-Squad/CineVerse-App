@@ -3,15 +3,15 @@ package com.giraffe.media.movie.usecase
 import com.giraffe.media.movie.repository.MovieRepository
 import javax.inject.Inject
 
-class GetMoviesByGenreIdsUseCase @Inject constructor(
+class GetMoviesBySortUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
     suspend operator fun invoke(
-        genreIds: List<Int>,
+        sortBy: String,
         page: Int
     ) =
-        movieRepository.getByGenreIds(
-            genreIds = genreIds,
+        movieRepository.getBySort(
+            sortBy = sortBy,
             page = page
         )
 }

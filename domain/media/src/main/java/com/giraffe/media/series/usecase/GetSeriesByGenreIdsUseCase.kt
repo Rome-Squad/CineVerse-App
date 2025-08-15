@@ -10,7 +10,7 @@ class GetSeriesByGenreIdsUseCase @Inject constructor(
         genreIds: List<Int>,
         page: Int
     ) =
-        seriesRepository.getSeriesByGenreIds(
+        seriesRepository.getByGenreIds(
             genreIds = genreIds,
             page = page
         )

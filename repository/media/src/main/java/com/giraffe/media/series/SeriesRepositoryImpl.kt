@@ -84,7 +84,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getSeriesByGenreIds(
+    override suspend fun getByGenreIds(
         genreIds: List<Int>,
         page: Int
     ) = safeCall {
@@ -95,7 +95,7 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getSeriesByKeywordsId(
+    override suspend fun getByKeywordsId(
         keywords: Int,
         page: Int
     ) = safeCall {
@@ -105,7 +105,7 @@ class SeriesRepositoryImpl @Inject constructor(
         ).map(SeriesDto::toEntity)
     }
 
-    override suspend fun getSeriesBySort(
+    override suspend fun getBySort(
         sortBy: String,
         page: Int
     ) = safeCall {

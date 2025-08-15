@@ -58,7 +58,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMoviesByGenreIds(
+    override suspend fun getByGenreIds(
         genreIds: List<Int>,
         page: Int
     ) = safeCall {
@@ -68,7 +68,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).map(MovieDto::toEntity)
     }
 
-    override suspend fun getMoviesByKeywordsId(
+    override suspend fun getByKeywordsId(
         keywords: Int,
         page: Int
     ) = safeCall {
@@ -78,7 +78,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).map(MovieDto::toEntity)
     }
 
-    override suspend fun getMoviesBySort(
+    override suspend fun getBySort(
         sortBy: String,
         page: Int
     ) = safeCall {
