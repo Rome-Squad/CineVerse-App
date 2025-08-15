@@ -62,33 +62,30 @@ class MovieRepositoryImpl @Inject constructor(
         genreIds: List<Int>,
         page: Int
     ) = safeCall {
-        val result = movieRemote.getMoviesByGenreIds(
+        movieRemote.getMoviesByGenreIds(
             genreIds = genreIds,
             page = page
         ).map(MovieDto::toEntity)
-        result
     }
 
     override suspend fun getMoviesByKeywordsId(
         keywords: String,
         page: Int
     ) = safeCall {
-        val result = movieRemote.getMoviesByKeywordsId(
+        movieRemote.getMoviesByKeywordsId(
             keywords = keywords,
             page = page
         ).map(MovieDto::toEntity)
-        result
     }
 
     override suspend fun getMoviesBySort(
         sortBy: String,
         page: Int
     ) = safeCall {
-        val result = movieRemote.getMoviesBySort(
+        movieRemote.getMoviesBySort(
             sortBy = sortBy,
             page = page
         ).map(MovieDto::toEntity)
-        result
     }
 
 

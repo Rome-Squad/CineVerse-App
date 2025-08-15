@@ -12,14 +12,11 @@ interface SeriesRepository {
 
     suspend fun getByGenreId(genreId: Int, page: Int): List<Series>
 
-    suspend fun discoverSeries(
-        genreId: List<Int>? = null,
-        keywords: String? = null,
-        sortBy: String = "popularity.desc",
-        page: Int
-    ): List<Series>
-
     suspend fun getSeriesByGenreIds(genreIds: List<Int>, page: Int): List<Series>
+
+    suspend fun getSeriesByKeywordsId(keywords: String, page: Int): List<Series>
+
+    suspend fun getSeriesBySort(sortBy: String, page: Int): List<Series>
 
     suspend fun getGenres(): List<Genre>
 

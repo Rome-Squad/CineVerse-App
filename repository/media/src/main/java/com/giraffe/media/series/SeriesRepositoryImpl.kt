@@ -83,26 +83,34 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesRemoteDataSource.getSeriesByGenre(genreId, page).map { it.toEntity() }
     }
 
-    override suspend fun discoverSeries(
-        genreId: List<Int>?,
-        keywords: String?,
-        sortBy: String,
-        page: Int
-    ) = safeCall {
-        seriesRemoteDataSource.discoverSeries(
-            genreId = genreId,
-            keywords = keywords,
-            sortBy = sortBy,
-            page = page
-        ).map(SeriesDto::toEntity)
-    }
 
     override suspend fun getSeriesByGenreIds(
         genreIds: List<Int>,
         page: Int
     ) = safeCall {
-        seriesRemoteDataSource.discoverSeries(
-            genreId = genreIds,
+        seriesRemoteDataSource.getSeriesByGenreIds(
+            genreIds = genreIds,
+            page = page
+        ).map(SeriesDto::toEntity)
+    }
+
+
+    override suspend fun getSeriesByKeywordsId(
+        keywords: String,
+        page: Int
+    ) = safeCall {
+        seriesRemoteDataSource.getSeriesByKeywordsId(
+            keywords = keywords,
+            page = page
+        ).map(SeriesDto::toEntity)
+    }
+
+    override suspend fun getSeriesBySort(
+        sortBy: String,
+        page: Int
+    ) = safeCall {
+        seriesRemoteDataSource.getSeriesBySort(
+            sortBy = sortBy,
             page = page
         ).map(SeriesDto::toEntity)
     }
