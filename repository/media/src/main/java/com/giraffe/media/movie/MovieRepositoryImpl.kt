@@ -14,7 +14,6 @@ import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.mapper.toCacheDto
-import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.utils.safeCall
@@ -22,6 +21,7 @@ import com.giraffe.media.utils.safeFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -93,37 +93,36 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-
     // region Movie Genres
-    private suspend fun addMovieGenres(genres: List<Genre>) =
-        safeCall { movieLocal.addMovieGenres(genres.map(Genre::toDto)) }
-
-    override suspend fun getGenres(): List<Genre> {
-        return safeCall {
-            getLocalGenres()
-                .ifEmpty {
-                    getRemoteGenres()
+    override fun getLocalGenres(): Flow<List<Genre>> {
+        return safeFlow {
+            movieLocal.getMoviesGenres()
+                .map { it.map(MovieGenreCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getRemoteGenres()
+                    }
                 }
         }
     }
 
-    private suspend fun getLocalGenres(): List<Genre> {
-        return movieLocal.getMoviesGenres()
-            .map(MovieGenreCacheDto::toEntity)
-    }
-
-    private suspend fun getRemoteGenres(): List<Genre> {
-        return movieRemote.getMovieGenres()
-            .map(MovieGenreDto::toEntity)
-            .also { addMovieGenres(it) }
-    }
-
-    override suspend fun getGenresByIds(genreIds: List<Int>): List<Genre> {
+    override suspend fun getRemoteGenres(): List<Genre> {
         return safeCall {
-            if (genreIds.isEmpty()) return@safeCall emptyList()
+            movieRemote.getMovieGenres()
+                .map(MovieGenreDto::toEntity)
+                .also { syncMovieGenres(it) }
+        }
+    }
+
+    private suspend fun syncMovieGenres(genres: List<Genre>) =
+        movieLocal.syncMovieGenres(genres.map(Genre::toCacheDto))
+
+    override fun getGenresByIds(genreIds: List<Int>): Flow<List<Genre>> {
+        if (genreIds.isEmpty()) return flowOf(emptyList())
+        return safeFlow {
             movieLocal.getMovieGenresByIds(genreIds)
-                .map(MovieGenreCacheDto::toEntity)
-                .ifEmpty {
+                .map { it.map(MovieGenreCacheDto::toEntity) }
+                .onEach {
                     getRemoteGenres().filter { it.id in genreIds }
                 }
         }
@@ -134,7 +133,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun clearGenres() =
         safeCall { movieLocal.clearMovieGenres() }
-// endregion
+    // endregion
 
     // region Rating
     override suspend fun addRating(movieId: Int, rating: Float) {
@@ -163,7 +162,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun deleteRating(movieId: Int) =
         safeCall { movieRemote.deleteMovieRating(movieId) }
-// endregion
+    // endregion
 
     // region Popular
     override fun getLocalPopular(limit: Int): Flow<List<Movie>> {

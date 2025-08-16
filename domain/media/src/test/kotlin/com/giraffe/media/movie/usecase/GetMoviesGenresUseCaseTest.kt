@@ -6,6 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -18,24 +19,25 @@ class GetMoviesGenresUseCaseTest {
     @Test
     fun `invoke should call getGenres on repository`() = runTest {
         //given
-        coEvery { repository.getGenres() } returns emptyList()
+        coEvery { repository.getLocalGenres() } returns flowOf(emptyList())
 
         //when
         getMoviesGenresUseCase()
 
         //then
-        coVerify(exactly = 1) { repository.getGenres() }
+        coVerify(exactly = 1) { repository.getLocalGenres() }
     }
 
     @Test
     fun `invoke should return list of genres from repository`() = runTest {
         // given
-        coEvery { repository.getGenres() } returns fakeGenres
+        val expectedGenres = flowOf(fakeGenres)
+        coEvery { repository.getLocalGenres() } returns expectedGenres
 
         // when
         val result = getMoviesGenresUseCase()
 
         // then
-        assertThat(result).isEqualTo(fakeGenres)
+        assertThat(result).isEqualTo(expectedGenres)
     }
 }

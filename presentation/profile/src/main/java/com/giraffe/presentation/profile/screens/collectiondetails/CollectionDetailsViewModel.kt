@@ -31,8 +31,8 @@ class CollectionDetailsViewModel @Inject constructor(
     }
 
     private fun getMoviesGenres() {
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
             block = getMoviesGenresUseCase::invoke
         )

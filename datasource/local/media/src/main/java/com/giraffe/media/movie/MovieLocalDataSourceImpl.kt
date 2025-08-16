@@ -23,17 +23,24 @@ class MovieLocalDataSourceImpl @Inject constructor(
     }
 
     // region Movie Genres
-    override suspend fun addMovieGenres(movieGenres: List<MovieGenreCacheDto>) =
-        safeCall { movieDao.insertMovieGenres(movieGenres) }
+    override suspend fun syncMovieGenres(movieGenres: List<MovieGenreCacheDto>) {
+        safeCall {
+            movieGenres.forEach { genre ->
+                movieDao.getGenreById(genre.id)?.let {
+                    movieDao.updateGenreNameOnly(genre.id, genre.name)
+                } ?: movieDao.insertMovieGenre(genre)
+            }
+        }
+    }
 
     override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) =
         safeCall { movieDao.incrementInteractionCountForGenres(genreIds) }
 
-    override suspend fun getMovieGenresByIds(ids: List<Int>) =
-        safeCall { movieDao.getMovieGenresByIds(ids) }
+    override fun getMovieGenresByIds(ids: List<Int>) =
+        safeFlow { movieDao.getMovieGenresByIds(ids) }
 
-    override suspend fun getMoviesGenres() =
-        safeCall { movieDao.getMoviesGenres() }
+    override fun getMoviesGenres() =
+        safeFlow { movieDao.getMoviesGenres() }
 
     override suspend fun getTopGenre() =
         safeCall { movieDao.getTopGenre() }

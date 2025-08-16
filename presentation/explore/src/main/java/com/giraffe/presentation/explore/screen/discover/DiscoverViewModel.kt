@@ -44,10 +44,10 @@ class DiscoverViewModel @Inject constructor(
     private fun getMovieGenres() {
         updateState { it.copy(isLoading = true, isNoInternet = false) }
 
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onError,
-            block = { getMoviesGenresUseCase() }
+            block = getMoviesGenresUseCase::invoke
         )
     }
 

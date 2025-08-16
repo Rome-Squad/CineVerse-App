@@ -32,8 +32,8 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun getGenres() {
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
             block = getMoviesGenresUseCase::invoke
         )

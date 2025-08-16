@@ -110,18 +110,21 @@ class SearchResultViewModel @Inject constructor(
 
     private fun getMoviesGenres() {
         updateState { it.copy(isLoading = true, isNoInternet = false) }
-        safeExecute(
-            onSuccess = { genres ->
-                updateState {
-                    it.copy(
-                        moviesGenres = genres.map(Genre::toUi), isLoading = false,
-                        isNoInternet = false
-                    )
-                }
-            },
+        safeCollect(
+            onEmitNewValue = ::getMoviesGenresSuccess,
             onError = ::onError,
-            block = { getMoviesGenresUseCase() }
+            block = getMoviesGenresUseCase::invoke
         )
+    }
+
+    private fun getMoviesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                moviesGenres = genres.map(Genre::toUi),
+                isLoading = false,
+                isNoInternet = false
+            )
+        }
     }
 
     private fun getSeriesGenres() {

@@ -39,8 +39,8 @@ class MatchPagerViewModel @Inject constructor(
     }
 
     private fun loadGenres() {
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
             block = getMoviesGenresUseCase::invoke
         )

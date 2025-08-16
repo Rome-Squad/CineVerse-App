@@ -14,7 +14,11 @@ import kotlinx.datetime.LocalDate
 
 fun MovieGenreCacheDto.toEntity() = Genre(id, name, rank)
 
-fun Genre.toDto() = MovieGenreCacheDto(id, title, rank)
+fun Genre.toCacheDto() = MovieGenreCacheDto(
+    id = id,
+    name = title,
+    rank = rank
+)
 
 fun MovieGenreDto.toEntity() = Genre(
     id = id,

@@ -11,9 +11,11 @@ interface MovieRepository {
 
     suspend fun getByName(name: String, page: Int): List<Movie>
 
-    suspend fun getGenres(): List<Genre>
+    fun getLocalGenres(): Flow<List<Genre>>
 
-    suspend fun getGenresByIds(genreIds: List<Int>): List<Genre>
+    suspend fun getRemoteGenres(): List<Genre>
+
+    fun getGenresByIds(genreIds: List<Int>): Flow<List<Genre>>
 
     suspend fun getTopGenre(): Genre?
 

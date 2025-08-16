@@ -139,16 +139,22 @@ interface MovieDao {
 
     // region Movie Genres
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovieGenres(movies: List<MovieGenreCacheDto>)
+    suspend fun insertMovieGenre(genre: MovieGenreCacheDto)
+
+    @Query("UPDATE $MOVIE_GENRE_TABLE SET name = :name WHERE id = :id")
+    suspend fun updateGenreNameOnly(id: Int, name: String)
 
     @Query("UPDATE $MOVIE_GENRE_TABLE SET rank = rank + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
-    suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
+    fun getMovieGenresByIds(ids: List<Int>): Flow<List<MovieGenreCacheDto>>
+
+    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id = :id")
+    suspend fun getGenreById(id: Int): MovieGenreCacheDto?
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY rank DESC")
-    suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
+    fun getMoviesGenres(): Flow<List<MovieGenreCacheDto>>
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY rank DESC LIMIT 1")
     suspend fun getTopGenre(): MovieGenreCacheDto?
