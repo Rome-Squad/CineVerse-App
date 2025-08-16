@@ -12,12 +12,11 @@ interface SeriesRemoteDataSource {
 
     suspend fun getSeriesByGenre(genreId: Int, page: Int = 1): List<SeriesDto>
 
-    suspend fun discoverSeries(
-        genreId: List<Int>? = null,
-        keywords: String? = null,
-        sortBy: String = "popularity.desc",
-        page: Int = 1
-    ): List<SeriesDto>
+    suspend fun getSeriesByGenreIds(genreIds: List<Int>, page: Int): List<SeriesDto>
+
+    suspend fun getSeriesByKeywordsId(keywords: Int, page: Int): List<SeriesDto>
+
+    suspend fun getSeriesBySort(sortBy: String, page: Int): List<SeriesDto>
 
     suspend fun getGenres(): List<GenreDto>
 

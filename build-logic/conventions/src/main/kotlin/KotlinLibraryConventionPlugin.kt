@@ -11,11 +11,7 @@ import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.gradle.testing.jacoco.tasks.JacocoReportBase
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-
-open class CoverageConfigExtension {
-    var includes: List<String> = emptyList()
-    var excludes: List<String> = emptyList()
-}
+import java.io.File
 
 class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = with(project) {
@@ -26,8 +22,6 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
         }
 
         applyDependencies()
-
-        val config = extensions.create<CoverageConfigExtension>("coverageConfig")
 
         extensions.configure<JavaPluginExtension> {
             sourceCompatibility = ProjectConfig.javaVersion
@@ -48,6 +42,8 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             finalizedBy("jacocoTestReport")
         }
 
+        val usecaseIncludes = listOf("**/usecase/**")
+
         tasks.withType<JacocoReport> {
             dependsOn("test")
             reports {
@@ -60,17 +56,17 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             }
         }
 
-        tasks.withType<JacocoReportBase> {
+        tasks.withType<JacocoReportBase>().configureEach {
             classDirectories.setFrom(
                 files(classDirectories.files.map {
                     fileTree(it) {
-                        config.includes.forEach { inc -> include(inc) }
-                        config.excludes.forEach { exc -> exclude(exc) }
+                        usecaseIncludes.forEach { inc -> include(inc) }
                     }
                 })
             )
         }
-        tasks.withType<JacocoCoverageVerification>() {
+
+        tasks.named("jacocoTestCoverageVerification", JacocoCoverageVerification::class.java) {
             dependsOn("test")
             violationRules {
                 listOf(
@@ -88,6 +84,13 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
                     }
                 }
             }
+            classDirectories.setFrom(
+                files(classDirectories.files.map {
+                    fileTree(it) {
+                        usecaseIncludes.forEach { inc -> include(inc) }
+                    }
+                })
+            )
         }
     }
 

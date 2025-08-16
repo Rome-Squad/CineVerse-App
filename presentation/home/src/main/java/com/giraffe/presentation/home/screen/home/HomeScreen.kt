@@ -39,7 +39,7 @@ import com.giraffe.presentation.home.components.TopAppBar
 import com.giraffe.presentation.home.components.YourCollectionsSections
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
-import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
+import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.utils.EffectListener
 import com.giraffe.presentation.home.utils.showToast
 import com.giraffe.presentation.home.utils.toStringRes
@@ -47,7 +47,7 @@ import com.giraffe.presentation.home.utils.toStringRes
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToShowMoreScreen: (ShowMoreSectionType) -> Unit,
+    navigateToShowMoreScreen: (MixedMediaSectionType) -> Unit,
     navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
@@ -85,6 +85,7 @@ fun HomeScreen(
         state = state,
         interactionListener = viewModel
     )
+
 }
 
 @Composable
@@ -132,7 +133,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllRecentlyReleasedClicked(
-                                sectionType = ShowMoreSectionType.RECENTLY_RELEASED
+                                sectionType = MixedMediaSectionType.RECENTLY_RELEASED
                             )
                         }
                     )
@@ -160,7 +161,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllUpcomingClicked(
-                                sectionType = ShowMoreSectionType.UPCOMING_MOVIES
+                                sectionType = MixedMediaSectionType.UPCOMING_MOVIES
                             )
                         }
                     )
@@ -176,18 +177,18 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onMatchYourVibeClicked(
-                                sectionType = ShowMoreSectionType.MATCHES_YOUR_VIBES
+                                sectionType = MixedMediaSectionType.MATCHES_YOUR_VIBES
                             )
                         }
                     )
                 }
-                if (state.featuredCollections.isNotEmpty()) {
-                    CollectionListSection(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        collectionItems = state.featuredCollections,
-                        onCollectionItemClick = interactionListener::onFeaturedCollectionClicked,
-                    )
-                }
+
+                CollectionListSection(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    collectionItems = state.featuredCollections,
+                    onCollectionItemClick = interactionListener::onLateNightThrillsFeatureClicked
+                )
+
                 if (state.topRated.isNotEmpty()) {
                     ListSection(
                         modifier = Modifier
@@ -199,7 +200,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllTopRatedClicked(
-                                sectionType = ShowMoreSectionType.TOP_RATED_TV_SHOWS
+                                sectionType = MixedMediaSectionType.TOP_RATED_TV_SHOWS
                             )
                         },
                     )
@@ -215,7 +216,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeAllRecentlyViewedClicked(
-                                sectionType = ShowMoreSectionType.RECENTLY_VIEWED
+                                sectionType = MixedMediaSectionType.RECENTLY_VIEWED
                             )
                         }
                     )
@@ -267,15 +268,15 @@ fun HomeContent(
 fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
-        override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllRecentlyReleasedClicked(sectionType: MixedMediaSectionType) {}
 
-        override fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllTopRatedClicked(sectionType: MixedMediaSectionType) {}
 
-        override fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllUpcomingClicked(sectionType: MixedMediaSectionType) {}
 
-        override fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType) {}
+        override fun onSeeAllRecentlyViewedClicked(sectionType: MixedMediaSectionType) {}
 
-        override fun onMatchYourVibeClicked(sectionType: ShowMoreSectionType) {}
+        override fun onMatchYourVibeClicked(sectionType: MixedMediaSectionType) {}
 
         override fun onFeaturedCollectionClicked(
             collectionId: Int,
@@ -287,6 +288,7 @@ fun HomeContentPreview() {
         override fun onExploreSectionClicked() {}
         override fun onMatchSectionClicked() {}
         override fun onCollectionClick(collectionId: Int, collectionName: String) {}
+        override fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType) {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(

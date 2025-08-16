@@ -27,7 +27,7 @@ import com.giraffe.presentation.home.components.BaseScreenWithStates
 import com.giraffe.presentation.home.components.HorizontalDivider
 import com.giraffe.presentation.home.components.TransitionLazyColumnToGrid
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
+import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.utils.showToast
 import com.giraffe.presentation.home.utils.toStringRes
 
@@ -117,7 +117,7 @@ fun ShowMorePreview() {
     }
     ShowMoreContent(
         state = ShowMoreScreenState(
-            sectionType = ShowMoreSectionType.RECENTLY_RELEASED
+            sectionType = MixedMediaSectionType.RECENTLY_RELEASED
         ),
         showMoreInteractionListener = interactionListener,
     )

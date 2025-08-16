@@ -53,12 +53,16 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         block: suspend () -> Flow<T>
     ) {
         coroutineScope.launch(dispatcher) {
-            block()
-                .catch {
-                    onError(it)
-                }.collect {
-                    onEmitNewValue(it)
-                }
+            try {
+                block()
+                    .catch {
+                        onError(it)
+                    }.collect {
+                        onEmitNewValue(it)
+                    }
+            } catch (e: Throwable) {
+                onError(e)
+            }
         }
     }
 
