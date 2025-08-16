@@ -9,8 +9,8 @@ interface MatchRemoteDataSource {
         genreIds: String,
         minRuntime: Int?,
         maxRuntime: Int?,
-        earliestFirstAirDate: String?,
-        latestFirstAirDate: String?,
+        earliestDate: String?,
+        latestDate: String?,
         moodId: String?,
     ): List<MovieDto>
 
@@ -18,8 +18,8 @@ interface MatchRemoteDataSource {
         genreIds: String,
         minRuntime: Int?,
         maxRuntime: Int?,
-        earliestFirstAirDate: String?,
-        latestFirstAirDate: String?,
+        earliestDate: String?,
+        latestDate: String?,
         moodId: String?,
     ): List<SeriesDto>
 
