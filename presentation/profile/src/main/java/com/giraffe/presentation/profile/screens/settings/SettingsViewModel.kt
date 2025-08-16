@@ -186,6 +186,7 @@ class SettingsViewModel @Inject constructor(
 
     override fun onConfirmLogout() {
         onDismissSheet()
+        updateState { it.copy(isLoggingOut = true) }
         safeExecute(
             onSuccess = onConfirmLogoutSuccess(),
             onError = ::onFailure
