@@ -21,7 +21,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
             buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
 
-            manifestPlaceholders["isFirebaseDeactivated"] = true
+            manifestPlaceholders["isFirebaseDeactivated"] = false
         }
 
         release {
@@ -30,6 +30,12 @@ android {
             buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
 
             manifestPlaceholders["isFirebaseDeactivated"] = false
+        }
+
+        getByName("publicTest") {
+            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
         }
     }
 
@@ -41,7 +47,7 @@ android {
 }
 
 tasks.whenTaskAdded {
-    if (name.contains("processDebugGoogleService")) {
+    if (name.contains("processPublicTestGoogleService")) {
         enabled = false
     }
 }

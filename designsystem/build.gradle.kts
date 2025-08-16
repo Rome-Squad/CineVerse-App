@@ -23,6 +23,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        create("publicTest") {
+            initWith(getByName("debug"))
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
