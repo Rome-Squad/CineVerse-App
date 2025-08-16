@@ -23,7 +23,6 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 
 @HiltViewModel
@@ -46,7 +45,6 @@ class SettingsViewModel @Inject constructor(
     init {
         observeTheme()
         observeUserProfile()
-        loadInitialProfile()
         observeLanguage()
         observeContentPreference()
         loadAppVersion()
@@ -68,19 +66,6 @@ class SettingsViewModel @Inject constructor(
                 }
             }
             .launchIn(viewModelScope)
-    }
-
-    private fun loadInitialProfile() {
-        viewModelScope.launch {
-            updateState { it.copy(isLoading = true) }
-            try {
-                refreshUserUseCase()
-            } catch (error: Throwable) {
-                onFailure(error, true)
-            } finally {
-                updateState { it.copy(isLoading = false) }
-            }
-        }
     }
 
     internal fun refreshUserProfile() {
