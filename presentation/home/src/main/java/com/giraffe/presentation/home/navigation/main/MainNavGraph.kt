@@ -45,22 +45,22 @@ fun MainNavGraph(
 
     val homeTab = HomeTab(
         labelRes = R.string.home,
-        iconRes = Theme.icons.outline.home
+        iconRes = listOf(Theme.icons.dueTone.home, Theme.icons.outline.home)
     )
 
     val exploreTab = ExploreTab(
         labelRes = R.string.explore,
-        iconRes = Theme.icons.outline.search
+        iconRes = listOf(Theme.icons.dueTone.search, Theme.icons.outline.search)
     )
 
     val profileTab = ProfileTab(
         labelRes = R.string.me,
-        iconRes = Theme.icons.outline.userSquare
+        iconRes = listOf(Theme.icons.dueTone.userSquare, Theme.icons.outline.userSquare)
     )
 
     val matchTab = MatchTab(
         labelRes = R.string.match,
-        iconRes = Theme.icons.outline.magicStick
+        iconRes = listOf(Theme.icons.dueTone.magicStick, Theme.icons.outline.magicStick)
     )
 
     val bottomTabs = listOf(

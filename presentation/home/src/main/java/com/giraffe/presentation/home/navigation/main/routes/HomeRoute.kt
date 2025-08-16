@@ -10,7 +10,7 @@ data object HomeRoute : Route("home")
 
 class HomeTab(
     override val labelRes: Int,
-    override val iconRes: Int
+    override val iconRes: List<Int>
 ) : BottomTab<HomeRoute> {
     override val route = HomeRoute
 }
