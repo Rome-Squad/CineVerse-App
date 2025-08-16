@@ -1,9 +1,7 @@
 package com.giraffe.presentation.home.screen.home
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,26 +14,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.HorizontalDivider
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.components.AdvertisementSection
-import com.giraffe.presentation.home.components.BaseScreenWithStates
 import com.giraffe.presentation.home.components.Carousel
 import com.giraffe.presentation.home.components.CollectionListSection
-import com.giraffe.presentation.home.components.HorizontalDivider
 import com.giraffe.presentation.home.components.ListSection
-import com.giraffe.presentation.home.components.TopAppBar
+import com.giraffe.presentation.home.components.ScreenState
 import com.giraffe.presentation.home.components.YourCollectionsSections
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
@@ -46,15 +42,15 @@ import com.giraffe.presentation.home.utils.toStringRes
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
     navigateToShowMoreScreen: (MixedMediaSectionType) -> Unit,
-    navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToYourCollection: () -> Unit,
     navigateToExploreScreen: () -> Unit,
     navigateToMatchScreen: () -> Unit,
-    navigateToCollection: (collectionId: Int, collectionName: String) -> Unit
+    navigateToCollection: (collectionId: Int, collectionName: String) -> Unit,
+    navigateToFeaturedCollection: (collectionId: Int, collectionTitle: String) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -94,25 +90,37 @@ fun HomeContent(
     interactionListener: HomeInteractionListener
 ) {
     var topAppBarHeight by remember { mutableStateOf(0.dp) }
-    val density = LocalDensity.current
 
-    BaseScreenWithStates(
+    ScreenState(
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interactionListener::onRetryClick
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Theme.color.background.screen)
                 .statusBarsPadding()
         ) {
+            AppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Theme.color.background.screen)
+                    .padding(start = 16.dp),
+                image = painterResource(Theme.icons.colored.logo),
+                caption = if (state.isLoggedIn) stringResource(R.string.welcome) else null,
+                title = if (state.isLoggedIn) state.userName else stringResource(com.giraffe.designsystem.R.string.home)
+            )
+
+            HorizontalDivider()
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(top = topAppBarHeight)
             ) {
-                if (state.popularity.isNotEmpty()) {
+                AnimatedVisibility(state.popularity.isNotEmpty()) {
                     Carousel(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -122,7 +130,7 @@ fun HomeContent(
                     )
                 }
 
-                if (state.recentlyReleased.isNotEmpty()) {
+                AnimatedVisibility(state.recentlyReleased.isNotEmpty()) {
                     ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -150,7 +158,7 @@ fun HomeContent(
                     onCardClick = interactionListener::onMatchSectionClicked,
                 )
 
-                if (state.upcomingMovies.isNotEmpty()) {
+                AnimatedVisibility(state.upcomingMovies.isNotEmpty()) {
                     ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -166,7 +174,7 @@ fun HomeContent(
                         }
                     )
                 }
-                if (state.matchVibes.isNotEmpty()) {
+                AnimatedVisibility(state.matchVibes.isNotEmpty()) {
                     ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -189,7 +197,7 @@ fun HomeContent(
                     onCollectionItemClick = interactionListener::onLateNightThrillsFeatureClicked
                 )
 
-                if (state.topRated.isNotEmpty()) {
+                AnimatedVisibility(state.topRated.isNotEmpty()) {
                     ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -205,7 +213,7 @@ fun HomeContent(
                         },
                     )
                 }
-                if (state.recentlyViewed.isNotEmpty()) {
+                AnimatedVisibility(state.recentlyViewed.isNotEmpty()) {
                     ListSection(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -221,7 +229,7 @@ fun HomeContent(
                         }
                     )
                 }
-                if (state.yourCollections.isNotEmpty()) {
+                AnimatedVisibility(state.yourCollections.isNotEmpty()) {
                     YourCollectionsSections(
                         modifier = Modifier.padding(vertical = 16.dp),
                         collectionItems = state.yourCollections,
@@ -239,25 +247,6 @@ fun HomeContent(
                     caption = stringResource(R.string.explore_all_movies_and_series),
                     onCardClick = interactionListener::onExploreSectionClicked
                 )
-            }
-            Column(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .onGloballyPositioned { coordinates ->
-                        topAppBarHeight = with(density) {
-                            coordinates.size.height.toDp()
-                        }
-                    }
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {},
-            ) {
-                TopAppBar(
-                    userName = state.userName,
-                    isLoggedIn = state.isLoggedIn
-                )
-                HorizontalDivider()
             }
         }
     }
@@ -287,6 +276,8 @@ fun HomeContentPreview() {
         override fun onYourCollectionClicked() {}
         override fun onExploreSectionClicked() {}
         override fun onMatchSectionClicked() {}
+        override fun onRetryClick() {}
+
         override fun onCollectionClick(collectionId: Int, collectionName: String) {}
         override fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType) {}
     }

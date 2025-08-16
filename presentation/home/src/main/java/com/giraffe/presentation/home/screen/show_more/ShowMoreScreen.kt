@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.HorizontalDivider
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.home.components.BaseScreenWithStates
-import com.giraffe.presentation.home.components.HorizontalDivider
+import com.giraffe.presentation.home.components.ScreenState
 import com.giraffe.presentation.home.components.TransitionLazyColumnToGrid
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
@@ -65,9 +65,10 @@ fun ShowMoreContent(
     showMoreInteractionListener: ShowMoreInteractionListener,
 ) {
     val lazyMediaPosters = state.mediaFlow.collectAsLazyPagingItems()
-    BaseScreenWithStates(
+    ScreenState(
         isLoading = state.isLoading,
-        isNoInternet = state.isNoInternet
+        isNoInternet = state.isNoInternet,
+        onRetryClick = {}
     ) {
         Box {
             Column(

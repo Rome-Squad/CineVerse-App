@@ -54,16 +54,7 @@ class HomeViewModel @Inject constructor(
     HomeInteractionListener {
 
     init {
-        getRecentViewed()
-        getPopularity()
-        getRecentlyReleased()
-        getTopRatedSeries()
-        getUpcomingMovies()
-        getMatchesYourVibeMovies()
-        getMatchesYourVibeSeries()
-        getUserName()
-        isLoggedIn()
-        getYourCollections()
+        loadHomeScreenData()
     }
 
     private fun isLoggedIn() {
@@ -349,6 +340,23 @@ class HomeViewModel @Inject constructor(
 
     override fun onMatchSectionClicked() {
         sendEffect(HomeEffect.NavigateToMatchScreen)
+    }
+
+    override fun onRetryClick() {
+        loadHomeScreenData()
+    }
+
+    private fun loadHomeScreenData() {
+        getRecentViewed()
+        getPopularity()
+        getRecentlyReleased()
+        getTopRatedSeries()
+        getUpcomingMovies()
+        getMatchesYourVibeMovies()
+        getMatchesYourVibeSeries()
+        getUserName()
+        isLoggedIn()
+        getYourCollections()
     }
 
     override fun onCollectionClick(collectionId: Int, collectionName: String) {
