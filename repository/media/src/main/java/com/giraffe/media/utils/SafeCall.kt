@@ -20,8 +20,6 @@ import com.giraffe.media.exception.UnknownNetworkDataException
 import com.giraffe.media.exception.ValidationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -34,9 +32,7 @@ suspend fun <T> safeCall(execute: suspend () -> T): T {
 }
 
 fun <T> safeFlow(block: () -> Flow<T>): Flow<T> {
-    return flow {
-        emitAll(block())
-    }.catch { e ->
+    return block().catch { e ->
         throw mapToDomainException(e)
     }
 }

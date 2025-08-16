@@ -202,12 +202,14 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getRecentSeries should sync time before returning recent series`() = runTest {
-        every { seriesDao.getRecentSeries() } returns flowOf(sampleSeries)
+        val page = 1
+        val pageSize = 10
+        every { seriesDao.getRecentSeries(page = page, pageSize = pageSize) } returns flowOf(sampleSeries)
         coEvery { seriesDao.syncRecentViewedTime() } just Runs
 
         val result = mutableListOf<List<SeriesCacheDto>>()
 
-        dataSource.getRecentSeries().collect { result.add(it) }
+        dataSource.getRecentSeries(page = page, pageSize = pageSize).collect { result.add(it) }
 
         assertThat(result).containsExactly(sampleSeries)
     }

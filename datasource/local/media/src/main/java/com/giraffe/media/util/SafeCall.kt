@@ -11,8 +11,6 @@ import com.giraffe.media.exception.NoInternetDataException
 import com.giraffe.media.exception.UnknownNetworkDataException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import java.sql.SQLException
 
@@ -25,9 +23,7 @@ suspend fun <T> safeCall(block: suspend () -> T): T {
 }
 
 fun <T> safeFlow(block: () -> Flow<T>): Flow<T> {
-    return flow {
-        emitAll(block())
-    }.catch { e ->
+    return block().catch { e ->
         throw mapToMediaException(e)
     }
 }
