@@ -54,10 +54,14 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         block: suspend () -> Flow<T>
     ) {
         coroutineScope.launch(dispatcher) {
-            block().catch {
-                onError(it, it is NoInternetException || it is UserNoInternetException)
-            }.collect {
-                onEmitNewValue(it)
+            try {
+                block().catch {
+                    onError(it, it is NoInternetException || it is UserNoInternetException)
+                }.collect {
+                    onEmitNewValue(it)
+                }
+            } catch (e: Exception) {
+                onError(e, e is NoInternetException || e is UserNoInternetException)
             }
         }
     }

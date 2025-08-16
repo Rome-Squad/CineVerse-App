@@ -5,9 +5,9 @@ import androidx.room.Room
 import com.giraffe.cineverseapp.data.database.CineVerseDatabase
 import com.giraffe.cineverseapp.data.preference.DataStorePreferences
 import com.giraffe.media.collections.dao.CollectionsDao
-import com.giraffe.media.explore.dao.SearchKeywordDao
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.person.dao.PersonDao
+import com.giraffe.media.search.dao.SearchKeywordDao
 import com.giraffe.media.series.dao.SeriesDao
 import dagger.Module
 import dagger.Provides
@@ -28,7 +28,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideExploreSearchKeywordDao(database: CineVerseDatabase): SearchKeywordDao =
-        database.exploreSearchKeywordDao()
+        database.searchKeywordDao()
 
     @Provides
     @Singleton

@@ -3,14 +3,14 @@ package com.giraffe.cineverseapp.di
 import com.giraffe.cineverseapp.util.AppVersionProviderImpl
 import com.giraffe.media.collections.CollectionsRepositoryImp
 import com.giraffe.media.collections.repository.CollectionsRepository
-import com.giraffe.media.explore.SearchRepositoryImpl
-import com.giraffe.media.explore.repository.SearchRepository
 import com.giraffe.media.match.MatchRepositoryImpl
 import com.giraffe.media.match.repository.MatchRepository
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.movie.MovieRepositoryImpl
 import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.person.MediaMemberRepositoryImpl
+import com.giraffe.media.search.SearchRepositoryImpl
+import com.giraffe.media.search.repository.SearchRepository
 import com.giraffe.media.series.SeriesRepositoryImpl
 import com.giraffe.media.series.repository.SeriesRepository
 import com.giraffe.presentation.profile.utils.AppVersionProvider

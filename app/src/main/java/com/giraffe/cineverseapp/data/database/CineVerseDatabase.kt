@@ -6,8 +6,6 @@ import androidx.room.TypeConverters
 import com.giraffe.cineverseapp.data.database.converter.Converters
 import com.giraffe.media.collections.dao.CollectionsDao
 import com.giraffe.media.collections.datasource.local.cache.CollectionCacheDto
-import com.giraffe.media.explore.dao.SearchKeywordDao
-import com.giraffe.media.explore.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.movie.datasource.local.cacheDto.MatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
@@ -20,6 +18,8 @@ import com.giraffe.media.person.dao.PersonDao
 import com.giraffe.media.person.datasource.local.cacheDto.PersonCacheDto
 import com.giraffe.media.person.relations.MoviePersonCrossRef
 import com.giraffe.media.person.relations.SeriesPersonCrossRef
+import com.giraffe.media.search.dao.SearchKeywordDao
+import com.giraffe.media.search.datasource.local.cacheDto.SearchKeywordCacheDto
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.cacheDto.MatchesYourVibeSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.PopularSeriesCacheDto
@@ -58,7 +58,6 @@ abstract class CineVerseDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
     abstract fun seriesDao(): SeriesDao
     abstract fun personDao(): PersonDao
-    abstract fun exploreSearchKeywordDao(): SearchKeywordDao
-
+    abstract fun searchKeywordDao(): SearchKeywordDao
     abstract fun collectionsDao(): CollectionsDao
 }

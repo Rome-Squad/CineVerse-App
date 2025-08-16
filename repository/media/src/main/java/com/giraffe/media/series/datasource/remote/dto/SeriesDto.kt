@@ -27,8 +27,6 @@ data class SeriesDto(
     val userRating: Float? = null,
     @SerialName("genre_ids")
     val genreIds: List<Int> = emptyList(),
-    @SerialName("origin_country")
-    val originCountry: List<String> = emptyList(),
     @SerialName("original_language")
     val originalLanguage: String? = null,
 )

@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShowMoreViewModel @Inject constructor(
-    private val showMoreFactory: ShowMoreFactory,
+    private val showMoreFactory: MixedMediaFactory,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<ShowMoreScreenState, ShowMoreEffect>(ShowMoreScreenState()),
     ShowMoreInteractionListener {

@@ -28,16 +28,34 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
             )
         }.results
 
-    override suspend fun discoverMovies(
-        genreId: List<Int>?,
-        keywords: String?,
+    override suspend fun getMoviesByGenreIds(
+        genreIds: List<Int>,
+        page: Int
+    ) =
+        retrofitRequestBuilder.get {
+            discoverMovies(
+                genreId = genreIds.joinToString(","),
+                page = page
+            )
+        }.results
+
+    override suspend fun getMoviesByKeywordsId(
+        keywords: Int,
+        page: Int
+    ) =
+        retrofitRequestBuilder.get {
+            discoverMovies(
+                keywords = keywords.toString(),
+                page = page
+            )
+        }.results
+
+    override suspend fun getMoviesBySort(
         sortBy: String,
         page: Int
     ) =
         retrofitRequestBuilder.get {
             discoverMovies(
-                genreId = genreId?.toString(),
-                keywords = keywords,
                 sortBy = sortBy,
                 page = page
             )
