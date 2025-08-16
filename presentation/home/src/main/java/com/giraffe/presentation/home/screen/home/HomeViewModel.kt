@@ -4,7 +4,6 @@ import android.accounts.NetworkErrorException
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
-import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
@@ -22,8 +21,7 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.home.routes.ShowMoreSectionType
-import com.giraffe.presentation.home.utils.toFeaturedCollectionUi
+import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
@@ -56,7 +54,6 @@ class HomeViewModel @Inject constructor(
     HomeInteractionListener {
 
     init {
-        getFeaturedCollection()
         getRecentViewed()
         getPopularity()
         getRecentlyReleased()
@@ -94,10 +91,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getYourCollections() {
-        safeExecute(
-            onSuccess = ::onGetYourCollectionsSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetYourCollectionsSuccess,
             onError = ::onFail,
-            block = { getCollectionsUseCase() }
+            block = getCollectionsUseCase::invoke
         )
     }
 
@@ -111,22 +108,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getFeaturedCollection() {
-        safeExecute(
-            onSuccess = ::onGetFeaturedCollectionSuccess,
-            onError = ::onFail,
-            block = { getMoviesGenresUseCase() })
-    }
-
-    private fun onGetFeaturedCollectionSuccess(genres: List<Genre>) {
-        updateState {
-            it.copy(
-                featuredCollections = genres.map(Genre::toFeaturedCollectionUi),
-                isNoInternet = false,
-                isLoading = false
-            )
-        }
-    }
 
     private fun getPopularity() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -339,7 +320,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    override fun onMatchYourVibeClicked(sectionType: ShowMoreSectionType) {
+    override fun onMatchYourVibeClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -379,7 +360,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllRecentlyReleasedClicked(sectionType: ShowMoreSectionType) {
+    override fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -387,7 +368,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllTopRatedClicked(sectionType: ShowMoreSectionType) {
+    override fun onSeeAllRecentlyReleasedClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -395,7 +376,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllUpcomingClicked(sectionType: ShowMoreSectionType) {
+    override fun onSeeAllTopRatedClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -403,7 +384,15 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllRecentlyViewedClicked(sectionType: ShowMoreSectionType) {
+    override fun onSeeAllUpcomingClicked(sectionType: MixedMediaSectionType) {
+        sendEffect(
+            HomeEffect.NavigateToShowMore(
+                sectionType = sectionType
+            )
+        )
+    }
+
+    override fun onSeeAllRecentlyViewedClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType

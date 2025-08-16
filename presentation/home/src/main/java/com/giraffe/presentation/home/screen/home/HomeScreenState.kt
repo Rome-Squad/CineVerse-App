@@ -1,5 +1,6 @@
 package com.giraffe.presentation.home.screen.home
 
+import com.giraffe.presentation.home.model.FeaturedCollectionType
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
 import com.giraffe.presentation.home.model.PopularMediaUi
 import com.giraffe.presentation.home.model.Poster
@@ -15,7 +16,11 @@ data class HomeScreenState(
     val upcomingMovies: List<Poster> = emptyList(),
     val recentlyViewed: List<Poster> = emptyList(),
     val yourCollections: List<YourCollectionUi> = emptyList(),
-    val featuredCollections: List<FeaturedCollectionUi> = emptyList(),
+    val featuredCollections: List<FeaturedCollectionUi> = FeaturedCollectionType.entries.map {
+        FeaturedCollectionUi(
+            it
+        )
+    },
     val isLoading: Boolean = false,
     val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,

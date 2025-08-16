@@ -82,7 +82,7 @@ fun SeriesDto.toEntity() = Series(
         else BASE_IMAGE_URL + it
     }.orEmpty(),
     genreIDs = genreIds,
-    releaseYear = releaseYear?.let { LocalDate.parse(it) },
+    releaseYear = releaseYear?.let { if (it.isEmpty() || it.isBlank()) null else LocalDate.parse(it) },
     popularity = popularity.orZero(),
     userRating = userRating,
     youtubeVideoId = null,

@@ -9,6 +9,8 @@ object DatabaseConstants {
     const val RECENT_VIEWED_SERIES_TABLE = "RECENT_VIEWED_SERIES"
     const val MATCHES_YOUR_VIBE_SERIES_TABLE = "MATCHES_YOUR_VIBE_SERIES"
     const val SEARCH_KEYWORD_TABLE = "SEARCH_KEYWORD"
+
+    const val COLLECTIONS_TABLE = "Collections"
     const val MOVIE_TABLE = "MOVIE"
     const val MOVIE_GENRE_TABLE = "MOVIE_GENRE"
     const val PERSONS_TABLE = "PERSONS"

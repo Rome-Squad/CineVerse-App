@@ -29,14 +29,13 @@ class SeriesRepositoryImplTest {
             name = "Vikings",
             voteCount = 1000,
             overview = "desc",
-            popularity = 90.0,
+            popularity = 90.0f,
             originalName = "Vikings",
             releaseYear = "2015-01-01",
             posterUrl = "poster",
             backdropUrl = "backdrop",
-            voteAverage = 8.0,
+            voteAverage = 8.0f,
             genreIds = listOf(1),
-            originCountry = listOf("US"),
             originalLanguage = "en"
         )
     )
@@ -73,7 +72,7 @@ class SeriesRepositoryImplTest {
         releaseYear = "2015-01-01",
         posterUrl = "poster",
         backdropUrl = "backdrop",
-        voteAverage = 8.0,
+        voteAverage = 8.0f,
         originCountry = listOf("US"),
         originalLanguage = "en"
     )

@@ -23,4 +23,11 @@
     <string name="looks_like_you_are_offline_let_s_reconnect_so_you_don_t_miss_out" translatable="false">Looks like you are offline. Let’s reconnect so you don’t miss out!</string>
     <string name="try_again" translatable="false">Try Again</string>
     <string name="star_rate">star rate</string>
+    <string name="late_night_thrills">Late-Night Thrills</string>
+    <string name="mind_bending_stories">Mind-Bending Stories</string>
+    <string name="cinematic_masterpieces">Cinematic Masterpieces</string>
+    <string name="family_night_picks">Family Night Picks</string>
+    <string name="based_on_true_events">Based on True Events</string>
+    <string name="feel_good_favorites">Feel-Good Favorites</string>
+
 </resources>
