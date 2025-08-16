@@ -11,17 +11,23 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ShowMoreRoute(
-    val sectionType: ShowMoreSectionType
+    val sectionType: MixedMediaSectionType
 )
 
 @Keep
 @Serializable
-enum class ShowMoreSectionType{
+enum class MixedMediaSectionType {
     RECENTLY_RELEASED,
     TOP_RATED_TV_SHOWS,
     UPCOMING_MOVIES,
     RECENTLY_VIEWED,
-    MATCHES_YOUR_VIBES;
+    MATCHES_YOUR_VIBES,
+    LATE_NIGHT_THRILLS,
+    FAMILY_NIGHT_PICKS,
+    MIND_BENDING_STORIES,
+    BASED_ON_TRUE_EVENTS,
+    CINEMATIC_MASTERPIECE,
+    FEEL_GOOD_PREFERENCES;
 
     fun getSectionTitle(context: Context): String {
         return when (this) {
@@ -30,17 +36,18 @@ enum class ShowMoreSectionType{
             UPCOMING_MOVIES -> context.getString(R.string.upcoming_movies)
             RECENTLY_VIEWED -> context.getString(R.string.you_recent_viewed)
             MATCHES_YOUR_VIBES -> context.getString(R.string.matches_your_vibe)
+            LATE_NIGHT_THRILLS -> context.getString(R.string.late_night_thrills)
+            FAMILY_NIGHT_PICKS -> context.getString(R.string.family_night_picks)
+            MIND_BENDING_STORIES -> context.getString(R.string.mind_bending_stories)
+            BASED_ON_TRUE_EVENTS -> context.getString(R.string.based_on_true_events)
+            CINEMATIC_MASTERPIECE -> context.getString(R.string.cinematic_masterpieces)
+            FEEL_GOOD_PREFERENCES -> context.getString(R.string.feel_good_favorites)
         }
     }
-
 }
 
-fun NavController.navigateToShowMore(sectionType: ShowMoreSectionType) {
-    navigate(
-        ShowMoreRoute(
-            sectionType = sectionType,
-        )
-    )
+fun NavController.navigateToShowMore(sectionType: MixedMediaSectionType) {
+    navigate(ShowMoreRoute(sectionType = sectionType))
 }
 
 fun NavGraphBuilder.showMoreRoute(

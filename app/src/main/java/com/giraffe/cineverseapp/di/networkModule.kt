@@ -5,9 +5,6 @@ import com.giraffe.cineverseapp.data.network.createRetrofitClient
 import com.giraffe.media.collections.datasource.remote.CollectionsRemoteDataSource
 import com.giraffe.media.collections.retrofit.CollectionsApiServiceRetrofit
 import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImp
-import com.giraffe.media.explore.datasource.remote.SearchRemoteDataSource
-import com.giraffe.media.explore.retrofit.SearchApiServiceRetrofit
-import com.giraffe.media.explore.retrofit.SearchRemoteDataSourceImplRetrofit
 import com.giraffe.media.match.datasource.MatchRemoteDataSource
 import com.giraffe.media.match.retrofit.MatchApiService
 import com.giraffe.media.match.retrofit.MatchRemoteDataSourceImplRetrofit
@@ -17,6 +14,9 @@ import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.retrofit.MoviesApiServiceRetrofit
 import com.giraffe.media.movie.retrofit.MoviesRemoteDataSourceImplRetrofit
 import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
+import com.giraffe.media.search.datasource.remote.SearchRemoteDataSource
+import com.giraffe.media.search.retrofit.SearchApiServiceRetrofit
+import com.giraffe.media.search.retrofit.SearchRemoteDataSourceImplRetrofit
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
 import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
