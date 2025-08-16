@@ -13,21 +13,14 @@ fun LocalDate?.formatAsFullDate(): String {
 
     val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
 
-    val isArabic = locale.language == "ar"
-
-    val dayStr = if (isArabic) this.day.toString().map { c ->
-        if (c.isDigit()) "٠١٢٣٤٥٦٧٨٩"[c - '0'] else c
-    }.joinToString("") else this.day.toString()
-
+    val dayStr = String.format(Locale.getDefault(), "%d", this.day)
     val monthStr = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         this.toJavaLocalDate().month.getDisplayName(TextStyle.FULL, locale)
     } else {
         this.month.number.toString()
     }
+    val yearStr = String.format(Locale.getDefault(), "%d", this.year)
 
-    val yearStr = if (isArabic) this.year.toString().map { c ->
-        if (c.isDigit()) "٠١٢٣٤٥٦٧٨٩"[c - '0'] else c
-    }.joinToString("") else this.year.toString()
 
     return "$dayStr $monthStr $yearStr"
 }
