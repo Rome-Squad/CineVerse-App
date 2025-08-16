@@ -8,6 +8,7 @@ import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
+import kotlinx.coroutines.flow.first
 
 class RecentlyReleasedStrategy(
     private val getRecentlyReleasedMovies: GetRecentlyReleasedMoviesUseCase,
@@ -17,7 +18,7 @@ class RecentlyReleasedStrategy(
 ) : MixedMediaStrategy {
     override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
         val recentMovies =
-            getRecentlyReleasedMovies.getRemoteRecentlyReleased(page = page, limit = pageSize)
+            getRecentlyReleasedMovies.invoke(page = page, limit = pageSize).first()
                 .map { movie ->
                     movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title })
                 }

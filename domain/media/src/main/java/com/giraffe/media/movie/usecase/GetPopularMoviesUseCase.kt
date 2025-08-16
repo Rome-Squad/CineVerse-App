@@ -7,5 +7,5 @@ class GetPopularMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
     operator fun invoke(limit: Int = 10) =
-        movieRepository.getLocalPopular(limit = limit)
+        movieRepository.getPopular(limit = limit)
 }

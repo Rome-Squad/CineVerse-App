@@ -7,6 +7,6 @@ class GetMoviesGenresUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
     operator fun invoke() =
-        movieRepository.getLocalGenres()
+        movieRepository.getGenres()
 
 }

@@ -162,7 +162,7 @@ class HomeViewModel @Inject constructor(
             safeCollect(
                 onEmitNewValue = ::onGetRecentlyReleasedMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyReleasedMoviesUseCase::getLocalRecentlyReleased
+                block = getRecentlyReleasedMoviesUseCase::invoke
             )
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
@@ -215,7 +215,7 @@ class HomeViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetUpcomingMoviesSuccess,
             onError = ::onFail,
-            block = getUpcomingMoviesUseCase::getLocalUpcoming
+            block = getUpcomingMoviesUseCase::invoke
         )
     }
 
@@ -268,7 +268,7 @@ class HomeViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetMatchesYourVibeMoviesSuccess,
             onError = ::onFail,
-            block = getMatchesYourVibeMoviesUseCase::getLocalMatchesYourVibe
+            block = getMatchesYourVibeMoviesUseCase::invoke
         )
     }
 

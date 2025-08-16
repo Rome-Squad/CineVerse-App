@@ -19,20 +19,20 @@ class GetMoviesGenresUseCaseTest {
     @Test
     fun `invoke should call getGenres on repository`() = runTest {
         //given
-        coEvery { repository.getLocalGenres() } returns flowOf(emptyList())
+        coEvery { repository.getGenres() } returns flowOf(emptyList())
 
         //when
         getMoviesGenresUseCase()
 
         //then
-        coVerify(exactly = 1) { repository.getLocalGenres() }
+        coVerify(exactly = 1) { repository.getGenres() }
     }
 
     @Test
     fun `invoke should return list of genres from repository`() = runTest {
         // given
         val expectedGenres = flowOf(fakeGenres)
-        coEvery { repository.getLocalGenres() } returns expectedGenres
+        coEvery { repository.getGenres() } returns expectedGenres
 
         // when
         val result = getMoviesGenresUseCase()

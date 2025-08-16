@@ -6,9 +6,6 @@ import javax.inject.Inject
 class GetRecentlyReleasedMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
-    fun getLocalRecentlyReleased(limit: Int = 10) =
-        movieRepository.getLocalRecentlyReleased(limit = limit)
-
-    suspend fun getRemoteRecentlyReleased(page: Int, limit: Int = 20) =
-        movieRepository.getRemoteRecentlyReleased(page = page, limit = limit)
+    suspend operator fun invoke(page: Int = 1, limit: Int = 10) =
+        movieRepository.getRecentlyReleased(page = page, limit = limit)
 }

@@ -8,8 +8,8 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
@@ -19,50 +19,25 @@ class GetUpcomingMoviesUseCaseTest {
     private var useCase: GetUpcomingMoviesUseCase = GetUpcomingMoviesUseCase(repository)
 
     @Test
-    fun `invoke should call getRemoteUpcoming on repository`() = runTest {
+    fun `invoke should call getUpcoming on repository`() = runTest {
         // given
-        coEvery { repository.getRemoteUpcoming(any(), any()) } returns emptyList()
+        coEvery { repository.getUpcoming(any(), any()) } returns emptyFlow()
 
         // when
-        useCase.getRemoteUpcoming(page, limit)
+        useCase.invoke(page, limit)
 
         // then
-        coVerify(exactly = 1) { repository.getRemoteUpcoming(any(), any()) }
-    }
-
-
-    @Test
-    fun `invoke should call getLocalUpcoming on repository`() = runTest {
-        // given
-        coEvery { repository.getLocalUpcoming(any()) } returns flowOf(emptyList())
-
-        // when
-        useCase.getLocalUpcoming(limit)
-
-        // then
-        coVerify(exactly = 1) { repository.getLocalUpcoming(any()) }
+        coVerify(exactly = 1) { repository.getUpcoming(any(), any()) }
     }
 
     @Test
-    fun `given remote upcoming movies, when invoke is called, then return movie list`() = runTest {
-        // Given
-        coEvery { repository.getRemoteUpcoming(page, limit) } returns fakeMovies
-
-        // When
-        val actualMovies = useCase.getRemoteUpcoming(page, limit)
-
-        // Then
-        assertThat(actualMovies).isEqualTo(fakeMovies)
-    }
-
-    @Test
-    fun `given local upcoming movies, when invoke is called, then return movie list`() = runTest {
+    fun `given upcoming movies, when invoke is called, then return movie list`() = runTest {
         // Given
         val expectedMovies = flow { emit(fakeMovies) }
-        coEvery { repository.getLocalUpcoming(limit) } returns expectedMovies
+        coEvery { repository.getUpcoming(page, limit) } returns expectedMovies
 
         // When
-        val actualMovies = useCase.getLocalUpcoming(limit)
+        val actualMovies = useCase.invoke(page, limit)
 
         // Then
         assertThat(actualMovies).isEqualTo(expectedMovies)

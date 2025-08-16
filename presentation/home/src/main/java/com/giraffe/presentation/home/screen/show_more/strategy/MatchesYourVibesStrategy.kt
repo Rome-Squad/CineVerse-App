@@ -8,6 +8,7 @@ import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
+import kotlinx.coroutines.flow.first
 
 class MatchesYourVibesStrategy(
     private val getMatchesYourVibeMovies: GetMatchesYourVibeMoviesUseCase,
@@ -17,7 +18,8 @@ class MatchesYourVibesStrategy(
 ) : MixedMediaStrategy {
     override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
 
-        val matchesYourVibeMovies = getMatchesYourVibeMovies.getRemoteMatchesYourVibe(page = page, limit = pageSize)
+        val matchesYourVibeMovies =
+            getMatchesYourVibeMovies.invoke(page = page, limit = pageSize).first()
         val matchesYourVibeSeries = getMatchesYourVibeSeries(page = page, limit = pageSize)
 
         return (matchesYourVibeMovies.map { movie ->

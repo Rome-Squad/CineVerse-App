@@ -19,20 +19,20 @@ class GetPopularityMoviesUseCaseTest {
     @Test
     fun `invoke should call getPopular on repository`() = runTest {
         // given
-        coEvery { repository.getLocalPopular(any()) } returns flowOf(emptyList())
+        coEvery { repository.getPopular(any()) } returns flowOf(emptyList())
 
         // when
         useCase(limit)
 
         // then
-        coVerify(exactly = 1) { repository.getLocalPopular(any()) }
+        coVerify(exactly = 1) { repository.getPopular(any()) }
     }
 
     @Test
     fun `given popular movies, when invoke is called, then return movie list`() = runTest {
         // Given
         val expectedPopularityMovies = flowOf(fakeMovies.filter { it.popularity > 0 })
-        coEvery { repository.getLocalPopular(limit) } returns expectedPopularityMovies
+        coEvery { repository.getPopular(limit) } returns expectedPopularityMovies
 
         // When
         val actualMovies = useCase(limit)

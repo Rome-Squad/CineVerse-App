@@ -21,6 +21,7 @@ import com.giraffe.media.utils.safeFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -94,19 +95,19 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     // region Movie Genres
-    override fun getLocalGenres(): Flow<List<Genre>> {
+    override fun getGenres(): Flow<List<Genre>> {
         return safeFlow {
             movieLocal.getMoviesGenres()
                 .map { it.map(MovieGenreCacheDto::toEntity) }
                 .onEach {
                     it.ifEmpty {
-                        getRemoteGenres()
+                        refreshGenres()
                     }
                 }
         }
     }
 
-    override suspend fun getRemoteGenres(): List<Genre> {
+    override suspend fun refreshGenres(): List<Genre> {
         return safeCall {
             movieRemote.getMovieGenres()
                 .map(MovieGenreDto::toEntity)
@@ -123,7 +124,9 @@ class MovieRepositoryImpl @Inject constructor(
             movieLocal.getMovieGenresByIds(genreIds)
                 .map { it.map(MovieGenreCacheDto::toEntity) }
                 .onEach {
-                    getRemoteGenres().filter { it.id in genreIds }
+                    refreshGenres().filter { genre ->
+                        genre.id in genreIds
+                    }
                 }
         }
     }
@@ -165,7 +168,7 @@ class MovieRepositoryImpl @Inject constructor(
     // endregion
 
     // region Popular
-    override fun getLocalPopular(limit: Int): Flow<List<Movie>> {
+    override fun getPopular(limit: Int): Flow<List<Movie>> {
         return safeFlow {
             movieLocal.getPopularityMovies(limit = limit)
                 .map { it.map(MovieCacheDto::toEntity) }
@@ -192,22 +195,29 @@ class MovieRepositoryImpl @Inject constructor(
                 .map(MovieDto::toEntity)
         }
     }
-// endregion
+    // endregion
 
     // region Recently Released
-    override fun getLocalRecentlyReleased(limit: Int): Flow<List<Movie>> {
+    override fun getRecentlyReleased(page: Int, limit: Int): Flow<List<Movie>> {
         return safeFlow {
-            movieLocal.getRecentlyReleasedMovies(limit)
-                .map { it.map(MovieCacheDto::toEntity) }
-                .onEach {
-                    it.ifEmpty {
-                        getRemoteRecentlyReleased(page = 1, limit = limit)
-                            .also { movies ->
-                                addRecentlyReleased(movies)
-                            }
-                    }
-                }
+            when (page) {
+                1 -> getLocalRecentlyReleased(limit)
+                else -> flow { emit(getRemoteRecentlyReleased(page = page, limit = limit)) }
+            }
         }
+    }
+
+    private fun getLocalRecentlyReleased(limit: Int): Flow<List<Movie>> {
+        return movieLocal.getRecentlyReleasedMovies(limit)
+            .map { it.map(MovieCacheDto::toEntity) }
+            .onEach {
+                it.ifEmpty {
+                    getRemoteRecentlyReleased(page = 1, limit = limit)
+                        .also { movies ->
+                            addRecentlyReleased(movies)
+                        }
+                }
+            }
     }
 
     private suspend fun addRecentlyReleased(movies: List<Movie>) {
@@ -215,17 +225,24 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.addRecentlyReleasedMovies(movies.map(Movie::toCacheDto))
     }
 
-    override suspend fun getRemoteRecentlyReleased(page: Int, limit: Int): List<Movie> {
-        return safeCall {
-            movieRemote.getRecentlyReleasedMovies(page)
-                .take(limit)
-                .map(MovieDto::toEntity)
-        }
+    private suspend fun getRemoteRecentlyReleased(page: Int, limit: Int): List<Movie> {
+        return movieRemote.getRecentlyReleasedMovies(page)
+            .take(limit)
+            .map(MovieDto::toEntity)
     }
-// endregion
+    // endregion
 
     // region Upcoming
-    override fun getLocalUpcoming(limit: Int): Flow<List<Movie>> {
+    override fun getUpcoming(page: Int, limit: Int): Flow<List<Movie>> {
+        return safeFlow {
+            when (page) {
+                1 -> getLocalUpcoming(limit)
+                else -> flow { emit(getRemoteUpcoming(page = page, limit = limit)) }
+            }
+        }
+    }
+
+    private fun getLocalUpcoming(limit: Int): Flow<List<Movie>> {
         return safeFlow {
             movieLocal.getUpcomingMovies(limit)
                 .map { it.map(MovieCacheDto::toEntity) }
@@ -245,29 +262,37 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.addUpcomingMovies(movies.map(Movie::toCacheDto))
     }
 
-    override suspend fun getRemoteUpcoming(page: Int, limit: Int): List<Movie> {
+    private suspend fun getRemoteUpcoming(page: Int, limit: Int): List<Movie> {
         return safeCall {
             movieRemote.getUpcomingMovies(page)
                 .take(limit)
                 .map(MovieDto::toEntity)
         }
     }
-// endregion
+    // endregion
 
     // region Match
-    override fun getLocalMatchesYourVibe(limit: Int): Flow<List<Movie>> {
+    override fun getMatchesYourVibe(page: Int, limit: Int): Flow<List<Movie>> {
         return safeFlow {
-            movieLocal.getMatchesYourVibeMovies(limit)
-                .map { it.map(MovieCacheDto::toEntity) }
-                .onEach {
-                    it.ifEmpty {
-                        getRemoteMatchesYourVibe(page = 1, limit = limit)
-                            .also { movies ->
-                                addMatchesYourVibe(movies = movies)
-                            }
-                    }
-                }
+            when (page) {
+                1 -> getLocalMatchesYourVibe(limit)
+                else -> flow { emit(getRemoteMatchesYourVibe(page = page, limit = limit)) }
+            }
         }
+    }
+
+    private fun getLocalMatchesYourVibe(limit: Int): Flow<List<Movie>> {
+        return movieLocal.getMatchesYourVibeMovies(limit)
+            .map { it.map(MovieCacheDto::toEntity) }
+            .onEach {
+                it.ifEmpty {
+                    getRemoteMatchesYourVibe(page = 1, limit = limit)
+                        .also { movies ->
+                            addMatchesYourVibe(movies = movies)
+                        }
+                }
+            }
+
     }
 
     private suspend fun addMatchesYourVibe(movies: List<Movie>) {
@@ -275,14 +300,12 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.addMatchesYourVibeMovies(movies.map(Movie::toCacheDto))
     }
 
-    override suspend fun getRemoteMatchesYourVibe(page: Int, limit: Int): List<Movie> {
-        return safeCall {
-            getTopGenre()?.let { topGenre ->
-                getByGenreId(genreId = topGenre.id, page = page).take(limit)
-            } ?: emptyList()
-        }
+    private suspend fun getRemoteMatchesYourVibe(page: Int, limit: Int): List<Movie> {
+        return getTopGenre()?.let { topGenre ->
+            getByGenreId(genreId = topGenre.id, page = page).take(limit)
+        } ?: emptyList()
     }
-// endregion
+    // endregion
 
     // region Recently Viewed
     private suspend fun addRecentlyViewed(movie: Movie) =
@@ -297,7 +320,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun syncRecentlyViewedMovies() {
+    override suspend fun refreshRecentlyViewedMovies() {
         return safeCall {
             movieLocal.getAllRecentlyViewedMovies().forEach {
                 movieRemote.getMovieById(it.movie.id)
@@ -314,7 +337,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun clearRecentlyViewed() =
         safeCall { movieLocal.clearRecentlyViewedMovies() }
-// endregion
+    // endregion
 
     override suspend fun clearAll() {
         safeCall {
