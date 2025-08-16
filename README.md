@@ -62,7 +62,11 @@ You will need to do some Installation steps first to start your tour in CineVers
 
     <img width="735" height="186" alt="image" src="https://github.com/user-attachments/assets/8f52d45a-9ac3-41cb-9110-0db474571566" />
 
-5. Now you can run app and start yout tour!
+6. change build variant to publicTest
+
+    <img width="817" height="953" alt="image" src="https://github.com/user-attachments/assets/9ded89ef-fc87-4edb-a20a-6a085100f6d5" />
+
+7. Now you can run app and start yout tour!
 
     <img width="1218" height="537" alt="image" src="https://github.com/user-attachments/assets/47cd20ec-61dd-4187-8c58-1499c4b8c384" />
 
