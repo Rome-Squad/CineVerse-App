@@ -11,11 +11,7 @@ import java.util.Locale
 fun LocalDate?.formatAsFullDate(): String {
     if (this == null) return ""
 
-    val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        AppCompatDelegate.getApplicationLocales()[0] ?: Locale.getDefault()
-    } else {
-        Locale.getDefault()
-    }
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
 
     val isArabic = locale.language == "ar"
 
@@ -35,3 +31,5 @@ fun LocalDate?.formatAsFullDate(): String {
 
     return "$dayStr $monthStr $yearStr"
 }
+
+
