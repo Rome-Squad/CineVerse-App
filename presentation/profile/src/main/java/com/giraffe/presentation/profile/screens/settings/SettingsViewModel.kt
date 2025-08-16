@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.settings
 
-import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
@@ -21,8 +20,6 @@ import com.giraffe.user.usecase.SetLanguageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 
 @HiltViewModel
@@ -56,16 +53,18 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun observeUserProfile() {
-        getUserUseCase()
-            .onEach { user ->
+        safeCollect(
+            onEmitNewValue = { user ->
                 updateState {
                     it.copy(
                         isLoggedIn = user != null,
                         user = user?.toUi()
                     )
                 }
-            }
-            .launchIn(viewModelScope)
+            },
+            onError = ::onFailure,
+            block = { getUserUseCase() }
+        )
     }
 
     internal fun refreshUserProfile() {
