@@ -68,8 +68,25 @@ private fun RatingContent(
         isNoInternet = state.isNoInternet,
         onBackClick = interaction::onBackClick,
     ) {
-
-        if (!state.isLoading && state.seriesPosters.isEmpty() && state.moviesPosters.isEmpty()) {
+        AnimatedVisibility(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            visible = state.isTipVisible
+        ) {
+            InfoCard(
+                description = stringResource(R.string.tap_an_item_to_see_details_or_update_your_rating),
+                modifier = Modifier.fillMaxWidth(),
+                onClosedClick = interaction::onCloseTipClick
+            )
+        }
+        Tabs(
+            listOf(
+                stringResource(R.string.movies),
+                stringResource(R.string.series)
+            ),
+            selectedTabIndex = state.selectedTabIndex,
+            onTabSelected = interaction::onTabSelected,
+        )
+        if (state.selectedPosters.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -90,24 +107,6 @@ private fun RatingContent(
                 )
             }
         } else {
-            AnimatedVisibility(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                visible = state.isTipVisible
-            ) {
-                InfoCard(
-                    description = stringResource(R.string.tap_an_item_to_see_details_or_update_your_rating),
-                    modifier = Modifier.fillMaxWidth(),
-                    onClosedClick = interaction::onCloseTipClick
-                )
-            }
-            Tabs(
-                listOf(
-                    stringResource(R.string.movies),
-                    stringResource(R.string.series)
-                ),
-                selectedTabIndex = state.selectedTabIndex,
-                onTabSelected = interaction::onTabSelected,
-            )
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(12.dp),
