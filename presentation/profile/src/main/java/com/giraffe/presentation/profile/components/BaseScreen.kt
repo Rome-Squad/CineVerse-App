@@ -17,7 +17,7 @@ import com.giraffe.designsystem.theme.Theme
 fun BaseScreen(
     title: String,
     isLoading: Boolean,
-    isNoInternet: Boolean,
+    isNoInternet: Boolean = false,
     onBackClick: () -> Unit,
     content: @Composable ColumnScope.() -> Unit,
 ) {
