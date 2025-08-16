@@ -10,6 +10,7 @@ data class SettingsScreenState(
     val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
     val user: UserUi? = null,
+    val isLoggingOut: Boolean = false,
     val isDarkMode: Boolean = false,
     val currentLanguage: Language = Language.ENGLISH,
     val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
