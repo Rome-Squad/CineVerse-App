@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.components
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -62,7 +61,7 @@ fun MainMovieOrSeriesDetails(
 
     val animationProgressValue = animationProgress.value
     val inverseAnimationProgressValue = 1 - animationProgressValue
-    Log.d("Animation", "animationProgressValue: $animationProgressValue")
+
     val playButtonBackground by animateColorAsState(
         if (isPlayButtonEnabled) Theme.color.button.primary else Theme.color.button.onDisabled
     )
@@ -71,6 +70,7 @@ fun MainMovieOrSeriesDetails(
     val hasSensitiveText by remember(animationProgressValue) {
         derivedStateOf { animationProgressValue < 0.5f }
     }
+
     Box(Modifier.fillMaxWidth()) {
         Box(modifier.fillMaxWidth()) {
             posterUrl?.let {
@@ -166,7 +166,7 @@ fun MainMovieOrSeriesDetails(
 
                         if (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty()) {
                             val iconTextHeight = max(
-                                Theme.textStyle.label.md.regular.fontSize.value + 4 ,
+                                Theme.textStyle.label.md.regular.fontSize.value + 4,
                                 16f
                             )
                             Row(
