@@ -53,7 +53,13 @@ class AuthenticationDatastore @Inject constructor(
 
 
     suspend fun clearAll() {
-        dataStore.edit { it.clear() }
+        dataStore.edit { preferences ->
+            preferences.remove(SESSION_ID)
+            preferences.remove(ACCOUNT_ID)
+            preferences.remove(USER_USERNAME)
+            preferences.remove(USER_DISPLAY_NAME)
+            preferences.remove(USER_AVATAR_URL)
+        }
     }
 
 

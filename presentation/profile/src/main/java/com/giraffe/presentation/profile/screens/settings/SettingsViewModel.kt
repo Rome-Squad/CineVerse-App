@@ -211,11 +211,11 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun onConfirmLogoutSuccess(): (Unit) -> Unit = {
+        sendEffect(SettingsEffect.NavigateToLogin)
         safeExecute(
             onError = ::onFailure,
             block = clearMoviesCacheUseCase::clearAll
         )
-        sendEffect(SettingsEffect.NavigateToLogin)
     }
 
     override fun onGoToWebsiteClick() {
