@@ -13,7 +13,10 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CineVerse App"
+includeBuild("build-logic")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "CineVerseApp"
 include(":app")
 include(":presentation:authentication")
 include(":presentation:home")

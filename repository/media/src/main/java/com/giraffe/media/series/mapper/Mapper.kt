@@ -10,7 +10,7 @@ import com.giraffe.media.series.datasource.remote.dto.SeriesDto
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.utils.BASE_IMAGE_URL
-import com.giraffe.media.utils.orEmpty
+import com.giraffe.media.utils.orZero
 import kotlinx.datetime.LocalDate
 
 // region series cache
@@ -23,7 +23,7 @@ fun SeriesCacheDto.toEntity() = Series(
     backdropUrl = backdropUrl,
     genreIDs = genresID,
     releaseYear = releaseYear?.let { LocalDate.parse(it) },
-    popularity = popularity.orEmpty(),
+    popularity = popularity.orZero(),
     youtubeVideoId = youtubeVideoId,
     userRating = userRating,
     recentViewedAt = recentViewedAt?.toULong(),
@@ -70,7 +70,7 @@ fun SeriesDto.toEntity() = Series(
     id = id,
     name = name.orEmpty(),
     overview = overview.orEmpty(),
-    rating = voteAverage?.toFloat().orEmpty(),
+    rating = voteAverage.orZero(),
     posterUrl = posterUrl?.let {
         if (it.contains(BASE_IMAGE_URL))
             it
@@ -82,8 +82,8 @@ fun SeriesDto.toEntity() = Series(
         else BASE_IMAGE_URL + it
     }.orEmpty(),
     genreIDs = genreIds,
-    releaseYear = releaseYear?.let { LocalDate.parse(it) },
-    popularity = popularity?.toFloat().orEmpty(),
+    releaseYear = releaseYear?.let { if (it.isEmpty() || it.isBlank()) null else LocalDate.parse(it) },
+    popularity = popularity.orZero(),
     userRating = userRating,
     youtubeVideoId = null,
     recentViewedAt = null,
@@ -108,7 +108,7 @@ fun SeriesDetailsDto.toEntity() = Series(
     id = id,
     name = name.orEmpty(),
     genreIDs = genres.map { it.id },
-    rating = voteAverage?.toFloat().orEmpty(),
+    rating = voteAverage.orZero(),
     overview = overview.orEmpty(),
     posterUrl = posterUrl?.let {
         if (it.contains(BASE_IMAGE_URL))
@@ -123,7 +123,7 @@ fun SeriesDetailsDto.toEntity() = Series(
     seasons = seasons.map { it.toEntity() },
     releaseYear = releaseYear?.let { LocalDate.parse(it) },
     youtubeVideoId = youtubeVideoId.orEmpty(),
-    popularity = popularity?.toFloat().orEmpty(),
+    popularity = popularity.orZero(),
     userRating = userRating,
     recentViewedAt = null
 )

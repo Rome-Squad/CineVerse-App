@@ -11,7 +11,7 @@ data object HomeRoute
 
 fun NavGraphBuilder.homeRoute(
     navigateToCollectionList: (Int, String) -> Unit,
-    navigateToShowMoreScreen: (ShowMoreSectionType) -> Unit,
+    navigateToShowMoreScreen: (MixedMediaSectionType) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToExploreScreen: () -> Unit,

@@ -10,7 +10,7 @@ data class CollectionItemDto(
     @SerialName("overview")
     val description: String? = null,
     @SerialName("vote_average")
-    val rating: Double? = null,
+    val rating: Float? = null,
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("backdrop_path")

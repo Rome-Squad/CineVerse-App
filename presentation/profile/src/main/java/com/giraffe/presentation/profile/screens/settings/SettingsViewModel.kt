@@ -1,5 +1,6 @@
 package com.giraffe.presentation.profile.screens.settings
 
+import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.movie.usecase.SyncRecentlyViewedMoviesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
@@ -37,6 +38,7 @@ class SettingsViewModel @Inject constructor(
     private val syncRecentlyViewedMoviesUseCase: SyncRecentlyViewedMoviesUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
+    private val clearCollectionsCacheUseCase: ClearCollectionsCacheUseCase
 ) : BaseViewModel<SettingsScreenState, SettingsEffect>(SettingsScreenState()),
     SettingsInteractionListener {
 
@@ -202,9 +204,11 @@ class SettingsViewModel @Inject constructor(
         onDismissSheet()
         safeExecute(
             onSuccess = onConfirmLogoutSuccess(),
-            onError = ::onFailure,
-            block = logoutUseCase::invoke
-        )
+            onError = ::onFailure
+        ) {
+            logoutUseCase()
+            clearCollectionsCacheUseCase()
+        }
     }
 
     private fun onConfirmLogoutSuccess(): (Unit) -> Unit = {

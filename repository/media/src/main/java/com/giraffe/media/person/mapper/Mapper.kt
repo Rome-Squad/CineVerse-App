@@ -1,3 +1,4 @@
+@file:JvmName("personMappers")
 package com.giraffe.media.person.mapper
 
 import com.giraffe.media.mediaMember.entity.CastMember
@@ -22,7 +23,7 @@ import com.giraffe.media.utils.INSTAGRAM_URL
 import com.giraffe.media.utils.TIKTOK_URL
 import com.giraffe.media.utils.X_URL
 import com.giraffe.media.utils.YOUTUBE_URL
-import com.giraffe.media.utils.orEmpty
+import com.giraffe.media.utils.orZero
 import kotlinx.datetime.LocalDate
 
 fun mapToCast(
@@ -185,7 +186,7 @@ fun PersonCreditDto.toMovieEntity() = Movie(
     id = id,
     name = title.orEmpty(),
     overview = overview.orEmpty(),
-    rating = voteAverage ?: 0f,
+    rating = voteAverage.orZero(),
     duration = null,
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL))
@@ -199,7 +200,7 @@ fun PersonCreditDto.toMovieEntity() = Movie(
     }.orEmpty(),
     genresID = genreIds ?: emptyList(),
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
-    popularity = popularity.orEmpty(),
+    popularity = popularity.orZero(),
     youtubeVideoId = "",
     recentViewedAt = null,
     userRating = null
@@ -209,7 +210,7 @@ fun PersonCreditDto.toSeriesEntity() = Series(
     id = id,
     name = name.orEmpty(),
     overview = overview.orEmpty(),
-    rating = voteAverage.orEmpty(),
+    rating = voteAverage.orZero(),
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     }.orEmpty(),
@@ -220,8 +221,8 @@ fun PersonCreditDto.toSeriesEntity() = Series(
     releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
     seasons = emptyList(),
     youtubeVideoId = null,
-    popularity = popularity.orEmpty(),
-    userRating = voteAverage.orEmpty(),
+    popularity = popularity.orZero(),
+    userRating = voteAverage.orZero(),
     recentViewedAt = null
 )
 

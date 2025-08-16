@@ -1,5 +1,7 @@
 package com.giraffe.media.utils
 
-fun Float?.orEmpty() = this ?: 0f
+import kotlinx.datetime.LocalDate
 
-fun Any?.orEmpty(): String = this?.toString() ?: ""
+fun Float?.orZero() = this ?: 0f
+
+fun LocalDate?.orEmptyString(): String = this?.toString() ?: ""

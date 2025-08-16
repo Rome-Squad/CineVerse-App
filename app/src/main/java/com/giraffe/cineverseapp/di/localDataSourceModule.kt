@@ -1,5 +1,7 @@
 package com.giraffe.cineverseapp.di
 
+import com.giraffe.media.collections.LocalCollectionsDataSourceImp
+import com.giraffe.media.collections.datasource.local.CollectionsLocalDataSource
 import com.giraffe.media.explore.LocalSearchDataSourceImpl
 import com.giraffe.media.explore.cleaner.KeywordsCacheCleaner
 import com.giraffe.media.explore.cleaner.KeywordsCacheCleanerImp
@@ -57,5 +59,9 @@ abstract class LocalDataSourceBindModule {
     @Binds
     @Singleton
     abstract fun bindAuthenticationLocalDataSource(impl: AuthenticationLocalDataSourceImpl): AuthenticationLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindCollectionsLocalDataSource(impl: LocalCollectionsDataSourceImp): CollectionsLocalDataSource
 }
 

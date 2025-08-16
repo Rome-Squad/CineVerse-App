@@ -60,16 +60,29 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-
-    override suspend fun discoverMovies(
-        genreId: List<Int>?,
-        keywords: String?,
-        sortBy: String,
-        page: Int
-    ): List<Movie> {
+    override suspend fun getByGenreIds(genreIds: List<Int>, page: Int): List<Movie> {
         return safeCall {
-            movieRemote.discoverMovies(
-                genreId = genreId, keywords = keywords, sortBy = sortBy, page = page
+            movieRemote.getMoviesByGenreIds(
+                genreIds = genreIds,
+                page = page
+            ).map(MovieDto::toEntity)
+        }
+    }
+
+    override suspend fun getByKeywordsId(keywords: Int, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMoviesByKeywordsId(
+                keywords = keywords,
+                page = page
+            ).map(MovieDto::toEntity)
+        }
+    }
+
+    override suspend fun getBySort(sortBy: String, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMoviesBySort(
+                sortBy = sortBy,
+                page = page
             ).map(MovieDto::toEntity)
         }
     }
@@ -87,9 +100,10 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getGenres(): List<Genre> {
         return safeCall {
-            getLocalGenres().ifEmpty {
-                getRemoteGenres()
-            }
+            getLocalGenres()
+                .ifEmpty {
+                    getRemoteGenres()
+                }
         }
     }
 
@@ -120,7 +134,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun clearGenres() =
         safeCall { movieLocal.clearMovieGenres() }
-    // endregion
+// endregion
 
     // region Rating
     override suspend fun addRating(movieId: Int, rating: Float) {
@@ -149,7 +163,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun deleteRating(movieId: Int) =
         safeCall { movieRemote.deleteMovieRating(movieId) }
-    // endregion
+// endregion
 
     // region Popular
     override fun getLocalPopular(limit: Int): Flow<List<Movie>> {
@@ -179,7 +193,7 @@ class MovieRepositoryImpl @Inject constructor(
                 .map(MovieDto::toEntity)
         }
     }
-    // endregion
+// endregion
 
     // region Recently Released
     override fun getLocalRecentlyReleased(limit: Int): Flow<List<Movie>> {
@@ -209,7 +223,7 @@ class MovieRepositoryImpl @Inject constructor(
                 .map(MovieDto::toEntity)
         }
     }
-    // endregion
+// endregion
 
     // region Upcoming
     override fun getLocalUpcoming(limit: Int): Flow<List<Movie>> {
@@ -239,7 +253,7 @@ class MovieRepositoryImpl @Inject constructor(
                 .map(MovieDto::toEntity)
         }
     }
-    // endregion
+// endregion
 
     // region Match
     override fun getLocalMatchesYourVibe(limit: Int): Flow<List<Movie>> {
@@ -269,7 +283,7 @@ class MovieRepositoryImpl @Inject constructor(
             } ?: emptyList()
         }
     }
-    // endregion
+// endregion
 
     // region Recently Viewed
     private suspend fun addRecentlyViewed(movie: Movie) =
@@ -301,7 +315,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun clearRecentlyViewed() =
         safeCall { movieLocal.clearRecentlyViewedMovies() }
-    // endregion
+// endregion
 
     override suspend fun clearAll() {
         safeCall {

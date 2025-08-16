@@ -14,9 +14,9 @@ data class SeriesDetailsDto(
     val languages: List<String> = emptyList(),
     val genres: List<GenreDto> = emptyList(),
     val homepage: String? = null,
-    val popularity: Double? = null,
+    val popularity: Float? = null,
     @SerialName("vote_average")
-    val voteAverage: Double? = null,
+    val voteAverage: Float? = null,
     @SerialName("vote_count")
     val voteCount: Int? = null,
     @SerialName("first_air_date")

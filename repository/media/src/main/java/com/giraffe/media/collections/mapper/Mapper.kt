@@ -1,5 +1,6 @@
 package com.giraffe.media.collections.mapper
 
+import com.giraffe.media.collections.datasource.local.cache.CollectionCacheDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionItemDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionMediaTypeString
@@ -7,7 +8,7 @@ import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.entity.CollectionMediaType
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.utils.BASE_IMAGE_URL
-import com.giraffe.media.utils.orEmpty
+import com.giraffe.media.utils.orZero
 import kotlinx.datetime.LocalDate
 
 fun CollectionDto.toEntity() = Collection(
@@ -29,7 +30,7 @@ fun CollectionItemDto.toMovie() = Movie(
     id = id,
     name = title.orEmpty(),
     overview = description.orEmpty(),
-    rating = rating?.toFloat().orEmpty(),
+    rating = rating.orZero(),
     duration = null,
     posterUrl = posterPath?.let {
         if (it.contains(BASE_IMAGE_URL))
@@ -47,6 +48,22 @@ fun CollectionItemDto.toMovie() = Movie(
     recentViewedAt = null,
     popularity = 0f,
     userRating = null
+)
+
+fun CollectionCacheDto.toEntity() = Collection(
+    id = id,
+    name = name,
+    description = description,
+    itemsCount = itemsCount,
+    type = type.toCollectionType()
+)
+
+fun Collection.toCacheDto() = CollectionCacheDto(
+    id = id,
+    name = name,
+    description = description,
+    itemsCount = itemsCount,
+    type = type.name
 )
 
 fun CollectionMediaTypeString.toCollectionType() = when (this) {

@@ -20,4 +20,11 @@
     <string name="explore_all_movies_and_series">استكشف جميع الأفلام والمسلسلات حسب النوع أو ابحث عن أي شيء تريده.</string>
     <string name="back">رجوع للنافذة السابقة</string>
     <string name="star_rate">معدل النجوم</string>
+    <string name="late_night_thrills">الإثارة في وقت متأخر من الليل</string>
+    <string name="mind_bending_stories">قصص الانحناء العقل</string>
+    <string name="cinematic_masterpieces">روائع سينمائية</string>
+    <string name="family_night_picks">العائلة ليلة يختار</string>
+    <string name="based_on_true_events">بناء على الأحداث الحقيقية</string>
+    <string name="feel_good_favorites">المشاعر المفضلة</string>
+
 </resources>
