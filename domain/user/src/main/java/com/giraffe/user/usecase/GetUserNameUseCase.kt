@@ -3,22 +3,24 @@ package com.giraffe.user.usecase
 import com.giraffe.user.repository.UserRepository
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transform
 
 class GetUserNameUseCase @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val userRepository: UserRepository
 ) {
     operator fun invoke(): Flow<String> {
-        return getUserUseCase().map { user ->
+        return getUserUseCase().transform { user ->
             if (user == null) {
-                userRepository.refreshUser().username
+                val refreshedUser = userRepository.refreshUser()
+                emit(refreshedUser.username)
             } else {
-                if (user.displayName.isEmpty()) {
+                val name = if (user.displayName.isEmpty()) {
                     user.username
                 } else {
                     user.displayName
                 }
+                emit(name)
             }
         }
     }
