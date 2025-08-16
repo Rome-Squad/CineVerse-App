@@ -16,6 +16,7 @@ interface MatchApiService {
         @Query("with_runtime.lte") maxRuntime: Int?,
         @Query("primary_release_date.gte") earliestFirstAirDate: String?,
         @Query("primary_release_date.lte") latestFirstAirDate: String?,
+        @Query("with_keywords") moodId: String? = null,
     ): Response<MatchResponse<MovieDto>>
 
     @GET("discover/tv")
@@ -25,6 +26,7 @@ interface MatchApiService {
         @Query("with_runtime.lte") maxRuntime: Int?,
         @Query("primary_release_date.gte") earliestFirstAirDate: String?,
         @Query("primary_release_date.lte") latestFirstAirDate: String?,
+        @Query("with_keywords") moodId: String? = null,
     ): Response<MatchResponse<SeriesDto>>
 
 }

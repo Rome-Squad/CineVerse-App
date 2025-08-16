@@ -17,10 +17,11 @@ class MatchRepositoryImpl @Inject constructor(
         minRuntime: Int?,
         maxRuntime: Int?,
         earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        latestFirstAirDate: String?,
+        moodId: String?,
     ): List<Movie> = safeCall {
         remoteDataSource.getMatchingMovies(
-            genreIds, minRuntime, maxRuntime, earliestFirstAirDate, latestFirstAirDate
+            genreIds, minRuntime, maxRuntime, earliestFirstAirDate, latestFirstAirDate, moodId
         ).map { it.toEntity() }
     }
 
@@ -29,10 +30,11 @@ class MatchRepositoryImpl @Inject constructor(
         minRuntime: Int?,
         maxRuntime: Int?,
         earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        latestFirstAirDate: String?,
+        moodId: String?,
     ): List<Series> = safeCall {
         remoteDataSource.getMatchingSeries(
-            genreIds, minRuntime, maxRuntime, earliestFirstAirDate, latestFirstAirDate
+            genreIds, minRuntime, maxRuntime, earliestFirstAirDate, latestFirstAirDate, moodId
         ).map { it.toEntity() }
     }
 }
