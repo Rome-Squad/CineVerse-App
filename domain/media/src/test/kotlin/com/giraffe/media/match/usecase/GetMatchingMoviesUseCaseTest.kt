@@ -14,58 +14,64 @@ class GetMatchingMoviesUseCaseTest {
     private val useCase = GetMatchingMoviesUseCase(repository)
 
     @Test
-    fun `invoke should call getMatchingMovies on repository with correct parameters`() = runTest {
-        val genreIds = "28,12"
-        val minRuntime = 90
-        val maxRuntime = 120
-        val earliestDate = "2020-01-01"
-        val latestDate = "2023-01-01"
+    fun `invoke should call getMatchingMovies on repository with correct parameters including moodId`() =
+        runTest {
+            val genreIds = "28,12"
+            val minRuntime = 90
+            val maxRuntime = 120
+            val earliestDate = "2020-01-01"
+            val latestDate = "2023-01-01"
+            val moodId = "9840|173824|10183"
 
-        val expectedMovies = listOf<Movie>(
-            mockk(relaxed = true),
-            mockk(relaxed = true)
-        )
-
-        coEvery {
-            repository.getMatchingMovies(
-                genreIds,
-                minRuntime,
-                maxRuntime,
-                earliestDate,
-                latestDate
+            val expectedMovies = listOf<Movie>(
+                mockk(relaxed = true),
+                mockk(relaxed = true)
             )
-        } returns expectedMovies
 
-        val result = useCase(
-            genreIds = genreIds,
-            minRuntime = minRuntime,
-            maxRuntime = maxRuntime,
-            earliestFirstAirDate = earliestDate,
-            latestFirstAirDate = latestDate
-        )
+            coEvery {
+                repository.getMatchingMovies(
+                    genreIds,
+                    minRuntime,
+                    maxRuntime,
+                    earliestDate,
+                    latestDate,
+                    moodId
+                )
+            } returns expectedMovies
 
-        coVerify(exactly = 1) {
-            repository.getMatchingMovies(
-                genreIds,
-                minRuntime,
-                maxRuntime,
-                earliestDate,
-                latestDate
+            val result = useCase(
+                genreIds = genreIds,
+                minRuntime = minRuntime,
+                maxRuntime = maxRuntime,
+                earliestFirstAirDate = earliestDate,
+                latestFirstAirDate = latestDate,
+                moodId = moodId
             )
+
+            coVerify(exactly = 1) {
+                repository.getMatchingMovies(
+                    genreIds,
+                    minRuntime,
+                    maxRuntime,
+                    earliestDate,
+                    latestDate,
+                    moodId
+                )
+            }
+
+            assertEquals(expectedMovies, result)
         }
-
-        assertEquals(expectedMovies, result)
-    }
 
     @Test
     fun `invoke should return empty list when repository returns empty`() = runTest {
         val genreIds = "18"
+        val moodId = ""
 
         coEvery {
-            repository.getMatchingMovies(genreIds, null, null, null, null)
+            repository.getMatchingMovies(genreIds, null, null, null, null, moodId)
         } returns emptyList()
 
-        val result = useCase(genreIds)
+        val result = useCase(genreIds, moodId = moodId)
 
         assertEquals(emptyList<Movie>(), result)
     }
