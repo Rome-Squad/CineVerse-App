@@ -7,6 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -19,7 +20,7 @@ class GetPopularityMoviesUseCaseTest {
     @Test
     fun `invoke should call getPopular on repository`() = runTest {
         // given
-        coEvery { repository.getPopular(any()) } returns flowOf(emptyList())
+        coEvery { repository.getPopular(any()) } returns emptyFlow()
 
         // when
         useCase(limit)

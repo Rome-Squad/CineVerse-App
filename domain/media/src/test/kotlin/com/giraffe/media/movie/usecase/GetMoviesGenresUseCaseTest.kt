@@ -6,6 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -19,7 +20,7 @@ class GetMoviesGenresUseCaseTest {
     @Test
     fun `invoke should call getGenres on repository`() = runTest {
         //given
-        coEvery { repository.getGenres() } returns flowOf(emptyList())
+        coEvery { repository.getGenres() } returns emptyFlow()
 
         //when
         getMoviesGenresUseCase()

@@ -21,8 +21,8 @@ import com.giraffe.media.utils.safeFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -119,7 +119,7 @@ class MovieRepositoryImpl @Inject constructor(
         movieLocal.syncMovieGenres(genres.map(Genre::toCacheDto))
 
     override fun getGenresByIds(genreIds: List<Int>): Flow<List<Genre>> {
-        if (genreIds.isEmpty()) return flowOf(emptyList())
+        if (genreIds.isEmpty()) return emptyFlow()
         return safeFlow {
             movieLocal.getMovieGenresByIds(genreIds)
                 .map { it.map(MovieGenreCacheDto::toEntity) }
