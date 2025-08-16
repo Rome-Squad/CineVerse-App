@@ -117,7 +117,13 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun onFailure(error: Throwable, isNoInternet: Boolean) {
-        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
+        updateState {
+            it.copy(
+                isLoading = false,
+                isLoggingOut = false,
+                isNoInternet = isNoInternet
+            )
+        }
         sendEffect(SettingsEffect.ShowError(error))
     }
 
