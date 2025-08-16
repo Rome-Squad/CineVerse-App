@@ -1,5 +1,9 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -24,6 +30,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,6 +53,8 @@ import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.TypeOfScreen
 import com.giraffe.presentation.details.utils.showToast
 import com.giraffe.presentation.details.utils.toStringResource
+import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 @Composable
 fun MovieDetailsScreen(
@@ -97,7 +106,10 @@ private fun MovieDetailsContent(
     var imageHeight by rememberSaveable { mutableIntStateOf(288) }
     var consumedX by rememberSaveable { mutableIntStateOf(0) }
     var consumedY by rememberSaveable { mutableIntStateOf(0) }
-    var animationProgress by rememberSaveable { mutableFloatStateOf(0f) }
+
+    val animationProgress = remember { Animatable(0f) }
+    val scope = rememberCoroutineScope()
+    var lastDelta by remember { mutableIntStateOf(0) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -112,13 +124,37 @@ private fun MovieDetailsContent(
                 val newImageWidth = imageWidth + delta
                 val previousImageWidth = imageWidth
                 imageWidth = newImageWidth.coerceIn(40, 216)
+
                 val newImageHeight = imageHeight + delta
                 val previousImageHeight = imageHeight
                 imageHeight = newImageHeight.coerceIn(40, 288)
-                animationProgress = 1f - (imageHeight - 40) / 248f
+
+
+                val progress = 1f - (imageHeight - 40) / 248f
+                scope.launch {
+                    animationProgress.snapTo(progress.coerceIn(0f, 1f))
+                }
+
                 consumedX = imageWidth - previousImageWidth
                 consumedY = imageHeight - previousImageHeight
+
+                if (delta != 0) {
+                    lastDelta = delta
+                }
+
                 return Offset(consumedX.toFloat(), consumedY.toFloat())
+            }
+
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                val target = if (lastDelta < 0f) 1f else 0f
+                animationProgress.animateTo(
+                    target,
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        easing = LinearEasing
+                    )
+                )
+                return super.onPostFling(consumed, available)
             }
         }
     }
@@ -162,7 +198,7 @@ private fun MovieDetailsContent(
                             modifier = Modifier
                                 .background(Theme.color.background.screen)
                                 .padding(horizontal = 16.dp)
-                                .padding(top = 16.dp * (1f - animationProgress))
+                                .padding(top = 16.dp * (1f - animationProgress.value))
                         )
                     }
                 }
