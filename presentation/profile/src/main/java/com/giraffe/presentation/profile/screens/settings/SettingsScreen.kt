@@ -1,9 +1,12 @@
 package com.giraffe.presentation.profile.screens.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +29,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
@@ -76,10 +80,24 @@ fun SettingsScreen(
                 is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
+
+    Box(modifier = Modifier.fillMaxSize()) {
     SettingsContent(
         state = state,
         interaction = viewModel
     )
+        if (state.isLoggingOut) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Theme.color.background.screen)
+                    .clickable(enabled = false) { },
+                contentAlignment = Alignment.Center
+            ) {
+                Progress(modifier = Modifier.size(40.dp))
+            }
+        }
+    }
 }
 
 @Composable
