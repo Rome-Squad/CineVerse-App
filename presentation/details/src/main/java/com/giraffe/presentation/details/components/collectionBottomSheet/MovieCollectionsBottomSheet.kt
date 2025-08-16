@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.giraffe.designsystem.composable.BaseBottomSheet
-import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.button_type.TertiaryButton
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.components.createCollection.CreateCollectionContent
