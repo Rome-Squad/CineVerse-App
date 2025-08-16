@@ -1,21 +1,38 @@
 package com.giraffe.match.utils
 
-import android.os.Build
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
-import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Locale
+
+
+private val arabicDigits = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+private val arabicMonths = listOf(
+    "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+)
+private val englishMonths = listOf(
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+)
 
 fun LocalDate?.formatAsFullDate(): String {
     if (this == null) return ""
 
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
-        this.toJavaLocalDate().format(formatter)
-    } else {
-        "%04d-%02d-%02d".format(this.year, this.month.number, this.day)
-    }
+    val locale = Locale.getDefault()
+    val isArabic = locale.language == "ar"
+
+    val dayStr = if (isArabic) this.day.toString().map { c ->
+        if (c.isDigit()) arabicDigits[c - '0'] else c
+    }.joinToString("") else this.day.toString()
+
+    val monthStr =
+        if (isArabic) arabicMonths[this.month.number - 1] else englishMonths[this.month.number - 1]
+
+    val yearStr = if (isArabic) this.year.toString().map { c ->
+        if (c.isDigit()) arabicDigits[c - '0'] else c
+    }.joinToString("") else this.year.toString()
+
+    return "$dayStr $monthStr $yearStr"
 }
 
 
