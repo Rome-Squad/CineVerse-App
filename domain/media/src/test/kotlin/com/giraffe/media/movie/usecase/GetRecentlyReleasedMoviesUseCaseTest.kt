@@ -9,6 +9,8 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
@@ -19,28 +21,54 @@ class GetRecentlyReleasedMoviesUseCaseTest {
         GetRecentlyReleasedMoviesUseCase(repository)
 
     @Test
-    fun `invoke should call getRecentlyReleased on repository`() = runTest {
+    fun `invoke should call getRemoteRecentlyReleased on repository`() = runTest {
         // given
-        coEvery { repository.getRecentlyReleased(any(), any()) } returns emptyList()
+        coEvery { repository.getRemoteRecentlyReleased(any(), any()) } returns emptyList()
 
         // when
-        useCase(page, limit)
+        useCase.getRemoteRecentlyReleased(page, limit)
 
         // then
-        coVerify(exactly = 1) { repository.getRecentlyReleased(any(), any()) }
+        coVerify(exactly = 1) { repository.getRemoteRecentlyReleased(any(), any()) }
     }
 
     @Test
-    fun `given recently released movies, when invoke is called, then return movie list`() =
+    fun `invoke should call getLocalRecentlyReleased on repository`() = runTest {
+        // given
+        coEvery { repository.getLocalRecentlyReleased(any()) } returns flowOf(emptyList())
+
+        // when
+        useCase.getLocalRecentlyReleased(limit)
+
+        // then
+        coVerify(exactly = 1) { repository.getLocalRecentlyReleased(any()) }
+    }
+
+    @Test
+    fun `given remote recently released movies, when invoke is called, then return movie list`() =
         runTest {
             // Given
-            coEvery { repository.getRecentlyReleased(page, limit) } returns fakeMovies
+            coEvery { repository.getRemoteRecentlyReleased(page, limit) } returns fakeMovies
 
             // When
-            val actualMovies = useCase(page, limit)
+            val actualMovies = useCase.getRemoteRecentlyReleased(page, limit)
 
             // Then
             assertThat(actualMovies).isEqualTo(fakeMovies)
+        }
+
+    @Test
+    fun `given local recently released movies, when invoke is called, then return movie list`() =
+        runTest {
+            // Given
+            val expectedMovies = flow { emit(fakeMovies) }
+            coEvery { repository.getLocalRecentlyReleased(limit) } returns expectedMovies
+
+            // When
+            val actualMovies = useCase.getLocalRecentlyReleased(limit)
+
+            // Then
+            assertThat(actualMovies).isEqualTo(expectedMovies)
         }
 }
 

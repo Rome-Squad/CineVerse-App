@@ -3,11 +3,11 @@ package com.giraffe.media.movie.usecase
 import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.movie.util.fakeMovies
 import com.giraffe.media.movie.util.limit
-import com.giraffe.media.movie.util.page
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
@@ -19,23 +19,23 @@ class GetPopularityMoviesUseCaseTest {
     @Test
     fun `invoke should call getPopular on repository`() = runTest {
         // given
-        coEvery { repository.getPopular(any(), any()) } returns emptyList()
+        coEvery { repository.getLocalPopular(any()) } returns flowOf(emptyList())
 
         // when
-        useCase(page, limit)
+        useCase(limit)
 
         // then
-        coVerify(exactly = 1) { repository.getPopular(any(), any()) }
+        coVerify(exactly = 1) { repository.getLocalPopular(any()) }
     }
 
     @Test
     fun `given popular movies, when invoke is called, then return movie list`() = runTest {
         // Given
-        val expectedPopularityMovies = fakeMovies.filter { it.popularity > 0 }
-        coEvery { repository.getPopular(page, limit) } returns expectedPopularityMovies
+        val expectedPopularityMovies = flowOf(fakeMovies.filter { it.popularity > 0 })
+        coEvery { repository.getLocalPopular(limit) } returns expectedPopularityMovies
 
         // When
-        val actualMovies = useCase(page, limit)
+        val actualMovies = useCase(limit)
 
         // Then
         assertThat(actualMovies).isEqualTo(expectedPopularityMovies)
