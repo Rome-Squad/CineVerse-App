@@ -56,19 +56,19 @@ You will need to do some Installation steps first to start your tour in CineVers
    
 4. Create `secrets.properties` file in `app` module
 
-     <img width="732" height="276" alt="image" src="https://github.com/user-attachments/assets/0f52558f-556c-48b1-86c8-83be7f9a27bc" />
+     <img width="1897" height="276" alt="image" src="https://github.com/user-attachments/assets/0f52558f-556c-48b1-86c8-83be7f9a27bc" />
 
 5. Enter your API Key and Access Token in `secrets.properties`
 
-    <img width="735" height="186" alt="image" src="https://github.com/user-attachments/assets/8f52d45a-9ac3-41cb-9110-0db474571566" />
+    <img width="1897" height="186" alt="image" src="https://github.com/user-attachments/assets/8f52d45a-9ac3-41cb-9110-0db474571566" />
 
 6. change build variant to publicTest
 
-    <img width="817" height="953" alt="image" src="https://github.com/user-attachments/assets/9ded89ef-fc87-4edb-a20a-6a085100f6d5" />
+    <img width="1897" height="953" alt="image" src="https://github.com/user-attachments/assets/9ded89ef-fc87-4edb-a20a-6a085100f6d5" />
 
 7. Now you can run app and start yout tour!
 
-    <img width="1218" height="537" alt="image" src="https://github.com/user-attachments/assets/47cd20ec-61dd-4187-8c58-1499c4b8c384" />
+    <img width="1897" height="537" alt="image" src="https://github.com/user-attachments/assets/47cd20ec-61dd-4187-8c58-1499c4b8c384" />
 
    
 ## 🧠 Key Concepts
