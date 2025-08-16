@@ -69,6 +69,10 @@
     <string name="no_collections_yet">No Collections Yet</string>
     <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">Create a new collection to start saving your favorite movies and series.</string>
     <string name="create_collection">Create collection</string>
+    <string name="no_results_title">No Matches Found</string>
+    <string name="no_results_caption">We couldn’t find any movies or series matching your criteria. Try adjusting your filters or preferences.</string>
+    <string name="try_again">Try Again</string>
+    <string name="season">%1$s Season%2$s</string>
 
 
 </resources>
