@@ -13,6 +13,5 @@ data class Poster(
     enum class Type(val value: String) {
         MOVIE("movie"),
         SERIES("series"),
-        PERSON("person")
     }
 }
