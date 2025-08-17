@@ -33,7 +33,7 @@ fun GenresAndCardsSection(
             posters = posters,
             onPosterClicked = onPosterClicked,
             isListSelected = !isGridSelected,
-            contentPadding = PaddingValues(vertical = 60.dp),
+            contentPadding = PaddingValues(vertical = 60.dp, horizontal = 16.dp),
         )
         GenresSection(
             modifier = Modifier.padding(top = 12.dp, bottom = 16.dp),
