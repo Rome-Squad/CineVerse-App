@@ -11,17 +11,8 @@ class GetUserNameUseCase @Inject constructor(
 ) {
     operator fun invoke(): Flow<String> {
         return getUserUseCase().transform { user ->
-            if (user == null) {
-                val refreshedUser = userRepository.refreshUser()
-                emit(refreshedUser.username)
-            } else {
-                val name = if (user.displayName.isEmpty()) {
-                    user.username
-                } else {
-                    user.displayName
-                }
-                emit(name)
-            }
+            val userInfo = user ?: userRepository.refreshUser()
+            emit(userInfo.displayName.ifEmpty { userInfo.username })
         }
     }
 }

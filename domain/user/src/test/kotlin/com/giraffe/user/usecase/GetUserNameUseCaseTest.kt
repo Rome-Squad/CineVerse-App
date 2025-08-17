@@ -39,7 +39,7 @@ class GetUserNameUseCaseTest {
 
     @Test
     fun `when user is null should refresh and return username`() = runTest {
-        val refreshedUser = fakeUser.copy(username = "refreshed_user")
+        val refreshedUser = fakeUser.copy(displayName = "", username = "refreshed_user")
 
         every { getUserUseCase() } returns flowOf(null)
         coEvery { userRepository.refreshUser() } returns refreshedUser
