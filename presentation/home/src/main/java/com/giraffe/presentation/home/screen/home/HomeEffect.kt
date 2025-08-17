@@ -1,12 +1,12 @@
 package com.giraffe.presentation.home.screen.home
 
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 
 
 sealed interface HomeEffect {
     data class NavigateToMovieDetails(val movieId: Int) : HomeEffect
     data class NavigateToSeriesDetails(val seriesId: Int) : HomeEffect
-    data class NavigateToShowMore(val sectionType: MixedMediaSectionType) :
+    data class NavigateToCategoryMediaSection(val sectionType: CategoryMediaSectionType) :
         HomeEffect
 
     data object NavigateToExploreScreen : HomeEffect

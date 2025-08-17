@@ -11,7 +11,7 @@ import androidx.paging.cachedIn
 import com.giraffe.presentation.home.base.BasePagingSource
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.model.ShowMorePoster
+import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreRoute
 import com.giraffe.user.exception.NoInternetException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShowMoreViewModel @Inject constructor(
-    private val showMoreFactory: MixedMediaFactory,
+    private val categoryMediaFactory: CategoryMediaFactory,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<ShowMoreScreenState, ShowMoreEffect>(ShowMoreScreenState()),
     ShowMoreInteractionListener {
@@ -48,7 +48,7 @@ class ShowMoreViewModel @Inject constructor(
                 BasePagingSource(
                     onError = ::onLoadByStrategyFail
                 ) { page ->
-                    showMoreFactory.createStrategy(sectionType).loadData(page, PAGE_SIZE)
+                    categoryMediaFactory.createStrategy(sectionType).loadData(page, PAGE_SIZE)
                 }
             }
 
@@ -64,7 +64,7 @@ class ShowMoreViewModel @Inject constructor(
         }
     }
 
-    private fun onLoadByStrategySuccess(mediaFlow: Flow<PagingData<ShowMorePoster>>) {
+    private fun onLoadByStrategySuccess(mediaFlow: Flow<PagingData<PosterMedia>>) {
         updateState {
             it.copy(
                 sectionType = sectionType,

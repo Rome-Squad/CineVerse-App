@@ -1,13 +1,13 @@
 package com.giraffe.presentation.home.screen.home
 
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 
 interface HomeInteractionListener {
 
     fun onMediaClicked(mediaId: Int, mediaType: MediaType)
 
-    fun onSeeMoreClicked(sectionType: MixedMediaSectionType)
+    fun onSeeMoreClicked(sectionType: CategoryMediaSectionType)
 
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)
 
@@ -21,5 +21,5 @@ interface HomeInteractionListener {
 
     fun onCollectionClick(collectionId: Int, collectionName: String)
 
-    fun onFeaturesCollectionClicked(sectionType: MixedMediaSectionType)
+    fun onFeaturesCollectionClicked(sectionType: CategoryMediaSectionType)
 }

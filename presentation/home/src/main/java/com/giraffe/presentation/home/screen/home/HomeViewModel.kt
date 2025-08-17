@@ -20,7 +20,7 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
@@ -352,17 +352,17 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onFeaturesCollectionClicked(sectionType: MixedMediaSectionType) {
+    override fun onFeaturesCollectionClicked(sectionType: CategoryMediaSectionType) {
         sendEffect(
-            HomeEffect.NavigateToShowMore(
+            HomeEffect.NavigateToCategoryMediaSection(
                 sectionType = sectionType
             )
         )
     }
 
-    override fun onSeeMoreClicked(sectionType: MixedMediaSectionType) {
+    override fun onSeeMoreClicked(sectionType: CategoryMediaSectionType) {
         sendEffect(
-            HomeEffect.NavigateToShowMore(
+            HomeEffect.NavigateToCategoryMediaSection(
                 sectionType = sectionType
             )
         )

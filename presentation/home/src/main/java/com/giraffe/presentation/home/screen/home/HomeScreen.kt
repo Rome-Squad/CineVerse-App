@@ -32,14 +32,14 @@ import com.giraffe.presentation.home.components.ScreenState
 import com.giraffe.presentation.home.components.YourCollectionsSections
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.utils.EffectListener
 import com.giraffe.presentation.home.utils.showToast
 import com.giraffe.presentation.home.utils.toStringRes
 
 @Composable
 fun HomeScreen(
-    navigateToShowMoreScreen: (MixedMediaSectionType) -> Unit,
+    navigateToCategoryMediaSection: (CategoryMediaSectionType) -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
     navigateToYourCollection: () -> Unit,
@@ -68,7 +68,7 @@ fun HomeScreen(
 
             is HomeEffect.NavigateToYourCollection -> navigateToYourCollection()
             is HomeEffect.NavigateToMatchScreen -> navigateToMatchScreen()
-            is HomeEffect.NavigateToShowMore -> navigateToShowMoreScreen(effect.sectionType)
+            is HomeEffect.NavigateToCategoryMediaSection -> navigateToCategoryMediaSection(effect.sectionType)
 
             is HomeEffect.ShowError -> context.showToast(effect.error.toStringRes())
         }
@@ -135,7 +135,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
-                                sectionType = MixedMediaSectionType.RECENTLY_RELEASED
+                                sectionType = CategoryMediaSectionType.RECENTLY_RELEASED
                             )
                         }
                     )
@@ -163,7 +163,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
-                                sectionType = MixedMediaSectionType.UPCOMING_MOVIES
+                                sectionType = CategoryMediaSectionType.UPCOMING_MOVIES
                             )
                         }
                     )
@@ -179,7 +179,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
-                                sectionType = MixedMediaSectionType.MATCHES_YOUR_VIBES
+                                sectionType = CategoryMediaSectionType.MATCHES_YOUR_VIBES
                             )
                         }
                     )
@@ -202,7 +202,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
-                                sectionType = MixedMediaSectionType.TOP_RATED_TV_SHOWS
+                                sectionType = CategoryMediaSectionType.TOP_RATED_TV_SHOWS
                             )
                         }
                     )
@@ -218,7 +218,7 @@ fun HomeContent(
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
-                                sectionType = MixedMediaSectionType.RECENTLY_VIEWED
+                                sectionType = CategoryMediaSectionType.RECENTLY_VIEWED
                             )
                         }
                     )
@@ -251,7 +251,7 @@ fun HomeContent(
 fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
-        override fun onSeeMoreClicked(sectionType: MixedMediaSectionType) {}
+        override fun onSeeMoreClicked(sectionType: CategoryMediaSectionType) {}
 
         override fun onFeaturedCollectionClicked(
             collectionId: Int,
@@ -265,7 +265,7 @@ fun HomeContentPreview() {
         override fun onRetryClick() {}
 
         override fun onCollectionClick(collectionId: Int, collectionName: String) {}
-        override fun onFeaturesCollectionClicked(sectionType: MixedMediaSectionType) {}
+        override fun onFeaturesCollectionClicked(sectionType: CategoryMediaSectionType) {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(

@@ -11,12 +11,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ShowMoreRoute(
-    val sectionType: MixedMediaSectionType
+    val sectionType: CategoryMediaSectionType
 )
 
 @Keep
 @Serializable
-enum class MixedMediaSectionType {
+enum class CategoryMediaSectionType {
     RECENTLY_RELEASED,
     TOP_RATED_TV_SHOWS,
     UPCOMING_MOVIES,
@@ -46,7 +46,7 @@ enum class MixedMediaSectionType {
     }
 }
 
-fun NavController.navigateToShowMore(sectionType: MixedMediaSectionType) {
+fun NavController.navigateToShowMore(sectionType: CategoryMediaSectionType) {
     navigate(ShowMoreRoute(sectionType = sectionType))
 }
 

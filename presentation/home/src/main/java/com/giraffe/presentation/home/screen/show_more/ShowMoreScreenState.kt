@@ -2,15 +2,15 @@ package com.giraffe.presentation.home.screen.show_more
 
 
 import androidx.paging.PagingData
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 data class ShowMoreScreenState(
     val isLoading: Boolean = false,
-    val mediaFlow: Flow<PagingData<ShowMorePoster>> = flowOf(),
-    val sectionType: MixedMediaSectionType? = null,
+    val mediaFlow: Flow<PagingData<PosterMedia>> = flowOf(),
+    val sectionType: CategoryMediaSectionType? = null,
     val isListSelected: Boolean = false,
     val isNoInternet: Boolean = false
 )
