@@ -7,6 +7,7 @@ data class RatingScreenState(
     val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
     val isTipVisible: Boolean = true,
+    val isLoggedIn: Boolean = false,
     val selectedTabIndex: Int = 0,
     val movieGenres: List<Genre> = emptyList(),
     val seriesGenres: List<Genre> = emptyList(),
