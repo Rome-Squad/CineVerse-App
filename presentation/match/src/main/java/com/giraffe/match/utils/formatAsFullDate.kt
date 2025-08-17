@@ -22,7 +22,7 @@ fun LocalDate?.formatAsFullDate(): String {
     val yearStr = String.format(Locale.getDefault(), "%d", this.year)
 
 
-    return "$dayStr $monthStr $yearStr"
+    return "$yearStr, $monthStr $dayStr"
 }
 
 
