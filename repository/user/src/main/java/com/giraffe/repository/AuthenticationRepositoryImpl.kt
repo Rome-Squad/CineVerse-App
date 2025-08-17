@@ -18,7 +18,8 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun login(username: String, password: String) = safeCall {
         val requestToken = authRemoteDataSource.createRequestToken()
-        val validatedToken = authRemoteDataSource.validateTokenWithLogin(requestToken, username, password)
+        val validatedToken =
+            authRemoteDataSource.validateTokenWithLogin(requestToken, username, password)
         val sessionId = authRemoteDataSource.createSession(validatedToken)
 
         localDataSource.saveSessionId(
@@ -26,8 +27,18 @@ class AuthenticationRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun loginAsGuest() {
+        val sessionId = authRemoteDataSource.createGuestSession()
+        localDataSource.saveSessionId(
+            encryptSessionId(sessionId),
+        )
+        localDataSource.setTheUserAsGuest()
+    }
+
+    override suspend fun isUserGuest() = safeCall { localDataSource.isUserGuest() }
+
     override suspend fun isLoggedIn() = safeCall { localDataSource.isLoggedIn() }
-  
+
     override suspend fun logout() = safeCall {
 
         val encryptedBase64 = localDataSource.getSessionId()

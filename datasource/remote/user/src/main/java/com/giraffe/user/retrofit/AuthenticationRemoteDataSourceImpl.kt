@@ -29,4 +29,6 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         return safeCall { userApiService.deleteSession(requestBody) }
     }
 
+    override suspend fun createGuestSession() =
+        safeCall { userApiService.createGuestSession() }.guestSessionId
 }

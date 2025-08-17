@@ -11,4 +11,5 @@ interface AuthenticationRemoteDataSource {
 
     suspend fun deleteSession(sessionId: String)
 
+    suspend fun createGuestSession(): String
 }

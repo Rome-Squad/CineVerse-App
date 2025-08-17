@@ -4,4 +4,6 @@ interface AuthRepository {
     suspend fun login(username: String, password: String)
     suspend fun isLoggedIn(): Boolean
     suspend fun logout()
+    suspend fun loginAsGuest()
+    suspend fun isUserGuest(): Boolean
 }
