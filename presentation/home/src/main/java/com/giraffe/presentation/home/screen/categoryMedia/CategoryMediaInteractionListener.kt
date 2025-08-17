@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.category_media
+package com.giraffe.presentation.home.screen.categoryMedia
 
 
 import com.giraffe.presentation.home.model.MediaType

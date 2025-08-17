@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.screen.category_media.CategoryMediaScreen
+import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,38 +1,38 @@
-package com.giraffe.presentation.home.screen.category_media.strategy
+package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
-import com.giraffe.media.movie.usecase.GetMoviesByKeywordsIdUseCase
+import com.giraffe.media.movie.usecase.GetMoviesBySortUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetSeriesByKeywordsIdUseCase
+import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.category_media.CategoryMediaStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
-class BasedOnTrueEventsStrategy(
-    private val getSeriesByKeywordsIdUseCase: GetSeriesByKeywordsIdUseCase,
+class CinematicMasterpiecesStrategy(
+    private val getSeriesBySortUseCase: GetSeriesBySortUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
-    private val getMoviesByKeywordsIdUseCase: GetMoviesByKeywordsIdUseCase,
+    private val getMoviesBySortUseCase: GetMoviesBySortUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
 ) : CategoryMediaStrategy {
     override suspend fun loadData(
         page: Int,
         pageSize: Int
     ): List<PosterMedia> {
-        val keywordIdForTrueEvents = 9672
+        val sortBy = "vote_average.desc"
         val moviesResult =
-            getMoviesByKeywordsIdUseCase(
+            getMoviesBySortUseCase(
                 page = page,
-                keywords = keywordIdForTrueEvents
+                sortBy = sortBy
             ).map { movie ->
                 movie.toShowMorePoster(
                     getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
                 )
             }
         val seriesResult =
-            getSeriesByKeywordsIdUseCase(
+            getSeriesBySortUseCase(
                 page = page,
-                keywords = keywordIdForTrueEvents
+                sortBy = sortBy
             ).map { series ->
                 series.toShowMorePoster(
                     getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
@@ -41,6 +41,6 @@ class BasedOnTrueEventsStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = CategoryMediaSectionType.BASED_ON_TRUE_EVENTS
+    override fun getSectionType() = CategoryMediaSectionType.CINEMATIC_MASTERPIECE
 
 }

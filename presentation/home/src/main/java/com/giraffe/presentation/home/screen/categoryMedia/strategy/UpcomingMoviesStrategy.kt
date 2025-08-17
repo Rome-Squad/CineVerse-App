@@ -1,9 +1,9 @@
-package com.giraffe.presentation.home.screen.category_media.strategy
+package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.category_media.CategoryMediaStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class UpcomingMoviesStrategy(

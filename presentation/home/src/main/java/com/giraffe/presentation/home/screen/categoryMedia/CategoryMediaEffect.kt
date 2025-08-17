@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.category_media
+package com.giraffe.presentation.home.screen.categoryMedia
 
 sealed class CategoryMediaEffect {
     data class NavigateToMovieDetails(val movieId: Int) : CategoryMediaEffect()
