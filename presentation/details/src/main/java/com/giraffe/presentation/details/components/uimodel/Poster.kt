@@ -1,4 +1,4 @@
-package com.giraffe.designsystem.uimodel
+package com.giraffe.presentation.details.components.uimodel
 
 data class Poster(
     val id: Int,
