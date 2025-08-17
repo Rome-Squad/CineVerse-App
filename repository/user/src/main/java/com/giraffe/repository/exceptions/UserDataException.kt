@@ -19,6 +19,8 @@ class CorruptDatabaseDataException : UserDataException()
 class DiskAccessDataException : UserDataException()
 class UnknownNetworkDataException : UserDataException()
 
+class CreateGuestSessionException : UserDataException()
+
 class ApiDataException(val code: Int) : UserDataException()
 
 

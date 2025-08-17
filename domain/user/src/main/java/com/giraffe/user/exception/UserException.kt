@@ -12,3 +12,5 @@ class FailedToGetUserName() : UserException()
 
 class NoInternetException : UserException()
 class AccessDeniedException : UserException()
+
+class GuestSessionException : UserException()
