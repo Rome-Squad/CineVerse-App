@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.show_more
+package com.giraffe.presentation.home.screen.categoryMedia
 
 
 import androidx.compose.foundation.background

@@ -1,18 +1,18 @@
-package com.giraffe.presentation.home.screen.show_more
+package com.giraffe.presentation.home.screen.categoryMedia
 
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.strategy.BasedOnTrueEventsStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.CinematicMasterpiecesStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.FamilyNightPicksStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.FeelGoodPreferencesStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.LateNightThrillsStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.MatchesYourVibesStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.MindBendingStoriesStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyReleasedStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyViewedStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.TopRatedTvShowsStrategy
-import com.giraffe.presentation.home.screen.show_more.strategy.UpcomingMoviesStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.BasedOnTrueEventsStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.CinematicMasterpiecesStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.FamilyNightPicksStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.FeelGoodPreferencesStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.LateNightThrillsStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.MatchesYourVibesStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.MindBendingStoriesStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.RecentlyReleasedStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.RecentlyViewedStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.TopRatedTvShowsStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.strategy.UpcomingMoviesStrategy
 
 interface CategoryMediaStrategy {
     suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia>

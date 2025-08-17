@@ -1,6 +1,7 @@
 package com.giraffe.presentation.home.components
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -37,53 +38,55 @@ fun PosterVertically(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
+    AnimatedVisibility(poster.name.isNotBlank() && poster.name.isNotEmpty()) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            with(sharedTransitionScope) {
 
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        with(sharedTransitionScope) {
-
-            Box(
-                modifier = modifier
-                    .clip(RoundedCornerShape(Theme.radius.lg))
-                    .background(Theme.color.background.card)
-                    .clickable(onClick = dropUnlessResumed { onClick() })
-                    .aspectRatio(0.74f),
-                contentAlignment = Alignment.Center
-            ) {
-                SafeIslamicImage(
-                    imageUrl = poster.imageUri,
-                    contentDescription = poster.name,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope
+                Box(
+                    modifier = modifier
+                        .clip(RoundedCornerShape(Theme.radius.lg))
+                        .background(Theme.color.background.card)
+                        .clickable(onClick = dropUnlessResumed { onClick() })
+                        .aspectRatio(0.74f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    SafeIslamicImage(
+                        imageUrl = poster.imageUri,
+                        contentDescription = poster.name,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                    )
+                    if (poster.rating > 0) {
+                        Rating(
+                            value = poster.rating,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(end = 8.dp, top = 8.dp)
+                                .sharedElement(
+                                    sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
+                                    animatedVisibilityScope = animatedVisibilityScope
+                                )
                         )
-                )
-                Rating(
-                    value = poster.rating,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(end = 8.dp, top = 8.dp)
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
+                    }
+                }
 
+
+                Text(
+                    text = poster.name,
+                    style = Theme.textStyle.body.md.medium,
+                    color = Theme.color.shade.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.sharedElement(
+                        sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
                 )
             }
-
-
-            Text(
-                text = poster.name,
-                style = Theme.textStyle.body.md.medium,
-                color = Theme.color.shade.secondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.sharedElement(
-                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
-                    animatedVisibilityScope = animatedVisibilityScope
-                )
-            )
         }
     }
 }
