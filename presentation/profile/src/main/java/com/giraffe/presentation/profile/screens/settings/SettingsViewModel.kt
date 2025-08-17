@@ -14,6 +14,7 @@ import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsUserGuestUseCase
 import com.giraffe.user.usecase.LogoutUseCase
 import com.giraffe.user.usecase.SetContentPreferenceUseCase
 import com.giraffe.user.usecase.SetDarkModeUseCase
@@ -26,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isUserGuestUseCase: IsUserGuestUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val getDarkModeUseCase: GetDarkModeUseCase,
     private val setDarkModeUseCase: SetDarkModeUseCase,
@@ -63,8 +65,18 @@ class SettingsViewModel @Inject constructor(
 
     private fun handleLoginStatusSuccess(isLoggedIn: Boolean) {
         updateState { it.copy(isLoading = false, isNoInternet = false, isLoggedIn = isLoggedIn) }
-        if (isLoggedIn) getUserProfile()
+        safeExecute(
+            onError = ::onFailure,
+            onSuccess = ::handleIsUserGuestSuccess,
+            block = isUserGuestUseCase::invoke
+        )
     }
+
+    private fun handleIsUserGuestSuccess(isUserGuest: Boolean) {
+        updateState { it.copy(isLoading = false, isNoInternet = false, isUserGuest = isUserGuest) }
+        if (!isUserGuest && state.value.isLoggedIn) getUserProfile()
+    }
+
 
     private fun observeTheme() {
         safeCollect(

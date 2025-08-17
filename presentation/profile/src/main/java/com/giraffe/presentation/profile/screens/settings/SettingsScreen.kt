@@ -47,15 +47,15 @@ fun SettingsScreen(
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     EffectListener(viewModel.effect) { effect ->
-            when (effect) {
-                SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
-                SettingsEffect.NavigateToHistory -> onNavigateToHistory()
-                SettingsEffect.NavigateToLogin -> onNavigateToLogin()
-                SettingsEffect.NavigateToMyCollections -> onNavigateToMyCollections()
-                SettingsEffect.NavigateToRatings -> onNavigateToRatings()
-                is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
-            }
+        when (effect) {
+            SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
+            SettingsEffect.NavigateToHistory -> onNavigateToHistory()
+            SettingsEffect.NavigateToLogin -> onNavigateToLogin()
+            SettingsEffect.NavigateToMyCollections -> onNavigateToMyCollections()
+            SettingsEffect.NavigateToRatings -> onNavigateToRatings()
+            is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
         }
+    }
     SettingsContent(
         state = state,
         interaction = viewModel
@@ -91,11 +91,15 @@ private fun SettingsContent(
                 .background(
                     color = Theme.color.background.screen
                 ),
-            userProfileImage = if (state.isLoggedIn) state.user.imageUrl else "",
-            userDisplayName = if (state.isLoggedIn) state.user.name else stringResource(R.string.login_or_sign_up),
-            username = if (state.isLoggedIn) "@${state.user.username}" else stringResource(R.string.to_personalize_your_experience),
+            userProfileImage = if (state.isLoggedIn && !state.isUserGuest) state.user.imageUrl else "",
+            userDisplayName = if (state.isLoggedIn && !state.isUserGuest) state.user.name else stringResource(
+                R.string.login_or_sign_up
+            ),
+            username = if (state.isLoggedIn && !state.isUserGuest) "@${state.user.username}" else stringResource(
+                R.string.to_personalize_your_experience
+            ),
             onRowClick = {
-                if (state.isLoggedIn) interaction.onEditProfileClick() else interaction.onLoginClick()
+                if (state.isLoggedIn && !state.isUserGuest) interaction.onEditProfileClick() else interaction.onLoginClick()
             }
         )
         ProfileShortcuts(
@@ -140,11 +144,11 @@ private fun SettingsContent(
                 hasButton = true,
                 onRowItemClick = interaction::onContentPreferencesClick,
                 isDanger = false,
-                hasBottomDivider = state.isLoggedIn,
+                hasBottomDivider = state.isLoggedIn && !state.isUserGuest,
                 onSwitchChange = {},
             )
 
-            if (state.isLoggedIn) {
+            if (state.isLoggedIn && !state.isUserGuest) {
                 MenuItem(
                     icon = Theme.icons.dueTone.logout,
                     title = stringResource(R.string.Logout),
