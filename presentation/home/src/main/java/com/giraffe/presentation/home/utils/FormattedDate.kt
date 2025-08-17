@@ -8,7 +8,7 @@ import kotlinx.datetime.toJavaLocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-fun LocalDate?.formatAsFullDate(): String {
+fun LocalDate?.formatDate(): String {
     if (this == null) return ""
 
     val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
