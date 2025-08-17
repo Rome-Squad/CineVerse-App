@@ -38,11 +38,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.NoInternetScreen
-import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.components.MainCastDetails
+import com.giraffe.presentation.details.components.PosterListSection
 import com.giraffe.presentation.details.components.gallery.GallerySection
 import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.showToast
