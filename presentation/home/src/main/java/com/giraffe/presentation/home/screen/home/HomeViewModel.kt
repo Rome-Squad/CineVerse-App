@@ -1,9 +1,9 @@
 package com.giraffe.presentation.home.screen.home
 
-import android.accounts.NetworkErrorException
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
+import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
@@ -81,7 +81,7 @@ class HomeViewModel @Inject constructor(
     private fun isLoggedIn() {
         safeExecute(
             onSuccess = ::onIsLoggedInSuccess,
-            onError = ::onFail,
+            onError = ::onError,
             block = { isLoggedInUseCase() }
         )
     }
@@ -94,7 +94,7 @@ class HomeViewModel @Inject constructor(
     private fun getUserName() {
         safeExecute(
             onSuccess = ::getUseNameSuccess,
-            onError = ::onFail,
+            onError = ::onError,
             block = { getUserNameUseCase() }
         )
     }
@@ -106,7 +106,7 @@ class HomeViewModel @Inject constructor(
     private fun getYourCollections() {
         safeCollect(
             onEmitNewValue = ::onGetYourCollectionsSuccess,
-            onError = ::onFail,
+            onError = ::onError,
             block = getCollectionsUseCase::invoke
         )
     }
@@ -124,12 +124,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             safeExecute(
                 onSuccess = ::onGetPopularityMoviesSuccess,
-                onError = ::onFail,
+                onError = ::onError,
                 block = { getPopularMoviesUseCase() }
             )
             safeExecute(
                 onSuccess = ::onGetPopularitySeriesSuccess,
-                onError = ::onFail,
+                onError = ::onError,
                 block = { getPopularSeriesUseCase() }
             )
         }
@@ -169,12 +169,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedMoviesSuccess,
-                onError = ::onFail,
+                onError = ::onError,
                 block = { getRecentlyReleasedMoviesUseCase() }
             )
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
-                onError = ::onFail,
+                onError = ::onError,
                 block = { getRecentlyReleasedSeriesUseCase() }
             )
         }
@@ -201,7 +201,7 @@ class HomeViewModel @Inject constructor(
     private fun getTopRatedSeries() {
         safeExecute(
             onSuccess = ::onGetTopRatedSeriesSuccess,
-            onError = ::onFail,
+            onError = ::onError,
             block = { getTopRatedSeriesUseCase() }
         )
     }
@@ -218,7 +218,7 @@ class HomeViewModel @Inject constructor(
     private fun getUpcomingMovies() {
         safeExecute(
             onSuccess = ::onGetUpcomingMoviesSuccess,
-            onError = ::onFail,
+            onError = ::onError,
             block = { getUpcomingMoviesUseCase() }
         )
     }
@@ -236,12 +236,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             safeCollect(
                 onEmitNewValue = ::onGetRecentlyMoviesSuccess,
-                onError = ::onFail,
+                onError = ::onError,
                 block = getRecentlyViewedMoviesUseCase::invoke
             )
             safeCollect(
                 onEmitNewValue = ::onGetRecentlySeriesSuccess,
-                onError = ::onFail,
+                onError = ::onError,
                 block = getRecentlyViewedSeriesUseCase::invoke
             )
         }
@@ -268,13 +268,13 @@ class HomeViewModel @Inject constructor(
     private fun getMatchesYourVibe() {
         safeExecute(
             onSuccess = ::onGetMatchesYourVibeSeriesSuccess,
-            onError = ::onFail,
+            onError = ::onError,
         ) {
             getMatchesYourVibeSeriesUseCase()
         }
         safeExecute(
             onSuccess = ::onGetMatchesYourVibeMoviesSuccess,
-            onError = ::onFail,
+            onError = ::onError,
         ) {
             getMatchesYourVibeMoviesUseCase()
         }
@@ -296,14 +296,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onFail(error: Throwable) = updateState {
+    private fun onError(error: Throwable) = updateState {
         it.copy(
             isLoadingRecentlyReleased = false,
             isLoadingUpcomingMovies = false,
             isLoadingPopularity = false,
             isLoadingTopRatedSeries = false,
             isLoadingUserName = false,
-            isNoInternet = if (error is NetworkErrorException) true else state.value.isNoInternet
+            isNoInternet = error is NoInternetException
         )
     }
 
