@@ -103,8 +103,10 @@ fun HomeContent(
                     .background(Theme.color.background.screen)
                     .padding(start = 16.dp),
                 image = painterResource(Theme.icons.colored.logo),
-                caption = if (state.isLoggedIn) stringResource(R.string.welcome) else null,
-                title = if (state.isLoggedIn) state.userName else stringResource(com.giraffe.designsystem.R.string.home)
+                caption = if (state.isLoggedIn && !state.isUserGuest) stringResource(R.string.welcome) else null,
+                title = if (state.isLoggedIn && !state.isUserGuest) state.userName else stringResource(
+                    com.giraffe.designsystem.R.string.home
+                )
             )
 
             HorizontalDivider()

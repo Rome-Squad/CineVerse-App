@@ -28,4 +28,5 @@ data class HomeScreenState(
     val isLoadingTopRatedSeries: Boolean = true,
     val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
+    val isUserGuest: Boolean = false
 )

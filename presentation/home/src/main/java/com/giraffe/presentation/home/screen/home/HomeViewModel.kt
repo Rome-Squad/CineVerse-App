@@ -26,6 +26,7 @@ import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
 import com.giraffe.user.usecase.GetUserNameUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsUserGuestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +48,8 @@ class HomeViewModel @Inject constructor(
     private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
-    private val isLoggedInUseCase: IsLoggedInUseCase
+    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isUserGuestUseCase: IsUserGuestUseCase
 ) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
@@ -68,6 +70,7 @@ class HomeViewModel @Inject constructor(
             )
         }
         isLoggedIn()
+        isUserGuest()
         getPopularity()
         getRecentlyReleased()
         getUpcomingMovies()
@@ -89,6 +92,18 @@ class HomeViewModel @Inject constructor(
 
     private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
         updateState { it.copy(isLoggedIn = isLoggedIn) }
+    }
+
+    private fun isUserGuest() {
+        safeExecute(
+            onSuccess = ::onIsUserGuestSuccess,
+            onError = ::onError,
+            block = { isUserGuestUseCase() }
+        )
+    }
+
+    private fun onIsUserGuestSuccess(isUserGuest: Boolean) {
+        updateState { it.copy(isUserGuest = isUserGuest) }
     }
 
     private fun getUserName() {
