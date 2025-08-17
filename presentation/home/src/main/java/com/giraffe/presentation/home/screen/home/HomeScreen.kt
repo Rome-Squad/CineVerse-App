@@ -11,9 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -81,7 +78,6 @@ fun HomeScreen(
         state = state,
         interactionListener = viewModel
     )
-
 }
 
 @Composable
@@ -89,10 +85,9 @@ fun HomeContent(
     state: HomeScreenState,
     interactionListener: HomeInteractionListener
 ) {
-    var topAppBarHeight by remember { mutableStateOf(0.dp) }
 
     ScreenState(
-        isLoading = state.isLoading,
+        isLoading = state.isLoadingPopularity || state.isLoadingRecentlyReleased || state.isLoadingUpcomingMovies || state.isLoadingTopRatedSeries,
         isNoInternet = state.isNoInternet,
         onRetryClick = interactionListener::onRetryClick
     ) {
@@ -118,7 +113,6 @@ fun HomeContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(top = topAppBarHeight)
             ) {
                 AnimatedVisibility(state.popularity.isNotEmpty()) {
                     Carousel(
@@ -140,7 +134,7 @@ fun HomeContent(
                         uiModels = state.recentlyReleased,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
-                            interactionListener.onSeeAllRecentlyReleasedClicked(
+                            interactionListener.onSeeMoreClicked(
                                 sectionType = MixedMediaSectionType.RECENTLY_RELEASED
                             )
                         }
@@ -168,7 +162,7 @@ fun HomeContent(
                         uiModels = state.upcomingMovies,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
-                            interactionListener.onSeeAllUpcomingClicked(
+                            interactionListener.onSeeMoreClicked(
                                 sectionType = MixedMediaSectionType.UPCOMING_MOVIES
                             )
                         }
@@ -184,7 +178,7 @@ fun HomeContent(
                         uiModels = state.matchVibes,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
-                            interactionListener.onMatchYourVibeClicked(
+                            interactionListener.onSeeMoreClicked(
                                 sectionType = MixedMediaSectionType.MATCHES_YOUR_VIBES
                             )
                         }
@@ -194,7 +188,7 @@ fun HomeContent(
                 CollectionListSection(
                     modifier = Modifier.padding(vertical = 16.dp),
                     collectionItems = state.featuredCollections,
-                    onCollectionItemClick = interactionListener::onLateNightThrillsFeatureClicked
+                    onCollectionItemClick = interactionListener::onFeaturesCollectionClicked
                 )
 
                 AnimatedVisibility(state.topRated.isNotEmpty()) {
@@ -207,7 +201,7 @@ fun HomeContent(
                         uiModels = state.topRated,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
-                            interactionListener.onSeeAllTopRatedClicked(
+                            interactionListener.onSeeMoreClicked(
                                 sectionType = MixedMediaSectionType.TOP_RATED_TV_SHOWS
                             )
                         },
@@ -223,7 +217,7 @@ fun HomeContent(
                         uiModels = state.recentlyViewed,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
-                            interactionListener.onSeeAllRecentlyViewedClicked(
+                            interactionListener.onSeeMoreClicked(
                                 sectionType = MixedMediaSectionType.RECENTLY_VIEWED
                             )
                         }
@@ -257,15 +251,7 @@ fun HomeContent(
 fun HomeContentPreview() {
     val interactionObject = object : HomeInteractionListener {
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
-        override fun onSeeAllRecentlyReleasedClicked(sectionType: MixedMediaSectionType) {}
-
-        override fun onSeeAllTopRatedClicked(sectionType: MixedMediaSectionType) {}
-
-        override fun onSeeAllUpcomingClicked(sectionType: MixedMediaSectionType) {}
-
-        override fun onSeeAllRecentlyViewedClicked(sectionType: MixedMediaSectionType) {}
-
-        override fun onMatchYourVibeClicked(sectionType: MixedMediaSectionType) {}
+        override fun onSeeMoreClicked(sectionType: MixedMediaSectionType) {}
 
         override fun onFeaturedCollectionClicked(
             collectionId: Int,
@@ -279,7 +265,7 @@ fun HomeContentPreview() {
         override fun onRetryClick() {}
 
         override fun onCollectionClick(collectionId: Int, collectionName: String) {}
-        override fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType) {}
+        override fun onFeaturesCollectionClicked(sectionType: MixedMediaSectionType) {}
     }
     CineVerseTheme(isDarkTheme = false) {
         HomeContent(

@@ -7,15 +7,7 @@ interface HomeInteractionListener {
 
     fun onMediaClicked(mediaId: Int, mediaType: MediaType)
 
-    fun onSeeAllRecentlyReleasedClicked(sectionType: MixedMediaSectionType)
-
-    fun onSeeAllTopRatedClicked(sectionType: MixedMediaSectionType)
-
-    fun onSeeAllUpcomingClicked(sectionType: MixedMediaSectionType)
-
-    fun onSeeAllRecentlyViewedClicked(sectionType: MixedMediaSectionType)
-
-    fun onMatchYourVibeClicked(sectionType: MixedMediaSectionType)
+    fun onSeeMoreClicked(sectionType: MixedMediaSectionType)
 
     fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String)
 
@@ -29,5 +21,5 @@ interface HomeInteractionListener {
 
     fun onCollectionClick(collectionId: Int, collectionName: String)
 
-    fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType)
+    fun onFeaturesCollectionClicked(sectionType: MixedMediaSectionType)
 }

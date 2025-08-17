@@ -6,6 +6,6 @@ import javax.inject.Inject
 class GetUpcomingMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
-    suspend operator fun invoke(page: Int, limit: Int = 10) =
+    suspend operator fun invoke(page: Int = 1, limit: Int = 10) =
         movieRepository.getUpcoming(page = page, limit = limit)
 }

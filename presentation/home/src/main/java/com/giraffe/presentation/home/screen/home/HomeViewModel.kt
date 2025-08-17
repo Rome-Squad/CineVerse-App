@@ -7,7 +7,6 @@ import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.GetPopularMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
@@ -35,7 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
-    private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
+    private val getPopularSeriesUseCase: GetPopularitySeriesUseCase,
     private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
@@ -43,10 +42,9 @@ class HomeViewModel @Inject constructor(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
     private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val getRecentlyViewedSeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getMatchesYourVibeMoviesUseCase: GetMatchesYourVibeMoviesUseCase,
     private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
@@ -57,6 +55,28 @@ class HomeViewModel @Inject constructor(
         loadHomeScreenData()
     }
 
+
+    private fun loadHomeScreenData() {
+        updateState {
+            it.copy(
+                isNoInternet = false,
+                isLoadingPopularity = true,
+                isLoadingRecentlyReleased = true,
+                isLoadingUpcomingMovies = true,
+                isLoadingTopRatedSeries = true
+            )
+        }
+        isLoggedIn()
+        getPopularity()
+        getRecentlyReleased()
+        getUpcomingMovies()
+        getMatchesYourVibe()
+        getTopRatedSeries()
+        getRecentViewed()
+        getUserName()
+        getYourCollections()
+    }
+
     private fun isLoggedIn() {
         safeExecute(
             onSuccess = ::onIsLoggedInSuccess,
@@ -64,6 +84,7 @@ class HomeViewModel @Inject constructor(
             block = { isLoggedInUseCase() }
         )
     }
+
 
     private fun onIsLoggedInSuccess(isLoggedIn: Boolean) {
         updateState { it.copy(isLoggedIn = isLoggedIn) }
@@ -78,7 +99,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getUseNameSuccess(userName: String) {
-        updateState { it.copy(userName = userName, isNoInternet = false, isLoading = false) }
+        updateState { it.copy(userName = userName) }
     }
 
     private fun getYourCollections() {
@@ -92,9 +113,7 @@ class HomeViewModel @Inject constructor(
     private fun onGetYourCollectionsSuccess(collections: List<Collection>) {
         updateState { currentState ->
             currentState.copy(
-                yourCollections = collections.map(Collection::toUi),
-                isNoInternet = false,
-                isLoading = false
+                yourCollections = collections.map(Collection::toUi)
             )
         }
     }
@@ -105,12 +124,12 @@ class HomeViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetPopularityMoviesSuccess,
                 onError = ::onFail,
-                block = { getPopularMoviesUseCase(page = 1) }
+                block = { getPopularMoviesUseCase() }
             )
             safeExecute(
                 onSuccess = ::onGetPopularitySeriesSuccess,
                 onError = ::onFail,
-                block = { getPopularitySeriesUseCase(page = 1, limit = 10) }
+                block = { getPopularSeriesUseCase() }
             )
         }
     }
@@ -123,10 +142,8 @@ class HomeViewModel @Inject constructor(
             }
             updateState { currentState ->
                 currentState.copy(
-                    popularity =
-                        currentState.popularity + popularMoviesUi,
-                    isNoInternet = false,
-                    isLoading = false
+                    popularity = currentState.popularity + popularMoviesUi,
+                    isLoadingPopularity = false
                 )
             }
         }
@@ -140,10 +157,8 @@ class HomeViewModel @Inject constructor(
             }
             updateState { currentState ->
                 currentState.copy(
-                    popularity =
-                        currentState.popularity + popularSeriesUi,
-                    isNoInternet = false,
-                    isLoading = false
+                    popularity = currentState.popularity + popularSeriesUi,
+                    isLoadingPopularity = false
                 )
             }
         }
@@ -154,12 +169,12 @@ class HomeViewModel @Inject constructor(
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedMoviesSuccess,
                 onError = ::onFail,
-                block = { getRecentlyReleasedMoviesUseCase(page = 1) }
+                block = { getRecentlyReleasedMoviesUseCase() }
             )
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
                 onError = ::onFail,
-                block = { getRecentlyReleasedSeriesUseCase(page = 1, limit = 10) }
+                block = { getRecentlyReleasedSeriesUseCase() }
             )
         }
     }
@@ -167,10 +182,8 @@ class HomeViewModel @Inject constructor(
     private fun onGetRecentlyReleasedMoviesSuccess(movies: List<Movie>) {
         updateState { currentState ->
             currentState.copy(
-                recentlyReleased =
-                    currentState.recentlyReleased + movies.map(Movie::toPoster),
-                isNoInternet = false,
-                isLoading = false
+                recentlyReleased = currentState.recentlyReleased + movies.map(Movie::toPoster),
+                isLoadingRecentlyReleased = false
             )
         }
     }
@@ -178,10 +191,8 @@ class HomeViewModel @Inject constructor(
     private fun onGetRecentlyReleasedSeriesSuccess(series: List<Series>) {
         updateState { currentState ->
             currentState.copy(
-                recentlyReleased =
-                    currentState.recentlyReleased + series.map(Series::toPoster),
-                isNoInternet = false,
-                isLoading = false
+                recentlyReleased = currentState.recentlyReleased + series.map(Series::toPoster),
+                isLoadingRecentlyReleased = false
             )
         }
     }
@@ -190,7 +201,7 @@ class HomeViewModel @Inject constructor(
         safeExecute(
             onSuccess = ::onGetTopRatedSeriesSuccess,
             onError = ::onFail,
-            block = { getTopRatedSeriesUseCase(page = 1, limit = 10) }
+            block = { getTopRatedSeriesUseCase() }
         )
     }
 
@@ -198,8 +209,7 @@ class HomeViewModel @Inject constructor(
         updateState { currentState ->
             currentState.copy(
                 topRated = currentState.topRated + series.map(Series::toPoster),
-                isNoInternet = false,
-                isLoading = false
+                isLoadingTopRatedSeries = false
             )
         }
     }
@@ -208,7 +218,7 @@ class HomeViewModel @Inject constructor(
         safeExecute(
             onSuccess = ::onGetUpcomingMoviesSuccess,
             onError = ::onFail,
-            block = { getUpcomingMoviesUseCase(page = 1) }
+            block = { getUpcomingMoviesUseCase() }
         )
     }
 
@@ -216,8 +226,7 @@ class HomeViewModel @Inject constructor(
         updateState { currentState ->
             currentState.copy(
                 upcomingMovies = currentState.upcomingMovies + movies.map(Movie::toPoster),
-                isNoInternet = false,
-                isLoading = false
+                isLoadingUpcomingMovies = false
             )
         }
     }
@@ -232,7 +241,7 @@ class HomeViewModel @Inject constructor(
             safeCollect(
                 onEmitNewValue = ::onGetRecentlySeriesSuccess,
                 onError = ::onFail,
-                block = { getRecentlySeriesUseCase.invoke() }
+                block = getRecentlyViewedSeriesUseCase::invoke
             )
         }
     }
@@ -241,9 +250,7 @@ class HomeViewModel @Inject constructor(
         updateState {
             it.copy(
                 recentlyViewed = (
-                        it.recentlyViewed + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id },
-                isNoInternet = false,
-                isLoading = false
+                        it.recentlyViewed + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id }
             )
         }
     }
@@ -251,55 +258,50 @@ class HomeViewModel @Inject constructor(
     private fun onGetRecentlySeriesSuccess(series: List<Series>) {
         updateState {
             it.copy(
-                recentlyViewed = (it.recentlyViewed + series.map(Series::toPoster)).distinctBy { series -> series.id },
-                isNoInternet = false,
-                isLoading = false
+                recentlyViewed = (it.recentlyViewed + series.map(Series::toPoster)).distinctBy { series -> series.id }
             )
         }
     }
 
-    private fun getMatchesYourVibeMovies() {
-        safeExecute(
-            onSuccess = ::onGetMatchesYourVibeMoviesSuccess,
-            onError = ::onFail,
-        ) {
-            getMatchesYourVibeMoviesUseCase(page = 1, limit = 10)
-        }
-    }
 
-    private fun onGetMatchesYourVibeMoviesSuccess(movies: List<Movie>) {
-        updateState {
-            it.copy(
-                matchVibes = (it.matchVibes + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id },
-                isNoInternet = false,
-                isLoading = false
-            )
-        }
-    }
-
-    private fun getMatchesYourVibeSeries() {
+    private fun getMatchesYourVibe() {
         safeExecute(
             onSuccess = ::onGetMatchesYourVibeSeriesSuccess,
             onError = ::onFail,
         ) {
-            getMatchesYourVibeSeriesUseCase(1, 10)
+            getMatchesYourVibeSeriesUseCase()
+        }
+        safeExecute(
+            onSuccess = ::onGetMatchesYourVibeMoviesSuccess,
+            onError = ::onFail,
+        ) {
+            getMatchesYourVibeMoviesUseCase()
         }
     }
 
     private fun onGetMatchesYourVibeSeriesSuccess(matchesYourVibeSeries: List<Series>) {
-        updateState {
-            it.copy(
-                matchVibes = (it.matchVibes + matchesYourVibeSeries.map(Series::toPoster)).distinctBy { series -> series.id },
-                isNoInternet = false,
-                isLoading = false
+        updateState { currentState ->
+            currentState.copy(
+                matchVibes = (currentState.matchVibes + matchesYourVibeSeries.map(Series::toPoster)).distinctBy { series -> series.id }
+            )
+        }
+    }
+
+    private fun onGetMatchesYourVibeMoviesSuccess(movies: List<Movie>) {
+        updateState { currentState ->
+            currentState.copy(
+                matchVibes = (currentState.matchVibes + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id }
             )
         }
     }
 
     private fun onFail(error: Throwable) = updateState {
         it.copy(
-            isLoading = false,
-            isNoInternet = error is NetworkErrorException
+            isLoadingRecentlyReleased = false,
+            isLoadingUpcomingMovies = false,
+            isLoadingPopularity = false,
+            isLoadingTopRatedSeries = false,
+            isNoInternet = if (error is NetworkErrorException) true else state.value.isNoInternet
         )
     }
 
@@ -310,14 +312,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
-    override fun onMatchYourVibeClicked(sectionType: MixedMediaSectionType) {
-        sendEffect(
-            HomeEffect.NavigateToShowMore(
-                sectionType = sectionType
-            )
-        )
-    }
 
     override fun onFeaturedCollectionClicked(collectionId: Int, collectionTitle: String) {
         sendEffect(
@@ -346,18 +340,6 @@ class HomeViewModel @Inject constructor(
         loadHomeScreenData()
     }
 
-    private fun loadHomeScreenData() {
-        getRecentViewed()
-        getPopularity()
-        getRecentlyReleased()
-        getTopRatedSeries()
-        getUpcomingMovies()
-        getMatchesYourVibeMovies()
-        getMatchesYourVibeSeries()
-        getUserName()
-        isLoggedIn()
-        getYourCollections()
-    }
 
     override fun onCollectionClick(collectionId: Int, collectionName: String) {
         sendEffect(
@@ -368,7 +350,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onLateNightThrillsFeatureClicked(sectionType: MixedMediaSectionType) {
+    override fun onFeaturesCollectionClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
@@ -376,31 +358,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onSeeAllRecentlyReleasedClicked(sectionType: MixedMediaSectionType) {
-        sendEffect(
-            HomeEffect.NavigateToShowMore(
-                sectionType = sectionType
-            )
-        )
-    }
-
-    override fun onSeeAllTopRatedClicked(sectionType: MixedMediaSectionType) {
-        sendEffect(
-            HomeEffect.NavigateToShowMore(
-                sectionType = sectionType
-            )
-        )
-    }
-
-    override fun onSeeAllUpcomingClicked(sectionType: MixedMediaSectionType) {
-        sendEffect(
-            HomeEffect.NavigateToShowMore(
-                sectionType = sectionType
-            )
-        )
-    }
-
-    override fun onSeeAllRecentlyViewedClicked(sectionType: MixedMediaSectionType) {
+    override fun onSeeMoreClicked(sectionType: MixedMediaSectionType) {
         sendEffect(
             HomeEffect.NavigateToShowMore(
                 sectionType = sectionType
