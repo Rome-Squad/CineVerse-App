@@ -35,18 +35,19 @@ class RatingViewModel @Inject constructor(
 
     private fun checkLoginStatus() {
         safeExecute(
-            onSuccess = { loggedIn ->
-                updateState { it.copy(isLoggedIn = loggedIn) }
-
-                if (loggedIn) {
-                    getGenres()
-                } else {
-                    updateState { it.copy(isLoading = false) }
-                }
-            },
+            onSuccess = ::handleLoginSuccess,
             onError = ::onFailure
         ) {
             isLoggedInUseCase()
+        }
+    }
+
+    private fun handleLoginSuccess(loggedIn: Boolean) {
+        updateState { it.copy(isLoggedIn = loggedIn) }
+        if (loggedIn) {
+            getGenres()
+        } else {
+            updateState { it.copy(isLoading = false) }
         }
     }
 
