@@ -30,6 +30,10 @@ class CategoryMediaViewModel @Inject constructor(
     private val sectionType = stateSavedStateHandle.toRoute<ShowMoreRoute>().sectionType
 
     init {
+        loadCategoryMediaDate()
+    }
+
+    private fun loadCategoryMediaDate() {
         updateState {
             it.copy(
                 isLoading = true,
@@ -115,7 +119,7 @@ class CategoryMediaViewModel @Inject constructor(
     }
 
     override fun onRetryClick() {
-        loadByStrategy()
+        loadCategoryMediaDate()
     }
 
     companion object {
