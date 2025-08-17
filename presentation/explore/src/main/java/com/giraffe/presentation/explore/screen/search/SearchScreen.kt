@@ -33,11 +33,11 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.NoInternetScreen
-import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.explore.R
 import com.giraffe.presentation.explore.components.ExploreHeader
+import com.giraffe.presentation.explore.components.PosterListSection
 import com.giraffe.presentation.explore.screen.search.components.VoiceRecordingOverlay
 import com.giraffe.presentation.explore.screen.search.components.keywordsSection
 import com.giraffe.presentation.explore.util.EffectListener

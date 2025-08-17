@@ -1,7 +1,7 @@
 package com.giraffe.presentation.home.screen.show_more
 
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.screen.show_more.strategy.BasedOnTrueEventsStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.CinematicMasterpiecesStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.FamilyNightPicksStrategy
@@ -14,13 +14,13 @@ import com.giraffe.presentation.home.screen.show_more.strategy.RecentlyViewedStr
 import com.giraffe.presentation.home.screen.show_more.strategy.TopRatedTvShowsStrategy
 import com.giraffe.presentation.home.screen.show_more.strategy.UpcomingMoviesStrategy
 
-interface MixedMediaStrategy {
-    suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster>
-    fun getSectionType(): MixedMediaSectionType
+interface CategoryMediaStrategy {
+    suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia>
+    fun getSectionType(): CategoryMediaSectionType
 }
 
 
-class MixedMediaFactory(
+class CategoryMediaFactory(
     private val recentlyReleasedStrategy: RecentlyReleasedStrategy,
     private val topRatedTvShowsStrategy: TopRatedTvShowsStrategy,
     private val upcomingMoviesStrategy: UpcomingMoviesStrategy,
@@ -33,19 +33,19 @@ class MixedMediaFactory(
     private val cinematicMasterpiecesStrategy: CinematicMasterpiecesStrategy,
     private val feelGoodPreferencesStrategy: FeelGoodPreferencesStrategy
 ) {
-    fun createStrategy(sectionType: MixedMediaSectionType): MixedMediaStrategy {
+    fun createStrategy(sectionType: CategoryMediaSectionType): CategoryMediaStrategy {
         return when (sectionType) {
-            MixedMediaSectionType.RECENTLY_RELEASED -> recentlyReleasedStrategy
-            MixedMediaSectionType.TOP_RATED_TV_SHOWS -> topRatedTvShowsStrategy
-            MixedMediaSectionType.UPCOMING_MOVIES -> upcomingMoviesStrategy
-            MixedMediaSectionType.RECENTLY_VIEWED -> recentlyViewedStrategy
-            MixedMediaSectionType.MATCHES_YOUR_VIBES -> matchesYourVibesStrategy
-            MixedMediaSectionType.LATE_NIGHT_THRILLS -> lateNightThrillsStrategy
-            MixedMediaSectionType.FAMILY_NIGHT_PICKS -> familyNightPicksStrategy
-            MixedMediaSectionType.MIND_BENDING_STORIES -> mindBendingStoriesStrategy
-            MixedMediaSectionType.BASED_ON_TRUE_EVENTS -> basedOnTrueEventsStrategy
-            MixedMediaSectionType.CINEMATIC_MASTERPIECE -> cinematicMasterpiecesStrategy
-            MixedMediaSectionType.FEEL_GOOD_PREFERENCES -> feelGoodPreferencesStrategy
+            CategoryMediaSectionType.RECENTLY_RELEASED -> recentlyReleasedStrategy
+            CategoryMediaSectionType.TOP_RATED_TV_SHOWS -> topRatedTvShowsStrategy
+            CategoryMediaSectionType.UPCOMING_MOVIES -> upcomingMoviesStrategy
+            CategoryMediaSectionType.RECENTLY_VIEWED -> recentlyViewedStrategy
+            CategoryMediaSectionType.MATCHES_YOUR_VIBES -> matchesYourVibesStrategy
+            CategoryMediaSectionType.LATE_NIGHT_THRILLS -> lateNightThrillsStrategy
+            CategoryMediaSectionType.FAMILY_NIGHT_PICKS -> familyNightPicksStrategy
+            CategoryMediaSectionType.MIND_BENDING_STORIES -> mindBendingStoriesStrategy
+            CategoryMediaSectionType.BASED_ON_TRUE_EVENTS -> basedOnTrueEventsStrategy
+            CategoryMediaSectionType.CINEMATIC_MASTERPIECE -> cinematicMasterpiecesStrategy
+            CategoryMediaSectionType.FEEL_GOOD_PREFERENCES -> feelGoodPreferencesStrategy
         }
     }
 }

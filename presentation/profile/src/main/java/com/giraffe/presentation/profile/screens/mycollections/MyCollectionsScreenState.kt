@@ -8,4 +8,5 @@ data class MyCollectionsScreenState(
     val collections: List<CollectionUi> = emptyList(),
     val isBottomSheetVisible: Boolean = false,
     val newCollectionName: String = "",
+    val isLoggedIn: Boolean = false
 )

@@ -2,7 +2,6 @@ package com.giraffe.presentation.details.screens.moviedetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
@@ -20,6 +19,7 @@ import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
 import com.giraffe.media.movie.usecase.GetUserMovieRatingUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.details.utils.groupByRole
