@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
@@ -40,6 +39,7 @@ import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.GiveStarsBottomSheet
 import com.giraffe.presentation.details.components.LoginBottomSheet
 import com.giraffe.presentation.details.components.MainMovieOrSeriesDetails
+import com.giraffe.presentation.details.components.PosterListSection
 import com.giraffe.presentation.details.components.RatingSection
 import com.giraffe.presentation.details.components.ReviewCard
 import com.giraffe.presentation.details.components.SeasonCard

@@ -1,6 +1,7 @@
 package com.giraffe.presentation.explore.screen.search
 
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.explore.components.uimodel.Poster
+
 
 interface SearchInteractionListener {
     fun onQueryChange(query: String = "")

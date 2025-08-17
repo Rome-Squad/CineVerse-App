@@ -25,16 +25,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
-import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.components.uimodel.Poster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -181,20 +179,4 @@ private fun IconWithText(
             color = Theme.color.shade.secondary
         )
     }
-}
-
-@Preview
-@Composable
-private fun PosterHorizontal() {
-    PosterItemHorizontal(
-        movie = Poster(
-            id = 1,
-            name = "The Flash",
-            imageUrl = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
-            rating = 0f,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(88.dp)
-    )
 }

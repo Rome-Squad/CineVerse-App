@@ -6,17 +6,17 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.giraffe.presentation.home.R
-import com.giraffe.presentation.home.screen.show_more.ShowMoreScreen
+import com.giraffe.presentation.home.screen.show_more.CategoryMediaScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ShowMoreRoute(
-    val sectionType: MixedMediaSectionType
+    val sectionType: CategoryMediaSectionType
 )
 
 @Keep
 @Serializable
-enum class MixedMediaSectionType {
+enum class CategoryMediaSectionType {
     RECENTLY_RELEASED,
     TOP_RATED_TV_SHOWS,
     UPCOMING_MOVIES,
@@ -46,7 +46,7 @@ enum class MixedMediaSectionType {
     }
 }
 
-fun NavController.navigateToShowMore(sectionType: MixedMediaSectionType) {
+fun NavController.navigateToShowMore(sectionType: CategoryMediaSectionType) {
     navigate(ShowMoreRoute(sectionType = sectionType))
 }
 
@@ -56,7 +56,7 @@ fun NavGraphBuilder.showMoreRoute(
     navigateToSeriesDetailsScreen: (Int) -> Unit,
 ) {
     composable<ShowMoreRoute> {
-        ShowMoreScreen(
+        CategoryMediaScreen(
             onBackClick = onBackClick,
             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
             navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,

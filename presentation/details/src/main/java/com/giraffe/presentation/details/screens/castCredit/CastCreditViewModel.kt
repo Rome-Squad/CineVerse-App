@@ -2,14 +2,13 @@ package com.giraffe.presentation.details.screens.castCredit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.designsystem.uimodel.Poster.Type
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastCreditRoute
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
@@ -94,8 +93,8 @@ class CastCreditViewModel @Inject constructor(
     override fun onPosterClick(mediaId: Int, mediaType: String) {
         sendEffect(
             effect = when (mediaType) {
-                Type.MOVIE.name -> CastCreditEffect.NavigateToMovieDetails(mediaId)
-                Type.SERIES.name -> CastCreditEffect.NavigateToSeriesDetails(mediaId)
+                Poster.Type.MOVIE.name -> CastCreditEffect.NavigateToMovieDetails(mediaId)
+                Poster.Type.SERIES.name -> CastCreditEffect.NavigateToSeriesDetails(mediaId)
                 else -> return
             }
         )
