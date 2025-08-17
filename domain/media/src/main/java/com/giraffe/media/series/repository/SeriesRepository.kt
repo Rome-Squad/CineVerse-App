@@ -18,9 +18,11 @@ interface SeriesRepository {
 
     suspend fun getBySort(sortBy: String, page: Int): List<Series>
 
+    fun observeGenres(): Flow<List<Genre>>
+
     suspend fun getGenres(): List<Genre>
 
-    suspend fun getGenresByIds(genreIDs: List<Int>): List<Genre>
+    fun getGenresByIds(genreIDs: List<Int>): Flow<List<Genre>>
 
     suspend fun getDetails(seriesId: Int): Series
 
@@ -49,8 +51,6 @@ interface SeriesRepository {
     fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Series>>
 
     suspend fun clearRecentlyViewed()
-
-    suspend fun addRecentlyViewed(series: Series)
 
     suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Series>
 

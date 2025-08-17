@@ -14,6 +14,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -43,18 +44,19 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getGenres returns genres if cache is valid`() = runTest {
-        coEvery { seriesDao.getGenres() } returns sampleGenres
+        val expectedGenres = flowOf(sampleGenres)
+        coEvery { seriesDao.getGenres() } returns expectedGenres
 
         val result = dataSource.getGenres()
 
-        assertThat(result).isEqualTo(sampleGenres)
+        assertThat(result).isEqualTo(expectedGenres)
     }
 
     @Test
     fun `getGenres returns empty if cache expired`() = runTest {
-        coEvery { seriesDao.getGenres() } returns emptyList()
+        coEvery { seriesDao.getGenres() } returns flowOf(emptyList())
 
-        val result = dataSource.getGenres()
+        val result = dataSource.getGenres().first()
 
         assertThat(result).isEmpty()
     }
@@ -62,7 +64,7 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `insertGenres inserts genres`() = runTest {
-        dataSource.insertGenres(sampleGenres)
+        dataSource.syncGenres(sampleGenres)
 
         coVerify { seriesDao.upsertGenres(sampleGenres) }
     }
@@ -79,11 +81,12 @@ class SeriesLocalDataSourceImpTest {
     @Test
     fun `getGenresByIDs returns genres from DAO`() = runTest {
         val genreIds = listOf(1)
-        coEvery { seriesDao.getGenresByIds(genreIds) } returns sampleGenres
+        val expectedGenres = flowOf(sampleGenres)
+        coEvery { seriesDao.getGenresByIds(genreIds) } returns expectedGenres
 
         val result = dataSource.getGenresByIDs(genreIds)
 
-        assertThat(result).isEqualTo(sampleGenres)
+        assertThat(result).isEqualTo(expectedGenres)
     }
 
     @Test
@@ -169,7 +172,7 @@ class SeriesLocalDataSourceImpTest {
         val seriesId = 1
         dataSource.deleteSeriesFromHistoryById(seriesId)
 
-        coVerify { seriesDao.deleteSeriesFromHistoryById(seriesId) }
+        coVerify { seriesDao.deleteRecentlyViewedSeriesById(seriesId) }
     }
 
     @Test
@@ -204,7 +207,12 @@ class SeriesLocalDataSourceImpTest {
     fun `getRecentSeries should sync time before returning recent series`() = runTest {
         val page = 1
         val pageSize = 10
-        every { seriesDao.getRecentSeries(page = page, pageSize = pageSize) } returns flowOf(sampleSeries)
+        every {
+            seriesDao.getRecentlyViewedSeries(
+                page = page,
+                pageSize = pageSize
+            )
+        } returns flowOf(sampleSeries)
         coEvery { seriesDao.syncRecentViewedTime() } just Runs
 
         val result = mutableListOf<List<SeriesCacheDto>>()
@@ -218,6 +226,6 @@ class SeriesLocalDataSourceImpTest {
     fun `clearRecentSeries clears DAO recent table`() = runTest {
         dataSource.clearRecentSeries()
 
-        coVerify { seriesDao.clearRecentSeries() }
+        coVerify { seriesDao.clearRecentlyViewedSeries() }
     }
 }

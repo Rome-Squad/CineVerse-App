@@ -13,7 +13,7 @@ import com.giraffe.media.movie.usecase.GetMoviesByGenresUseCase
 import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.model.GenreUi
 import com.giraffe.presentation.explore.screen.discover.DiscoverEffect.NavigateToMovieDetails
@@ -29,7 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
-    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     private val getSeriesByGenresUseCase: GetSeriesByGenresUseCase,
 ) : BaseViewModel<DiscoverScreenState, DiscoverEffect>(DiscoverScreenState()),
@@ -65,10 +65,10 @@ class DiscoverViewModel @Inject constructor(
     private fun getSeriesGenres() {
         updateState { it.copy(isLoading = true, isNoInternet = false) }
 
-        safeExecute(
-            onSuccess = ::getSeriesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::getSeriesGenresSuccess,
             onError = ::onError,
-            block = { getSeriesGenresUseCase() }
+            block = observeSeriesGenresUseCase::invoke
         )
     }
 

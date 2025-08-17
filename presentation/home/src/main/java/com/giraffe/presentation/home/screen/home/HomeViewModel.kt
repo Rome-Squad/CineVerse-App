@@ -16,7 +16,7 @@ import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType

@@ -13,7 +13,7 @@ import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
 import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

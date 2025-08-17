@@ -3,7 +3,7 @@ package com.giraffe.presentation.home.screen.show_more.strategy
 import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
 import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.ShowMorePoster
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy

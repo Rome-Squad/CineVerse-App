@@ -16,7 +16,7 @@ import com.giraffe.media.movie.usecase.GetMoviesByNameUseCase
 import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.screen.discover.SearchTab
 import com.giraffe.presentation.explore.util.BasePagingSource
@@ -33,7 +33,7 @@ class SearchResultViewModel @Inject constructor(
     private val getSeriesByName: GetSeriesByNameUseCase,
     private val searchPeopleByName: GetMediaMembersByNameUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
-    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SearchResultScreenState, SearchResultEffect>(
     SearchResultScreenState(query = savedStateHandle.get<String>("query").orEmpty()),
@@ -130,8 +130,8 @@ class SearchResultViewModel @Inject constructor(
     private fun getSeriesGenres() {
         updateState { it.copy(isNoInternet = false, isLoading = true) }
 
-        safeExecute(
-            onSuccess = { genres ->
+        safeCollect(
+            onEmitNewValue = { genres ->
                 updateState {
                     it.copy(
                         seriesGenres = genres.map(Genre::toUi), isLoading = false,
@@ -140,7 +140,7 @@ class SearchResultViewModel @Inject constructor(
                 }
             },
             onError = ::onError,
-            block = { getSeriesGenresUseCase() },
+            block = observeSeriesGenresUseCase::invoke,
         )
     }
 

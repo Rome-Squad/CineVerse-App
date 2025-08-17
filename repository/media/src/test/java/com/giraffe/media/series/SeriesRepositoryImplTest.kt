@@ -96,9 +96,9 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getSeriesGenres returns cached if valid`() = runTest {
-        coEvery { local.getGenres() } returns cachedGenres
+        coEvery { local.getGenres() } returns flowOf(cachedGenres)
 
-        val result = repository.getGenres()
+        val result = repository.observeGenres().first()
 
         assertThat(result).hasSize(1)
         assertThat(result.first().title).isEqualTo("Action")
@@ -133,14 +133,14 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getSeriesGenres fetches from remote if cache empty and saves`() = runTest {
-        coEvery { local.getGenres() } returns emptyList()
+        coEvery { local.getGenres() } returns flowOf(emptyList())
         coEvery { remote.getGenres() } returns remoteGenres
 
-        val result = repository.getGenres()
+        val result = repository.observeGenres().first()
 
         assertThat(result).hasSize(1)
         assertThat(result.first().title).isEqualTo("Action")
-        coVerify { local.insertGenres(match { it.first().id == 1 }) }
+        coVerify { local.syncGenres(match { it.first().id == 1 }) }
     }
 
 

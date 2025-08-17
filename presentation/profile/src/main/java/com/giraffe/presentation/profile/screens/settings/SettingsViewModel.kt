@@ -4,6 +4,7 @@ import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.movie.usecase.genre.SyncMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.SyncRecentlyViewedMoviesUseCase
+import com.giraffe.media.series.usecase.genre.SyncSeriesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.presentation.profile.utils.Language
@@ -38,6 +39,7 @@ class SettingsViewModel @Inject constructor(
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
     private val syncRecentlyViewedMoviesUseCase: SyncRecentlyViewedMoviesUseCase,
     private val syncMoviesGenresUseCase: SyncMoviesGenresUseCase,
+    private val syncSeriesGenresUseCase: SyncSeriesGenresUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
     private val clearCollectionsCacheUseCase: ClearCollectionsCacheUseCase
@@ -191,6 +193,8 @@ class SettingsViewModel @Inject constructor(
             clearMoviesCacheUseCase.clearExceptRecentlyViewed()
             syncRecentlyViewedMoviesUseCase.invoke()
             syncMoviesGenresUseCase.invoke()
+
+            syncSeriesGenresUseCase.invoke()
         }
         onDismissSheet()
     }

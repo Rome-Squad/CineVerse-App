@@ -14,7 +14,7 @@ import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByKeywordsIdUseCase
 import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.screen.show_more.MixedMediaFactory
 import com.giraffe.presentation.home.screen.show_more.strategy.BasedOnTrueEventsStrategy

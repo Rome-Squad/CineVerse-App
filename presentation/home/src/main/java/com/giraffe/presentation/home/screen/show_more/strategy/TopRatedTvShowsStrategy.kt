@@ -1,6 +1,6 @@
 package com.giraffe.presentation.home.screen.show_more.strategy
 
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
 import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy

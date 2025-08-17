@@ -18,23 +18,30 @@ class SeriesLocalDataSourceImp @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
 
-    override suspend fun getGenres(): List<SeriesGenreCacheDto> = safeCall {
-        seriesDao.getGenres()
+    override fun getGenres() =
+        safeFlow { seriesDao.getGenres() }
+
+    override suspend fun syncGenres(genres: List<SeriesGenreCacheDto>) {
+        safeCall {
+            genres.forEach { genre ->
+                seriesDao.getGenreById(genre.id)?.let {
+                    seriesDao.updateGenreNameOnly(genre.id, genre.name)
+                } ?: seriesDao.upsertGenres(genres)
+            }
+        }
+
     }
 
-    override suspend fun insertGenres(genres: List<SeriesGenreCacheDto>) = safeCall {
-        seriesDao.upsertGenres(genres)
-    }
-
-    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = safeCall {
-        if (genreIds.isNotEmpty()) {
-            seriesDao.incrementInteractionCountForGenres(genreIds)
+    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) {
+        safeCall {
+            if (genreIds.isNotEmpty()) {
+                seriesDao.incrementInteractionCountForGenres(genreIds)
+            }
         }
     }
 
-    override suspend fun getGenresByIDs(genreIds: List<Int>) = safeCall {
-        seriesDao.getGenresByIds(genreIds)
-    }
+    override fun getGenresByIDs(genreIds: List<Int>) =
+        safeFlow { seriesDao.getGenresByIds(genreIds) }
 
     override suspend fun clearGenres() = safeCall {
         seriesDao.clearGenres()
@@ -76,7 +83,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
     override suspend fun deleteSeriesFromHistoryById(seriesId: Int) = safeCall {
-        seriesDao.deleteSeriesFromHistoryById(seriesId)
+        seriesDao.deleteRecentlyViewedSeriesById(seriesId)
     }
 
     override suspend fun getTopGenreCount() = safeCall {
@@ -94,7 +101,8 @@ class SeriesLocalDataSourceImp @Inject constructor(
 
 
     override fun getRecentSeries(page: Int, pageSize: Int) = safeFlow {
-        seriesDao.getRecentSeries(page, pageSize).onStart { seriesDao.syncRecentViewedTime() }
+        seriesDao.getRecentlyViewedSeries(page, pageSize)
+            .onStart { seriesDao.syncRecentViewedTime() }
     }
 
 
@@ -105,7 +113,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
 
 
     override suspend fun clearRecentSeries() = safeCall {
-        seriesDao.clearRecentSeries()
+        seriesDao.clearRecentlyViewedSeries()
     }
 
     private suspend fun insertSeries(series: List<SeriesCacheDto>) = safeCall {

@@ -9,7 +9,7 @@ import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMovie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ class HistoryViewModel @Inject constructor(
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
-    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val deleteRecentlyViewedMovieByIdUseCase: DeleteRecentlyViewedMovieByIdUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :
@@ -37,10 +37,10 @@ class HistoryViewModel @Inject constructor(
             onError = ::onFailure.also { onGetMoviesGenresFailure() },
             block = observeMoviesGenresUseCase::invoke
         )
-        safeExecute(
-            onSuccess = ::onGetSeriesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetSeriesGenresSuccess,
             onError = ::onFailure.also { onGetSeriesGenresFailure() },
-            block = getSeriesGenresUseCase::invoke
+            block = observeSeriesGenresUseCase::invoke
         )
     }
 
