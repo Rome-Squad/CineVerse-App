@@ -44,4 +44,5 @@
     <string name="bottomradiusanim">bottomRadiusAnim</string>
     <string name="image">Image %1$s</string>
     <string name="rotationanim">rotationAnim</string>
+    <string name="something_went_wrong_while_creating_your_session_id_please_try_again">Something went wrong while creating Your session Id , please try again..</string>
 </resources>
