@@ -8,7 +8,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,11 +43,12 @@ fun PosterHorizontal(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     modifier: Modifier = Modifier,
+    height: Int = 88,
     onClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
-            .height(IntrinsicSize.Min)
+            .height(height.dp)
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.card)
             .clickable(onClick = dropUnlessResumed { onClick() }),
@@ -132,15 +132,20 @@ fun PosterHorizontal(
                             )
                     )
                 }
-                poster.date?.let {
-                    if (it.isNotEmpty()) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (!poster.time.isNullOrEmpty()) {
+                        IconWithText(
+                            icon = painterResource(Theme.icons.dueTone.clock),
+                            text = poster.time
+                        )
+                    }
+                    if (!poster.date.isNullOrEmpty()) {
                         IconWithText(
                             icon = painterResource(Theme.icons.dueTone.calendar),
                             text = poster.date
                         )
                     }
                 }
-
             }
         }
     }
