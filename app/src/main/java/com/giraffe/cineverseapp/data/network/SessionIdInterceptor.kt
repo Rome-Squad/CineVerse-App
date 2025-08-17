@@ -10,6 +10,8 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import com.giraffe.repository.encryption.SecretKeyAliasEnum
 import com.giraffe.user.encryption.IEncryptionService
+import com.giraffe.user.exception.AccessDeniedException
+import java.io.IOException
 
 class SessionIdInterceptor(
     private val authenticationDatastore: AuthenticationDatastore,
@@ -29,7 +31,7 @@ class SessionIdInterceptor(
         val sessionId = runBlocking {
             val sessionId = authenticationDatastore.getSessionId()?.let { decryptSessionId(it) }
             sessionId
-        } ?: return chain.proceed(cleanRequest.build())
+        } ?: throw IOException(AccessDeniedException().message, AccessDeniedException())
 
         val originalUrl = original.url
         val newUrl = originalUrl.newBuilder()
