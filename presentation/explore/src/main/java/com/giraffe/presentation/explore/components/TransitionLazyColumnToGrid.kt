@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.explore.components.uimodel.Poster
+import com.giraffe.presentation.explore.R
 
 @Composable
 fun TransitionLazyColumnToGrid(
