@@ -2,8 +2,8 @@ package com.giraffe.presentation.profile.screens.history
 
 import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.DeleteRecentlyViewedMovieByIdUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.DeleteRecentlyViewedMovieByIdUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val getRecentlyMoviesUseCase: GetRecentlyViewedMoviesUseCase,
+    private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val deleteRecentlyViewedMovieByIdUseCase: DeleteRecentlyViewedMovieByIdUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
@@ -31,7 +31,7 @@ class HistoryViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetRecentMoviesSuccess,
             onError = ::onFailure,
-            block = getRecentlyMoviesUseCase::invoke
+            block = observeRecentlyViewedMoviesUseCase::invoke
         )
     }
 

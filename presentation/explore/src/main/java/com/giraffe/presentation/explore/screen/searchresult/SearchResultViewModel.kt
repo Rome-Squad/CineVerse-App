@@ -13,7 +13,7 @@ import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersByNameUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesByNameUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
@@ -32,7 +32,7 @@ class SearchResultViewModel @Inject constructor(
     private val getMoviesByNameUseCase: GetMoviesByNameUseCase,
     private val getSeriesByName: GetSeriesByNameUseCase,
     private val searchPeopleByName: GetMediaMembersByNameUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SearchResultScreenState, SearchResultEffect>(
@@ -113,7 +113,7 @@ class SearchResultViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::getMoviesGenresSuccess,
             onError = ::onError,
-            block = getMoviesGenresUseCase::invoke
+            block = observeMoviesGenresUseCase::invoke
         )
     }
 

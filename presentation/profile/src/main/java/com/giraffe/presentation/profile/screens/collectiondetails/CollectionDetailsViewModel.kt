@@ -5,7 +5,7 @@ import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.toSwipeablePoster
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class CollectionDetailsViewModel @Inject constructor(
     private val getCollectionMoviesUseCase: GetCollectionMoviesUseCase,
     private val removeMovieFromCollectionUseCase: RemoveMovieFromCollectionUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CollectionDetailsScreenState, CollectionDetailsEffect>(
     CollectionDetailsScreenState(
@@ -34,7 +34,7 @@ class CollectionDetailsViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
-            block = getMoviesGenresUseCase::invoke
+            block = observeMoviesGenresUseCase::invoke
         )
     }
 

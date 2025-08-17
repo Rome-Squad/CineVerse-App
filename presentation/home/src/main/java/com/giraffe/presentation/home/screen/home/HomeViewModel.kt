@@ -5,13 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.GetPopularMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.ObservePopularMoviesUseCase
+import com.giraffe.media.movie.usecase.matchesYourVibe.ObserveMatchesYourVibeMoviesUseCase
+import com.giraffe.media.movie.usecase.recentlyReleased.ObserveRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.upcoming.ObserveUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
@@ -34,19 +33,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
+    private val observePopularMoviesUseCase: ObservePopularMoviesUseCase,
     private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
-    private val getRecentlyReleasedMoviesUseCase: GetRecentlyReleasedMoviesUseCase,
+    private val observeRecentlyReleasedMoviesUseCase: ObserveRecentlyReleasedMoviesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
-    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
+    private val observeUpcomingMoviesUseCase: ObserveUpcomingMoviesUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
-    private val getRecentlyViewedMoviesUseCase: GetRecentlyViewedMoviesUseCase,
+    private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-    private val getMatchesYourVibeMoviesUseCase: GetMatchesYourVibeMoviesUseCase,
+    private val observeMatchesYourVibeMoviesUseCase: ObserveMatchesYourVibeMoviesUseCase,
     private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
@@ -114,7 +112,7 @@ class HomeViewModel @Inject constructor(
             safeCollect(
                 onEmitNewValue = ::onGetPopularityMoviesSuccess,
                 onError = ::onFail,
-                block = getPopularMoviesUseCase::invoke
+                block = observePopularMoviesUseCase::invoke
             )
             safeExecute(
                 onSuccess = ::onGetPopularitySeriesSuccess,
@@ -162,7 +160,7 @@ class HomeViewModel @Inject constructor(
             safeCollect(
                 onEmitNewValue = ::onGetRecentlyReleasedMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyReleasedMoviesUseCase::getLocalRecentlyReleased
+                block = observeRecentlyReleasedMoviesUseCase::invoke
             )
             safeExecute(
                 onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
@@ -215,7 +213,7 @@ class HomeViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetUpcomingMoviesSuccess,
             onError = ::onFail,
-            block = getUpcomingMoviesUseCase::getLocalUpcoming
+            block = observeUpcomingMoviesUseCase::invoke
         )
     }
 
@@ -234,7 +232,7 @@ class HomeViewModel @Inject constructor(
             safeCollect(
                 onEmitNewValue = ::onGetRecentlyMoviesSuccess,
                 onError = ::onFail,
-                block = getRecentlyViewedMoviesUseCase::invoke
+                block = observeRecentlyViewedMoviesUseCase::invoke
             )
             safeCollect(
                 onEmitNewValue = ::onGetRecentlySeriesSuccess,
@@ -268,7 +266,7 @@ class HomeViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetMatchesYourVibeMoviesSuccess,
             onError = ::onFail,
-            block = getMatchesYourVibeMoviesUseCase::getLocalMatchesYourVibe
+            block = observeMatchesYourVibeMoviesUseCase::invoke
         )
     }
 

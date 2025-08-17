@@ -11,9 +11,9 @@ interface MovieRepository {
 
     suspend fun getByName(name: String, page: Int): List<Movie>
 
-    fun getLocalGenres(): Flow<List<Genre>>
+    fun observeGenres(): Flow<List<Genre>>
 
-    suspend fun getRemoteGenres(): List<Genre>
+    suspend fun getGenres(): List<Genre>
 
     fun getGenresByIds(genreIds: List<Int>): Flow<List<Genre>>
 
@@ -39,21 +39,21 @@ interface MovieRepository {
 
     suspend fun getUserRated(accountId: Int): List<Movie>
 
-    fun getLocalPopular(limit: Int): Flow<List<Movie>>
+    fun observePopular(limit: Int): Flow<List<Movie>>
 
-    fun getLocalRecentlyReleased(limit: Int): Flow<List<Movie>>
+    fun observeRecentlyReleased(limit: Int): Flow<List<Movie>>
 
-    suspend fun getRemoteRecentlyReleased(page: Int, limit: Int): List<Movie>
+    suspend fun getRecentlyReleased(page: Int, limit: Int): List<Movie>
 
-    fun getLocalUpcoming(limit: Int): Flow<List<Movie>>
+    fun observeUpcoming(limit: Int): Flow<List<Movie>>
 
-    suspend fun getRemoteUpcoming(page: Int, limit: Int): List<Movie>
+    suspend fun getUpcoming(page: Int, limit: Int): List<Movie>
 
-    fun getLocalMatchesYourVibe(limit: Int): Flow<List<Movie>>
+    fun observeMatchesYourVibe(limit: Int): Flow<List<Movie>>
 
-    suspend fun getRemoteMatchesYourVibe(page: Int, limit: Int): List<Movie>
+    suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Movie>
 
-    fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>>
+    fun observeRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>>
 
     suspend fun syncRecentlyViewedMovies()
 

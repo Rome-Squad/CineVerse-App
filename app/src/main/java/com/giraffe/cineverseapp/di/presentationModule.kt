@@ -1,13 +1,13 @@
 package com.giraffe.cineverseapp.di
 
-import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesByKeywordsIdUseCase
 import com.giraffe.media.movie.usecase.GetMoviesBySortUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetUpcomingMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.matchesYourVibe.GetMatchesYourVibeMoviesUseCase
+import com.giraffe.media.movie.usecase.recentlyReleased.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.upcoming.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
@@ -70,13 +70,13 @@ object PresentationModule {
     @Provides
     @Singleton
     fun provideRecentlyViewedStrategy(
-        getRecentlyViewedMovies: GetRecentlyViewedMoviesUseCase,
+        observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
         getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
     ): RecentlyViewedStrategy =
         RecentlyViewedStrategy(
-            getRecentlyViewedMovies,
+            observeRecentlyViewedMoviesUseCase,
             getRecentlySeriesUseCase,
             getMovieGenresUseCase,
             getSeriesGenresUseCase

@@ -2,8 +2,8 @@ package com.giraffe.presentation.profile.screens.settings
 
 import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
-import com.giraffe.media.movie.usecase.SyncMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.SyncRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.SyncMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.SyncRecentlyViewedMoviesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.presentation.profile.utils.Language

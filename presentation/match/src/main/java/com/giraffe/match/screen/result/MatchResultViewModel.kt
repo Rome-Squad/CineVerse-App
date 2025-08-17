@@ -10,7 +10,7 @@ import com.giraffe.media.match.usecase.GetMatchingMoviesUseCase
 import com.giraffe.media.match.usecase.GetMatchingSeriesUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
