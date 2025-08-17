@@ -12,9 +12,9 @@ class EncryptionService(
     private val keyStoreService: IKeyStoreService
 ) : IEncryptionService {
 
-    private val cipher: Cipher = Cipher.getInstance(keyStoreService.transformation)
 
     override fun encrypt(keyAlias: ISecretKeyAliasEnum, data: ByteArray): ByteArray {
+        val cipher = Cipher.getInstance(keyStoreService.transformation)
         cipher.init(Cipher.ENCRYPT_MODE, keyStoreService.getSecretKey(keyAlias.keyAlias))
         val iv = cipher.iv
         val encryptedData = cipher.doFinal(data)
@@ -23,6 +23,7 @@ class EncryptionService(
 
     override fun decrypt(keyAlias: ISecretKeyAliasEnum, data: ByteArray): ByteArray {
         return try {
+            val cipher = Cipher.getInstance(keyStoreService.transformation)
             val iv = data.copyOfRange(0, cipher.blockSize)
             val encryptedData = data.copyOfRange(cipher.blockSize, data.size)
             cipher.init(

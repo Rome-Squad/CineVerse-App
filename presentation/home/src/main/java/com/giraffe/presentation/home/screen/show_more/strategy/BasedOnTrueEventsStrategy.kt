@@ -4,9 +4,9 @@ import com.giraffe.media.movie.usecase.GetMoviesByKeywordsIdUseCase
 import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByKeywordsIdUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
+import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class BasedOnTrueEventsStrategy(
@@ -14,11 +14,11 @@ class BasedOnTrueEventsStrategy(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesByKeywordsIdUseCase: GetMoviesByKeywordsIdUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
-) : MixedMediaStrategy {
+) : CategoryMediaStrategy {
     override suspend fun loadData(
         page: Int,
         pageSize: Int
-    ): List<ShowMorePoster> {
+    ): List<PosterMedia> {
         val keywordIdForTrueEvents = 9672
         val moviesResult =
             getMoviesByKeywordsIdUseCase(
@@ -41,6 +41,6 @@ class BasedOnTrueEventsStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.BASED_ON_TRUE_EVENTS
+    override fun getSectionType() = CategoryMediaSectionType.BASED_ON_TRUE_EVENTS
 
 }

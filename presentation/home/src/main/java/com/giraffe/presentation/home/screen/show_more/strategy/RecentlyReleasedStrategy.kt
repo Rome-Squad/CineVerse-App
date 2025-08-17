@@ -4,9 +4,9 @@ import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.recentlyReleased.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
+import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class RecentlyReleasedStrategy(
@@ -14,8 +14,8 @@ class RecentlyReleasedStrategy(
     private val getRecentlyReleasedSeries: GetRecentlyReleasedSeriesUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-) : MixedMediaStrategy {
-    override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
+) : CategoryMediaStrategy {
+    override suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia> {
         val recentMovies =
             getRecentlyReleasedMovies.invoke(page = page, limit = pageSize)
                 .map { movie ->
@@ -29,5 +29,5 @@ class RecentlyReleasedStrategy(
         return recentMovies + recentSeries
     }
 
-    override fun getSectionType() = MixedMediaSectionType.RECENTLY_RELEASED
+    override fun getSectionType() = CategoryMediaSectionType.RECENTLY_RELEASED
 }

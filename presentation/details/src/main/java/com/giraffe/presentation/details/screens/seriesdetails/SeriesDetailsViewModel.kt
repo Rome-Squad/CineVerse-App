@@ -2,7 +2,6 @@ package com.giraffe.presentation.details.screens.seriesdetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
 import com.giraffe.media.exception.NoInternetException
@@ -19,6 +18,7 @@ import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.GetUserSeriesRatingUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.SeriesUi
 import com.giraffe.presentation.details.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.details.utils.groupByRole

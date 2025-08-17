@@ -6,7 +6,7 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
 import com.giraffe.presentation.home.model.Poster
-import com.giraffe.presentation.home.model.ShowMorePoster
+import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.model.YourCollectionUi
 
 
@@ -28,27 +28,27 @@ fun Series.toPoster() = Poster(
 )
 
 
-fun Series.toShowMorePoster(genres: List<String>) = ShowMorePoster(
+fun Series.toShowMorePoster(genres: List<String>) = PosterMedia(
     id = id,
     name = name,
     imageUri = posterUrl,
     rating = rating,
-    date = releaseYear.orEmpty(),
+    date = releaseYear.formatDate(),
     mediaType = MediaType.SERIES,
     genres = genres,
     recentViewedAt = recentViewedAt?.toLong()
 )
 
 
-fun Movie.toShowMorePoster(genres: List<String>) = ShowMorePoster(
+fun Movie.toShowMorePoster(genres: List<String>) = PosterMedia(
     id = id,
     name = name,
     imageUri = posterUrl,
     rating = rating,
-    date = releaseYear.orEmpty(),
+    date = releaseYear.formatDate(),
     mediaType = MediaType.MOVIE,
     genres = genres,
-    time = duration.toString(),
+    time = duration.formatDuration(),
     recentViewedAt = recentViewedAt
 )
 

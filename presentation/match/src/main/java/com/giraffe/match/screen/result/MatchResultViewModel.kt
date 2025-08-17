@@ -121,7 +121,8 @@ class MatchResultViewModel @Inject constructor(
         updateState {
             it.copy(
                 matchItems = movieItems + seriesItems,
-                isLoading = false
+                isLoading = false,
+                isEmptyResults = movieItems.isEmpty() && seriesItems.isEmpty()
             )
         }
     }

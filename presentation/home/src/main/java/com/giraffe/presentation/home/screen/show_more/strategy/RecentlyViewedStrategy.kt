@@ -4,9 +4,9 @@ import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
+import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 import kotlinx.coroutines.flow.first
 
@@ -15,8 +15,8 @@ class RecentlyViewedStrategy(
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-) : MixedMediaStrategy {
-    override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
+) : CategoryMediaStrategy {
+    override suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia> {
         val recentMovies = observeRecentlyViewedMoviesUseCase.invoke(page, pageSize).first()
             .map { movie -> movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title }) }
         val recentSeries = getRecentlySeriesUseCase(page, pageSize).first()
@@ -27,5 +27,5 @@ class RecentlyViewedStrategy(
             .sortedByDescending { it.recentViewedAt }
     }
 
-    override fun getSectionType() = MixedMediaSectionType.RECENTLY_VIEWED
+    override fun getSectionType() = CategoryMediaSectionType.RECENTLY_VIEWED
 }

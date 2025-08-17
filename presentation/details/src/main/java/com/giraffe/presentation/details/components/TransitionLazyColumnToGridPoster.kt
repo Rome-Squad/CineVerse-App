@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.utils.ObserveScrollDirection
 
 @OptIn(ExperimentalSharedTransitionApi::class)
