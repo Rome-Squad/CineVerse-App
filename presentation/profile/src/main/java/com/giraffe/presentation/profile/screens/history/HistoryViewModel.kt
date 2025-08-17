@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.history
 
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.DeleteRecentlyViewedMovieByIdUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
@@ -8,6 +7,7 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
+import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.presentation.profile.utils.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
