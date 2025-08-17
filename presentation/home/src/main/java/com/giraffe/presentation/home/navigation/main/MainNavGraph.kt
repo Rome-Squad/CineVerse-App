@@ -1,5 +1,7 @@
 package com.giraffe.presentation.home.navigation.main
 
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,17 +21,14 @@ import com.giraffe.api.explore.ExploreApi
 import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
+import com.giraffe.designsystem.composable.navbar.BottomTab
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.MatchApi
 import com.giraffe.presentation.home.navigation.home.HomeNavGraph
 import com.giraffe.presentation.home.navigation.main.routes.ExploreRoute
-import com.giraffe.presentation.home.navigation.main.routes.ExploreTab
 import com.giraffe.presentation.home.navigation.main.routes.HomeRoute
-import com.giraffe.presentation.home.navigation.main.routes.HomeTab
 import com.giraffe.presentation.home.navigation.main.routes.MatchRoute
-import com.giraffe.presentation.home.navigation.main.routes.MatchTab
 import com.giraffe.presentation.home.navigation.main.routes.ProfileRoute
-import com.giraffe.presentation.home.navigation.main.routes.ProfileTab
 import com.giraffe.presentation.home.navigation.main.routes.navigateToExplore
 import com.giraffe.presentation.home.navigation.main.routes.navigateToMatch
 
@@ -43,24 +41,28 @@ fun MainNavGraph(
     matchApi: MatchApi
 ) {
 
-    val homeTab = HomeTab(
+    val homeTab = BottomTab(
         labelRes = R.string.home,
-        iconRes = listOf(Theme.icons.dueTone.home, Theme.icons.outline.home)
+        iconRes = listOf(Theme.icons.dueTone.home, Theme.icons.outline.home),
+        route = HomeRoute
     )
 
-    val exploreTab = ExploreTab(
+    val exploreTab = BottomTab(
         labelRes = R.string.explore,
-        iconRes = listOf(Theme.icons.dueTone.search, Theme.icons.outline.search)
+        iconRes = listOf(Theme.icons.dueTone.search, Theme.icons.outline.search),
+        route = ExploreRoute
     )
 
-    val profileTab = ProfileTab(
+    val profileTab = BottomTab(
         labelRes = R.string.me,
-        iconRes = listOf(Theme.icons.dueTone.userSquare, Theme.icons.outline.userSquare)
+        iconRes = listOf(Theme.icons.dueTone.userSquare, Theme.icons.outline.userSquare),
+        route = ProfileRoute
     )
 
-    val matchTab = MatchTab(
+    val matchTab = BottomTab(
         labelRes = R.string.match,
-        iconRes = listOf(Theme.icons.dueTone.magicStick, Theme.icons.outline.magicStick)
+        iconRes = listOf(Theme.icons.dueTone.magicStick, Theme.icons.outline.magicStick),
+        route = MatchRoute
     )
 
     val bottomTabs = listOf(
@@ -151,16 +153,17 @@ fun MainNavGraph(
                 if (currentRoute == tab.route) {
                     return@BottomNavigationBar
                 }
-
                 navController.navigate(tab.route.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                        inclusive = true
-                    }
                     launchSingleTop = true
                     restoreState = true
                 }
             }
         )
     }
+
+
+    val activity = LocalActivity.current
+    val isAtRoot =
+        navController.currentDestination?.route == navController.graph.startDestinationRoute
+    BackHandler(isAtRoot) { activity?.finish() }
 }

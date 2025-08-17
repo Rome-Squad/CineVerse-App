@@ -25,9 +25,9 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun BottomNavigationBar(
-    tabs: List<BottomTab<out Route>>,
+    tabs: List<BottomTab>,
     selectedTabRoute: Route?,
-    onTabSelected: (BottomTab<out Route>) -> Unit,
+    onTabSelected: (BottomTab) -> Unit,
     modifier: Modifier = Modifier,
     isBottomBarVisible: Boolean = true
 ) {
