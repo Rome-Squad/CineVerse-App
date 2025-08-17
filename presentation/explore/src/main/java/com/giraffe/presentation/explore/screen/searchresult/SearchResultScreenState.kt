@@ -1,7 +1,7 @@
 package com.giraffe.presentation.explore.screen.searchresult
 
 import androidx.paging.PagingData
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.model.GenreUi
 import com.giraffe.presentation.explore.screen.discover.SearchTab
 import kotlinx.coroutines.flow.Flow

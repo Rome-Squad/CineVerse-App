@@ -4,9 +4,9 @@ import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
+import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class LateNightThrillsStrategy(
@@ -14,11 +14,11 @@ class LateNightThrillsStrategy(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
-) : MixedMediaStrategy {
+) : CategoryMediaStrategy {
     override suspend fun loadData(
         page: Int,
         pageSize: Int
-    ): List<ShowMorePoster> {
+    ): List<PosterMedia> {
         val genreIdForHorror = 27
         val genreIdForThriller = 53
         val moviesResult =
@@ -42,6 +42,6 @@ class LateNightThrillsStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.LATE_NIGHT_THRILLS
+    override fun getSectionType() = CategoryMediaSectionType.LATE_NIGHT_THRILLS
 
 }

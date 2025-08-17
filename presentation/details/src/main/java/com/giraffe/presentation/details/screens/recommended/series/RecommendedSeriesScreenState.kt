@@ -1,8 +1,8 @@
 package com.giraffe.presentation.details.screens.recommended.series
 
 import androidx.paging.PagingData
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
+import com.giraffe.presentation.details.components.uimodel.Poster
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
