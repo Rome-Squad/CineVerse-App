@@ -22,8 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.presentation.details.R
+import com.giraffe.presentation.details.components.uimodel.Poster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable

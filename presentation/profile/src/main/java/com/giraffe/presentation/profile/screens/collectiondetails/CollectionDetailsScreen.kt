@@ -18,11 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.InfoCard
-import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
 import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.components.DeleteButton
+import com.giraffe.presentation.profile.components.PosterItemHorizontal
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.utils.EffectListener
 import com.giraffe.presentation.profile.utils.showToast
