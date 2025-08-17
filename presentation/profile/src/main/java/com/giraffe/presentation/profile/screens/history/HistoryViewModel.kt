@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.screens.history
 
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.DeleteRecentlyViewedMovieByIdUseCase
