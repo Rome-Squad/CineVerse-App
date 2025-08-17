@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,8 +27,6 @@ import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.components.DeleteButton
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.utils.EffectListener
-import com.giraffe.presentation.profile.utils.showToast
-import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
 fun HistoryScreen(
@@ -39,7 +36,6 @@ fun HistoryScreen(
     navigateToExploreScreen: () -> Unit,
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     EffectListener(
         events = viewModel.effect
@@ -50,7 +46,7 @@ fun HistoryScreen(
             HistoryEffect.NavigateToExploreScreen -> navigateToExploreScreen()
             is HistoryEffect.NavigateToProfileScreen -> onBackClicked()
             HistoryEffect.NavigateBack -> onBackClicked()
-            is HistoryEffect.ShowError -> context.showToast(effect.error.toStringResource())
+            is HistoryEffect.ShowError -> {}
         }
     }
 
@@ -68,7 +64,6 @@ private fun HistoryContent(
     BaseScreen(
         title = stringResource(R.string.history),
         isLoading = state.isLoading,
-        isNoInternet = state.isNoInternet,
         onBackClick = interaction::onBackClick,
     ) {
         Box(
