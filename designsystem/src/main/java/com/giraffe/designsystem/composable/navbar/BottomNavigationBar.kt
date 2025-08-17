@@ -6,7 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.BuildingBlock
+import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.Theme
 
 @Composable
@@ -55,12 +54,12 @@ fun BottomNavigationBar(
                 tabs.forEach { tab ->
                     val isSelected = selectedTabRoute == tab.route
                     BuildingBlock(
-                        icon = painterResource(tab.iconRes),
+                        icons = tab.iconRes,
                         label = stringResource(tab.labelRes),
                         isSelected = isSelected,
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { onTabSelected(tab) }
+                            .noHoverClickable { onTabSelected(tab) }
                             .padding(vertical = 13.dp)
                     )
                 }
