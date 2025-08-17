@@ -14,8 +14,9 @@ interface MatchApiService {
         @Query("with_genres") genreIds: String,
         @Query("with_runtime.gte") minRuntime: Int?,
         @Query("with_runtime.lte") maxRuntime: Int?,
-        @Query("primary_release_date.gte") earliestFirstAirDate: String?,
-        @Query("primary_release_date.lte") latestFirstAirDate: String?,
+        @Query("primary_release_date.gte") earliestDate: String?,
+        @Query("primary_release_date.lte") latestDate: String?,
+        @Query("with_keywords") moodId: String? = null,
     ): Response<MatchResponse<MovieDto>>
 
     @GET("discover/tv")
@@ -23,8 +24,9 @@ interface MatchApiService {
         @Query("with_genres") genreIds: String,
         @Query("with_runtime.gte") minRuntime: Int?,
         @Query("with_runtime.lte") maxRuntime: Int?,
-        @Query("primary_release_date.gte") earliestFirstAirDate: String?,
-        @Query("primary_release_date.lte") latestFirstAirDate: String?,
+        @Query("primary_release_date.gte") earliestDate: String?,
+        @Query("primary_release_date.lte") latestDate: String?,
+        @Query("with_keywords") moodId: String? = null,
     ): Response<MatchResponse<SeriesDto>>
 
 }

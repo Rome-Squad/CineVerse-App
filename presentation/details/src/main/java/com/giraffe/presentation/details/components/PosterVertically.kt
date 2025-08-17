@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.components.uimodel.Poster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -57,17 +57,6 @@ fun PosterVertically(
                             animatedVisibilityScope = animatedVisibilityScope
                         )
                 )
-//                {
-//
-//                    Icon(
-//                        painter = painterResource(Theme.icons.dueTone.image),
-//                        contentDescription = stringResource(R.string.loading_image),
-//                        modifier = Modifier.size(32.dp),
-//                        tint = Theme.color.brand.secondary
-//                    )
-//
-//                }
-
                 if (poster.rating != 0f) {
                     Rating(
                         value = poster.rating,

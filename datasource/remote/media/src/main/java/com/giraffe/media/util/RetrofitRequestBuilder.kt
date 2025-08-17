@@ -1,6 +1,5 @@
 package com.giraffe.media.util
 
-import android.util.Log
 import com.giraffe.media.exception.ApiDataException
 import com.giraffe.media.exception.InvalidIdDataException
 import com.giraffe.media.exception.MediaDataException
@@ -37,13 +36,17 @@ class RetrofitRequestBuilder<API>(
         suspend inline fun <reified T> safeCall(
             crossinline execute: suspend () -> Response<T>
         ): T {
+            return try {
                 val response = execute()
                 if (response.isSuccessful) {
                     val body = response.body()
-                    return body ?: throw SerializationDataException()
+                    body ?: throw SerializationDataException()
                 } else {
                     throw ApiDataException(response.code())
                 }
+            } catch (e: Throwable) {
+                throw mapToMediaException(e)
+            }
         }
 
         fun mapToMediaException(e: Throwable): MediaDataException = when (e) {

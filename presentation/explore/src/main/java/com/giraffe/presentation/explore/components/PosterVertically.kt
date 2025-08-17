@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.explore.components.uimodel.Poster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("StateFlowValueCalledInComposition")

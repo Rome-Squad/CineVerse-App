@@ -4,9 +4,9 @@ import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
+import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class MatchesYourVibesStrategy(
@@ -14,8 +14,8 @@ class MatchesYourVibesStrategy(
     private val getMatchesYourVibeSeries: GetMatchesYourVibeSeriesUseCase,
     private val getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-) : MixedMediaStrategy {
-    override suspend fun loadData(page: Int, pageSize: Int): List<ShowMorePoster> {
+) : CategoryMediaStrategy {
+    override suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia> {
 
         val matchesYourVibeMovies = getMatchesYourVibeMovies(page = page, limit = pageSize)
         val matchesYourVibeSeries = getMatchesYourVibeSeries(page = page, limit = pageSize)
@@ -34,5 +34,5 @@ class MatchesYourVibesStrategy(
             .distinctBy { it.id }
     }
 
-    override fun getSectionType() = MixedMediaSectionType.MATCHES_YOUR_VIBES
+    override fun getSectionType() = CategoryMediaSectionType.MATCHES_YOUR_VIBES
 }

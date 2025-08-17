@@ -47,4 +47,5 @@
     <string name="password_visibility_icon">password visibility icon</string>
     <string name="danger_triangle_icon">Danger_Triangle_Icon</string>
     <string name="user_icon">User_Icon</string>
+    <string name="icon_in_navigation_bottom">Icon in navigation bottom</string>
 </resources>

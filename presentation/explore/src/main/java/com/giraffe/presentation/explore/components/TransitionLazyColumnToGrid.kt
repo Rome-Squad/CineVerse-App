@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.presentation.explore.R
+import com.giraffe.presentation.explore.components.uimodel.Poster
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable

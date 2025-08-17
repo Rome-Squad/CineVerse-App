@@ -9,9 +9,10 @@ import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 
 @Composable
-fun BaseScreenWithStates(
+fun ScreenState(
     isLoading: Boolean,
     isNoInternet: Boolean,
+    onRetryClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     when {
@@ -19,7 +20,10 @@ fun BaseScreenWithStates(
             Progress()
         }
 
-        isNoInternet -> NoInternetScreen()
+        isNoInternet -> NoInternetScreen(
+            onRetryClick = onRetryClick
+        )
+
         else -> content()
     }
 }

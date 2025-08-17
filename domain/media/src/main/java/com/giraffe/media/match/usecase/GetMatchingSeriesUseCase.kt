@@ -12,14 +12,16 @@ class GetMatchingSeriesUseCase @Inject constructor(
         minRuntime: Int? = null,
         maxRuntime: Int? = null,
         earliestFirstAirDate: String? = null,
-        latestFirstAirDate: String? = null
+        latestFirstAirDate: String? = null,
+        moodId: String? = null,
     ): List<Series> {
         return matchRepository.getMatchingSeries(
             genreIds = genreIds,
             minRuntime = minRuntime,
             maxRuntime = maxRuntime,
             earliestFirstAirDate = earliestFirstAirDate,
-            latestFirstAirDate = latestFirstAirDate
+            latestFirstAirDate = latestFirstAirDate,
+            moodId = moodId,
         )
     }
 }
