@@ -80,24 +80,10 @@ fun SettingsScreen(
                 is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
-
-    Box(modifier = Modifier.fillMaxSize()) {
     SettingsContent(
         state = state,
         interaction = viewModel
     )
-        if (state.isLoggingOut) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Theme.color.background.screen)
-                    .clickable(enabled = false) { },
-                contentAlignment = Alignment.Center
-            ) {
-                Progress(modifier = Modifier.size(40.dp))
-            }
-        }
-    }
 }
 
 @Composable
@@ -272,4 +258,16 @@ private fun SettingsContent(
             )
         }
     )
+
+    if (state.isLoggingOut) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Theme.color.background.screen)
+                .clickable(enabled = false) { },
+            contentAlignment = Alignment.Center
+        ) {
+            Progress(modifier = Modifier.size(40.dp))
+        }
+    }
 }
