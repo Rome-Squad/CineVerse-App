@@ -1,14 +1,26 @@
 package com.giraffe.presentation.home.utils
 
-import java.text.SimpleDateFormat
+import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
+import kotlinx.datetime.toJavaLocalDate
+import java.time.format.TextStyle
 import java.util.Locale
 
-fun String.toFormattedDate(): String {
-    if (this.isBlank()) return this
-    val inputFormat = SimpleDateFormat("yyyy-M-dd", Locale.ENGLISH)
-    val date = inputFormat.parse(this) ?: return this
+fun LocalDate?.formatAsFullDate(): String {
+    if (this == null) return ""
+
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
+
+    val dayStr = String.format(Locale.getDefault(), "%d", this.day)
+    val monthStr = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        this.toJavaLocalDate().month.getDisplayName(TextStyle.SHORT, locale)
+    } else {
+        this.month.number.toString()
+    }
+    val yearStr = String.format(Locale.getDefault(), "%d", this.year)
 
 
-    val outputFormat = SimpleDateFormat("yyyy, MMM d", Locale.ENGLISH)
-    return outputFormat.format(date)
+    return "$yearStr, $monthStr $dayStr"
 }
