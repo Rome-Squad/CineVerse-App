@@ -21,15 +21,21 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class ShowMoreViewModel @Inject constructor(
+class CategoryMediaViewModel @Inject constructor(
     private val categoryMediaFactory: CategoryMediaFactory,
     stateSavedStateHandle: SavedStateHandle
-) : BaseViewModel<ShowMoreScreenState, ShowMoreEffect>(ShowMoreScreenState()),
-    ShowMoreInteractionListener {
+) : BaseViewModel<CategoryMediaScreenState, CategoryMediaEffect>(CategoryMediaScreenState()),
+    CategoryMediaInteractionListener {
 
     private val sectionType = stateSavedStateHandle.toRoute<ShowMoreRoute>().sectionType
 
     init {
+        updateState {
+            it.copy(
+                isLoading = true,
+                isNoInternet = false
+            )
+        }
         loadByStrategy()
     }
 
@@ -82,7 +88,9 @@ class ShowMoreViewModel @Inject constructor(
                 isNoInternet = exception is NoInternetException
             )
         }
-        sendEffect(ShowMoreEffect.ShowError(exception))
+        if (exception is NoInternetException) {
+            sendEffect(CategoryMediaEffect.ShowError(exception))
+        }
     }
 
 
@@ -97,13 +105,17 @@ class ShowMoreViewModel @Inject constructor(
         mediaType: MediaType
     ) {
         when (mediaType) {
-            MediaType.MOVIE -> sendEffect(ShowMoreEffect.NavigateToMovieDetails(mediaId))
-            MediaType.SERIES -> sendEffect(ShowMoreEffect.NavigateToSeriesDetails(mediaId))
+            MediaType.MOVIE -> sendEffect(CategoryMediaEffect.NavigateToMovieDetails(mediaId))
+            MediaType.SERIES -> sendEffect(CategoryMediaEffect.NavigateToSeriesDetails(mediaId))
         }
     }
 
     override fun onBackClick() {
-        sendEffect(ShowMoreEffect.NavigateBack)
+        sendEffect(CategoryMediaEffect.NavigateBack)
+    }
+
+    override fun onRetryClick() {
+        loadByStrategy()
     }
 
     companion object {

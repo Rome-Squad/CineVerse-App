@@ -7,8 +7,8 @@ import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-data class ShowMoreScreenState(
-    val isLoading: Boolean = false,
+data class CategoryMediaScreenState(
+    val isLoading: Boolean = true,
     val mediaFlow: Flow<PagingData<PosterMedia>> = flowOf(),
     val sectionType: CategoryMediaSectionType? = null,
     val isListSelected: Boolean = false,
