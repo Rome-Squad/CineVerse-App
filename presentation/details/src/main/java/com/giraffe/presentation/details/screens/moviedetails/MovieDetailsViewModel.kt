@@ -118,8 +118,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onMoviePosterClick(movieId: Int) {
-        updateState { MovieDetailsScreenState() }
-        loadMovieDetails(movieId)
+        sendEffect(MovieDetailsEffect.NavigateToMovieDetails(movieId))
     }
 
     override fun onGiveStarsCardClick() {

@@ -10,5 +10,6 @@ abstract class Route(val route: String)
 interface BottomTab<R: Route> {
     val route: R
     @get:StringRes val labelRes: Int
-    @get:DrawableRes val iconRes: Int
+    @get:DrawableRes
+    val iconRes: List<Int>
 }
