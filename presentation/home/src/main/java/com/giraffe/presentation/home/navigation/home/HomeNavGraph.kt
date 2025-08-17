@@ -60,7 +60,7 @@ fun HomeNavGraph(
             modifier = Modifier.weight(1f)
         ) {
             homeRoute(
-                navigateToShowMoreScreen = {
+                navigateToCategoryMediaSection = {
                     navController.navigateToShowMore(it)
                 },
                 navigateToMoviesDetailsScreen = {

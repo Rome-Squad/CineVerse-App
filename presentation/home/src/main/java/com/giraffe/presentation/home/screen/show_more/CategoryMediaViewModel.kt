@@ -11,7 +11,7 @@ import androidx.paging.cachedIn
 import com.giraffe.presentation.home.base.BasePagingSource
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.model.ShowMorePoster
+import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.ShowMoreRoute
 import com.giraffe.user.exception.NoInternetException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,15 +21,25 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class ShowMoreViewModel @Inject constructor(
-    private val showMoreFactory: MixedMediaFactory,
+class CategoryMediaViewModel @Inject constructor(
+    private val categoryMediaFactory: CategoryMediaFactory,
     stateSavedStateHandle: SavedStateHandle
-) : BaseViewModel<ShowMoreScreenState, ShowMoreEffect>(ShowMoreScreenState()),
-    ShowMoreInteractionListener {
+) : BaseViewModel<CategoryMediaScreenState, CategoryMediaEffect>(CategoryMediaScreenState()),
+    CategoryMediaInteractionListener {
 
     private val sectionType = stateSavedStateHandle.toRoute<ShowMoreRoute>().sectionType
 
     init {
+        loadCategoryMediaDate()
+    }
+
+    private fun loadCategoryMediaDate() {
+        updateState {
+            it.copy(
+                isLoading = true,
+                isNoInternet = false
+            )
+        }
         loadByStrategy()
     }
 
@@ -48,7 +58,7 @@ class ShowMoreViewModel @Inject constructor(
                 BasePagingSource(
                     onError = ::onLoadByStrategyFail
                 ) { page ->
-                    showMoreFactory.createStrategy(sectionType).loadData(page, PAGE_SIZE)
+                    categoryMediaFactory.createStrategy(sectionType).loadData(page, PAGE_SIZE)
                 }
             }
 
@@ -64,7 +74,7 @@ class ShowMoreViewModel @Inject constructor(
         }
     }
 
-    private fun onLoadByStrategySuccess(mediaFlow: Flow<PagingData<ShowMorePoster>>) {
+    private fun onLoadByStrategySuccess(mediaFlow: Flow<PagingData<PosterMedia>>) {
         updateState {
             it.copy(
                 sectionType = sectionType,
@@ -82,7 +92,9 @@ class ShowMoreViewModel @Inject constructor(
                 isNoInternet = exception is NoInternetException
             )
         }
-        sendEffect(ShowMoreEffect.ShowError(exception))
+        if (exception is NoInternetException) {
+            sendEffect(CategoryMediaEffect.ShowError(exception))
+        }
     }
 
 
@@ -97,13 +109,17 @@ class ShowMoreViewModel @Inject constructor(
         mediaType: MediaType
     ) {
         when (mediaType) {
-            MediaType.MOVIE -> sendEffect(ShowMoreEffect.NavigateToMovieDetails(mediaId))
-            MediaType.SERIES -> sendEffect(ShowMoreEffect.NavigateToSeriesDetails(mediaId))
+            MediaType.MOVIE -> sendEffect(CategoryMediaEffect.NavigateToMovieDetails(mediaId))
+            MediaType.SERIES -> sendEffect(CategoryMediaEffect.NavigateToSeriesDetails(mediaId))
         }
     }
 
     override fun onBackClick() {
-        sendEffect(ShowMoreEffect.NavigateBack)
+        sendEffect(CategoryMediaEffect.NavigateBack)
+    }
+
+    override fun onRetryClick() {
+        loadCategoryMediaDate()
     }
 
     companion object {
