@@ -21,6 +21,7 @@ data class HomeScreenState(
             it
         )
     },
+    val isLoadingUserName: Boolean = true,
     val isLoadingPopularity: Boolean = true,
     val isLoadingRecentlyReleased: Boolean = true,
     val isLoadingUpcomingMovies: Boolean = true,

@@ -60,6 +60,7 @@ class HomeViewModel @Inject constructor(
         updateState {
             it.copy(
                 isNoInternet = false,
+                isLoadingUserName = true,
                 isLoadingPopularity = true,
                 isLoadingRecentlyReleased = true,
                 isLoadingUpcomingMovies = true,
@@ -99,7 +100,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getUseNameSuccess(userName: String) {
-        updateState { it.copy(userName = userName) }
+        updateState { it.copy(userName = userName, isLoadingUserName = false) }
     }
 
     private fun getYourCollections() {
@@ -301,6 +302,7 @@ class HomeViewModel @Inject constructor(
             isLoadingUpcomingMovies = false,
             isLoadingPopularity = false,
             isLoadingTopRatedSeries = false,
+            isLoadingUserName = false,
             isNoInternet = if (error is NetworkErrorException) true else state.value.isNoInternet
         )
     }

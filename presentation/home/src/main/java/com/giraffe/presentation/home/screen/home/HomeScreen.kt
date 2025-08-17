@@ -87,7 +87,7 @@ fun HomeContent(
 ) {
 
     ScreenState(
-        isLoading = state.isLoadingPopularity || state.isLoadingRecentlyReleased || state.isLoadingUpcomingMovies || state.isLoadingTopRatedSeries,
+        isLoading = state.isLoadingUserName || state.isLoadingPopularity || state.isLoadingRecentlyReleased || state.isLoadingUpcomingMovies || state.isLoadingTopRatedSeries,
         isNoInternet = state.isNoInternet,
         onRetryClick = interactionListener::onRetryClick
     ) {
@@ -131,7 +131,7 @@ fun HomeContent(
                             .padding(vertical = 16.dp),
                         title = stringResource(R.string.recently_released),
                         endText = stringResource(R.string.show_more),
-                        uiModels = state.recentlyReleased,
+                        posters = state.recentlyReleased,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
@@ -159,7 +159,7 @@ fun HomeContent(
                             .padding(vertical = 16.dp),
                         title = stringResource(R.string.upcoming_movies),
                         endText = stringResource(R.string.show_more),
-                        uiModels = state.upcomingMovies,
+                        posters = state.upcomingMovies,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
@@ -175,7 +175,7 @@ fun HomeContent(
                             .padding(vertical = 16.dp),
                         title = stringResource(R.string.matches_your_vibe),
                         endText = stringResource(R.string.show_more),
-                        uiModels = state.matchVibes,
+                        posters = state.matchVibes,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
@@ -198,13 +198,13 @@ fun HomeContent(
                             .padding(vertical = 16.dp),
                         title = stringResource(R.string.top_rated_tv_shows),
                         endText = stringResource(R.string.show_more),
-                        uiModels = state.topRated,
+                        posters = state.topRated,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
                                 sectionType = MixedMediaSectionType.TOP_RATED_TV_SHOWS
                             )
-                        },
+                        }
                     )
                 }
                 AnimatedVisibility(state.recentlyViewed.isNotEmpty()) {
@@ -214,7 +214,7 @@ fun HomeContent(
                             .padding(vertical = 16.dp),
                         endText = stringResource(R.string.show_more),
                         title = stringResource(R.string.you_recent_viewed),
-                        uiModels = state.recentlyViewed,
+                        posters = state.recentlyViewed,
                         onClickItem = interactionListener::onMediaClicked,
                         onClickEndText = {
                             interactionListener.onSeeMoreClicked(
