@@ -47,4 +47,5 @@
     <string name="password_visibility_icon">ايقونه الرؤية</string>
     <string name="danger_triangle_icon">ايقونه الخطر</string>
     <string name="user_icon">ايقونه المستخدم</string>
+    <string name="icon_in_navigation_bottom">أيقونة في شريط التنقل السفلي</string>
 </resources>

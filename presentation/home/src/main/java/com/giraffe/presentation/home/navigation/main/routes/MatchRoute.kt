@@ -12,7 +12,7 @@ object MatchRoute : Route("match")
 
 class MatchTab(
     override val labelRes: Int,
-    override val iconRes: Int
+    override val iconRes: List<Int>
 ) : BottomTab<MatchRoute> {
     override val route = MatchRoute
 }

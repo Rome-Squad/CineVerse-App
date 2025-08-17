@@ -70,5 +70,10 @@
     <string name="no_collections_yet">لا توجد مجموعات بعد</string>
     <string name="create_a_new_collection_to_start_saving_your_favorite_movies_and_series">أنشئ مجموعة جديدة لبدء حفظ أفلامك ومسلسلاتك المفضلة.</string>
     <string name="create_collection">انشاء مجموعة</string>
+    <string name="no_results_title">لا توجد نتائج</string>
+    <string name="no_results_caption">لم نتمكن من العثور على أي أفلام أو مسلسلات تطابق اختياراتك. حاول تعديل الفلاتر أو التفضيلات.</string>
+    <string name="try_again">حاول مرة أخرى</string>
+    <string name="season">%1$s مواسم%2$s</string>
+
 
 </resources>
