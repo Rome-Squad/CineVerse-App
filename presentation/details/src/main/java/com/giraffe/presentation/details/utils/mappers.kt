@@ -1,7 +1,5 @@
 package com.giraffe.presentation.details.utils
 
-import com.giraffe.designsystem.uimodel.Poster
-import com.giraffe.designsystem.uimodel.Poster.Type
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
@@ -12,6 +10,7 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.details.R
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.presentation.details.model.CollectionUi
 import com.giraffe.presentation.details.model.CrewUi
@@ -45,7 +44,7 @@ fun MovieUi.toPoster() = Poster(
     genres = if (genres.isNotEmpty()) genres.joinToString(", ") else null,
     time = duration,
     date = releaseYear,
-    mediaTypeOfPoster = Type.MOVIE.name
+    mediaTypeOfPoster = Poster.Type.MOVIE.name
 )
 
 fun ReviewUI.toEntity() = Review(
@@ -107,7 +106,7 @@ fun SeriesUi.toPoster() = Poster(
     rating = rating,
     genres = genres.joinToString(", "),
     date = releaseYear,
-    mediaTypeOfPoster = Type.SERIES.name
+    mediaTypeOfPoster = Poster.Type.SERIES.name
 )
 
 

@@ -27,14 +27,14 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.FeaturedCollectionType
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun CollectionItem(
     modifier: Modifier = Modifier,
     collectionItemData: FeaturedCollectionUi,
-    onClick: (MixedMediaSectionType) -> Unit
+    onClick: (CategoryMediaSectionType) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -45,12 +45,12 @@ fun CollectionItem(
             .clickable(onClick = dropUnlessResumed {
                 onClick(
                     when (collectionItemData.type) {
-                        FeaturedCollectionType.LATE_NIGHT_THRILLS -> MixedMediaSectionType.LATE_NIGHT_THRILLS
-                        FeaturedCollectionType.FAMILY_NIGHT_PICKS -> MixedMediaSectionType.FAMILY_NIGHT_PICKS
-                        FeaturedCollectionType.MIND_BENDING_STORIES -> MixedMediaSectionType.MIND_BENDING_STORIES
-                        FeaturedCollectionType.BASED_ON_TRUE_EVENTS -> MixedMediaSectionType.BASED_ON_TRUE_EVENTS
-                        FeaturedCollectionType.CINEMATIC_MASTERPIECE -> MixedMediaSectionType.CINEMATIC_MASTERPIECE
-                        FeaturedCollectionType.FEEL_GOOD_PREFERENCES -> MixedMediaSectionType.FEEL_GOOD_PREFERENCES
+                        FeaturedCollectionType.LATE_NIGHT_THRILLS -> CategoryMediaSectionType.LATE_NIGHT_THRILLS
+                        FeaturedCollectionType.FAMILY_NIGHT_PICKS -> CategoryMediaSectionType.FAMILY_NIGHT_PICKS
+                        FeaturedCollectionType.MIND_BENDING_STORIES -> CategoryMediaSectionType.MIND_BENDING_STORIES
+                        FeaturedCollectionType.BASED_ON_TRUE_EVENTS -> CategoryMediaSectionType.BASED_ON_TRUE_EVENTS
+                        FeaturedCollectionType.CINEMATIC_MASTERPIECE -> CategoryMediaSectionType.CINEMATIC_MASTERPIECE
+                        FeaturedCollectionType.FEEL_GOOD_PREFERENCES -> CategoryMediaSectionType.FEEL_GOOD_PREFERENCES
                     }
                 )
             })

@@ -1,6 +1,6 @@
 package com.giraffe.presentation.details.screens.seriesdetails
 
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.presentation.details.model.ReviewUI
 import com.giraffe.presentation.details.model.SeasonUi

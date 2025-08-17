@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.giraffe.designsystem.composable.PosterItemHorizontal
 import com.giraffe.presentation.profile.components.DeleteButton
+import com.giraffe.presentation.profile.components.PosterItemHorizontal
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.model.RatedPoster
 

@@ -24,14 +24,14 @@ import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.home.model.Poster
-import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.Poster
 
 @Composable
 fun ListSection(
     title: String,
-    uiModels: List<Poster>,
+    posters: List<Poster>,
     modifier: Modifier = Modifier,
     endText: String? = null,
     paddingHorizontal: Int = 16,
@@ -45,14 +45,14 @@ fun ListSection(
         SectionTitle(
             modifier = Modifier.padding(horizontal = paddingHorizontal.dp),
             title = title,
-            clickableText = endText,
+            clickableText = if (posters.size >= 10) endText else null,
             onClickableText = onClickEndText
         )
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
         ) {
-            items(items = uiModels, key = { it.id }) { uiModel ->
+            items(items = posters, key = { it.id }) { uiModel ->
                 HomeItemVertically(
                     item = uiModel,
                     modifier = Modifier.width(136.dp),

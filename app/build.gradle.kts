@@ -15,20 +15,24 @@ plugins {
 android {
     namespace = "com.giraffe.cineverseapp"
 
-    defaultConfig {
-        buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
-        buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
-        buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
-    }
-
     buildTypes {
         debug {
             buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
             buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
             buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
+
+            manifestPlaceholders["isFirebaseDeactivated"] = false
         }
 
         release {
+            buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
+            buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
+            buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
+
+            manifestPlaceholders["isFirebaseDeactivated"] = false
+        }
+
+        getByName("publicTest") {
             buildConfigField("String", "API_KEY", "\"${getSecret("API_KEY")}\"")
             buildConfigField("String", "BASE_URL", "\"${getSecret("BASE_URL")}\"")
             buildConfigField("String", "ACCESS_TOKEN", "\"${getSecret("ACCESS_TOKEN")}\"")
@@ -41,6 +45,13 @@ android {
         }
     }
 }
+
+tasks.whenTaskAdded {
+    if (name.contains("processPublicTestGoogleService")) {
+        enabled = false
+    }
+}
+
 
 dependencies {
     projectModules()
