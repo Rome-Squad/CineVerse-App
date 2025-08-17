@@ -1,7 +1,7 @@
 package com.giraffe.presentation.explore.screen.discover
 
 import androidx.paging.PagingData
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.model.GenreUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
