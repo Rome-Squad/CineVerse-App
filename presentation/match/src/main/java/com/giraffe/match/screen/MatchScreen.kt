@@ -20,7 +20,6 @@ import com.giraffe.presentation.match.R
 @Composable
 fun MatchScreen(
     modifier: Modifier = Modifier,
-    onShowBottomBarChange: (Boolean) -> Unit = {},
     onStartMatchingClick: () -> Unit = {},
 ) {
     Column(
