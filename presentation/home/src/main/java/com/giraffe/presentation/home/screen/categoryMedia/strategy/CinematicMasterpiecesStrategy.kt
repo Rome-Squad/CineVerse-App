@@ -1,39 +1,38 @@
-package com.giraffe.presentation.home.screen.show_more.strategy
+package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
-import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
+import com.giraffe.media.movie.usecase.GetMoviesBySortUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
+import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
-class LateNightThrillsStrategy(
-    private val getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
+class CinematicMasterpiecesStrategy(
+    private val getSeriesBySortUseCase: GetSeriesBySortUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
-    private val getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
+    private val getMoviesBySortUseCase: GetMoviesBySortUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
 ) : CategoryMediaStrategy {
     override suspend fun loadData(
         page: Int,
         pageSize: Int
     ): List<PosterMedia> {
-        val genreIdForHorror = 27
-        val genreIdForThriller = 53
+        val sortBy = "vote_average.desc"
         val moviesResult =
-            getMoviesByGenresUseCase(
+            getMoviesBySortUseCase(
                 page = page,
-                genreIds = listOf(genreIdForHorror, genreIdForThriller)
+                sortBy = sortBy
             ).map { movie ->
                 movie.toShowMorePoster(
                     getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
                 )
             }
         val seriesResult =
-            getSeriesByGenresUseCase(
+            getSeriesBySortUseCase(
                 page = page,
-                genreIds = listOf(genreIdForHorror, genreIdForThriller)
+                sortBy = sortBy
             ).map { series ->
                 series.toShowMorePoster(
                     getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
@@ -42,6 +41,6 @@ class LateNightThrillsStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = CategoryMediaSectionType.LATE_NIGHT_THRILLS
+    override fun getSectionType() = CategoryMediaSectionType.CINEMATIC_MASTERPIECE
 
 }

@@ -1,9 +1,9 @@
-package com.giraffe.presentation.home.screen.show_more.strategy
+package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class TopRatedTvShowsStrategy(
