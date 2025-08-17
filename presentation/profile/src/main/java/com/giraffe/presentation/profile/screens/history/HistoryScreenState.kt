@@ -1,6 +1,6 @@
 package com.giraffe.presentation.profile.screens.history
 
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.media.entity.Genre
 
 

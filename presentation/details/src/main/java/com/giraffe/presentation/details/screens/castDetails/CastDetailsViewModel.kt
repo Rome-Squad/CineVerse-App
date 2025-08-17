@@ -57,8 +57,6 @@ class CastDetailsViewModel @Inject constructor(
 
     private fun getPersonDetailsSuccess(castMember: CastMember) {
         safeExecute { storeRecentSeriesUseCase(castMember) }
-
-        //todo we should get posters from new usecases which will get movies and series for personId
         updateState {
             it.copy(
                 actorId = castMember.id,

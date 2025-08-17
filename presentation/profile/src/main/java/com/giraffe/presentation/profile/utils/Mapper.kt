@@ -1,6 +1,5 @@
 package com.giraffe.presentation.profile.utils
 
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
@@ -9,6 +8,7 @@ import com.giraffe.presentation.profile.model.CollectionUi
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.model.SwipeablePoster
 import com.giraffe.presentation.profile.model.UserUi
+import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.user.entity.User
 
 fun User.toUi() = UserUi(

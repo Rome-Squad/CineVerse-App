@@ -1,4 +1,4 @@
-package com.giraffe.designsystem.composable
+package com.giraffe.presentation.details.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -19,11 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.components.uimodel.Poster
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
