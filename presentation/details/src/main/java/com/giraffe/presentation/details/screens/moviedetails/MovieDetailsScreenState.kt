@@ -19,6 +19,7 @@ data class MovieDetailsScreenState(
     val movieReviews: List<ReviewUI> = emptyList(),
     val newCollectionName: String = "",
     val isLoggedIn: Boolean = false,
+    val isUserGuest: Boolean = false,
     val currentRating: Int = 0,
 
     val collectionBottomSheet: CollectionBottomSheet? = null,

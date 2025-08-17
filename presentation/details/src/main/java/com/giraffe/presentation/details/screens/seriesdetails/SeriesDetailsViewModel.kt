@@ -26,6 +26,7 @@ import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsUserGuestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
@@ -40,6 +41,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getSeriesReviews: GetSeriesReviewsUseCase,
     private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isUserGuestUseCase: IsUserGuestUseCase,
     private val addRatingUseCase: AddSeriesRatingUseCase,
     private val getUserRatingUseCase: GetUserSeriesRatingUseCase,
     savedStateHandle: SavedStateHandle
@@ -54,6 +56,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     init {
         loadSeriesDetailsScreen(state.value.seriesUi.id)
+        isUserGuest()
     }
 
 
@@ -70,6 +73,18 @@ class SeriesDetailsViewModel @Inject constructor(
         loadRecommendedSeries(seriesID)
         loadSeriesReviews(seriesID)
         loadSeriesPeople(seriesID)
+    }
+
+    private fun isUserGuest() {
+        safeExecute(
+            onError = ::onError,
+            onSuccess = ::onIsUserGuestSuccess,
+            block = { isUserGuestUseCase() }
+        )
+    }
+
+    private fun onIsUserGuestSuccess(isUserGuest: Boolean) {
+        updateState { it.copy(isUserGuest = isUserGuest) }
     }
 
     override fun onGiveStarsCardClick() {
@@ -357,7 +372,7 @@ class SeriesDetailsViewModel @Inject constructor(
                     )
                 }
 
-                if (isLoggedIn) {
+                if (isLoggedIn && !state.value.isUserGuest) {
                     block()
                 } else {
                     ifNotLoggedIn()

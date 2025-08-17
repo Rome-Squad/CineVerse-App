@@ -27,6 +27,7 @@ import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsUserGuestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
@@ -39,6 +40,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val getMediaMembersByMovieId: GetMediaMembersByMovieIdUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isUserGuestUseCase: IsUserGuestUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
@@ -57,6 +59,7 @@ class MovieDetailsViewModel @Inject constructor(
         state.value.movie.id.let {
             loadMovieDetailsScreen(it)
         }
+        isUserGuest()
     }
 
 
@@ -72,6 +75,18 @@ class MovieDetailsViewModel @Inject constructor(
         loadMoviePeople(movieID)
         loadMovieReviews(movieID)
         loadRecommendedMovie(movieID)
+    }
+
+    private fun isUserGuest() {
+        safeExecute(
+            onError = ::onError,
+            onSuccess = ::onIsUserGuestSuccess,
+            block = { isUserGuestUseCase() }
+        )
+    }
+
+    private fun onIsUserGuestSuccess(isUserGuest: Boolean) {
+        updateState { it.copy(isUserGuest = isUserGuest) }
     }
 
 
@@ -447,7 +462,7 @@ class MovieDetailsViewModel @Inject constructor(
                     )
                 }
 
-                if (isLoggedIn) {
+                if (isLoggedIn && !state.value.isUserGuest) {
                     block()
                 } else {
                     ifNotLoggedIn()
