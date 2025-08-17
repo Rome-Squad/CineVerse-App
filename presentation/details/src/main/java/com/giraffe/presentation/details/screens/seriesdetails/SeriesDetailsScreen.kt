@@ -1,5 +1,8 @@
 package com.giraffe.presentation.details.screens.seriesdetails
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,10 +15,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +28,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.InfoSection
@@ -45,6 +49,8 @@ import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.TypeOfScreen
 import com.giraffe.presentation.details.utils.showToast
 import com.giraffe.presentation.details.utils.toStringResource
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlin.math.min
 
 @Composable
@@ -95,39 +101,62 @@ fun SeriesDetailsScreen(
 }
 
 
+@Suppress("SameReturnValue")
 @Composable
 private fun SeriesDetailsContent(
     state: SeriesDetailsScreenState,
     interaction: SeriesDetailsInteractionListener,
 ) {
     val scrollState = rememberLazyListState()
-    var imageWidth by rememberSaveable { mutableIntStateOf(216) }
-    var imageHeight by rememberSaveable { mutableIntStateOf(288) }
-    var consumedX by rememberSaveable { mutableIntStateOf(0) }
-    var consumedY by rememberSaveable { mutableIntStateOf(0) }
-    var animationProgress by rememberSaveable { mutableFloatStateOf(0f) }
+
+    val animationProgress = remember { Animatable(0f) }
+    val scope = rememberCoroutineScope()
+    var lastDelta by remember { mutableIntStateOf(0) }
+    var flingJob by remember { mutableStateOf<Job?>(null) }
+
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y.toInt()
+
                 if (
-                    (scrollState.firstVisibleItemIndex != 0 || scrollState.firstVisibleItemScrollOffset != 0)
-                    && delta > 0
+                    (scrollState.firstVisibleItemIndex != 0 ||
+                            scrollState.firstVisibleItemScrollOffset != 0) && delta > 0
                 ) {
-                    return Offset(consumedX.toFloat(), consumedY.toFloat())
+                    return Offset.Zero
                 }
 
-                val newImageWidth = imageWidth + delta
-                val previousImageWidth = imageWidth
-                imageWidth = newImageWidth.coerceIn(40, 216)
-                val newImageHeight = imageHeight + delta
-                val previousImageHeight = imageHeight
-                imageHeight = newImageHeight.coerceIn(40, 288)
-                animationProgress = 1f - (imageHeight - 40) / 248f
-                consumedX = imageWidth - previousImageWidth
-                consumedY = imageHeight - previousImageHeight
-                return Offset(consumedX.toFloat(), consumedY.toFloat())
+                if (source == NestedScrollSource.UserInput) {
+                    flingJob?.cancel()
+                    flingJob = null
+                }
+
+                val current = animationProgress.value
+                val change = -delta / 248f
+                val newProgress = (current + change).coerceIn(0f, 1f)
+
+                scope.launch {
+                    animationProgress.snapTo(newProgress)
+                }
+
+                if (delta != 0) lastDelta = delta
+
+                return Offset.Zero
+            }
+
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                val target = if (lastDelta < 0) 1f else 0f
+                flingJob = scope.launch {
+                    animationProgress.animateTo(
+                        target,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing
+                        )
+                    )
+                }
+                return Velocity.Zero
             }
         }
     }
@@ -168,7 +197,7 @@ private fun SeriesDetailsContent(
                             animationProgress = animationProgress,
                             modifier = Modifier
                                 .background(Theme.color.background.screen)
-                                .padding(top = 16.dp * (1f - animationProgress))
+                                .padding(top = 16.dp * (1f - animationProgress.value))
                                 .padding(horizontal = 16.dp)
                         )
                     }
