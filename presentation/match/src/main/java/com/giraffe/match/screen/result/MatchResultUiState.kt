@@ -3,7 +3,8 @@ package com.giraffe.match.screen.result
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import com.giraffe.match.utils.formatAsFullDate
-import com.giraffe.match.utils.formatDuration
+import com.giraffe.match.utils.toDurationString
+import com.giraffe.match.utils.toSeasonsString
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
@@ -15,11 +16,13 @@ data class MatchResultScreenState(
     val isLoading: Boolean = false,
     val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
+    val isEmptyResults: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,
     val collectionBottomSheet: CollectionBottomSheet? = null,
     val collections: List<CollectionUi> = emptyList(),
     val newCollectionName: String = "",
     val genreIds: List<Int> = emptyList(),
+    val moodId: String = "",
     val runtime: Int? = null,
     val releaseDate: String? = null,
     val minRuntime: Int? = null,
@@ -72,7 +75,7 @@ fun Movie.toMatchResultModel(genres: List<String>): MatchResultModel {
         posterUrl = posterUrl,
         genres = genres,
         mediaType = MediaType.MOVIE,
-        duration = formatDuration(duration),
+        duration = duration.toDurationString(),
         releaseDate = releaseYear.formatAsFullDate(),
         rating = rating,
         youtubeVideoId = youtubeVideoId
@@ -81,8 +84,6 @@ fun Movie.toMatchResultModel(genres: List<String>): MatchResultModel {
 
 fun Series.toMatchResultModel(
     genres: List<String>,
-    ratings: Float,
-    youtubeId: String?
 ): MatchResultModel {
     return MatchResultModel(
         id = id,
@@ -90,7 +91,7 @@ fun Series.toMatchResultModel(
         posterUrl = posterUrl,
         genres = genres,
         mediaType = MediaType.SERIES,
-        duration = "${seasons.size} Seasons",
+        duration = seasons.size.toSeasonsString(),
         releaseDate = releaseYear.formatAsFullDate(),
         rating = rating,
         youtubeVideoId = youtubeVideoId ?: ""

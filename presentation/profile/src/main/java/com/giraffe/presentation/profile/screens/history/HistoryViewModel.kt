@@ -1,12 +1,15 @@
 package com.giraffe.presentation.profile.screens.history
 
 import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.DeleteRecentlyViewedMovieByIdUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +19,8 @@ import javax.inject.Inject
 class HistoryViewModel @Inject constructor(
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
+    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     private val deleteRecentlyViewedMovieByIdUseCase: DeleteRecentlyViewedMovieByIdUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :
@@ -23,7 +28,37 @@ class HistoryViewModel @Inject constructor(
     HistoryInteractionListener {
 
     init {
+        getGenres()
+    }
+
+    private fun getGenres() {
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
+            onError = ::onFailure.also { onGetMoviesGenresFailure() },
+            block = observeMoviesGenresUseCase::invoke
+        )
+        safeExecute(
+            onSuccess = ::onGetSeriesGenresSuccess,
+            onError = ::onFailure.also { onGetSeriesGenresFailure() },
+            block = getSeriesGenresUseCase::invoke
+        )
+    }
+
+    private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
+        updateState { it.copy(moviesGenres = genres) }
         getRecentViewedMovies()
+    }
+
+    private fun onGetMoviesGenresFailure() {
+        getRecentViewedMovies()
+    }
+
+    private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
+        updateState { it.copy(seriesGenres = genres) }
+        getRecentViewedSeries()
+    }
+
+    private fun onGetSeriesGenresFailure() {
         getRecentViewedSeries()
     }
 
@@ -44,11 +79,11 @@ class HistoryViewModel @Inject constructor(
     }
 
     private fun onGetRecentMoviesSuccess(moviesList: List<Movie>) {
-        updateMediaList(moviesList.map(Movie::toPoster))
+        updateMediaList(moviesList.map { movie -> movie.toPoster(state.value.moviesGenres) })
     }
 
     private fun onGetRecentSeriesSuccess(seriesList: List<Series>) {
-        updateMediaList(seriesList.map(Series::toPoster))
+        updateMediaList(seriesList.map { series -> series.toPoster(state.value.seriesGenres) })
     }
 
     private fun updateMediaList(newMediaList: List<Poster>) {

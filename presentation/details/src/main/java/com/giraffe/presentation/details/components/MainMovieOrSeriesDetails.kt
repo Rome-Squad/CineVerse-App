@@ -2,8 +2,8 @@ package com.giraffe.presentation.details.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -38,8 +38,9 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.details.R
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.R
+import kotlin.math.max
 
 
 @Composable
@@ -55,16 +56,21 @@ fun MainMovieOrSeriesDetails(
     onClickPlay: () -> Unit,
     modifier: Modifier = Modifier,
     onClickAdd: (() -> Unit)? = null,
-    animationProgress: Float = 0f
+    animationProgress: Animatable<Float, AnimationVector1D>
 ) {
+
+    val animationProgressValue = animationProgress.value
+    val inverseAnimationProgressValue = 1 - animationProgressValue
+
     val playButtonBackground by animateColorAsState(
         if (isPlayButtonEnabled) Theme.color.button.primary else Theme.color.button.onDisabled
     )
 
     val imageClipRadius = Theme.radius.xl
-    val hasSensitiveText by remember(animationProgress) {
-        derivedStateOf { animationProgress < 0.5f }
+    val hasSensitiveText by remember(animationProgressValue) {
+        derivedStateOf { animationProgressValue < 0.5f }
     }
+
     Box(Modifier.fillMaxWidth()) {
         Box(modifier.fillMaxWidth()) {
             posterUrl?.let {
@@ -73,13 +79,13 @@ fun MainMovieOrSeriesDetails(
                     hasSensitiveText = hasSensitiveText,
                     contentDescription = stringResource(R.string.poster_image),
                     modifier = Modifier
-                        .align(BiasAlignment(animationProgress * -1, -1f))
-                        .padding(bottom = 16.dp - (16 - 9).dp * (animationProgress))
+                        .align(BiasAlignment(animationProgressValue * -1, -1f))
+                        .padding(bottom = 16.dp - (16 - 9).dp * (animationProgressValue))
                         .size(
-                            width = 216.dp - (216 - 40).dp * (animationProgress),
-                            height = 289.dp - (289 - 40).dp * (animationProgress)
+                            width = 216.dp - (216 - 40).dp * (animationProgressValue),
+                            height = 289.dp - (289 - 40).dp * (animationProgressValue)
                         )
-                        .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * animationProgress)),
+                        .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * animationProgressValue)),
                     contentScale = ContentScale.Crop,
                     placeHolderTint = Theme.color.brand.secondary,
                     placeholderModifier = Modifier
@@ -90,7 +96,7 @@ fun MainMovieOrSeriesDetails(
                             shape = RoundedCornerShape(
                                 imageClipRadius
                                         + (40.dp - imageClipRadius)
-                                        * animationProgress
+                                        * animationProgressValue
                             )
 
                         )
@@ -98,40 +104,40 @@ fun MainMovieOrSeriesDetails(
 
                 Row(
                     modifier = Modifier
-                        .padding(top = (289.dp + 16.dp) * ((1f - animationProgress)))
+                        .padding(top = (289.dp + (16.dp)) * inverseAnimationProgressValue)
                         .fillMaxWidth()
-                        .heightIn(min = 52.dp)
                         .clip(RoundedCornerShape(Theme.radius.lg))
-                        .background(Theme.color.background.card.copy(1f - animationProgress))
+                        .background(Theme.color.background.card.copy(inverseAnimationProgressValue))
                         .padding(
-                            start = 16.dp - (16 - 12).dp * (1f - animationProgress),
-                            bottom = 16.dp - (16 - 12).dp * (1f - animationProgress),
-                            end = 16.dp * (1f - animationProgress)
+                            start = 16.dp - (16 - 12).dp * inverseAnimationProgressValue,
+                            bottom = 16.dp - (16 - 12).dp * animationProgressValue,
+                            end = 16.dp * inverseAnimationProgressValue
                         )
                         .align(Alignment.TopEnd)
                 ) {
                     Column(
                         modifier = Modifier
                             .weight(1f)
-                            .padding(start = 36.dp * animationProgress)
+                            .padding(start = 36.dp * animationProgressValue)
                     ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(end = 48.dp)
                         ) {
-                            AnimatedVisibility(
-                                visible = animationProgress == 0f,
-                                enter = fadeIn(),
-                                exit = fadeOut(),
-                                modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
-                            ) {
-                                Text(
-                                    text = type.uppercase(),
-                                    style = Theme.textStyle.label.md.medium,
-                                    color = Theme.color.brand.primary
-                                )
-                            }
+                            Text(
+                                text = type.uppercase(),
+                                style = Theme.textStyle.label.md.medium,
+                                color = Theme.color.brand.primary,
+                                modifier = Modifier
+                                    .padding(
+                                        top = 16.dp * inverseAnimationProgressValue,
+                                        bottom = 4.dp * inverseAnimationProgressValue
+                                    )
+                                    .height(((Theme.textStyle.label.md.medium.fontSize.value + 4) * inverseAnimationProgressValue).dp)
+                                    .alpha(inverseAnimationProgressValue)
+                            )
+
 
                             Text(
                                 text = name,
@@ -139,52 +145,54 @@ fun MainMovieOrSeriesDetails(
                                 color = Theme.color.shade.primary,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.then(
-                                    if (animationProgress == 1f) Modifier.padding(top = 9.dp)
-                                    else Modifier
-                                )
+                                modifier = Modifier
+                                    .padding(top = (9 * animationProgressValue).dp)
                             )
 
-                            AnimatedVisibility(
-                                visible = genres.isNotEmpty() && animationProgress == 0f,
-                                enter = fadeIn(),
-                                exit = fadeOut(),
-                                modifier = Modifier.padding(top = 4.dp)
-                            ) {
+                            if (genres.isNotEmpty()) {
                                 Text(
                                     text = genres.joinToString(", "),
                                     style = Theme.textStyle.body.sm.medium,
                                     color = Theme.color.shade.secondary,
                                     maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier
+                                        .padding(top = 4.dp * inverseAnimationProgressValue)
+                                        .height(((Theme.textStyle.body.sm.medium.fontSize.value + 4) * inverseAnimationProgressValue).dp)
+                                        .alpha(inverseAnimationProgressValue)
                                 )
                             }
                         }
 
-                        AnimatedVisibility(
-                            visible = (rating != 0f || !duration.isNullOrEmpty()
-                                    || releaseDate.isNotEmpty())
-                                    && animationProgress == 0f,
-                            enter = fadeIn(),
-                            exit = fadeOut(),
-                            modifier = Modifier.padding(top = 12.dp)
-                        ) {
+                        if (rating != 0f || !duration.isNullOrEmpty() || releaseDate.isNotEmpty()) {
+                            val iconTextHeight = max(
+                                Theme.textStyle.label.md.regular.fontSize.value + 4,
+                                16f
+                            )
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                modifier = Modifier
+                                    .padding(top = 12.dp * inverseAnimationProgressValue)
+                                    .alpha(inverseAnimationProgressValue)
+                                    .height((iconTextHeight * inverseAnimationProgressValue).dp)
                             ) {
                                 if (rating != 0f) {
                                     IconWithText(
                                         icon = painterResource(Theme.icons.dueTone.star),
                                         text = "%.1f".format(rating),
-                                        colorOfIcon = Theme.color.additional.primary.yellow
+                                        colorOfIcon = Theme.color.additional.primary.yellow,
+                                        modifier = Modifier
+                                            .height((iconTextHeight * inverseAnimationProgressValue).dp)
                                     )
                                 }
 
                                 if (!duration.isNullOrEmpty()) {
                                     IconWithText(
                                         icon = painterResource(Theme.icons.dueTone.clock),
-                                        text = duration.toString(),
-                                        colorOfIcon = Theme.color.shade.secondary
+                                        text = duration,
+                                        colorOfIcon = Theme.color.shade.secondary,
+                                        modifier = Modifier
+                                            .height((iconTextHeight * inverseAnimationProgressValue).dp)
                                     )
                                 }
 
@@ -192,7 +200,9 @@ fun MainMovieOrSeriesDetails(
                                     IconWithText(
                                         icon = painterResource(Theme.icons.dueTone.calendar),
                                         text = releaseDate,
-                                        colorOfIcon = Theme.color.shade.secondary
+                                        colorOfIcon = Theme.color.shade.secondary,
+                                        modifier = Modifier
+                                            .height((iconTextHeight * inverseAnimationProgressValue).dp)
                                     )
                                 }
                             }
@@ -200,11 +210,12 @@ fun MainMovieOrSeriesDetails(
                     }
 
 
+
                     Box(
                         modifier = Modifier
-                            .padding(top = 17.dp * (1f - animationProgress))
-                            .width(40.dp + (88.dp - 40.dp) * animationProgress)
-                            .height(92.dp - (92.dp - 40.dp) * animationProgress)
+                            .padding(top = 17.dp * inverseAnimationProgressValue)
+                            .width(40.dp + (88.dp - 40.dp) * animationProgressValue)
+                            .height(92.dp - (52.dp * animationProgressValue))
                             .align(Alignment.CenterVertically)
                     ) {
                         Icon(
@@ -222,7 +233,9 @@ fun MainMovieOrSeriesDetails(
                                     enabled = isPlayButtonEnabled,
                                     onClick = onClickPlay
                                 )
-                                .padding(10.dp)
+                                .padding(
+                                    horizontal = 10.dp
+                                )
                                 .align(Alignment.TopEnd)
                         )
 
@@ -239,7 +252,9 @@ fun MainMovieOrSeriesDetails(
                                         shape = RoundedCornerShape(Theme.radius.md)
                                     )
                                     .clickable(onClick = onClickAdd)
-                                    .padding(10.dp)
+                                    .padding(
+                                        horizontal = 10.dp
+                                    )
                                     .align(Alignment.BottomStart)
                             )
                         }
@@ -249,7 +264,7 @@ fun MainMovieOrSeriesDetails(
         }
 
         AnimatedVisibility(
-            visible = animationProgress == 1f,
+            visible = animationProgressValue == 1f,
             modifier = Modifier.align(Alignment.BottomStart)
         ) {
             Box(

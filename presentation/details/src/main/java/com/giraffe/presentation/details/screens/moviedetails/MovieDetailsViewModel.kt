@@ -13,11 +13,11 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersByMovieIdUseCase
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.rate.AddMovieRatingUseCase
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movie.usecase.rate.GetMovieReviewsUseCase
-import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.rate.AddMovieRatingUseCase
+import com.giraffe.media.movie.usecase.rate.GetMovieReviewsUseCase
 import com.giraffe.media.movie.usecase.rate.GetUserMovieRatingUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.model.MovieUi
@@ -118,8 +118,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onMoviePosterClick(movieId: Int) {
-        updateState { MovieDetailsScreenState() }
-        loadMovieDetails(movieId)
+        sendEffect(MovieDetailsEffect.NavigateToMovieDetails(movieId))
     }
 
     override fun onGiveStarsCardClick() {
