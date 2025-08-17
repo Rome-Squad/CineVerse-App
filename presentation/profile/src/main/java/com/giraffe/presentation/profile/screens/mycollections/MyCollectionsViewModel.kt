@@ -7,6 +7,7 @@ import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.CollectionUi
 import com.giraffe.presentation.profile.utils.toEntity
 import com.giraffe.presentation.profile.utils.toUi
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,12 +15,13 @@ import javax.inject.Inject
 class MyCollectionsViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
+    private val isLoggedInUseCase: IsLoggedInUseCase,
 ) : BaseViewModel<MyCollectionsScreenState, MyCollectionsEffect>(
     MyCollectionsScreenState()
 ), MyCollectionsInteractionListener {
 
     init {
-        getCollections()
+        checkLoginStatus()
     }
 
     private fun getCollections() {
@@ -35,9 +37,7 @@ class MyCollectionsViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 isNoInternet = false,
-                collections = collections.map { collection ->
-                    collection.toUi()
-                }
+                collections = collections.map { collection -> collection.toUi() }
             )
         }
     }
@@ -47,38 +47,21 @@ class MyCollectionsViewModel @Inject constructor(
     }
 
     override fun onNewCollectionNameChange(newCollectionName: String) {
-        updateState {
-            it.copy(
-                isLoading = false,
-                isNoInternet = false,
-                newCollectionName = newCollectionName
-            )
-        }
+        updateState { it.copy(newCollectionName = newCollectionName) }
     }
 
     override fun onCreateNewCollectionClick() {
-        updateState {
-            it.copy(
-                isBottomSheetVisible = true
-            )
-        }
+        updateState { it.copy(isBottomSheetVisible = true) }
     }
 
     override fun onConfirmCreateNewCollectionClick() {
-        updateState {
-            it.copy(
-                isLoading = true,
-                isBottomSheetVisible = false
-            )
-        }
+        updateState { it.copy(isLoading = true, isBottomSheetVisible = false) }
         safeExecute(
             onSuccess = { onCreateCollectionSuccess() },
             onError = ::onFailure
         ) {
             addCollectionUseCase(
-                collection = CollectionUi(
-                    name = state.value.newCollectionName
-                ).toEntity()
+                CollectionUi(name = state.value.newCollectionName).toEntity()
             )
         }
     }
@@ -94,11 +77,7 @@ class MyCollectionsViewModel @Inject constructor(
     }
 
     override fun onDismissBottomSheet() {
-        updateState {
-            it.copy(
-                isBottomSheetVisible = false
-            )
-        }
+        updateState { it.copy(isBottomSheetVisible = false) }
     }
 
     override fun onStartCollectingClick() {
@@ -107,5 +86,22 @@ class MyCollectionsViewModel @Inject constructor(
 
     override fun onBackClick() {
         sendEffect(MyCollectionsEffect.NavigateBack)
+    }
+
+    private fun checkLoginStatus() {
+        safeExecute(
+            onSuccess = { loggedIn ->
+                updateState { it.copy(isLoggedIn = loggedIn) }
+
+                if (loggedIn) {
+                    getCollections()
+                } else {
+                    updateState { it.copy(isLoading = false) }
+                }
+            },
+            onError = ::onFailure
+        ) {
+            isLoggedInUseCase()
+        }
     }
 }
