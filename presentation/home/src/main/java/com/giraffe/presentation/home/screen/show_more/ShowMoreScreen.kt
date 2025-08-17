@@ -21,53 +21,58 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.HorizontalDivider
 import com.giraffe.designsystem.composable.ViewToggle
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.home.components.BaseScreenWithStates
-import com.giraffe.presentation.home.components.HorizontalDivider
+import com.giraffe.presentation.home.components.ScreenState
 import com.giraffe.presentation.home.components.TransitionLazyColumnToGrid
 import com.giraffe.presentation.home.model.MediaType
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.utils.showToast
 import com.giraffe.presentation.home.utils.toStringRes
 
 @Composable
-fun ShowMoreScreen(
-    showMoreViewModel: ShowMoreViewModel = hiltViewModel(),
+fun CategoryMediaScreen(
     onBackClick: () -> Unit,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
     navigateToSeriesDetailsScreen: (Int) -> Unit,
+    categoryMediaViewModel: CategoryMediaViewModel = hiltViewModel()
 ) {
-    val state by showMoreViewModel.state.collectAsState()
+    val state by categoryMediaViewModel.state.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        showMoreViewModel.effect.collect { effect ->
+        categoryMediaViewModel.effect.collect { effect ->
             when (effect) {
-                is ShowMoreEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(effect.movieId)
+                is CategoryMediaEffect.NavigateToMovieDetails -> navigateToMoviesDetailsScreen(
+                    effect.movieId
+                )
 
-                is ShowMoreEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(effect.seriesId)
+                is CategoryMediaEffect.NavigateToSeriesDetails -> navigateToSeriesDetailsScreen(
+                    effect.seriesId
+                )
 
-                ShowMoreEffect.NavigateBack -> onBackClick()
+                CategoryMediaEffect.NavigateBack -> onBackClick()
 
-                is ShowMoreEffect.ShowError -> context.showToast(effect.error.toStringRes())
+                is CategoryMediaEffect.ShowError -> context.showToast(effect.error.toStringRes())
             }
         }
     }
-    ShowMoreContent(
+    CategoryMediaContent(
         state = state,
-        showMoreInteractionListener = showMoreViewModel,
+        interactionListener = categoryMediaViewModel,
     )
 }
 
 @Composable
-fun ShowMoreContent(
-    state: ShowMoreScreenState,
-    showMoreInteractionListener: ShowMoreInteractionListener,
+fun CategoryMediaContent(
+    state: CategoryMediaScreenState,
+    interactionListener: CategoryMediaInteractionListener,
 ) {
     val lazyMediaPosters = state.mediaFlow.collectAsLazyPagingItems()
-    BaseScreenWithStates(
+    ScreenState(
         isLoading = state.isLoading,
-        isNoInternet = state.isNoInternet
+        isNoInternet = state.isNoInternet,
+        onRetryClick = interactionListener::onRetryClick
     ) {
         Box {
             Column(
@@ -77,19 +82,16 @@ fun ShowMoreContent(
                     .statusBarsPadding()
             ) {
                 AppBar(
-                    title = state.sectionType?.getSectionTitle(LocalContext.current) ?: "",
+                    title = state.sectionType?.getSectionTitle(LocalContext.current),
                     showBackButton = true,
-                    onBackButtonClick = showMoreInteractionListener::onBackClick
+                    onBackButtonClick = interactionListener::onBackClick
                 )
                 HorizontalDivider()
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
+                Box(Modifier.fillMaxWidth()) {
                     TransitionLazyColumnToGrid(
                         posters = lazyMediaPosters,
                         isListSelected = state.isListSelected,
-                        onClickItem = showMoreInteractionListener::onMediaClicked,
+                        onClickItem = interactionListener::onMediaClicked,
                     )
                 }
 
@@ -100,7 +102,7 @@ fun ShowMoreContent(
                     .navigationBarsPadding()
                     .padding(bottom = 16.dp, end = 16.dp),
                 isListSelected = state.isListSelected,
-                onGridSelected = showMoreInteractionListener::onViewChanged
+                onGridSelected = interactionListener::onViewChanged
             )
         }
     }
@@ -109,16 +111,17 @@ fun ShowMoreContent(
 
 @Preview(showSystemUi = false, showBackground = true)
 @Composable
-fun ShowMorePreview() {
-    val interactionListener = object : ShowMoreInteractionListener {
+fun CategoryMediaPreview() {
+    val interactionListener = object : CategoryMediaInteractionListener {
         override fun onViewChanged(isGrid: Boolean) {}
         override fun onMediaClicked(mediaId: Int, mediaType: MediaType) {}
         override fun onBackClick() {}
+        override fun onRetryClick() {}
     }
-    ShowMoreContent(
-        state = ShowMoreScreenState(
-            sectionType = MixedMediaSectionType.RECENTLY_RELEASED
+    CategoryMediaContent(
+        state = CategoryMediaScreenState(
+            sectionType = CategoryMediaSectionType.RECENTLY_RELEASED
         ),
-        showMoreInteractionListener = interactionListener,
+        interactionListener = interactionListener,
     )
 }

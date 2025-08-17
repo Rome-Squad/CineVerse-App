@@ -12,7 +12,7 @@ object ProfileRoute : Route("profile")
 
 class ProfileTab(
     override val labelRes: Int,
-    override val iconRes: Int
+    override val iconRes: List<Int>
 ) : BottomTab<ProfileRoute> {
     override val route = ProfileRoute
 }

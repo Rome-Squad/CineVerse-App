@@ -17,13 +17,13 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 
 @Composable
 fun CollectionListSection(
     modifier: Modifier = Modifier,
     collectionItems: List<FeaturedCollectionUi>,
-    onCollectionItemClick: (MixedMediaSectionType) -> Unit
+    onCollectionItemClick: (CategoryMediaSectionType) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),

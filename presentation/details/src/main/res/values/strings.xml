@@ -77,4 +77,5 @@
     <string name="validation_error">Validation Error!</string>
     <string name="collection_not_found">Collection not found!</string>
     <string name="screen_info">Swipe left to remove the item</string>
+    <string name="new_collection">New Collection</string>
 </resources>

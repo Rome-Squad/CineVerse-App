@@ -40,7 +40,7 @@ fun HeroCarousel(
 ) {
     if (items.isEmpty()) return
 
-    val pagerState = rememberPagerState(2) { items.size }
+    val pagerState = rememberPagerState(0) { items.size }
     val density = LocalDensity.current
 
     LaunchedEffect(pagerState.currentPage) {

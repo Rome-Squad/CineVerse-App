@@ -4,9 +4,9 @@ import com.giraffe.media.movie.usecase.GetMoviesBySortUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.presentation.home.model.ShowMorePoster
-import com.giraffe.presentation.home.navigation.home.routes.MixedMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.MixedMediaStrategy
+import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
+import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class CinematicMasterpiecesStrategy(
@@ -14,11 +14,11 @@ class CinematicMasterpiecesStrategy(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesBySortUseCase: GetMoviesBySortUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
-) : MixedMediaStrategy {
+) : CategoryMediaStrategy {
     override suspend fun loadData(
         page: Int,
         pageSize: Int
-    ): List<ShowMorePoster> {
+    ): List<PosterMedia> {
         val sortBy = "vote_average.desc"
         val moviesResult =
             getMoviesBySortUseCase(
@@ -41,6 +41,6 @@ class CinematicMasterpiecesStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = MixedMediaSectionType.CINEMATIC_MASTERPIECE
+    override fun getSectionType() = CategoryMediaSectionType.CINEMATIC_MASTERPIECE
 
 }

@@ -9,16 +9,18 @@ interface MatchRemoteDataSource {
         genreIds: String,
         minRuntime: Int?,
         maxRuntime: Int?,
-        earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        earliestDate: String?,
+        latestDate: String?,
+        moodId: String?,
     ): List<MovieDto>
 
     suspend fun getMatchingSeries(
         genreIds: String,
         minRuntime: Int?,
         maxRuntime: Int?,
-        earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        earliestDate: String?,
+        latestDate: String?,
+        moodId: String?,
     ): List<SeriesDto>
 
 }

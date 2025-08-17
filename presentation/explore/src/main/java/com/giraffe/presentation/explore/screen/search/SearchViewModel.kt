@@ -1,19 +1,19 @@
 package com.giraffe.presentation.explore.screen.search
 
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.explore.usecase.AddSearchKeywordUseCase
-import com.giraffe.media.explore.usecase.ClearSearchHistoryUseCase
-import com.giraffe.media.explore.usecase.DeleteSearchKeywordUseCase
-import com.giraffe.media.explore.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.mediaMember.usecase.ClearRecentMediaMembersUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.search.usecase.AddSearchKeywordUseCase
+import com.giraffe.media.search.usecase.ClearSearchHistoryUseCase
+import com.giraffe.media.search.usecase.DeleteSearchKeywordUseCase
+import com.giraffe.media.search.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
+import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.screen.search.SearchEffect.NavigateToMovieDetail
 import com.giraffe.presentation.explore.util.toPoster
 import dagger.hilt.android.lifecycle.HiltViewModel
