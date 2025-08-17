@@ -29,9 +29,10 @@ fun TertiaryButton(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
-            .clickable {
-                if (enabled) onClick
-            },
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         if (isLoading)

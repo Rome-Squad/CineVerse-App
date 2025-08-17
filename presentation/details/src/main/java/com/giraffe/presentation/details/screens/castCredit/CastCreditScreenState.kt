@@ -1,6 +1,6 @@
 package com.giraffe.presentation.details.screens.castCredit
 
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.details.components.uimodel.Poster
 
 data class CastCreditScreenState(
     val posters: List<Poster> = emptyList(),

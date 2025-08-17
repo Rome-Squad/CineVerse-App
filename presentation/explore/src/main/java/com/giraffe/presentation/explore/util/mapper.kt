@@ -1,10 +1,10 @@
 package com.giraffe.presentation.explore.util
 
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
+import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.model.GenreUi
 
 

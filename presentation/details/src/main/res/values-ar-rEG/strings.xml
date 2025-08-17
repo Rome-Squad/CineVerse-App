@@ -69,5 +69,6 @@
     <string name="collection_name_cannot_be_blank">اسم المجموعة لا يمكن أن يكون فارغ!</string>
     <string name="validation_error">خطأ: بيانات غير مسموحة!</string>
     <string name="collection_not_found">خطأ: لم نجد المجموعة!</string>
+    <string name="new_collection">مجموعة جديدة</string>
 
 </resources>

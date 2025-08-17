@@ -13,10 +13,10 @@ import com.giraffe.presentation.details.model.CollectionUi
 fun AddToCollectionBottomSheetContent(
     collectionsList: List<CollectionUi>,
     onCollectionClick: (Int) -> Unit,
-    onNewCollectionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
+        modifier = modifier,
         contentPadding = PaddingValues(top = 20.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {

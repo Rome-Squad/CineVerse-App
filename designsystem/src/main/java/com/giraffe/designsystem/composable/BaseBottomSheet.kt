@@ -33,6 +33,18 @@ fun BaseBottomSheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
+    endAction: (@Composable () -> Unit)? = {
+        Icon(
+            painter = painterResource(Theme.icons.outline.close),
+            contentDescription = stringResource(R.string.close),
+            tint = Theme.color.shade.secondary,
+            modifier = Modifier
+                .size(20.dp)
+                .noHoverClickable(
+                    onClick = { onDismiss() }
+                )
+        )
+    }
 ) {
 
     if (isVisible) {
@@ -67,16 +79,7 @@ fun BaseBottomSheet(
                             color = Theme.color.shade.primary,
                             modifier = Modifier.weight(1f)
                         )
-                        Icon(
-                            painter = painterResource(Theme.icons.outline.close),
-                            contentDescription = stringResource(R.string.close),
-                            tint = Theme.color.shade.secondary,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .noHoverClickable(
-                                    onClick = { onDismiss() }
-                                )
-                        )
+                        endAction?.let { it() }
                     }
                 }
 

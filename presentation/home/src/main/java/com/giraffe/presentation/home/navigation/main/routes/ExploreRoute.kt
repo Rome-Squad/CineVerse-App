@@ -11,7 +11,7 @@ object ExploreRoute : Route("explore")
 
 class ExploreTab(
     override val labelRes: Int,
-    override val iconRes: Int
+    override val iconRes: List<Int>
 ) : BottomTab<ExploreRoute> {
     override val route = ExploreRoute
 }

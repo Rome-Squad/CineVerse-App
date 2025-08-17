@@ -7,12 +7,15 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.giraffe.designsystem.R as DesignSystemResources
 import com.giraffe.designsystem.composable.BaseBottomSheet
+import com.giraffe.designsystem.composable.button_type.TertiaryButton
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.components.createCollection.CreateCollectionContent
 import com.giraffe.presentation.details.model.CollectionUi
 import com.giraffe.presentation.details.screens.moviedetails.MovieDetailsScreenState
+import com.giraffe.designsystem.R as DesignSystemResources
+
+typealias ComposableFunction = @Composable () -> Unit
 
 @Composable
 fun MovieCollectionsBottomSheet(
@@ -29,11 +32,22 @@ fun MovieCollectionsBottomSheet(
     onCancelCreateNewCollectionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val endAction: ComposableFunction = {
+        TertiaryButton(
+            text = stringResource(R.string.new_collection),
+            onClick = onNewCollectionClick
+        )
+    }
+
     BaseBottomSheet(
         isVisible = isVisible,
         onDismiss = onDismiss,
         title = stringResource(R.string.add_to_collection),
         modifier = modifier,
+        endAction = if (targetState is MovieDetailsScreenState.CollectionBottomSheet.AddToCollection)
+            endAction
+        else
+            null,
         content = {
             AnimatedContent(
                 targetState = targetState,
@@ -45,7 +59,6 @@ fun MovieCollectionsBottomSheet(
                     is MovieDetailsScreenState.CollectionBottomSheet.AddToCollection -> {
                         AddToCollectionBottomSheetContent(
                             collectionsList = collections,
-                            onNewCollectionClick = onNewCollectionClick,
                             onCollectionClick = onCollectionClick
                         )
                     }

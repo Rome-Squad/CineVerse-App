@@ -1,7 +1,7 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
 import androidx.compose.runtime.Stable
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.presentation.details.model.CollectionUi
 import com.giraffe.presentation.details.model.MovieUi
