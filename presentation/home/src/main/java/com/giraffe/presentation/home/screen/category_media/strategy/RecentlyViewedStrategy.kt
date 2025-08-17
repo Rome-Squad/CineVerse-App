@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.show_more.strategy
+package com.giraffe.presentation.home.screen.category_media.strategy
 
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
@@ -6,7 +6,7 @@ import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
+import com.giraffe.presentation.home.screen.category_media.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 import kotlinx.coroutines.flow.first
 

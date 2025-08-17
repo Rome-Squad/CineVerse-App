@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.show_more.strategy
+package com.giraffe.presentation.home.screen.category_media.strategy
 
 import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
@@ -6,10 +6,10 @@ import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
+import com.giraffe.presentation.home.screen.category_media.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
-class FeelGoodPreferencesStrategy(
+class FamilyNightPicksStrategy(
     private val getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
@@ -19,12 +19,12 @@ class FeelGoodPreferencesStrategy(
         page: Int,
         pageSize: Int
     ): List<PosterMedia> {
-        val genreIdForComedy = 35
-        val genreIdForRomance = 10749
+        val genreIdForFamily = 10751
+        val genreIdForAnimation = 16
         val moviesResult =
             getMoviesByGenresUseCase(
                 page = page,
-                genreIds = listOf(genreIdForComedy, genreIdForRomance)
+                genreIds = listOf(genreIdForFamily, genreIdForAnimation)
             ).map { movie ->
                 movie.toShowMorePoster(
                     getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
@@ -33,7 +33,7 @@ class FeelGoodPreferencesStrategy(
         val seriesResult =
             getSeriesByGenresUseCase(
                 page = page,
-                genreIds = listOf(genreIdForComedy, genreIdForRomance)
+                genreIds = listOf(genreIdForFamily, genreIdForAnimation)
             ).map { series ->
                 series.toShowMorePoster(
                     getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
@@ -42,6 +42,6 @@ class FeelGoodPreferencesStrategy(
         return moviesResult + seriesResult
     }
 
-    override fun getSectionType() = CategoryMediaSectionType.FEEL_GOOD_PREFERENCES
+    override fun getSectionType() = CategoryMediaSectionType.FAMILY_NIGHT_PICKS
 
 }

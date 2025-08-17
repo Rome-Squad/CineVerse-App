@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.show_more
+package com.giraffe.presentation.home.screen.category_media
 
 
 import androidx.lifecycle.SavedStateHandle
@@ -12,7 +12,7 @@ import com.giraffe.presentation.home.base.BasePagingSource
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PosterMedia
-import com.giraffe.presentation.home.navigation.home.routes.ShowMoreRoute
+import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaRoute
 import com.giraffe.user.exception.NoInternetException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +27,7 @@ class CategoryMediaViewModel @Inject constructor(
 ) : BaseViewModel<CategoryMediaScreenState, CategoryMediaEffect>(CategoryMediaScreenState()),
     CategoryMediaInteractionListener {
 
-    private val sectionType = stateSavedStateHandle.toRoute<ShowMoreRoute>().sectionType
+    private val sectionType = stateSavedStateHandle.toRoute<CategoryMediaRoute>().sectionType
 
     init {
         loadCategoryMediaDate()
