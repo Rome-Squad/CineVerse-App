@@ -1,5 +1,7 @@
 package com.giraffe.presentation.home.navigation.home
 
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +29,7 @@ import com.giraffe.presentation.home.navigation.home.routes.navigateToSeriesDeta
 import com.giraffe.presentation.home.navigation.home.routes.navigateToShowMore
 import com.giraffe.presentation.home.navigation.home.routes.navigateToYourCollections
 import com.giraffe.presentation.home.navigation.home.routes.showMoreRoute
+import com.giraffe.presentation.home.navigation.main.routes.HomeRoute.route as HomeNavGraphRoute
 
 
 @Composable
@@ -124,4 +127,9 @@ fun HomeNavGraph(
         }
 
     }
+
+    val activity = LocalActivity.current
+    val isAtRoot =
+        navBackStackEntry?.destination?.route == HomeRoute::class.qualifiedName || navBackStackEntry?.destination?.route == HomeNavGraphRoute
+    BackHandler(isAtRoot) { activity?.finish() }
 }

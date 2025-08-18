@@ -1,7 +1,5 @@
 package com.giraffe.presentation.home.navigation.main
 
-import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -122,7 +120,6 @@ fun MainNavGraph(
                 }
             }
 
-
             composable(
                 route = ExploreRoute.route
             ) {
@@ -160,10 +157,4 @@ fun MainNavGraph(
             }
         )
     }
-
-
-    val activity = LocalActivity.current
-    val isAtRoot =
-        navController.currentDestination?.route == navController.graph.startDestinationRoute
-    BackHandler(isAtRoot) { activity?.finish() }
 }
