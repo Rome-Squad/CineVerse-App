@@ -13,7 +13,6 @@ import com.giraffe.user.entity.User
 import com.giraffe.user.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -33,14 +32,11 @@ class UserRepositoryImpl @Inject constructor(
         val decryptedBytes = decryptSessionId(encryptedBase64)
         val userResponse = userRemoteDataSource.getUser(decryptedBytes).toEntity()
 
-        val localUser = getUser().firstOrNull()
+        localDataSource.saveAccountId(userResponse.id)
+        localDataSource.saveUsername(userResponse.username)
+        localDataSource.saveDisplayName(userResponse.displayName)
+        localDataSource.saveAvatarUrl(userResponse.avatarUrl)
 
-        if (userResponse != localUser) {
-            localDataSource.saveAccountId(userResponse.id)
-            localDataSource.saveUsername(userResponse.username)
-            localDataSource.saveDisplayName(userResponse.displayName)
-            localDataSource.saveAvatarUrl(userResponse.avatarUrl)
-        }
         userResponse
     }
 
@@ -52,23 +48,23 @@ class UserRepositoryImpl @Inject constructor(
         return decrypted.decodeToString()
     }
 
-        override fun getUser(): Flow<User?> = safeFlow {
-            combine(
-                localDataSource.getAccountId(),
-                localDataSource.getUsername(),
-                localDataSource.getDisplayName(),
-                localDataSource.getAvatarUrl()
-            ) { id, username, displayName, avatarUrl ->
-                if (id != null && username != null) {
-                    User(
-                        id = id,
-                        username = username,
-                        displayName = displayName.orEmpty(),
-                        avatarUrl = avatarUrl
-                    )
-                } else {
-                    null
-                }
+    override fun getUser(): Flow<User?> = safeFlow {
+        combine(
+            localDataSource.getAccountId(),
+            localDataSource.getUsername(),
+            localDataSource.getDisplayName(),
+            localDataSource.getAvatarUrl()
+        ) { id, username, displayName, avatarUrl ->
+            if (id != null && username != null) {
+                User(
+                    id = id,
+                    username = username,
+                    displayName = displayName.orEmpty(),
+                    avatarUrl = avatarUrl
+                )
+            } else {
+                null
             }
         }
+    }
 }
