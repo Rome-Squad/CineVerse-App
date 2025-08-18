@@ -25,7 +25,7 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
@@ -39,7 +39,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
     private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
-    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val addRatingUseCase: AddSeriesRatingUseCase,
     private val getUserRatingUseCase: GetUserSeriesRatingUseCase,
     savedStateHandle: SavedStateHandle
@@ -195,17 +195,28 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadSeriesDetails(seriesId: Int) {
         updateState { it.copy(isLoading = true) }
+        executeIfLoggedIn(
+            block = {
+                safeExecute(
+                    onSuccess = ::loadSeriesDetailsSuccess,
+                    onError = ::onError
+                ) {
+                    val userRating = getUserRatingUseCase(seriesId)
+                    val series = getSeriesDetails(seriesId)
+                    series.copy(
+                        userRating = userRating
+                    )
+                }
+            },
+            ifNotLoggedIn = {
+                safeExecute(
+                    onSuccess = ::loadSeriesDetailsSuccess,
+                ) {
+                    getSeriesDetails(seriesId)
+                }
+            }
+        )
 
-        safeExecute(
-            onSuccess = ::loadSeriesDetailsSuccess,
-            onError = ::onError
-        ) {
-            val userRating = getUserRatingUseCase(seriesId)
-            val series = getSeriesDetails(seriesId)
-            series.copy(
-                userRating = userRating
-            )
-        }
     }
 
 
@@ -364,7 +375,7 @@ class SeriesDetailsViewModel @Inject constructor(
                 }
             },
             onError = ::onError,
-            block = isLoggedInUseCase::invoke
+            block = isLoggedInByAccountUseCase::invoke
         )
     }
 
