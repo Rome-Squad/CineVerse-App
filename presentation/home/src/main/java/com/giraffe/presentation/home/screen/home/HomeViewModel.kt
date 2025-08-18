@@ -25,7 +25,7 @@ import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
 import com.giraffe.user.usecase.GetUserNameUseCase
-import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
     private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
-    private val isLoggedInUseCase: IsLoggedInUseCase
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase
 ) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
@@ -82,7 +82,7 @@ class HomeViewModel @Inject constructor(
         safeExecute(
             onSuccess = ::onIsLoggedInSuccess,
             onError = ::onError,
-            block = { isLoggedInUseCase() }
+            block = { isLoggedInByAccountUseCase() }
         )
     }
 

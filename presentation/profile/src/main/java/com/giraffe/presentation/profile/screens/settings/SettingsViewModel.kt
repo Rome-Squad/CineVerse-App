@@ -13,7 +13,7 @@ import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
-import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import com.giraffe.user.usecase.LogoutUseCase
 import com.giraffe.user.usecase.SetContentPreferenceUseCase
 import com.giraffe.user.usecase.SetDarkModeUseCase
@@ -25,7 +25,7 @@ import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val getDarkModeUseCase: GetDarkModeUseCase,
     private val setDarkModeUseCase: SetDarkModeUseCase,
@@ -57,7 +57,7 @@ class SettingsViewModel @Inject constructor(
         safeExecute(
             onSuccess = ::handleLoginStatusSuccess,
             onError = ::onFailure,
-            block = isLoggedInUseCase::invoke
+            block = isLoggedInByAccountUseCase::invoke
         )
     }
 
