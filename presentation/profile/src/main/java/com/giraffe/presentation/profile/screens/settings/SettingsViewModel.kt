@@ -59,7 +59,15 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun observeUserProfile() {
-        safeCollect(
+        safeExecute(
+            onError = ::onFailure,
+            onSuccess = ::onObserveUserProfileSuccess,
+            block = isLoggedInByAccountUseCase::invoke
+        )
+    }
+
+    private fun onObserveUserProfileSuccess(isLoggedIn: Boolean) {
+        if (isLoggedIn) safeCollect(
             onEmitNewValue = { user ->
                 updateState {
                     it.copy(
@@ -76,7 +84,6 @@ class SettingsViewModel @Inject constructor(
     override fun refreshUserProfile() {
         safeExecute(
             onError = ::onFailure,
-            block = isLoggedInByAccountUseCase::invoke
             block = refreshUserUseCase::invoke
         )
     }

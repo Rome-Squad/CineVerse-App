@@ -25,7 +25,7 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     override suspend fun clearSessionId() {
         safeCall {
             authenticationDatastore.setUserAsNotGuest()
-            authenticationDatastore.clearSessionId()
+            authenticationDatastore.clearAll()
         }
     }
 

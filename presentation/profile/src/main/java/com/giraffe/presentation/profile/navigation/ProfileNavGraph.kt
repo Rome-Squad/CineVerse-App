@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,7 @@ import com.giraffe.presentation.profile.navigation.routes.MovieDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SettingsScreenRoute
 import com.giraffe.presentation.profile.navigation.routes.collectionRoute
+import com.giraffe.presentation.profile.navigation.routes.editProfileWebViewRoute
 import com.giraffe.presentation.profile.navigation.routes.historyRoute
 import com.giraffe.presentation.profile.navigation.routes.loginRoute
 import com.giraffe.presentation.profile.navigation.routes.myCollectionsRoute
@@ -28,8 +30,7 @@ import com.giraffe.presentation.profile.navigation.routes.navigateToRatings
 import com.giraffe.presentation.profile.navigation.routes.navigateToSeriesDetails
 import com.giraffe.presentation.profile.navigation.routes.ratingsRoute
 import com.giraffe.presentation.profile.navigation.routes.settingsScreenRoute
-import editProfileWebViewRoute
-
+import com.giraffe.presentation.profile.screens.settings.SettingsViewModel
 
 @Composable
 internal fun ProfileNavGraph(
@@ -53,7 +54,7 @@ internal fun ProfileNavGraph(
         onShowBottomBarChange(isBottomBarVisible)
     }
 
-
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
 
     NavHost(
         modifier = modifier,
@@ -61,6 +62,7 @@ internal fun ProfileNavGraph(
         startDestination = startDestinationRoute,
     ) {
         settingsScreenRoute(
+            settingsViewModel = settingsViewModel,
             navController = navController,
             onNavigateToLogin = navController::navigateLoginScreen,
             onNavigateToMyCollections = navController::navigateToMyCollections,
@@ -68,7 +70,10 @@ internal fun ProfileNavGraph(
             onNavigateToRatings = navController::navigateToRatings,
         )
 
-        editProfileWebViewRoute(navController)
+        editProfileWebViewRoute(
+            settingsViewModel = settingsViewModel,
+            navController = navController,
+        )
 
         historyRoute(
             onBackClicked = navController::navigateUp,

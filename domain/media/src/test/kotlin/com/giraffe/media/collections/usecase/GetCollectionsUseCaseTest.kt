@@ -4,7 +4,6 @@ import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.collections.util.createFakeCollection
 import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetUserUseCase
-import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
@@ -17,9 +16,6 @@ class GetCollectionsUseCaseTest {
 
     private val collectionsRepository: CollectionsRepository = mockk()
     private val getUserUseCase: GetUserUseCase = mockk()
-    private val isLoggedInUseCase: IsLoggedInByAccountUseCase = mockk()
-    private val getCollectionsUseCase =
-        GetCollectionsUseCase(collectionsRepository, getUserUseCase, isLoggedInUseCase)
     private val getCollectionsUseCase = GetCollectionsUseCase(collectionsRepository, getUserUseCase)
 
     @Test

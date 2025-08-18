@@ -12,20 +12,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
@@ -40,8 +35,6 @@ import com.giraffe.presentation.profile.screens.settings.components.ProfileShort
 import com.giraffe.presentation.profile.screens.settings.components.SettingsSection
 import com.giraffe.presentation.profile.screens.settings.components.UserProfileSection
 import com.giraffe.presentation.profile.utils.EffectListener
-import com.giraffe.presentation.profile.utils.showToast
-import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
 fun SettingsScreen(
@@ -52,34 +45,17 @@ fun SettingsScreen(
     onNavigateToHistory: () -> Unit,
     onNavigateToRatings: () -> Unit
 ) {
-    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.refreshUserProfile()
-            }
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
+    EffectListener(viewModel.effect) { effect ->
+        when (effect) {
+            SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
+            SettingsEffect.NavigateToHistory -> onNavigateToHistory()
+            SettingsEffect.NavigateToLogin -> onNavigateToLogin()
+            SettingsEffect.NavigateToMyCollections -> onNavigateToMyCollections()
+            SettingsEffect.NavigateToRatings -> onNavigateToRatings()
+            is SettingsEffect.ShowError -> {}
         }
     }
-
-    EffectListener(viewModel.effect) { effect ->
-            when (effect) {
-                SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
-                SettingsEffect.NavigateToHistory -> onNavigateToHistory()
-                SettingsEffect.NavigateToLogin -> onNavigateToLogin()
-                SettingsEffect.NavigateToMyCollections -> onNavigateToMyCollections()
-                SettingsEffect.NavigateToRatings -> onNavigateToRatings()
-                is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
-            }
-        }
     SettingsContent(
         state = state,
         interaction = viewModel
