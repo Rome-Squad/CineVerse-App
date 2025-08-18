@@ -12,10 +12,10 @@ import com.giraffe.media.movie.usecase.recentlyReleased.ObserveRecentlyReleasedM
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.movie.usecase.upcoming.ObserveUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.ObservePopularSeriesUseCase
 import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.matchesYourVibe.ObserveMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.recentlyReleased.ObserveRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.topRated.ObserveTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentlyViewedSeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val observeMatchesYourVibeMoviesUseCase: ObserveMatchesYourVibeMoviesUseCase,
-    private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
+    private val observeMatchesYourVibeSeriesUseCase: ObserveMatchesYourVibeSeriesUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInUseCase: IsLoggedInUseCase
@@ -262,31 +262,30 @@ class HomeViewModel @Inject constructor(
 
 
     private fun getMatchesYourVibe() {
-        safeExecute(
-            onSuccess = ::onGetMatchesYourVibeSeriesSuccess,
-            onError = ::onError,
-        ) {
-            getMatchesYourVibeSeriesUseCase()
-        }
         safeCollect(
             onEmitNewValue = ::onGetMatchesYourVibeMoviesSuccess,
             onError = ::onError,
             block = observeMatchesYourVibeMoviesUseCase::invoke
         )
-    }
-
-    private fun onGetMatchesYourVibeSeriesSuccess(matchesYourVibeSeries: List<Series>) {
-        updateState { currentState ->
-            currentState.copy(
-                matchVibes = (currentState.matchVibes + matchesYourVibeSeries.map(Series::toPoster)).distinctBy { series -> series.id }
-            )
-        }
+        safeCollect(
+            onEmitNewValue = ::onGetMatchesYourVibeSeriesSuccess,
+            onError = ::onError,
+            block = observeMatchesYourVibeSeriesUseCase::invoke
+        )
     }
 
     private fun onGetMatchesYourVibeMoviesSuccess(movies: List<Movie>) {
         updateState { currentState ->
             currentState.copy(
-                matchVibes = (currentState.matchVibes + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id }
+                matchVibes = (movies.map(Movie::toPoster) + currentState.matchVibes).distinctBy { it.id }
+            )
+        }
+    }
+
+    private fun onGetMatchesYourVibeSeriesSuccess(series: List<Series>) {
+        updateState { currentState ->
+            currentState.copy(
+                matchVibes = (series.map(Series::toPoster) + currentState.matchVibes).distinctBy { it.id }
             )
         }
     }

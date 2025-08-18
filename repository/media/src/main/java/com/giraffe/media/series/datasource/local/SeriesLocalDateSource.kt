@@ -44,5 +44,5 @@ interface SeriesLocalDateSource {
 
     suspend fun insertMatchesYourVibe(series: List<SeriesCacheDto>)
 
-    suspend fun getMatchesYourVibe(limit: Int): List<SeriesCacheDto>
+    fun getMatchesYourVibe(limit: Int): Flow<List<SeriesCacheDto>>
 }

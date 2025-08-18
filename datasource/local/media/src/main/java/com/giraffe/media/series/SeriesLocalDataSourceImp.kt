@@ -84,9 +84,8 @@ class SeriesLocalDataSourceImp @Inject constructor(
         seriesDao.upsertMatchesYourVibeSeries(series.map(SeriesCacheDto::toMatchesYourVibeSeriesCacheDto))
     }
 
-    override suspend fun getMatchesYourVibe(limit: Int) = safeCall {
-        seriesDao.getMatchesYourVibeSeries(limit)
-    }
+    override fun getMatchesYourVibe(limit: Int) =
+        safeFlow { seriesDao.getMatchesYourVibeSeries(limit) }
 
     override fun getRecentSeries(page: Int, pageSize: Int) = safeFlow {
         seriesDao.getRecentlyViewedSeries(page, pageSize)

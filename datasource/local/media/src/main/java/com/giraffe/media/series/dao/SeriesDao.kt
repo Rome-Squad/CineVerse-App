@@ -92,7 +92,7 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getMatchesYourVibeSeries(limit: Int): List<SeriesCacheDto>
+    fun getMatchesYourVibeSeries(limit: Int): Flow<List<SeriesCacheDto>>
 
     @Query("DELETE FROM $MATCHES_YOUR_VIBE_SERIES_TABLE")
     suspend fun clearMatchesYourVibeSeriesTable()

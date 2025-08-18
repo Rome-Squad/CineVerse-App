@@ -58,6 +58,8 @@ interface SeriesRepository {
 
     suspend fun clearRecentlyViewed()
 
+    fun observeMatchesYourVibe(limit: Int): Flow<List<Series>>
+
     suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Series>
 
     suspend fun getTopGenreCount(): Genre?

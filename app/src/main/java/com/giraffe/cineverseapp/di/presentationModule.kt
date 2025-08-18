@@ -8,7 +8,7 @@ import com.giraffe.media.movie.usecase.matchesYourVibe.GetMatchesYourVibeMoviesU
 import com.giraffe.media.movie.usecase.recentlyReleased.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.movie.usecase.upcoming.GetUpcomingMoviesUseCase
-import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
+import com.giraffe.media.series.usecase.matchesYourVibe.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.recentlyReleased.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase

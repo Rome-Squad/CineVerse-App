@@ -234,29 +234,32 @@ class SeriesRepositoryImpl @Inject constructor(
     // endregion
 
     // region Matches Your Vibe
-    override suspend fun getMatchesYourVibe(page: Int, limit: Int) = safeCall {
-        val topGenreCount = getTopGenreCount()
-        if (topGenreCount != null) {
-            if (page > 1) {
-                seriesRemote.getSeriesByGenre(genreId = topGenreCount.id, page = page)
-                    .take(limit)
-                    .map(SeriesDto::toEntity)
-            } else {
-                seriesLocal.getMatchesYourVibe(limit).map { it.toEntity() }.ifEmpty {
-                    seriesRemote.getSeriesByGenre(
-                        genreId = topGenreCount.id,
-                        page = page
-                    )
-                        .take(limit)
-                        .map(SeriesDto::toEntity)
-                        .also { addMatchesYourVibe(it) }
+    override fun observeMatchesYourVibe(limit: Int): Flow<List<Series>> {
+        return safeFlow {
+            seriesLocal.getMatchesYourVibe(limit)
+                .map { it.map(SeriesCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getMatchesYourVibe(page = 1, limit = limit)
+                            .also { series ->
+                                addMatchesYourVibe(series)
+                            }
+                    }
                 }
-            }
-        } else emptyList()
+        }
     }
 
-    private suspend fun addMatchesYourVibe(series: List<Series>) = safeCall {
-        seriesLocal.insertMatchesYourVibe(series.map { it.toCacheDto() })
+    override suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Series> {
+        return safeCall {
+            getTopGenreCount()?.let { topGenre ->
+                getByGenreId(topGenre.id, page).take(limit)
+            } ?: emptyList()
+        }
+    }
+
+    private suspend fun addMatchesYourVibe(series: List<Series>) {
+        if (series.isEmpty()) return
+        safeCall { seriesLocal.insertMatchesYourVibe(series.map(Series::toCacheDto)) }
     }
     // endregion
 

@@ -184,11 +184,11 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getMatchesYourVibe returns series`() = runTest {
-        coEvery { seriesDao.getMatchesYourVibeSeries(10) } returns sampleSeries
+        coEvery { seriesDao.getMatchesYourVibeSeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getMatchesYourVibe(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test
