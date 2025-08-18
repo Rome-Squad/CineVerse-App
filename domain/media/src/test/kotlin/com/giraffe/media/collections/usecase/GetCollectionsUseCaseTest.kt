@@ -3,6 +3,7 @@ package com.giraffe.media.collections.usecase
 import com.giraffe.media.collections.repository.CollectionsRepository
 import com.giraffe.media.collections.util.createFakeCollection
 import com.giraffe.user.usecase.GetUserUseCase
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.every
@@ -16,7 +17,9 @@ class GetCollectionsUseCaseTest {
 
     private val collectionsRepository: CollectionsRepository = mockk()
     private val getUserUseCase: GetUserUseCase = mockk()
-    private val getCollectionsUseCase = GetCollectionsUseCase(collectionsRepository, getUserUseCase)
+    private val isLoggedInUseCase: IsLoggedInUseCase = mockk()
+    private val getCollectionsUseCase =
+        GetCollectionsUseCase(collectionsRepository, getUserUseCase, isLoggedInUseCase)
 
     @Test
     fun `should return list of collections when GetCollectionsUseCase invoked`() = runTest {
