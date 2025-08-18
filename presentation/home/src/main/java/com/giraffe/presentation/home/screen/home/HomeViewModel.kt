@@ -94,7 +94,7 @@ class HomeViewModel @Inject constructor(
     private fun getUserName() {
         safeCollect(
             onEmitNewValue = ::getUseNameSuccess,
-            onError = ::onFail,
+            onError = ::onError,
             block = { getUserNameUseCase() }
         )
     }
