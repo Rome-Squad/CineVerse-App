@@ -22,12 +22,12 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
 
     override suspend fun clearSessionId() {
         safeCall {
-            authenticationDatastore.clearUserAsNotGuest()
+            authenticationDatastore.setUserAsNotGuest()
             authenticationDatastore.clearSessionId()
         }
     }
 
-    override suspend fun setTheUserAsGuest() =
-        safeCall { authenticationDatastore.setTheUserAsGuest() }
+    override suspend fun setUserAsGuest() =
+        safeCall { authenticationDatastore.setUserAsGuest() }
 
 }

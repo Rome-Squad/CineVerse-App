@@ -12,6 +12,6 @@ interface AuthenticationLocalDataSource {
 
     suspend fun clearSessionId()
 
-    suspend fun setTheUserAsGuest()
+    suspend fun setUserAsGuest()
 
 }

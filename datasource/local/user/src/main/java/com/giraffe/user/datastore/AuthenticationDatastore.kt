@@ -31,13 +31,13 @@ class AuthenticationDatastore @Inject constructor(
         }
     }
 
-    suspend fun setTheUserAsGuest() {
+    suspend fun setUserAsGuest() {
         dataStore.edit { preferences ->
             preferences[IS_GUEST] = true
         }
     }
 
-    suspend fun clearUserAsNotGuest() {
+    suspend fun setUserAsNotGuest() {
         dataStore.edit { preferences ->
             preferences[IS_GUEST] = false
         }

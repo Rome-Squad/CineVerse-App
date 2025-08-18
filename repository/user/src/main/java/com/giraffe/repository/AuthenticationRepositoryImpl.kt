@@ -29,7 +29,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun loginAsGuest() {
-        localDataSource.setTheUserAsGuest()
+        localDataSource.setUserAsGuest()
     }
 
     override suspend fun isLoggedInByAccount() = safeCall { localDataSource.isLoggedInByAccount() }

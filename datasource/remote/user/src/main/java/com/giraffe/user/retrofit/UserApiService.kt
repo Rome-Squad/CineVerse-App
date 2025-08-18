@@ -8,36 +8,25 @@ import com.giraffe.user.dto.SessionResponse
 import com.giraffe.user.dto.TokenValidationBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface UserApiService {
 
-    @GET(CREATE_REQUEST_TOKEN)
+    @GET("authentication/token/new")
     suspend fun createRequestToken(): Response<RequestTokenResponse>
 
-    @POST(VALIDATE_TOKEN_WITH_LOGIN_URL)
+    @POST("authentication/token/validate_with_login")
     suspend fun validateTokenWithLogin(@Body requestBody: TokenValidationBody): Response<RequestTokenResponse>
 
-    @POST(CREATE_SESSION_URL)
+    @POST("authentication/session/new")
     suspend fun createSession(@Body requestBody: SessionRequestBody): Response<SessionResponse>
 
-    @GET(ACCOUNT)
-    suspend fun getUser(@Query(SESSION_ID) sessionId: String): Response<UserDto>
+    @GET("account")
+    suspend fun getUser(@Query("session_id") sessionId: String): Response<UserDto>
 
-    @HTTP(method = DELETE, path = DELETE_SESSION_URL, hasBody = true)
+    @DELETE("authentication/session")
     suspend fun deleteSession(@Body requestBody: DeleteSessionRequest): Response<Unit>
-
-
-    companion object {
-        private const val CREATE_REQUEST_TOKEN = "authentication/token/new"
-        private const val VALIDATE_TOKEN_WITH_LOGIN_URL = "authentication/token/validate_with_login"
-        private const val CREATE_SESSION_URL = "authentication/session/new"
-        private const val DELETE_SESSION_URL = "authentication/session"
-        private const val ACCOUNT = "account"
-        private const val SESSION_ID = "session_id"
-        private const val DELETE = "DELETE"
-    }
 }
