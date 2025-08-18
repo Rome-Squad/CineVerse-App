@@ -29,7 +29,6 @@ import com.giraffe.presentation.home.navigation.home.routes.navigateToCollection
 import com.giraffe.presentation.home.navigation.home.routes.navigateToMovieDetails
 import com.giraffe.presentation.home.navigation.home.routes.navigateToSeriesDetails
 import com.giraffe.presentation.home.navigation.home.routes.navigateToYourCollections
-import com.giraffe.presentation.home.navigation.home.routes.showMoreRoute
 import com.giraffe.presentation.home.navigation.main.routes.HomeRoute.route as HomeNavGraphRoute
 
 
