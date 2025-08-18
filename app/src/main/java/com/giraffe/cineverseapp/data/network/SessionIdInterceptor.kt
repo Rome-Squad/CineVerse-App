@@ -1,16 +1,15 @@
 package com.giraffe.cineverseapp.data.network
 
 import android.util.Base64
-import android.util.Log
 import com.giraffe.media.util.NetworkConstants.NEEDS_SESSION
 import com.giraffe.media.util.NetworkConstants.SESSION_ID
+import com.giraffe.repository.encryption.SecretKeyAliasEnum
 import com.giraffe.user.datastore.AuthenticationDatastore
+import com.giraffe.user.encryption.IEncryptionService
+import com.giraffe.user.exception.AccessDeniedException
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import com.giraffe.repository.encryption.SecretKeyAliasEnum
-import com.giraffe.user.encryption.IEncryptionService
-import com.giraffe.user.exception.AccessDeniedException
 import java.io.IOException
 
 class SessionIdInterceptor(
