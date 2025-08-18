@@ -4,53 +4,48 @@ import com.giraffe.media.collections.datasource.remote.CollectionsRemoteDataSour
 import com.giraffe.media.collections.datasource.remote.dto.CollectionDto
 import com.giraffe.media.collections.datasource.remote.dto.CollectionItemDto
 import com.giraffe.media.collections.response.CollectionItemIdRequestBody
-import com.giraffe.media.util.RetrofitRequestBuilder
+import com.giraffe.media.util.safeCallRemote
 import javax.inject.Inject
 
-class CollectionsRemoteDataSourceImp @Inject constructor(
-    private val requestBuilder: RetrofitRequestBuilder<CollectionsApiServiceRetrofit>
+class CollectionsRemoteDataSourceImpl @Inject constructor(
+    private val collectionsApiService: CollectionsApiService,
 ) : CollectionsRemoteDataSource {
     override suspend fun getCollections(
         accountId: Int
-    ): List<CollectionDto> = requestBuilder.get {
-        getCollections(accountId)
-    }.results
+    ): List<CollectionDto> =
+        safeCallRemote { collectionsApiService.getCollections(accountId = accountId) }.results
 
     override suspend fun getCollectionDetails(collectionId: Int): CollectionDto =
-        requestBuilder.get {
-            getCollectionDetails(collectionId)
-        }
+        safeCallRemote { collectionsApiService.getCollectionDetails(collectionId = collectionId) }
 
-    override suspend fun addCollection(collection: CollectionDto): Int? = requestBuilder.post {
-        addCollection(collection)
+    override suspend fun addCollection(collection: CollectionDto): Int? = safeCallRemote {
+        collectionsApiService.addCollection(collection)
     }.collectionId
 
-    override suspend fun removeCollection(collectionId: Int): Boolean = requestBuilder.delete {
-        removeCollection(collectionId)
+    override suspend fun removeCollection(collectionId: Int): Boolean = safeCallRemote {
+        collectionsApiService.removeCollection(collectionId)
     }.isSuccess
 
-    override suspend fun clearCollection(collectionId: Int): Boolean = requestBuilder.post {
-        clearCollection(collectionId)
+    override suspend fun clearCollection(collectionId: Int): Boolean = safeCallRemote {
+        collectionsApiService.clearCollection(collectionId)
     }.isSuccess
 
     override suspend fun addMovieToCollection(collectionId: Int, movieId: Int): Boolean =
-        requestBuilder.post {
-            addMovieToCollection(
+        safeCallRemote {
+            collectionsApiService.addMovieToCollection(
                 collectionId,
                 CollectionItemIdRequestBody(movieId)
             )
         }.isSuccess
 
     override suspend fun removeMovieFromCollection(collectionId: Int, movieId: Int): Boolean =
-        requestBuilder.post {
-            removeMovieFromCollection(
+        safeCallRemote {
+            collectionsApiService.removeMovieFromCollection(
                 collectionId,
                 CollectionItemIdRequestBody(movieId)
             )
         }.isSuccess
 
     override suspend fun getCollectionMovies(collectionId: Int): List<CollectionItemDto> =
-        requestBuilder.get {
-            getCollectionItems(collectionId)
-        }.items
+        safeCallRemote { collectionsApiService.getCollectionItems(collectionId) }.items
 }
