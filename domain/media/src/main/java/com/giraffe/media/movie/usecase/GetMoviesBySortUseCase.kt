@@ -6,12 +6,6 @@ import javax.inject.Inject
 class GetMoviesBySortUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
-    suspend operator fun invoke(
-        sortBy: String,
-        page: Int
-    ) =
-        movieRepository.getBySort(
-            sortBy = sortBy,
-            page = page
-        )
+    suspend operator fun invoke(sortBy: String, page: Int) =
+        movieRepository.getBySort(sortBy = sortBy, page = page)
 }

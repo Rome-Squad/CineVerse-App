@@ -11,9 +11,11 @@ interface MovieRepository {
 
     suspend fun getByName(name: String, page: Int): List<Movie>
 
+    fun observeGenres(): Flow<List<Genre>>
+
     suspend fun getGenres(): List<Genre>
 
-    suspend fun getGenresByIds(genreIds: List<Int>): List<Genre>
+    fun getGenresByIds(genreIds: List<Int>): Flow<List<Genre>>
 
     suspend fun getTopGenre(): Genre?
 
@@ -37,15 +39,23 @@ interface MovieRepository {
 
     suspend fun getUserRated(accountId: Int): List<Movie>
 
-    suspend fun getPopular(page: Int, limit: Int): List<Movie>
+    fun observePopular(limit: Int): Flow<List<Movie>>
+
+    fun observeRecentlyReleased(limit: Int): Flow<List<Movie>>
 
     suspend fun getRecentlyReleased(page: Int, limit: Int): List<Movie>
 
+    fun observeUpcoming(limit: Int): Flow<List<Movie>>
+
     suspend fun getUpcoming(page: Int, limit: Int): List<Movie>
+
+    fun observeMatchesYourVibe(limit: Int): Flow<List<Movie>>
 
     suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Movie>
 
-    fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>>
+    fun observeRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>>
+
+    suspend fun syncRecentlyViewedMovies()
 
     suspend fun clearRecentlyViewed()
 

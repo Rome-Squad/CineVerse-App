@@ -2,9 +2,9 @@ package com.giraffe.presentation.profile.screens.history
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.DeleteRecentlyViewedMovieByIdUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyViewedMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.DeleteRecentlyViewedMovieByIdUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
@@ -17,9 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val getRecentlyMoviesUseCase: GetRecentlyViewedMoviesUseCase,
+    private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     private val deleteRecentlyViewedMovieByIdUseCase: DeleteRecentlyViewedMovieByIdUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
@@ -32,14 +32,14 @@ class HistoryViewModel @Inject constructor(
     }
 
     private fun getGenres() {
-        safeExecute(
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onFailure.also { onGetMoviesGenresFailure() },
-            onSuccess = ::onGetMoviesGenresSuccess,
-            block = getMoviesGenresUseCase::invoke
+            block = observeMoviesGenresUseCase::invoke
         )
         safeExecute(
-            onError = ::onFailure.also { onGetSeriesGenresFailure() },
             onSuccess = ::onGetSeriesGenresSuccess,
+            onError = ::onFailure.also { onGetSeriesGenresFailure() },
             block = getSeriesGenresUseCase::invoke
         )
     }
@@ -66,7 +66,7 @@ class HistoryViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetRecentMoviesSuccess,
             onError = ::onFailure,
-            block = getRecentlyMoviesUseCase::invoke
+            block = observeRecentlyViewedMoviesUseCase::invoke
         )
     }
 

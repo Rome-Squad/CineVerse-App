@@ -14,7 +14,11 @@ import kotlinx.datetime.LocalDate
 
 fun MovieGenreCacheDto.toEntity() = Genre(id, name, rank)
 
-fun Genre.toDto() = MovieGenreCacheDto(id, title, rank)
+fun Genre.toCacheDto() = MovieGenreCacheDto(
+    id = id,
+    name = title,
+    rank = rank
+)
 
 fun MovieGenreDto.toEntity() = Genre(
     id = id,
@@ -89,6 +93,26 @@ fun Movie.toCacheDto() = MovieCacheDto(
     releaseYear = releaseYear.orEmptyString(),
     duration = duration,
     popularity = popularity,
+)
+
+fun MovieDto.toCacheDto() = MovieCacheDto(
+    id = id,
+    name = title.orEmpty(),
+    overview = overview.orEmpty(),
+    rating = voteAverage.orZero(),
+    posterUrl = posterPath?.let {
+        if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
+    },
+    backdropUrl = backdropPath?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it else
+            BASE_IMAGE_URL + it
+    },
+    youtubeVideoId = youtubeVideoId,
+    genresID = genresID,
+    releaseYear = releaseDate,
+    duration = runtime,
+    popularity = popularity.orZero(),
 )
 
 fun MovieDto.toEntity(

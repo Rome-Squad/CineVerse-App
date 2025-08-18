@@ -14,14 +14,16 @@ import com.giraffe.media.movie.datasource.remote.dto.MovieGenreDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.mapper.toCacheDto
-import com.giraffe.media.movie.mapper.toDto
 import com.giraffe.media.movie.mapper.toEntity
 import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.utils.safeCall
+import com.giraffe.media.utils.safeFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -58,84 +60,80 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getByGenreIds(
-        genreIds: List<Int>,
-        page: Int
-    ) = safeCall {
-        movieRemote.getMoviesByGenreIds(
-            genreIds = genreIds,
-            page = page
-        ).map(MovieDto::toEntity)
-    }
-
-    override suspend fun getByKeywordsId(
-        keywords: Int,
-        page: Int
-    ) = safeCall {
-        movieRemote.getMoviesByKeywordsId(
-            keywords = keywords,
-            page = page
-        ).map(MovieDto::toEntity)
-    }
-
-    override suspend fun getBySort(
-        sortBy: String,
-        page: Int
-    ) = safeCall {
-        movieRemote.getMoviesBySort(
-            sortBy = sortBy,
-            page = page
-        ).map(MovieDto::toEntity)
-    }
-
-
-    override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
+    override suspend fun getByGenreIds(genreIds: List<Int>, page: Int): List<Movie> {
         return safeCall {
-            movieRemote.getMovieRecommendations(movieId, page).map(MovieDto::toEntity)
+            movieRemote.getMoviesByGenreIds(
+                genreIds = genreIds,
+                page = page
+            ).map(MovieDto::toEntity)
         }
     }
 
+    override suspend fun getByKeywordsId(keywords: Int, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMoviesByKeywordsId(
+                keywords = keywords,
+                page = page
+            ).map(MovieDto::toEntity)
+        }
+    }
+
+    override suspend fun getBySort(sortBy: String, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMoviesBySort(
+                sortBy = sortBy,
+                page = page
+            ).map(MovieDto::toEntity)
+        }
+    }
+
+    override suspend fun getRecommended(movieId: Int, page: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getMovieRecommendations(movieId, page)
+                .map(MovieDto::toEntity)
+        }
+    }
 
     // region Movie Genres
-    private suspend fun addMovieGenres(genres: List<Genre>) =
-        safeCall { movieLocal.addMovieGenres(genres.map(Genre::toDto)) }
-
-    override suspend fun getGenres(): List<Genre> {
-        return safeCall {
-            getLocalGenres()
-                .ifEmpty {
-                    getRemoteGenres()
+    override fun observeGenres(): Flow<List<Genre>> {
+        return safeFlow {
+            movieLocal.getMoviesGenres()
+                .map { it.map(MovieGenreCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getGenres()
+                    }
                 }
         }
     }
 
-    private suspend fun getLocalGenres(): List<Genre> {
-        return movieLocal.getMoviesGenres()
-            .map(MovieGenreCacheDto::toEntity)
-    }
-
-    private suspend fun getRemoteGenres(): List<Genre> {
-        return movieRemote.getMovieGenres()
-            .map(MovieGenreDto::toEntity)
-            .also { addMovieGenres(it) }
-    }
-
-    override suspend fun getGenresByIds(genreIds: List<Int>): List<Genre> {
+    override suspend fun getGenres(): List<Genre> {
         return safeCall {
-            if (genreIds.isEmpty()) return@safeCall emptyList()
+            movieRemote.getMovieGenres()
+                .map(MovieGenreDto::toEntity)
+                .also { syncMovieGenres(it) }
+        }
+    }
+
+    private suspend fun syncMovieGenres(genres: List<Genre>) =
+        movieLocal.syncMovieGenres(genres.map(Genre::toCacheDto))
+
+    override fun getGenresByIds(genreIds: List<Int>): Flow<List<Genre>> {
+        if (genreIds.isEmpty()) return flowOf(emptyList())
+        return safeFlow {
             movieLocal.getMovieGenresByIds(genreIds)
-                .map(MovieGenreCacheDto::toEntity)
-                .ifEmpty {
-                    getRemoteGenres().filter { it.id in genreIds }
+                .map { it.map(MovieGenreCacheDto::toEntity) }
+                .onEach {
+                    getGenres().filter { it.id in genreIds }
                 }
         }
     }
 
     override suspend fun getTopGenre() =
-        movieLocal.getTopGenre()?.toEntity()
+        safeCall { movieLocal.getTopGenre()?.toEntity() }
 
     override suspend fun clearGenres() =
-        movieLocal.clearMovieGenres()
+        safeCall { movieLocal.clearMovieGenres() }
     // endregion
 
     // region Rating
@@ -168,183 +166,177 @@ class MovieRepositoryImpl @Inject constructor(
     // endregion
 
     // region Popular
-    override suspend fun getPopular(page: Int, limit: Int): List<Movie> {
-        return safeCall {
-            when (page) {
-                1 -> {
-                    getLocalPopular(limit).ifEmpty {
-                        getRemotePopular(page = page, limit = limit)
+    override fun observePopular(limit: Int): Flow<List<Movie>> {
+        return safeFlow {
+            movieLocal.getPopularityMovies(limit = limit)
+                .map { it.map(MovieCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getRemotePopular(page = 1, limit = limit)
+                            .also { movies ->
+                                addPopular(movies)
+                            }
                     }
                 }
-
-                else -> {
-                    getRemotePopular(page = page, limit = limit)
-                }
-            }
         }
     }
 
-    private suspend fun addPopular(page: Int, movies: List<Movie>) {
-        if (page == 1) {
-            movieLocal.addPopularityMovies(movies.map(Movie::toCacheDto))
-        }
-    }
-
-    private suspend fun getLocalPopular(limit: Int): List<Movie> {
-        return movieLocal.getPopularityMovies(limit = limit)
-            .map(MovieCacheDto::toEntity)
+    private suspend fun addPopular(movies: List<Movie>) {
+        if (movies.isEmpty()) return
+        movieLocal.addPopularityMovies(movies.map(Movie::toCacheDto))
     }
 
     private suspend fun getRemotePopular(page: Int, limit: Int): List<Movie> {
-        return movieRemote.getPopularityMovies(page)
-            .take(limit)
-            .map(MovieDto::toEntity)
-            .also {
-                addPopular(page, it)
-            }
+        return safeCall {
+            movieRemote.getPopularityMovies(page)
+                .take(limit)
+                .map(MovieDto::toEntity)
+        }
     }
     // endregion
 
     // region Recently Released
-    override suspend fun getRecentlyReleased(page: Int, limit: Int): List<Movie> {
-        return safeCall {
-            when (page) {
-                1 -> {
-                    getLocalRecentlyReleased(limit).ifEmpty {
-                        getRemoteRecentlyReleased(page = page, limit = limit)
+    override fun observeRecentlyReleased(limit: Int): Flow<List<Movie>> {
+        return safeFlow {
+            movieLocal.getRecentlyReleasedMovies(limit)
+                .map { it.map(MovieCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getRecentlyReleased(page = 1, limit = limit)
+                            .also { movies ->
+                                addRecentlyReleased(movies)
+                            }
                     }
                 }
-
-                else -> {
-                    getRemoteRecentlyReleased(page = page, limit = limit)
-                }
-            }
         }
     }
 
-    private suspend fun addRecentlyReleased(page: Int, movies: List<Movie>) {
-        if (page == 1) {
-            movieLocal.addRecentlyReleasedMovies(movies.map(Movie::toCacheDto))
+    private suspend fun addRecentlyReleased(movies: List<Movie>) {
+        if (movies.isEmpty()) return
+        movieLocal.addRecentlyReleasedMovies(movies.map(Movie::toCacheDto))
+    }
+
+    override suspend fun getRecentlyReleased(page: Int, limit: Int): List<Movie> {
+        return safeCall {
+            movieRemote.getRecentlyReleasedMovies(page)
+                .take(limit)
+                .map(MovieDto::toEntity)
         }
-    }
-
-    private suspend fun getLocalRecentlyReleased(limit: Int): List<Movie> {
-        return movieLocal.getRecentlyReleasedMovies(limit)
-            .map(MovieCacheDto::toEntity)
-    }
-
-    private suspend fun getRemoteRecentlyReleased(page: Int, limit: Int): List<Movie> {
-        return movieRemote.getRecentlyReleasedMovies(page)
-            .take(limit)
-            .map(MovieDto::toEntity)
-            .also {
-                addRecentlyReleased(page, it)
-            }
     }
     // endregion
 
     // region Upcoming
+    override fun observeUpcoming(limit: Int): Flow<List<Movie>> {
+        return safeFlow {
+            movieLocal.getUpcomingMovies(limit)
+                .map { it.map(MovieCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getUpcoming(page = 1, limit = limit)
+                            .also { movies ->
+                                addUpcoming(movies = movies)
+                            }
+                    }
+                }
+        }
+    }
+
+    private suspend fun addUpcoming(movies: List<Movie>) {
+        if (movies.isEmpty()) return
+        movieLocal.addUpcomingMovies(movies.map(Movie::toCacheDto))
+    }
+
     override suspend fun getUpcoming(page: Int, limit: Int): List<Movie> {
         return safeCall {
-            when (page) {
-                1 -> getLocalUpcoming(limit).ifEmpty {
-                    getRemoteUpcoming(page = page, limit = limit)
-                }
-
-                else -> {
-                    getRemoteUpcoming(page, limit)
-                }
-            }
+            movieRemote.getUpcomingMovies(page)
+                .take(limit)
+                .map(MovieDto::toEntity)
         }
-    }
-
-    private suspend fun addUpcoming(page: Int, movies: List<Movie>) {
-        if (page == 1) {
-            movieLocal.addUpcomingMovies(movies.map(Movie::toCacheDto))
-        }
-    }
-
-    private suspend fun getLocalUpcoming(limit: Int): List<Movie> {
-        return movieLocal.getUpcomingMovies(limit)
-            .map(MovieCacheDto::toEntity)
-    }
-
-    private suspend fun getRemoteUpcoming(page: Int, limit: Int): List<Movie> {
-        return movieRemote.getUpcomingMovies(page)
-            .take(limit)
-            .map(MovieDto::toEntity)
-            .also {
-                addUpcoming(page = page, movies = it)
-            }
     }
     // endregion
 
     // region Match
+    override fun observeMatchesYourVibe(limit: Int): Flow<List<Movie>> {
+        return safeFlow {
+            movieLocal.getMatchesYourVibeMovies(limit)
+                .map { it.map(MovieCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getMatchesYourVibe(page = 1, limit = limit)
+                            .also { movies ->
+                                addMatchesYourVibe(movies = movies)
+                            }
+                    }
+                }
+        }
+    }
+
+    private suspend fun addMatchesYourVibe(movies: List<Movie>) {
+        if (movies.isEmpty()) return
+        movieLocal.addMatchesYourVibeMovies(movies.map(Movie::toCacheDto))
+    }
+
     override suspend fun getMatchesYourVibe(page: Int, limit: Int): List<Movie> {
         return safeCall {
             getTopGenre()?.let { topGenre ->
-                when (page) {
-                    1 -> getLocalMatchesYourVibe(limit).map(MovieCacheDto::toEntity).ifEmpty {
-                        getRemoteMatchesYourVibe(topGenre, page).take(limit)
-                    }
-
-                    else -> getRemoteMatchesYourVibe(topGenre, page)
-                }
+                getByGenreId(genreId = topGenre.id, page = page).take(limit)
             } ?: emptyList()
         }
     }
-
-    private suspend fun getRemoteMatchesYourVibe(topGenre: Genre, page: Int): List<Movie> {
-        return getByGenreId(genreId = topGenre.id, page = page).also {
-            addMatchesYourVibe(page = page, movies = it)
-        }
-    }
-
-    private suspend fun addMatchesYourVibe(page: Int, movies: List<Movie>) {
-        if (page == 1) {
-            movieLocal.addMatchesYourVibeMovies(movies.map(Movie::toCacheDto))
-        }
-    }
-
-    private suspend fun getLocalMatchesYourVibe(limit: Int) =
-        safeCall { movieLocal.getMatchesYourVibeMovies(limit) }
     // endregion
 
     // region Recently Viewed
     private suspend fun addRecentlyViewed(movie: Movie) =
         movieLocal.addRecentlyViewedMovie(movie.toCacheDto())
 
-    override fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>> {
-        return movieLocal.getRecentlyViewedMovies(page, pageSize).map { movies ->
-            movies.map(MovieWithRecentlyViewedAt::toEntity)
+    override fun observeRecentlyViewed(page: Int, pageSize: Int): Flow<List<Movie>> {
+        return safeFlow {
+            movieLocal.getRecentlyViewedMovies(page, pageSize)
+                .map { movies ->
+                    movies.map(MovieWithRecentlyViewedAt::toEntity)
+                }
         }
     }
 
-    override suspend fun deleteRecentlyViewedMovieById(movieId: Int) {
-        movieLocal.deleteRecentlyViewedMovieById(movieId)
+    override suspend fun syncRecentlyViewedMovies() {
+        return safeCall {
+            movieLocal.getAllRecentlyViewedMovies().forEach {
+                movieRemote.getMovieById(it.movie.id)
+                    .toCacheDto()
+                    .also { movie ->
+                        movieLocal.addMovie(movie)
+                    }
+            }
+        }
     }
 
-    override suspend fun clearRecentlyViewed() {
-        movieLocal.clearRecentlyViewedMovies()
-    }
+    override suspend fun deleteRecentlyViewedMovieById(movieId: Int) =
+        safeCall { movieLocal.deleteRecentlyViewedMovieById(movieId) }
+
+    override suspend fun clearRecentlyViewed() =
+        safeCall { movieLocal.clearRecentlyViewedMovies() }
     // endregion
 
     override suspend fun clearAll() {
-        movieLocal.clearMovieCache()
-        movieLocal.clearMovieGenres()
-        movieLocal.clearPopularMovies()
-        movieLocal.clearRecentlyReleasedMovies()
-        movieLocal.clearUpcomingMovies()
-        movieLocal.clearMatchesYourVibeMovies()
-        movieLocal.clearRecentlyViewedMovies()
+        safeCall {
+            movieLocal.clearMovieCache()
+            movieLocal.clearMovieGenres()
+            movieLocal.clearPopularMovies()
+            movieLocal.clearRecentlyReleasedMovies()
+            movieLocal.clearUpcomingMovies()
+            movieLocal.clearMatchesYourVibeMovies()
+            movieLocal.clearRecentlyViewedMovies()
+        }
     }
 
     override suspend fun clearExceptRecentlyViewed() {
-        movieLocal.clearExceptRecentlyViewed()
-        movieLocal.clearPopularMovies()
-        movieLocal.clearRecentlyReleasedMovies()
-        movieLocal.clearUpcomingMovies()
-        movieLocal.clearMatchesYourVibeMovies()
+        safeCall {
+            movieLocal.clearExceptRecentlyViewed()
+            movieLocal.clearPopularMovies()
+            movieLocal.clearRecentlyReleasedMovies()
+            movieLocal.clearUpcomingMovies()
+            movieLocal.clearMatchesYourVibeMovies()
+        }
     }
 
 }

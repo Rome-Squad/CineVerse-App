@@ -10,10 +10,9 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedMovieRoute
@@ -25,12 +24,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class RecommendedMoviesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getRecommendedMovies: GetRecommendedMoviesUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
 
     ) : BaseViewModel<RecommendedMoviesScreenState, RecommendedMoviesEffect>(
     RecommendedMoviesScreenState(
@@ -46,10 +46,10 @@ class RecommendedMoviesViewModel @Inject constructor(
     }
 
     private fun getMoviesGenres() {
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onError,
-            block = getMoviesGenresUseCase::invoke
+            block = observeMoviesGenresUseCase::invoke
         )
     }
 
