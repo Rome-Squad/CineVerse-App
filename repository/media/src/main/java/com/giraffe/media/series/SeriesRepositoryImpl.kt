@@ -174,21 +174,32 @@ class SeriesRepositoryImpl @Inject constructor(
     // endregion
 
     // region Recently Released
-    override suspend fun getRecentlyReleased(page: Int, limit: Int) = safeCall {
-        if (page > 1) {
-            seriesRemote.getRecentlyReleasedSeries(page).take(limit)
-                .map(SeriesDto::toEntity)
-        } else {
-            seriesLocal.getRecentlyReleasedSeries(limit).map { it.toEntity() }.ifEmpty {
-                seriesRemote.getRecentlyReleasedSeries(page).take(limit)
-                    .map(SeriesDto::toEntity)
-                    .also { addRecentlyReleased(it) }
-            }
+    override fun observeRecentlyReleased(limit: Int): Flow<List<Series>> {
+        return safeFlow {
+            seriesLocal.getRecentlyReleasedSeries(limit)
+                .map { it.map(SeriesCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getRecentlyReleased(page = 1, limit = limit)
+                            .also { series ->
+                                addRecentlyReleased(series)
+                            }
+                    }
+                }
         }
     }
 
-    private suspend fun addRecentlyReleased(series: List<Series>) = safeCall {
-        seriesLocal.insertRecentlyReleasedSeries(series.map { it.toCacheDto() })
+    override suspend fun getRecentlyReleased(page: Int, limit: Int): List<Series> {
+        return safeCall {
+            seriesRemote.getRecentlyReleasedSeries(page)
+                .take(limit)
+                .map(SeriesDto::toEntity)
+        }
+    }
+
+    private suspend fun addRecentlyReleased(series: List<Series>) {
+        if (series.isEmpty()) return
+        seriesLocal.insertRecentlyReleasedSeries(series.map(Series::toCacheDto))
     }
     // endregion
 
@@ -254,9 +265,8 @@ class SeriesRepositoryImpl @Inject constructor(
         seriesLocal.deleteSeriesFromHistoryById(seriesId)
     }
 
-    override suspend fun clearRecentlyViewed() = safeCall {
-        seriesLocal.clearRecentSeries()
-    }
+    override suspend fun clearRecentlyViewed() =
+        safeCall { seriesLocal.clearRecentSeries() }
     // endregion
 
     override suspend fun clearExceptRecentlyViewed() =

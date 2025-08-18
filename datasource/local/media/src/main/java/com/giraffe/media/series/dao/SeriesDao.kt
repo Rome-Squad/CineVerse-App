@@ -55,7 +55,7 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getRecentlyReleasedSeries(limit: Int): List<SeriesCacheDto>
+    fun getRecentlyReleasedSeries(limit: Int): Flow<List<SeriesCacheDto>>
 
     @Query("DELETE FROM $RECENTLY_RELEASED_SERIES_TABLE")
     suspend fun clearRecentlyReleasedSeriesTable()

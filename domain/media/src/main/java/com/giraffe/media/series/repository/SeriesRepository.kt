@@ -34,6 +34,8 @@ interface SeriesRepository {
 
     fun observePopular(limit: Int): Flow<List<Series>>
 
+    fun observeRecentlyReleased(limit: Int): Flow<List<Series>>
+
     suspend fun getRecentlyReleased(page: Int, limit: Int): List<Series>
 
     suspend fun getTopRated(page: Int, limit: Int): List<Series>

@@ -129,11 +129,12 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getRecentlyReleasedSeries returns series`() = runTest {
-        coEvery { seriesDao.getRecentlyReleasedSeries(10) } returns sampleSeries
+        val expectedSeries = flowOf(sampleSeries)
+        coEvery { seriesDao.getRecentlyReleasedSeries(10) } returns expectedSeries
 
         val result = dataSource.getRecentlyReleasedSeries(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeries)
     }
 
     @Test

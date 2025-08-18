@@ -193,7 +193,7 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getRecentlyReleasedSeries returns cached if page is 1 and cache is not empty`() = runTest {
-        coEvery { local.getRecentlyReleasedSeries(10) } returns cachedSeries
+        coEvery { remote.getRecentlyReleasedSeries(10) } returns remoteSeriesDto
 
         val result = repository.getRecentlyReleased(1, 10)
 
@@ -202,14 +202,14 @@ class SeriesRepositoryImplTest {
     }
 
     @Test
-    fun `getRecentlyReleasedSeries fetches from remote if cache is empty`() = runTest {
-        coEvery { local.getRecentlyReleasedSeries(10) } returns emptyList()
+    fun `observeRecentlyReleased fetches from remote if cache is empty`() = runTest {
+        coEvery { local.getRecentlyReleasedSeries(10) } returns emptyFlow()
         coEvery { remote.getRecentlyReleasedSeries(1) } returns remoteSeriesDto
 
-        val result = repository.getRecentlyReleased(1, 10)
+        val result = repository.observeRecentlyReleased(10)
 
-        assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
-        coVerify { local.insertRecentlyReleasedSeries(any()) }
+        coVerify(exactly = 1) { local.insertRecentlyReleasedSeries(any()) }
+        assertThat(result.first()).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
     }
 
     @Test
