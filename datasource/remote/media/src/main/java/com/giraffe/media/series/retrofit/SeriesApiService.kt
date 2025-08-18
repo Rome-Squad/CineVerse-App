@@ -23,7 +23,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface SeriesApiServiceRetrofit {
+interface SeriesApiService {
 
     @GET(SEARCH_TV)
     suspend fun getSeriesByName(

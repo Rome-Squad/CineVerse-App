@@ -17,9 +17,9 @@ class GetCollectionsUseCaseTest {
 
     private val collectionsRepository: CollectionsRepository = mockk()
     private val getUserUseCase: GetUserUseCase = mockk()
-    private val isLoggedIn: IsLoggedInUseCase = mockk()
+    private val isLoggedInUseCase: IsLoggedInUseCase = mockk()
     private val getCollectionsUseCase =
-        GetCollectionsUseCase(collectionsRepository, getUserUseCase, isLoggedIn)
+        GetCollectionsUseCase(collectionsRepository, getUserUseCase, isLoggedInUseCase)
 
     @Test
     fun `should return list of collections when GetCollectionsUseCase invoked`() = runTest {
@@ -29,7 +29,7 @@ class GetCollectionsUseCaseTest {
             createFakeCollection(id = 2, name = "Watch Later")
         )
 
-        coEvery { isLoggedIn() } returns true
+        coEvery { isLoggedInUseCase() } returns true
         coEvery { getUserUseCase().id } returns 111
         every { collectionsRepository.getCollections(111) } returns flowOf(expectedCollections)
 

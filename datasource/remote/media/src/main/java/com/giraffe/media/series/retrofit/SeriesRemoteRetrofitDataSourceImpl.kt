@@ -4,27 +4,27 @@ import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
-import com.giraffe.media.util.RetrofitRequestBuilder
+import com.giraffe.media.util.safeCallRemote
 import javax.inject.Inject
 
-class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
-    private val retrofitRequestBuilder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>
+class SeriesRemoteRetrofitDataSourceImpl @Inject constructor(
+    private val seriesApiService: SeriesApiService,
 ) : SeriesRemoteDataSource {
 
     override suspend fun getSeriesByName(name: String, page: Int) =
-        retrofitRequestBuilder.get { getSeriesByName(name, page) }.results
+        safeCallRemote { seriesApiService.getSeriesByName(name, page) }.results
 
     override suspend fun getSeriesByGenre(genreId: Int, page: Int) =
-        retrofitRequestBuilder.get {
-            getSeriesByGenre(if (genreId == -1) "" else genreId.toString(), page)
+        safeCallRemote {
+            seriesApiService.getSeriesByGenre(if (genreId == -1) "" else genreId.toString(), page)
         }.results
 
     override suspend fun getSeriesByGenreIds(
         genreIds: List<Int>,
         page: Int
     ) =
-        retrofitRequestBuilder.get {
-            discoverSeries(
+        safeCallRemote {
+            seriesApiService.discoverSeries(
                 genreId = genreIds.joinToString(","),
                 page = page
             )
@@ -34,8 +34,8 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
         keywords: Int,
         page: Int
     ) =
-        retrofitRequestBuilder.get {
-            discoverSeries(
+        safeCallRemote {
+            seriesApiService.discoverSeries(
                 keywords = keywords.toString(),
                 page = page
             )
@@ -45,8 +45,8 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
         sortBy: String,
         page: Int
     ) =
-        retrofitRequestBuilder.get {
-            discoverSeries(
+        safeCallRemote {
+            seriesApiService.discoverSeries(
                 sortBy = sortBy,
                 page = page
             )
@@ -54,45 +54,45 @@ class SeriesRemoteRetrofitDataSourceImp @Inject constructor(
 
 
     override suspend fun getGenres() =
-        retrofitRequestBuilder.get { getGenres() }.genres
+        safeCallRemote { seriesApiService.getGenres() }.genres
 
     override suspend fun getSeriesDetails(seriesId: Int): SeriesDetailsDto =
-        retrofitRequestBuilder.get { getSeriesDetails(seriesId) }
+        safeCallRemote { seriesApiService.getSeriesDetails(seriesId) }
 
     override suspend fun getSeriesReviews(seriesId: Int, page: Int) =
-        retrofitRequestBuilder.get { getSeriesReviews(seriesId, page) }.results
+        safeCallRemote { seriesApiService.getSeriesReviews(seriesId, page) }.results
 
     override suspend fun getPopularitySeries(page: Int): List<SeriesDto> =
-        retrofitRequestBuilder.get { getPopularSeries(page) }.results
+        safeCallRemote { seriesApiService.getPopularSeries(page) }.results
 
     override suspend fun getRecentlyReleasedSeries(page: Int): List<SeriesDto> =
-        retrofitRequestBuilder.get { getRecentlyReleasedSeries(page) }.results
+        safeCallRemote { seriesApiService.getRecentlyReleasedSeries(page) }.results
 
 
     override suspend fun getTopRatedSeries(page: Int): List<SeriesDto> =
-        retrofitRequestBuilder.get { getTopRatedSeries(page) }.results
+        safeCallRemote { seriesApiService.getTopRatedSeries(page) }.results
 
     override suspend fun getSeriesRecommendations(seriesId: Int, page: Int) =
-        retrofitRequestBuilder.get { getSeriesRecommendations(seriesId, page) }.results
+        safeCallRemote { seriesApiService.getSeriesRecommendations(seriesId, page) }.results
 
     override suspend fun getSeriesTrailerUrl(seriesId: Int): String {
-        val results = retrofitRequestBuilder.get { getSeriesTrailerUrl(seriesId) }.results
+        val results = safeCallRemote { seriesApiService.getSeriesTrailerUrl(seriesId) }.results
         return results.firstOrNull { it.type == "Trailer" }?.key
             ?: results.firstOrNull()?.key.orEmpty()
     }
 
     override suspend fun getRatedSeries(
         accountId: Int
-    ): List<SeriesDto> = retrofitRequestBuilder.get { getRatedSeries(accountId) }.results
+    ): List<SeriesDto> = safeCallRemote { seriesApiService.getRatedSeries(accountId) }.results
 
 
     override suspend fun deleteSeriesRating(seriesId: Int) =
-        retrofitRequestBuilder.delete { deleteSeriesRating(seriesId) }
+        safeCallRemote { seriesApiService.deleteSeriesRating(seriesId) }
 
     override suspend fun addRating(serisId: Int, request: RatingRequest) {
-        retrofitRequestBuilder.post { rateSeries(serisId, request) }
+        safeCallRemote { seriesApiService.rateSeries(serisId, request) }
     }
 
     override suspend fun getUserSeriesRating(seriesId: Int) =
-        retrofitRequestBuilder.get { getUserSeriesRating(seriesId) }.getRating()
+        safeCallRemote { seriesApiService.getUserSeriesRating(seriesId) }.getRating()
 }

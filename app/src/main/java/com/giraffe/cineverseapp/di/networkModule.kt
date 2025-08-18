@@ -3,25 +3,24 @@ package com.giraffe.cineverseapp.di
 import com.giraffe.cineverseapp.BuildConfig
 import com.giraffe.cineverseapp.data.network.createRetrofitClient
 import com.giraffe.media.collections.datasource.remote.CollectionsRemoteDataSource
-import com.giraffe.media.collections.retrofit.CollectionsApiServiceRetrofit
-import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImp
+import com.giraffe.media.collections.retrofit.CollectionsApiService
+import com.giraffe.media.collections.retrofit.CollectionsRemoteDataSourceImpl
 import com.giraffe.media.match.datasource.MatchRemoteDataSource
 import com.giraffe.media.match.retrofit.MatchApiService
-import com.giraffe.media.match.retrofit.MatchRemoteDataSourceImplRetrofit
-import com.giraffe.media.mediaMember.retrofit.MediaMemberApiServiceRetrofit
-import com.giraffe.media.mediaMember.retrofit.MediaMemberRemoteDataSourceImplRetrofit
+import com.giraffe.media.match.retrofit.MatchRemoteDataSourceImpl
+import com.giraffe.media.mediaMember.retrofit.MediaMemberApiService
+import com.giraffe.media.mediaMember.retrofit.MediaMemberRemoteDataSourceImpl
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
-import com.giraffe.media.movie.retrofit.MoviesApiServiceRetrofit
-import com.giraffe.media.movie.retrofit.MoviesRemoteDataSourceImplRetrofit
+import com.giraffe.media.movie.retrofit.MoviesApiService
+import com.giraffe.media.movie.retrofit.MoviesRemoteDataSourceImpl
 import com.giraffe.media.person.datasource.remote.MediaMemberRemoteDataSource
 import com.giraffe.media.search.datasource.remote.SearchRemoteDataSource
-import com.giraffe.media.search.retrofit.SearchApiServiceRetrofit
-import com.giraffe.media.search.retrofit.SearchRemoteDataSourceImplRetrofit
+import com.giraffe.media.search.retrofit.SearchApiService
+import com.giraffe.media.search.retrofit.SearchRemoteDataSourceImpl
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
-import com.giraffe.media.series.retrofit.SeriesApiServiceRetrofit
-import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImp
+import com.giraffe.media.series.retrofit.SeriesApiService
+import com.giraffe.media.series.retrofit.SeriesRemoteRetrofitDataSourceImpl
 import com.giraffe.media.util.NetworkInterceptor
-import com.giraffe.media.util.RetrofitRequestBuilder
 import com.giraffe.repository.datasource.remote.AuthenticationRemoteDataSource
 import com.giraffe.repository.datasource.remote.UserRemoteDataSource
 import com.giraffe.user.datastore.AuthenticationDatastore
@@ -71,7 +70,6 @@ object NetworkModule {
         )
     }
 
-
     @Provides
     @Singleton
     fun provideJson(): Json = Json {
@@ -95,23 +93,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMoviesApi(retrofit: Retrofit): MoviesApiServiceRetrofit =
-        retrofit.create(MoviesApiServiceRetrofit::class.java)
+    fun provideMoviesApi(retrofit: Retrofit): MoviesApiService =
+        retrofit.create(MoviesApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideSeriesApi(retrofit: Retrofit): SeriesApiServiceRetrofit =
-        retrofit.create(SeriesApiServiceRetrofit::class.java)
+    fun provideSeriesApi(retrofit: Retrofit): SeriesApiService =
+        retrofit.create(SeriesApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideExploreApi(retrofit: Retrofit): SearchApiServiceRetrofit =
-        retrofit.create(SearchApiServiceRetrofit::class.java)
+    fun provideExploreApi(retrofit: Retrofit): SearchApiService =
+        retrofit.create(SearchApiService::class.java)
 
     @Provides
     @Singleton
-    fun providePersonApi(retrofit: Retrofit): MediaMemberApiServiceRetrofit =
-        retrofit.create(MediaMemberApiServiceRetrofit::class.java)
+    fun providePersonApi(retrofit: Retrofit): MediaMemberApiService =
+        retrofit.create(MediaMemberApiService::class.java)
 
     @Provides
     @Singleton
@@ -125,29 +123,38 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideCollectionsApi(retrofit: Retrofit): CollectionsApiServiceRetrofit =
-        retrofit.create(CollectionsApiServiceRetrofit::class.java)
+    fun provideCollectionsApi(retrofit: Retrofit): CollectionsApiService =
+        retrofit.create(CollectionsApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideMoviesRequestBuilder(api: MoviesApiServiceRetrofit): RetrofitRequestBuilder<MoviesApiServiceRetrofit> =
-        RetrofitRequestBuilder(api)
+    fun provideMoviesRemoteDataSource(api: MoviesApiService): MoviesRemoteDataSource =
+        MoviesRemoteDataSourceImpl(api)
 
     @Provides
     @Singleton
-    fun provideSeriesRequestBuilder(api: SeriesApiServiceRetrofit): RetrofitRequestBuilder<SeriesApiServiceRetrofit> =
-        RetrofitRequestBuilder(api)
+    fun provideSeriesRemoteDataSource(api: SeriesApiService): SeriesRemoteDataSource =
+        SeriesRemoteRetrofitDataSourceImpl(api)
 
     @Provides
     @Singleton
-    fun provideExploreRequestBuilder(api: SearchApiServiceRetrofit): RetrofitRequestBuilder<SearchApiServiceRetrofit> =
-        RetrofitRequestBuilder(api)
+    fun provideExploreRemoteDataSource(api: SearchApiService): SearchRemoteDataSource =
+        SearchRemoteDataSourceImpl(api)
 
     @Provides
     @Singleton
-    fun providePersonRequestBuilder(api: MediaMemberApiServiceRetrofit): RetrofitRequestBuilder<MediaMemberApiServiceRetrofit> =
-        RetrofitRequestBuilder(api)
+    fun providePersonRemoteDataSource(api: MediaMemberApiService): MediaMemberRemoteDataSource =
+        MediaMemberRemoteDataSourceImpl(api)
 
+    @Provides
+    @Singleton
+    fun provideCollectionsRemoteDataSource(api: CollectionsApiService): CollectionsRemoteDataSource =
+        CollectionsRemoteDataSourceImpl(api)
+
+    @Provides
+    @Singleton
+    fun provideMatchRemoteDataSource(api: MatchApiService): MatchRemoteDataSource =
+        MatchRemoteDataSourceImpl(api)
 
     @Provides
     @Singleton
@@ -158,43 +165,4 @@ object NetworkModule {
     @Singleton
     fun provideUserRemoteDataSource(api: UserApiService): UserRemoteDataSource =
         UserRemoteDataSourceImpl(api)
-
-    @Provides
-    @Singleton
-    fun provideCollectionsRequestBuilder(api: CollectionsApiServiceRetrofit): RetrofitRequestBuilder<CollectionsApiServiceRetrofit> =
-        RetrofitRequestBuilder(api)
-
-    @Provides
-    @Singleton
-    fun provideExploreRemoteDataSource(builder: RetrofitRequestBuilder<SearchApiServiceRetrofit>): SearchRemoteDataSource =
-        SearchRemoteDataSourceImplRetrofit(builder)
-
-    @Provides
-    @Singleton
-    fun provideMoviesRemoteDataSource(builder: RetrofitRequestBuilder<MoviesApiServiceRetrofit>): MoviesRemoteDataSource =
-        MoviesRemoteDataSourceImplRetrofit(builder)
-
-    @Provides
-    @Singleton
-    fun providePersonRemoteDataSource(builder: RetrofitRequestBuilder<MediaMemberApiServiceRetrofit>): MediaMemberRemoteDataSource =
-        MediaMemberRemoteDataSourceImplRetrofit(builder)
-
-    @Provides
-    @Singleton
-    fun provideSeriesRemoteDataSource(builder: RetrofitRequestBuilder<SeriesApiServiceRetrofit>): SeriesRemoteDataSource =
-        SeriesRemoteRetrofitDataSourceImp(builder)
-
-    @Provides
-    @Singleton
-    fun provideCollectionsRemoteDataSource(builder: RetrofitRequestBuilder<CollectionsApiServiceRetrofit>): CollectionsRemoteDataSource =
-        CollectionsRemoteDataSourceImp(builder)
-
-    @Provides
-    @Singleton
-    fun provideMatchRemoteDataSource(
-        api: MatchApiService
-    ): MatchRemoteDataSource {
-        return MatchRemoteDataSourceImplRetrofit(api)
-    }
-
 }
