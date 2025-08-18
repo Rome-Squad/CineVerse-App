@@ -1,5 +1,9 @@
 package com.giraffe.presentation.home.navigation.main
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -107,8 +113,8 @@ fun MainNavGraph(
             modifier = Modifier.weight(1f)
         ) {
 
-            composable(
-                route = HomeRoute.route
+            animatedComposable(
+                route = HomeRoute.route,
             ) {
                 HomeNavGraph(
                     navigateToExplore = navController::navigateToExplore,
@@ -120,7 +126,7 @@ fun MainNavGraph(
                 }
             }
 
-            composable(
+            animatedComposable(
                 route = ExploreRoute.route
             ) {
                 exploreApi.ExploreContainer {
@@ -128,13 +134,13 @@ fun MainNavGraph(
                 }
             }
 
-            composable(
+            animatedComposable(
                 route = MatchRoute.route
             ) {
                 matchApi.MatchContainer { isBottomBarVisible = it }
             }
 
-            composable(
+            animatedComposable(
                 route = ProfileRoute.route
             ) {
                 profileApi.ProfileContainer { isBottomBarVisible = it }
@@ -157,4 +163,106 @@ fun MainNavGraph(
             }
         )
     }
+}
+
+fun NavGraphBuilder.animatedComposable(
+    route: String,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route = route,
+        enterTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideInHorizontally(tween(300)) { it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideInHorizontally(tween(300)) { -it }
+                }
+
+                else -> null
+            }
+        },
+        exitTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideOutHorizontally(tween(300)) { -it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideOutHorizontally(tween(300)) { it }
+                }
+
+                else -> null
+            }
+        },
+        popEnterTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideInHorizontally(tween(300)) { it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideInHorizontally(tween(300)) { -it }
+                }
+
+                else -> null
+            }
+        },
+        popExitTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideOutHorizontally(tween(300)) { -it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideOutHorizontally(tween(300)) { it }
+                }
+
+                else -> null
+            }
+        },
+        content = content
+    )
 }
