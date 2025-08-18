@@ -13,6 +13,7 @@ import com.giraffe.user.entity.User
 import com.giraffe.user.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -49,6 +50,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun getUser(): Flow<User?> = safeFlow {
+        var refreshAttempted = false
         combine(
             localDataSource.getAccountId(),
             localDataSource.getUsername(),
@@ -64,6 +66,13 @@ class UserRepositoryImpl @Inject constructor(
                 )
             } else {
                 null
+            }
+        }.transform { user ->
+            if (user == null && !refreshAttempted) {
+                refreshAttempted = true
+                refreshUser()
+            } else {
+                emit(user)
             }
         }
     }
