@@ -59,7 +59,7 @@ private fun PosterGridView(
             key = { index -> "${posters[index]?.id} + ${posters[index]?.recentViewedAt} + $index" }
         ) { index ->
             posters[index]?.let { poster ->
-                PosterVertically(
+                MediaPoster(
                     poster = poster,
                     isGridSelected = !isListSelected,
                     onClick = { onClickItem(poster.id, poster.mediaType) },

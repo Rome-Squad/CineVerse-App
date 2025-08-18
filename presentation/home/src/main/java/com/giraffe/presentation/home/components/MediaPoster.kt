@@ -48,12 +48,14 @@ import com.giraffe.presentation.home.model.PosterMedia
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun PosterVertically(
+fun MediaPoster(
     poster: PosterMedia,
     isGridSelected: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
+
+
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
     val imageMaxWidth = with(density) { widowSize.containerSize.width.toDp() }
@@ -88,15 +90,16 @@ fun PosterVertically(
     if (poster.name.isNotBlank() && poster.name.isNotEmpty()) {
         Box(
             modifier = modifier
+                .clip(shape = RoundedCornerShape(Theme.radius.lg))
                 .then(
                     if (isGridSelected) Modifier
                     else Modifier.background(Theme.color.background.card)
                 )
-
         ) {
             SafeIslamicImage(
                 imageUrl = poster.imageUri,
                 contentDescription = poster.name,
+                hasSensitiveText = isGridSelected,
                 placeHolderTint = Theme.color.brand.secondary,
                 contentScale = ContentScale.FillBounds,
                 placeholderModifier = Modifier
@@ -117,7 +120,14 @@ fun PosterVertically(
                     .clickable(onClick = onClick)
                     .width(imageWidth)
                     .aspectRatio(0.73f)
-                    .clip(RoundedCornerShape(Theme.radius.lg))
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg,
+                            bottomEnd = if (isGridSelected) Theme.radius.lg else 0.dp
+                        )
+                    )
                     .background(Theme.color.background.card)
             )
 
@@ -145,15 +155,15 @@ fun PosterVertically(
                     exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
                     modifier = Modifier.padding(top = 4.dp)
                 ) {
-                    if (poster.genres.isNotEmpty()) {
-                        Text(
-                            text = poster.genres.joinToString(separator = ", "),
-                            style = Theme.textStyle.body.sm.regular,
-                            color = Theme.color.shade.secondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                    Text(
+                        text = if (poster.genres.isNotEmpty()) poster.genres.joinToString(separator = ", ") else stringResource(
+                            R.string.unknown_genre
+                        ),
+                        style = Theme.textStyle.body.sm.regular,
+                        color = Theme.color.shade.secondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
 
                 transition.AnimatedVisibility(
