@@ -331,11 +331,14 @@ class MovieDetailsViewModel @Inject constructor(
             onSuccess = ::loadMovieDetailsSuccess,
             onError = ::onError
         ) {
-            val userRating = getUserRatingUseCase(movieId)
+            val isUserGuest = isUserGuestUseCase()
             val movie = getMovieDetails(movieId)
-            movie.copy(
-                userRating = userRating
-            )
+            if (isUserGuest) {
+                movie
+            } else {
+                val userRating = getUserRatingUseCase(movieId)
+                movie.copy(userRating = userRating)
+            }
         }
     }
 

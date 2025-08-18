@@ -215,11 +215,16 @@ class SeriesDetailsViewModel @Inject constructor(
             onSuccess = ::loadSeriesDetailsSuccess,
             onError = ::onError
         ) {
-            val userRating = getUserRatingUseCase(seriesId)
+            val isUserGuest = isUserGuestUseCase()
             val series = getSeriesDetails(seriesId)
-            series.copy(
-                userRating = userRating
-            )
+            if (isUserGuest) {
+                series
+            } else {
+                val userRating = getUserRatingUseCase(seriesId)
+                series.copy(
+                    userRating = userRating
+                )
+            }
         }
     }
 
