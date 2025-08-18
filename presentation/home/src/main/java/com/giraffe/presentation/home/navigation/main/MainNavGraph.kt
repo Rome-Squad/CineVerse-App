@@ -1,5 +1,9 @@
 package com.giraffe.presentation.home.navigation.main
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,17 +25,14 @@ import com.giraffe.api.explore.ExploreApi
 import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.navbar.BottomNavigationBar
+import com.giraffe.designsystem.composable.navbar.BottomTab
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.MatchApi
 import com.giraffe.presentation.home.navigation.home.HomeNavGraph
 import com.giraffe.presentation.home.navigation.main.routes.ExploreRoute
-import com.giraffe.presentation.home.navigation.main.routes.ExploreTab
 import com.giraffe.presentation.home.navigation.main.routes.HomeRoute
-import com.giraffe.presentation.home.navigation.main.routes.HomeTab
 import com.giraffe.presentation.home.navigation.main.routes.MatchRoute
-import com.giraffe.presentation.home.navigation.main.routes.MatchTab
 import com.giraffe.presentation.home.navigation.main.routes.ProfileRoute
-import com.giraffe.presentation.home.navigation.main.routes.ProfileTab
 import com.giraffe.presentation.home.navigation.main.routes.navigateToExplore
 import com.giraffe.presentation.home.navigation.main.routes.navigateToMatch
 
@@ -43,24 +45,28 @@ fun MainNavGraph(
     matchApi: MatchApi
 ) {
 
-    val homeTab = HomeTab(
+    val homeTab = BottomTab(
         labelRes = R.string.home,
-        iconRes = listOf(Theme.icons.dueTone.home, Theme.icons.outline.home)
+        iconRes = listOf(Theme.icons.dueTone.home, Theme.icons.outline.home),
+        route = HomeRoute
     )
 
-    val exploreTab = ExploreTab(
+    val exploreTab = BottomTab(
         labelRes = R.string.explore,
-        iconRes = listOf(Theme.icons.dueTone.search, Theme.icons.outline.search)
+        iconRes = listOf(Theme.icons.dueTone.search, Theme.icons.outline.search),
+        route = ExploreRoute
     )
 
-    val profileTab = ProfileTab(
+    val profileTab = BottomTab(
         labelRes = R.string.me,
-        iconRes = listOf(Theme.icons.dueTone.userSquare, Theme.icons.outline.userSquare)
+        iconRes = listOf(Theme.icons.dueTone.userSquare, Theme.icons.outline.userSquare),
+        route = ProfileRoute
     )
 
-    val matchTab = MatchTab(
+    val matchTab = BottomTab(
         labelRes = R.string.match,
-        iconRes = listOf(Theme.icons.dueTone.magicStick, Theme.icons.outline.magicStick)
+        iconRes = listOf(Theme.icons.dueTone.magicStick, Theme.icons.outline.magicStick),
+        route = MatchRoute
     )
 
     val bottomTabs = listOf(
@@ -107,8 +113,8 @@ fun MainNavGraph(
             modifier = Modifier.weight(1f)
         ) {
 
-            composable(
-                route = HomeRoute.route
+            animatedComposable(
+                route = HomeRoute.route,
             ) {
                 HomeNavGraph(
                     navigateToExplore = navController::navigateToExplore,
@@ -120,8 +126,7 @@ fun MainNavGraph(
                 }
             }
 
-
-            composable(
+            animatedComposable(
                 route = ExploreRoute.route
             ) {
                 exploreApi.ExploreContainer {
@@ -129,13 +134,13 @@ fun MainNavGraph(
                 }
             }
 
-            composable(
+            animatedComposable(
                 route = MatchRoute.route
             ) {
                 matchApi.MatchContainer { isBottomBarVisible = it }
             }
 
-            composable(
+            animatedComposable(
                 route = ProfileRoute.route
             ) {
                 profileApi.ProfileContainer { isBottomBarVisible = it }
@@ -151,16 +156,113 @@ fun MainNavGraph(
                 if (currentRoute == tab.route) {
                     return@BottomNavigationBar
                 }
-
                 navController.navigate(tab.route.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                        inclusive = true
-                    }
                     launchSingleTop = true
                     restoreState = true
                 }
             }
         )
     }
+}
+
+fun NavGraphBuilder.animatedComposable(
+    route: String,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route = route,
+        enterTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideInHorizontally(tween(300)) { it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideInHorizontally(tween(300)) { -it }
+                }
+
+                else -> null
+            }
+        },
+        exitTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideOutHorizontally(tween(300)) { -it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideOutHorizontally(tween(300)) { it }
+                }
+
+                else -> null
+            }
+        },
+        popEnterTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideInHorizontally(tween(300)) { it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideInHorizontally(tween(300)) { -it }
+                }
+
+                else -> null
+            }
+        },
+        popExitTransition = {
+            when (initialState.destination.route to targetState.destination.route) {
+                HomeRoute.route to ExploreRoute.route,
+                HomeRoute.route to MatchRoute.route,
+                HomeRoute.route to ProfileRoute.route,
+                ExploreRoute.route to MatchRoute.route,
+                ExploreRoute.route to ProfileRoute.route,
+                MatchRoute.route to ProfileRoute.route -> {
+                    slideOutHorizontally(tween(300)) { -it }
+                }
+
+                ExploreRoute.route to HomeRoute.route,
+                MatchRoute.route to HomeRoute.route,
+                MatchRoute.route to ExploreRoute.route,
+                ProfileRoute.route to HomeRoute.route,
+                ProfileRoute.route to ExploreRoute.route,
+                ProfileRoute.route to MatchRoute.route -> {
+                    slideOutHorizontally(tween(300)) { it }
+                }
+
+                else -> null
+            }
+        },
+        content = content
+    )
 }
