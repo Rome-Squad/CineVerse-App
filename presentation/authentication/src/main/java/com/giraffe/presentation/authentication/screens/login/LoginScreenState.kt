@@ -11,6 +11,7 @@ data class LoginScreenState(
     val screenErrorMessage: Int? = null,
     val isPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,
+    val isGuestLoading: Boolean = false,
     val isNoInternet:Boolean=false,
     val isVisibleCreateNewAccountBottomSheet: Boolean = false,
 )

@@ -6,7 +6,12 @@ interface AuthenticationLocalDataSource {
 
     suspend fun getSessionId(): String?
 
+    suspend fun isLoggedInByAccount(): Boolean
+
     suspend fun isLoggedIn(): Boolean
 
     suspend fun clearSessionId()
+
+    suspend fun setUserAsGuest()
+
 }
