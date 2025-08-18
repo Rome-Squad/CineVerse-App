@@ -7,9 +7,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 abstract class Route(val route: String)
 
-interface BottomTab<R: Route> {
-    val route: R
-    @get:StringRes val labelRes: Int
+data class BottomTab(
+    val route: Route,
+    @get:StringRes
+    val labelRes: Int,
     @get:DrawableRes
-    val iconRes: List<Int>
-}
+    val iconRes: List<Int>,
+)
