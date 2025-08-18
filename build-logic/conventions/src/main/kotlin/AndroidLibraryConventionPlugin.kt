@@ -12,6 +12,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             applyPlugins()
             applyDependencies()
             tasks.withType<Test>().configureEach { useJUnitPlatform() }
+
+
         }
     }
 

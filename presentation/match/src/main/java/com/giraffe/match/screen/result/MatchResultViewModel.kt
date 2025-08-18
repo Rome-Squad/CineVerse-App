@@ -38,6 +38,9 @@ class MatchResultViewModel @Inject constructor(
         val genreIds = savedStateHandle.get<List<Int>>("genreSelections")
             ?: savedStateHandle.get<IntArray>("selectedGenres")?.toList()
             ?: emptyList()
+        val mood = savedStateHandle.get<List<Int>>("selectionMood")
+            ?: savedStateHandle.get<IntArray>("moodSelections")?.toList()
+            ?: emptyList()
         val runtime = savedStateHandle.get<Int>("minRuntime")
             ?: savedStateHandle.get<Int>("timeSelection")
         val releaseDate = savedStateHandle.get<String>("earliestDate")
@@ -45,6 +48,7 @@ class MatchResultViewModel @Inject constructor(
 
         val (minRuntime, maxRuntime) = mapTimeSelectionToRuntimeRange(runtime)
         val (earliestDate, latestDate) = mapReleasePeriodToDateRange(releaseDate)
+        val moodKeywords = getKeywordIdsForMood(mood)
 
         updateState {
             it.copy(
@@ -54,7 +58,8 @@ class MatchResultViewModel @Inject constructor(
                 minRuntime = minRuntime,
                 maxRuntime = maxRuntime,
                 earliestDate = earliestDate,
-                latestDate = latestDate
+                latestDate = latestDate,
+                moodId = moodKeywords
             )
         }
 
@@ -65,7 +70,8 @@ class MatchResultViewModel @Inject constructor(
             minRuntime = minRuntime,
             maxRuntime = maxRuntime,
             earliestDate = earliestDate,
-            latestDate = latestDate
+            latestDate = latestDate,
+            moodId = moodKeywords
         )
     }
 
@@ -74,7 +80,8 @@ class MatchResultViewModel @Inject constructor(
         minRuntime: Int?,
         maxRuntime: Int?,
         earliestDate: String?,
-        latestDate: String?
+        latestDate: String?,
+        moodId: String = ""
     ) {
         updateState { it.copy(isLoading = true) }
 
@@ -89,7 +96,8 @@ class MatchResultViewModel @Inject constructor(
                     minRuntime = minRuntime,
                     maxRuntime = maxRuntime,
                     earliestFirstAirDate = earliestDate,
-                    latestFirstAirDate = latestDate
+                    latestFirstAirDate = latestDate,
+                    moodId = moodId
                 ).take(10)
                 val movieItems = mapMoviesToMatchResult(movies)
 
@@ -98,7 +106,8 @@ class MatchResultViewModel @Inject constructor(
                     minRuntime = minRuntime,
                     maxRuntime = maxRuntime,
                     earliestFirstAirDate = earliestDate,
-                    latestFirstAirDate = latestDate
+                    latestFirstAirDate = latestDate,
+                    moodId = moodId
                 ).take(10)
                 val seriesItems = mapSeriesToMatchResult(seriesList)
 
@@ -112,7 +121,8 @@ class MatchResultViewModel @Inject constructor(
         updateState {
             it.copy(
                 matchItems = movieItems + seriesItems,
-                isLoading = false
+                isLoading = false,
+                isEmptyResults = movieItems.isEmpty() && seriesItems.isEmpty()
             )
         }
     }
@@ -129,7 +139,7 @@ class MatchResultViewModel @Inject constructor(
         return seriesList.map { series ->
             val details = getSeriesDetailsUseCase(series.id)
             val genres = getSeriesGenresByIdsUseCase(details.genreIDs).map { it.title }
-            details.toMatchResultModel(genres, details.rating, details.youtubeVideoId)
+            details.toMatchResultModel(genres)
 
         }
     }
@@ -350,12 +360,43 @@ class MatchResultViewModel @Inject constructor(
     }
 
     private fun mapReleasePeriodToDateRange(releasePeriod: String?): Pair<String?, String?> {
-        return when (releasePeriod) {
-            "Recent" -> Pair("2001-01-01", null)
-            "Classic" -> Pair(null, "2000-12-31")
-            else -> Pair(null, null)
+        return when (releasePeriod?.trim()?.lowercase()) {
+            "recent", "حديث" -> "2001-01-01" to null
+            "classic", "كلاسيكي" -> null to "2000-12-31"
+            else -> "1888-01-01" to null
         }
     }
+
+    fun getKeywordIdsForMood(moodIds: List<Int>): String {
+        return moodIds.flatMap { moodId ->
+            when (moodId) {
+                // Chill
+                1 -> listOf(9840, 173824, 10183, 230239, 6078, 3205, 2888, 263629, 186358, 10143)
+                // Excited
+                2 -> listOf(233777, 234323, 10034, 9748, 207317, 4458, 10246, 12379, 9717)
+                // Emotional
+                3 -> listOf(9715, 9844, 10759, 10683, 186359, 14752, 155030, 9637, 186355, 10549)
+                // Curious
+                4 -> listOf(
+                    9663,
+                    10330,
+                    10292,
+                    10419,
+                    211051,
+                    709,
+                    10332,
+                    10342,
+                    10466,
+                    9953,
+                    271583
+                )
+
+                else -> emptyList()
+            }
+        }.joinToString("|")
+    }
+
+
 
     private fun checkLoginStatus() {
         safeExecute {

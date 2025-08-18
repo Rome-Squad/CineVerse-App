@@ -13,13 +13,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.MessageInfoBox
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.components.HeroCarousel
@@ -124,71 +127,96 @@ private fun MatchResultContent(
     modifier: Modifier = Modifier
 ) {
     val selectedIndex = state.currentCarouselPage
+
     Column(
         modifier
             .fillMaxSize()
             .statusBarsPadding()
             .background(Theme.color.background.screen)
     ) {
-
         AppBar(
             showBackButton = true,
             title = stringResource(R.string.here_s_your_match_list),
             onBackButtonClick = navigateBack,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
-        Column(
-            Modifier.verticalScroll(rememberScrollState())
-        ) {
 
-            HeroCarousel(
-                items = state.matchItems.map { it.posterUrl },
-                onPageChanged = { newIndex -> onPageChanged(newIndex) },
-                onItemClick = { clickedIndex ->
-                    val clickedItem = state.matchItems.getOrNull(clickedIndex)
-                    clickedItem?.let {
+        if (state.isEmptyResults) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                MessageInfoBox(
+                    title = stringResource(R.string.no_results_title),
+                    caption = stringResource(R.string.no_results_caption),
+                    icon = painterResource(Theme.icons.dueTone.linkMinimalistic),
+                    iconTintColor = Theme.color.brand.primary,
+                    buttonBackgroundColor = Theme.color.brand.primary,
+                    iconBackgroundColor = Theme.color.brand.tertiary,
+                    isSecondaryButtonVisible = false,
+                    titlePrimaryButton = stringResource(R.string.try_again),
+                    onClickPrimaryButton = navigateBack,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        } else {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                HeroCarousel(
+                    items = state.matchItems.map { it.posterUrl },
+                    onPageChanged = { newIndex -> onPageChanged(newIndex) },
+                    onItemClick = { clickedIndex ->
+                        val clickedItem = state.matchItems.getOrNull(clickedIndex)
+                        clickedItem?.let {
+                            when (it.mediaType) {
+                                MediaType.MOVIE -> navigateToMoviesDetailsScreen(it.id)
+                                MediaType.SERIES -> navigateToSeriesDetailsScreen(it.id)
+                            }
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                val match = state.matchItems.getOrNull(selectedIndex)
+                match?.let {
+                    MainMovieOrSeriesDetails(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        type = it.mediaType,
+                        name = it.title,
+                        genres = it.genres,
+                        rating = it.rating,
+                        duration = it.duration,
+                        releaseDate = it.releaseDate,
+                        isPlayButtonEnabled = it.youtubeVideoId.isNotBlank(),
+                        onClickPlay = { navigateToYouTubePlayer(it.youtubeVideoId) },
+                        onClickAdd = { onAddToCollection(it.id, it.mediaType) }
+                    )
+                }
+
+                PrimaryButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 32.dp),
+                    text = stringResource(R.string.view_details),
+                ) {
+                    match?.let {
                         when (it.mediaType) {
                             MediaType.MOVIE -> navigateToMoviesDetailsScreen(it.id)
                             MediaType.SERIES -> navigateToSeriesDetailsScreen(it.id)
                         }
                     }
                 }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            val match = state.matchItems.getOrNull(selectedIndex)
-            match?.let {
-                MainMovieOrSeriesDetails(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    type = it.mediaType,
-                    name = it.title,
-                    genres = it.genres,
-                    rating = it.rating,
-                    duration = it.duration,
-                    releaseDate = it.releaseDate,
-                    isPlayButtonEnabled = it.youtubeVideoId.isNotBlank(),
-                    onClickPlay = { navigateToYouTubePlayer(it.youtubeVideoId) },
-                    onClickAdd = {
-                        onAddToCollection(it.id, it.mediaType)
-                    },
-                )
-            }
-
-            PrimaryButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 32.dp),
-                text = stringResource(R.string.view_details),
-            ) {
-                match?.let {
-                    when (it.mediaType) {
-                        MediaType.MOVIE -> navigateToMoviesDetailsScreen(it.id)
-                        MediaType.SERIES -> navigateToSeriesDetailsScreen(it.id)
-                    }
-                }
             }
         }
     }
 }
+
+
 

@@ -1,6 +1,10 @@
 package com.giraffe.presentation.details.screens.castDetails
 
 import android.content.Intent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,10 +18,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,21 +31,24 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.InfoSection
 import com.giraffe.designsystem.composable.NoInternetScreen
-import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.components.MainDetails
+import com.giraffe.presentation.details.components.MainCastDetails
+import com.giraffe.presentation.details.components.PosterListSection
 import com.giraffe.presentation.details.components.gallery.GallerySection
 import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.showToast
 import com.giraffe.presentation.details.utils.toStringResource
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @Composable
 fun CastDetailsScreen(
@@ -92,6 +99,8 @@ fun CastDetailsScreen(
     )
 }
 
+@Suppress("SameReturnValue")
+
 @Composable
 fun CastDetailsContent(
     state: CastDetailsUiState,
@@ -101,13 +110,13 @@ fun CastDetailsContent(
     val padding16 = 16.dp
     val bottomSpacingHeight = 90
     val innerColumnSpacing = 18.dp
+
     val scrollState = rememberLazyListState()
 
-    var imageWidth by rememberSaveable { mutableIntStateOf(64) }
-    var imageHeight by rememberSaveable { mutableIntStateOf(80) }
-    var consumedX by rememberSaveable { mutableIntStateOf(0) }
-    var consumedY by rememberSaveable { mutableIntStateOf(0) }
-    var animationProgress by rememberSaveable { mutableFloatStateOf(0f) }
+    val animationProgress = remember { Animatable(0f) }
+    val scope = rememberCoroutineScope()
+    var lastDelta by remember { mutableIntStateOf(0) }
+    var flingJob by remember { mutableStateOf<Job?>(null) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -118,22 +127,39 @@ fun CastDetailsContent(
                     (scrollState.firstVisibleItemIndex != 0 || scrollState.firstVisibleItemScrollOffset != 0)
                     && delta > 0
                 ) {
-                    return Offset(consumedX.toFloat(), consumedY.toFloat())
+                    return Offset.Zero
                 }
 
-                val newImageWidth = imageWidth + delta
-                val previousImageWidth = imageWidth
-                imageWidth = newImageWidth.coerceIn(40, 64)
+                if (source == NestedScrollSource.UserInput) {
+                    flingJob?.cancel()
+                    flingJob = null
+                }
 
-                val newImageHeight = imageHeight + delta
-                val previousImageHeight = imageHeight
-                imageHeight = newImageHeight.coerceIn(40, 80)
+                val current = animationProgress.value
+                val change = -delta / 40f
+                val newProgress = (current + change).coerceIn(0f, 1f)
 
-                animationProgress = 1f - (imageHeight - 40) / 40f
-                consumedX = imageWidth - previousImageWidth
-                consumedY = imageHeight - previousImageHeight
+                scope.launch {
+                    animationProgress.snapTo(newProgress)
+                }
 
-                return Offset(consumedX.toFloat(), consumedY.toFloat())
+                if (delta != 0) lastDelta = delta
+
+                return Offset.Zero
+            }
+
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                val target = if (lastDelta < 0) 1f else 0f
+                flingJob = scope.launch {
+                    animationProgress.animateTo(
+                        target,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing
+                        )
+                    )
+                }
+                return Velocity.Zero
             }
         }
     }
@@ -179,24 +205,28 @@ fun CastDetailsContent(
                             modifier = Modifier.padding(horizontal = 8.dp)
                         )
 
-                        MainDetails(
+                        MainCastDetails(
                             actorName = state.actorName,
                             actorBirthday = state.actorBirth,
                             actorPlaceOfBirth = state.actorPlace,
                             socialMediaUiList = state.socialMediaUiList,
                             onLinkClick = interaction::onSocialMediaLinkClick,
                             actorImageUrl = state.actorImageUrl,
-                            animationProgress = animationProgress,
+                            animationProgress = animationProgress.value,
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
-                                .padding(top = 72.dp - 72.dp * animationProgress)
+                                .padding(top = 72.dp - 72.dp * animationProgress.value)
                         )
 
-                        if (animationProgress == 1f) {
+                        AnimatedVisibility(
+                            visible = animationProgress.value == 1f,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.BottomStart)
+                        ) {
                             Box(
                                 modifier = Modifier
                                     .height(1.dp)
-                                    .fillMaxWidth()
                                     .background(Theme.color.stroke.primary)
                                     .align(Alignment.BottomStart)
                             )

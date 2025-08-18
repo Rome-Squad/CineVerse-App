@@ -1,6 +1,5 @@
 package com.giraffe.designsystem.composable
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,10 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
@@ -23,16 +23,14 @@ import com.giraffe.designsystem.theme.Theme
 
 @Composable
 fun BuildingBlock(
-    icon: Painter,
+    icons: List<Int>,
     label: String,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
 ) {
 
-    val color by animateColorAsState(
-        targetValue = if (isSelected) Theme.color.brand.primary else Theme.color.shade.tertiary,
-        label = "BuildingBlock"
-    )
+    val color = if (isSelected) Theme.color.brand.primary else Theme.color.shade.tertiary
+    val icon = if (isSelected) icons[0] else icons[1]
 
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -40,8 +38,8 @@ fun BuildingBlock(
         modifier = modifier
     ) {
         Icon(
-            painter = icon,
-            contentDescription = null,
+            painter = painterResource(id = icon),
+            contentDescription = stringResource(R.string.icon_in_navigation_bottom),
             tint = color,
             modifier = Modifier.size(24.dp)
         )
@@ -57,13 +55,13 @@ fun BuildingBlock(
 @PreviewLightDark
 @Composable
 fun BuildingBlockPreview() {
-    var isSelected by remember { mutableStateOf(false) }
+    var isSelected by remember { mutableStateOf(true) }
     CineVerseTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             BuildingBlock(
-                icon = painterResource(Theme.icons.outline.home),
+                icons = listOf(Theme.icons.dueTone.userSquare, Theme.icons.outline.userSquare),
                 label = "Label",
                 isSelected = isSelected,
                 modifier = Modifier

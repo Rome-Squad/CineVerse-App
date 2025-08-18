@@ -16,7 +16,7 @@ class SettingsDataStore @Inject constructor(
 
     fun isDarkMode(): Flow<Boolean> =
         dataStore.data.map { preferences ->
-            preferences[IS_DARK_MODE] ?: false
+            preferences[IS_DARK_MODE] ?: true
         }
 
     suspend fun setDarkMode(isDark: Boolean) {

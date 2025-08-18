@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -57,7 +58,7 @@ fun PrimaryButton(
             }
         ) { loadingState ->
             if (loadingState) {
-                Progress()
+                Progress(modifier = Modifier.size(24.dp))
             } else {
                 Text(
                     text = text,

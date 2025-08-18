@@ -14,15 +14,17 @@ class MatchRemoteDataSourceImplRetrofit @Inject constructor(
         genreIds: String,
         minRuntime: Int?,
         maxRuntime: Int?,
-        earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        earliestDate: String?,
+        latestDate: String?,
+        moodId: String?
     ): List<MovieDto> = safeCall {
         matchApiService.getMatchingMovies(
             genreIds = genreIds,
             minRuntime = minRuntime,
             maxRuntime = maxRuntime,
-            earliestFirstAirDate = earliestFirstAirDate,
-            latestFirstAirDate = latestFirstAirDate
+            earliestDate = earliestDate,
+            latestDate = latestDate,
+            moodId = moodId
         )
     }.results
 
@@ -31,15 +33,17 @@ class MatchRemoteDataSourceImplRetrofit @Inject constructor(
         genreIds: String,
         minRuntime: Int?,
         maxRuntime: Int?,
-        earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        earliestDate: String?,
+        latestDate: String?,
+        moodId: String?
     ): List<SeriesDto> = safeCall {
         matchApiService.getMatchingSeries(
             genreIds = genreIds,
             minRuntime = minRuntime,
             maxRuntime = maxRuntime,
-            earliestFirstAirDate = earliestFirstAirDate,
-            latestFirstAirDate = latestFirstAirDate
+            earliestDate = earliestDate,
+            latestDate = latestDate,
+            moodId = moodId
         )
     }.results
 }

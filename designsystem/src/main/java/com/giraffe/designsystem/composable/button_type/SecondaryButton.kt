@@ -7,15 +7,16 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 
@@ -50,7 +51,7 @@ fun SecondaryButton(
             }
         ) { loadingState ->
             if (loadingState) {
-                CircularProgressIndicator(color = Theme.color.button.onPrimary)
+                Progress(modifier = Modifier.size(24.dp))
             } else {
                 Text(
                     text = text,
@@ -84,6 +85,7 @@ fun SecondaryButtonPreviewDark() {
         SecondaryButton(
             text = "Button",
             onClick = {},
+            isLoading = true
         )
     }
 }

@@ -9,7 +9,8 @@ interface MatchRepository {
         minRuntime: Int?,
         maxRuntime: Int?,
         earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        latestFirstAirDate: String?,
+        moodId: String? = null,
     ): List<Movie>
 
     suspend fun getMatchingSeries(
@@ -17,6 +18,7 @@ interface MatchRepository {
         minRuntime: Int?,
         maxRuntime: Int?,
         earliestFirstAirDate: String?,
-        latestFirstAirDate: String?
+        latestFirstAirDate: String?,
+        moodId: String? = null,
     ): List<Series>
 }
