@@ -1,7 +1,7 @@
 package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
 import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia

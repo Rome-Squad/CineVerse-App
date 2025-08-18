@@ -13,7 +13,7 @@ import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersByNameUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesByNameUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
@@ -32,7 +32,7 @@ class SearchResultViewModel @Inject constructor(
     private val getMoviesByNameUseCase: GetMoviesByNameUseCase,
     private val getSeriesByName: GetSeriesByNameUseCase,
     private val searchPeopleByName: GetMediaMembersByNameUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SearchResultScreenState, SearchResultEffect>(
@@ -110,18 +110,21 @@ class SearchResultViewModel @Inject constructor(
 
     private fun getMoviesGenres() {
         updateState { it.copy(isLoading = true, isNoInternet = false) }
-        safeExecute(
-            onSuccess = { genres ->
-                updateState {
-                    it.copy(
-                        moviesGenres = genres.map(Genre::toUi), isLoading = false,
-                        isNoInternet = false
-                    )
-                }
-            },
+        safeCollect(
+            onEmitNewValue = ::getMoviesGenresSuccess,
             onError = ::onError,
-            block = { getMoviesGenresUseCase() }
+            block = observeMoviesGenresUseCase::invoke
         )
+    }
+
+    private fun getMoviesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                moviesGenres = genres.map(Genre::toUi),
+                isLoading = false,
+                isNoInternet = false
+            )
+        }
     }
 
     private fun getSeriesGenres() {

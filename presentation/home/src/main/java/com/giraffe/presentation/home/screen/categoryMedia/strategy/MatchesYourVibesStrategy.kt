@@ -1,7 +1,7 @@
 package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
-import com.giraffe.media.movie.usecase.GetMatchesYourVibeMoviesUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.matchesYourVibe.GetMatchesYourVibeMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia
@@ -17,7 +17,7 @@ class MatchesYourVibesStrategy(
 ) : CategoryMediaStrategy {
     override suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia> {
 
-        val matchesYourVibeMovies = getMatchesYourVibeMovies(page = page, limit = pageSize)
+        val matchesYourVibeMovies = getMatchesYourVibeMovies.invoke(page = page, limit = pageSize)
         val matchesYourVibeSeries = getMatchesYourVibeSeries(page = page, limit = pageSize)
 
         return (matchesYourVibeMovies.map { movie ->

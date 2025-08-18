@@ -10,7 +10,7 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMoviesByGenresUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByGenresUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     private val getSeriesByGenresUseCase: GetSeriesByGenresUseCase,
@@ -44,10 +44,10 @@ class DiscoverViewModel @Inject constructor(
     private fun getMovieGenres() {
         updateState { it.copy(isLoading = true, isNoInternet = false) }
 
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onError,
-            block = { getMoviesGenresUseCase() }
+            block = observeMoviesGenresUseCase::invoke
         )
     }
 

@@ -2,6 +2,8 @@ package com.giraffe.presentation.profile.screens.settings
 
 import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
+import com.giraffe.media.movie.usecase.genre.SyncMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.SyncRecentlyViewedMoviesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.presentation.profile.utils.Language
@@ -34,6 +36,8 @@ class SettingsViewModel @Inject constructor(
     private val appVersionProvider: AppVersionProvider,
     private val logoutUseCase: LogoutUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
+    private val syncRecentlyViewedMoviesUseCase: SyncRecentlyViewedMoviesUseCase,
+    private val syncMoviesGenresUseCase: SyncMoviesGenresUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
     private val clearCollectionsCacheUseCase: ClearCollectionsCacheUseCase
@@ -169,15 +173,26 @@ class SettingsViewModel @Inject constructor(
     }
 
     override fun onLanguageChange(languageCode: String) {
+        if (languageCode == state.value.currentLanguage.code) {
+            onDismissSheet()
+            return
+        }
         safeExecute(
             dispatcher = Dispatchers.Main,
-            onSuccess = {
-                LanguageHelper.updateAppLocale(languageCode)
-                onDismissSheet()
-            },
+            onSuccess = { onLanguageChangeSuccess(languageCode) },
             onError = ::onFailure,
             block = { setLanguageUseCase(languageCode) }
         )
+    }
+
+    private fun onLanguageChangeSuccess(languageCode: String) {
+        LanguageHelper.updateAppLocale(languageCode)
+        safeExecute {
+            clearMoviesCacheUseCase.clearExceptRecentlyViewed()
+            syncRecentlyViewedMoviesUseCase.invoke()
+            syncMoviesGenresUseCase.invoke()
+        }
+        onDismissSheet()
     }
 
     override fun onToggleDarkMode(isDark: Boolean) {

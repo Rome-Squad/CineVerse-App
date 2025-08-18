@@ -2,9 +2,9 @@ package com.giraffe.presentation.profile.screens.ratings
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.DeleteMovieRatingUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
-import com.giraffe.media.movie.usecase.GetRatedMoviesUseCase
+import com.giraffe.media.movie.usecase.rate.DeleteMovieRatingUseCase
+import com.giraffe.media.movie.usecase.rate.GetRatedMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesRatingUseCase
 import com.giraffe.media.series.usecase.GetRatedSeriesUseCase
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class RatingViewModel @Inject constructor(
     private val getRatedMoviesUseCase: GetRatedMoviesUseCase,
     private val getRatedSeriesUseCase: GetRatedSeriesUseCase,
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     private val deleteMovieRatingUseCase: DeleteMovieRatingUseCase,
     private val deleteSeriesRatingUseCase: DeleteSeriesRatingUseCase,
@@ -52,10 +52,10 @@ class RatingViewModel @Inject constructor(
     }
 
     private fun getGenres() {
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
-            block = getMoviesGenresUseCase::invoke
+            block = observeMoviesGenresUseCase::invoke
         )
         safeExecute(
             onSuccess = ::onGetSeriesGenresSuccess,
