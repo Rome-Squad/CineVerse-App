@@ -17,6 +17,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override suspend fun login(username: String, password: String) = safeCall {
+        localDataSource.clearSessionId()
         val requestToken = authRemoteDataSource.createRequestToken()
         val validatedToken =
             authRemoteDataSource.validateTokenWithLogin(requestToken, username, password)

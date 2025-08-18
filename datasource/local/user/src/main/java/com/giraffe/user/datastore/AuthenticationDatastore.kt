@@ -37,6 +37,12 @@ class AuthenticationDatastore @Inject constructor(
         }
     }
 
+    suspend fun clearUserAsNotGuest() {
+        dataStore.edit { preferences ->
+            preferences[IS_GUEST] = false
+        }
+    }
+
     suspend fun isUserGuest(): Boolean {
         return dataStore.data.map { preferences ->
             preferences[IS_GUEST]

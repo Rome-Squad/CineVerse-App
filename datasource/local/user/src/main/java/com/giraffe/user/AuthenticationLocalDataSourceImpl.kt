@@ -20,8 +20,12 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     override suspend fun isLoggedIn(): Boolean =
         safeCall { authenticationDatastore.getSessionId() != null || authenticationDatastore.isUserGuest() }
 
-    override suspend fun clearSessionId() =
-        safeCall { authenticationDatastore.clearSessionId() }
+    override suspend fun clearSessionId() {
+        safeCall {
+            authenticationDatastore.clearUserAsNotGuest()
+            authenticationDatastore.clearSessionId()
+        }
+    }
 
     override suspend fun setTheUserAsGuest() =
         safeCall { authenticationDatastore.setTheUserAsGuest() }
