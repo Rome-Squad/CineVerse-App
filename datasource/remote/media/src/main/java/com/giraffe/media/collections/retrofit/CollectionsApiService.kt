@@ -25,7 +25,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface CollectionsApiServiceRetrofit {
+interface CollectionsApiService {
     @GET("$ACCOUNT/{$ACCOUNT_ID}/$COLLECTIONS_END_POINT")
     @Headers("$NEEDS_SESSION: true")
     suspend fun getCollections(
