@@ -29,6 +29,7 @@ class GetCollectionsUseCaseTest {
             createFakeCollection(id = 2, name = "Watch Later")
         )
 
+        coEvery { isLoggedInUseCase() } returns true
         coEvery { getUserUseCase().id } returns 111
         every { collectionsRepository.getCollections(111) } returns flowOf(expectedCollections)
 
