@@ -1,4 +1,4 @@
-package com.giraffe.media.series.usecase
+package com.giraffe.media.series.usecase.recentlyViewed
 
 
 import com.giraffe.media.collections.util.createFakeSeries
@@ -8,19 +8,13 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 
-class GetRecentlyViewedSeriesUseCaseTest {
+class ObserveRecentlyViewedSeriesUseCaseTest {
 
-    private lateinit var repository: SeriesRepository
-    private lateinit var useCase: GetRecentlyViewedSeriesUseCase
-
-    @BeforeEach
-    fun setUp() {
-        repository = mockk()
-        useCase = GetRecentlyViewedSeriesUseCase(repository)
-    }
+    private var repository: SeriesRepository = mockk()
+    private var useCase: ObserveRecentlyViewedSeriesUseCase =
+        ObserveRecentlyViewedSeriesUseCase(repository)
 
     @Test
     fun `should return recent series from repository`() = runTest {
@@ -38,7 +32,7 @@ class GetRecentlyViewedSeriesUseCaseTest {
                 )
             )
         }
-        coEvery { repository.getRecentlyViewed(any(), any()) } returns expectedSeries
+        coEvery { repository.observeRecentlyViewed(any(), any()) } returns expectedSeries
 
         val result = useCase()
 

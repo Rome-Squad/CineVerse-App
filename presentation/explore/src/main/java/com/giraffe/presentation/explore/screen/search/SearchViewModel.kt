@@ -11,7 +11,7 @@ import com.giraffe.media.search.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.media.search.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ClearSeriesCacheUseCase
-import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.screen.search.SearchEffect.NavigateToMovieDetail
@@ -31,7 +31,7 @@ class SearchViewModel @Inject constructor(
     private val deleteKeywordUseCase: DeleteSearchKeywordUseCase,
     private val clearSearchHistory: ClearSearchHistoryUseCase,
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
-    private val getRecentSeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
     private val clearSeriesCacheUseCase: ClearSeriesCacheUseCase,
     private val clearRecentlyPeopleUseCase: ClearRecentMediaMembersUseCase
@@ -54,7 +54,7 @@ class SearchViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetRecentlySeriesSuccess,
             onError = ::onError,
-            block = getRecentSeriesUseCase::invoke
+            block = observeRecentlyViewedSeriesUseCase::invoke
         )
     }
 

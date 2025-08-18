@@ -264,9 +264,21 @@ class SeriesRepositoryImpl @Inject constructor(
     // endregion
 
     // region Recently Viewed
-    override fun getRecentlyViewed(page: Int, pageSize: Int) = safeFlow {
-        seriesLocal.getRecentSeries(page, pageSize).map { seriesList ->
+    override fun observeRecentlyViewed(page: Int, pageSize: Int) = safeFlow {
+        seriesLocal.getRecentlyViewedSeries(page, pageSize).map { seriesList ->
             seriesList.map { series -> series.toEntity() }
+        }
+    }
+
+    override suspend fun syncRecentlyViewedSeries() {
+        safeCall {
+            seriesLocal.getAllRecentlyViewedSeries().forEach {
+                seriesRemote.getSeriesDetails(it.id)
+                    .toCacheDto()
+                    .also { series ->
+                        seriesLocal.addSeries(series)
+                    }
+            }
         }
     }
 

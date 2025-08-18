@@ -90,6 +90,29 @@ fun SeriesDto.toEntity() = Series(
     seasons = emptyList()
 )
 
+fun SeriesDetailsDto.toCacheDto() = SeriesCacheDto(
+    id = id,
+    name = name.orEmpty(),
+    overview = overview.orEmpty(),
+    rate = voteAverage.orZero(),
+    posterUrl = posterUrl?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    backdropUrl = backdropUrl?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    genresID = genres.map { it.id },
+    releaseYear = releaseYear,
+    popularity = popularity.orZero(),
+    userRating = userRating,
+    youtubeVideoId = null,
+    recentViewedAt = null,
+)
+
 fun SeasonDto.toEntity() = Season(
     id = id,
     overview = overview,

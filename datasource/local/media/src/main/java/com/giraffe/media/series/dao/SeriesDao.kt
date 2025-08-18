@@ -22,6 +22,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SeriesDao {
     @Upsert
+    suspend fun upsertSeries(series: SeriesCacheDto)
+
+    @Upsert
     suspend fun upsertSeries(series: List<SeriesCacheDto>)
 
     // region Popular
@@ -126,6 +129,17 @@ interface SeriesDao {
     )
     fun getRecentlyViewedSeries(page: Int, pageSize: Int): Flow<List<SeriesCacheDto>>
 
+    @Query(
+        """
+        SELECT * 
+            FROM $SERIES_TABLE
+            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
+            ORDER BY recentViewedAt DESC
+        """
+    )
+    suspend fun getAllRecentlyViewedSeries(): List<SeriesCacheDto>
+
+
     @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE WHERE id = :seriesId")
     suspend fun deleteRecentlyViewedSeriesById(seriesId: Int)
 
@@ -150,7 +164,7 @@ interface SeriesDao {
     suspend fun getGenreById(id: Int): SeriesGenreCacheDto?
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
-    fun getGenres(): Flow<List<SeriesGenreCacheDto>>
+    fun  getGenres(): Flow<List<SeriesGenreCacheDto>>
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE WHERE count > 0 ORDER BY count DESC LIMIT 1")
     suspend fun getTopGenreCount(): SeriesGenreCacheDto?

@@ -7,8 +7,8 @@ import com.giraffe.media.movie.usecase.recentlyViewed.DeleteRecentlyViewedMovieB
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
+import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.presentation.profile.utils.toPoster
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val deleteRecentlyViewedMovieByIdUseCase: DeleteRecentlyViewedMovieByIdUseCase,
@@ -74,7 +74,7 @@ class HistoryViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetRecentSeriesSuccess,
             onError = ::onFailure,
-            block = getRecentlySeriesUseCase::invoke
+            block = observeRecentlyViewedSeriesUseCase::invoke
         )
     }
 

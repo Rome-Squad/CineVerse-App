@@ -205,7 +205,7 @@ class SeriesLocalDataSourceImpTest {
 
         val result = mutableListOf<List<SeriesCacheDto>>()
 
-        dataSource.getRecentSeries(page = page, pageSize = pageSize).collect { result.add(it) }
+        dataSource.getRecentlyViewedSeries(page = page, pageSize = pageSize).collect { result.add(it) }
 
         assertThat(result).containsExactly(sampleSeries)
     }

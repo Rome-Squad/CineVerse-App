@@ -54,7 +54,9 @@ interface SeriesRepository {
 
     suspend fun deleteById(seriesId: Int)
 
-    fun getRecentlyViewed(page: Int, pageSize: Int): Flow<List<Series>>
+    fun observeRecentlyViewed(page: Int, pageSize: Int): Flow<List<Series>>
+
+    suspend fun syncRecentlyViewedSeries()
 
     suspend fun clearRecentlyViewed()
 

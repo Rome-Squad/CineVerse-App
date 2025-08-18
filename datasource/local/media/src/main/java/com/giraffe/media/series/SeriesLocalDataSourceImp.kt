@@ -17,6 +17,8 @@ import javax.inject.Inject
 class SeriesLocalDataSourceImp @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
+    override suspend fun addSeries(series: SeriesCacheDto) =
+        safeCall { seriesDao.upsertSeries(series) }
 
     override fun getGenres() =
         safeFlow { seriesDao.getGenres() }
@@ -87,10 +89,13 @@ class SeriesLocalDataSourceImp @Inject constructor(
     override fun getMatchesYourVibe(limit: Int) =
         safeFlow { seriesDao.getMatchesYourVibeSeries(limit) }
 
-    override fun getRecentSeries(page: Int, pageSize: Int) = safeFlow {
+    override fun getRecentlyViewedSeries(page: Int, pageSize: Int) = safeFlow {
         seriesDao.getRecentlyViewedSeries(page, pageSize)
             .onStart { seriesDao.syncRecentViewedTime() }
     }
+
+    override suspend fun getAllRecentlyViewedSeries(): List<SeriesCacheDto> =
+        safeCall { seriesDao.getAllRecentlyViewedSeries() }
 
 
     override suspend fun insertRecentViewedSeries(series: SeriesCacheDto) = safeCall {

@@ -123,14 +123,14 @@ class SeriesRepositoryImplTest {
     fun `getRecentSeries should return mapped cached series`() = runTest {
         val page = 1
         val pageSize = 10
-        coEvery { local.getRecentSeries(page = page, pageSize = pageSize) } returns flowOf(
+        coEvery { local.getRecentlyViewedSeries(page = page, pageSize = pageSize) } returns flowOf(
             cachedSeries
         )
 
-        val result = repository.getRecentlyViewed(page = page, pageSize = pageSize).first()
+        val result = repository.observeRecentlyViewed(page = page, pageSize = pageSize).first()
 
         assertThat(result.first().name).isEqualTo("Vikings")
-        coVerify { local.getRecentSeries(page = page, pageSize = pageSize) }
+        coVerify { local.getRecentlyViewedSeries(page = page, pageSize = pageSize) }
     }
 
     @Test
