@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
@@ -40,6 +39,7 @@ import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.GiveStarsBottomSheet
 import com.giraffe.presentation.details.components.LoginBottomSheet
 import com.giraffe.presentation.details.components.MainMovieOrSeriesDetails
+import com.giraffe.presentation.details.components.PosterListSection
 import com.giraffe.presentation.details.components.RatingSection
 import com.giraffe.presentation.details.components.ReviewCard
 import com.giraffe.presentation.details.components.SeasonCard
@@ -206,7 +206,9 @@ private fun SeriesDetailsContent(
                 if (state.seriesUi.overview.isNotBlank()) {
                     item {
                         InfoSection(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .align(Alignment.CenterStart),
                             title = stringResource(R.string.storyline),
                             description = state.seriesUi.overview
                         )
@@ -216,7 +218,9 @@ private fun SeriesDetailsContent(
                 if (state.seasons.isNotEmpty()) {
                     item {
                         SectionTitle(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .align(Alignment.CenterStart),
                             title = stringResource(R.string.latest_seasons),
                             clickableText = if (state.seasons.size > 3) stringResource(R.string.show_more) else null,
                             onClickableText = { interaction.onShowMoreSeasonsTextClick(state.seriesUi.id) }
@@ -227,7 +231,9 @@ private fun SeriesDetailsContent(
                 if (state.seasons.isNotEmpty()) {
                     item {
                         Column(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .align(Alignment.CenterStart),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             for (i in 0..min(2, state.seasons.size - 1)) {
@@ -258,7 +264,9 @@ private fun SeriesDetailsContent(
                         StarCastSection(
                             title = stringResource(R.string.star_cast),
                             castList = state.cast,
-                            onCastClick = interaction::onCastCardClick
+                            onCastClick = interaction::onCastCardClick,
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
                         )
                     }
                 }
@@ -266,7 +274,9 @@ private fun SeriesDetailsContent(
                 if (state.crew.isNotEmpty()) {
                     item {
                         StaffInfoSection(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .align(Alignment.CenterStart),
                             title = stringResource(R.string.behind_the_scenes),
                             staffList = state.crew
                         )
@@ -294,7 +304,9 @@ private fun SeriesDetailsContent(
 
                 item {
                     RatingSection(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .align(Alignment.CenterStart),
                         rate = state.seriesUi.userRating.toInt(),
                         onClickCard = interaction::onGiveStarsCardClick
                     )
@@ -304,8 +316,8 @@ private fun SeriesDetailsContent(
                     item {
                         Column(
                             modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 24.dp),
+                                .align(Alignment.CenterStart)
+                                .padding(horizontal = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             SectionTitle(

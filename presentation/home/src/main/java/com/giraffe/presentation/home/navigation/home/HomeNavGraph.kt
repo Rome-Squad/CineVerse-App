@@ -22,11 +22,12 @@ import com.giraffe.presentation.home.navigation.home.routes.HomeRoute
 import com.giraffe.presentation.home.navigation.home.routes.MovieDetailsRoute
 import com.giraffe.presentation.home.navigation.home.routes.SeriesDetailsRoute
 import com.giraffe.presentation.home.navigation.home.routes.YourCollectionsRoute
+import com.giraffe.presentation.home.navigation.home.routes.categoryMediaRoute
 import com.giraffe.presentation.home.navigation.home.routes.homeRoute
+import com.giraffe.presentation.home.navigation.home.routes.navigateToCategoryMedia
 import com.giraffe.presentation.home.navigation.home.routes.navigateToCollection
 import com.giraffe.presentation.home.navigation.home.routes.navigateToMovieDetails
 import com.giraffe.presentation.home.navigation.home.routes.navigateToSeriesDetails
-import com.giraffe.presentation.home.navigation.home.routes.navigateToShowMore
 import com.giraffe.presentation.home.navigation.home.routes.navigateToYourCollections
 import com.giraffe.presentation.home.navigation.home.routes.showMoreRoute
 import com.giraffe.presentation.home.navigation.main.routes.HomeRoute.route as HomeNavGraphRoute
@@ -63,8 +64,8 @@ fun HomeNavGraph(
             modifier = Modifier.weight(1f)
         ) {
             homeRoute(
-                navigateToShowMoreScreen = {
-                    navController.navigateToShowMore(it)
+                navigateToCategoryMediaSection = {
+                    navController.navigateToCategoryMedia(it)
                 },
                 navigateToMoviesDetailsScreen = {
                     navController.navigateToMovieDetails(it)
@@ -79,7 +80,7 @@ fun HomeNavGraph(
                 navigateToCollection = navController::navigateToCollection
             )
 
-            showMoreRoute(
+            categoryMediaRoute(
                 onBackClick = navController::popBackStack,
                 navigateToMoviesDetailsScreen = {
                     navController.navigateToMovieDetails(it)

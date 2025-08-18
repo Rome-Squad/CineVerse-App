@@ -3,7 +3,6 @@ package com.giraffe.presentation.home.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,8 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.CollectionItem
-import com.giraffe.designsystem.composable.custom.Text
-import com.giraffe.designsystem.modifier.noHoverClickable
+import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.YourCollectionUi
@@ -27,35 +25,28 @@ fun YourCollectionsSections(
     modifier: Modifier = Modifier,
     collectionItems: List<YourCollectionUi>,
     onShowMoreClick: () -> Unit,
-    onCollectionClick: (collectionId: Int, collectionName: String) -> Unit
+    onCollectionClick: (collectionId: Int, collectionName: String) -> Unit,
+    paddingHorizontal: Int = 16
 ) {
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        ) {
-            Text(
-                text = stringResource(R.string.your_collections),
-                style = Theme.textStyle.title.sm,
-                color = Theme.color.shade.primary
-            )
-            Text(
-                modifier = Modifier.noHoverClickable(onClick = onShowMoreClick),
-                text = stringResource(R.string.show_more),
-                style = Theme.textStyle.body.md.medium,
-                color = Theme.color.brand.primary
-            )
-        }
+        SectionTitle(
+            modifier = Modifier.padding(horizontal = paddingHorizontal.dp),
+            title = stringResource(R.string.your_collections),
+            clickableText = if (collectionItems.size >= 5) stringResource(R.string.show_more) else null,
+            onClickableText = onShowMoreClick
+        )
+
+        val rows = if (collectionItems.size > 2) 2 else 1
+        val gridHeight = if (rows == 2) 135.dp else 63.dp
         LazyHorizontalGrid(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(135.dp),
-            rows = GridCells.Fixed(2),
+                .height(gridHeight),
+            rows = GridCells.Fixed(rows),
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)

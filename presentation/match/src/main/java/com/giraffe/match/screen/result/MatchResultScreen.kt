@@ -127,6 +127,7 @@ private fun MatchResultContent(
     modifier: Modifier = Modifier
 ) {
     val selectedIndex = state.currentCarouselPage
+
     Column(
         modifier
             .fillMaxSize()
@@ -139,15 +140,14 @@ private fun MatchResultContent(
             onBackButtonClick = navigateBack,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
-        Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
 
-
-            if (state.isEmptyResults) {
+        if (state.isEmptyResults) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
                 MessageInfoBox(
                     title = stringResource(R.string.no_results_title),
                     caption = stringResource(R.string.no_results_caption),
@@ -158,11 +158,16 @@ private fun MatchResultContent(
                     isSecondaryButtonVisible = false,
                     titlePrimaryButton = stringResource(R.string.try_again),
                     onClickPrimaryButton = navigateBack,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 32.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
-            } else {
+            }
+        } else {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 HeroCarousel(
                     items = state.matchItems.map { it.posterUrl },
                     onPageChanged = { newIndex -> onPageChanged(newIndex) },
@@ -212,5 +217,6 @@ private fun MatchResultContent(
         }
     }
 }
+
 
 

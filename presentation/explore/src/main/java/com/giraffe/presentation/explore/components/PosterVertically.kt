@@ -1,101 +1,210 @@
 package com.giraffe.presentation.explore.components
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.Rating
+import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.designsystem.uimodel.Poster
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.explore.components.uimodel.Poster
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun PosterVertically(
     poster: Poster,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope,
+    isGridSelected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
+    val density = LocalDensity.current
+    val widowSize = LocalWindowInfo.current
+    val imageMaxWidth = with(density) {
+        widowSize.containerSize.width.toDp()
+    }
+    val transition = updateTransition(isGridSelected)
+    val imageWidth by transition.animateDp(
+        targetValueByState = { if (it) imageMaxWidth else 64.dp },
+        transitionSpec = { tween(700, easing = LinearEasing) }
+    )
+    val columnStartPadding by transition.animateDp(
+        targetValueByState = { if (it) 0.dp else 76.dp },
+        transitionSpec = { tween(700, easing = LinearEasing) }
+    )
+    val columnEndPadding by transition.animateDp(
+        targetValueByState = { if (it) 0.dp else 12.dp },
+        transitionSpec = { tween(700, easing = LinearEasing) }
+    )
+    val columnVerticalPadding by transition.animateDp(
+        targetValueByState = { if (it) 0.dp else 12.dp },
+        transitionSpec = { tween(700, easing = LinearEasing) }
+    )
+    val verticalAlignment by transition.animateFloat(
+        targetValueByState = { if (it) 1f else -1f },
+        transitionSpec = { tween(700, easing = LinearEasing) }
+    )
 
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        with(sharedTransitionScope) {
+    val ratingPadding by transition.animateDp(
+        targetValueByState = { if (it) 8.dp else 12.dp },
+        transitionSpec = { tween(700, easing = LinearEasing) }
+    )
 
-            Box(
-                modifier = modifier
-                    .clip(RoundedCornerShape(Theme.radius.lg))
-                    .background(Theme.color.background.card)
-                    .clickable(onClick = onClick)
-                    .aspectRatio(0.74f), contentAlignment = Alignment.Center
-            ) {
-                SafeIslamicImage(
-                    imageUrl = poster.imageUrl,
-                    contentDescription = poster.name,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = "image - ${poster.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        ),
-                    placeHolderTint = Theme.color.brand.secondary,
-                    placeholderModifier = Modifier
-                        .fillMaxSize()
-                        .border(
-                            width = 1.dp,
-                            color = Theme.color.stroke.primary,
-                            shape = RoundedCornerShape(
-                                topStart = Theme.radius.lg,
-                                bottomStart = Theme.radius.lg,
-                                topEnd = Theme.radius.lg
-                            )
-                        )
+    val textHeight = with(density) {
+        14.sp.toDp() + 8.dp
+    }
+
+    Box(
+        modifier = modifier
+            .then(
+                if (isGridSelected) Modifier
+                else Modifier.background(Theme.color.background.card)
+            )
+
+    ) {
+        SafeIslamicImage(
+            imageUrl = poster.imageUrl,
+            contentDescription = poster.name,
+            modifier = Modifier
+                .padding(bottom = if (isGridSelected) textHeight else 0.dp)
+                .clickable(onClick = onClick)
+                .width(imageWidth)
+                .aspectRatio(0.73f)
+                .clip(RoundedCornerShape(Theme.radius.lg))
+                .background(Theme.color.background.card),
+            placeHolderTint = Theme.color.brand.secondary,
+            contentScale = ContentScale.FillBounds,
+            placeholderModifier = Modifier
+                .align(Alignment.TopStart)
+                .fillMaxWidth()
+                .aspectRatio(0.73f)
+                .border(
+                    width = 1.dp,
+                    color = Theme.color.stroke.primary,
+                    shape = RoundedCornerShape(
+                        topStart = Theme.radius.lg,
+                        bottomStart = Theme.radius.lg,
+                        topEnd = Theme.radius.lg
+                    )
                 )
+        )
 
-
-                Rating(
-                    value = poster.rating,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(end = 8.dp, top = 8.dp)
-                        .sharedElement(
-                            sharedContentState = rememberSharedContentState(key = "rate - ${poster.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope
-                        )
-
+        Column(
+            modifier = Modifier
+                .padding(
+                    start = columnStartPadding,
+                    end = columnEndPadding,
+                    top = columnVerticalPadding,
+                    bottom = columnVerticalPadding
                 )
-            }
-
-
+                .align(BiasAlignment(-1f, verticalAlignment))
+        ) {
             Text(
                 text = poster.name,
                 style = Theme.textStyle.body.md.medium,
-                color = Theme.color.shade.secondary,
+                color = Theme.color.shade.primary,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.sharedElement(
-                    sharedContentState = rememberSharedContentState(key = "name - ${poster.id}"),
-                    animatedVisibilityScope = animatedVisibilityScope
-                )
+                modifier = Modifier.widthIn(max = 156.dp)
             )
+
+            transition.AnimatedVisibility(
+                visible = { !it },
+                enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
+                exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
+                modifier = Modifier.padding(top = 4.dp)
+            ) {
+                poster.genres?.let {
+                    if (it.isNotEmpty()) {
+                        Text(
+                            text = poster.genres ?: stringResource(R.string.unknown_genre),
+                            style = Theme.textStyle.body.sm.regular,
+                            color = Theme.color.shade.secondary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
+
+            transition.AnimatedVisibility(
+                visible = { !it },
+                enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
+                exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                poster.date?.let {
+                    if (it.isNotEmpty()) {
+                        IconWithText(
+                            icon = painterResource(Theme.icons.dueTone.calendar),
+                            text = poster.date ?: stringResource(R.string.unknown_date)
+                        )
+                    }
+                }
+            }
         }
+
+        Rating(
+            value = poster.rating,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(
+                    end = ratingPadding,
+                    top = ratingPadding
+                )
+
+        )
+    }
+}
+
+@Composable
+private fun IconWithText(icon: Painter, text: String) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Icon(
+            painter = icon,
+            contentDescription = stringResource(R.string.clock_icon),
+            tint = Theme.color.shade.secondary,
+            modifier = Modifier.size(16.dp)
+        )
+        Text(
+            text = text,
+            style = Theme.textStyle.label.md.regular,
+            color = Theme.color.shade.secondary
+        )
     }
 }

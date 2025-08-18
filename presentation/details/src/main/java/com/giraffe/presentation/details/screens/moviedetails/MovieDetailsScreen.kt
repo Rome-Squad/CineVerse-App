@@ -33,7 +33,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.giraffe.designsystem.composable.InfoSection
-import com.giraffe.designsystem.composable.PosterListSection
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.details.R
@@ -41,6 +40,7 @@ import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.GiveStarsBottomSheet
 import com.giraffe.presentation.details.components.LoginBottomSheet
 import com.giraffe.presentation.details.components.MainMovieOrSeriesDetails
+import com.giraffe.presentation.details.components.PosterListSection
 import com.giraffe.presentation.details.components.RatingSection
 import com.giraffe.presentation.details.components.ReviewCard
 import com.giraffe.presentation.details.components.StaffInfoSection
@@ -200,7 +200,10 @@ private fun MovieDetailsContent(
                 if (state.movie.overview.isNotBlank()) {
                     item {
                         InfoSection(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .align(Alignment.CenterStart)
+                            ,
                             title = stringResource(R.string.storyline),
                             description = state.movie.overview
                         )
@@ -212,7 +215,9 @@ private fun MovieDetailsContent(
                         StarCastSection(
                             title = stringResource(R.string.star_cast),
                             onCastClick = { interaction.onCastCardClick(it) },
-                            castList = state.cast
+                            castList = state.cast,
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
                         )
                     }
                 }
@@ -220,9 +225,11 @@ private fun MovieDetailsContent(
                 if (state.crew.isNotEmpty()) {
                     item {
                         StaffInfoSection(
-                            modifier = Modifier.padding(horizontal = 16.dp),
                             title = stringResource(R.string.behind_the_scenes),
-                            staffList = state.crew
+                            staffList = state.crew,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .align(Alignment.CenterStart)
                         )
                     }
                 }
@@ -246,7 +253,9 @@ private fun MovieDetailsContent(
 
                 item {
                     RatingSection(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .align(Alignment.CenterStart),
                         rate = state.movie.userRating.toInt(),
                         onClickCard = interaction::onGiveStarsCardClick
                     )
@@ -256,7 +265,8 @@ private fun MovieDetailsContent(
                     item {
                         Column(
                             modifier = Modifier
-                                .padding(horizontal = 16.dp),
+                                .padding(horizontal = 16.dp)
+                                .align(Alignment.CenterStart),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             SectionTitle(

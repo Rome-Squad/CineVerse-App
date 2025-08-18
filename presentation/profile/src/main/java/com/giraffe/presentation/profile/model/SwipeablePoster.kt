@@ -1,6 +1,6 @@
 package com.giraffe.presentation.profile.model
 
-import com.giraffe.designsystem.uimodel.Poster
+import com.giraffe.presentation.profile.uimodel.Poster
 
 data class SwipeablePoster(
     val poster: Poster,
