@@ -11,7 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MediaMemberApiServiceRetrofit {
+interface MediaMemberApiService {
 
     @GET(ENDPOINT_SEARCH_PERSON)
     suspend fun searchByName(

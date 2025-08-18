@@ -4,25 +4,25 @@ import com.giraffe.media.dto.ReviewDto
 import com.giraffe.media.movie.datasource.remote.MoviesRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
-import com.giraffe.media.util.RetrofitRequestBuilder
+import com.giraffe.media.util.safeCallRemote
 import javax.inject.Inject
 
-class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
-    private val retrofitRequestBuilder: RetrofitRequestBuilder<MoviesApiServiceRetrofit>
+class MoviesRemoteDataSourceImpl @Inject constructor(
+    private val moviesApiService: MoviesApiService,
 ) : MoviesRemoteDataSource {
 
     override suspend fun getMovieById(movieId: Int) =
-        retrofitRequestBuilder.get { getMovieById(movieId) }
+        safeCallRemote { moviesApiService.getMovieById(movieId) }
 
     override suspend fun getMoviesByName(movieName: String, page: Int) =
-        retrofitRequestBuilder.get { getMoviesByName(movieName, page) }.results
+        safeCallRemote { moviesApiService.getMoviesByName(movieName, page) }.results
 
     override suspend fun getMovieGenres() =
-        retrofitRequestBuilder.get { getGenres() }.genres
+        safeCallRemote { moviesApiService.getGenres() }.genres
 
     override suspend fun getMoviesByGenre(genreId: Int, page: Int) =
-        retrofitRequestBuilder.get {
-            discoverMovies(
+        safeCallRemote {
+            moviesApiService.discoverMovies(
                 genreId = if (genreId == -1) "" else genreId.toString(),
                 page = page
             )
@@ -32,8 +32,8 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         genreIds: List<Int>,
         page: Int
     ) =
-        retrofitRequestBuilder.get {
-            discoverMovies(
+        safeCallRemote {
+            moviesApiService.discoverMovies(
                 genreId = genreIds.joinToString(","),
                 page = page
             )
@@ -43,8 +43,8 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         keywords: Int,
         page: Int
     ) =
-        retrofitRequestBuilder.get {
-            discoverMovies(
+        safeCallRemote {
+            moviesApiService.discoverMovies(
                 keywords = keywords.toString(),
                 page = page
             )
@@ -54,8 +54,8 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
         sortBy: String,
         page: Int
     ) =
-        retrofitRequestBuilder.get {
-            discoverMovies(
+        safeCallRemote {
+            moviesApiService.discoverMovies(
                 sortBy = sortBy,
                 page = page
             )
@@ -63,36 +63,36 @@ class MoviesRemoteDataSourceImplRetrofit @Inject constructor(
 
 
     override suspend fun getMovieReviews(movieId: Int, page: Int): List<ReviewDto> =
-        retrofitRequestBuilder.get { getMovieReviews(movieId, page = page) }.results
+        safeCallRemote { moviesApiService.getMovieReviews(movieId, page = page) }.results
 
     override suspend fun getMovieRecommendations(movieId: Int, page: Int): List<MovieDto> =
-        retrofitRequestBuilder.get { getRecommendations(movieId, page) }.results
+        safeCallRemote { moviesApiService.getRecommendations(movieId, page) }.results
 
     override suspend fun addRating(movieId: Int, request: RatingRequest) =
-        retrofitRequestBuilder.post { rateMovie(movieId, request) }
+        safeCallRemote { moviesApiService.rateMovie(movieId, request) }
 
     override suspend fun getUserMovieRating(movieId: Int) =
-        retrofitRequestBuilder.get { getUserMovieRating(movieId) }.getRating()
+        safeCallRemote { moviesApiService.getUserMovieRating(movieId) }.getRating()
 
     override suspend fun getPopularityMovies(page: Int): List<MovieDto> =
-        retrofitRequestBuilder.get { getPopularMovies(page) }.results
+        safeCallRemote { moviesApiService.getPopularMovies(page) }.results
 
     override suspend fun getRecentlyReleasedMovies(page: Int): List<MovieDto> =
-        retrofitRequestBuilder.get { getRecentlyReleasedMovies(page) }.results
+        safeCallRemote { moviesApiService.getRecentlyReleasedMovies(page) }.results
 
     override suspend fun getUpcomingMovies(page: Int): List<MovieDto> =
-        retrofitRequestBuilder.get { getUpcomingMovies(page) }.results
+        safeCallRemote { moviesApiService.getUpcomingMovies(page) }.results
 
     override suspend fun getMovieTrailerUrl(movieId: Int): String {
-        val results = retrofitRequestBuilder.get { getMovieTrailerUrl(movieId) }.results
+        val results = safeCallRemote { moviesApiService.getMovieTrailerUrl(movieId) }.results
         return results.firstOrNull { it.type == "Trailer" }?.key
             ?: results.firstOrNull()?.key.orEmpty()
     }
 
     override suspend fun getRatedMovies(accountId: Int) =
-        retrofitRequestBuilder.get { getRatedMovies(accountId) }.results
+        safeCallRemote { moviesApiService.getRatedMovies(accountId) }.results
 
     override suspend fun deleteMovieRating(movieId: Int) =
-        retrofitRequestBuilder.delete { deleteMovieRating(movieId) }
+        safeCallRemote { moviesApiService.deleteMovieRating(movieId) }
 
 }

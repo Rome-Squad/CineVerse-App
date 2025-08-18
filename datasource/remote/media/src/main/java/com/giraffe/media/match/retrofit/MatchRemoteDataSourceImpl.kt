@@ -3,10 +3,10 @@ package com.giraffe.media.match.retrofit
 import com.giraffe.media.match.datasource.MatchRemoteDataSource
 import com.giraffe.media.movie.datasource.remote.dto.MovieDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
-import com.giraffe.media.util.RetrofitRequestBuilder.Companion.safeCall
+import com.giraffe.media.util.safeCallRemote
 import javax.inject.Inject
 
-class MatchRemoteDataSourceImplRetrofit @Inject constructor(
+class MatchRemoteDataSourceImpl @Inject constructor(
     private val matchApiService: MatchApiService
 ) : MatchRemoteDataSource {
 
@@ -17,7 +17,7 @@ class MatchRemoteDataSourceImplRetrofit @Inject constructor(
         earliestDate: String?,
         latestDate: String?,
         moodId: String?
-    ): List<MovieDto> = safeCall {
+    ): List<MovieDto> = safeCallRemote {
         matchApiService.getMatchingMovies(
             genreIds = genreIds,
             minRuntime = minRuntime,
@@ -36,7 +36,7 @@ class MatchRemoteDataSourceImplRetrofit @Inject constructor(
         earliestDate: String?,
         latestDate: String?,
         moodId: String?
-    ): List<SeriesDto> = safeCall {
+    ): List<SeriesDto> = safeCallRemote {
         matchApiService.getMatchingSeries(
             genreIds = genreIds,
             minRuntime = minRuntime,
