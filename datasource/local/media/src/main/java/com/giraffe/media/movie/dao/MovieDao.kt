@@ -42,7 +42,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getPopularityMovies(limit: Int): List<MovieCacheDto>
+    fun getPopularityMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $POPULAR_MOVIE_TABLE")
     suspend fun clearPopularMovies()
@@ -60,7 +60,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getRecentlyReleasedMovies(limit: Int): List<MovieCacheDto>
+    fun getRecentlyReleasedMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $RECENTLY_RELEASED_MOVIE_TABLE")
     suspend fun clearRecentlyReleasedMovies()
@@ -78,7 +78,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getUpcomingMovies(limit: Int): List<MovieCacheDto>
+    fun getUpcomingMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $UPCOMING_MOVIE_TABLE")
     suspend fun clearUpcomingMovies()
@@ -97,7 +97,7 @@ interface MovieDao {
         LIMIT :limit
         """
     )
-    suspend fun getMatchesYourVibeMovies(limit: Int): List<MovieCacheDto>
+    fun getMatchesYourVibeMovies(limit: Int): Flow<List<MovieCacheDto>>
 
     @Query("DELETE FROM $MATCHES_YOUR_VIBE_MOVIE_TABLE")
     suspend fun clearMatchesYourVibeMovies()
@@ -119,6 +119,17 @@ interface MovieDao {
     )
     fun getRecentlyViewedMovies(page: Int, pageSize: Int): Flow<List<MovieWithRecentlyViewedAt>>
 
+    @Query(
+        """
+        SELECT m.*, r.createdAt AS recentViewedAt
+        FROM $MOVIE_TABLE AS m
+        INNER JOIN $RECENTLY_VIEWED_MOVIE_TABLE AS r 
+        ON m.id = r.id
+        ORDER BY r.createdAt DESC
+        """
+    )
+    suspend fun getAllRecentlyViewedMovies(): List<MovieWithRecentlyViewedAt>
+
     @Query("DELETE FROM $RECENTLY_VIEWED_MOVIE_TABLE WHERE id = :movieId")
     suspend fun deleteRecentlyViewedMovieById(movieId: Int)
 
@@ -128,16 +139,22 @@ interface MovieDao {
 
     // region Movie Genres
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovieGenres(movies: List<MovieGenreCacheDto>)
+    suspend fun insertMovieGenre(genre: MovieGenreCacheDto)
+
+    @Query("UPDATE $MOVIE_GENRE_TABLE SET name = :name WHERE id = :id")
+    suspend fun updateGenreNameOnly(id: Int, name: String)
 
     @Query("UPDATE $MOVIE_GENRE_TABLE SET rank = rank + 1 WHERE id IN (:genreIds)")
     suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id IN (:ids)")
-    suspend fun getMovieGenresByIds(ids: List<Int>): List<MovieGenreCacheDto>
+    fun getMovieGenresByIds(ids: List<Int>): Flow<List<MovieGenreCacheDto>>
+
+    @Query("SELECT * FROM $MOVIE_GENRE_TABLE WHERE id = :id")
+    suspend fun getGenreById(id: Int): MovieGenreCacheDto?
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY rank DESC")
-    suspend fun getMoviesGenres(): List<MovieGenreCacheDto>
+    fun getMoviesGenres(): Flow<List<MovieGenreCacheDto>>
 
     @Query("SELECT * FROM $MOVIE_GENRE_TABLE ORDER BY rank DESC LIMIT 1")
     suspend fun getTopGenre(): MovieGenreCacheDto?

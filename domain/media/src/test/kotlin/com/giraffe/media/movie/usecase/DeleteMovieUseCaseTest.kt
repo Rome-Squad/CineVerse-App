@@ -1,6 +1,7 @@
 package com.giraffe.media.movie.usecase
 
 import com.giraffe.media.movie.repository.MovieRepository
+import com.giraffe.media.movie.usecase.recentlyViewed.DeleteRecentlyViewedMovieByIdUseCase
 import com.giraffe.media.movie.util.movieId
 import io.mockk.coVerify
 import io.mockk.mockk

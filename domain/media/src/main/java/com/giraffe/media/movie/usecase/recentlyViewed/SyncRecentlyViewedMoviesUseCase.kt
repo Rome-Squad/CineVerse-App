@@ -1,0 +1,11 @@
+package com.giraffe.media.movie.usecase.recentlyViewed
+
+import com.giraffe.media.movie.repository.MovieRepository
+import javax.inject.Inject
+
+class SyncRecentlyViewedMoviesUseCase @Inject constructor(
+    private val movieRepository: MovieRepository
+) {
+    suspend operator fun invoke() =
+        movieRepository.syncRecentlyViewedMovies()
+}

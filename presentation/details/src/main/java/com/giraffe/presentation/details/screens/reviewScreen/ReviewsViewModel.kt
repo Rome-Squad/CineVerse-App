@@ -10,7 +10,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Review
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
+import com.giraffe.media.movie.usecase.rate.GetMovieReviewsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
