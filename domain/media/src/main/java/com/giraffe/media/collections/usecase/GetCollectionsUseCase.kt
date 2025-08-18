@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 class GetCollectionsUseCase @Inject constructor(
     private val collectionsRepository: CollectionsRepository,
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase,
 ) {
     suspend operator fun invoke(): Flow<List<Collection>> {
         val accountId = getUserUseCase().first()?.id ?: throw AccessDeniedException()

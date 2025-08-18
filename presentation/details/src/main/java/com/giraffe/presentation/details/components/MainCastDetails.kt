@@ -1,9 +1,6 @@
 package com.giraffe.presentation.details.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -25,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -37,9 +36,10 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.model.SocialMediaUi
 import com.giraffe.presentation.details.utils.getIcon
+import kotlin.math.max
 
 @Composable
-fun MainDetails(
+fun MainCastDetails(
     actorName: String,
     actorBirthday: String,
     actorPlaceOfBirth: String,
@@ -49,6 +49,8 @@ fun MainDetails(
     modifier: Modifier = Modifier,
     animationProgress: Float = 0f
 ) {
+    val inverseAnimationProgress = 1f - animationProgress
+
     val radiusXl = Theme.radius.xl
     val radiusS = Theme.radius.s
     val shapeImage = remember(animationProgress) {
@@ -66,8 +68,8 @@ fun MainDetails(
             .fillMaxWidth()
             .wrapContentHeight()
             .clip(shape = RoundedCornerShape(Theme.radius.xxl))
-            .background(Theme.color.background.card.copy(1f - animationProgress))
-            .padding(vertical = 16.dp * (1 - animationProgress)),
+            .background(Theme.color.background.card.copy(inverseAnimationProgress))
+            .padding(vertical = 16.dp * inverseAnimationProgress),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
@@ -105,44 +107,48 @@ fun MainDetails(
                 )
             }
 
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy((8 * inverseAnimationProgress).dp)) {
                 Text(
                     style = Theme.textStyle.title.md,
                     color = Theme.color.shade.primary,
                     text = actorName
                 )
 
-                AnimatedVisibility(
-                    visible = actorBirthday.isNotBlank() && animationProgress == 0f,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
+                val iconTextHeight = max(
+                    Theme.textStyle.label.md.regular.fontSize.value + 4,
+                    16f
+                )
+
+                if (actorBirthday.isNotBlank()) {
                     IconTextBox(
                         icon = painterResource(Theme.icons.outline.cake),
                         contentDescription = stringResource(R.string.birthday_cake_icon),
                         text = stringResource(R.string.actor_birthday) + singleSpace + actorBirthday,
+                        modifier = Modifier
+                            .height((iconTextHeight * inverseAnimationProgress).dp)
+                            .alpha(inverseAnimationProgress)
                     )
                 }
 
-                AnimatedVisibility(
-                    visible = actorPlaceOfBirth.isNotBlank() && animationProgress == 0f,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
+                if (actorPlaceOfBirth.isNotBlank()) {
                     IconTextBox(
                         icon = painterResource(Theme.icons.outline.location),
                         contentDescription = stringResource(R.string.location_icon),
                         text = stringResource(R.string.place_of_birth) + singleSpace + actorPlaceOfBirth,
+                        modifier = Modifier
+                            .height((iconTextHeight * inverseAnimationProgress).dp)
+                            .alpha(inverseAnimationProgress)
                     )
                 }
             }
         }
 
-        AnimatedVisibility(
-            visible = socialMediaUiList.isNotEmpty() && animationProgress == 0f,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
+        if (socialMediaUiList.isNotEmpty()) {
+            val socialMediaItemHeight = max(
+                Theme.textStyle.label.md.medium.fontSize.value + 4,
+                24f
+            ) + 16f
+
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp)
@@ -152,7 +158,10 @@ fun MainDetails(
                         image = it.platform.getIcon(),
                         name = stringResource(it.name),
                         contentDescription = stringResource(it.contentDescription),
-                        onClick = { onLinkClick(it.url) }
+                        onClick = { onLinkClick(it.url) },
+                        modifier = Modifier
+                            .height((socialMediaItemHeight * inverseAnimationProgress).dp)
+                            .alpha(inverseAnimationProgress)
                     )
                 }
             }

@@ -13,6 +13,7 @@ import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.presentation.profile.utils.toRatedPoster
+import com.giraffe.user.usecase.IsLoggedInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -23,12 +24,31 @@ class RatingViewModel @Inject constructor(
     private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
     private val deleteMovieRatingUseCase: DeleteMovieRatingUseCase,
-    private val deleteSeriesRatingUseCase: DeleteSeriesRatingUseCase
+    private val deleteSeriesRatingUseCase: DeleteSeriesRatingUseCase,
+    private val isLoggedInUseCase: IsLoggedInUseCase
 ) : BaseViewModel<RatingScreenState, RatingEffect>(RatingScreenState()),
     RatingInteractionListener {
 
     init {
-        getGenres()
+        checkLoginStatus()
+    }
+
+    private fun checkLoginStatus() {
+        safeExecute(
+            onSuccess = ::handleLoginSuccess,
+            onError = ::onFailure
+        ) {
+            isLoggedInUseCase()
+        }
+    }
+
+    private fun handleLoginSuccess(loggedIn: Boolean) {
+        updateState { it.copy(isLoggedIn = loggedIn) }
+        if (loggedIn) {
+            getGenres()
+        } else {
+            updateState { it.copy(isLoading = false) }
+        }
     }
 
     private fun getGenres() {

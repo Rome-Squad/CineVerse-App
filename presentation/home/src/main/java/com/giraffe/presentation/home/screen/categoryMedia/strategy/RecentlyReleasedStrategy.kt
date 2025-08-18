@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.screen.show_more.strategy
+package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
 import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
@@ -6,7 +6,7 @@ import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
-import com.giraffe.presentation.home.screen.show_more.CategoryMediaStrategy
+import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
 
 class RecentlyReleasedStrategy(
