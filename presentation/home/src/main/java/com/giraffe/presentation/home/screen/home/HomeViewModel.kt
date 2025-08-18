@@ -13,11 +13,11 @@ import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMovie
 import com.giraffe.media.movie.usecase.upcoming.ObserveUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
-import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.media.series.usecase.ObservePopularSeriesUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
@@ -34,9 +34,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val observePopularMoviesUseCase: ObservePopularMoviesUseCase,
-    private val getPopularSeriesUseCase: GetPopularitySeriesUseCase,
+    private val observePopularSeriesUseCase: ObservePopularSeriesUseCase,
     private val observeRecentlyReleasedMoviesUseCase: ObserveRecentlyReleasedMoviesUseCase,
-    private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
     private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
     private val observeUpcomingMoviesUseCase: ObserveUpcomingMoviesUseCase,
@@ -45,7 +44,6 @@ class HomeViewModel @Inject constructor(
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentlyViewedSeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val observeMatchesYourVibeMoviesUseCase: ObserveMatchesYourVibeMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
@@ -128,10 +126,10 @@ class HomeViewModel @Inject constructor(
                 onError = ::onError,
                 block = observePopularMoviesUseCase::invoke
             )
-            safeExecute(
-                onSuccess = ::onGetPopularitySeriesSuccess,
+            safeCollect(
+                onEmitNewValue = ::onGetPopularitySeriesSuccess,
                 onError = ::onError,
-                block = { getPopularSeriesUseCase() }
+                block = observePopularSeriesUseCase::invoke
             )
         }
     }

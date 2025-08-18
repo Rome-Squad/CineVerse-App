@@ -5,6 +5,7 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.mapper.toEntity
 import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
@@ -146,12 +147,25 @@ class SeriesRepositoryImpl @Inject constructor(
     // endregion
 
     // region Popular
-    override suspend fun getPopular(page: Int, limit: Int) = safeCall {
-        seriesLocal.getPopularitySeries(limit).map { it.toEntity() }.ifEmpty {
-            seriesRemote.getPopularitySeries(page).take(limit)
-                .map(SeriesDto::toEntity)
-                .also { addPopular(it) }
+    override fun observePopular(limit: Int): Flow<List<Series>> {
+        return safeFlow {
+            seriesLocal.getPopularitySeries(limit)
+                .map { it.map(SeriesCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getRemotePopular(page = 1, limit = limit)
+                            .also { series ->
+                                addPopular(series)
+                            }
+                    }
+                }
         }
+    }
+
+    private suspend fun getRemotePopular(page: Int, limit: Int): List<Series> {
+        return seriesRemote.getPopularitySeries(page)
+            .take(limit)
+            .map(SeriesDto::toEntity)
     }
 
     private suspend fun addPopular(series: List<Series>) = safeCall {
@@ -245,7 +259,9 @@ class SeriesRepositoryImpl @Inject constructor(
     }
     // endregion
 
-    override suspend fun clearAll() = safeCall {
-        seriesLocal.clearSeries()
-    }
+    override suspend fun clearExceptRecentlyViewed() =
+        safeCall { seriesLocal.clearExceptRecentlyViewed() }
+
+    override suspend fun clearAll() =
+        safeCall { seriesLocal.clearAll() }
 }

@@ -37,7 +37,7 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
+    fun getPopularitySeries(limit: Int): Flow<List<SeriesCacheDto>>
 
     @Query("DELETE FROM $POPULAR_SERIES_TABLE")
     suspend fun clearPopularSeriesTable()
@@ -158,6 +158,9 @@ interface SeriesDao {
     @Query("DELETE FROM $SERIES_GENRE_TABLE")
     suspend fun clearGenres()
     // endregion
+
+    @Query("DELETE FROM $SERIES_TABLE")
+    suspend fun clearSeriesCache()
 
     @Query(
         """

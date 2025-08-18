@@ -4,6 +4,7 @@ import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.movie.usecase.genre.SyncMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.SyncRecentlyViewedMoviesUseCase
+import com.giraffe.media.series.usecase.ClearSeriesCacheUseCase
 import com.giraffe.media.series.usecase.genre.SyncSeriesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
@@ -37,6 +38,7 @@ class SettingsViewModel @Inject constructor(
     private val appVersionProvider: AppVersionProvider,
     private val logoutUseCase: LogoutUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
+    private val clearSeriesCacheUseCase: ClearSeriesCacheUseCase,
     private val syncRecentlyViewedMoviesUseCase: SyncRecentlyViewedMoviesUseCase,
     private val syncMoviesGenresUseCase: SyncMoviesGenresUseCase,
     private val syncSeriesGenresUseCase: SyncSeriesGenresUseCase,
@@ -194,6 +196,7 @@ class SettingsViewModel @Inject constructor(
             syncRecentlyViewedMoviesUseCase.invoke()
             syncMoviesGenresUseCase.invoke()
 
+            clearSeriesCacheUseCase.clearExceptRecentlyViewed()
             syncSeriesGenresUseCase.invoke()
         }
         onDismissSheet()
@@ -221,6 +224,10 @@ class SettingsViewModel @Inject constructor(
         safeExecute(
             onError = ::onFailure,
             block = clearMoviesCacheUseCase::clearAll
+        )
+        safeExecute(
+            onError = ::onFailure,
+            block = clearSeriesCacheUseCase::clearAll
         )
         sendEffect(SettingsEffect.NavigateToLogin)
     }

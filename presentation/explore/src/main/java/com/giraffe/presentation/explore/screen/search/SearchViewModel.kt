@@ -10,7 +10,7 @@ import com.giraffe.media.search.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.search.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.media.search.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.ClearRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.ClearSeriesCacheUseCase
 import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.components.uimodel.Poster
@@ -30,10 +30,10 @@ class SearchViewModel @Inject constructor(
     private val insertSearchKeyword: AddSearchKeywordUseCase,
     private val deleteKeywordUseCase: DeleteSearchKeywordUseCase,
     private val clearSearchHistory: ClearSearchHistoryUseCase,
-    private val clearRecentlyViewedSeriesUseCase: ClearRecentlyViewedSeriesUseCase,
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val getRecentSeriesUseCase: GetRecentlyViewedSeriesUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
+    private val clearSeriesCacheUseCase: ClearSeriesCacheUseCase,
     private val clearRecentlyPeopleUseCase: ClearRecentMediaMembersUseCase
 ) : BaseViewModel<SearchScreenState, SearchEffect>(SearchScreenState()),
     SearchInteractionListener {
@@ -116,7 +116,7 @@ class SearchViewModel @Inject constructor(
 
     override fun clearAllRecentViewedPosters() {
         safeExecute {
-            val job1 = launch { clearRecentlyViewedSeriesUseCase() }
+            val job1 = launch { clearSeriesCacheUseCase.clearRecentlyViewed() }
             val job2 = launch { clearMoviesCacheUseCase.clearRecentlyViewed() }
             val job3 = launch { clearRecentlyPeopleUseCase() }
             joinAll(job1, job2, job3)

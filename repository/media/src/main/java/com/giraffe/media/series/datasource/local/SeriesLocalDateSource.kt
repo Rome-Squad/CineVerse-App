@@ -22,11 +22,13 @@ interface SeriesLocalDateSource {
 
     suspend fun clearRecentSeries()
 
-    suspend fun clearSeries()
+    suspend fun clearExceptRecentlyViewed()
+
+    suspend fun clearAll()
 
     suspend fun insertPopularitySeries(series: List<SeriesCacheDto>)
 
-    suspend fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
+    fun getPopularitySeries(limit: Int): Flow<List<SeriesCacheDto>>
 
     suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>)
 

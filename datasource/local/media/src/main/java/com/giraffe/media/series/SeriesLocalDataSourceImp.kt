@@ -47,22 +47,13 @@ class SeriesLocalDataSourceImp @Inject constructor(
         seriesDao.clearGenres()
     }
 
-    override suspend fun clearSeries() = safeCall {
-        seriesDao.clearSeriesExceptRecentViewed()
-        seriesDao.clearPopularSeriesTable()
-        seriesDao.clearRecentlyReleasedSeriesTable()
-        seriesDao.clearTopRatedSeriesTable()
-        seriesDao.clearMatchesYourVibeSeriesTable()
-    }
-
     override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
         insertSeries(series)
         seriesDao.upsertPopularSeriesIDs(series.map(SeriesCacheDto::toPopularSeriesCacheDto))
     }
 
-    override suspend fun getPopularitySeries(limit: Int) = safeCall {
-        seriesDao.getPopularitySeries(limit)
-    }
+    override fun getPopularitySeries(limit: Int) =
+        safeFlow { seriesDao.getPopularitySeries(limit) }
 
     override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) = safeCall {
         insertSeries(series)
@@ -99,7 +90,6 @@ class SeriesLocalDataSourceImp @Inject constructor(
         seriesDao.getMatchesYourVibeSeries(limit)
     }
 
-
     override fun getRecentSeries(page: Int, pageSize: Int) = safeFlow {
         seriesDao.getRecentlyViewedSeries(page, pageSize)
             .onStart { seriesDao.syncRecentViewedTime() }
@@ -114,6 +104,29 @@ class SeriesLocalDataSourceImp @Inject constructor(
 
     override suspend fun clearRecentSeries() = safeCall {
         seriesDao.clearRecentlyViewedSeries()
+    }
+
+
+    override suspend fun clearExceptRecentlyViewed() {
+        safeCall {
+            seriesDao.clearSeriesExceptRecentViewed()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+        }
+    }
+
+    override suspend fun clearAll() {
+        safeCall {
+            clearGenres()
+            seriesDao.clearSeriesCache()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+            clearRecentSeries()
+        }
     }
 
     private suspend fun insertSeries(series: List<SeriesCacheDto>) = safeCall {

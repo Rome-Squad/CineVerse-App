@@ -22,7 +22,7 @@ interface SeriesRepository {
 
     suspend fun getGenres(): List<Genre>
 
-    fun getGenresByIds(genreIDs: List<Int>): Flow<List<Genre>>
+    fun getGenresByIds(genreIds: List<Int>): Flow<List<Genre>>
 
     suspend fun getDetails(seriesId: Int): Series
 
@@ -32,7 +32,7 @@ interface SeriesRepository {
 
     suspend fun getReviews(seriesId: Int, page: Int = 1): List<Review>
 
-    suspend fun getPopular(page: Int, limit: Int): List<Series>
+    fun observePopular(limit: Int): Flow<List<Series>>
 
     suspend fun getRecentlyReleased(page: Int, limit: Int): List<Series>
 
@@ -43,6 +43,8 @@ interface SeriesRepository {
     suspend fun addRating(seriesId: Int, rating: Float)
 
     suspend fun deleteRating(seriesId: Int)
+
+    suspend fun clearExceptRecentlyViewed()
 
     suspend fun clearAll()
 

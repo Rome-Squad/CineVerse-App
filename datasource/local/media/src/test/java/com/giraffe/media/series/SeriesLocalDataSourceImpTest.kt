@@ -97,19 +97,6 @@ class SeriesLocalDataSourceImpTest {
     }
 
     @Test
-    fun `clearSeries clears DAO`() = runTest {
-        dataSource.clearSeries()
-
-        coVerify {
-            seriesDao.clearSeriesExceptRecentViewed()
-            seriesDao.clearPopularSeriesTable()
-            seriesDao.clearRecentlyReleasedSeriesTable()
-            seriesDao.clearTopRatedSeriesTable()
-            seriesDao.clearMatchesYourVibeSeriesTable()
-        }
-    }
-
-    @Test
     fun `insertPopularitySeries should upsert series and popularSeriesIDs`() = runTest {
         dataSource.insertPopularitySeries(sampleSeries)
 
@@ -121,11 +108,12 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getPopularitySeries returns series`() = runTest {
-        coEvery { seriesDao.getPopularitySeries(10) } returns sampleSeries
+        val expectedSeries = flowOf(sampleSeries)
+        coEvery { seriesDao.getPopularitySeries(10) } returns expectedSeries
 
         val result = dataSource.getPopularitySeries(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeries)
     }
 
     @Test
@@ -227,5 +215,33 @@ class SeriesLocalDataSourceImpTest {
         dataSource.clearRecentSeries()
 
         coVerify { seriesDao.clearRecentlyViewedSeries() }
+    }
+
+    @Test
+    fun `clearExceptRecentlyViewed clears DAO recent table`() = runTest {
+        dataSource.clearExceptRecentlyViewed()
+
+        coVerify(exactly = 1) {
+            seriesDao.clearSeriesExceptRecentViewed()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+        }
+    }
+
+    @Test
+    fun `clearAll clears DAO recent table`() = runTest {
+        dataSource.clearAll()
+
+        coVerify(exactly = 1) {
+            seriesDao.clearGenres()
+            seriesDao.clearSeriesCache()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+            seriesDao.clearRecentlyViewedSeries()
+        }
     }
 }

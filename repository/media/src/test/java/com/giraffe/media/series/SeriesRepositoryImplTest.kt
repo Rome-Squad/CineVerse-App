@@ -13,6 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -151,6 +152,18 @@ class SeriesRepositoryImplTest {
     }
 
     @Test
+    fun `clearExceptRecentlyViewed should call local clear`() = runTest {
+        repository.clearExceptRecentlyViewed()
+        coVerify(exactly = 1) { local.clearExceptRecentlyViewed() }
+    }
+
+    @Test
+    fun `clearAll should call local clear`() = runTest {
+        repository.clearAll()
+        coVerify(exactly = 1) { local.clearAll() }
+    }
+
+    @Test
     fun `SeriesRepository should return Series`() = runTest {
         repository.getRecommended(1, 1)
         coVerify { remote.getSeriesRecommendations(1, 1) }
@@ -158,20 +171,21 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getPopularitySeries returns cached if available`() = runTest {
-        coEvery { local.getPopularitySeries(10) } returns cachedSeries
+        val expectedSeries = flowOf(cachedSeries)
+        coEvery { local.getPopularitySeries(10) } returns expectedSeries
 
-        val result = repository.getPopular(1, 10)
+        val result = repository.observePopular(10)
 
-        assertThat(result.first().name).isEqualTo(cachedSeries.first().name)
+        assertThat(result.first().first().name).isEqualTo(expectedSeries.first().first().name)
         coVerify(exactly = 0) { remote.getPopularitySeries(any()) }
     }
 
     @Test
     fun `getPopularitySeries fetches from remote if cache is empty`() = runTest {
-        coEvery { local.getPopularitySeries(10) } returns emptyList()
+        coEvery { local.getPopularitySeries(10) } returns emptyFlow()
         coEvery { remote.getPopularitySeries(1) } returns remoteSeriesDto
 
-        val result = repository.getPopular(1, 10)
+        val result = repository.observePopular(10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
         coVerify { local.insertPopularitySeries(any()) }
