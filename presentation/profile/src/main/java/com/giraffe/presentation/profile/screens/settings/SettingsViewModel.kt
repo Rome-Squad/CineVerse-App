@@ -67,7 +67,7 @@ class SettingsViewModel @Inject constructor(
         )
     }
 
-    internal fun refreshUserProfile() {
+    override fun refreshUserProfile() {
         safeExecute(
             onError = ::onFailure,
             block = refreshUserUseCase::invoke
