@@ -12,14 +12,13 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class GetUserNameUseCaseTest {
-    val getUserUseCase: GetUserUseCase = mockk()
     val userRepository: UserRepository = mockk()
-    val getUserNameUseCase = GetUserNameUseCase(getUserUseCase, userRepository)
+    val getUserNameUseCase = GetUserNameUseCase(userRepository)
 
     @Test
     fun `when user exists and has non-empty displayName should return displayName`() = runTest {
 
-        every { getUserUseCase() } returns flowOf(fakeUser)
+        every { userRepository.getUser() } returns flowOf(fakeUser)
 
         val result = getUserNameUseCase().first()
 
@@ -30,7 +29,7 @@ class GetUserNameUseCaseTest {
     fun `when user exists and has empty displayName should return username`() = runTest {
         val fakeUser1 = fakeUser.copy(displayName = "")
 
-        every { getUserUseCase() } returns flowOf(fakeUser1)
+        every { userRepository.getUser() } returns flowOf(fakeUser1)
 
         val result = getUserNameUseCase().first()
 
@@ -41,7 +40,7 @@ class GetUserNameUseCaseTest {
     fun `when user is null should refresh and return username`() = runTest {
         val refreshedUser = fakeUser.copy(displayName = "", username = "refreshed_user")
 
-        every { getUserUseCase() } returns flowOf(null)
+        every { userRepository.getUser() } returns flowOf(null)
         coEvery { userRepository.refreshUser() } returns refreshedUser
 
         val result = getUserNameUseCase().first()
