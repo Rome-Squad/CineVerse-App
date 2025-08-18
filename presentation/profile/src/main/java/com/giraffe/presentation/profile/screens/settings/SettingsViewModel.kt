@@ -2,6 +2,8 @@ package com.giraffe.presentation.profile.screens.settings
 
 import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
+import com.giraffe.media.movie.usecase.genre.SyncMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.recentlyViewed.SyncRecentlyViewedMoviesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.presentation.profile.utils.Language
@@ -12,6 +14,7 @@ import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import com.giraffe.user.usecase.LogoutUseCase
 import com.giraffe.user.usecase.RefreshUserUseCase
 import com.giraffe.user.usecase.SetContentPreferenceUseCase
@@ -24,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val refreshUserUseCase: RefreshUserUseCase,
     private val getDarkModeUseCase: GetDarkModeUseCase,
@@ -33,6 +37,8 @@ class SettingsViewModel @Inject constructor(
     private val appVersionProvider: AppVersionProvider,
     private val logoutUseCase: LogoutUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
+    private val syncRecentlyViewedMoviesUseCase: SyncRecentlyViewedMoviesUseCase,
+    private val syncMoviesGenresUseCase: SyncMoviesGenresUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
     private val clearCollectionsCacheUseCase: ClearCollectionsCacheUseCase
@@ -70,6 +76,7 @@ class SettingsViewModel @Inject constructor(
     override fun refreshUserProfile() {
         safeExecute(
             onError = ::onFailure,
+            block = isLoggedInByAccountUseCase::invoke
             block = refreshUserUseCase::invoke
         )
     }
@@ -171,15 +178,26 @@ class SettingsViewModel @Inject constructor(
     }
 
     override fun onLanguageChange(languageCode: String) {
+        if (languageCode == state.value.currentLanguage.code) {
+            onDismissSheet()
+            return
+        }
         safeExecute(
             dispatcher = Dispatchers.Main,
-            onSuccess = {
-                LanguageHelper.updateAppLocale(languageCode)
-                onDismissSheet()
-            },
+            onSuccess = { onLanguageChangeSuccess(languageCode) },
             onError = ::onFailure,
             block = { setLanguageUseCase(languageCode) }
         )
+    }
+
+    private fun onLanguageChangeSuccess(languageCode: String) {
+        LanguageHelper.updateAppLocale(languageCode)
+        safeExecute {
+            clearMoviesCacheUseCase.clearExceptRecentlyViewed()
+            syncRecentlyViewedMoviesUseCase.invoke()
+            syncMoviesGenresUseCase.invoke()
+        }
+        onDismissSheet()
     }
 
     override fun onToggleDarkMode(isDark: Boolean) {

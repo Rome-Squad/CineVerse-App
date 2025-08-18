@@ -2,6 +2,7 @@ package com.giraffe.user.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -62,12 +63,31 @@ class AuthenticationDatastore @Inject constructor(
         }
     }
 
+    suspend fun setUserAsGuest() {
+        dataStore.edit { preferences ->
+            preferences[IS_GUEST] = true
+        }
+    }
 
-    companion object {
+    suspend fun setUserAsNotGuest() {
+        dataStore.edit { preferences ->
+            preferences[IS_GUEST] = false
+        }
+    }
+
+    suspend fun isUserGuest(): Boolean {
+        return dataStore.data.map { preferences ->
+            preferences[IS_GUEST]
+        }.first() == true
+    }
+
+
+    private companion object {
         val SESSION_ID = stringPreferencesKey("session_id")
         val ACCOUNT_ID = intPreferencesKey("account_id")
         val USER_USERNAME = stringPreferencesKey("user_username")
         val USER_DISPLAY_NAME = stringPreferencesKey("user_display_name")
         val USER_AVATAR_URL = stringPreferencesKey("user_avatar_url")
+        val IS_GUEST = booleanPreferencesKey("is_guest")
     }
 }

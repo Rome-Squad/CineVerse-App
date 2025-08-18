@@ -4,14 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.giraffe.match.base.BaseViewModel
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.movie.usecase.GetMoviesGenresUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MatchPagerViewModel @Inject constructor(
-    private val getMoviesGenresUseCase: GetMoviesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MatchScreenState, MatchScreenEffect>(MatchScreenState()) {
 
@@ -39,10 +39,10 @@ class MatchPagerViewModel @Inject constructor(
     }
 
     private fun loadGenres() {
-        safeExecute(
-            onSuccess = ::onGetMoviesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = ::onFailure,
-            block = getMoviesGenresUseCase::invoke
+            block = observeMoviesGenresUseCase::invoke
         )
     }
 

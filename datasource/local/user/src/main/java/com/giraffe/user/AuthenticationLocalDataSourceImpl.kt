@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AuthenticationLocalDataSourceImpl @Inject constructor(
-    private val authenticationDatastore: AuthenticationDatastore
+    private val authenticationDatastore: AuthenticationDatastore,
 ) : AuthenticationLocalDataSource {
     override suspend fun saveSessionId(sessionId: String) =
         safeCall { authenticationDatastore.saveSessionId(sessionId) }
@@ -16,8 +16,18 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
     override suspend fun getSessionId(): String? =
         safeCall { authenticationDatastore.getSessionId() }
 
+    override suspend fun isLoggedInByAccount(): Boolean =
+        safeCall { authenticationDatastore.getSessionId() != null && !authenticationDatastore.isUserGuest() }
+
     override suspend fun isLoggedIn(): Boolean =
-        safeCall { authenticationDatastore.getSessionId() != null }
+        safeCall { authenticationDatastore.getSessionId() != null || authenticationDatastore.isUserGuest() }
+
+    override suspend fun clearSessionId() {
+        safeCall {
+            authenticationDatastore.setUserAsNotGuest()
+            authenticationDatastore.clearSessionId()
+        }
+    }
 
     override fun getAccountId(): Flow<Int?> =
         safeFlow { authenticationDatastore.getAccountId() }
@@ -44,5 +54,7 @@ class AuthenticationLocalDataSourceImpl @Inject constructor(
         safeCall { authenticationDatastore.saveAvatarUrl(url) }
 
     override suspend fun clearAllData() = safeCall { authenticationDatastore.clearAll() }
+    override suspend fun setUserAsGuest() =
+        safeCall { authenticationDatastore.setUserAsGuest() }
 
 }

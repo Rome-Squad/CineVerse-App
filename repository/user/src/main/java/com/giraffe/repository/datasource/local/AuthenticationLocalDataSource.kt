@@ -8,6 +8,8 @@ interface AuthenticationLocalDataSource {
 
     suspend fun getSessionId(): String?
 
+    suspend fun isLoggedInByAccount(): Boolean
+
     suspend fun isLoggedIn(): Boolean
 
     fun getAccountId(): Flow<Int?>
@@ -27,4 +29,8 @@ interface AuthenticationLocalDataSource {
     suspend fun saveAvatarUrl(url: String?)
 
     suspend fun clearAllData()
+    suspend fun clearSessionId()
+
+    suspend fun setUserAsGuest()
+
 }

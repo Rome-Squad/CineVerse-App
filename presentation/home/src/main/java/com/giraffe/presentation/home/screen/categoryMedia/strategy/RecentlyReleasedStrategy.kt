@@ -1,7 +1,7 @@
 package com.giraffe.presentation.home.screen.categoryMedia.strategy
 
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.movie.usecase.GetRecentlyReleasedMoviesUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.recentlyReleased.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.home.model.PosterMedia
@@ -17,9 +17,10 @@ class RecentlyReleasedStrategy(
 ) : CategoryMediaStrategy {
     override suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia> {
         val recentMovies =
-            getRecentlyReleasedMovies(page = page, limit = pageSize).map { movie ->
-                movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title })
-            }
+            getRecentlyReleasedMovies.invoke(page = page, limit = pageSize)
+                .map { movie ->
+                    movie.toShowMorePoster(getMovieGenresUseCase(movie.genresID).map { it.title })
+                }
         val recentSeries =
             getRecentlyReleasedSeries(page = page, limit = pageSize).map { series ->
                 series.toShowMorePoster(

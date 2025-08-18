@@ -10,11 +10,11 @@ import com.giraffe.media.match.usecase.GetMatchingMoviesUseCase
 import com.giraffe.media.match.usecase.GetMatchingSeriesUseCase
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class MatchResultViewModel @Inject constructor(
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getSeriesDetailsUseCase: GetSeriesDetailsUseCase,
-    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
@@ -335,7 +335,7 @@ class MatchResultViewModel @Inject constructor(
     ) {
         safeExecute(
             block = {
-                val loggedIn = isLoggedInUseCase()
+                val loggedIn = isLoggedInByAccountUseCase()
                 if (loggedIn) block() else ifNotLoggedIn()
             },
             onError = { _, _ ->
@@ -400,7 +400,7 @@ class MatchResultViewModel @Inject constructor(
 
     private fun checkLoginStatus() {
         safeExecute {
-            val loggedIn = isLoggedInUseCase()
+            val loggedIn = isLoggedInByAccountUseCase()
             updateState { it.copy(isLoggedIn = loggedIn) }
         }
     }

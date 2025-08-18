@@ -12,12 +12,12 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersByMovieIdUseCase
 import com.giraffe.media.movie.entity.Movie
-import com.giraffe.media.movie.usecase.AddMovieRatingUseCase
 import com.giraffe.media.movie.usecase.GetMovieDetailsUseCase
-import com.giraffe.media.movie.usecase.GetMovieReviewsUseCase
-import com.giraffe.media.movie.usecase.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.GetRecommendedMoviesUseCase
-import com.giraffe.media.movie.usecase.GetUserMovieRatingUseCase
+import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.rate.AddMovieRatingUseCase
+import com.giraffe.media.movie.usecase.rate.GetMovieReviewsUseCase
+import com.giraffe.media.movie.usecase.rate.GetUserMovieRatingUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.MovieUi
@@ -26,7 +26,7 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
-import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
@@ -38,7 +38,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val getMediaMembersByMovieId: GetMediaMembersByMovieIdUseCase,
-    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val addRatingUseCase: AddMovieRatingUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
@@ -312,16 +312,28 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private fun loadMovieDetails(movieId: Int) {
-        safeExecute(
-            onSuccess = ::loadMovieDetailsSuccess,
-            onError = ::onError
-        ) {
-            val userRating = getUserRatingUseCase(movieId)
-            val movie = getMovieDetails(movieId)
-            movie.copy(
-                userRating = userRating
-            )
-        }
+        executeIfLoggedIn(
+            block = {
+                safeExecute(
+                    onSuccess = ::loadMovieDetailsSuccess,
+                    onError = ::onError
+                ) {
+                    val userRating = getUserRatingUseCase(movieId)
+                    val movie = getMovieDetails(movieId)
+                    movie.copy(
+                        userRating = userRating
+                    )
+                }
+            },
+            ifNotLoggedIn = {
+                safeExecute(
+                    onSuccess = ::loadMovieDetailsSuccess,
+                ) {
+                    getMovieDetails(movieId)
+                }
+            }
+        )
+
     }
 
     private fun loadMovieDetailsSuccess(movie: Movie) {
@@ -454,7 +466,7 @@ class MovieDetailsViewModel @Inject constructor(
                 }
             },
             onError = ::onError,
-            block = isLoggedInUseCase::invoke
+            block = isLoggedInByAccountUseCase::invoke
         )
     }
 
