@@ -1,7 +1,9 @@
-package com.giraffe.media.series.usecase
+package com.giraffe.media.series.usecase.topRated
 
 import com.giraffe.media.collections.util.createFakeSeries
 import com.giraffe.media.series.repository.SeriesRepository
+import com.giraffe.media.util.limit
+import com.giraffe.media.util.page
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -23,8 +25,6 @@ class GetTopRatedSeriesUseCaseTest {
                 rating = 9.5f
             )
         )
-        val page = 1
-        val limit = 10
 
         coEvery { repository.getTopRated(page = page, limit = limit) } returns expectedSeries
 

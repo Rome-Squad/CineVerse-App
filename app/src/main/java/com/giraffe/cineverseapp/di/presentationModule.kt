@@ -15,7 +15,7 @@ import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByKeywordsIdUseCase
 import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
 import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.media.series.usecase.topRated.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaFactory
 import com.giraffe.presentation.home.screen.categoryMedia.strategy.BasedOnTrueEventsStrategy
 import com.giraffe.presentation.home.screen.categoryMedia.strategy.CinematicMasterpiecesStrategy

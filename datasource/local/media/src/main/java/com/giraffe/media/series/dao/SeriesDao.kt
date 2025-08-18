@@ -74,7 +74,7 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
+    fun getTopRatedSeries(limit: Int): Flow<List<SeriesCacheDto>>
 
     @Query("DELETE FROM $TOP_RATED_SERIES_TABLE")
     suspend fun clearTopRatedSeriesTable()

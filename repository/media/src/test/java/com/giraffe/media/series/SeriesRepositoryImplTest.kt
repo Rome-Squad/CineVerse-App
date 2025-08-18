@@ -77,6 +77,7 @@ class SeriesRepositoryImplTest {
         originCountry = listOf("US"),
         originalLanguage = "en"
     )
+    private val expectedSeriesFlow = flowOf(cachedSeries)
 
     @Before
     fun setup() {
@@ -171,12 +172,11 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getPopularitySeries returns cached if available`() = runTest {
-        val expectedSeries = flowOf(cachedSeries)
-        coEvery { local.getPopularitySeries(10) } returns expectedSeries
+        coEvery { local.getPopularitySeries(10) } returns expectedSeriesFlow
 
         val result = repository.observePopular(10)
 
-        assertThat(result.first().first().name).isEqualTo(expectedSeries.first().first().name)
+        assertThat(result.first().first().name).isEqualTo(expectedSeriesFlow.first().first().name)
         coVerify(exactly = 0) { remote.getPopularitySeries(any()) }
     }
 
@@ -224,23 +224,23 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `getTopRatedSeries returns cached if page is 1 and cache is not empty`() = runTest {
-        coEvery { local.getTopRatedSeries(10) } returns cachedSeries
+        coEvery { local.getTopRatedSeries(10) } returns expectedSeriesFlow
 
         val result = repository.getTopRated(1, 10)
 
-        assertThat(result.first().name).isEqualTo(cachedSeries.first().name)
+        assertThat(result.first().name).isEqualTo(expectedSeriesFlow.first().first().name)
         coVerify(exactly = 0) { remote.getTopRatedSeries(any()) }
     }
 
     @Test
-    fun `getTopRatedSeries fetches from remote if cache is empty`() = runTest {
-        coEvery { local.getTopRatedSeries(10) } returns emptyList()
+    fun `observeTopRated fetches from remote if cache is empty`() = runTest {
+        coEvery { local.getTopRatedSeries(10) } returns emptyFlow()
         coEvery { remote.getTopRatedSeries(1) } returns remoteSeriesDto
 
-        val result = repository.getTopRated(1, 10)
+        val result = repository.observeTopRated(10)
 
         assertThat(result).isEqualTo(remoteSeriesDto.map(SeriesDto::toEntity))
-        coVerify { local.insertTopRatedSeries(any()) }
+        coVerify(exactly = 1) { local.insertTopRatedSeries(any()) }
     }
 
     @Test

@@ -36,7 +36,7 @@ interface SeriesLocalDateSource {
 
     suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>)
 
-    suspend fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
+    fun getTopRatedSeries(limit: Int): Flow<List<SeriesCacheDto>>
 
     suspend fun deleteSeriesFromHistoryById(seriesId: Int)
 

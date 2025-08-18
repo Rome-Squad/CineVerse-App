@@ -37,6 +37,7 @@ class SeriesLocalDataSourceImpTest {
             youtubeVideoId = "youtube"
         )
     )
+    private val expectedSeriesFlow = flowOf(sampleSeries)
     private val sampleGenres = listOf(
         SeriesGenreCacheDto(id = 1, name = "Action", count = 1)
     )
@@ -108,12 +109,11 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getPopularitySeries returns series`() = runTest {
-        val expectedSeries = flowOf(sampleSeries)
-        coEvery { seriesDao.getPopularitySeries(10) } returns expectedSeries
+        coEvery { seriesDao.getPopularitySeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getPopularitySeries(10)
 
-        assertThat(result).isEqualTo(expectedSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test
@@ -129,12 +129,11 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getRecentlyReleasedSeries returns series`() = runTest {
-        val expectedSeries = flowOf(sampleSeries)
-        coEvery { seriesDao.getRecentlyReleasedSeries(10) } returns expectedSeries
+        coEvery { seriesDao.getRecentlyReleasedSeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getRecentlyReleasedSeries(10)
 
-        assertThat(result).isEqualTo(expectedSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test
@@ -149,11 +148,11 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getTopRatedSeries returns series`() = runTest {
-        coEvery { seriesDao.getTopRatedSeries(10) } returns sampleSeries
+        coEvery { seriesDao.getTopRatedSeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getTopRatedSeries(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test

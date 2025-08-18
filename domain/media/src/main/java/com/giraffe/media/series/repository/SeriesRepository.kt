@@ -38,6 +38,8 @@ interface SeriesRepository {
 
     suspend fun getRecentlyReleased(page: Int, limit: Int): List<Series>
 
+    fun observeTopRated(limit: Int): Flow<List<Series>>
+
     suspend fun getTopRated(page: Int, limit: Int): List<Series>
 
     suspend fun getUserRated(accountId: Int): List<Series>

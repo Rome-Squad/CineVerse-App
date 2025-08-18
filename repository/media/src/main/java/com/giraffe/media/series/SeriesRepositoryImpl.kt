@@ -204,21 +204,32 @@ class SeriesRepositoryImpl @Inject constructor(
     // endregion
 
     // region Top Rated
-    override suspend fun getTopRated(page: Int, limit: Int) = safeCall {
-        if (page > 1) {
-            seriesRemote.getTopRatedSeries(page).take(limit)
-                .map(SeriesDto::toEntity)
-        } else {
-            seriesLocal.getTopRatedSeries(limit).map { it.toEntity() }.ifEmpty {
-                seriesRemote.getTopRatedSeries(page).take(limit)
-                    .map(SeriesDto::toEntity)
-                    .also { addTopRated(it) }
-            }
+    override fun observeTopRated(limit: Int): Flow<List<Series>> {
+        return safeFlow {
+            seriesLocal.getTopRatedSeries(limit)
+                .map { it.map(SeriesCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getTopRated(page = 1, limit = limit)
+                            .also { series ->
+                                addTopRated(series)
+                            }
+                    }
+                }
         }
     }
 
-    private suspend fun addTopRated(series: List<Series>) = safeCall {
-        seriesLocal.insertTopRatedSeries(series.map { it.toCacheDto() })
+    override suspend fun getTopRated(page: Int, limit: Int): List<Series> {
+        return safeCall {
+            seriesRemote.getTopRatedSeries(page)
+                .take(limit)
+                .map(SeriesDto::toEntity)
+        }
+    }
+
+    private suspend fun addTopRated(series: List<Series>) {
+        if (series.isEmpty()) return
+        safeCall { seriesLocal.insertTopRatedSeries(series.map(Series::toCacheDto)) }
     }
     // endregion
 

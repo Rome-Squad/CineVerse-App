@@ -68,9 +68,8 @@ class SeriesLocalDataSourceImp @Inject constructor(
         seriesDao.upsertTopRatedSeriesIDs(series.map(SeriesCacheDto::toTopRatedSeriesCacheDto))
     }
 
-    override suspend fun getTopRatedSeries(limit: Int) = safeCall {
-        seriesDao.getTopRatedSeries(limit)
-    }
+    override fun getTopRatedSeries(limit: Int) =
+        safeFlow { seriesDao.getTopRatedSeries(limit) }
 
     override suspend fun deleteSeriesFromHistoryById(seriesId: Int) = safeCall {
         seriesDao.deleteRecentlyViewedSeriesById(seriesId)
