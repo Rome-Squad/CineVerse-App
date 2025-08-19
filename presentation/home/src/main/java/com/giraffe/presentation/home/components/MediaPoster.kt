@@ -66,7 +66,7 @@ fun MediaPoster(
         var numberOfCards = windowWidth / 156.dp.toPx()
         val padding = (numberOfCards - 1) * 32.dp.toPx()
         numberOfCards = (windowWidth - padding) / 156.dp.toPx()
-        val width = windowWidth / numberOfCards
+        val width = windowWidth / numberOfCards.toInt()
         width.toDp().coerceAtLeast(156.dp)
     }
     val transition = updateTransition(isGridSelected)
