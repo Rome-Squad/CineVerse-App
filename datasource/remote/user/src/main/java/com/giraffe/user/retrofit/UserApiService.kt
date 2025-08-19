@@ -10,6 +10,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -27,6 +28,6 @@ interface UserApiService {
     @GET("account")
     suspend fun getUser(@Query("session_id") sessionId: String): Response<UserDto>
 
-    @DELETE("authentication/session")
+    @HTTP(method = "DELETE", path = "authentication/session", hasBody = true)
     suspend fun deleteSession(@Body requestBody: DeleteSessionRequest): Response<Unit>
 }
