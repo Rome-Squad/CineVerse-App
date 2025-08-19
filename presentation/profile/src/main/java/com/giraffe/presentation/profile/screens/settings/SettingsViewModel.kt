@@ -4,6 +4,9 @@ import com.giraffe.media.collections.usecase.ClearCollectionsCacheUseCase
 import com.giraffe.media.movie.usecase.ClearMoviesCacheUseCase
 import com.giraffe.media.movie.usecase.genre.SyncMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.SyncRecentlyViewedMoviesUseCase
+import com.giraffe.media.series.usecase.ClearSeriesCacheUseCase
+import com.giraffe.media.series.usecase.genre.SyncSeriesGenresUseCase
+import com.giraffe.media.series.usecase.recentlyViewed.SyncRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.AppVersionProvider
 import com.giraffe.presentation.profile.utils.Language
@@ -37,8 +40,11 @@ class SettingsViewModel @Inject constructor(
     private val appVersionProvider: AppVersionProvider,
     private val logoutUseCase: LogoutUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
+    private val clearSeriesCacheUseCase: ClearSeriesCacheUseCase,
     private val syncRecentlyViewedMoviesUseCase: SyncRecentlyViewedMoviesUseCase,
+    private val syncRecentlyViewedSeriesUseCase: SyncRecentlyViewedSeriesUseCase,
     private val syncMoviesGenresUseCase: SyncMoviesGenresUseCase,
+    private val syncSeriesGenresUseCase: SyncSeriesGenresUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     private val setContentPreferenceUseCase: SetContentPreferenceUseCase,
     private val clearCollectionsCacheUseCase: ClearCollectionsCacheUseCase
@@ -203,6 +209,10 @@ class SettingsViewModel @Inject constructor(
             clearMoviesCacheUseCase.clearExceptRecentlyViewed()
             syncRecentlyViewedMoviesUseCase.invoke()
             syncMoviesGenresUseCase.invoke()
+
+            clearSeriesCacheUseCase.clearExceptRecentlyViewed()
+            syncRecentlyViewedSeriesUseCase.invoke()
+            syncSeriesGenresUseCase.invoke()
         }
         onDismissSheet()
     }
@@ -222,16 +232,19 @@ class SettingsViewModel @Inject constructor(
             onError = ::onFailure
         ) {
             logoutUseCase()
-            clearCollectionsCacheUseCase()
+
         }
     }
 
     private fun onConfirmLogoutSuccess(): (Unit) -> Unit = {
-        sendEffect(SettingsEffect.NavigateToLogin)
         safeExecute(
             onError = ::onFailure,
-            block = clearMoviesCacheUseCase::clearAll
-        )
+        ) {
+            clearMoviesCacheUseCase.clearAll()
+            clearSeriesCacheUseCase.clearAll()
+            clearCollectionsCacheUseCase()
+        }
+        sendEffect(SettingsEffect.NavigateToLogin)
     }
 
     override fun onGoToWebsiteClick() {

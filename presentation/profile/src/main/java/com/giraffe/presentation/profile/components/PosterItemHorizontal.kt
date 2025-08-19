@@ -161,7 +161,8 @@ private fun Preview() {
                 rating = 7.5f,
                 genres = "Drama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, ThrillerDrama, Action, Crime, Thriller",
                 time = "2h 32m",
-                date = "2008, Jul 18"
+                date = "2008, Jul 18",
+                recentViewedAt = 0L
             ),
             modifier = Modifier
                 .padding(top = 8.dp, start = 8.dp, end = 8.dp)

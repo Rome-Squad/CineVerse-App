@@ -8,14 +8,14 @@ import com.giraffe.media.movie.usecase.matchesYourVibe.GetMatchesYourVibeMoviesU
 import com.giraffe.media.movie.usecase.recentlyReleased.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.movie.usecase.upcoming.GetUpcomingMoviesUseCase
-import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByKeywordsIdUseCase
 import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.matchesYourVibe.GetMatchesYourVibeSeriesUseCase
+import com.giraffe.media.series.usecase.recentlyReleased.GetRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.topRated.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaFactory
 import com.giraffe.presentation.home.screen.categoryMedia.strategy.BasedOnTrueEventsStrategy
 import com.giraffe.presentation.home.screen.categoryMedia.strategy.CinematicMasterpiecesStrategy
@@ -71,13 +71,13 @@ object PresentationModule {
     @Singleton
     fun provideRecentlyViewedStrategy(
         observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
-        getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
+        observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
         getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
         getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
     ): RecentlyViewedStrategy =
         RecentlyViewedStrategy(
             observeRecentlyViewedMoviesUseCase,
-            getRecentlySeriesUseCase,
+            observeRecentlyViewedSeriesUseCase,
             getMovieGenresUseCase,
             getSeriesGenresUseCase
         )

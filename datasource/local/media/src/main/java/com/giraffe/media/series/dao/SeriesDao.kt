@@ -9,6 +9,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCach
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesWithRecentlyViewedAt
 import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
 import com.giraffe.media.utils.DatabaseConstants.MATCHES_YOUR_VIBE_SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.POPULAR_SERIES_TABLE
@@ -22,49 +23,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SeriesDao {
     @Upsert
+    suspend fun upsertSeries(series: SeriesCacheDto)
+
+    @Upsert
     suspend fun upsertSeries(series: List<SeriesCacheDto>)
 
+    // region Popular
     @Upsert
     suspend fun upsertPopularSeriesIDs(seriesIDs: List<PopularSeriesCacheDto>)
-
-    @Upsert
-    suspend fun upsertRecentlyReleasedSeriesIDs(seriesIDs: List<RecentlyReleasedSeriesCacheDto>)
-
-    @Upsert
-    suspend fun upsertTopRatedSeriesIDs(seriesIDs: List<TopRatedSeriesCacheDto>)
-
-    @Upsert
-    suspend fun upsertRecentViewedSeries(series: RecentViewedSeriesCacheDto)
-
-    @Upsert
-    suspend fun upsertMatchesYourVibeSeries(seriesIDs: List<MatchesYourVibeSeriesCacheDto>)
-
-    @Upsert
-    suspend fun upsertGenres(genres: List<SeriesGenreCacheDto>)
-
-    @Query(
-        """
-            UPDATE $SERIES_TABLE
-            SET recentViewedAt = (
-                SELECT r.recentViewedAt 
-                FROM $RECENT_VIEWED_SERIES_TABLE r
-                WHERE r.id = id
-            )
-            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
-        """
-    )
-    suspend fun syncRecentViewedTime()
-
-    @Query(
-        """
-            SELECT * 
-            FROM $SERIES_TABLE
-            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
-            ORDER BY recentViewedAt DESC
-        LIMIT :pageSize OFFSET (:page - 1) * :pageSize
-        """
-    )
-    fun getRecentSeries(page: Int, pageSize: Int): Flow<List<SeriesCacheDto>>
 
     @Query(
         """
@@ -75,7 +41,15 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getPopularitySeries(limit: Int): List<SeriesCacheDto>
+    fun getPopularitySeries(limit: Int): Flow<List<SeriesCacheDto>>
+
+    @Query("DELETE FROM $POPULAR_SERIES_TABLE")
+    suspend fun clearPopularSeriesTable()
+    // endregion
+
+    // region Recently Released
+    @Upsert
+    suspend fun upsertRecentlyReleasedSeriesIDs(seriesIDs: List<RecentlyReleasedSeriesCacheDto>)
 
     @Query(
         """
@@ -85,7 +59,15 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getRecentlyReleasedSeries(limit: Int): List<SeriesCacheDto>
+    fun getRecentlyReleasedSeries(limit: Int): Flow<List<SeriesCacheDto>>
+
+    @Query("DELETE FROM $RECENTLY_RELEASED_SERIES_TABLE")
+    suspend fun clearRecentlyReleasedSeriesTable()
+    // endregion
+
+    // region Top Rated
+    @Upsert
+    suspend fun upsertTopRatedSeriesIDs(seriesIDs: List<TopRatedSeriesCacheDto>)
 
     @Query(
         """
@@ -96,7 +78,15 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getTopRatedSeries(limit: Int): List<SeriesCacheDto>
+    fun getTopRatedSeries(limit: Int): Flow<List<SeriesCacheDto>>
+
+    @Query("DELETE FROM $TOP_RATED_SERIES_TABLE")
+    suspend fun clearTopRatedSeriesTable()
+    // endregion
+
+    // region Matches Your Vibe
+    @Upsert
+    suspend fun upsertMatchesYourVibeSeries(seriesIDs: List<MatchesYourVibeSeriesCacheDto>)
 
     @Query(
         """
@@ -106,24 +96,67 @@ interface SeriesDao {
         LIMIT :limit
         """
     )
-    fun getMatchesYourVibeSeries(limit: Int): List<SeriesCacheDto>
+    fun getMatchesYourVibeSeries(limit: Int): Flow<List<SeriesCacheDto>>
+
+    @Query("DELETE FROM $MATCHES_YOUR_VIBE_SERIES_TABLE")
+    suspend fun clearMatchesYourVibeSeriesTable()
+    // endregion
+
+    // region Recent Viewed
+    @Upsert
+    suspend fun upsertRecentViewedSeries(series: RecentViewedSeriesCacheDto)
+
+    @Query(
+        """
+        SELECT m.*, r.recentViewedAt AS recentViewedAt
+        FROM $SERIES_TABLE AS m
+        INNER JOIN $RECENT_VIEWED_SERIES_TABLE AS r 
+        ON m.id = r.id
+        ORDER BY r.recentViewedAt DESC
+        LIMIT :pageSize OFFSET (:page - 1) * :pageSize
+        """
+    )
+    fun getRecentlyViewedSeries(page: Int, pageSize: Int): Flow<List<SeriesWithRecentlyViewedAt>>
+
+    @Query("SELECT id FROM $RECENT_VIEWED_SERIES_TABLE")
+    suspend fun getRecentlyViewedSeriesIds(): List<Int>
 
 
     @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE WHERE id = :seriesId")
-    suspend fun deleteSeriesFromHistoryById(seriesId: Int)
+    suspend fun deleteRecentlyViewedSeriesById(seriesId: Int)
 
-    @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
-    suspend fun getGenres(): List<SeriesGenreCacheDto>
+    @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE")
+    suspend fun clearRecentlyViewedSeries()
+    // endregion
+
+    // region Genres
+    @Upsert
+    suspend fun upsertGenres(genres: List<SeriesGenreCacheDto>)
+
+    @Query("UPDATE $SERIES_GENRE_TABLE SET name = :name WHERE id = :id")
+    suspend fun updateGenreNameOnly(id: Int, name: String)
+
+    @Query("UPDATE $SERIES_GENRE_TABLE SET count = count + 1 WHERE id IN (:genreIds)")
+    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  WHERE id IN (:genreIds)")
-    suspend fun getGenresByIds(genreIds: List<Int>): List<SeriesGenreCacheDto>
+    fun getGenresByIds(genreIds: List<Int>): Flow<List<SeriesGenreCacheDto>>
 
-    @Query("UPDATE series_genre SET count = count + 1 WHERE id IN (:genreIds)")
-    suspend fun incrementInteractionCountForGenres(genreIds: List<Int>)
+    @Query("SELECT * FROM $SERIES_GENRE_TABLE WHERE id = :id")
+    suspend fun getGenreById(id: Int): SeriesGenreCacheDto?
+
+    @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
+    fun getGenres(): Flow<List<SeriesGenreCacheDto>>
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE WHERE count > 0 ORDER BY count DESC LIMIT 1")
     suspend fun getTopGenreCount(): SeriesGenreCacheDto?
 
+    @Query("DELETE FROM $SERIES_GENRE_TABLE")
+    suspend fun clearGenres()
+    // endregion
+
+    @Query("DELETE FROM $SERIES_TABLE")
+    suspend fun clearSeriesCache()
 
     @Query(
         """
@@ -133,21 +166,4 @@ interface SeriesDao {
     )
     suspend fun clearSeriesExceptRecentViewed()
 
-    @Query("DELETE FROM $SERIES_GENRE_TABLE")
-    suspend fun clearGenres()
-
-    @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE")
-    suspend fun clearRecentSeries()
-
-    @Query("DELETE FROM $POPULAR_SERIES_TABLE")
-    suspend fun clearPopularSeriesTable()
-
-    @Query("DELETE FROM $RECENTLY_RELEASED_SERIES_TABLE")
-    suspend fun clearRecentlyReleasedSeriesTable()
-
-    @Query("DELETE FROM $TOP_RATED_SERIES_TABLE")
-    suspend fun clearTopRatedSeriesTable()
-
-    @Query("DELETE FROM $MATCHES_YOUR_VIBE_SERIES_TABLE")
-    suspend fun clearMatchesYourVibeSeriesTable()
 }

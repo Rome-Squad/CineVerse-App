@@ -1,4 +1,4 @@
-package com.giraffe.media.series.usecase
+package com.giraffe.media.series.usecase.matchesYourVibe
 
 import com.giraffe.media.series.repository.SeriesRepository
 import javax.inject.Inject
@@ -6,6 +6,6 @@ import javax.inject.Inject
 class GetMatchesYourVibeSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
-    suspend operator fun invoke(page: Int = 1, limit: Int = 10) =
+    suspend operator fun invoke(page: Int, limit: Int) =
         seriesRepository.getMatchesYourVibe(page, limit)
 }

@@ -12,14 +12,15 @@ import com.giraffe.media.movie.usecase.recentlyReleased.ObserveRecentlyReleasedM
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.movie.usecase.upcoming.ObserveUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.GetMatchesYourVibeSeriesUseCase
-import com.giraffe.media.series.usecase.GetPopularitySeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyReleasedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetTopRatedSeriesUseCase
+import com.giraffe.media.series.usecase.ObservePopularSeriesUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.matchesYourVibe.ObserveMatchesYourVibeSeriesUseCase
+import com.giraffe.media.series.usecase.recentlyReleased.ObserveRecentlyReleasedSeriesUseCase
+import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.topRated.ObserveTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.Poster
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
@@ -34,19 +35,17 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val observePopularMoviesUseCase: ObservePopularMoviesUseCase,
-    private val getPopularSeriesUseCase: GetPopularitySeriesUseCase,
+    private val observePopularSeriesUseCase: ObservePopularSeriesUseCase,
     private val observeRecentlyReleasedMoviesUseCase: ObserveRecentlyReleasedMoviesUseCase,
-    private val getPopularitySeriesUseCase: GetPopularitySeriesUseCase,
-    private val getRecentlyReleasedSeriesUseCase: GetRecentlyReleasedSeriesUseCase,
-    private val getTopRatedSeriesUseCase: GetTopRatedSeriesUseCase,
+    private val observeRecentlyReleasedSeriesUseCase: ObserveRecentlyReleasedSeriesUseCase,
+    private val observeTopRatedSeriesUseCase: ObserveTopRatedSeriesUseCase,
     private val observeUpcomingMoviesUseCase: ObserveUpcomingMoviesUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
-    private val getRecentlyViewedSeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
     private val observeMatchesYourVibeMoviesUseCase: ObserveMatchesYourVibeMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
-    private val getMatchesYourVibeSeriesUseCase: GetMatchesYourVibeSeriesUseCase,
+    private val observeMatchesYourVibeSeriesUseCase: ObserveMatchesYourVibeSeriesUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase
@@ -128,10 +127,10 @@ class HomeViewModel @Inject constructor(
                 onError = ::onError,
                 block = observePopularMoviesUseCase::invoke
             )
-            safeExecute(
-                onSuccess = ::onGetPopularitySeriesSuccess,
+            safeCollect(
+                onEmitNewValue = ::onGetPopularitySeriesSuccess,
                 onError = ::onError,
-                block = { getPopularSeriesUseCase() }
+                block = observePopularSeriesUseCase::invoke
             )
         }
     }
@@ -159,7 +158,7 @@ class HomeViewModel @Inject constructor(
             }
             updateState { currentState ->
                 currentState.copy(
-                    popularity = currentState.popularity + popularSeriesUi,
+                    popularity = (popularSeriesUi + currentState.popularity).distinctBy { it.id },
                     isLoadingPopularity = false
                 )
             }
@@ -173,10 +172,10 @@ class HomeViewModel @Inject constructor(
                 onError = ::onError,
                 block = observeRecentlyReleasedMoviesUseCase::invoke
             )
-            safeExecute(
-                onSuccess = ::onGetRecentlyReleasedSeriesSuccess,
+            safeCollect(
+                onEmitNewValue = ::onGetRecentlyReleasedSeriesSuccess,
                 onError = ::onError,
-                block = { getRecentlyReleasedSeriesUseCase() }
+                block = observeRecentlyReleasedSeriesUseCase::invoke
             )
         }
     }
@@ -193,24 +192,24 @@ class HomeViewModel @Inject constructor(
     private fun onGetRecentlyReleasedSeriesSuccess(series: List<Series>) {
         updateState { currentState ->
             currentState.copy(
-                recentlyReleased = currentState.recentlyReleased + series.map(Series::toPoster),
+                recentlyReleased = (series.map(Series::toPoster) + currentState.recentlyReleased).distinctBy { it.id },
                 isLoadingRecentlyReleased = false
             )
         }
     }
 
     private fun getTopRatedSeries() {
-        safeExecute(
-            onSuccess = ::onGetTopRatedSeriesSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetTopRatedSeriesSuccess,
             onError = ::onError,
-            block = { getTopRatedSeriesUseCase() }
+            block = observeTopRatedSeriesUseCase::invoke
         )
     }
 
     private fun onGetTopRatedSeriesSuccess(series: List<Series>) {
         updateState { currentState ->
             currentState.copy(
-                topRated = currentState.topRated + series.map(Series::toPoster),
+                topRated = (series.map(Series::toPoster) + currentState.topRated).distinctBy { it.id },
                 isLoadingTopRatedSeries = false
             )
         }
@@ -243,52 +242,55 @@ class HomeViewModel @Inject constructor(
             safeCollect(
                 onEmitNewValue = ::onGetRecentlySeriesSuccess,
                 onError = ::onError,
-                block = getRecentlyViewedSeriesUseCase::invoke
+                block = observeRecentlyViewedSeriesUseCase::invoke
             )
         }
     }
 
     private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
-        updateState {
-            it.copy(recentlyViewed = (movies.map(Movie::toPoster) + it.recentlyViewed).distinctBy { movie -> movie.id })
-        }
+        updateRecentPosters(movies.map(Movie::toPoster))
     }
 
     private fun onGetRecentlySeriesSuccess(series: List<Series>) {
+        updateRecentPosters(series.map(Series::toPoster))
+    }
+
+    private fun updateRecentPosters(posters: List<Poster>) {
         updateState {
             it.copy(
-                recentlyViewed = (it.recentlyViewed + series.map(Series::toPoster)).distinctBy { series -> series.id }
+                recentlyViewed = (posters + it.recentlyViewed)
+                    .distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.recentViewedAt }
+                    .take(20)
             )
         }
     }
 
-
     private fun getMatchesYourVibe() {
-        safeExecute(
-            onSuccess = ::onGetMatchesYourVibeSeriesSuccess,
-            onError = ::onError,
-        ) {
-            getMatchesYourVibeSeriesUseCase()
-        }
         safeCollect(
             onEmitNewValue = ::onGetMatchesYourVibeMoviesSuccess,
             onError = ::onError,
             block = observeMatchesYourVibeMoviesUseCase::invoke
         )
-    }
-
-    private fun onGetMatchesYourVibeSeriesSuccess(matchesYourVibeSeries: List<Series>) {
-        updateState { currentState ->
-            currentState.copy(
-                matchVibes = (currentState.matchVibes + matchesYourVibeSeries.map(Series::toPoster)).distinctBy { series -> series.id }
-            )
-        }
+        safeCollect(
+            onEmitNewValue = ::onGetMatchesYourVibeSeriesSuccess,
+            onError = ::onError,
+            block = observeMatchesYourVibeSeriesUseCase::invoke
+        )
     }
 
     private fun onGetMatchesYourVibeMoviesSuccess(movies: List<Movie>) {
         updateState { currentState ->
             currentState.copy(
-                matchVibes = (currentState.matchVibes + movies.map(Movie::toPoster)).distinctBy { movie -> movie.id }
+                matchVibes = (movies.map(Movie::toPoster) + currentState.matchVibes).distinctBy { it.id }
+            )
+        }
+    }
+
+    private fun onGetMatchesYourVibeSeriesSuccess(series: List<Series>) {
+        updateState { currentState ->
+            currentState.copy(
+                matchVibes = (series.map(Series::toPoster) + currentState.matchVibes).distinctBy { it.id }
             )
         }
     }

@@ -15,7 +15,8 @@ fun Movie.toPoster() = Poster(
     title = name,
     posterUrl = posterUrl.orEmpty(),
     rating = rating,
-    mediaType = MediaType.MOVIE
+    mediaType = MediaType.MOVIE,
+    recentViewedAt = recentViewedAt ?: 0L
 )
 
 
@@ -24,7 +25,8 @@ fun Series.toPoster() = Poster(
     title = name,
     posterUrl = posterUrl,
     rating = rating,
-    mediaType = MediaType.SERIES
+    mediaType = MediaType.SERIES,
+    recentViewedAt = recentViewedAt ?: 0L
 )
 
 
@@ -36,7 +38,7 @@ fun Series.toShowMorePoster(genres: List<String>) = PosterMedia(
     date = releaseYear.formatDate(),
     mediaType = MediaType.SERIES,
     genres = genres,
-    recentViewedAt = recentViewedAt?.toLong()
+    recentViewedAt = recentViewedAt
 )
 
 

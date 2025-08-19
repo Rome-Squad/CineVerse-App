@@ -2,7 +2,7 @@ package com.giraffe.media.movie.usecase.rate
 
 import com.giraffe.media.entity.Review
 import com.giraffe.media.movie.repository.MovieRepository
-import com.giraffe.media.movie.util.page
+import com.giraffe.media.util.page
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify

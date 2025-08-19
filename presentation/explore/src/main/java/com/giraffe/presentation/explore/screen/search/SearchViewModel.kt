@@ -10,8 +10,8 @@ import com.giraffe.media.search.usecase.ClearSearchHistoryUseCase
 import com.giraffe.media.search.usecase.DeleteSearchKeywordUseCase
 import com.giraffe.media.search.usecase.GetSearchKeywordsUseCase
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.ClearRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
+import com.giraffe.media.series.usecase.ClearSeriesCacheUseCase
+import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.screen.search.SearchEffect.NavigateToMovieDetail
@@ -30,10 +30,10 @@ class SearchViewModel @Inject constructor(
     private val insertSearchKeyword: AddSearchKeywordUseCase,
     private val deleteKeywordUseCase: DeleteSearchKeywordUseCase,
     private val clearSearchHistory: ClearSearchHistoryUseCase,
-    private val clearRecentlyViewedSeriesUseCase: ClearRecentlyViewedSeriesUseCase,
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
-    private val getRecentSeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
+    private val clearSeriesCacheUseCase: ClearSeriesCacheUseCase,
     private val clearRecentlyPeopleUseCase: ClearRecentMediaMembersUseCase
 ) : BaseViewModel<SearchScreenState, SearchEffect>(SearchScreenState()),
     SearchInteractionListener {
@@ -54,29 +54,31 @@ class SearchViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetRecentlySeriesSuccess,
             onError = ::onError,
-            block = getRecentSeriesUseCase::invoke
+            block = observeRecentlyViewedSeriesUseCase::invoke
         )
     }
 
     private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
+        updateRecentPosters(movies.map(Movie::toPoster))
+    }
+
+    private fun onGetRecentlySeriesSuccess(series: List<Series>) {
+        updateRecentPosters(series.map(Series::toPoster))
+    }
+
+    private fun updateRecentPosters(posters: List<Poster>) {
         updateState {
             it.copy(
-                recentPosters = (it.recentPosters + movies.map(Movie::toPoster)).distinctBy { poster -> poster.id },
                 isLoading = false,
-                isNoInternet = false
+                isNoInternet = false,
+                recentPosters = (posters + it.recentPosters)
+                    .distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.recentViewedAt }
+                    .take(20)
             )
         }
     }
 
-    private fun onGetRecentlySeriesSuccess(series: List<Series>) {
-        updateState {
-            it.copy(
-                recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id },
-                isLoading = false,
-                isNoInternet = false
-            )
-        }
-    }
 
     private var searchJob: Job? = null
     override fun onQueryChange(query: String) {
@@ -116,7 +118,7 @@ class SearchViewModel @Inject constructor(
 
     override fun clearAllRecentViewedPosters() {
         safeExecute {
-            val job1 = launch { clearRecentlyViewedSeriesUseCase() }
+            val job1 = launch { clearSeriesCacheUseCase.clearRecentlyViewed() }
             val job2 = launch { clearMoviesCacheUseCase.clearRecentlyViewed() }
             val job3 = launch { clearRecentlyPeopleUseCase() }
             joinAll(job1, job2, job3)

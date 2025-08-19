@@ -11,104 +11,129 @@ import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class SeriesLocalDataSourceImp @Inject constructor(
     private val seriesDao: SeriesDao,
 ) : SeriesLocalDateSource {
+    override suspend fun addSeries(series: SeriesCacheDto) =
+        safeCall { seriesDao.upsertSeries(series) }
 
-    override suspend fun getGenres(): List<SeriesGenreCacheDto> = safeCall {
-        seriesDao.getGenres()
+    override fun getGenres() =
+        safeFlow { seriesDao.getGenres() }
+
+    override suspend fun syncGenres(genres: List<SeriesGenreCacheDto>) {
+        safeCall {
+            genres.forEach { genre ->
+                seriesDao.getGenreById(genre.id)?.let {
+                    seriesDao.updateGenreNameOnly(genre.id, genre.name)
+                } ?: seriesDao.upsertGenres(genres)
+            }
+        }
+
     }
 
-    override suspend fun insertGenres(genres: List<SeriesGenreCacheDto>) = safeCall {
-        seriesDao.upsertGenres(genres)
-    }
-
-    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) = safeCall {
-        if (genreIds.isNotEmpty()) {
+    override suspend fun incrementInteractionCountForGenres(genreIds: List<Int>) {
+        if (genreIds.isEmpty()) return
+        safeCall {
             seriesDao.incrementInteractionCountForGenres(genreIds)
         }
     }
 
-    override suspend fun getGenresByIDs(genreIds: List<Int>) = safeCall {
-        seriesDao.getGenresByIds(genreIds)
+    override fun getGenresByIDs(genreIds: List<Int>) =
+        safeFlow { seriesDao.getGenresByIds(genreIds) }
+
+    override suspend fun clearGenres() =
+        safeCall { seriesDao.clearGenres() }
+
+    override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) {
+        safeCall {
+            insertSeries(series)
+            seriesDao.upsertPopularSeriesIDs(series.map(SeriesCacheDto::toPopularSeriesCacheDto))
+        }
     }
 
-    override suspend fun clearGenres() = safeCall {
-        seriesDao.clearGenres()
+    override fun getPopularitySeries(limit: Int) =
+        safeFlow { seriesDao.getPopularitySeries(limit) }
+
+    override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) {
+        safeCall {
+            insertSeries(series)
+            seriesDao.upsertRecentlyReleasedSeriesIDs(series.map(SeriesCacheDto::toRecentlyReleasedSeriesCacheDto))
+        }
     }
 
-    override suspend fun clearSeries() = safeCall {
-        seriesDao.clearSeriesExceptRecentViewed()
-        seriesDao.clearPopularSeriesTable()
-        seriesDao.clearRecentlyReleasedSeriesTable()
-        seriesDao.clearTopRatedSeriesTable()
-        seriesDao.clearMatchesYourVibeSeriesTable()
+    override fun getRecentlyReleasedSeries(limit: Int) =
+        safeFlow { seriesDao.getRecentlyReleasedSeries(limit) }
+
+    override suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>) {
+        safeCall {
+            insertSeries(series)
+            seriesDao.upsertTopRatedSeriesIDs(series.map(SeriesCacheDto::toTopRatedSeriesCacheDto))
+        }
     }
 
-    override suspend fun insertPopularitySeries(series: List<SeriesCacheDto>) = safeCall {
-        insertSeries(series)
-        seriesDao.upsertPopularSeriesIDs(series.map(SeriesCacheDto::toPopularSeriesCacheDto))
+    override fun getTopRatedSeries(limit: Int) =
+        safeFlow { seriesDao.getTopRatedSeries(limit) }
+
+    override suspend fun deleteSeriesFromHistoryById(seriesId: Int) {
+        safeCall {
+            seriesDao.deleteRecentlyViewedSeriesById(seriesId)
+        }
     }
 
-    override suspend fun getPopularitySeries(limit: Int) = safeCall {
-        seriesDao.getPopularitySeries(limit)
+    override suspend fun getTopGenreCount() =
+        safeCall { seriesDao.getTopGenreCount() }
+
+    override suspend fun insertMatchesYourVibe(series: List<SeriesCacheDto>) {
+        safeCall {
+            insertSeries(series)
+            seriesDao.upsertMatchesYourVibeSeries(series.map(SeriesCacheDto::toMatchesYourVibeSeriesCacheDto))
+        }
     }
 
-    override suspend fun insertRecentlyReleasedSeries(series: List<SeriesCacheDto>) = safeCall {
-        insertSeries(series)
-        seriesDao.upsertRecentlyReleasedSeriesIDs(series.map(SeriesCacheDto::toRecentlyReleasedSeriesCacheDto))
+    override fun getMatchesYourVibe(limit: Int) =
+        safeFlow { seriesDao.getMatchesYourVibeSeries(limit) }
+
+    override fun getRecentlyViewedSeries(page: Int, pageSize: Int) =
+        safeFlow { seriesDao.getRecentlyViewedSeries(page, pageSize) }
+
+    override suspend fun getRecentlyViewedSeriesIds() =
+        safeCall { seriesDao.getRecentlyViewedSeriesIds() }
+
+
+    override suspend fun insertRecentViewedSeries(series: SeriesCacheDto) {
+        safeCall {
+            insertSeries(listOf(series))
+            seriesDao.upsertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
+        }
     }
 
-    override suspend fun getRecentlyReleasedSeries(limit: Int) = safeCall {
-        seriesDao.getRecentlyReleasedSeries(limit)
+    override suspend fun clearRecentSeries() =
+        safeCall { seriesDao.clearRecentlyViewedSeries() }
+
+    override suspend fun clearAllSeriesExceptRecentlyViewed() {
+        safeCall {
+            seriesDao.clearSeriesExceptRecentViewed()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+        }
     }
 
-    override suspend fun insertTopRatedSeries(series: List<SeriesCacheDto>) = safeCall {
-        insertSeries(series)
-        seriesDao.upsertTopRatedSeriesIDs(series.map(SeriesCacheDto::toTopRatedSeriesCacheDto))
+    override suspend fun clearAll() {
+        safeCall {
+            clearGenres()
+            seriesDao.clearSeriesCache()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+            clearRecentSeries()
+        }
     }
 
-    override suspend fun getTopRatedSeries(limit: Int) = safeCall {
-        seriesDao.getTopRatedSeries(limit)
-    }
-
-    override suspend fun deleteSeriesFromHistoryById(seriesId: Int) = safeCall {
-        seriesDao.deleteSeriesFromHistoryById(seriesId)
-    }
-
-    override suspend fun getTopGenreCount() = safeCall {
-        seriesDao.getTopGenreCount()
-    }
-
-    override suspend fun insertMatchesYourVibe(series: List<SeriesCacheDto>) = safeCall {
-        insertSeries(series)
-        seriesDao.upsertMatchesYourVibeSeries(series.map(SeriesCacheDto::toMatchesYourVibeSeriesCacheDto))
-    }
-
-    override suspend fun getMatchesYourVibe(limit: Int) = safeCall {
-        seriesDao.getMatchesYourVibeSeries(limit)
-    }
-
-
-    override fun getRecentSeries(page: Int, pageSize: Int) = safeFlow {
-        seriesDao.getRecentSeries(page, pageSize).onStart { seriesDao.syncRecentViewedTime() }
-    }
-
-
-    override suspend fun insertRecentViewedSeries(series: SeriesCacheDto) = safeCall {
-        insertSeries(listOf(series))
-        seriesDao.upsertRecentViewedSeries(series.toRecentViewedSeriesCacheDto())
-    }
-
-
-    override suspend fun clearRecentSeries() = safeCall {
-        seriesDao.clearRecentSeries()
-    }
-
-    private suspend fun insertSeries(series: List<SeriesCacheDto>) = safeCall {
-        seriesDao.upsertSeries(series)
-    }
+    private suspend fun insertSeries(series: List<SeriesCacheDto>) =
+        safeCall { seriesDao.upsertSeries(series) }
 }

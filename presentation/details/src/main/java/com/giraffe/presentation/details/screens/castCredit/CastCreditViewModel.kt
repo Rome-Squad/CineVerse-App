@@ -6,7 +6,7 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
 import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastCreditRoute

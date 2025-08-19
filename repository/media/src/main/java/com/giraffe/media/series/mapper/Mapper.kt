@@ -3,6 +3,7 @@ package com.giraffe.media.series.mapper
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesWithRecentlyViewedAt
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.datasource.remote.dto.SeasonDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
@@ -14,6 +15,22 @@ import com.giraffe.media.utils.orZero
 import kotlinx.datetime.LocalDate
 
 // region series cache
+fun SeriesWithRecentlyViewedAt.toEntity() = Series(
+    id = series.id,
+    name = series.name,
+    overview = series.overview,
+    rating = series.rate,
+    posterUrl = series.posterUrl,
+    backdropUrl = series.backdropUrl,
+    genreIDs = series.genresID,
+    releaseYear = series.releaseYear?.let { LocalDate.parse(it) },
+    popularity = series.popularity.orZero(),
+    youtubeVideoId = series.youtubeVideoId,
+    userRating = series.userRating,
+    recentViewedAt = recentViewedAt,
+    seasons = emptyList()
+)
+
 fun SeriesCacheDto.toEntity() = Series(
     id = id,
     name = name,
@@ -26,7 +43,7 @@ fun SeriesCacheDto.toEntity() = Series(
     popularity = popularity.orZero(),
     youtubeVideoId = youtubeVideoId,
     userRating = userRating,
-    recentViewedAt = recentViewedAt?.toULong(),
+    recentViewedAt = null,
     seasons = emptyList()
 )
 
@@ -88,6 +105,28 @@ fun SeriesDto.toEntity() = Series(
     youtubeVideoId = null,
     recentViewedAt = null,
     seasons = emptyList()
+)
+
+fun SeriesDetailsDto.toCacheDto() = SeriesCacheDto(
+    id = id,
+    name = name.orEmpty(),
+    overview = overview.orEmpty(),
+    rate = voteAverage.orZero(),
+    posterUrl = posterUrl?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    backdropUrl = backdropUrl?.let {
+        if (it.contains(BASE_IMAGE_URL))
+            it
+        else BASE_IMAGE_URL + it
+    }.orEmpty(),
+    genresID = genres.map { it.id },
+    releaseYear = releaseYear,
+    popularity = popularity.orZero(),
+    userRating = userRating,
+    youtubeVideoId = null,
 )
 
 fun SeasonDto.toEntity() = Season(

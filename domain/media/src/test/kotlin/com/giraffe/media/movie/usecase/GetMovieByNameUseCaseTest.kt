@@ -3,9 +3,9 @@ package com.giraffe.media.movie.usecase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.movie.util.fakeMovie
-import com.giraffe.media.movie.util.fakeTopGenre
-import com.giraffe.media.movie.util.genreWithZeroRank
-import com.giraffe.media.movie.util.page
+import com.giraffe.media.util.fakeTopGenre
+import com.giraffe.media.util.genreWithZeroRank
+import com.giraffe.media.util.page
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify

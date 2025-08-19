@@ -3,17 +3,17 @@ package com.giraffe.media.series
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesWithRecentlyViewedAt
 import com.giraffe.media.series.mapper.toMatchesYourVibeSeriesCacheDto
 import com.giraffe.media.series.mapper.toPopularSeriesCacheDto
 import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.google.common.truth.Truth.assertThat
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -36,6 +36,10 @@ class SeriesLocalDataSourceImpTest {
             youtubeVideoId = "youtube"
         )
     )
+    private val expectedSeriesFlow = flowOf(sampleSeries)
+    private val expectedSeriesWithRecentlyViewedAt = flowOf(
+        listOf(SeriesWithRecentlyViewedAt(series = sampleSeries.first(), recentViewedAt = 1234L))
+    )
     private val sampleGenres = listOf(
         SeriesGenreCacheDto(id = 1, name = "Action", count = 1)
     )
@@ -43,18 +47,19 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getGenres returns genres if cache is valid`() = runTest {
-        coEvery { seriesDao.getGenres() } returns sampleGenres
+        val expectedGenres = flowOf(sampleGenres)
+        coEvery { seriesDao.getGenres() } returns expectedGenres
 
         val result = dataSource.getGenres()
 
-        assertThat(result).isEqualTo(sampleGenres)
+        assertThat(result).isEqualTo(expectedGenres)
     }
 
     @Test
     fun `getGenres returns empty if cache expired`() = runTest {
-        coEvery { seriesDao.getGenres() } returns emptyList()
+        coEvery { seriesDao.getGenres() } returns flowOf(emptyList())
 
-        val result = dataSource.getGenres()
+        val result = dataSource.getGenres().first()
 
         assertThat(result).isEmpty()
     }
@@ -62,7 +67,7 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `insertGenres inserts genres`() = runTest {
-        dataSource.insertGenres(sampleGenres)
+        dataSource.syncGenres(sampleGenres)
 
         coVerify { seriesDao.upsertGenres(sampleGenres) }
     }
@@ -79,11 +84,12 @@ class SeriesLocalDataSourceImpTest {
     @Test
     fun `getGenresByIDs returns genres from DAO`() = runTest {
         val genreIds = listOf(1)
-        coEvery { seriesDao.getGenresByIds(genreIds) } returns sampleGenres
+        val expectedGenres = flowOf(sampleGenres)
+        coEvery { seriesDao.getGenresByIds(genreIds) } returns expectedGenres
 
         val result = dataSource.getGenresByIDs(genreIds)
 
-        assertThat(result).isEqualTo(sampleGenres)
+        assertThat(result).isEqualTo(expectedGenres)
     }
 
     @Test
@@ -91,19 +97,6 @@ class SeriesLocalDataSourceImpTest {
         dataSource.clearGenres()
 
         coVerify { seriesDao.clearGenres() }
-    }
-
-    @Test
-    fun `clearSeries clears DAO`() = runTest {
-        dataSource.clearSeries()
-
-        coVerify {
-            seriesDao.clearSeriesExceptRecentViewed()
-            seriesDao.clearPopularSeriesTable()
-            seriesDao.clearRecentlyReleasedSeriesTable()
-            seriesDao.clearTopRatedSeriesTable()
-            seriesDao.clearMatchesYourVibeSeriesTable()
-        }
     }
 
     @Test
@@ -118,11 +111,11 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getPopularitySeries returns series`() = runTest {
-        coEvery { seriesDao.getPopularitySeries(10) } returns sampleSeries
+        coEvery { seriesDao.getPopularitySeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getPopularitySeries(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test
@@ -138,11 +131,11 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getRecentlyReleasedSeries returns series`() = runTest {
-        coEvery { seriesDao.getRecentlyReleasedSeries(10) } returns sampleSeries
+        coEvery { seriesDao.getRecentlyReleasedSeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getRecentlyReleasedSeries(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test
@@ -157,11 +150,11 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getTopRatedSeries returns series`() = runTest {
-        coEvery { seriesDao.getTopRatedSeries(10) } returns sampleSeries
+        coEvery { seriesDao.getTopRatedSeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getTopRatedSeries(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test
@@ -169,7 +162,7 @@ class SeriesLocalDataSourceImpTest {
         val seriesId = 1
         dataSource.deleteSeriesFromHistoryById(seriesId)
 
-        coVerify { seriesDao.deleteSeriesFromHistoryById(seriesId) }
+        coVerify { seriesDao.deleteRecentlyViewedSeriesById(seriesId) }
     }
 
     @Test
@@ -193,31 +186,82 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `getMatchesYourVibe returns series`() = runTest {
-        coEvery { seriesDao.getMatchesYourVibeSeries(10) } returns sampleSeries
+        coEvery { seriesDao.getMatchesYourVibeSeries(10) } returns expectedSeriesFlow
 
         val result = dataSource.getMatchesYourVibe(10)
 
-        assertThat(result).isEqualTo(sampleSeries)
+        assertThat(result).isEqualTo(expectedSeriesFlow)
     }
 
     @Test
     fun `getRecentSeries should sync time before returning recent series`() = runTest {
         val page = 1
         val pageSize = 10
-        every { seriesDao.getRecentSeries(page = page, pageSize = pageSize) } returns flowOf(sampleSeries)
-        coEvery { seriesDao.syncRecentViewedTime() } just Runs
+        every {
+            seriesDao.getRecentlyViewedSeries(
+                page = page,
+                pageSize = pageSize
+            )
+        } returns expectedSeriesWithRecentlyViewedAt
 
         val result = mutableListOf<List<SeriesCacheDto>>()
 
-        dataSource.getRecentSeries(page = page, pageSize = pageSize).collect { result.add(it) }
+        dataSource.getRecentlyViewedSeries(page = page, pageSize = pageSize)
+            .collect { result.add(it.map { series -> series.series }) }
 
-        assertThat(result).containsExactly(sampleSeries)
+        assertThat(result.first()).isEqualTo(sampleSeries.first())
     }
 
     @Test
     fun `clearRecentSeries clears DAO recent table`() = runTest {
         dataSource.clearRecentSeries()
 
-        coVerify { seriesDao.clearRecentSeries() }
+        coVerify { seriesDao.clearRecentlyViewedSeries() }
+    }
+
+    @Test
+    fun `clearExceptRecentlyViewed clears DAO recent table`() = runTest {
+        dataSource.clearAllSeriesExceptRecentlyViewed()
+
+        coVerify(exactly = 1) {
+            seriesDao.clearSeriesExceptRecentViewed()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+        }
+    }
+
+    @Test
+    fun `clearAll clears DAO recent table`() = runTest {
+        dataSource.clearAll()
+
+        coVerify(exactly = 1) {
+            seriesDao.clearGenres()
+            seriesDao.clearSeriesCache()
+            seriesDao.clearPopularSeriesTable()
+            seriesDao.clearRecentlyReleasedSeriesTable()
+            seriesDao.clearTopRatedSeriesTable()
+            seriesDao.clearMatchesYourVibeSeriesTable()
+            seriesDao.clearRecentlyViewedSeries()
+        }
+    }
+
+    @Test
+    fun `clearAll clears all DAO tables and verifies no data remains`() = runTest {
+        dataSource.clearAll()
+        val genres = dataSource.getGenres()
+        val popular = dataSource.getPopularitySeries(limit = 1)
+        val recentlyReleased = dataSource.getRecentlyReleasedSeries(limit = 1)
+        val topRated = dataSource.getTopRatedSeries(limit = 1)
+        val matchesYourVibe = dataSource.getMatchesYourVibe(limit = 1)
+        val recentlyViewed = dataSource.getRecentlyViewedSeries(page = 1, pageSize = 1)
+
+        assertThat(genres.first()).isEmpty()
+        assertThat(popular.first()).isEmpty()
+        assertThat(recentlyReleased.first()).isEmpty()
+        assertThat(topRated.first()).isEmpty()
+        assertThat(matchesYourVibe.first()).isEmpty()
+        assertThat(recentlyViewed.first()).isEmpty()
     }
 }

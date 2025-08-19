@@ -4,7 +4,6 @@ import com.giraffe.media.movie.dao.MovieDao
 import com.giraffe.media.movie.datasource.local.MoviesLocalDataSource
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieCacheDto
 import com.giraffe.media.movie.datasource.local.cacheDto.MovieGenreCacheDto
-import com.giraffe.media.movie.datasource.local.cacheDto.MovieWithRecentlyViewedAt
 import com.giraffe.media.movie.mapper.toMatchesYourVibeMovieCacheDto
 import com.giraffe.media.movie.mapper.toPopularMovieCacheDto
 import com.giraffe.media.movie.mapper.toRecentReleasedMovieCacheDto
@@ -18,9 +17,8 @@ import javax.inject.Inject
 class MovieLocalDataSourceImpl @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
-    override suspend fun addMovie(movie: MovieCacheDto) {
-        movieDao.insertMovie(movie)
-    }
+    override suspend fun addMovie(movie: MovieCacheDto) =
+        safeCall { movieDao.insertMovie(movie) }
 
     // region Movie Genres
     override suspend fun syncMovieGenres(movieGenres: List<MovieGenreCacheDto>) {
@@ -112,16 +110,14 @@ class MovieLocalDataSourceImpl @Inject constructor(
     override fun getRecentlyViewedMovies(page: Int, pageSize: Int) =
         safeFlow { movieDao.getRecentlyViewedMovies(page, pageSize) }
 
-    override suspend fun getAllRecentlyViewedMovies(): List<MovieWithRecentlyViewedAt> =
-        safeCall { movieDao.getAllRecentlyViewedMovies() }
-
+    override suspend fun getRecentlyViewedMovieIds() =
+        safeCall { movieDao.getRecentlyViewedMovieIds() }
 
     override suspend fun deleteRecentlyViewedMovieById(movieId: Int) =
         safeCall { movieDao.deleteRecentlyViewedMovieById(movieId) }
 
     override suspend fun clearRecentlyViewedMovies() =
         safeCall { movieDao.clearRecentlyViewedMovies() }
-
     // endregion Popularity, Recently Released, Upcoming, Match, Recently Viewed
 
     override suspend fun clearMovieCache() =

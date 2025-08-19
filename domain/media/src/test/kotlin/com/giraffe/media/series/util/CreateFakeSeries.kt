@@ -14,7 +14,7 @@ fun createFakeSeries(
     youtubeVideoId: String = "",
     popularity: Float = 0f,
     userRating: Float = 0f,
-    recentViewedAt: ULong = 0u,
+    recentViewedAt: Long = 0L,
     releaseYear: LocalDate? = null,
     seasons: List<Season> = emptyList(),
     genreIDs: List<Int> = listOf(),

@@ -29,7 +29,8 @@ fun Series.toPoster(genres: List<Genre> = emptyList()) = Poster(
     imageUrl = posterUrl,
     rating = rating,
     date = releaseYear.toFormattedDate(),
-    mediaTypeOfPoster = "series"
+    mediaTypeOfPoster = "series",
+    recentViewedAt = recentViewedAt ?: 0L
 )
 
 fun Movie.toRatedPoster(genres: List<Genre>) = RatedPoster(
@@ -44,7 +45,8 @@ fun Movie.toPoster(genres: List<Genre> = emptyList()) = Poster(
     imageUrl = posterUrl,
     rating = rating,
     date = releaseYear.toFormattedDate(),
-    mediaTypeOfPoster = "movie"
+    mediaTypeOfPoster = "movie",
+    recentViewedAt = recentViewedAt ?: 0L
 )
 
 fun Collection.toUi() = CollectionUi(

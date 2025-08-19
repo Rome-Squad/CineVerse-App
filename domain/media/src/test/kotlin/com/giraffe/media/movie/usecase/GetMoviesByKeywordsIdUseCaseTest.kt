@@ -2,13 +2,13 @@ package com.giraffe.media.movie.usecase
 
 import com.giraffe.media.movie.repository.MovieRepository
 import com.giraffe.media.movie.util.fakeMovies
-import com.giraffe.media.movie.util.limit
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import com.giraffe.media.util.limit
 
 class GetMoviesByKeywordsIdUseCaseTest {
     private var repository: MovieRepository = mockk()

@@ -11,10 +11,9 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
-import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedSeriesRoute
@@ -26,11 +25,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
+import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class RecommendedSeriesViewModel @Inject constructor(
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
-    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<RecommendedSeriesScreenState, RecommendedSeriesEffect>(
     RecommendedSeriesScreenState(
@@ -45,10 +45,10 @@ class RecommendedSeriesViewModel @Inject constructor(
     }
 
     private fun getSeriesGenres() {
-        safeExecute(
-            onSuccess = ::onGetSeriesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetSeriesGenresSuccess,
             onError = ::onError,
-            block = getSeriesGenresUseCase::invoke
+            block = observeSeriesGenresUseCase::invoke
         )
     }
 

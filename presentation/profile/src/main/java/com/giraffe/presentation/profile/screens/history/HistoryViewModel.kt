@@ -7,8 +7,8 @@ import com.giraffe.media.movie.usecase.recentlyViewed.DeleteRecentlyViewedMovieB
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesUseCase
-import com.giraffe.media.series.usecase.GetRecentlyViewedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
+import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.presentation.profile.utils.toPoster
@@ -18,9 +18,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
-    private val getRecentlySeriesUseCase: GetRecentlyViewedSeriesUseCase,
+    private val observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
-    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val deleteRecentlyViewedMovieByIdUseCase: DeleteRecentlyViewedMovieByIdUseCase,
     private val deleteSeriesUseCase: DeleteSeriesUseCase
 ) :
@@ -37,10 +37,10 @@ class HistoryViewModel @Inject constructor(
             onError = ::onFailure.also { onGetMoviesGenresFailure() },
             block = observeMoviesGenresUseCase::invoke
         )
-        safeExecute(
-            onSuccess = ::onGetSeriesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetSeriesGenresSuccess,
             onError = ::onFailure.also { onGetSeriesGenresFailure() },
-            block = getSeriesGenresUseCase::invoke
+            block = observeSeriesGenresUseCase::invoke
         )
     }
 
@@ -74,7 +74,7 @@ class HistoryViewModel @Inject constructor(
         safeCollect(
             onEmitNewValue = ::onGetRecentSeriesSuccess,
             onError = ::onFailure,
-            block = getRecentlySeriesUseCase::invoke
+            block = observeRecentlyViewedSeriesUseCase::invoke
         )
     }
 
@@ -91,7 +91,9 @@ class HistoryViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 isNoInternet = false,
-                mediaList = (it.mediaList + newMediaList).distinctBy { poster -> poster.id }
+                mediaList = (it.mediaList + newMediaList)
+                    .distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.recentViewedAt }
             )
         }
     }

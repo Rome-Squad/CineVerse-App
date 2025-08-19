@@ -9,14 +9,13 @@ import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetMediaMembersBySeriesIdUseCase
 import com.giraffe.media.series.entity.Season
 import com.giraffe.media.series.entity.Series
-import com.giraffe.media.series.usecase.AddRecentSeriesUseCase
 import com.giraffe.media.series.usecase.AddSeriesRatingUseCase
 import com.giraffe.media.series.usecase.GetRecommendedSeriesUseCase
 import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesReviewsUseCase
 import com.giraffe.media.series.usecase.GetUserSeriesRatingUseCase
+import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.SeriesUi
@@ -38,7 +37,6 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getCastAndCrewOfSeries: GetMediaMembersBySeriesIdUseCase,
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val getSeriesReviews: GetSeriesReviewsUseCase,
-    private val storeRecentSeriesUseCase: AddRecentSeriesUseCase,
     private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val addRatingUseCase: AddSeriesRatingUseCase,
     private val getUserRatingUseCase: GetUserSeriesRatingUseCase,
@@ -229,16 +227,7 @@ class SeriesDetailsViewModel @Inject constructor(
             )
         }
         loadSeriesGenres(series.genreIDs)
-        saveSeriesToRecent(series)
     }
-
-
-    private fun saveSeriesToRecent(series: Series) {
-        safeExecute {
-            storeRecentSeriesUseCase(series)
-        }
-    }
-
 
     private fun loadSeriesGenres(genreIDs: List<Int>) {
         safeExecute(

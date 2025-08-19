@@ -8,10 +8,9 @@ class GetSeriesByNameUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
     suspend operator fun invoke(seriesName: String, page: Int): List<Series> {
-        val results = seriesRepository.getByName(seriesName, page)
-        val topGenre = seriesRepository.getGenres().firstOrNull { it.rank != 0 }
-        return topGenre?.let { genre ->
-            results.sortedByDescending { it.genreIDs.contains(genre.id) }
+        val results = seriesRepository.getByName(name = seriesName, page = page)
+        return seriesRepository.getTopGenreCount()?.let { genre ->
+            results.sortedByDescending { genre.id in it.genreIDs }
         } ?: results
     }
 }

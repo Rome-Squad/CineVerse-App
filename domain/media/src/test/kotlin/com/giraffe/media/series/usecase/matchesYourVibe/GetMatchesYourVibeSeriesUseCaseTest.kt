@@ -1,7 +1,9 @@
-package com.giraffe.media.series.usecase
+package com.giraffe.media.series.usecase.matchesYourVibe
 
 import com.giraffe.media.collections.util.createFakeSeries
 import com.giraffe.media.series.repository.SeriesRepository
+import com.giraffe.media.util.limit
+import com.giraffe.media.util.page
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -9,7 +11,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 class GetMatchesYourVibeSeriesUseCaseTest {
-    private val repository: SeriesRepository = mockk(relaxed = true)
+    private val repository: SeriesRepository = mockk()
     private val useCase: GetMatchesYourVibeSeriesUseCase =
         GetMatchesYourVibeSeriesUseCase(repository)
 
@@ -17,15 +19,7 @@ class GetMatchesYourVibeSeriesUseCaseTest {
     @Test
     fun `given matches your vibe series, when invoke is called, then return series list`() =
         runTest {
-            val expectedSeries = listOf(
-                createFakeSeries(
-                    id = 1,
-                    name = "The Last of Us",
-                )
-            )
-            val page = 1
-            val limit = 10
-
+            val expectedSeries = listOf(createFakeSeries(id = 1, name = "The Last of Us"))
             coEvery {
                 repository.getMatchesYourVibe(
                     page = page,

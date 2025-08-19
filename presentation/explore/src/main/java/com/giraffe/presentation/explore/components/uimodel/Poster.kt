@@ -8,7 +8,8 @@ data class Poster(
     val genres: String? = null,
     val time: String? = null,
     val date: String? = null,
-    val mediaTypeOfPoster: String? = null
+    val mediaTypeOfPoster: String? = null,
+    val recentViewedAt: Long? = null,
 ) {
     enum class Type(val value: String) {
         MOVIE("movie"),

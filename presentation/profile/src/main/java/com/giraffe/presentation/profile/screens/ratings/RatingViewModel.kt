@@ -2,13 +2,13 @@ package com.giraffe.presentation.profile.screens.ratings
 
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.rate.DeleteMovieRatingUseCase
 import com.giraffe.media.movie.usecase.rate.GetRatedMoviesUseCase
-import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.DeleteSeriesRatingUseCase
 import com.giraffe.media.series.usecase.GetRatedSeriesUseCase
-import com.giraffe.media.series.usecase.GetSeriesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.uimodel.Poster
@@ -22,7 +22,7 @@ class RatingViewModel @Inject constructor(
     private val getRatedMoviesUseCase: GetRatedMoviesUseCase,
     private val getRatedSeriesUseCase: GetRatedSeriesUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
-    private val getSeriesGenresUseCase: GetSeriesGenresUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val deleteMovieRatingUseCase: DeleteMovieRatingUseCase,
     private val deleteSeriesRatingUseCase: DeleteSeriesRatingUseCase,
     private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase
@@ -57,10 +57,10 @@ class RatingViewModel @Inject constructor(
             onError = ::onFailure,
             block = observeMoviesGenresUseCase::invoke
         )
-        safeExecute(
-            onSuccess = ::onGetSeriesGenresSuccess,
+        safeCollect(
+            onEmitNewValue = ::onGetSeriesGenresSuccess,
             onError = ::onFailure,
-            block = getSeriesGenresUseCase::invoke
+            block = observeSeriesGenresUseCase::invoke
         )
     }
 
