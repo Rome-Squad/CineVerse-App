@@ -65,4 +65,8 @@ class GalleryViewModel @Inject constructor(
     override fun onBackClick() {
         sendEffect(GalleryEffect.NavigateBack)
     }
+
+    override fun onRetryClick() {
+        getPersonImages()
+    }
 }
