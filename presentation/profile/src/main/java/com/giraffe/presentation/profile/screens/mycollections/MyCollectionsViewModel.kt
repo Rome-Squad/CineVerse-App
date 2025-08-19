@@ -65,7 +65,6 @@ class MyCollectionsViewModel @Inject constructor(
             addCollectionUseCase(
                 CollectionUi(name = state.value.newCollectionName).toEntity()
             )
-            Log.d("TAG", "onConfirmCreateNewCollectionClick: after")
         }
     }
 
