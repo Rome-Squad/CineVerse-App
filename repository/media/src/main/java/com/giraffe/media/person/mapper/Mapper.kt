@@ -199,7 +199,9 @@ fun PersonCreditDto.toMovieEntity() = Movie(
             BASE_IMAGE_URL + it
     }.orEmpty(),
     genresID = genreIds ?: emptyList(),
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    releaseYear = if (firstCreditAirDate.isNullOrEmpty()) null else LocalDate.parse(
+        firstCreditAirDate
+    ),
     popularity = popularity.orZero(),
     youtubeVideoId = "",
     recentViewedAt = null,
@@ -218,7 +220,9 @@ fun PersonCreditDto.toSeriesEntity() = Series(
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     }.orEmpty(),
     genreIDs = genreIds ?: emptyList(),
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    releaseYear = if (firstCreditAirDate.isNullOrEmpty()) null else LocalDate.parse(
+        firstCreditAirDate
+    ),
     seasons = emptyList(),
     youtubeVideoId = null,
     popularity = popularity.orZero(),
