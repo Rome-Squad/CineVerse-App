@@ -16,7 +16,7 @@ class ObserveTopRatedSeriesUseCaseTest {
 
 
     @Test
-    fun `given top rated series, when invoke is called, then return series list`() = runTest {
+    fun `should return list of top rated series when observeTopRated function in repository called'
         val expectedSeries = flowOf(
             listOf(
                 createFakeSeries(id = 101, name = "Breaking Bad", rating = 9.5f)
