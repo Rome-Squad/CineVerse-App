@@ -232,19 +232,18 @@ class SettingsViewModel @Inject constructor(
             onError = ::onFailure
         ) {
             logoutUseCase()
-            clearCollectionsCacheUseCase()
+
         }
     }
 
     private fun onConfirmLogoutSuccess(): (Unit) -> Unit = {
         safeExecute(
             onError = ::onFailure,
-            block = clearMoviesCacheUseCase::clearAll
-        )
-        safeExecute(
-            onError = ::onFailure,
-            block = clearSeriesCacheUseCase::clearAll
-        )
+        ) {
+            clearMoviesCacheUseCase.clearAll()
+            clearSeriesCacheUseCase.clearAll()
+            clearCollectionsCacheUseCase()
+        }
         sendEffect(SettingsEffect.NavigateToLogin)
     }
 
