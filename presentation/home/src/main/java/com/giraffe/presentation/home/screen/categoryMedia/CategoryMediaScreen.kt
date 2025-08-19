@@ -87,7 +87,11 @@ fun CategoryMediaContent(
                     onBackButtonClick = interactionListener::onBackClick
                 )
                 HorizontalDivider()
-                Box(Modifier.fillMaxWidth()) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 40.dp)
+                ) {
                     TransitionLazyColumnToGrid(
                         posters = lazyMediaPosters,
                         isListSelected = state.isListSelected,
