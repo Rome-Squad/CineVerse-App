@@ -54,7 +54,7 @@ private fun SeasonsContent(
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
         onBackClick = interaction::onBackClick,
-        onRetryClick = interaction::retry
+        onRetryClick = interaction::onRetryClick
     ) {
         LazyColumn(
             modifier = modifier,
