@@ -62,7 +62,6 @@ class MyCollectionsViewModel @Inject constructor(
             onSuccess = { onCreateCollectionSuccess() },
             onError = ::onFailure
         ) {
-            Log.d("TAG", "onConfirmCreateNewCollectionClick: before")
             addCollectionUseCase(
                 CollectionUi(name = state.value.newCollectionName).toEntity()
             )
