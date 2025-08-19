@@ -1,6 +1,7 @@
 package com.giraffe.match.screen.match_pager
 
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -43,6 +45,7 @@ import com.giraffe.match.composable.getTimeOptions
 import com.giraffe.match.utils.showToast
 import com.giraffe.match.utils.toStringResource
 import com.giraffe.presentation.match.R
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 data class SelectionOption(
@@ -80,6 +83,7 @@ fun MatchPagerScreen(
                         releasePeriodLabel
                     )
                 }
+
                 is MatchScreenEffect.ShowError -> context.showToast(effect.error.toStringResource())
             }
         }
@@ -89,7 +93,18 @@ fun MatchPagerScreen(
         if (pagerState.currentPage != state.currentPage) {
             pagerState.scrollToPage(state.currentPage)
         }
-
+        snapshotFlow { scrollState.maxValue }
+            .collectLatest { max ->
+                if (max > 0) {
+                    scrollState.animateScrollTo(
+                        value = max,
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessLow,
+                            dampingRatio = Spring.DampingRatioNoBouncy
+                        )
+                    )
+                }
+            }
         if (
             state.currentPage == pagerState.pageCount - 1 && !state.isLoading
         ) {
@@ -136,7 +151,6 @@ fun MatchPagerScreen(
                     userScrollEnabled = false,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .animateContentSize()
                         .padding(bottom = 24.dp),
                     verticalAlignment = Alignment.Top
                 ) { page ->
