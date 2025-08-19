@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.components.collectionBottomSheet
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -64,12 +63,13 @@ fun AddToCollectionItem(
             )
         }
 
-        if( isLoading ) {
+        if (isLoading)
             Progress(
                 modifier = Modifier
+                    .size(24.dp)
                     .align(Alignment.CenterEnd)
             )
-        }
+
 
     }
 }
