@@ -36,6 +36,6 @@ class ClearSeriesCacheUseCaseTest {
             useCase.clearExceptRecentlyViewed()
 
             // Then
-            coVerify(exactly = 1) { repository.clearExceptRecentlyViewed() }
+            coVerify(exactly = 1) { repository.clearAllSeriesExceptRecentlyViewed() }
         }
 }

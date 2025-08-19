@@ -163,8 +163,8 @@ class SeriesRepositoryImplTest {
 
     @Test
     fun `clearExceptRecentlyViewed should call local clear`() = runTest {
-        repository.clearExceptRecentlyViewed()
-        coVerify(exactly = 1) { local.clearExceptRecentlyViewed() }
+        repository.clearAllSeriesExceptRecentlyViewed()
+        coVerify(exactly = 1) { local.clearAllSeriesExceptRecentlyViewed() }
     }
 
     @Test

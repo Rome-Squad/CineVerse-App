@@ -26,7 +26,7 @@ interface SeriesLocalDateSource {
 
     suspend fun clearRecentSeries()
 
-    suspend fun clearExceptRecentlyViewed()
+    suspend fun clearAllSeriesExceptRecentlyViewed()
 
     suspend fun clearAll()
 

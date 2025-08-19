@@ -107,7 +107,7 @@ class SeriesLocalDataSourceImp @Inject constructor(
     }
 
 
-    override suspend fun clearExceptRecentlyViewed() {
+    override suspend fun clearAllSeriesExceptRecentlyViewed() {
         safeCall {
             seriesDao.clearSeriesExceptRecentViewed()
             seriesDao.clearPopularSeriesTable()

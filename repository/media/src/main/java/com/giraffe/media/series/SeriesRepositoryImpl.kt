@@ -297,8 +297,8 @@ class SeriesRepositoryImpl @Inject constructor(
         safeCall { seriesLocal.clearRecentSeries() }
     // endregion
 
-    override suspend fun clearExceptRecentlyViewed() =
-        safeCall { seriesLocal.clearExceptRecentlyViewed() }
+    override suspend fun clearAllSeriesExceptRecentlyViewed() =
+        safeCall { seriesLocal.clearAllSeriesExceptRecentlyViewed() }
 
     override suspend fun clearAll() =
         safeCall { seriesLocal.clearAll() }

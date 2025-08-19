@@ -11,7 +11,7 @@ class ClearSeriesCacheUseCase @Inject constructor(
         seriesRepository.clearAll()
 
     suspend fun clearExceptRecentlyViewed() =
-        seriesRepository.clearExceptRecentlyViewed()
+        seriesRepository.clearAllSeriesExceptRecentlyViewed()
 
     suspend fun clearRecentlyViewed() =
         seriesRepository.clearRecentlyViewed()

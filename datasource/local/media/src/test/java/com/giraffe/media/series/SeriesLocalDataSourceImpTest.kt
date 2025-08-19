@@ -221,7 +221,7 @@ class SeriesLocalDataSourceImpTest {
 
     @Test
     fun `clearExceptRecentlyViewed clears DAO recent table`() = runTest {
-        dataSource.clearExceptRecentlyViewed()
+        dataSource.clearAllSeriesExceptRecentlyViewed()
 
         coVerify(exactly = 1) {
             seriesDao.clearSeriesExceptRecentViewed()
@@ -245,5 +245,23 @@ class SeriesLocalDataSourceImpTest {
             seriesDao.clearMatchesYourVibeSeriesTable()
             seriesDao.clearRecentlyViewedSeries()
         }
+    }
+
+    @Test
+    fun `clearAll clears all DAO tables and verifies no data remains`() = runTest {
+        dataSource.clearAll()
+        val genres = dataSource.getGenres()
+        val popular = dataSource.getPopularitySeries(limit = 1)
+        val recentlyReleased = dataSource.getRecentlyReleasedSeries(limit = 1)
+        val topRated = dataSource.getTopRatedSeries(limit = 1)
+        val matchesYourVibe = dataSource.getMatchesYourVibe(limit = 1)
+        val recentlyViewed = dataSource.getRecentlyViewedSeries(page = 1, pageSize = 1)
+
+        assertThat(genres.first()).isEmpty()
+        assertThat(popular.first()).isEmpty()
+        assertThat(recentlyReleased.first()).isEmpty()
+        assertThat(topRated.first()).isEmpty()
+        assertThat(matchesYourVibe.first()).isEmpty()
+        assertThat(recentlyViewed.first()).isEmpty()
     }
 }

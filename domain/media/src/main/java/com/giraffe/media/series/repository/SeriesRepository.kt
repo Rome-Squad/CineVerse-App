@@ -48,7 +48,7 @@ interface SeriesRepository {
 
     suspend fun deleteRating(seriesId: Int)
 
-    suspend fun clearExceptRecentlyViewed()
+    suspend fun clearAllSeriesExceptRecentlyViewed()
 
     suspend fun clearAll()
 
