@@ -20,7 +20,6 @@ fun MovieCollectionsBottomSheet(
     onDismiss: () -> Unit,
     targetState: MatchResultScreenState.CollectionBottomSheet?,
     collections: List<CollectionUi>,
-    onNewCollectionClick: () -> Unit,
     onCollectionClick: (Int) -> Unit,
     onCreateCollectionButtonClick: () -> Unit,
     newCollectionName: String,
@@ -45,7 +44,6 @@ fun MovieCollectionsBottomSheet(
                     is MatchResultScreenState.CollectionBottomSheet.AddToCollection -> {
                         AddToCollectionBottomSheetContent(
                             collectionsList = collections,
-                            onNewCollectionClick = onNewCollectionClick,
                             onCollectionClick = onCollectionClick
                         )
                     }

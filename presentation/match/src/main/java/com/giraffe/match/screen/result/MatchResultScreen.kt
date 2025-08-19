@@ -92,7 +92,6 @@ fun MatchResultScreen(
                     onDismiss = viewModel::onCollectionBottomSheetDismiss,
                     targetState = state.collectionBottomSheet,
                     collections = state.collections,
-                    onNewCollectionClick = viewModel::onCreateCollectionButtonClick,
                     onCollectionClick = viewModel::onCollectionClick,
                     onCreateCollectionButtonClick = viewModel::onCreateCollectionButtonClick,
                     newCollectionName = state.newCollectionName,
