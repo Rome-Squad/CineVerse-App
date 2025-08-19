@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,16 +20,8 @@ import com.giraffe.presentation.profile.navigation.routes.editProfileWebViewRout
 import com.giraffe.presentation.profile.navigation.routes.historyRoute
 import com.giraffe.presentation.profile.navigation.routes.loginRoute
 import com.giraffe.presentation.profile.navigation.routes.myCollectionsRoute
-import com.giraffe.presentation.profile.navigation.routes.navigateLoginScreen
-import com.giraffe.presentation.profile.navigation.routes.navigateToCollection
-import com.giraffe.presentation.profile.navigation.routes.navigateToHistory
-import com.giraffe.presentation.profile.navigation.routes.navigateToMovieDetails
-import com.giraffe.presentation.profile.navigation.routes.navigateToMyCollections
-import com.giraffe.presentation.profile.navigation.routes.navigateToRatings
-import com.giraffe.presentation.profile.navigation.routes.navigateToSeriesDetails
 import com.giraffe.presentation.profile.navigation.routes.ratingsRoute
 import com.giraffe.presentation.profile.navigation.routes.settingsScreenRoute
-import com.giraffe.presentation.profile.screens.settings.SettingsViewModel
 
 @Composable
 internal fun ProfileNavGraph(
@@ -54,67 +45,47 @@ internal fun ProfileNavGraph(
         onShowBottomBarChange(isBottomBarVisible)
     }
 
-    val settingsViewModel: SettingsViewModel = hiltViewModel()
 
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestinationRoute,
     ) {
-        settingsScreenRoute(
-            settingsViewModel = settingsViewModel,
-            navController = navController,
-            onNavigateToLogin = navController::navigateLoginScreen,
-            onNavigateToMyCollections = navController::navigateToMyCollections,
-            onNavigateToHistory = navController::navigateToHistory,
-            onNavigateToRatings = navController::navigateToRatings,
-        )
+        settingsScreenRoute(navController = navController)
 
-        editProfileWebViewRoute(
-            settingsViewModel = settingsViewModel,
-            navController = navController,
-        )
+        editProfileWebViewRoute(navController = navController)
 
         historyRoute(
-            onBackClicked = navController::navigateUp,
-            navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
-            navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails,
-            navigateToExploreScreen = homeApi::navigateToExploreScreen
+            navController = navController,
+            homeApi = homeApi
         )
 
         ratingsRoute(
-            navigateBack = navController::navigateUp,
-            navigateToMovieDetails = navController::navigateToMovieDetails,
-            navigateToSeriesDetails = navController::navigateToSeriesDetails,
-            navigateToExploreScreen = homeApi::navigateToExploreScreen
+            navController = navController,
+            homeApi = homeApi
         )
 
         myCollectionsRoute(
+            navController = navController,
+            homeApi = homeApi,
             navigateBack = {
                 if (navigateBack != null) {
                     navigateBack()
                 } else {
                     navController.navigateUp()
                 }
-            },
-            navigateToCollection = {
-                navController.navigateToCollection(
-                    collectionId = it.id,
-                    collectionName = it.name
-                )
-            },
-            navigateToExploreScreen = homeApi::navigateToExploreScreen
+            }
         )
 
         collectionRoute(
+            navController = navController,
             navigateBack = {
                 if (navigateBack != null) {
                     navigateBack()
                 } else {
                     navController.navigateUp()
                 }
-            },
-            navigateToMovieDetails = navController::navigateToMovieDetails
+            }
         )
 
         composable<SeriesDetailsRoute> { backStackEntry ->

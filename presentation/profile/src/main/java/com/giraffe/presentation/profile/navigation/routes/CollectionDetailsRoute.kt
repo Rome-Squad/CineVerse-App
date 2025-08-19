@@ -25,13 +25,13 @@ fun NavController.navigateToCollection(
 }
 
 fun NavGraphBuilder.collectionRoute(
+    navController: NavController,
     navigateBack: () -> Unit,
-    navigateToMovieDetails: (Int) -> Unit
 ) {
     composable<CollectionRoute> {
         CollectionDetailsScreen(
             navigateBack = navigateBack,
-            navigateToMovieDetails = navigateToMovieDetails
+            navigateToMovieDetails = navController::navigateToMovieDetails
         )
     }
 }

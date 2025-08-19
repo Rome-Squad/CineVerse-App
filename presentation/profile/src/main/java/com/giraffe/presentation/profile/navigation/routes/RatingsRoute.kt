@@ -3,6 +3,7 @@ package com.giraffe.presentation.profile.navigation.routes
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.api.home.HomeApi
 import com.giraffe.presentation.profile.screens.ratings.RatingScreen
 import kotlinx.serialization.Serializable
 
@@ -14,17 +15,15 @@ internal fun NavController.navigateToRatings() {
 }
 
 fun NavGraphBuilder.ratingsRoute(
-    navigateToMovieDetails: (Int) -> Unit = {},
-    navigateToSeriesDetails: (Int) -> Unit = {},
-    navigateToExploreScreen: () -> Unit = {},
-    navigateBack: () -> Unit = {},
+    navController: NavController,
+    homeApi: HomeApi
 ) {
     composable<RatingsRoute> { backStackEntry ->
         RatingScreen(
-            navigateToMovieDetails = navigateToMovieDetails,
-            navigateToSeriesDetails = navigateToSeriesDetails,
-            navigateBack = navigateBack,
-            navigateToExploreScreen = navigateToExploreScreen
+            navigateToMovieDetails = navController::navigateToMovieDetails,
+            navigateToSeriesDetails = navController::navigateToSeriesDetails,
+            navigateBack = navController::navigateUp,
+            navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
     }
 }
