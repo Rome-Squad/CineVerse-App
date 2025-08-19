@@ -1,5 +1,7 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.runtime.Stable
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.CastUi
@@ -27,7 +29,8 @@ data class MovieDetailsScreenState(
     val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
 
-    ) {
+    val animationProgress: Animatable<Float, AnimationVector1D> = Animatable(0f)
+) {
     @Stable
     sealed class CollectionBottomSheet {
         object AddToCollection : CollectionBottomSheet()

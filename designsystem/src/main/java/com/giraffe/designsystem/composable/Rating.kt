@@ -51,7 +51,9 @@ fun Rating(
 private fun String.toArabicDigits(): String {
     val arabicDigits = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
     return this.map { char ->
-        if (char.isDigit()) arabicDigits[char.digitToInt()] else char
+        if (char.isDigit()) arabicDigits[char.digitToInt()]
+        else if (char == '٫') '.'
+        else char
     }.joinToString("")
 }
 

@@ -2,7 +2,6 @@ package com.giraffe.presentation.details.screens.castDetails
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -113,7 +112,7 @@ fun CastDetailsContent(
 
     val scrollState = rememberLazyListState()
 
-    val animationProgress = remember { Animatable(0f) }
+    val animationProgress = state.animationProgress
     val scope = rememberCoroutineScope()
     var lastDelta by remember { mutableIntStateOf(0) }
     var flingJob by remember { mutableStateOf<Job?>(null) }

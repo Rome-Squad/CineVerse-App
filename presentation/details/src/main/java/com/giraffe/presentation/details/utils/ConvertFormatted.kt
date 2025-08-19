@@ -14,8 +14,8 @@ fun Int?.toFormattedDuration(locale: Locale = Locale.getDefault()): String {
     val minutes = this % 60
 
     val formatted = buildString {
-        if (hours > 0) append("${hours} ${if (locale.language == "ar") "ساعة" else "h"} ")
-        if (minutes > 0 || hours == 0) append("${minutes} ${if (locale.language == "ar") "دقيقة" else "m"}")
+        if (hours > 0) append("$hours ${if (locale.language == "ar") "ساعة" else "h"} ")
+        if (minutes > 0 || hours == 0) append("$minutes ${if (locale.language == "ar") "دقيقة" else "m"}")
     }.trim()
 
     return if (locale.language == "ar") formatted.map { c ->
@@ -30,16 +30,36 @@ fun LocalDate?.toFormattedDate(): String {
 
     val dayStr = this.day.toString()
     val monthStr = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        this.toJavaLocalDate().month.getDisplayName(TextStyle.FULL, locale)
+        this.toJavaLocalDate().month.getDisplayName(TextStyle.SHORT, locale)
     } else {
         this.month.number.toString()
     }
     val yearStr = this.year.toString()
 
     return if (locale.language == "ar") {
-        "${yearStr.toArabicDigits()}, $monthStr ${dayStr.toArabicDigits()}"
+        "${dayStr.toArabicDigits()} $monthStr ${yearStr.toArabicDigits()}"
     } else {
         "$yearStr, $monthStr $dayStr"
+    }
+}
+
+fun LocalDate?.toFormattedDateBornOn(): String {
+    if (this == null) return ""
+
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
+
+    val dayStr = this.day.toString()
+    val monthStr = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        this.toJavaLocalDate().month.getDisplayName(TextStyle.SHORT, locale)
+    } else {
+        this.month.number.toString()
+    }
+    val yearStr = this.year.toString()
+
+    return if (locale.language == "ar") {
+        "${dayStr.toArabicDigits()} $monthStr ${yearStr.toArabicDigits()}"
+    } else {
+        "$monthStr $dayStr, $yearStr"
     }
 }
 

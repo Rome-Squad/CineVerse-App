@@ -19,7 +19,7 @@ import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 @HiltViewModel
 class CastCreditViewModel @Inject constructor(
     private val getPeopleMediaCredits: GetCastCreditsUseCase,
-    private val getSeriesGenres: GetSeriesGenresByIdsUseCase,
+    private val getSeriesGenresByIds: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(
@@ -51,7 +51,7 @@ class CastCreditViewModel @Inject constructor(
             onError = ::loadCastCreditError
         ) {
             val seriesPosters = castCredits.series.map {
-                val genres = getSeriesGenres(it.genreIDs).map { genre -> genre.title }
+                val genres = getSeriesGenresByIds(it.genreIDs).map { genre -> genre.title }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
