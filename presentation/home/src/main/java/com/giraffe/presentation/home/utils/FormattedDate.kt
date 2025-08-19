@@ -15,7 +15,7 @@ fun LocalDate?.formatDate(): String {
 
     val dayStr = this.day.toString()
     val monthStr = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        this.toJavaLocalDate().month.getDisplayName(TextStyle.FULL, locale)
+        this.toJavaLocalDate().month.getDisplayName(TextStyle.SHORT, locale)
     } else {
         this.month.number.toString()
     }
