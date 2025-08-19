@@ -300,8 +300,8 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun syncRecentlyViewedMovies() {
         return safeCall {
-            movieLocal.getAllRecentlyViewedMovies().forEach {
-                movieRemote.getMovieById(it.movie.id)
+            movieLocal.getRecentlyViewedMovieIds().forEach {
+                movieRemote.getMovieById(it)
                     .toCacheDto()
                     .also { movie ->
                         movieLocal.addMovie(movie)

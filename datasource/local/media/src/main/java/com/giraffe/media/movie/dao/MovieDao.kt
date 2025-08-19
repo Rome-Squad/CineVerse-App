@@ -119,16 +119,8 @@ interface MovieDao {
     )
     fun getRecentlyViewedMovies(page: Int, pageSize: Int): Flow<List<MovieWithRecentlyViewedAt>>
 
-    @Query(
-        """
-        SELECT m.*, r.createdAt AS recentViewedAt
-        FROM $MOVIE_TABLE AS m
-        INNER JOIN $RECENTLY_VIEWED_MOVIE_TABLE AS r 
-        ON m.id = r.id
-        ORDER BY r.createdAt DESC
-        """
-    )
-    suspend fun getAllRecentlyViewedMovies(): List<MovieWithRecentlyViewedAt>
+    @Query("SELECT id FROM $RECENTLY_VIEWED_MOVIE_TABLE")
+    suspend fun getRecentlyViewedMovieIds(): List<Int>
 
     @Query("DELETE FROM $RECENTLY_VIEWED_MOVIE_TABLE WHERE id = :movieId")
     suspend fun deleteRecentlyViewedMovieById(movieId: Int)
