@@ -2,6 +2,7 @@ package com.giraffe.media.mediaMember.util
 
 import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
+import kotlinx.datetime.LocalDate
 
 object TestDummyData {
 
@@ -9,7 +10,7 @@ object TestDummyData {
         id = 3895,
         name = "Michael Caine",
         biography = "A legendary British actor...",
-        birthday = "1933-03-14",
+        birthday = LocalDate(1933, 3, 14),
         placeOfBirth = "Rotherhithe, London, England, UK",
         imageUrl = "https://image.tmdb.org/t/p/w500/bVZRMlpjTAO2pJK6v90buFgVbSW.jpg",
         otherImages = listOf(
