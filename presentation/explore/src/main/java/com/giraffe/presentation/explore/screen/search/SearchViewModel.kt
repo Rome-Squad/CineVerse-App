@@ -61,7 +61,8 @@ class SearchViewModel @Inject constructor(
     private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
         updateState {
             it.copy(
-                recentPosters = (it.recentPosters + movies.map(Movie::toPoster)).distinctBy { poster -> poster.id },
+                recentPosters = (movies.map(Movie::toPoster) + it.recentPosters)
+                    .distinctBy { poster -> poster.id },
                 isLoading = false,
                 isNoInternet = false
             )
@@ -71,7 +72,8 @@ class SearchViewModel @Inject constructor(
     private fun onGetRecentlySeriesSuccess(series: List<Series>) {
         updateState {
             it.copy(
-                recentPosters = (it.recentPosters + series.map(Series::toPoster)).distinctBy { poster -> poster.id },
+                recentPosters = (series.map(Series::toPoster) + it.recentPosters)
+                    .distinctBy { poster -> poster.id },
                 isLoading = false,
                 isNoInternet = false
             )

@@ -23,7 +23,6 @@ class RecentlyViewedStrategy(
             .map { series -> series.toShowMorePoster(getSeriesGenresUseCase(series.genreIDs).map { it.title }) }
         return (recentMovies + recentSeries)
             .distinctBy { it.id }
-            .filter { it.recentViewedAt != null }
             .sortedByDescending { it.recentViewedAt }
     }
 
