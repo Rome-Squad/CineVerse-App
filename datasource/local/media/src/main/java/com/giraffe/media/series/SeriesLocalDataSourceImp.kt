@@ -11,7 +11,6 @@ import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class SeriesLocalDataSourceImp @Inject constructor(
@@ -91,11 +90,10 @@ class SeriesLocalDataSourceImp @Inject constructor(
 
     override fun getRecentlyViewedSeries(page: Int, pageSize: Int) = safeFlow {
         seriesDao.getRecentlyViewedSeries(page, pageSize)
-            .onStart { seriesDao.syncRecentViewedTime() }
     }
 
-    override suspend fun getAllRecentlyViewedSeries(): List<SeriesCacheDto> =
-        safeCall { seriesDao.getAllRecentlyViewedSeries() }
+    override suspend fun getRecentlyViewedSeriesIds() =
+        safeCall { seriesDao.getRecentlyViewedSeriesIds() }
 
 
     override suspend fun insertRecentViewedSeries(series: SeriesCacheDto) = safeCall {

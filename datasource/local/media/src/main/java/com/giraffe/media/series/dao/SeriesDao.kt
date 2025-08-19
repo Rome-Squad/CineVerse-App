@@ -9,6 +9,7 @@ import com.giraffe.media.series.datasource.local.cacheDto.RecentViewedSeriesCach
 import com.giraffe.media.series.datasource.local.cacheDto.RecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesWithRecentlyViewedAt
 import com.giraffe.media.series.datasource.local.cacheDto.TopRatedSeriesCacheDto
 import com.giraffe.media.utils.DatabaseConstants.MATCHES_YOUR_VIBE_SERIES_TABLE
 import com.giraffe.media.utils.DatabaseConstants.POPULAR_SERIES_TABLE
@@ -107,37 +108,18 @@ interface SeriesDao {
 
     @Query(
         """
-            UPDATE $SERIES_TABLE
-            SET recentViewedAt = (
-                SELECT r.recentViewedAt 
-                FROM $RECENT_VIEWED_SERIES_TABLE r
-                WHERE r.id = id
-            )
-            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
-        """
-    )
-    suspend fun syncRecentViewedTime()
-
-    @Query(
-        """
-            SELECT * 
-            FROM $SERIES_TABLE
-            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
-            ORDER BY recentViewedAt DESC
+        SELECT m.*, r.recentViewedAt AS recentViewedAt
+        FROM $SERIES_TABLE AS m
+        INNER JOIN $RECENT_VIEWED_SERIES_TABLE AS r 
+        ON m.id = r.id
+        ORDER BY r.recentViewedAt DESC
         LIMIT :pageSize OFFSET (:page - 1) * :pageSize
         """
     )
-    fun getRecentlyViewedSeries(page: Int, pageSize: Int): Flow<List<SeriesCacheDto>>
+    fun getRecentlyViewedSeries(page: Int, pageSize: Int): Flow<List<SeriesWithRecentlyViewedAt>>
 
-    @Query(
-        """
-        SELECT * 
-            FROM $SERIES_TABLE
-            WHERE id IN (SELECT id FROM $RECENT_VIEWED_SERIES_TABLE)
-            ORDER BY recentViewedAt DESC
-        """
-    )
-    suspend fun getAllRecentlyViewedSeries(): List<SeriesCacheDto>
+    @Query("SELECT id FROM $RECENT_VIEWED_SERIES_TABLE")
+    suspend fun getRecentlyViewedSeriesIds(): List<Int>
 
 
     @Query("DELETE FROM $RECENT_VIEWED_SERIES_TABLE WHERE id = :seriesId")
@@ -164,7 +146,7 @@ interface SeriesDao {
     suspend fun getGenreById(id: Int): SeriesGenreCacheDto?
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE  ORDER BY count DESC")
-    fun  getGenres(): Flow<List<SeriesGenreCacheDto>>
+    fun getGenres(): Flow<List<SeriesGenreCacheDto>>
 
     @Query("SELECT * FROM $SERIES_GENRE_TABLE WHERE count > 0 ORDER BY count DESC LIMIT 1")
     suspend fun getTopGenreCount(): SeriesGenreCacheDto?

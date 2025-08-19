@@ -59,26 +59,26 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
+        updateRecentPosters(movies.map(Movie::toPoster))
+    }
+
+    private fun onGetRecentlySeriesSuccess(series: List<Series>) {
+        updateRecentPosters(series.map(Series::toPoster))
+    }
+
+    private fun updateRecentPosters(posters: List<Poster>) {
         updateState {
             it.copy(
-                recentPosters = (movies.map(Movie::toPoster) + it.recentPosters)
-                    .distinctBy { poster -> poster.id },
                 isLoading = false,
-                isNoInternet = false
+                isNoInternet = false,
+                recentPosters = (posters + it.recentPosters)
+                    .distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.recentViewedAt }
+                    .take(20)
             )
         }
     }
 
-    private fun onGetRecentlySeriesSuccess(series: List<Series>) {
-        updateState {
-            it.copy(
-                recentPosters = (series.map(Series::toPoster) + it.recentPosters)
-                    .distinctBy { poster -> poster.id },
-                isLoading = false,
-                isNoInternet = false
-            )
-        }
-    }
 
     private var searchJob: Job? = null
     override fun onQueryChange(query: String) {

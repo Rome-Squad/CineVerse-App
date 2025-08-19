@@ -20,6 +20,7 @@ import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeri
 import com.giraffe.media.series.usecase.topRated.ObserveTopRatedSeriesUseCase
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
+import com.giraffe.presentation.home.model.Poster
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
@@ -247,19 +248,23 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onGetRecentlyMoviesSuccess(movies: List<Movie>) {
-        updateState {
-            it.copy(recentlyViewed = (movies.map(Movie::toPoster) + it.recentlyViewed).distinctBy { movie -> movie.id })
-        }
+        updateRecentPosters(movies.map(Movie::toPoster))
     }
 
     private fun onGetRecentlySeriesSuccess(series: List<Series>) {
+        updateRecentPosters(series.map(Series::toPoster))
+    }
+
+    private fun updateRecentPosters(posters: List<Poster>) {
         updateState {
             it.copy(
-                recentlyViewed = (series.map(Series::toPoster) + it.recentlyViewed).distinctBy { series -> series.id }
+                recentlyViewed = (posters + it.recentlyViewed)
+                    .distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.recentViewedAt }
+                    .take(20)
             )
         }
     }
-
 
     private fun getMatchesYourVibe() {
         safeCollect(

@@ -91,7 +91,9 @@ class HistoryViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 isNoInternet = false,
-                mediaList = (it.mediaList + newMediaList).distinctBy { poster -> poster.id }
+                mediaList = (it.mediaList + newMediaList)
+                    .distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.recentViewedAt }
             )
         }
     }

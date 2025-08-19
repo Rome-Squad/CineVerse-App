@@ -16,5 +16,5 @@ data class Series(
     val youtubeVideoId: String?,
     val popularity: Float,
     val userRating: Float?,
-    val recentViewedAt: ULong?
+    val recentViewedAt: Long?
 )

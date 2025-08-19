@@ -7,6 +7,7 @@ import com.giraffe.media.movie.datasource.remote.dto.RatingRequest
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesWithRecentlyViewedAt
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDto
@@ -265,15 +266,16 @@ class SeriesRepositoryImpl @Inject constructor(
 
     // region Recently Viewed
     override fun observeRecentlyViewed(page: Int, pageSize: Int) = safeFlow {
-        seriesLocal.getRecentlyViewedSeries(page, pageSize).map { seriesList ->
-            seriesList.map { series -> series.toEntity() }
-        }
+        seriesLocal.getRecentlyViewedSeries(page, pageSize)
+            .map { series ->
+                series.map(SeriesWithRecentlyViewedAt::toEntity)
+            }
     }
 
     override suspend fun syncRecentlyViewedSeries() {
         safeCall {
-            seriesLocal.getAllRecentlyViewedSeries().forEach {
-                seriesRemote.getSeriesDetails(it.id)
+            seriesLocal.getRecentlyViewedSeriesIds().forEach {
+                seriesRemote.getSeriesDetails(it)
                     .toCacheDto()
                     .also { series ->
                         seriesLocal.addSeries(series)

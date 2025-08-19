@@ -29,7 +29,8 @@ fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         genres = genreTitles,
         time = duration?.toString(),
         date = date,
-        mediaTypeOfPoster = Poster.Type.MOVIE.value
+        mediaTypeOfPoster = Poster.Type.MOVIE.value,
+        recentViewedAt = recentViewedAt
     )
 }
 
@@ -47,7 +48,8 @@ fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         rating = rating,
         genres = genreTitles,
         date = releaseYear?.toString(),
-        mediaTypeOfPoster = Poster.Type.SERIES.value
+        mediaTypeOfPoster = Poster.Type.SERIES.value,
+        recentViewedAt = recentViewedAt
     )
 }
 

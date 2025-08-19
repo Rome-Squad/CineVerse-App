@@ -6,5 +6,6 @@ data class Poster(
     val title: String,
     val posterUrl: String,
     val rating: Float,
-    val mediaType: MediaType
+    val mediaType: MediaType,
+    val recentViewedAt: Long,
 )
