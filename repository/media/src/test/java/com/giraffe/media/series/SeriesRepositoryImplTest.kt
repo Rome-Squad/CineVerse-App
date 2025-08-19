@@ -3,6 +3,7 @@ package com.giraffe.media.series
 import com.giraffe.media.series.datasource.local.SeriesLocalDateSource
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesWithRecentlyViewedAt
 import com.giraffe.media.series.datasource.remote.SeriesRemoteDataSource
 import com.giraffe.media.series.datasource.remote.dto.GenreDto
 import com.giraffe.media.series.datasource.remote.dto.SeriesDetailsDto
@@ -78,6 +79,9 @@ class SeriesRepositoryImplTest {
         originalLanguage = "en"
     )
     private val expectedSeriesFlow = flowOf(cachedSeries)
+    private val expectedSeriesWithRecentlyViewedAt = flowOf(
+        listOf(SeriesWithRecentlyViewedAt(series = cachedSeries.first(), recentViewedAt = 1234L))
+    )
 
     @Before
     fun setup() {
@@ -123,13 +127,18 @@ class SeriesRepositoryImplTest {
     fun `getRecentSeries should return mapped cached series`() = runTest {
         val page = 1
         val pageSize = 10
-        coEvery { local.getRecentlyViewedSeries(page = page, pageSize = pageSize) } returns flowOf(
-            cachedSeries
-        )
+        coEvery {
+            local.getRecentlyViewedSeries(
+                page = page,
+                pageSize = pageSize
+            )
+        } returns expectedSeriesWithRecentlyViewedAt
 
         val result = repository.observeRecentlyViewed(page = page, pageSize = pageSize).first()
 
-        assertThat(result.first().name).isEqualTo("Vikings")
+        assertThat(result.first().id).isEqualTo(
+            expectedSeriesWithRecentlyViewedAt.first().first().series.id
+        )
         coVerify { local.getRecentlyViewedSeries(page = page, pageSize = pageSize) }
     }
 

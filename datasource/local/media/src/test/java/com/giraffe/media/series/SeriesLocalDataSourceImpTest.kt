@@ -3,16 +3,15 @@ package com.giraffe.media.series
 import com.giraffe.media.series.dao.SeriesDao
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesCacheDto
 import com.giraffe.media.series.datasource.local.cacheDto.SeriesGenreCacheDto
+import com.giraffe.media.series.datasource.local.cacheDto.SeriesWithRecentlyViewedAt
 import com.giraffe.media.series.mapper.toMatchesYourVibeSeriesCacheDto
 import com.giraffe.media.series.mapper.toPopularSeriesCacheDto
 import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.google.common.truth.Truth.assertThat
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -38,6 +37,9 @@ class SeriesLocalDataSourceImpTest {
         )
     )
     private val expectedSeriesFlow = flowOf(sampleSeries)
+    private val expectedSeriesWithRecentlyViewedAt = flowOf(
+        listOf(SeriesWithRecentlyViewedAt(series = sampleSeries.first(), recentViewedAt = 1234L))
+    )
     private val sampleGenres = listOf(
         SeriesGenreCacheDto(id = 1, name = "Action", count = 1)
     )
@@ -200,14 +202,14 @@ class SeriesLocalDataSourceImpTest {
                 page = page,
                 pageSize = pageSize
             )
-        } returns flowOf(sampleSeries)
-        coEvery { seriesDao.syncRecentViewedTime() } just Runs
+        } returns expectedSeriesWithRecentlyViewedAt
 
         val result = mutableListOf<List<SeriesCacheDto>>()
 
-        dataSource.getRecentlyViewedSeries(page = page, pageSize = pageSize).collect { result.add(it) }
+        dataSource.getRecentlyViewedSeries(page = page, pageSize = pageSize)
+            .collect { result.add(it.map { series -> series.series }) }
 
-        assertThat(result).containsExactly(sampleSeries)
+        assertThat(result.first()).isEqualTo(sampleSeries.first())
     }
 
     @Test
