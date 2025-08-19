@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.match.screen.result.CollectionUi
 
@@ -13,8 +12,6 @@ import com.giraffe.match.screen.result.CollectionUi
 fun AddToCollectionBottomSheetContent(
     collectionsList: List<CollectionUi>,
     onCollectionClick: (Int) -> Unit,
-    onNewCollectionClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         contentPadding = PaddingValues(top = 20.dp),
