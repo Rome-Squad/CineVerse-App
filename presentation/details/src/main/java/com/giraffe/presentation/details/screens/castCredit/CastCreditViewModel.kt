@@ -83,6 +83,7 @@ class CastCreditViewModel @Inject constructor(
                         exception is UserNoInternetException
             )
         }
+        sendEffect(CastCreditEffect.Error(exception))
     }
 
     override fun onBackClick() {
