@@ -16,16 +16,17 @@ class ObserveTopRatedSeriesUseCaseTest {
 
 
     @Test
-    fun `should return list of top rated series when observeTopRated function in repository called'
-        val expectedSeries = flowOf(
-            listOf(
-                createFakeSeries(id = 101, name = "Breaking Bad", rating = 9.5f)
+    fun `should return list of top rated series when observeTopRated function in repository called`() =
+        runTest {
+            val expectedSeries = flowOf(
+                listOf(
+                    createFakeSeries(id = 101, name = "Breaking Bad", rating = 9.5f)
+                )
             )
-        )
-        coEvery { repository.observeTopRated(limit) } returns expectedSeries
+            coEvery { repository.observeTopRated(limit) } returns expectedSeries
 
-        val actualSeries = useCase(limit)
+            val actualSeries = useCase(limit)
 
-        assertThat(actualSeries).isEqualTo(expectedSeries)
-    }
+            assertThat(actualSeries).isEqualTo(expectedSeries)
+        }
 }
