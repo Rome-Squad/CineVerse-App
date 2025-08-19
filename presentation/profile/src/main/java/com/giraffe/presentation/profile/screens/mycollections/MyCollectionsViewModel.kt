@@ -1,5 +1,6 @@
 package com.giraffe.presentation.profile.screens.mycollections
 
+import android.util.Log
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
@@ -56,13 +57,16 @@ class MyCollectionsViewModel @Inject constructor(
 
     override fun onConfirmCreateNewCollectionClick() {
         updateState { it.copy(isLoading = true, isBottomSheetVisible = false) }
+
         safeExecute(
             onSuccess = { onCreateCollectionSuccess() },
             onError = ::onFailure
         ) {
+            Log.d("TAG", "onConfirmCreateNewCollectionClick: before")
             addCollectionUseCase(
                 CollectionUi(name = state.value.newCollectionName).toEntity()
             )
+            Log.d("TAG", "onConfirmCreateNewCollectionClick: after")
         }
     }
 

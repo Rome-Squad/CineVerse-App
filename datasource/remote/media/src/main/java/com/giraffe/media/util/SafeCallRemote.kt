@@ -12,15 +12,11 @@ import java.io.IOException
 
 
 suspend fun <T> safeCallRemote(execute: suspend () -> Response<T>): T {
-    return try {
-        val response = execute()
-        if (response.isSuccessful) {
-            response.body() ?: throw SerializationDataException()
-        } else {
-            throw ApiDataException(response.code())
-        }
-    } catch (e: Throwable) {
-        throw mapToMediaException(e)
+    val response = execute()
+    if (response.isSuccessful) {
+        return response.body() ?: throw SerializationDataException()
+    } else {
+        throw ApiDataException(response.code())
     }
 }
 

@@ -37,12 +37,9 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         block: suspend () -> T
     ) {
+        //TODO
         coroutineScope.launch(dispatcher) {
-            runCatching {
-                onSuccess(block())
-            }.onFailure {
-                onError(it, it is NoInternetException || it is UserNoInternetException)
-            }
+            onSuccess(block())
         }
     }
 

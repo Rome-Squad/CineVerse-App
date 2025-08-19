@@ -20,7 +20,10 @@ fun AddToCollectionBottomSheetContent(
         contentPadding = PaddingValues(top = 20.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        itemsIndexed(collectionsList) { index, collection ->
+        itemsIndexed(
+            collectionsList,
+            key = { _, collection -> collection.id }
+        ) { index, collection ->
             AddToCollectionItem(
                 title = collection.title,
                 isLoading = collection.isLoading,

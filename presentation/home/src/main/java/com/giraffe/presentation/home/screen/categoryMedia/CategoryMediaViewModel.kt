@@ -1,6 +1,7 @@
 package com.giraffe.presentation.home.screen.categoryMedia
 
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -75,6 +76,7 @@ class CategoryMediaViewModel @Inject constructor(
     }
 
     private fun onLoadByStrategySuccess(mediaFlow: Flow<PagingData<PosterMedia>>) {
+        Log.d("TAG", "onLoadByStrategySuccess: $mediaFlow")
         updateState {
             it.copy(
                 sectionType = sectionType,

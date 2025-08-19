@@ -267,6 +267,8 @@ class MovieDetailsViewModel @Inject constructor(
                 isNoInternet = false
             )
         }
+
+        onDismissAddToCollectionBottomSheet()
     }
 
     private fun onAddMovieToCollectionError(
