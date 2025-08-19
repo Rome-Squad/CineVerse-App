@@ -49,7 +49,7 @@ import com.giraffe.presentation.explore.components.uimodel.Poster
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun PosterVertically(
+fun MediaPoster(
     poster: Poster,
     isGridSelected: Boolean,
     modifier: Modifier = Modifier,
@@ -58,10 +58,12 @@ fun PosterVertically(
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
     val imageMaxWidth = with(density) {
-        val numberOfCards =
-            (widowSize.containerSize.width.toDp().toPx() - 32.dp.toPx()) / 156.dp.toPx()
-        val size = widowSize.containerSize.width.toDp() / numberOfCards.toInt()
-        size.coerceAtLeast(156.dp)
+        val windowWidth = widowSize.containerSize.width - 32.dp.toPx()
+        var numberOfCards = windowWidth / 156.dp.toPx()
+        val padding = (numberOfCards - 1) * 32.dp.toPx()
+        numberOfCards = (windowWidth - padding) / 156.dp.toPx()
+        val width = windowWidth / numberOfCards
+        width.toDp().coerceAtLeast(156.dp)
     }
     val transition = updateTransition(isGridSelected)
     val imageWidth by transition.animateDp(
@@ -90,12 +92,19 @@ fun PosterVertically(
     if (poster.name.isNotBlank()) {
         Box(
             modifier = modifier
-                .clip(shape = RoundedCornerShape(Theme.radius.xxs))
-                .clickable(onClick = onClick)
+                .clip(
+                    shape = RoundedCornerShape(
+                        topStart = Theme.radius.lg,
+                        bottomStart = if (isGridSelected) Theme.radius.xxs else Theme.radius.lg,
+                        topEnd = Theme.radius.lg,
+                        bottomEnd = Theme.radius.lg
+                    )
+                )
                 .then(
                     if (isGridSelected) Modifier
                     else Modifier.background(Theme.color.background.card)
                 )
+                .clickable(onClick = onClick)
         ) {
             SafeIslamicImage(
                 imageUrl = poster.imageUrl,

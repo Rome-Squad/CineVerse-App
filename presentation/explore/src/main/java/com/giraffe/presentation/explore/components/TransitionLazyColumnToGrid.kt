@@ -57,7 +57,7 @@ fun TransitionLazyColumnToGrid(
             key = { index -> "${posters[index]?.id} + ${posters[index]?.date} + ${posters[index]?.time} + $index" }
         ) { index ->
             posters[index]?.let { poster ->
-                PosterVertically(
+                MediaPoster(
                     poster = poster,
                     isGridSelected = !isListSelected,
                     onClick = {
