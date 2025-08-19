@@ -1,5 +1,7 @@
 package com.giraffe.presentation.details.screens.seriesdetails
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.presentation.details.model.ReviewUI
@@ -22,4 +24,6 @@ data class SeriesDetailsScreenState(
     val isVisibleAddToCollectionBottomSheet: Boolean = false,
     val isVisibleGiveStarsBottomSheet: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,
+
+    val animationProgress: Animatable<Float, AnimationVector1D> = Animatable(0f)
 )

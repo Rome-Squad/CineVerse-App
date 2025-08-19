@@ -11,7 +11,6 @@ import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
-import com.giraffe.presentation.details.screens.castCredit.MediaType
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toSocialMediaUi
 import com.giraffe.presentation.details.utils.toUi
