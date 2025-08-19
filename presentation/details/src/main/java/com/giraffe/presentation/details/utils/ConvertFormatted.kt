@@ -43,6 +43,26 @@ fun LocalDate?.toFormattedDate(): String {
     }
 }
 
+fun LocalDate?.toFormattedDateBornOn(): String {
+    if (this == null) return ""
+
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
+
+    val dayStr = this.day.toString()
+    val monthStr = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        this.toJavaLocalDate().month.getDisplayName(TextStyle.SHORT, locale)
+    } else {
+        this.month.number.toString()
+    }
+    val yearStr = this.year.toString()
+
+    return if (locale.language == "ar") {
+        "$monthStr ${dayStr.toArabicDigits()}, ${yearStr.toArabicDigits()}"
+    } else {
+        "$monthStr $dayStr, $yearStr"
+    }
+}
+
 private fun String.toArabicDigits(): String {
     return this.map { char ->
         if (char.isDigit()) "٠١٢٣٤٥٦٧٨٩"[char.digitToInt()] else char

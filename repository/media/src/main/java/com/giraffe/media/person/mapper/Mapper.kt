@@ -1,4 +1,5 @@
 @file:JvmName("personMappers")
+
 package com.giraffe.media.person.mapper
 
 import com.giraffe.media.mediaMember.entity.CastMember
@@ -31,14 +32,16 @@ fun mapToCast(
     details: PersonDetailsDto,
     images: List<ProfileDto>,
     socialMedia: PersonSocialMediaDto
-): CastMember = CastMember(
+) = CastMember(
     id = personId,
     name = details.name.orEmpty(),
     imageUrl = details.profilePath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
     role = details.department.orEmpty(),
-    birthday = details.birthday,
+    birthday = if (details.birthday.isNullOrEmpty()) null else LocalDate.parse(
+        details.birthday
+    ),
     placeOfBirth = details.placeOfBirth,
     biography = details.biography,
     otherImages = images.map(ProfileDto::toImageUrl),
@@ -51,7 +54,7 @@ fun mapToCrew(
     details: PersonDetailsDto,
     images: List<ProfileDto>,
     socialMedia: PersonSocialMediaDto
-): CrewMember = CrewMember(
+) = CrewMember(
     id = personId,
     name = details.name.orEmpty(),
     imageUrl = details.profilePath?.let {
