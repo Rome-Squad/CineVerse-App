@@ -51,9 +51,11 @@ class CollectionsRepositoryImp @Inject constructor(
     override suspend fun addCollection(
         collection: Collection
     ) = safeCall {
-        collectionsRemoteDataSource.addCollection(collection.toDto())
+         collectionsRemoteDataSource.addCollection(collection.toDto())
             .also {
-                collectionsLocalDataSource.insertCollection(collection.toCacheDto())
+                it?.let {
+                    collectionsLocalDataSource.insertCollection(collection.copy(id = it).toCacheDto())
+                }
             }
     }
 

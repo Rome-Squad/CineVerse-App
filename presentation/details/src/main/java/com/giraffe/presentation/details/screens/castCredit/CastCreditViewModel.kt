@@ -36,7 +36,7 @@ class CastCreditViewModel @Inject constructor(
     }
 
     private fun loadCastCredit(castId: Int) {
-        updateState { it.copy(isLoading = true) }
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
 
         safeExecute(
             onSuccess = ::loadCastCreditSuccess,
