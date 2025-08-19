@@ -37,7 +37,7 @@ fun LocalDate?.toFormattedDate(): String {
     val yearStr = this.year.toString()
 
     return if (locale.language == "ar") {
-        "${yearStr.toArabicDigits()}, $monthStr ${dayStr.toArabicDigits()}"
+        "${dayStr.toArabicDigits()} $monthStr ${yearStr.toArabicDigits()}"
     } else {
         "$yearStr, $monthStr $dayStr"
     }
@@ -57,7 +57,7 @@ fun LocalDate?.toFormattedDateBornOn(): String {
     val yearStr = this.year.toString()
 
     return if (locale.language == "ar") {
-        "$monthStr ${dayStr.toArabicDigits()}, ${yearStr.toArabicDigits()}"
+        "${dayStr.toArabicDigits()} $monthStr ${yearStr.toArabicDigits()}"
     } else {
         "$monthStr $dayStr, $yearStr"
     }
