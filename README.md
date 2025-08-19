@@ -6,7 +6,7 @@
 -- The App still in Development Process --
 But you can see the last updated version here:
 
-[⬇️ Download Cineverse APK ](https://github.com/Bilalazam26/CineVerse/releases/download/V1.0-alpha/CineVerse-V1.0-alpha.apk)
+[⬇️ Download Cineverse APK ](https://github.com/Rome-Squad/CineVerse-App/releases/download/V1.0/CineVerse.apk)
 
 ---
 
