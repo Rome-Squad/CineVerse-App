@@ -40,6 +40,7 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.R
+import com.giraffe.presentation.details.utils.toLocalizedRating
 import kotlin.math.max
 
 
@@ -179,7 +180,7 @@ fun MainMovieOrSeriesDetails(
                                 if (rating != 0f) {
                                     IconWithText(
                                         icon = painterResource(Theme.icons.dueTone.star),
-                                        text = "%.1f".format(rating),
+                                        text = rating.toLocalizedRating(),
                                         colorOfIcon = Theme.color.additional.primary.yellow,
                                         modifier = Modifier
                                             .height((iconTextHeight * inverseAnimationProgressValue).dp)

@@ -7,7 +7,7 @@ import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.CollectionUi
 import com.giraffe.presentation.profile.utils.toEntity
 import com.giraffe.presentation.profile.utils.toUi
-import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class MyCollectionsViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
-    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
 ) : BaseViewModel<MyCollectionsScreenState, MyCollectionsEffect>(
     MyCollectionsScreenState()
 ), MyCollectionsInteractionListener {
@@ -93,7 +93,7 @@ class MyCollectionsViewModel @Inject constructor(
             onSuccess = ::handleLoginSuccess,
             onError = ::onFailure
         ) {
-            isLoggedInUseCase()
+            isLoggedInByAccountUseCase()
         }
     }
 

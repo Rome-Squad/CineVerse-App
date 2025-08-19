@@ -10,13 +10,13 @@ import com.giraffe.presentation.profile.utils.Language
 import com.giraffe.presentation.profile.utils.LanguageHelper
 import com.giraffe.presentation.profile.utils.toUi
 import com.giraffe.user.entity.ContentPreference
-import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetLanguageUseCase
 import com.giraffe.user.usecase.GetUserUseCase
-import com.giraffe.user.usecase.IsLoggedInUseCase
+import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import com.giraffe.user.usecase.LogoutUseCase
+import com.giraffe.user.usecase.RefreshUserUseCase
 import com.giraffe.user.usecase.SetContentPreferenceUseCase
 import com.giraffe.user.usecase.SetDarkModeUseCase
 import com.giraffe.user.usecase.SetLanguageUseCase
@@ -27,8 +27,9 @@ import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val isLoggedInUseCase: IsLoggedInUseCase,
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val refreshUserUseCase: RefreshUserUseCase,
     private val getDarkModeUseCase: GetDarkModeUseCase,
     private val setDarkModeUseCase: SetDarkModeUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
@@ -45,8 +46,8 @@ class SettingsViewModel @Inject constructor(
     SettingsInteractionListener {
 
     init {
-        checkLoginStatus()
         observeTheme()
+        observeUserProfile()
         observeLanguage()
         observeContentPreference()
         loadAppVersion()
@@ -57,17 +58,34 @@ class SettingsViewModel @Inject constructor(
         updateState { it.copy(appVersion = versionName) }
     }
 
-    private fun checkLoginStatus() {
+    private fun observeUserProfile() {
         safeExecute(
-            onSuccess = ::handleLoginStatusSuccess,
             onError = ::onFailure,
-            block = isLoggedInUseCase::invoke
+            onSuccess = ::onObserveUserProfileSuccess,
+            block = isLoggedInByAccountUseCase::invoke
         )
     }
 
-    private fun handleLoginStatusSuccess(isLoggedIn: Boolean) {
-        updateState { it.copy(isLoading = false, isNoInternet = false, isLoggedIn = isLoggedIn) }
-        if (isLoggedIn) getUserProfile()
+    private fun onObserveUserProfileSuccess(isLoggedIn: Boolean) {
+        if (isLoggedIn) safeCollect(
+            onEmitNewValue = { user ->
+                updateState {
+                    it.copy(
+                        isLoggedIn = user != null,
+                        user = user?.toUi()
+                    )
+                }
+            },
+            onError = ::onFailure,
+            block = { getUserUseCase() }
+        )
+    }
+
+    override fun refreshUserProfile() {
+        safeExecute(
+            onError = ::onFailure,
+            block = refreshUserUseCase::invoke
+        )
     }
 
     private fun observeTheme() {
@@ -111,20 +129,14 @@ class SettingsViewModel @Inject constructor(
         updateState { it.copy(contentPreference = preference) }
     }
 
-    private fun getUserProfile() {
-        safeExecute(
-            onSuccess = ::handleGetUserProfileSuccess,
-            onError = ::onFailure,
-            block = getUserUseCase::invoke
-        )
-    }
-
-    private fun handleGetUserProfileSuccess(user: User) {
-        updateState { it.copy(isLoading = false, isNoInternet = false, user = user.toUi()) }
-    }
-
     private fun onFailure(error: Throwable, isNoInternet: Boolean) {
-        updateState { it.copy(isLoading = false, isNoInternet = isNoInternet) }
+        updateState {
+            it.copy(
+                isLoading = false,
+                isLoggingOut = false,
+                isNoInternet = isNoInternet
+            )
+        }
         sendEffect(SettingsEffect.ShowError(error))
     }
 
@@ -204,6 +216,7 @@ class SettingsViewModel @Inject constructor(
 
     override fun onConfirmLogout() {
         onDismissSheet()
+        updateState { it.copy(isLoggingOut = true) }
         safeExecute(
             onSuccess = onConfirmLogoutSuccess(),
             onError = ::onFailure
@@ -214,11 +227,11 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun onConfirmLogoutSuccess(): (Unit) -> Unit = {
+        sendEffect(SettingsEffect.NavigateToLogin)
         safeExecute(
             onError = ::onFailure,
             block = clearMoviesCacheUseCase::clearAll
         )
-        sendEffect(SettingsEffect.NavigateToLogin)
     }
 
     override fun onGoToWebsiteClick() {

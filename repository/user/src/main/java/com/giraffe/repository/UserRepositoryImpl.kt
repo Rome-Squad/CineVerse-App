@@ -7,9 +7,12 @@ import com.giraffe.repository.encryption.SecretKeyAliasEnum
 import com.giraffe.repository.exceptions.InvalidIdDataException
 import com.giraffe.repository.utils.base64Decode
 import com.giraffe.repository.utils.safeCall
+import com.giraffe.repository.utils.safeFlow
 import com.giraffe.user.encryption.IEncryptionService
 import com.giraffe.user.entity.User
 import com.giraffe.user.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -18,7 +21,7 @@ class UserRepositoryImpl @Inject constructor(
     private val encryptionService: IEncryptionService
 ) : UserRepository {
 
-    override suspend fun getUser(): User = safeCall {
+    override suspend fun refreshUser(): User = safeCall {
         val encryptedBase64 = localDataSource.getSessionId()
             ?: throw InvalidIdDataException()
 
@@ -27,8 +30,14 @@ class UserRepositoryImpl @Inject constructor(
         }
 
         val decryptedBytes = decryptSessionId(encryptedBase64)
-        val userResponse = userRemoteDataSource.getUser(decryptedBytes)
-        userResponse.toEntity()
+        val userResponse = userRemoteDataSource.getUser(decryptedBytes).toEntity()
+
+        localDataSource.saveAccountId(userResponse.id)
+        localDataSource.saveUsername(userResponse.username)
+        localDataSource.saveDisplayName(userResponse.displayName)
+        localDataSource.saveAvatarUrl(userResponse.avatarUrl)
+
+        userResponse
     }
 
     private fun decryptSessionId(encryptedBase64: String): String {
@@ -37,5 +46,25 @@ class UserRepositoryImpl @Inject constructor(
             encryptedBase64.base64Decode()
         )
         return decrypted.decodeToString()
+    }
+
+    override fun getUser(): Flow<User?> = safeFlow {
+        combine(
+            localDataSource.getAccountId(),
+            localDataSource.getUsername(),
+            localDataSource.getDisplayName(),
+            localDataSource.getAvatarUrl()
+        ) { id, username, displayName, avatarUrl ->
+            if (id != null && username != null) {
+                User(
+                    id = id,
+                    username = username,
+                    displayName = displayName.orEmpty(),
+                    avatarUrl = avatarUrl
+                )
+            } else {
+                null
+            }
+        }
     }
 }

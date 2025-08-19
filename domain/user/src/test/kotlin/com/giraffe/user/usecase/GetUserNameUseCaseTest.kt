@@ -1,60 +1,50 @@
 package com.giraffe.user.usecase
 
 import com.giraffe.user.dummydata.fakeUser
+import com.giraffe.user.repository.UserRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
-import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import java.io.IOException
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 class GetUserNameUseCaseTest {
-    private val getUserUseCase: GetUserUseCase = mockk()
-    private val getUserNameUseCase: GetUserNameUseCase = GetUserNameUseCase(getUserUseCase)
+    val userRepository: UserRepository = mockk()
+    val getUserNameUseCase = GetUserNameUseCase(userRepository)
 
     @Test
-    fun `invoke should call getUser on repository`() = runTest {
+    fun `when user exists and has non-empty displayName should return displayName`() = runTest {
 
-        coEvery { getUserUseCase.invoke() } returns fakeUser
+        every { userRepository.getUser() } returns flowOf(fakeUser)
 
-        getUserNameUseCase()
+        val result = getUserNameUseCase().first()
 
-        coVerify(exactly = 1) { getUserUseCase.invoke() }
+        assertThat(result).isEqualTo("hamada")
     }
 
     @Test
-    fun `invoke when user has non-empty displayName should return displayName`() = runTest {
+    fun `when user exists and has empty displayName should return username`() = runTest {
+        val fakeUser1 = fakeUser.copy(displayName = "")
 
-        coEvery { getUserUseCase.invoke() } returns fakeUser
+        every { userRepository.getUser() } returns flowOf(fakeUser1)
 
-        val result = getUserNameUseCase()
+        val result = getUserNameUseCase().first()
 
-        assertThat(result).isEqualTo(fakeUser.displayName)
+        assertThat(result).isEqualTo("hamada_rayyan")
     }
 
     @Test
-    fun `invoke when user has empty displayName should return username`() = runTest {
+    fun `when user is null should refresh and return username`() = runTest {
+        val refreshedUser = fakeUser.copy(displayName = "", username = "refreshed_user")
 
-        val userWithoutDisplayName = fakeUser.copy(displayName = "")
-        coEvery { getUserUseCase.invoke() } returns userWithoutDisplayName
+        every { userRepository.getUser() } returns flowOf(null)
+        coEvery { userRepository.refreshUser() } returns refreshedUser
 
-        val result = getUserNameUseCase()
+        val result = getUserNameUseCase().first()
 
-        assertThat(result).isEqualTo(fakeUser.username)
-    }
-
-    @Test
-    fun `invoke when repository throws exception should rethrow the exception`() = runTest {
-
-        val expectedException = IOException("Network failed")
-        coEvery { getUserUseCase.invoke() } throws expectedException
-
-        val actualException = assertFailsWith<IOException> {
-            getUserNameUseCase()
-        }
-
-        assertThat(actualException).isEqualTo(expectedException)
+        assertThat(result).isEqualTo("refreshed_user")
     }
 }

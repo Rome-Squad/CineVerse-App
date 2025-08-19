@@ -5,6 +5,7 @@ import com.giraffe.user.entity.ContentPreference
 interface SettingsInteractionListener {
     fun onLoginClick()
     fun onEditProfileClick()
+    fun refreshUserProfile()
     fun onLanguageClick()
     fun onLogoutClick()
     fun onToggleDarkMode(isDark: Boolean)

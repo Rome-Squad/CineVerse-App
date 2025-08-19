@@ -7,13 +7,16 @@ import com.giraffe.presentation.authentication.nav.routes.LoginRoute
 import com.giraffe.presentation.authentication.utils.toStringResource
 import com.giraffe.user.exception.EmptyUsernameException
 import com.giraffe.user.exception.InvalidPasswordException
+import com.giraffe.user.usecase.LoginAsGuestUseCase
 import com.giraffe.user.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase, savedStateHandle: SavedStateHandle,
+    private val loginUseCase: LoginUseCase,
+    private val loginAsGuestUseCase: LoginAsGuestUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginScreenState, LoginEffect>(LoginScreenState()), LoginInteractionListener {
 
 
@@ -84,8 +87,16 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onJoinAsGuestClick() {
+        updateState { it.copy(isGuestLoading = true) }
         clearErrorMessages()
-        sendEffect(LoginEffect.NavigateToHomeScreen)
+        safeExecute(
+            onError = this::onFailure,
+            onSuccess = {
+                updateState { it.copy(isGuestLoading = false) }
+                sendEffect(LoginEffect.NavigateToHomeScreen)
+            },
+            block = { loginAsGuestUseCase() }
+        )
     }
 
     override fun onCreateNewAccountClick() {
