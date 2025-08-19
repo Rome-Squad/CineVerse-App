@@ -1,4 +1,4 @@
-package com.giraffe.presentation.home.components
+package com.giraffe.presentation.explore.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.R
@@ -44,19 +45,26 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
-import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.explore.components.uimodel.Poster
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun PosterVertically(
-    poster: PosterMedia,
+fun MediaPoster(
+    poster: Poster,
     isGridSelected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
-    val imageMaxWidth = with(density) { widowSize.containerSize.width.toDp() }
+    val imageMaxWidth = with(density) {
+        val windowWidth = widowSize.containerSize.width - 32.dp.toPx()
+        var numberOfCards = windowWidth / 156.dp.toPx()
+        val padding = (numberOfCards - 1) * 32.dp.toPx()
+        numberOfCards = (windowWidth - padding) / 156.dp.toPx()
+        val width = windowWidth / numberOfCards.toInt()
+        width.toDp().coerceAtLeast(156.dp)
+    }
     val transition = updateTransition(isGridSelected)
     val imageWidth by transition.animateDp(
         targetValueByState = { if (it) imageMaxWidth else 64.dp },
@@ -70,12 +78,8 @@ fun PosterVertically(
         targetValueByState = { if (it) 0.dp else 12.dp },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
-    val columnVerticalPadding by transition.animateDp(
-        targetValueByState = { if (it) 0.dp else 12.dp },
-        transitionSpec = { tween(700, easing = LinearEasing) }
-    )
     val verticalAlignment by transition.animateFloat(
-        targetValueByState = { if (it) 1f else -1f },
+        targetValueByState = { if (it) 1f else 0f },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
 
@@ -85,25 +89,34 @@ fun PosterVertically(
     )
     val textHeight = with(density) { 14.sp.toDp() + 8.dp }
 
-    if (poster.name.isNotBlank() && poster.name.isNotEmpty()) {
+    if (poster.name.isNotBlank()) {
         Box(
             modifier = modifier
+                .clip(
+                    shape = RoundedCornerShape(
+                        topStart = Theme.radius.lg,
+                        bottomStart = if (isGridSelected) Theme.radius.xxs else Theme.radius.lg,
+                        topEnd = Theme.radius.lg,
+                        bottomEnd = Theme.radius.lg
+                    )
+                )
                 .then(
                     if (isGridSelected) Modifier
                     else Modifier.background(Theme.color.background.card)
                 )
-
+                .clickable(onClick = onClick)
         ) {
             SafeIslamicImage(
-                imageUrl = poster.imageUri,
+                imageUrl = poster.imageUrl,
                 contentDescription = poster.name,
-                placeHolderTint = Theme.color.brand.secondary,
                 hasSensitiveText = isGridSelected,
+                placeHolderTint = Theme.color.brand.secondary,
                 contentScale = ContentScale.FillBounds,
                 placeholderModifier = Modifier
                     .align(Alignment.TopStart)
-                    .fillMaxWidth()
+                    .width(imageWidth)
                     .aspectRatio(0.73f)
+                    .heightIn(min = 88.dp)
                     .border(
                         width = 1.dp,
                         color = Theme.color.stroke.primary,
@@ -114,11 +127,19 @@ fun PosterVertically(
                         )
                     ),
                 modifier = Modifier
+                    .align(Alignment.TopStart)
                     .padding(bottom = if (isGridSelected) textHeight else 0.dp)
-                    .clickable(onClick = onClick)
                     .width(imageWidth)
                     .aspectRatio(0.73f)
-                    .clip(RoundedCornerShape(Theme.radius.lg))
+                    .heightIn(min = 88.dp)
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg,
+                            bottomEnd = if (isGridSelected) Theme.radius.lg else 0.dp
+                        )
+                    )
                     .background(Theme.color.background.card)
             )
 
@@ -126,9 +147,7 @@ fun PosterVertically(
                 modifier = Modifier
                     .padding(
                         start = columnStartPadding,
-                        end = columnEndPadding,
-                        top = columnVerticalPadding,
-                        bottom = columnVerticalPadding
+                        end = columnEndPadding
                     )
                     .align(BiasAlignment(-1f, verticalAlignment))
             ) {
@@ -146,15 +165,13 @@ fun PosterVertically(
                     exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
                     modifier = Modifier.padding(top = 4.dp)
                 ) {
-                    if (poster.genres.isNotEmpty()) {
-                        Text(
-                            text = poster.genres.joinToString(separator = ", "),
-                            style = Theme.textStyle.body.sm.regular,
-                            color = Theme.color.shade.secondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                    Text(
+                        text = poster.genres ?: stringResource(R.string.unknown_genre),
+                        style = Theme.textStyle.body.sm.regular,
+                        color = Theme.color.shade.secondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
 
                 transition.AnimatedVisibility(
@@ -182,33 +199,25 @@ fun PosterVertically(
                             }
                         }
                     }
-
                 }
             }
 
-            if (poster.rating > 0) {
-                Rating(
-                    value = poster.rating,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(
-                            end = ratingPadding,
-                            top = ratingPadding
-                        )
-                )
-            }
+            Rating(
+                value = poster.rating,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(
+                        end = ratingPadding,
+                        top = ratingPadding
+                    )
+            )
         }
     }
-
 }
-
 
 @Composable
 private fun IconWithText(icon: Painter, text: String) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.clock_icon),
@@ -216,11 +225,11 @@ private fun IconWithText(icon: Painter, text: String) {
             modifier = Modifier.size(16.dp)
         )
         Text(
-            text = text,
+            text = text.trim(),
             style = Theme.textStyle.label.md.regular,
-            color = Theme.color.shade.secondary,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            color = Theme.color.shade.secondary
         )
     }
 }
