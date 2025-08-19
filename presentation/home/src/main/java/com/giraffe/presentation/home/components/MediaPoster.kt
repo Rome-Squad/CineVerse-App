@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,14 +37,18 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
+import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PosterMedia
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -54,11 +59,14 @@ fun MediaPoster(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
-
-
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
-    val imageMaxWidth = with(density) { widowSize.containerSize.width.toDp() }
+    val imageMaxWidth = with(density) {
+        val numberOfCards =
+            (widowSize.containerSize.width.toDp().toPx() - 32.dp.toPx()) / 156.dp.toPx()
+        val size = widowSize.containerSize.width.toDp() / numberOfCards.toInt()
+        size.coerceAtLeast(156.dp)
+    }
     val transition = updateTransition(isGridSelected)
     val imageWidth by transition.animateDp(
         targetValueByState = { if (it) imageMaxWidth else 64.dp },
@@ -72,12 +80,8 @@ fun MediaPoster(
         targetValueByState = { if (it) 0.dp else 12.dp },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
-    val columnVerticalPadding by transition.animateDp(
-        targetValueByState = { if (it) 0.dp else 12.dp },
-        transitionSpec = { tween(700, easing = LinearEasing) }
-    )
     val verticalAlignment by transition.animateFloat(
-        targetValueByState = { if (it) 1f else -1f },
+        targetValueByState = { if (it) 1f else 0f },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
 
@@ -87,10 +91,11 @@ fun MediaPoster(
     )
     val textHeight = with(density) { 14.sp.toDp() + 8.dp }
 
-    if (poster.name.isNotBlank() && poster.name.isNotEmpty()) {
+    if (poster.name.isNotBlank()) {
         Box(
             modifier = modifier
-                .clip(shape = RoundedCornerShape(Theme.radius.lg))
+                .clip(shape = RoundedCornerShape(Theme.radius.xxs))
+                .clickable(onClick = onClick)
                 .then(
                     if (isGridSelected) Modifier
                     else Modifier.background(Theme.color.background.card)
@@ -104,8 +109,9 @@ fun MediaPoster(
                 contentScale = ContentScale.FillBounds,
                 placeholderModifier = Modifier
                     .align(Alignment.TopStart)
-                    .fillMaxWidth()
+                    .width(imageWidth)
                     .aspectRatio(0.73f)
+                    .heightIn(min = 88.dp)
                     .border(
                         width = 1.dp,
                         color = Theme.color.stroke.primary,
@@ -116,10 +122,11 @@ fun MediaPoster(
                         )
                     ),
                 modifier = Modifier
+                    .align(Alignment.TopStart)
                     .padding(bottom = if (isGridSelected) textHeight else 0.dp)
-                    .clickable(onClick = onClick)
                     .width(imageWidth)
                     .aspectRatio(0.73f)
+                    .heightIn(min = 88.dp)
                     .clip(
                         shape = RoundedCornerShape(
                             topStart = Theme.radius.lg,
@@ -135,9 +142,7 @@ fun MediaPoster(
                 modifier = Modifier
                     .padding(
                         start = columnStartPadding,
-                        end = columnEndPadding,
-                        top = columnVerticalPadding,
-                        bottom = columnVerticalPadding
+                        end = columnEndPadding
                     )
                     .align(BiasAlignment(-1f, verticalAlignment))
             ) {
@@ -172,19 +177,21 @@ fun MediaPoster(
                     exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    poster.date?.let {
-                        if (!poster.time.isNullOrEmpty()) {
-                            IconWithText(
-                                icon = painterResource(Theme.icons.dueTone.clock),
-                                text = poster.time
-                            )
-                        }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        poster.date?.let {
+                            if (!poster.time.isNullOrEmpty()) {
+                                IconWithText(
+                                    icon = painterResource(Theme.icons.dueTone.clock),
+                                    text = poster.time
+                                )
+                            }
 
-                        if (poster.date.isNotEmpty()) {
-                            IconWithText(
-                                icon = painterResource(Theme.icons.dueTone.calendar),
-                                text = poster.date
-                            )
+                            if (poster.date.isNotEmpty()) {
+                                IconWithText(
+                                    icon = painterResource(Theme.icons.dueTone.calendar),
+                                    text = poster.date
+                                )
+                            }
                         }
                     }
                 }
@@ -203,7 +210,6 @@ fun MediaPoster(
             }
         }
     }
-
 }
 
 
@@ -211,7 +217,7 @@ fun MediaPoster(
 private fun IconWithText(icon: Painter, text: String) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = icon,
@@ -225,6 +231,30 @@ private fun IconWithText(icon: Painter, text: String) {
             color = Theme.color.shade.secondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+
+@Preview
+@Composable
+private fun MediaPosterPreview() {
+    CineVerseTheme(isDarkTheme = true) {
+        MediaPoster(
+            poster = PosterMedia(
+                id = 1,
+                name = "poula",
+                imageUri = "",
+                rating = 5f,
+                genres = listOf("dsdads", "dasdadasd"),
+                time = "45",
+                date = "2024",
+                mediaType = MediaType.MOVIE,
+                recentViewedAt = 21L
+            ),
+            isGridSelected = false,
+            onClick = {},
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

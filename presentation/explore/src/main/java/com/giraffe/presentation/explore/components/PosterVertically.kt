@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.R
@@ -57,7 +58,10 @@ fun PosterVertically(
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
     val imageMaxWidth = with(density) {
-        widowSize.containerSize.width.toDp()
+        val numberOfCards =
+            (widowSize.containerSize.width.toDp().toPx() - 32.dp.toPx()) / 156.dp.toPx()
+        val size = widowSize.containerSize.width.toDp() / numberOfCards.toInt()
+        size.coerceAtLeast(156.dp)
     }
     val transition = updateTransition(isGridSelected)
     val imageWidth by transition.animateDp(
@@ -72,12 +76,8 @@ fun PosterVertically(
         targetValueByState = { if (it) 0.dp else 12.dp },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
-    val columnVerticalPadding by transition.animateDp(
-        targetValueByState = { if (it) 0.dp else 12.dp },
-        transitionSpec = { tween(700, easing = LinearEasing) }
-    )
     val verticalAlignment by transition.animateFloat(
-        targetValueByState = { if (it) 1f else -1f },
+        targetValueByState = { if (it) 1f else 0f },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
 
@@ -85,110 +85,116 @@ fun PosterVertically(
         targetValueByState = { if (it) 8.dp else 12.dp },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
+    val textHeight = with(density) { 14.sp.toDp() + 8.dp }
 
-    val textHeight = with(density) {
-        14.sp.toDp() + 8.dp
-    }
-
-    Box(
-        modifier = modifier
-            .then(
-                if (isGridSelected) Modifier
-                else Modifier.background(Theme.color.background.card)
-            )
-
-    ) {
-        SafeIslamicImage(
-            imageUrl = poster.imageUrl,
-            contentDescription = poster.name,
-            modifier = Modifier
-                .padding(bottom = if (isGridSelected) textHeight else 0.dp)
+    if (poster.name.isNotBlank()) {
+        Box(
+            modifier = modifier
+                .clip(shape = RoundedCornerShape(Theme.radius.xxs))
                 .clickable(onClick = onClick)
-                .width(imageWidth)
-                .aspectRatio(0.73f)
-                .clip(RoundedCornerShape(Theme.radius.lg))
-                .background(Theme.color.background.card),
-            placeHolderTint = Theme.color.brand.secondary,
-            contentScale = ContentScale.FillBounds,
-            placeholderModifier = Modifier
-                .align(Alignment.TopStart)
-                .fillMaxWidth()
-                .aspectRatio(0.73f)
-                .border(
-                    width = 1.dp,
-                    color = Theme.color.stroke.primary,
-                    shape = RoundedCornerShape(
-                        topStart = Theme.radius.lg,
-                        bottomStart = Theme.radius.lg,
-                        topEnd = Theme.radius.lg
-                    )
+                .then(
+                    if (isGridSelected) Modifier
+                    else Modifier.background(Theme.color.background.card)
                 )
-        )
-
-        Column(
-            modifier = Modifier
-                .padding(
-                    start = columnStartPadding,
-                    end = columnEndPadding,
-                    top = columnVerticalPadding,
-                    bottom = columnVerticalPadding
-                )
-                .align(BiasAlignment(-1f, verticalAlignment))
         ) {
-            Text(
-                text = poster.name,
-                style = Theme.textStyle.body.md.medium,
-                color = Theme.color.shade.primary,
-                maxLines = 1,
-                modifier = Modifier.widthIn(max = 156.dp)
+            SafeIslamicImage(
+                imageUrl = poster.imageUrl,
+                contentDescription = poster.name,
+                hasSensitiveText = isGridSelected,
+                placeHolderTint = Theme.color.brand.secondary,
+                contentScale = ContentScale.FillBounds,
+                placeholderModifier = Modifier
+                    .align(Alignment.TopStart)
+                    .width(imageWidth)
+                    .aspectRatio(0.73f)
+                    .heightIn(min = 88.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Theme.color.stroke.primary,
+                        shape = RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg
+                        )
+                    ),
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(bottom = if (isGridSelected) textHeight else 0.dp)
+                    .width(imageWidth)
+                    .aspectRatio(0.73f)
+                    .heightIn(min = 88.dp)
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg,
+                            bottomEnd = if (isGridSelected) Theme.radius.lg else 0.dp
+                        )
+                    )
+                    .background(Theme.color.background.card)
             )
 
-            transition.AnimatedVisibility(
-                visible = { !it },
-                enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
-                exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
-                modifier = Modifier.padding(top = 4.dp)
+            Column(
+                modifier = Modifier
+                    .padding(
+                        start = columnStartPadding,
+                        end = columnEndPadding
+                    )
+                    .align(BiasAlignment(-1f, verticalAlignment))
             ) {
-                poster.genres?.let {
-                    if (it.isNotEmpty()) {
-                        Text(
-                            text = poster.genres ?: stringResource(R.string.unknown_genre),
-                            style = Theme.textStyle.body.sm.regular,
-                            color = Theme.color.shade.secondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                Text(
+                    text = poster.name,
+                    style = Theme.textStyle.body.md.medium,
+                    color = Theme.color.shade.primary,
+                    maxLines = 1,
+                    modifier = Modifier.widthIn(max = 156.dp)
+                )
+
+                transition.AnimatedVisibility(
+                    visible = { !it },
+                    enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
+                    exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
+                    modifier = Modifier.padding(top = 4.dp)
+                ) {
+                    Text(
+                        text = poster.genres ?: stringResource(R.string.unknown_genre),
+                        style = Theme.textStyle.body.sm.regular,
+                        color = Theme.color.shade.secondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                transition.AnimatedVisibility(
+                    visible = { !it },
+                    enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
+                    exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    poster.date?.let {
+                        if (it.isNotEmpty()) {
+                            IconWithText(
+                                icon = painterResource(Theme.icons.dueTone.calendar),
+                                text = poster.date
+                            )
+                        }
                     }
                 }
             }
 
-            transition.AnimatedVisibility(
-                visible = { !it },
-                enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
-                exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                poster.date?.let {
-                    if (it.isNotEmpty()) {
-                        IconWithText(
-                            icon = painterResource(Theme.icons.dueTone.calendar),
-                            text = poster.date ?: stringResource(R.string.unknown_date)
+            if (poster.rating > 0) {
+                Rating(
+                    value = poster.rating,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(
+                            end = ratingPadding,
+                            top = ratingPadding
                         )
-                    }
-                }
+
+                )
             }
         }
-
-        Rating(
-            value = poster.rating,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(
-                    end = ratingPadding,
-                    top = ratingPadding
-                )
-
-        )
     }
 }
 
@@ -202,8 +208,10 @@ private fun IconWithText(icon: Painter, text: String) {
             modifier = Modifier.size(16.dp)
         )
         Text(
-            text = text,
+            text = text.trim(),
             style = Theme.textStyle.label.md.regular,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             color = Theme.color.shade.secondary
         )
     }
