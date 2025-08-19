@@ -29,5 +29,6 @@
     <string name="family_night_picks">Family Night Picks</string>
     <string name="based_on_true_events">Based on True Events</string>
     <string name="feel_good_favorites">Feel-Good Favorites</string>
+    <string name="unknown_genre">Unknown genre</string>
 
 </resources>

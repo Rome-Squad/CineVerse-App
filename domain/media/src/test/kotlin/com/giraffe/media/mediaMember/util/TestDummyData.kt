@@ -2,15 +2,19 @@ package com.giraffe.media.mediaMember.util
 
 import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 object TestDummyData {
 
+    @OptIn(ExperimentalTime::class)
     val castMember1 = createCastMember(
         id = 3895,
         name = "Michael Caine",
         biography = "A legendary British actor...",
-        birthday = LocalDate(1933, 3, 14),
+        birthday = Clock.System.now().toLocalDateTime(TimeZone.UTC).date,
         placeOfBirth = "Rotherhithe, London, England, UK",
         imageUrl = "https://image.tmdb.org/t/p/w500/bVZRMlpjTAO2pJK6v90buFgVbSW.jpg",
         otherImages = listOf(
