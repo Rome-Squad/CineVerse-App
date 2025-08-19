@@ -106,7 +106,10 @@ private fun MyCollectionsScreenContent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(state.collections) { collection ->
+                    items(
+                        items = state.collections,
+                        key = { collection -> collection.id }
+                    ) { collection ->
                         CollectionItem(
                             modifier = Modifier.fillMaxWidth(),
                             text = collection.name,

@@ -37,7 +37,7 @@ class CastDetailsViewModel @Inject constructor(
     }
 
     private fun getCastDetailsAndCredits(personId: Int) {
-        updateState { it.copy(isLoading = true) }
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
 
         safeExecute(
             onSuccess = ::getPersonDetailsSuccess,
