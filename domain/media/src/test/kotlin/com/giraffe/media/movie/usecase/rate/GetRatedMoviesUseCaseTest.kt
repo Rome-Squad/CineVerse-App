@@ -7,6 +7,7 @@ import com.giraffe.user.usecase.GetUserUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -25,40 +26,34 @@ class GetRatedMoviesUseCaseTest {
 
     @Test
     fun `invoke should call getUserRated on repository`() = runTest {
-        // given
-        coEvery { repository.getUserRated(any()) } returns emptyList()
-        coEvery { getUserUseCase() } returns mockUser
 
-        // when
+        coEvery { repository.getUserRated(any()) } returns emptyList()
+        coEvery { getUserUseCase() } returns flowOf(mockUser)
+
         useCase()
 
-        // then
         coVerify(exactly = 1) { repository.getUserRated(any()) }
     }
 
     @Test
     fun `invoke should call getUserUseCase on GetRatedMoviesUseCase`() = runTest {
-        // given
-        coEvery { repository.getUserRated(any()) } returns emptyList()
-        coEvery { getUserUseCase() } returns mockUser
 
-        // when
+        coEvery { repository.getUserRated(any()) } returns emptyList()
+        coEvery { getUserUseCase() } returns flowOf(mockUser)
+
         useCase()
 
-        // then
         coVerify(exactly = 1) { getUserUseCase() }
     }
 
     @Test
     fun `invoke should return rated movies for user`() = runTest {
-        // Given
-        coEvery { getUserUseCase() } returns mockUser
+
+        coEvery { getUserUseCase() } returns flowOf(mockUser)
         coEvery { repository.getUserRated(mockUser.id) } returns fakeMovies
 
-        // When
         val result = useCase()
 
-        // Then
         assertEquals(fakeMovies, result)
     }
 }

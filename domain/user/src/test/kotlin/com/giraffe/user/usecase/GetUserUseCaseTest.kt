@@ -6,6 +6,8 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -17,7 +19,7 @@ class GetUserUseCaseTest {
     @Test
     fun `invoke should call getAccountDetails on repository`() = runTest {
 
-        coEvery { userRepository.getUser() } returns fakeUser
+        coEvery { userRepository.getUser() } returns flowOf(fakeUser)
 
         getUserUseCase()
 
@@ -27,11 +29,11 @@ class GetUserUseCaseTest {
     @Test
     fun `invoke should return account details from repository`() = runTest {
 
-        coEvery { userRepository.getUser() } returns fakeUser
+        coEvery { userRepository.getUser() } returns flowOf(fakeUser)
 
         val result = getUserUseCase()
 
-        assertThat(result).isEqualTo(fakeUser)
+        assertThat(result.first()).isEqualTo(fakeUser)
     }
 
 }
