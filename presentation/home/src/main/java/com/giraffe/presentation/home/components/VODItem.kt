@@ -29,6 +29,7 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
+import com.giraffe.presentation.home.utils.toLocalizedRating
 
 @SuppressLint("DefaultLocale")
 @Composable
@@ -71,7 +72,7 @@ fun VODItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = String.format("%.1f", popularMediaItem.rating),
+                    text = popularMediaItem.rating.toLocalizedRating(),
                     style = Theme.textStyle.label.md.medium,
                     color = Theme.color.shade.primary
                 )

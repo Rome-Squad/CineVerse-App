@@ -34,8 +34,9 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.details.R
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.R
+import com.giraffe.presentation.details.utils.toLocalizedRating
 
 @Composable
 fun SeasonCard(
@@ -156,7 +157,7 @@ fun SeasonCard(
                     )
                     Text(
                         modifier = Modifier.padding(end = 8.dp),
-                        text = rating.toString(),
+                        text = rating.toLocalizedRating(),
                         color = Theme.color.shade.secondary,
                         style = Theme.textStyle.label.md.regular,
                     )
