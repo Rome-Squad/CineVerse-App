@@ -1,4 +1,5 @@
 @file:JvmName("personMappers")
+
 package com.giraffe.media.person.mapper
 
 import com.giraffe.media.mediaMember.entity.CastMember
@@ -31,14 +32,16 @@ fun mapToCast(
     details: PersonDetailsDto,
     images: List<ProfileDto>,
     socialMedia: PersonSocialMediaDto
-): CastMember = CastMember(
+) = CastMember(
     id = personId,
     name = details.name.orEmpty(),
     imageUrl = details.profilePath?.let {
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     },
     role = details.department.orEmpty(),
-    birthday = details.birthday,
+    birthday = if (details.birthday.isNullOrEmpty()) null else LocalDate.parse(
+        details.birthday
+    ),
     placeOfBirth = details.placeOfBirth,
     biography = details.biography,
     otherImages = images.map(ProfileDto::toImageUrl),
@@ -51,7 +54,7 @@ fun mapToCrew(
     details: PersonDetailsDto,
     images: List<ProfileDto>,
     socialMedia: PersonSocialMediaDto
-): CrewMember = CrewMember(
+) = CrewMember(
     id = personId,
     name = details.name.orEmpty(),
     imageUrl = details.profilePath?.let {
@@ -199,7 +202,9 @@ fun PersonCreditDto.toMovieEntity() = Movie(
             BASE_IMAGE_URL + it
     }.orEmpty(),
     genresID = genreIds ?: emptyList(),
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    releaseYear = if (firstCreditAirDate.isNullOrEmpty()) null else LocalDate.parse(
+        firstCreditAirDate
+    ),
     popularity = popularity.orZero(),
     youtubeVideoId = "",
     recentViewedAt = null,
@@ -218,7 +223,9 @@ fun PersonCreditDto.toSeriesEntity() = Series(
         if (it.contains(BASE_IMAGE_URL)) it else BASE_IMAGE_URL + it
     }.orEmpty(),
     genreIDs = genreIds ?: emptyList(),
-    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(releaseDate),
+    releaseYear = if (firstCreditAirDate.isNullOrEmpty()) null else LocalDate.parse(
+        firstCreditAirDate
+    ),
     seasons = emptyList(),
     youtubeVideoId = null,
     popularity = popularity.orZero(),

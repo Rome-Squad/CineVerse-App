@@ -65,7 +65,7 @@ class SeasonsViewModel @Inject constructor(
         sendEffect(SeasonsEffect.NavigateBack)
     }
 
-    override fun retry() {
+    override fun onRetryClick() {
         state.value.seriesId?.let {
             loadSeason(it)
         }

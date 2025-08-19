@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.screens.seriesdetails
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -109,7 +108,7 @@ private fun SeriesDetailsContent(
 ) {
     val scrollState = rememberLazyListState()
 
-    val animationProgress = remember { Animatable(0f) }
+    val animationProgress = state.animationProgress
     val scope = rememberCoroutineScope()
     var lastDelta by remember { mutableIntStateOf(0) }
     var flingJob by remember { mutableStateOf<Job?>(null) }
@@ -165,6 +164,7 @@ private fun SeriesDetailsContent(
         title = "",
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interaction::onRetryClick,
         onBackClick = interaction::onBackClick
     ) {
         Box(

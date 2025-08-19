@@ -49,7 +49,7 @@ import com.giraffe.presentation.explore.components.uimodel.Poster
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun PosterVertically(
+fun MediaPoster(
     poster: Poster,
     isGridSelected: Boolean,
     modifier: Modifier = Modifier,
@@ -58,10 +58,12 @@ fun PosterVertically(
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
     val imageMaxWidth = with(density) {
-        val numberOfCards =
-            (widowSize.containerSize.width.toDp().toPx() - 32.dp.toPx()) / 156.dp.toPx()
-        val size = widowSize.containerSize.width.toDp() / numberOfCards.toInt()
-        size.coerceAtLeast(156.dp)
+        val windowWidth = widowSize.containerSize.width - 32.dp.toPx()
+        var numberOfCards = windowWidth / 156.dp.toPx()
+        val padding = (numberOfCards - 1) * 32.dp.toPx()
+        numberOfCards = (windowWidth - padding) / 156.dp.toPx()
+        val width = windowWidth / numberOfCards.toInt()
+        width.toDp().coerceAtLeast(156.dp)
     }
     val transition = updateTransition(isGridSelected)
     val imageWidth by transition.animateDp(
@@ -90,12 +92,19 @@ fun PosterVertically(
     if (poster.name.isNotBlank()) {
         Box(
             modifier = modifier
-                .clip(shape = RoundedCornerShape(Theme.radius.xxs))
-                .clickable(onClick = onClick)
+                .clip(
+                    shape = RoundedCornerShape(
+                        topStart = Theme.radius.lg,
+                        bottomStart = if (isGridSelected) Theme.radius.xxs else Theme.radius.lg,
+                        topEnd = Theme.radius.lg,
+                        bottomEnd = Theme.radius.lg
+                    )
+                )
                 .then(
                     if (isGridSelected) Modifier
                     else Modifier.background(Theme.color.background.card)
                 )
+                .clickable(onClick = onClick)
         ) {
             SafeIslamicImage(
                 imageUrl = poster.imageUrl,
@@ -171,29 +180,37 @@ fun PosterVertically(
                     exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    poster.date?.let {
-                        if (it.isNotEmpty()) {
-                            IconWithText(
-                                icon = painterResource(Theme.icons.dueTone.calendar),
-                                text = poster.date
-                            )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        poster.date?.let {
+                            if (!poster.time.isNullOrEmpty()) {
+                                IconWithText(
+                                    icon = painterResource(Theme.icons.dueTone.clock),
+                                    text = poster.time
+                                )
+                            }
+
+                            if (poster.date.isNotEmpty()) {
+                                IconWithText(
+                                    icon = painterResource(Theme.icons.dueTone.calendar),
+                                    text = poster.date
+                                )
+                            }
                         }
                     }
                 }
             }
 
-            if (poster.rating > 0) {
-                Rating(
-                    value = poster.rating,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(
-                            end = ratingPadding,
-                            top = ratingPadding
-                        )
-
-                )
-            }
+            Rating(
+                value = poster.rating,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(
+                        end = ratingPadding,
+                        top = ratingPadding
+                    )
+            )
         }
     }
 }

@@ -3,6 +3,7 @@ package com.giraffe.media.mediaMember.util
 import com.giraffe.media.mediaMember.entity.CastMember
 import com.giraffe.media.mediaMember.entity.CrewMember
 import com.giraffe.media.mediaMember.entity.core.SocialMediaLinks
+import kotlinx.datetime.LocalDate
 
 fun createCrewMember(
     id: Int,
@@ -31,7 +32,7 @@ fun createCastMember(
     name: String,
     role: String = "Acting",
     biography: String? = null,
-    birthday: String? = null,
+    birthday: LocalDate? = null,
     characterName: String? = null,
     imageUrl: String? = null,
     otherImages: List<String> = emptyList(),
