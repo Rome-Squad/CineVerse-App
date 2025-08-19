@@ -76,7 +76,6 @@ class CategoryMediaViewModel @Inject constructor(
     }
 
     private fun onLoadByStrategySuccess(mediaFlow: Flow<PagingData<PosterMedia>>) {
-        Log.d("TAG", "onLoadByStrategySuccess: $mediaFlow")
         updateState {
             it.copy(
                 sectionType = sectionType,
