@@ -16,7 +16,7 @@ class ObserveRecentlyReleasedSeriesUseCaseTest {
         ObserveRecentlyReleasedSeriesUseCase(repository)
 
     @Test
-    fun `given recently released series, when invoke is called, then return series list`() =
+    fun `should return list of recently released series when the usecase is called  `() =
         runTest {
             val expectedSeries = flowOf(
                 listOf(createFakeSeries(id = 1, name = "The Last of Us"))
