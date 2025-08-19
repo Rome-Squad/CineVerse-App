@@ -98,6 +98,7 @@ fun PosterVertically(
                 imageUrl = poster.imageUri,
                 contentDescription = poster.name,
                 placeHolderTint = Theme.color.brand.secondary,
+                hasSensitiveText = isGridSelected,
                 contentScale = ContentScale.FillBounds,
                 placeholderModifier = Modifier
                     .align(Alignment.TopStart)
@@ -162,21 +163,26 @@ fun PosterVertically(
                     exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    poster.date?.let {
-                        if (!poster.time.isNullOrEmpty()) {
-                            IconWithText(
-                                icon = painterResource(Theme.icons.dueTone.clock),
-                                text = poster.time
-                            )
-                        }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        poster.date?.let {
+                            if (!poster.time.isNullOrEmpty()) {
+                                IconWithText(
+                                    icon = painterResource(Theme.icons.dueTone.clock),
+                                    text = poster.time
+                                )
+                            }
 
-                        if (poster.date.isNotEmpty()) {
-                            IconWithText(
-                                icon = painterResource(Theme.icons.dueTone.calendar),
-                                text = poster.date
-                            )
+                            if (poster.date.isNotEmpty()) {
+                                IconWithText(
+                                    icon = painterResource(Theme.icons.dueTone.calendar),
+                                    text = poster.date
+                                )
+                            }
                         }
                     }
+
                 }
             }
 
