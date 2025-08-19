@@ -6,7 +6,6 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.model.GenreUi
-import com.giraffe.presentation.home.utils.formatAsFullDate
 
 
 fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
