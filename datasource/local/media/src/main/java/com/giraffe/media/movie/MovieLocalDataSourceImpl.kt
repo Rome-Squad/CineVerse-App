@@ -18,9 +18,8 @@ import javax.inject.Inject
 class MovieLocalDataSourceImpl @Inject constructor(
     private val movieDao: MovieDao
 ) : MoviesLocalDataSource {
-    override suspend fun addMovie(movie: MovieCacheDto) {
-        movieDao.insertMovie(movie)
-    }
+    override suspend fun addMovie(movie: MovieCacheDto) =
+        safeCall { movieDao.insertMovie(movie) }
 
     // region Movie Genres
     override suspend fun syncMovieGenres(movieGenres: List<MovieGenreCacheDto>) {
@@ -115,13 +114,11 @@ class MovieLocalDataSourceImpl @Inject constructor(
     override suspend fun getAllRecentlyViewedMovies(): List<MovieWithRecentlyViewedAt> =
         safeCall { movieDao.getAllRecentlyViewedMovies() }
 
-
     override suspend fun deleteRecentlyViewedMovieById(movieId: Int) =
         safeCall { movieDao.deleteRecentlyViewedMovieById(movieId) }
 
     override suspend fun clearRecentlyViewedMovies() =
         safeCall { movieDao.clearRecentlyViewedMovies() }
-
     // endregion Popularity, Recently Released, Upcoming, Match, Recently Viewed
 
     override suspend fun clearMovieCache() =
