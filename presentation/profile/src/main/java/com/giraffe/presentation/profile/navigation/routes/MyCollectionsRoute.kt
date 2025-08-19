@@ -3,7 +3,7 @@ package com.giraffe.presentation.profile.navigation.routes
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.giraffe.media.collections.entity.Collection
+import com.giraffe.api.home.HomeApi
 import com.giraffe.presentation.profile.screens.mycollections.MyCollectionsScreen
 import kotlinx.serialization.Serializable
 
@@ -16,15 +16,20 @@ internal fun NavController.navigateToMyCollections() {
 }
 
 fun NavGraphBuilder.myCollectionsRoute(
+    navController: NavController,
     navigateBack: () -> Unit,
-    navigateToCollection: (Collection) -> Unit,
-    navigateToExploreScreen: () -> Unit
+    homeApi: HomeApi,
 ) {
     composable<MyCollectionsRoute> {
         MyCollectionsScreen(
             navigateBack = navigateBack,
-            navigateToCollection = navigateToCollection,
-            navigateToExploreScreen = navigateToExploreScreen
+            navigateToCollection = {
+                navController.navigateToCollection(
+                    collectionId = it.id,
+                    collectionName = it.name
+                )
+            },
+            navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
     }
 }

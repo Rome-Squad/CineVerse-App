@@ -3,6 +3,7 @@ package com.giraffe.presentation.profile.navigation.routes
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.giraffe.api.home.HomeApi
 import com.giraffe.presentation.profile.screens.history.HistoryScreen
 import kotlinx.serialization.Serializable
 
@@ -14,17 +15,15 @@ internal fun NavController.navigateToHistory() {
 }
 
 fun NavGraphBuilder.historyRoute(
-    onBackClicked: () -> Unit,
-    navigateToMoviesDetailsScreen: (Int) -> Unit,
-    navigateToSeriesDetailsScreen: (Int) -> Unit,
-    navigateToExploreScreen: () -> Unit
+    navController: NavController,
+    homeApi: HomeApi,
 ) {
     composable<HistoryRoute> {
         HistoryScreen(
-            onBackClicked = onBackClicked,
-            navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
-            navigateToSeriesDetailsScreen = navigateToSeriesDetailsScreen,
-            navigateToExploreScreen = navigateToExploreScreen
+            onBackClicked = navController::navigateUp,
+            navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
+            navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails,
+            navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
     }
 }
