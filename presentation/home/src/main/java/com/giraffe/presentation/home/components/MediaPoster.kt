@@ -206,17 +206,15 @@ fun MediaPoster(
                 }
             }
 
-            if (poster.rating > 0) {
-                Rating(
-                    value = poster.rating,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(
-                            end = ratingPadding,
-                            top = ratingPadding
-                        )
-                )
-            }
+            Rating(
+                value = poster.rating,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(
+                        end = ratingPadding,
+                        top = ratingPadding
+                    )
+            )
         }
     }
 }
