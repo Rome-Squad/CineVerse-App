@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -101,7 +100,7 @@ private fun MovieDetailsContent(
 ) {
     val scrollState = rememberLazyListState()
 
-    val animationProgress = remember { Animatable(0f) }
+    val animationProgress = state.animationProgress
     val scope = rememberCoroutineScope()
     var lastDelta by remember { mutableIntStateOf(0) }
     var flingJob by remember { mutableStateOf<Job?>(null) }
@@ -202,8 +201,7 @@ private fun MovieDetailsContent(
                         InfoSection(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
-                                .align(Alignment.CenterStart)
-                            ,
+                                .align(Alignment.CenterStart),
                             title = stringResource(R.string.storyline),
                             description = state.movie.overview
                         )

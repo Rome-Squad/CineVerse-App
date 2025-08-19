@@ -9,8 +9,8 @@ import com.giraffe.media.mediaMember.usecase.AddCastToRecentCastUseCase
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
 import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
+import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
-import com.giraffe.presentation.details.screens.castCredit.MediaType
 import com.giraffe.presentation.details.utils.toFormattedDateBornOn
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toSocialMediaUi
@@ -130,10 +130,10 @@ class CastDetailsViewModel @Inject constructor(
 
     override fun onPosterClick(mediaId: Int, mediaType: String) {
         when (mediaType) {
-            MediaType.MOVIE.value ->
+            Poster.Type.MOVIE.name ->
                 sendEffect(CastDetailsEffect.NavigateToMovieDetails(mediaId))
 
-            MediaType.TV.value ->
+            Poster.Type.SERIES.name ->
                 sendEffect(CastDetailsEffect.NavigateToSeriesDetails(mediaId))
         }
     }
