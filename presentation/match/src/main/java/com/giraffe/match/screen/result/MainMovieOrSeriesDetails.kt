@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.match.utils.toLocalizedRating
 import com.giraffe.presentation.match.R
 
 @Composable
@@ -90,7 +91,7 @@ fun MainMovieOrSeriesDetails(
                     if (rating != 0f) {
                         IconWithText(
                             icon = painterResource(Theme.icons.dueTone.star),
-                            text = "%.1f".format(rating),
+                            text = rating.toLocalizedRating(),
                             colorOfIcon = Theme.color.additional.primary.yellow
                         )
                     }

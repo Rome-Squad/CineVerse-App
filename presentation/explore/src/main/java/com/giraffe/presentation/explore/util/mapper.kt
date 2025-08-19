@@ -6,6 +6,7 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.model.GenreUi
+import com.giraffe.presentation.home.utils.formatAsFullDate
 
 
 fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
@@ -14,13 +15,6 @@ fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         .joinToString(", ") { it.title }
         .ifBlank { null }
 
-
-    val date = releaseYear?.let {
-        "${it.year}, ${
-            it.month.name.lowercase().replaceFirstChar { char -> char.uppercase() }.take(3)
-        } ${it.day}"
-    } ?: ""
-
     return Poster(
         id = id,
         name = name,
@@ -28,7 +22,7 @@ fun Movie.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         rating = rating,
         genres = genreTitles,
         time = duration?.toString(),
-        date = date,
+        date = releaseYear.formatAsFullDate(),
         mediaTypeOfPoster = Poster.Type.MOVIE.value,
         recentViewedAt = recentViewedAt
     )
@@ -47,7 +41,7 @@ fun Series.toPoster(allGenres: List<GenreUi> = emptyList()): Poster {
         imageUrl = "https://image.tmdb.org/t/p/w500$posterUrl",
         rating = rating,
         genres = genreTitles,
-        date = releaseYear?.toString(),
+        date = releaseYear?.formatAsFullDate(),
         mediaTypeOfPoster = Poster.Type.SERIES.value,
         recentViewedAt = recentViewedAt
     )

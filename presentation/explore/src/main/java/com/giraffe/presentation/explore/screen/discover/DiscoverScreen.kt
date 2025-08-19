@@ -107,22 +107,19 @@ fun ExploreContent(
                     }
 
                     else -> {
-
-                        posters.itemSnapshotList.items.forEach { poster ->
-                            item(key = poster.id) {
-                                GenresAndCardsSection(
-                                    modifier = Modifier.fillParentMaxHeight(),
-                                    onPosterClicked = { id ->
-                                        interactions.onPosterClick(id, state.selectedTab)
-                                    },
-                                    posters = posters,
-                                    selectedGenre = state.selectedGenre
-                                        ?: GenreUi(title = stringResource(R.string.all)),
-                                    genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
-                                    isGridSelected = state.isGridSelected,
-                                    onGenreSelected = interactions::onGenreSelected,
-                                )
-                            }
+                        item {
+                            GenresAndCardsSection(
+                                modifier = Modifier.fillParentMaxHeight(),
+                                onPosterClicked = { id ->
+                                    interactions.onPosterClick(id, state.selectedTab)
+                                },
+                                posters = posters,
+                                selectedGenre = state.selectedGenre
+                                    ?: GenreUi(title = stringResource(R.string.all)),
+                                genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
+                                isGridSelected = state.isGridSelected,
+                                onGenreSelected = interactions::onGenreSelected,
+                            )
                         }
                     }
 

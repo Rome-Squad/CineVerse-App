@@ -1,9 +1,12 @@
 package com.giraffe.presentation.profile.screens.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.BaseBottomSheet
 import com.giraffe.designsystem.composable.MessageInfoBox
+import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
@@ -32,8 +35,6 @@ import com.giraffe.presentation.profile.screens.settings.components.ProfileShort
 import com.giraffe.presentation.profile.screens.settings.components.SettingsSection
 import com.giraffe.presentation.profile.screens.settings.components.UserProfileSection
 import com.giraffe.presentation.profile.utils.EffectListener
-import com.giraffe.presentation.profile.utils.showToast
-import com.giraffe.presentation.profile.utils.toStringResource
 
 @Composable
 fun SettingsScreen(
@@ -44,18 +45,17 @@ fun SettingsScreen(
     onNavigateToHistory: () -> Unit,
     onNavigateToRatings: () -> Unit
 ) {
-    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     EffectListener(viewModel.effect) { effect ->
-            when (effect) {
-                SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
-                SettingsEffect.NavigateToHistory -> onNavigateToHistory()
-                SettingsEffect.NavigateToLogin -> onNavigateToLogin()
-                SettingsEffect.NavigateToMyCollections -> onNavigateToMyCollections()
-                SettingsEffect.NavigateToRatings -> onNavigateToRatings()
-                is SettingsEffect.ShowError -> context.showToast(effect.error.toStringResource())
-            }
+        when (effect) {
+            SettingsEffect.NavigateToEditProfileWebView -> onNavigateToEditProfileWebView()
+            SettingsEffect.NavigateToHistory -> onNavigateToHistory()
+            SettingsEffect.NavigateToLogin -> onNavigateToLogin()
+            SettingsEffect.NavigateToMyCollections -> onNavigateToMyCollections()
+            SettingsEffect.NavigateToRatings -> onNavigateToRatings()
+            is SettingsEffect.ShowError -> {}
         }
+    }
     SettingsContent(
         state = state,
         interaction = viewModel
@@ -91,11 +91,16 @@ private fun SettingsContent(
                 .background(
                     color = Theme.color.background.screen
                 ),
-            userProfileImage = if (state.isLoggedIn) state.user.imageUrl else "",
-            userDisplayName = if (state.isLoggedIn) state.user.name else stringResource(R.string.login_or_sign_up),
-            username = if (state.isLoggedIn) "@${state.user.username}" else stringResource(R.string.to_personalize_your_experience),
+            userProfileImage = state.user?.imageUrl ?: "",
+            userDisplayName = state.user?.name ?: stringResource(R.string.login_or_sign_up),
+            username = state.user?.let { "@${it.username}" }
+                ?: stringResource(R.string.to_personalize_your_experience),
             onRowClick = {
-                if (state.isLoggedIn) interaction.onEditProfileClick() else interaction.onLoginClick()
+                if (state.user != null) {
+                    interaction.onEditProfileClick()
+                } else {
+                    interaction.onLoginClick()
+                }
             }
         )
         ProfileShortcuts(
@@ -229,4 +234,16 @@ private fun SettingsContent(
             )
         }
     )
+
+    if (state.isLoggingOut) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Theme.color.background.screen)
+                .clickable(enabled = false) { },
+            contentAlignment = Alignment.Center
+        ) {
+            Progress(modifier = Modifier.size(40.dp))
+        }
+    }
 }

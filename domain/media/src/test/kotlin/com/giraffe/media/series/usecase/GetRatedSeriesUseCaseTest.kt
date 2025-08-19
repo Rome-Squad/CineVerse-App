@@ -6,14 +6,14 @@ import com.giraffe.user.entity.User
 import com.giraffe.user.usecase.GetUserUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GetRatedSeriesUseCaseTest {
-
-    private val repository: SeriesRepository = mockk(relaxed = true)
-    private val getUserUseCase: GetUserUseCase = mockk(relaxed = true)
+    private val repository: SeriesRepository = mockk()
+    private val getUserUseCase: GetUserUseCase = mockk()
     private val useCase: GetRatedSeriesUseCase = GetRatedSeriesUseCase(repository, getUserUseCase)
 
 
@@ -36,7 +36,7 @@ class GetRatedSeriesUseCaseTest {
             )
         )
 
-        coEvery { getUserUseCase() } returns user
+        coEvery { getUserUseCase() } returns flowOf(user)
         coEvery { repository.getUserRated(user.id) } returns expectedResult
 
         val result = useCase()

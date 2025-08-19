@@ -20,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.profile.R
+import com.giraffe.presentation.profile.screens.settings.SettingsViewModel
 import com.giraffe.presentation.profile.utils.FilePicker
 import com.google.accompanist.web.AccompanistWebChromeClient
 import com.google.accompanist.web.AccompanistWebViewClient
@@ -35,12 +37,14 @@ private const val EDIT_PROFILE_URL = "https://www.themoviedb.org/settings/profil
 private const val LOGIN_URL = "https://www.themoviedb.org/login"
 
 @Composable
-fun EditProfileWebViewScreen(onBack: () -> Unit) {
+fun EditProfileWebViewScreen(
+    viewModel: SettingsViewModel = hiltViewModel(),
+    onBack: () -> Unit
+) {
     val webViewState = rememberWebViewState(url = EDIT_PROFILE_URL)
     val isLoading = webViewState.loadingState is LoadingState.Loading
     val webViewClient = remember { RestrictedWebViewClient() }
     val chromeClient = remember { FileChooserWebChromeClient() }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,6 +71,9 @@ fun EditProfileWebViewScreen(onBack: () -> Unit) {
                 onCreated = {
                     it.settings.javaScriptEnabled = true
                     it.setBackgroundColor(Color.TRANSPARENT)
+                },
+                onDispose = {
+                    viewModel.refreshUserProfile()
                 }
             )
 

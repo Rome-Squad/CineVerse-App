@@ -1,5 +1,6 @@
 package com.giraffe.designsystem.composable
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,8 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun Rating(
@@ -32,7 +35,7 @@ fun Rating(
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
-            text = (((value * 10).toInt()).toFloat() / 10).toString(),
+            text = value.toLocalizedRating(),
             style = Theme.textStyle.label.md.medium,
             color = Theme.color.shade.primary
         )
@@ -43,6 +46,23 @@ fun Rating(
             modifier = Modifier.size(16.dp)
         )
     }
+}
+
+private fun String.toArabicDigits(): String {
+    val arabicDigits = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+    return this.map { char ->
+        if (char.isDigit()) arabicDigits[char.digitToInt()] else char
+    }.joinToString("")
+}
+
+fun Float.toLocalizedRating(): String {
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
+    val numberFormat = NumberFormat.getNumberInstance(locale).apply {
+        maximumFractionDigits = 1
+        minimumFractionDigits = 1
+    }
+    val formatted = numberFormat.format(this)
+    return if (locale.language == "ar") formatted.toArabicDigits() else formatted
 }
 
 @Preview(showBackground = true)
