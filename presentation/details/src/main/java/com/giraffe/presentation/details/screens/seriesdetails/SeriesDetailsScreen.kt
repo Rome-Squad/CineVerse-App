@@ -164,6 +164,7 @@ private fun SeriesDetailsContent(
         title = "",
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interaction::onRetryClick,
         onBackClick = interaction::onBackClick
     ) {
         Box(

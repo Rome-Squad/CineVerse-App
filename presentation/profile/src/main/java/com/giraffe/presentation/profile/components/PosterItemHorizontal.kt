@@ -113,7 +113,7 @@ fun PosterItemHorizontal(
 
 
             if (movie.time != null || movie.date != null) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (movie.time != null) {
                         IconWithText(
                             icon = painterResource(Theme.icons.dueTone.clock),

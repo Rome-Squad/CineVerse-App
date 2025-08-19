@@ -59,6 +59,7 @@ fun GalleryContent(
         title = state.actorName + " " + stringResource(R.string.gallery),
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interaction::onRetryClick,
         onBackClick = interaction::onBackClick,
     ) {
         LazyColumn(

@@ -55,6 +55,7 @@ private fun CastCreditContent(
         title = stringResource(R.string.best_of_, state.actorName),
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interaction::onRetryClick,
         onBackClick = interaction::onBackClick
     ) {
         Box(modifier = modifier) {

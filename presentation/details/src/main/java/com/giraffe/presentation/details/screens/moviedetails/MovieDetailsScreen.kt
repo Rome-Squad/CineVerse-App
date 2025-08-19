@@ -156,6 +156,7 @@ private fun MovieDetailsContent(
         title = "",
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interaction::onRetryClick,
         onBackClick = interaction::onBackButtonClick
     ) {
         Box(
