@@ -87,7 +87,9 @@ fun HomeItemVertically(
             SafeIslamicImage(
                 imageUrl = item.posterUrl,
                 contentDescription = item.title,
-                modifier = Modifier
+                placeHolderTint = Theme.color.brand.secondary,
+                placeholderModifier = Modifier
+                    .background(Theme.color.background.card)
                     .fillMaxSize()
             )
             Rating(

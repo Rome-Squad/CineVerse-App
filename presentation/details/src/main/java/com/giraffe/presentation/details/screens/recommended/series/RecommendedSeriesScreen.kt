@@ -13,10 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.ViewToggle
+import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.TransitionLazyColumnToGridPoster
 import com.giraffe.presentation.details.utils.EventListener
@@ -67,6 +69,7 @@ private fun RecommendedSeriesContent(
         isNoInternet = state.isNoInternet,
         onRetryClick = interaction::onRetryClick,
         title = state.seriesTitle.orEmpty(),
+        caption = stringResource(R.string.because_you_watched),
         onBackClick = interaction::onBackClick,
         hasHorizontalDivider = true
     ) {

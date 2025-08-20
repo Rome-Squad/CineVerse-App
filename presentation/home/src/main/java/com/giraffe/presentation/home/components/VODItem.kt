@@ -48,6 +48,10 @@ fun VODItem(
                     shape = RoundedCornerShape(Theme.radius.xl)
                 )
                 .align(Alignment.TopCenter),
+            placeholderModifier = Modifier
+                .background(Theme.color.background.card)
+                .fillMaxSize(),
+            placeHolderTint = Theme.color.brand.secondary,
             imageUrl = popularMediaItem.backdropUrl,
             contentDescription = "cover",
             contentScale = ContentScale.Crop
