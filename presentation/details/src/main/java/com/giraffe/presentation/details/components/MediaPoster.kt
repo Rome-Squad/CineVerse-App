@@ -10,7 +10,6 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -90,7 +89,7 @@ fun MediaPoster(
         targetValueByState = { if (it) 8.dp else 12.dp },
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
-    val textHeight = with(density) { 14.sp.toDp() + 8.dp }
+    val textHeight = with(density) { 20.sp.toDp() + 8.dp }
 
     if (poster.name.isNotBlank()) {
         Box(
@@ -117,18 +116,13 @@ fun MediaPoster(
                 contentScale = ContentScale.FillBounds,
                 placeholderModifier = Modifier
                     .align(Alignment.TopStart)
+                    .then(
+                        if (isGridSelected) Modifier.background(Theme.color.background.card)
+                        else Modifier.background(color = Theme.color.brand.tertiary)
+                    )
                     .width(imageWidth)
                     .aspectRatio(0.73f)
-                    .heightIn(min = 88.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Theme.color.stroke.primary,
-                        shape = RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg
-                        )
-                    ),
+                    .heightIn(min = 88.dp),
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(bottom = if (isGridSelected) textHeight else 0.dp)
@@ -157,7 +151,7 @@ fun MediaPoster(
                 Text(
                     text = poster.name,
                     style = Theme.textStyle.body.md.medium,
-                    color = Theme.color.shade.primary,
+                    color = Theme.color.shade.secondary,
                     maxLines = 1,
                     modifier = Modifier.widthIn(max = 156.dp)
                 )
@@ -207,6 +201,7 @@ fun MediaPoster(
 
             Rating(
                 value = poster.rating,
+                hasBackground = isGridSelected,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(

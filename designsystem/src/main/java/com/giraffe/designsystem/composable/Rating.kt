@@ -24,13 +24,23 @@ import java.util.Locale
 @Composable
 fun Rating(
     value: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hasBackground: Boolean = true
 ) {
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(Theme.radius.full))
-            .background(Theme.color.background.card)
-            .padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 6.dp),
+            .then(
+                if (hasBackground) Modifier
+                    .clip(RoundedCornerShape(Theme.radius.full))
+                    .background(Theme.color.background.card)
+                    .padding(
+                        top = 4.dp,
+                        bottom = 4.dp,
+                        start = 8.dp,
+                        end = 6.dp
+                    )
+                else Modifier
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -73,6 +83,7 @@ private fun Preview() {
     CineVerseTheme(isDarkTheme = true) {
         Rating(
             value = 7.5f,
+            hasBackground = true
         )
     }
 }

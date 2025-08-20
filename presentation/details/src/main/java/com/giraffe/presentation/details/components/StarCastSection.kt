@@ -1,6 +1,6 @@
 package com.giraffe.presentation.details.components
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.CustomCard
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.model.CastUi
 
 
 @Composable
@@ -99,27 +99,17 @@ fun CastCard(
                         RoundedCornerShape(
                             topStart = Theme.radius.lg,
                             topEnd = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            bottomEnd = 0.dp
+                            bottomStart = Theme.radius.lg
                         )
                     ),
                 contentScale = ContentScale.Crop,
                 placeHolderTint = Theme.color.brand.secondary,
                 placeholderModifier = Modifier
+                    .background(Theme.color.brand.tertiary)
                     .fillMaxSize()
-                    .border(
-                        width = 1.dp,
-                        color = Theme.color.stroke.primary,
-                        shape = RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg,
-                            bottomEnd = Theme.radius.lg
-                        )
-                    )
             )
 
-            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.5.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
                 Text(
                     text = actorName,
                     color = Theme.color.shade.primary,
