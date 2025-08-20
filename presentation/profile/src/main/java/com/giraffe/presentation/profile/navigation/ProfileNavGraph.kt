@@ -79,6 +79,7 @@ internal fun ProfileNavGraph(
 
         collectionRoute(
             navController = navController,
+            homeApi = homeApi,
             navigateBack = {
                 if (navigateBack != null) {
                     navigateBack()

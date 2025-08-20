@@ -99,7 +99,6 @@ private fun HistoryContent(
                 ) {
                     if (state.isTipVisible) {
                         item {
-
                             InfoCard(
                                 description = stringResource(
                                     id = R.string.screen_info

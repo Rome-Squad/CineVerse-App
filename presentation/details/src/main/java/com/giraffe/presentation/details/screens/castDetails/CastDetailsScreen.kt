@@ -226,7 +226,7 @@ fun CastDetailsContent(
                             Box(
                                 modifier = Modifier
                                     .height(1.dp)
-                                    .background(Theme.color.stroke.primary)
+                                    .background(Theme.color.brand.tertiary)
                                     .align(Alignment.BottomStart)
                             )
                         }

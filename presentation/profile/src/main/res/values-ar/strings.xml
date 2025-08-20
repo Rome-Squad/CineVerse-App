@@ -53,6 +53,7 @@
     <string name="collection_not_found">خطأ: لم نجد المجموعة!</string>
     <string name="no_collections">لا يوجد مجموعات</string>
     <string name="no_collections_yet">لا يوجد مجموعات بعد</string>
+    <string name="no_movies_yet">لا يوجد أفلام بعد</string>
     <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">ابدأ ببناء مكتبتك و حفظ الأفلام اللتي تريد تذكرها</string>
     <string name="start_collecting">ابدأ بالتصفح</string>
     <string name="no_rating_yet">لا يوجد تقيمات</string>

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -68,7 +69,8 @@ fun ProfileShortcuts(
                 Icon(
                     painter = painterResource(id = item.iconResId),
                     contentDescription = stringResource(id = item.textResId),
-                    tint = Theme.color.brand.primary
+                    tint = Theme.color.brand.primary,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
