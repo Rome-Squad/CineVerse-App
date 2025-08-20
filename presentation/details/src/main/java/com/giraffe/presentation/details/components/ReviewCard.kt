@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -67,6 +68,7 @@ fun ReviewCard(
                 contentScale = ContentScale.Crop,
                 placeHolderTint = Theme.color.shade.secondary,
                 placeholderIcon = painterResource(id = R.drawable.profile),
+                placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
                 placeholderModifier = Modifier
                     .size(40.dp)
                     .background(Theme.color.shade.quinary)

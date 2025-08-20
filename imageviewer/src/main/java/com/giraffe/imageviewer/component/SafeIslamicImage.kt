@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -19,10 +20,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.giraffe.designsystem.composable.custom.Text
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.R
 import com.giraffe.imageviewer.model.ImageState
 import com.giraffe.imageviewer.model.SafeIslamicImageHost
@@ -36,8 +36,10 @@ fun SafeIslamicImage(
     alignment: Alignment = Alignment.Center,
     hasSensitiveText: Boolean = true,
     placeholderModifier: Modifier = Modifier,
+    placeholderTextStyle: TextStyle,
+    eyeSplashTint: Color = Color(0xFFE1E1E3),
     placeholderIcon: Painter = painterResource(id = R.drawable.placeholder),
-    placeHolderTint: Color = Theme.color.brand.secondary,
+    placeHolderTint: Color = Color(0xFFBEC8FF),
 ) {
     val context = LocalContext.current
     val host = remember { SafeIslamicImageHost(context.applicationContext) }
@@ -75,13 +77,12 @@ fun SafeIslamicImage(
                             contentDescription = stringResource(id = R.string.placeholder),
                             modifier = Modifier.size(20.dp),
                             contentScale = ContentScale.FillBounds,
-                            colorFilter = ColorFilter.tint(Color(0xFFE1E1E3))
+                            colorFilter = ColorFilter.tint(eyeSplashTint)
                         )
                         if (hasSensitiveText) {
-                            Text(
+                            BasicText(
                                 text = stringResource(R.string.sensitive_content),
-                                style = Theme.textStyle.body.sm.medium,
-                                color = Color(0xFFE1E1E3)
+                                style = placeholderTextStyle,
                             )
                         }
                     }

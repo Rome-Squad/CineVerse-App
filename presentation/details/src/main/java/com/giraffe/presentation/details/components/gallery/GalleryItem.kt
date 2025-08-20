@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ fun GalleryItem(
     SafeIslamicImage(
         imageUrl = imageUrl.orEmpty(),
         contentDescription = imageUrl.orEmpty(),
+        placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
         contentScale = ContentScale.Crop,
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.lg)),

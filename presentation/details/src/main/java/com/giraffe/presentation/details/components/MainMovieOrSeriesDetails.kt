@@ -88,6 +88,11 @@ fun MainMovieOrSeriesDetails(
                         .background(Theme.color.background.card),
                     contentScale = ContentScale.Crop,
                     placeHolderTint = Theme.color.brand.secondary,
+                    placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(
+                        color = Color(
+                            0xFFE1E1E3
+                        )
+                    ),
                     placeholderModifier = Modifier.size(40.dp)
                 )
 

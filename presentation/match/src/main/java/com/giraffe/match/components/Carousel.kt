@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -113,6 +114,7 @@ private fun CarouselItemContent(
                 .fillMaxSize()
                 .clip(shape = RoundedCornerShape(Theme.radius.lg)),
             placeHolderTint = Theme.color.brand.secondary,
+            placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .background(Theme.color.background.card)
                 .height(88.dp)
