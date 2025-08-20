@@ -103,13 +103,27 @@ This app demonstrates modern Android development practices:
 
 ## 📱 Features
 
-- onboarding screen to appear only the first time I launch the app.
-- home screen displaying Collections of Movies and Series.
-- Explore Screen displaying Collections of Movies and Series filtered by categories.
-- Search Screen to enable user to search for his favourite Actors, Movies, Series ..etc.
-- Voice Recognition to allow user to search by voice.
-- Authentication
-- New Library for Previewing Images and bluring Images that are not Suitable to the Islamic Culture using ML Models.
+**🎬 Discovery & Search**
+- Home Screen: Collections of trending movies and TV series
+- Explore Screen: Browse content filtered by genres and categories
+- Smart Search: Find movies, series, actors, and directors
+- Voice Search: Hands-free search using voice recognition
+
+**👤 User Management**
+- Onboarding: First-time user introduction
+- Authentication: Secure user accounts with login/registration
+- Guest Mode: App access without creating an account
+- Collection: Save favorites and create watchlists
+
+**🛡️ Cultural Features**
+- Smart Image Filter: AI-powered content filtering for Islamic culture
+- Automatic Blurring: ML model detects and blurs inappropriate imagery
+- Custom Settings: User-controlled content sensitivity preferences
+
+**📱 User Experience**
+- Dark/Light Themes: Comfortable viewing in any lighting
+- Fast Performance: Optimized loading with smart caching
+- Offline Browse: Access cached home screen content without internet
 
 ---
 
