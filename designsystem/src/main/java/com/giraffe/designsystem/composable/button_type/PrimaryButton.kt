@@ -32,6 +32,7 @@ fun PrimaryButton(
     enabled: Boolean = true,
     isLoading: Boolean = false,
     buttonColorEnabled: Color = Theme.color.brand.primary,
+    contentPadding: PaddingValues = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
     onClick: () -> Unit,
 ) {
 
@@ -48,7 +49,7 @@ fun PrimaryButton(
             contentColor = Theme.color.button.onPrimary,
             disabledContentColor = Theme.color.button.onDisabled
         ),
-        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 24.dp)
+        contentPadding = contentPadding
     ) {
         AnimatedContent(
             modifier = Modifier

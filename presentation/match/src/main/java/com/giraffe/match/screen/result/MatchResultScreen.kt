@@ -3,6 +3,7 @@ package com.giraffe.match.screen.result
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -198,12 +199,14 @@ private fun MatchResultContent(
                         onClickAdd = { onAddToCollection(it.id, it.mediaType) }
                     )
                 }
+                Spacer(modifier = Modifier.height(32.dp))
 
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 32.dp),
+                        .padding(horizontal = 27.dp, vertical = 14.dp),
                     text = stringResource(R.string.view_details),
+                    contentPadding = PaddingValues(vertical = 14.dp),
                 ) {
                     match?.let {
                         when (it.mediaType) {
