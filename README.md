@@ -149,3 +149,10 @@ This app demonstrates modern Android development practices:
 <img width="2000" height="1380" alt="image" src="https://github.com/user-attachments/assets/e91509ed-3e5c-4245-9165-ecd12cb433c6" />  
 </pre>
 
+
+### 💻 GitHub Contributors
+
+This project came to life thanks to the hard work and passion of an incredible group of people 🔥
+
+[![](https://contrib.rocks/image?repo=Rome-Squad/CineVerse-App)](https://github.com/Rome-Squad/CineVerse-App/graphs/contributors)
+
