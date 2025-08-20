@@ -53,7 +53,7 @@ fun BaseScreen(
 
 
 @Composable
-private fun ScreenStates(
+fun ScreenStates(
     isLoading: Boolean,
     isNoInternet: Boolean,
     onRetryClick: () -> Unit,

@@ -47,7 +47,7 @@ fun SeasonCard(
     episodes: Int,
     year: Int?,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
     posterWidth: Dp = 48.dp,
     ratingIcon: Painter = painterResource(id = Theme.icons.dueTone.star),
     episodesIcon: Painter = painterResource(id = Theme.icons.dueTone.videoLibrary),
@@ -57,7 +57,10 @@ fun SeasonCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(Theme.radius.lg))
-            .clickable(onClick = onClick),
+            .then(
+                if (onClick != null) Modifier.clickable(onClick = onClick)
+                else Modifier
+            ),
         shape = RoundedCornerShape(Theme.radius.lg),
         colors = Theme.color.background.card,
     ) {

@@ -1,10 +1,13 @@
 package com.giraffe.presentation.details.screens.recommended.movie
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,13 +17,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.HorizontalDivider
 import com.giraffe.designsystem.composable.ViewToggle
-import com.giraffe.presentation.details.R
-import com.giraffe.presentation.details.base.BaseScreen
+import com.giraffe.designsystem.theme.Theme
+import com.giraffe.presentation.details.base.ScreenStates
 import com.giraffe.presentation.details.components.TransitionLazyColumnToGridPoster
 import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.showToast
@@ -53,7 +57,7 @@ fun RecommendedMoviesScreen(
 
     RecommendedMovieContent(
         state = state,
-        interaction = viewModel,
+        interaction = viewModel
     )
 
 }
@@ -67,37 +71,47 @@ fun RecommendedMovieContent(
     var isListSelected by rememberSaveable { mutableStateOf(false) }
     val lazyPagingItems = state.recommendedMoviesFlow.collectAsLazyPagingItems()
 
-    BaseScreen(
-        title = state.movieTitle.orEmpty(),
-        caption = stringResource(R.string.because_you_watched),
+    ScreenStates(
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
-        onBackClick = interaction::onBackClick,
         onRetryClick = interaction::onRetryClick
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
+        Box {
+            Column(
+                modifier = Modifier
+                    .background(Theme.color.background.screen)
+                    .fillMaxSize()
+                    .statusBarsPadding()
+            ) {
+                AppBar(
+                    title = state.movieTitle.orEmpty(),
+                    showBackButton = true,
+                    onBackButtonClick = interaction::onBackClick
+                )
+                HorizontalDivider()
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 40.dp)
+                ) {
+                    TransitionLazyColumnToGridPoster(
+                        lazyPagingItems = lazyPagingItems,
+                        isListSelected = isListSelected,
+                        onItemClick = interaction::onMovieClick
+                    )
+                }
 
-            TransitionLazyColumnToGridPoster(
-                lazyPagingItems = lazyPagingItems,
-                isListSelected = isListSelected,
-                contentPadding = PaddingValues(vertical = 16.dp),
-                onItemClick = interaction::onMovieClick
-            )
+            }
 
             ViewToggle(
+                isListSelected = isListSelected,
+                onGridSelected = { isListSelected = !it },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .navigationBarsPadding()
-                    .padding(16.dp),
-                isListSelected = isListSelected,
-                onGridSelected = { isListSelected = !it }
+                    .padding(bottom = 16.dp, end = 16.dp)
             )
         }
     }
-
-
 }
 
