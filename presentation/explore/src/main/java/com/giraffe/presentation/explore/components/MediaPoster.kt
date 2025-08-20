@@ -2,6 +2,7 @@ package com.giraffe.presentation.explore.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
@@ -84,6 +85,10 @@ fun MediaPoster(
     )
 
     val textHeight = with(density) { 20.sp.toDp() + 8.dp }
+    val textColor by animateColorAsState(
+        targetValue = if (isGridSelected) Theme.color.shade.secondary else Theme.color.shade.primary,
+        animationSpec = tween(700, easing = LinearEasing)
+    )
 
     if (poster.name.isNotBlank()) {
         Box(
@@ -146,7 +151,7 @@ fun MediaPoster(
                 Text(
                     text = poster.name,
                     style = Theme.textStyle.body.md.medium,
-                    color = Theme.color.shade.primary,
+                    color = textColor,
                     maxLines = 1,
                     modifier = Modifier.widthIn(max = 156.dp)
                 )
