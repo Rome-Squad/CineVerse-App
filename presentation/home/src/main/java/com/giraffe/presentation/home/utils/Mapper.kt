@@ -1,6 +1,7 @@
 package com.giraffe.presentation.home.utils
 
 import com.giraffe.media.collections.entity.Collection
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.home.model.MediaType
@@ -55,12 +56,14 @@ fun Movie.toShowMorePoster(genres: List<String>) = PosterMedia(
 )
 
 
-fun Movie.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
+fun Movie.toPopularMediaUi(genres: List<Genre>) = PopularMediaUi(
     id = id,
     title = name,
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
-    genres = genres,
+    genres = genres
+        .filter { genre -> genre.id in genresID }
+        .map { genre -> genre.title },
     rating = rating,
     mediaType = MediaType.MOVIE
 )

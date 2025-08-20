@@ -11,6 +11,8 @@ import com.giraffe.media.movie.mapper.toRecentlyViewedMovieCacheDto
 import com.giraffe.media.movie.mapper.toUpcomingMovieCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import javax.inject.Inject
 
 
@@ -37,8 +39,9 @@ class MovieLocalDataSourceImpl @Inject constructor(
     override fun getMovieGenresByIds(ids: List<Int>) =
         safeFlow { movieDao.getMovieGenresByIds(ids) }
 
+    @OptIn(FlowPreview::class)
     override fun getMoviesGenres() =
-        safeFlow { movieDao.getMoviesGenres() }
+        safeFlow { movieDao.getMoviesGenres() }.debounce(1000L)
 
     override suspend fun getTopGenre() =
         safeCall { movieDao.getTopGenre() }

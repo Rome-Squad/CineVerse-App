@@ -1,5 +1,6 @@
 package com.giraffe.presentation.home.screen.home
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.presentation.home.model.FeaturedCollectionType
 import com.giraffe.presentation.home.model.FeaturedCollectionUi
 import com.giraffe.presentation.home.model.PopularMediaUi
@@ -28,4 +29,6 @@ data class HomeScreenState(
     val isLoadingTopRatedSeries: Boolean = true,
     val isNoInternet: Boolean = false,
     val isLoggedIn: Boolean = false,
+    val moviesGenres: List<Genre> = emptyList(),
+    val seriesGenres: List<Genre> = emptyList()
 )
