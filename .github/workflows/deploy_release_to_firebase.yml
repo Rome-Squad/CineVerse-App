@@ -5,6 +5,10 @@ on:
     types: [ closed ]
     branches: [ main, develop ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.0.0)"
+        required: true
 
 permissions:
   contents: write
@@ -66,13 +70,16 @@ jobs:
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
           keyPassword: ${{ secrets.ANDROID_DEVS_ALIAS_PASSWORD }}
 
+      - name: Rename APK
+        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/CineVerse-v${{ github.event.inputs.version }}.apk
+
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
-          file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+          file: app/build/outputs/apk/release/CineVerse-v${{ github.event.inputs.version }}.apk
           releaseNotes: |
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.sha }}
@@ -83,16 +90,16 @@ jobs:
       - name: 📤 Upload signed APK to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ github.run_number }}
-          name: Release ${{ github.run_number }}
+          tag_name: v${{ github.event.inputs.version }}
+          name: CineVerse v${{ github.event.inputs.version }}
           body: |
-            🚀 New Release Uploaded!
+            🚀 New CineVerse Release Uploaded!
 
             **Branch:** ${{ github.ref_name }}
             **Commit:** ${{ github.sha }}
             **By:** ${{ github.actor }}
             **Title:** ${{ github.event.pull_request.title }}
             **PR Description:** ${{ github.event.pull_request.body }}
-          files: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+          files: app/build/outputs/apk/release/CineVerse-v${{ github.event.inputs.version }}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
