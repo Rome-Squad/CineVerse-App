@@ -1,5 +1,8 @@
 ## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) CineVerse – Where Every Story Finds Its Star
-![Image](https://github.com/user-attachments/assets/991d2735-8995-471b-a293-c967f5b30f3f)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/991d2735-8995-471b-a293-c967f5b30f3f">
+  <p  align="center"><strong>Cineverse</strong> is a modern Android application designed for movie and TV series enthusiasts who want to explore, discover, and organize their entertainment journey. Built with cutting-edge technology and powered by TMDB API, Cineverse delivers a seamless and intuitive experience for all your cinematic needs.<br></p>
+</p>
 
 ## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) Download Cineverse APK
 
