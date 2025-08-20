@@ -67,7 +67,7 @@
     <string name="not_now">Not Now</string>
     <string name="log_in">Log In</string>
     <string name="reviews">Reviews</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="create">create</string>
     <string name="collection_name">collection name</string>
     <string name="error_unknown">Something went wrong. Please try again later.</string>
@@ -76,6 +76,6 @@
     <string name="collection_name_cannot_be_blank">Collection name cannot be blank</string>
     <string name="validation_error">Validation Error!</string>
     <string name="collection_not_found">Collection not found!</string>
-    <string name="screen_info">Swipe left to remove the item</string>
+    <string name="screen_info">Tips: Swipe left to remove movies from your history.</string>
     <string name="new_collection">New Collection</string>
 </resources>

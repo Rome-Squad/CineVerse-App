@@ -272,7 +272,7 @@ fun MainMovieOrSeriesDetails(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(Theme.color.brand.tertiary)
+                    .background(Theme.color.stroke.primary)
             )
         }
     }
