@@ -50,7 +50,6 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.ui)
-    implementation(projects.designsystem)
     implementation(libs.androidx.foundation)
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.tensorflow.lite)
