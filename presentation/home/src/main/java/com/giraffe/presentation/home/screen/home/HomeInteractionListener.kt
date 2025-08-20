@@ -17,8 +17,6 @@ interface HomeInteractionListener {
 
     fun onMatchSectionClicked()
 
-    fun onRetryClick()
-
     fun onCollectionClick(collectionId: Int, collectionName: String)
 
     fun onFeaturesCollectionClicked(sectionType: CategoryMediaSectionType)

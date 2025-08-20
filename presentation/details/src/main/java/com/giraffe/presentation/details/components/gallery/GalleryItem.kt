@@ -1,7 +1,7 @@
 package com.giraffe.presentation.details.components.gallery
 
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -29,17 +29,8 @@ fun GalleryItem(
             .clip(RoundedCornerShape(Theme.radius.lg)),
         placeHolderTint = Theme.color.brand.secondary,
         placeholderModifier = Modifier
+            .background(Theme.color.background.card)
             .fillMaxSize()
-            .border(
-                width = 1.dp,
-                color = Theme.color.stroke.primary,
-                shape = RoundedCornerShape(
-                    topStart = Theme.radius.lg,
-                    bottomStart = Theme.radius.lg,
-                    topEnd = Theme.radius.lg,
-                    bottomEnd = Theme.radius.lg
-                )
-            )
     )
 }
 

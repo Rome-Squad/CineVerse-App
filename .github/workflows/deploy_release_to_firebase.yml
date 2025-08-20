@@ -61,7 +61,7 @@ jobs:
         run: |
           echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
 
-      # 🔹 Bump version from ProjectConfig.kt (Option 2)
+      # 🔹 Bump version from ProjectConfig.kt
       - name: 📌 Determine & bump version (manual or auto)
         id: set_version
         run: |
@@ -78,15 +78,14 @@ jobs:
             VERSION="$major.$minor.$patch"
             echo "Auto-bumped version: $VERSION"
 
-            # update file
+            # update file (local only, no push)
             sed -i -E "s/(val versionName = \").*(\")/\1$VERSION\2/" build-logic/conventions/src/main/kotlin/ProjectConfig.kt
 
-            # commit bump
+            # commit bump (local only)
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add build-logic/conventions/src/main/kotlin/ProjectConfig.kt
             git commit -m "🔼 Bump version to $VERSION" || echo "No changes to commit"
-            git push
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 

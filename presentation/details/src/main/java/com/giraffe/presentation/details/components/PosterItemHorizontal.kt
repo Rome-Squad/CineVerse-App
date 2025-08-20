@@ -1,9 +1,9 @@
 package com.giraffe.presentation.details.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -38,54 +38,46 @@ fun PosterItemHorizontal(
     modifier: Modifier = Modifier,
     onClickPoster: () -> Unit = {},
 ) {
-    Row(
+    Box(
         modifier = modifier
             .clip(RoundedCornerShape(Theme.radius.lg))
             .background(Theme.color.background.card)
             .clickable(onClick = onClickPoster),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-
-        SafeIslamicImage(
-            imageUrl = movie.imageUrl,
-            contentDescription = movie.name,
-            hasSensitiveText = false,
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(64.dp)
-                .clip(
-                    RoundedCornerShape(
-                        topStart = Theme.radius.lg,
-                        bottomStart = Theme.radius.lg,
-                        topEnd = Theme.radius.lg
-                    )
-                ),
-            placeHolderTint = Theme.color.brand.secondary,
-            placeholderModifier = Modifier
-                .height(88.dp)
-                .width(64.dp)
-                .border(
-                    width = 1.dp,
-                    color = Theme.color.stroke.primary,
-                    shape = RoundedCornerShape(
-                        topStart = Theme.radius.lg,
-                        bottomStart = Theme.radius.lg,
-                        topEnd = Theme.radius.lg
-                    )
-                )
-        )
-
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+
+            SafeIslamicImage(
+                imageUrl = movie.imageUrl,
+                contentDescription = movie.name,
+                hasSensitiveText = false,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(64.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg
+                        )
+                    ),
+                placeHolderTint = Theme.color.brand.secondary,
+                placeholderModifier = Modifier
+                    .background(color = Theme.color.brand.tertiary)
+                    .height(88.dp)
+                    .width(64.dp)
+            )
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Column(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
@@ -104,30 +96,37 @@ fun PosterItemHorizontal(
                     }
                 }
 
-                if (movie.rating != 0f) {
-                    Rating(
-                        value = movie.rating,
+
+                if (movie.time != null || movie.date != null) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        if (movie.time != null) {
+                            IconWithText(
+                                icon = painterResource(Theme.icons.dueTone.clock),
+                                text = movie.time
+                            )
+                        }
+                        if (movie.date != null) {
+                            IconWithText(
+                                icon = painterResource(Theme.icons.dueTone.calendar),
+                                text = movie.date
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        if (movie.rating != 0f) {
+            Rating(
+                hasBackground = false,
+                value = movie.rating,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(
+                        end = 12.dp,
+                        top = 12.dp
                     )
-                }
-            }
-
-
-            if (movie.time != null || movie.date != null) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    if (movie.time != null) {
-                        IconWithText(
-                            icon = painterResource(Theme.icons.dueTone.clock),
-                            text = movie.time
-                        )
-                    }
-                    if (movie.date != null) {
-                        IconWithText(
-                            icon = painterResource(Theme.icons.dueTone.calendar),
-                            text = movie.date
-                        )
-                    }
-                }
-            }
+            )
         }
     }
 }
