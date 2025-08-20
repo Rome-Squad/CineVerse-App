@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Progress
@@ -64,7 +65,9 @@ fun PrimaryButton(
             } else {
                 Text(
                     text = text,
-                    style = Theme.textStyle.body.md.medium
+                    style = Theme.textStyle.body.md.medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

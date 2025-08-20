@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Progress
@@ -55,7 +56,9 @@ fun SecondaryButton(
             } else {
                 Text(
                     text = text,
-                    style = Theme.textStyle.body.md.medium
+                    style = Theme.textStyle.body.md.medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
