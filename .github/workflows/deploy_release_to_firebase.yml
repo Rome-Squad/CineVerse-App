@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version (e.g. 1.0.0)"
+        description: "Manual version (e.g., 1.0.0)"
         required: true
+        default: "1.0.0"
 
 permissions:
   contents: write
@@ -70,8 +71,15 @@ jobs:
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
           keyPassword: ${{ secrets.ANDROID_DEVS_ALIAS_PASSWORD }}
 
+      - name: 📌 Get version from Gradle
+        id: version
+        run: |
+          VERSION=$(grep versionName app/build.gradle | awk '{print $2}' | tr -d '"')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Detected version: $VERSION"
+
       - name: Rename APK
-        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/CineVerse-v${{ github.event.inputs.version }}.apk
+        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/CineVerse-v${VERSION}.apk
 
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -79,7 +87,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
-          file: app/build/outputs/apk/release/CineVerse-v${{ github.event.inputs.version }}.apk
+          file: app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
           releaseNotes: |
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.sha }}
@@ -90,8 +98,8 @@ jobs:
       - name: 📤 Upload signed APK to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ github.event.inputs.version }}
-          name: CineVerse v${{ github.event.inputs.version }}
+          tag_name: v${{ env.VERSION }}
+          name: CineVerse v${{ env.VERSION }}
           body: |
             🚀 New CineVerse Release Uploaded!
 
@@ -100,6 +108,6 @@ jobs:
             **By:** ${{ github.actor }}
             **Title:** ${{ github.event.pull_request.title }}
             **PR Description:** ${{ github.event.pull_request.body }}
-          files: app/build/outputs/apk/release/CineVerse-v${{ github.event.inputs.version }}.apk
+          files: app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
