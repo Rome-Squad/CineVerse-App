@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.AppBar
+import com.giraffe.designsystem.composable.HorizontalDivider
 import com.giraffe.designsystem.composable.NoInternetScreen
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.Theme
@@ -23,6 +24,7 @@ fun BaseScreen(
     isLoading: Boolean,
     isNoInternet: Boolean,
     onBackClick: () -> Unit,
+    hasHorizontalDivider: Boolean = false,
     onRetryClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -41,19 +43,20 @@ fun BaseScreen(
             showBackButton = true,
             onBackButtonClick = onBackClick
         )
+
+        if (hasHorizontalDivider) HorizontalDivider()
+
         ScreenStates(
             isLoading = isLoading,
             isNoInternet = isNoInternet,
-            onRetryClick = onRetryClick
-        ) {
-            content()
-        }
+            onRetryClick = onRetryClick,
+            content = content
+        )
     }
 }
 
-
 @Composable
-fun ScreenStates(
+private fun ScreenStates(
     isLoading: Boolean,
     isNoInternet: Boolean,
     onRetryClick: () -> Unit,

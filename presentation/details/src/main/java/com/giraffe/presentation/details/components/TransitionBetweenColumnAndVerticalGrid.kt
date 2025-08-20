@@ -33,25 +33,23 @@ fun TransitionBetweenColumnAndVerticalGrid(
     ) {
         itemsIndexed(
             items = posters,
-            key = { index, item -> "${item.id} + ${item.date} + ${item.time} + $index" }
-        ) { _, item ->
-            item.let { poster ->
-                MediaPoster(
-                    poster = poster,
-                    isGridSelected = !isListSelected,
-                    onClick = {
-                        onPosterClicked(poster.id, poster.mediaTypeOfPoster.toString())
-                    },
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                        .animateItem(
-                            fadeInSpec = tween(700, easing = LinearEasing),
-                            placementSpec = tween(700, easing = LinearEasing),
-                            fadeOutSpec = tween(700, easing = LinearEasing)
-                        )
-                )
-            }
+            key = { index, poster -> "${poster.id} + ${poster.date} + ${poster.time} + $index" }
+        ) { _, poster ->
+            MediaPoster(
+                poster = poster,
+                isGridSelected = !isListSelected,
+                onClick = {
+                    onPosterClicked(poster.id, poster.mediaTypeOfPoster.toString())
+                },
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+                    .animateItem(
+                        fadeInSpec = tween(700, easing = LinearEasing),
+                        placementSpec = tween(700, easing = LinearEasing),
+                        fadeOutSpec = tween(700, easing = LinearEasing)
+                    )
+            )
         }
     }
 }

@@ -1,13 +1,9 @@
 package com.giraffe.presentation.details.screens.recommended.series
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,11 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.giraffe.designsystem.composable.AppBar
-import com.giraffe.designsystem.composable.HorizontalDivider
 import com.giraffe.designsystem.composable.ViewToggle
-import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.details.base.ScreenStates
+import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.TransitionLazyColumnToGridPoster
 import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.showToast
@@ -69,36 +62,21 @@ private fun RecommendedSeriesContent(
     var isGridSelected by rememberSaveable { mutableStateOf(true) }
     val lazyPagingItems = state.recommendedSeriesFlow.collectAsLazyPagingItems()
 
-    ScreenStates(
+    BaseScreen(
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
-        onRetryClick = interaction::onRetryClick
+        onRetryClick = interaction::onRetryClick,
+        title = state.seriesTitle.orEmpty(),
+        onBackClick = interaction::onBackClick,
+        hasHorizontalDivider = true
     ) {
-        Box {
-            Column(
-                modifier = Modifier
-                    .background(Theme.color.background.screen)
-                    .fillMaxSize()
-                    .statusBarsPadding()
-            ) {
-                AppBar(
-                    title = state.seriesTitle.orEmpty(),
-                    showBackButton = true,
-                    onBackButtonClick = interaction::onBackClick
-                )
-                HorizontalDivider()
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 40.dp)
-                ) {
-                    TransitionLazyColumnToGridPoster(
-                        lazyPagingItems = lazyPagingItems,
-                        isListSelected = !isGridSelected,
-                        onItemClick = interaction::onSeriesClick
-                    )
-                }
-            }
+        Box(Modifier.fillMaxSize()) {
+            TransitionLazyColumnToGridPoster(
+                lazyPagingItems = lazyPagingItems,
+                isListSelected = !isGridSelected,
+                onItemClick = interaction::onSeriesClick
+            )
+
             ViewToggle(
                 isListSelected = !isGridSelected,
                 onGridSelected = { isGridSelected = !isGridSelected },
