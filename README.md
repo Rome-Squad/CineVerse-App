@@ -131,7 +131,7 @@ This app demonstrates modern Android development practices:
   
 **🔧 Quality & DevOps**
 - DevOps: CI/CD Pipeline
-- Testing: JUnit 5, Truth, MockK
+- Testing: JUnit 5, Truth, MockK + JaCoCo Coverage
 - Monitoring: Firebase Crashlytics + Firebase Performance
 - Distribution: Firebase App Distribution + GitHub Actions
 ---
