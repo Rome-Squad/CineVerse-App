@@ -14,6 +14,7 @@ import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMovie
 import com.giraffe.media.movie.usecase.upcoming.ObserveUpcomingMoviesUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.ObservePopularSeriesUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.media.series.usecase.matchesYourVibe.ObserveMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.recentlyReleased.ObserveRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
@@ -49,13 +50,15 @@ class HomeViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
-    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase
 ) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
     init {
         getUserName()
         getMoviesGenres()
+        getSeriesGenres()
         getRecentlyReleased()
         getUpcomingMovies()
         getYourCollections()
@@ -82,33 +85,50 @@ class HomeViewModel @Inject constructor(
     private fun getMoviesGenres() {
         safeCollect(
             onEmitNewValue = ::onGetMoviesGenresSuccess,
-            onError = ::onError.also { getPopularity() },
+            onError = ::onError.also { getPopularityMovies() },
             block = observeMoviesGenresUseCase::invoke
         )
     }
 
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
         updateState { it.copy(moviesGenres = genres) }
-        getPopularity()
+        getPopularityMovies()
     }
 
-    private fun getPopularity() {
+    private fun getSeriesGenres() {
+        safeCollect(
+            onEmitNewValue = ::onGetSeriesGenresSuccess,
+            onError = ::onError.also { getPopularitySeries() },
+            block = observeSeriesGenresUseCase::invoke
+        )
+    }
+
+    private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
+        updateState { it.copy(seriesGenres = genres) }
+        getPopularitySeries()
+    }
+
+    private fun getPopularityMovies() {
         updateState { it.copy(isLoadingPopularity = true) }
         safeCollect(
             onEmitNewValue = ::onGetPopularityMoviesSuccess,
             onError = ::onError,
             block = observePopularMoviesUseCase::invoke
         )
-        safeCollect(
-            onEmitNewValue = ::onGetPopularitySeriesSuccess,
-            onError = ::onError,
-            block = observePopularSeriesUseCase::invoke
-        )
     }
 
     private fun onGetPopularityMoviesSuccess(movies: List<Movie>) {
         val newMovies = movies.map { movie -> movie.toPopularMediaUi(state.value.moviesGenres) }
         updatePopularityMedia(newMovies)
+    }
+
+    private fun getPopularitySeries() {
+        updateState { it.copy(isLoadingPopularity = true) }
+        safeCollect(
+            onEmitNewValue = ::onGetPopularitySeriesSuccess,
+            onError = ::onError,
+            block = observePopularSeriesUseCase::invoke
+        )
     }
 
     private fun onGetPopularitySeriesSuccess(series: List<Series>) {

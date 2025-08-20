@@ -11,6 +11,8 @@ import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import javax.inject.Inject
 
 class SeriesLocalDataSourceImp @Inject constructor(
@@ -19,8 +21,9 @@ class SeriesLocalDataSourceImp @Inject constructor(
     override suspend fun addSeries(series: SeriesCacheDto) =
         safeCall { seriesDao.upsertSeries(series) }
 
+    @FlowPreview
     override fun getGenres() =
-        safeFlow { seriesDao.getGenres() }
+        safeFlow { seriesDao.getGenres() }.debounce(500L)
 
     override suspend fun syncGenres(genres: List<SeriesGenreCacheDto>) {
         safeCall {
