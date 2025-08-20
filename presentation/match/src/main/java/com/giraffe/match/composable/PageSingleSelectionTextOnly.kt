@@ -30,7 +30,7 @@ fun SingleSelectionPageTextOnly(
                     isSelected = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.dp),
+                        .height(56.dp),
                     onClick = {
                         if (!readOnly) {
                             onSelectionChange(null)
@@ -51,7 +51,7 @@ fun SingleSelectionPageTextOnly(
                             isSelected = option.id == selectedItem,
                             modifier = Modifier
                                 .weight(1f)
-                                .height(44.dp),
+                                .height(56.dp),
                             onClick = {
                                 if (!readOnly) {
                                     onSelectionChange(

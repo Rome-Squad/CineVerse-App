@@ -22,7 +22,7 @@ fun PageWithMultiSelectionTextOnly(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         if (readOnly && selectedItems.size == 1) {
-            val selectedOption = options.firstOrNull { it.id == selectedItems.first() }
+            val selectedOption = options.take(9).firstOrNull { it.id == selectedItems.first() }
             selectedOption?.let { option ->
                 SelectionItem(
                     type = SelectionType.CHIP,
@@ -39,7 +39,7 @@ fun PageWithMultiSelectionTextOnly(
                 )
             }
         } else {
-            options.chunked(3).forEach { row ->
+            options.take(9).chunked(3).forEach { row ->
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -50,7 +50,6 @@ fun PageWithMultiSelectionTextOnly(
                             description = option.label,
                             isSelected = option.id in selectedItems,
                             modifier = Modifier
-                                .weight(1f)
                                 .height(44.dp),
                             onClick = {
                                 if (!readOnly) {
