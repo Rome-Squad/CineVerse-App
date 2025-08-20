@@ -75,12 +75,13 @@ class MatchPagerViewModel @Inject constructor(
 
     fun onNextClicked() {
         viewModelScope.launch {
-            if (state.value.currentPage < 4) {
+            if (state.value.currentPage < 3) {
                 val newPage = state.value.currentPage + 1
                 updateState { it.copy(currentPage = newPage) }
                 savedStateHandle["currentPage"] = newPage
             } else {
                 saveAllDataToSavedState()
+                updateState { it.copy(isLoading = true) }
                 sendEffect(MatchScreenEffect.FinishMatching)
             }
         }

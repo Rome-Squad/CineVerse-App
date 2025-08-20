@@ -5,6 +5,14 @@ on:
     types: [ closed ]
     branches: [ main, develop ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Manual version (optional, e.g. 1.0.0)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -14,6 +22,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # required to push tags later
 
       - name: Setup JDK 17
         uses: actions/setup-java@v3
@@ -51,6 +61,34 @@ jobs:
         run: |
           echo "y" | sudo ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --install "build-tools;29.0.3"
 
+      # 🔹 Bump version from ProjectConfig.kt
+      - name: 📌 Determine & bump version (manual or auto)
+        id: set_version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            echo "Manual version provided: $VERSION"
+          else
+            # read current version from ProjectConfig.kt
+            CURRENT_VERSION=$(grep -m1 'val versionName' build-logic/conventions/src/main/kotlin/ProjectConfig.kt | sed -E 's/.*val versionName = "([^"]+)".*/\1/')
+            echo "Current ProjectConfig version: $CURRENT_VERSION"
+
+            IFS='.' read -r major minor patch <<< "$CURRENT_VERSION"
+            patch=$((patch + 1))
+            VERSION="$major.$minor.$patch"
+            echo "Auto-bumped version: $VERSION"
+
+            # update file (local only, no push)
+            sed -i -E "s/(val versionName = \").*(\")/\1$VERSION\2/" build-logic/conventions/src/main/kotlin/ProjectConfig.kt
+
+            # commit bump (local only)
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add build-logic/conventions/src/main/kotlin/ProjectConfig.kt
+            git commit -m "🔼 Bump version to $VERSION" || echo "No changes to commit"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Assemble Release APK
         run: ./gradlew :app:assembleRelease --build-cache --parallel --warning-mode=all
 
@@ -63,16 +101,42 @@ jobs:
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
           keyPassword: ${{ secrets.ANDROID_DEVS_ALIAS_PASSWORD }}
 
+      - name: Rename APK
+        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
+
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
-          file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+          file: app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
           releaseNotes: |
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.sha }}
             By: ${{ github.actor }}
             Title: ${{ github.event.pull_request.title }}
             PR Description: ${{ github.event.pull_request.body }}
+
+      # 🔹 Tag and Release on GitHub
+      - name: Create Git Tag
+        run: |
+          git tag v${{ env.VERSION }}
+          git push origin v${{ env.VERSION }}
+
+      - name: 📤 Upload signed APK to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: CineVerse v${{ env.VERSION }}
+          body: |
+            🚀 New CineVerse Release Uploaded!
+
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** ${{ github.sha }}
+            **By:** ${{ github.actor }}
+            **Title:** ${{ github.event.pull_request.title }}
+            **PR Description:** ${{ github.event.pull_request.body }}
+          files: app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

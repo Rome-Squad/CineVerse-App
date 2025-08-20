@@ -1,4 +1,4 @@
-package com.giraffe.presentation.explore.components
+package com.giraffe.presentation.details.components
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -44,7 +45,7 @@ import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
-import com.giraffe.presentation.explore.components.uimodel.Poster
+import com.giraffe.presentation.details.components.uimodel.Poster
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -56,13 +57,15 @@ fun MediaPoster(
 ) {
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
-    val imageMaxWidth = with(density) {
-        val windowWidth = widowSize.containerSize.width - 32.dp.toPx()
-        var numberOfCards = windowWidth / 156.dp.toPx()
-        val padding = (numberOfCards - 1) * 32.dp.toPx()
-        numberOfCards = (windowWidth - padding) / 156.dp.toPx()
-        val width = windowWidth / numberOfCards.toInt()
-        width.toDp().coerceAtLeast(156.dp)
+    val imageMaxWidth = remember {
+        with(density) {
+            val windowWidth = widowSize.containerSize.width - 32.dp.toPx()
+            var numberOfCards = windowWidth / 156.dp.toPx()
+            val padding = (numberOfCards - 1) * 32.dp.toPx()
+            numberOfCards = (windowWidth - padding) / 156.dp.toPx()
+            val width = windowWidth / numberOfCards.toInt()
+            width.toDp().coerceAtLeast(156.dp)
+        }
     }
     val transition = updateTransition(isGridSelected)
     val imageWidth by transition.animateDp(
@@ -82,6 +85,10 @@ fun MediaPoster(
         transitionSpec = { tween(700, easing = LinearEasing) }
     )
 
+    val ratingPadding by transition.animateDp(
+        targetValueByState = { if (it) 8.dp else 12.dp },
+        transitionSpec = { tween(700, easing = LinearEasing) }
+    )
     val textHeight = with(density) { 20.sp.toDp() + 8.dp }
 
     if (poster.name.isNotBlank()) {
@@ -144,7 +151,7 @@ fun MediaPoster(
                 Text(
                     text = poster.name,
                     style = Theme.textStyle.body.md.medium,
-                    color = Theme.color.shade.primary,
+                    color = Theme.color.shade.secondary,
                     maxLines = 1,
                     modifier = Modifier.widthIn(max = 156.dp)
                 )
@@ -198,8 +205,8 @@ fun MediaPoster(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(
-                        end = 12.dp,
-                        top = 12.dp
+                        end = ratingPadding,
+                        top = ratingPadding
                     )
             )
         }

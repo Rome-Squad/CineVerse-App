@@ -1,27 +1,14 @@
 package com.giraffe.presentation.details.components
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,24 +16,15 @@ import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.utils.ObserveScrollDirection
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TransitionLazyColumnToGridPoster(
     lazyPagingItems: LazyPagingItems<Poster>,
     isListSelected: Boolean = false,
-    contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
+    contentPadding: PaddingValues = PaddingValues(16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
     onItemClick: (Int) -> Unit,
 ) {
-    val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
-
-    ObserveScrollDirection(
-        listState,
-        { it.firstVisibleItemIndex },
-        { it.firstVisibleItemScrollOffset },
-        onScroll
-    )
 
     ObserveScrollDirection(
         gridState,
@@ -55,98 +33,29 @@ fun TransitionLazyColumnToGridPoster(
         onScroll
     )
 
-
-    SharedTransitionLayout {
-        AnimatedContent(
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-            targetState = isListSelected,
-            label = "ViewToggleAnimation",
-            transitionSpec = {
-                (fadeIn(animationSpec = tween(220, delayMillis = 90, easing = EaseIn)) +
-                        scaleIn(
-                            initialScale = 0.92f,
-                            animationSpec = tween(220, delayMillis = 90, easing = EaseIn)
-                        ))
-                    .togetherWith(fadeOut(animationSpec = tween(90, easing = EaseOut)))
-            }
-        ) { isList ->
-            val animatedScope = this
-            if (isList) {
-                PostersListView(
-                    lazyPagingItems = lazyPagingItems,
-                    listState = listState,
-                    contentPadding = contentPadding,
-                    onItemClick = { poster -> onItemClick(poster.id) },
-                    animatedContentScope = animatedScope,
-                    sharedTransitionScope = this@SharedTransitionLayout
-                )
-            } else {
-                PostersGridView(
-                    lazyPagingItems = lazyPagingItems,
-                    gridState = gridState,
-                    contentPadding = contentPadding,
-                    onItemClick = { poster -> onItemClick(poster.id) },
-                    animatedContentScope = animatedScope,
-                    sharedTransitionScope = this@SharedTransitionLayout
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-private fun PostersListView(
-    lazyPagingItems: LazyPagingItems<Poster>,
-    listState: LazyListState,
-    contentPadding: PaddingValues,
-    onItemClick: (Poster) -> Unit,
-    animatedContentScope: AnimatedContentScope,
-    sharedTransitionScope: SharedTransitionScope
-) {
-    LazyColumn(
-        state = listState,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = contentPadding
-    ) {
-        items(lazyPagingItems.itemCount) { index ->
-            lazyPagingItems[index]?.let { poster ->
-                PosterHorizontal(
-                    poster = poster,
-                    animatedVisibilityScope = animatedContentScope,
-                    sharedTransitionScope = sharedTransitionScope,
-                    onClick = { onItemClick(poster) }
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-private fun PostersGridView(
-    lazyPagingItems: LazyPagingItems<Poster>,
-    gridState: LazyGridState,
-    contentPadding: PaddingValues,
-    onItemClick: (Poster) -> Unit,
-    animatedContentScope: AnimatedContentScope,
-    sharedTransitionScope: SharedTransitionScope
-) {
     LazyVerticalGrid(
         state = gridState,
-        columns = GridCells.Adaptive(165.dp),
+        columns = GridCells.Adaptive(if (isListSelected) 328.dp else 156.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = contentPadding
     ) {
         items(lazyPagingItems.itemCount) { index ->
             lazyPagingItems[index]?.let { poster ->
-                PosterVertically(
+                MediaPoster(
                     poster = poster,
-                    animatedVisibilityScope = animatedContentScope,
-                    sharedTransitionScope = sharedTransitionScope,
-                    onClick = { onItemClick(poster) }
+                    isGridSelected = !isListSelected,
+                    onClick = {
+                        onItemClick(poster.id)
+                    },
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                        .animateItem(
+                            fadeInSpec = tween(700, easing = LinearEasing),
+                            placementSpec = tween(700, easing = LinearEasing),
+                            fadeOutSpec = tween(700, easing = LinearEasing)
+                        )
                 )
             }
         }

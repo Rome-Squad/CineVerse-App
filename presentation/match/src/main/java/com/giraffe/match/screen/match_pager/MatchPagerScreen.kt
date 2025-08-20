@@ -45,6 +45,7 @@ import com.giraffe.match.composable.getTimeOptions
 import com.giraffe.match.utils.showToast
 import com.giraffe.match.utils.toStringResource
 import com.giraffe.presentation.match.R
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -61,7 +62,7 @@ fun MatchPagerScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState(initialPage = state.currentPage, pageCount = { 5 })
+    val pagerState = rememberPagerState(initialPage = state.currentPage, pageCount = { 4 })
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val moodOptions = getMoodOptions()
@@ -76,6 +77,7 @@ fun MatchPagerScreen(
                     val releasePeriodLabel = state.releasePeriodSelection?.let { id ->
                         releasePeriodOptions.find { it.id == id }?.label
                     }
+                    delay(500)
                     onFinish(
                         state.genreSelections,
                         state.moodSelections,
@@ -319,20 +321,24 @@ fun MatchPagerScreen(
                                         }
                                     }
                                 }
-
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.loading_recommendations_you_ll_love),
-                                        style = Theme.textStyle.body.md.medium,
-                                        color = Theme.color.shade.primary,
-                                    )
-                                }
                             }
                         }
                     }
+                }
+            }
+
+            if (state.isLoading) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.loading_recommendations_you_ll_love),
+                        style = Theme.textStyle.body.md.medium,
+                        color = Theme.color.shade.primary,
+                    )
                 }
             }
 
@@ -340,7 +346,7 @@ fun MatchPagerScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                text = if (state.currentPage < pagerState.pageCount - 2) {
+                text = if (state.currentPage < pagerState.pageCount - 1) {
                     stringResource(R.string.next)
                 } else {
                     stringResource(R.string.start_matching)

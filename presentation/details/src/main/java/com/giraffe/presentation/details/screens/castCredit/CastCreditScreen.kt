@@ -1,6 +1,7 @@
 package com.giraffe.presentation.details.screens.castCredit
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -28,15 +29,11 @@ fun CastCreditScreen(
     EventListener(events = viewModel.effect) {
         when (it) {
             is CastCreditEffect.NavigateToSeriesDetails -> navigateToSeriesDetails(it.seriesId)
-
             is CastCreditEffect.NavigateToMovieDetails -> navigateToMovieDetails(it.movieId)
-
+            is CastCreditEffect.NavigateBack -> navigateBack()
             is CastCreditEffect.Error -> {}
-
-            CastCreditEffect.NavigateBack -> navigateBack()
         }
     }
-
 
     CastCreditContent(
         state = state,
@@ -48,19 +45,19 @@ fun CastCreditScreen(
 @Composable
 private fun CastCreditContent(
     state: CastCreditScreenState,
-    interaction: CastCreditInteractionListener,
-    modifier: Modifier = Modifier
+    interaction: CastCreditInteractionListener
 ) {
     BaseScreen(
-        title = stringResource(R.string.best_of_, state.actorName),
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
         onRetryClick = interaction::onRetryClick,
-        onBackClick = interaction::onBackClick
+        title = stringResource(R.string.best_of) + " " + state.actorName,
+        onBackClick = interaction::onBackClick,
+        hasHorizontalDivider = true
     ) {
-        Box(modifier = modifier) {
+        Box(Modifier.fillMaxSize()) {
             TransitionBetweenColumnAndVerticalGrid(
-                poster = state.posters,
+                posters = state.posters,
                 isListSelected = !state.isGridSelected,
                 onPosterClicked = interaction::onPosterClick
             )

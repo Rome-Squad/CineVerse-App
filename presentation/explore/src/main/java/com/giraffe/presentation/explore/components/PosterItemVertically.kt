@@ -2,7 +2,6 @@ package com.giraffe.presentation.explore.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,16 +52,8 @@ fun PosterItemVertically(
                     .fillMaxSize(),
                 placeHolderTint = Theme.color.brand.secondary,
                 placeholderModifier = Modifier
+                    .background(Theme.color.background.card)
                     .fillMaxSize()
-                    .border(
-                        width = 1.dp,
-                        color = Theme.color.stroke.primary,
-                        shape = RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg
-                        )
-                    )
             )
 
             if (poster.rating > 0f) {

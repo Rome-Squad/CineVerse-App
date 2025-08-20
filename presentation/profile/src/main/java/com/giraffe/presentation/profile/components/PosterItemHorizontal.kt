@@ -1,7 +1,6 @@
 package com.giraffe.presentation.profile.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -63,17 +62,9 @@ fun PosterItemHorizontal(
                 ),
             placeHolderTint = Theme.color.brand.secondary,
             placeholderModifier = Modifier
+                .background(Theme.color.brand.tertiary)
                 .height(88.dp)
                 .width(64.dp)
-                .border(
-                    width = 1.dp,
-                    color = Theme.color.stroke.primary,
-                    shape = RoundedCornerShape(
-                        topStart = Theme.radius.lg,
-                        bottomStart = Theme.radius.lg,
-                        topEnd = Theme.radius.lg
-                    )
-                )
         )
 
         Column(
@@ -91,7 +82,9 @@ fun PosterItemHorizontal(
                     Text(
                         text = movie.name,
                         style = Theme.textStyle.body.md.medium,
-                        color = Theme.color.shade.primary
+                        color = Theme.color.shade.primary,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                     if (movie.genres != null) {
                         Text(

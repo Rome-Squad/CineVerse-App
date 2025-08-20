@@ -3,7 +3,6 @@ package com.giraffe.presentation.details.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -98,12 +97,8 @@ fun MainCastDetails(
                         .clip(shape = shapeImage),
                     placeHolderTint = Theme.color.brand.secondary,
                     placeholderModifier = Modifier
+                        .background(Theme.color.background.card)
                         .fillMaxSize()
-                        .border(
-                            width = 1.dp,
-                            color = Theme.color.stroke.primary,
-                            shape = shapeImage
-                        )
                 )
             }
 

@@ -1,7 +1,6 @@
 package com.giraffe.presentation.details.screens.recommended.series
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -63,37 +62,32 @@ private fun RecommendedSeriesContent(
     interaction: RecommendedInteractionListener,
 ) {
     var isGridSelected by rememberSaveable { mutableStateOf(true) }
-
     val lazyPagingItems = state.recommendedSeriesFlow.collectAsLazyPagingItems()
 
     BaseScreen(
-        title = state.seriesTitle.orEmpty(),
-        caption = stringResource(R.string.because_you_watched),
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interaction::onRetryClick,
+        title = state.seriesTitle.orEmpty(),
+        caption = stringResource(R.string.because_you_watched),
         onBackClick = interaction::onBackClick,
-        onRetryClick = interaction::onRetryClick
+        hasHorizontalDivider = true
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        Box(Modifier.fillMaxSize()) {
             TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = !isGridSelected,
-                contentPadding = PaddingValues(vertical = 16.dp),
                 onItemClick = interaction::onSeriesClick
             )
 
             ViewToggle(
+                isListSelected = !isGridSelected,
+                onGridSelected = { isGridSelected = !isGridSelected },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .navigationBarsPadding()
-                    .padding(16.dp),
-                isListSelected = !isGridSelected,
-                onGridSelected = { isGridSelected = !isGridSelected }
+                    .padding(bottom = 16.dp, end = 16.dp)
             )
         }
-
     }
 }
