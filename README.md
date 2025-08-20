@@ -76,20 +76,29 @@ You will need to do some Installation steps first to start your tour in CineVers
    
 ## 🧠 Key Concepts
 
-This app is a practical demonstration of:
+This app demonstrates modern Android development practices:
 
-- Jetpack Compose UI
-- CI/CD
-- Modularization
-- Clean MVI Architecture
-- OO A&D + SOLID Principles
-- OnDevice Machine Learning
-- Koin & Hilt & Dagger for Dependency Injection
-- Ktor & Retrofit for Networking
-- Room for Caching
-- Coil
-- Paging3 for Pagination
-
+**🏗️ Architecture**
+- Language: Kotlin
+- UI: Jetpack Compose
+- Architecture: Clean Architecture + MVI Pattern
+- Modularization: Feature-based modules
+- Principles: SOLID + Repository & Strategy Patterns
+  
+**⚡ Core Tech**
+- DI: Koin, Hilt & Dagger
+- Networking: Ktor & Retrofit + OkHttp
+- Storage: Room + DataStore
+- Async: Kotlin Coroutines + Flow
+- Image Loading: Coil
+- Pagination: Paging3
+- Background Tasks: WorkManager
+- ML: TensorFlow Lite
+  
+**🔧 Quality & DevOps**
+- Testing: JUnit 5, Truth, MockK
+- Monitoring: Firebase Crashlytics
+- DevOps: CI/CD Pipeline
 ---
 
 ## 📱 Features
