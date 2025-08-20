@@ -1,5 +1,6 @@
 package com.giraffe.presentation.home.navigation.main
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -36,6 +37,7 @@ import com.giraffe.presentation.home.navigation.main.routes.MatchRoute
 import com.giraffe.presentation.home.navigation.main.routes.ProfileRoute
 import com.giraffe.presentation.home.navigation.main.routes.navigateToExplore
 import com.giraffe.presentation.home.navigation.main.routes.navigateToMatch
+import java.util.Locale
 
 @Composable
 fun MainNavGraph(
@@ -173,6 +175,8 @@ fun NavGraphBuilder.animatedComposable(
     route: String,
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
+    val rtlFlag = if (locale.language == "ar") -1 else 1
     composable(
         route = route,
         enterTransition = {
@@ -183,7 +187,7 @@ fun NavGraphBuilder.animatedComposable(
                 ExploreRoute.route to MatchRoute.route,
                 ExploreRoute.route to ProfileRoute.route,
                 MatchRoute.route to ProfileRoute.route -> {
-                    slideInHorizontally(tween(300)) { it }
+                    slideInHorizontally(tween(300)) { it * rtlFlag }
                 }
 
                 ExploreRoute.route to HomeRoute.route,
@@ -192,7 +196,7 @@ fun NavGraphBuilder.animatedComposable(
                 ProfileRoute.route to HomeRoute.route,
                 ProfileRoute.route to ExploreRoute.route,
                 ProfileRoute.route to MatchRoute.route -> {
-                    slideInHorizontally(tween(300)) { -it }
+                    slideInHorizontally(tween(300)) { -it * rtlFlag }
                 }
 
                 else -> null
@@ -206,7 +210,7 @@ fun NavGraphBuilder.animatedComposable(
                 ExploreRoute.route to MatchRoute.route,
                 ExploreRoute.route to ProfileRoute.route,
                 MatchRoute.route to ProfileRoute.route -> {
-                    slideOutHorizontally(tween(300)) { -it }
+                    slideOutHorizontally(tween(300)) { -it * rtlFlag }
                 }
 
                 ExploreRoute.route to HomeRoute.route,
@@ -215,7 +219,7 @@ fun NavGraphBuilder.animatedComposable(
                 ProfileRoute.route to HomeRoute.route,
                 ProfileRoute.route to ExploreRoute.route,
                 ProfileRoute.route to MatchRoute.route -> {
-                    slideOutHorizontally(tween(300)) { it }
+                    slideOutHorizontally(tween(300)) { it * rtlFlag }
                 }
 
                 else -> null
@@ -229,7 +233,7 @@ fun NavGraphBuilder.animatedComposable(
                 ExploreRoute.route to MatchRoute.route,
                 ExploreRoute.route to ProfileRoute.route,
                 MatchRoute.route to ProfileRoute.route -> {
-                    slideInHorizontally(tween(300)) { it }
+                    slideInHorizontally(tween(300)) { it * rtlFlag }
                 }
 
                 ExploreRoute.route to HomeRoute.route,
@@ -238,7 +242,7 @@ fun NavGraphBuilder.animatedComposable(
                 ProfileRoute.route to HomeRoute.route,
                 ProfileRoute.route to ExploreRoute.route,
                 ProfileRoute.route to MatchRoute.route -> {
-                    slideInHorizontally(tween(300)) { -it }
+                    slideInHorizontally(tween(300)) { -it * rtlFlag }
                 }
 
                 else -> null
@@ -252,7 +256,7 @@ fun NavGraphBuilder.animatedComposable(
                 ExploreRoute.route to MatchRoute.route,
                 ExploreRoute.route to ProfileRoute.route,
                 MatchRoute.route to ProfileRoute.route -> {
-                    slideOutHorizontally(tween(300)) { -it }
+                    slideOutHorizontally(tween(300)) { -it * rtlFlag }
                 }
 
                 ExploreRoute.route to HomeRoute.route,
@@ -261,7 +265,7 @@ fun NavGraphBuilder.animatedComposable(
                 ProfileRoute.route to HomeRoute.route,
                 ProfileRoute.route to ExploreRoute.route,
                 ProfileRoute.route to MatchRoute.route -> {
-                    slideOutHorizontally(tween(300)) { it }
+                    slideOutHorizontally(tween(300)) { it * rtlFlag }
                 }
 
                 else -> null
