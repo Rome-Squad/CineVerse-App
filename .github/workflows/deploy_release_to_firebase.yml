@@ -121,8 +121,12 @@ jobs:
       # 🔹 Tag and Release on GitHub
       - name: Create Git Tag
         run: |
-          git tag v${{ env.VERSION }}
-          git push origin v${{ env.VERSION }}
+          if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
+            echo "⚠️ Tag v${{ env.VERSION }} already exists. Skipping..."
+          else
+            git tag v${{ env.VERSION }}
+            git push origin v${{ env.VERSION }}
+          fi
 
       - name: 📤 Upload signed APK to GitHub Release
         uses: softprops/action-gh-release@v1
