@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,6 +28,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.Poster
+import com.giraffe.presentation.home.utils.shimmerEffect
 
 @Composable
 fun ListSection(
@@ -35,6 +37,7 @@ fun ListSection(
     modifier: Modifier = Modifier,
     endText: String? = null,
     paddingHorizontal: Int = 16,
+    isLoading: Boolean = false,
     onClickEndText: () -> Unit = {},
     onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
 ) {
@@ -48,18 +51,45 @@ fun ListSection(
             clickableText = if (posters.size >= 10) endText else null,
             onClickableText = onClickEndText
         )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
-        ) {
-            items(items = posters, key = { it.id }) { uiModel ->
-                HomeItemVertically(
-                    item = uiModel,
-                    modifier = Modifier.width(136.dp),
-                    onClick = onClickItem
-                )
+        if (isLoading) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+            ) {
+                items(5) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Box(
+                            modifier = Modifier
+                                .height(182.dp)
+                                .clip(RoundedCornerShape(Theme.radius.lg))
+                                .shimmerEffect()
+                                .aspectRatio(0.74f),
+                        )
+                        Box(
+                            modifier = Modifier
+                                .height(12.dp)
+                                .width(96.dp)
+                                .clip(RoundedCornerShape(Theme.radius.lg))
+                                .shimmerEffect(),
+                        )
+                    }
+                }
+            }
+        } else {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+            ) {
+                items(items = posters, key = { it.id }) { uiModel ->
+                    HomeItemVertically(
+                        item = uiModel,
+                        modifier = Modifier.width(136.dp),
+                        onClick = onClickItem
+                    )
+                }
             }
         }
+
     }
 }
 

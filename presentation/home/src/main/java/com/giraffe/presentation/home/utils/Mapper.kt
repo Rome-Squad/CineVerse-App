@@ -69,12 +69,14 @@ fun Movie.toPopularMediaUi(genres: List<Genre>) = PopularMediaUi(
 )
 
 
-fun Series.toPopularMediaUi(genres: List<String>) = PopularMediaUi(
+fun Series.toPopularMediaUi(genres: List<Genre>) = PopularMediaUi(
     id = id,
     title = name,
     posterUrl = posterUrl,
     backdropUrl = backdropUrl,
-    genres = genres,
+    genres = genres
+        .filter { genre -> genre.id in genreIDs }
+        .map { genre -> genre.title },
     rating = rating,
     mediaType = MediaType.SERIES
 )

@@ -22,13 +22,16 @@ data class HomeScreenState(
             it
         )
     },
-    val isLoadingUserName: Boolean = true,
+
     val isLoadingPopularity: Boolean = true,
     val isLoadingRecentlyReleased: Boolean = true,
+    val isLoadingMatchesYourVibe: Boolean = true,
+    val isLoadingRecentlyViewed: Boolean = true,
     val isLoadingUpcomingMovies: Boolean = true,
     val isLoadingTopRatedSeries: Boolean = true,
+
+
     val isNoInternet: Boolean = false,
-    val isLoggedIn: Boolean = false,
     val moviesGenres: List<Genre> = emptyList(),
     val seriesGenres: List<Genre> = emptyList()
 )

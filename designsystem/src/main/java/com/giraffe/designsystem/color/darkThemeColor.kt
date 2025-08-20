@@ -9,7 +9,8 @@ val darkThemeColor = CineVerseColors(
         secondary = Color(0xFFA4A4AA),
         tertiary = Color(0xFF72727B),
         quaternary = Color(0xFF2D2E3B),
-        quinary = Color(0xFF242533)
+        quinary = Color(0xFF242533),
+        shimmer = Color(0x14FFFFFF)
     ),
     background = Background(
         screen = Color(0xFF121321),
