@@ -114,6 +114,7 @@ private fun CarouselItemContent(
                 .clip(shape = RoundedCornerShape(Theme.radius.lg)),
             placeHolderTint = Theme.color.brand.secondary,
             placeholderModifier = Modifier
+                .background(Theme.color.background.card)
                 .height(88.dp)
                 .width(64.dp)
         )
