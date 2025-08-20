@@ -103,6 +103,7 @@ private fun CarouselItemContent(
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(Theme.radius.lg))
+            .background(Theme.color.background.card)
     ) {
         SafeIslamicImage(
             imageUrl = imageUrl,
@@ -110,14 +111,18 @@ private fun CarouselItemContent(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(shape = RoundedCornerShape(Theme.radius.lg))
+                .clip(shape = RoundedCornerShape(Theme.radius.lg)),
+            placeHolderTint = Theme.color.brand.secondary,
+            placeholderModifier = Modifier
+                .height(88.dp)
+                .width(64.dp)
         )
 
         if (!isSelected) {
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(Theme.color.shade.primary.copy(0.4f))
+                    .background(Theme.color.background.card.copy(0.4f))
             )
         }
     }
