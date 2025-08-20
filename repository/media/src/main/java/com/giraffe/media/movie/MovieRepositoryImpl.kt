@@ -99,6 +99,11 @@ class MovieRepositoryImpl @Inject constructor(
         return safeFlow {
             movieLocal.getMoviesGenres()
                 .map { it.map(MovieGenreCacheDto::toEntity) }
+                .onEach {
+                    it.ifEmpty {
+                        getGenres()
+                    }
+                }
         }
     }
 
