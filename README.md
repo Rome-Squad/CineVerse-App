@@ -4,13 +4,6 @@
   <p  align="center"><strong>Cineverse</strong> is a modern Android application designed for movie and TV series enthusiasts who want to explore, discover, and organize their entertainment journey. Built with cutting-edge technology and powered by TMDB API, Cineverse delivers a seamless and intuitive experience for all your cinematic needs.<br></p>
 </p>
 
-## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) Download Cineverse APK
-
--- The App still in Development Process --
-But you can see the last updated version here:
-
-[![⬇️ Download Latest Release](https://img.shields.io/github/v/release/Rome-Squad/CineVerse-App?color=brightgreen&label=Latest%20Release&logo=android&style=for-the-badge)](https://github.com/Rome-Squad/CineVerse-App/releases/latest)
-
 ---
 
 ## 📸 Screen Shots
@@ -41,6 +34,46 @@ But you can see the last updated version here:
 </table>
 
 ---
+
+## 🧩 CineVerse App Architecture
+<pre>
+<img width="2000" height="1380" alt="image" src="https://github.com/user-attachments/assets/e91509ed-3e5c-4245-9165-ecd12cb433c6" />  
+</pre>
+
+---
+
+## 📱 Features
+
+**🎬 Discovery & Search**
+- Home Screen: Collections of trending movies and TV series
+- Explore Screen: Browse content filtered by genres and categories
+- Smart Search: Find movies, series, actors, and directors
+- Voice Search: Hands-free search using voice recognition
+
+**👤 User Management**
+- Onboarding: First-time user introduction
+- Authentication: Secure user accounts with login/registration
+- Guest Mode: App access without creating an account
+- Collection: Save favorites and create watchlists
+
+**🛡️ Cultural Features**
+- Smart Image Filter: AI-powered content filtering for Islamic culture
+- Automatic Blurring: ML model detects and blurs inappropriate imagery
+- Custom Settings: User-controlled content sensitivity preferences
+
+**📱 User Experience**
+- Dark/Light Themes: Comfortable viewing in any lighting
+- Fast Performance: Optimized loading with smart caching
+- Offline Browse: Access cached home screen content without internet
+
+---
+
+## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) Download Cineverse APK
+
+-- The App still in Development Process --
+But you can see the last updated version here:
+
+[![⬇️ Download Latest Release](https://img.shields.io/github/v/release/Rome-Squad/CineVerse-App?color=brightgreen&label=Latest%20Release&logo=android&style=for-the-badge)](https://github.com/Rome-Squad/CineVerse-App/releases/latest)
 
 ## Getting Started
 
@@ -101,32 +134,6 @@ This app demonstrates modern Android development practices:
 - DevOps: CI/CD Pipeline
 ---
 
-## 📱 Features
-
-**🎬 Discovery & Search**
-- Home Screen: Collections of trending movies and TV series
-- Explore Screen: Browse content filtered by genres and categories
-- Smart Search: Find movies, series, actors, and directors
-- Voice Search: Hands-free search using voice recognition
-
-**👤 User Management**
-- Onboarding: First-time user introduction
-- Authentication: Secure user accounts with login/registration
-- Guest Mode: App access without creating an account
-- Collection: Save favorites and create watchlists
-
-**🛡️ Cultural Features**
-- Smart Image Filter: AI-powered content filtering for Islamic culture
-- Automatic Blurring: ML model detects and blurs inappropriate imagery
-- Custom Settings: User-controlled content sensitivity preferences
-
-**📱 User Experience**
-- Dark/Light Themes: Comfortable viewing in any lighting
-- Fast Performance: Optimized loading with smart caching
-- Offline Browse: Access cached home screen content without internet
-
----
-
 ## 🛠️ Tech Stack
 
 | Tech                    | Usage                         |
@@ -144,11 +151,6 @@ This app demonstrates modern Android development practices:
 
 
 ---
-## 🧩 CineVerse App Architecture
-<pre>
-<img width="2000" height="1380" alt="image" src="https://github.com/user-attachments/assets/e91509ed-3e5c-4245-9165-ecd12cb433c6" />  
-</pre>
-
 
 ### 💻 GitHub Contributors
 
