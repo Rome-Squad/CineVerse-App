@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Manual version (e.g., 1.0.0)"
-        required: true
-        default: "1.0.0"
+        description: 'Manual version (optional, e.g. 1.0.0)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -71,15 +71,20 @@ jobs:
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
           keyPassword: ${{ secrets.ANDROID_DEVS_ALIAS_PASSWORD }}
 
-      - name: 📌 Get version from Gradle
-        id: version
+      - name: 📌 Determine version (manual or Gradle)
+        id: set_version
         run: |
-          VERSION=$(grep versionName app/build.gradle | awk '{print $2}' | tr -d '"')
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            echo "Manual version provided: $VERSION"
+          else
+            VERSION=$(grep versionName app/build.gradle | awk '{print $2}' | tr -d '"')
+            echo "Gradle version detected: $VERSION"
+          fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Detected version: $VERSION"
 
       - name: Rename APK
-        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/CineVerse-v${VERSION}.apk
+        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
 
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
