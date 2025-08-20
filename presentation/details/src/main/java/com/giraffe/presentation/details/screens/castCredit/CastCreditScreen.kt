@@ -67,7 +67,7 @@ private fun CastCreditContent(
                     .statusBarsPadding()
             ) {
                 AppBar(
-                    title = stringResource(R.string.best_of_, state.actorName),
+                    stringResource(R.string.best_of) + " " + state.actorName,
                     showBackButton = true,
                     onBackButtonClick = interaction::onBackClick
                 )
