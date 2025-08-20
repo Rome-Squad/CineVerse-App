@@ -41,7 +41,7 @@ class MovieLocalDataSourceImpl @Inject constructor(
 
     @OptIn(FlowPreview::class)
     override fun getMoviesGenres() =
-        safeFlow { movieDao.getMoviesGenres() }.debounce(1000L)
+        safeFlow { movieDao.getMoviesGenres() }.debounce(500L)
 
     override suspend fun getTopGenre() =
         safeCall { movieDao.getTopGenre() }

@@ -1,5 +1,6 @@
 package com.giraffe.presentation.home.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,23 +11,29 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.giraffe.designsystem.composable.Rating
 import com.giraffe.designsystem.composable.SectionTitle
+import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.Poster
 import com.giraffe.presentation.home.utils.shimmerEffect
@@ -39,6 +46,8 @@ fun ListSection(
     endText: String? = null,
     paddingHorizontal: Int = 16,
     isLoading: Boolean = false,
+    hasError: Boolean = false,
+    onRetry: () -> Unit = {},
     onClickEndText: () -> Unit = {},
     onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
 ) {
@@ -52,7 +61,7 @@ fun ListSection(
             clickableText = if (posters.size >= 10) endText else null,
             onClickableText = onClickEndText
         )
-        if (isLoading) {
+        if (isLoading && !hasError) {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
@@ -76,6 +85,33 @@ fun ListSection(
                     }
                 }
             }
+        } else if (hasError) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = paddingHorizontal.dp)
+            ) {
+                item {
+                    RetryCard(onRetry = onRetry)
+                }
+                items(5) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Box(
+                            modifier = Modifier
+                                .height(182.dp)
+                                .clip(RoundedCornerShape(Theme.radius.lg))
+                                .shimmerEffect(isAnimated = false)
+                                .aspectRatio(0.74f),
+                        )
+                        Box(
+                            modifier = Modifier
+                                .height(12.dp)
+                                .width(96.dp)
+                                .clip(RoundedCornerShape(Theme.radius.lg))
+                                .shimmerEffect(isAnimated = false),
+                        )
+                    }
+                }
+            }
         } else {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -90,7 +126,6 @@ fun ListSection(
                 }
             }
         }
-
     }
 }
 
@@ -138,6 +173,45 @@ fun HomeItemVertically(
             color = Theme.color.shade.secondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+
+@Composable
+fun RetryCard(modifier: Modifier = Modifier, onRetry: () -> Unit) {
+    Column(
+        modifier = modifier
+            .height(182.dp)
+            .clip(RoundedCornerShape(Theme.radius.lg))
+            .aspectRatio(0.74f),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Box(
+            modifier = Modifier.background(
+                color = Theme.color.additional.secondary.red,
+                shape = CircleShape
+            ),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(14.dp),
+                painter = painterResource(Theme.icons.dueTone.station),
+                contentDescription = stringResource(
+                    R.string.oops_no_internet
+                )
+            )
+        }
+        Text(
+            text = stringResource(R.string.failed_to_load_the_list),
+            style = Theme.textStyle.body.md.medium,
+            color = Theme.color.shade.primary
+        )
+        PrimaryButton(
+            text = stringResource(R.string.try_again),
+            onClick = onRetry
         )
     }
 }

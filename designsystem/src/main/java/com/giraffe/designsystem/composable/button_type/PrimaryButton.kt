@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.Progress
@@ -31,6 +32,7 @@ fun PrimaryButton(
     enabled: Boolean = true,
     isLoading: Boolean = false,
     buttonColorEnabled: Color = Theme.color.brand.primary,
+    contentPadding: PaddingValues = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
     onClick: () -> Unit,
 ) {
 
@@ -47,7 +49,7 @@ fun PrimaryButton(
             contentColor = Theme.color.button.onPrimary,
             disabledContentColor = Theme.color.button.onDisabled
         ),
-        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 24.dp)
+        contentPadding = contentPadding
     ) {
         AnimatedContent(
             modifier = Modifier
@@ -64,7 +66,9 @@ fun PrimaryButton(
             } else {
                 Text(
                     text = text,
-                    style = Theme.textStyle.body.md.medium
+                    style = Theme.textStyle.body.md.medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
