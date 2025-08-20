@@ -80,10 +80,9 @@ fun ExploreHeader(
                         contentDescription = stringResource(R.string.end_icon),
                         colorFilter = ColorFilter.tint(Theme.color.shade.primary),
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(20.dp)
                             .clip(CircleShape)
                             .clickable(onClick = onEndIconClick)
-                            .padding(10.dp)
                     )
                 },
                 placeholder = placeholder,
