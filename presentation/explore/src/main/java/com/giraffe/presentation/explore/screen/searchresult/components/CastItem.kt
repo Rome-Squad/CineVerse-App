@@ -1,6 +1,6 @@
 package com.giraffe.presentation.explore.screen.searchresult.components
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,11 +46,8 @@ fun CastItem(
             placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .fillMaxSize()
-                .border(
-                    width = 1.dp,
-                    color = Theme.color.stroke.primary,
-                    RoundedCornerShape(Theme.radius.lg)
-                )
+                .background(Theme.color.background.card)
+
         )
 
         Text(
