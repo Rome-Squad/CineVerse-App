@@ -14,11 +14,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -47,9 +47,11 @@ fun PrimaryButton(
             contentColor = Theme.color.button.onPrimary,
             disabledContentColor = Theme.color.button.onDisabled
         ),
-        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp)
+        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 24.dp)
     ) {
         AnimatedContent(
+            modifier = Modifier
+                .align(Alignment.CenterVertically),
             targetState = isLoading,
             label = "PrimaryButton",
             transitionSpec = {
@@ -62,10 +64,7 @@ fun PrimaryButton(
             } else {
                 Text(
                     text = text,
-                    style = Theme.textStyle.body.md.medium,
-                    fontSize = 14.sp,
-                    lineHeight = 20.sp,
-                    letterSpacing = 0.sp
+                    style = Theme.textStyle.body.md.medium
                 )
             }
         }

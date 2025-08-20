@@ -43,7 +43,7 @@
     <string name="create">Create</string>
     <string name="back">Back Icon</string>
     <string name="profile_screen">Profile Screen</string>
-    <string name="screen_info">Tip: Swipe left to remove movies from your history.</string>
+    <string name="screen_info">Tips: Swipe left to remove movies from your history.</string>
     <string name="error_network">Please check your internet connection.</string>
     <string name="error_unknown">Something went wrong. Please try again later.</string>
     <string name="access_denied_error">Access Denied Error!</string>
@@ -55,13 +55,14 @@
     <string name="Rate_movies_and_series">Rate movies and series you’ve watched to track what you love, and what you don’t.</string>
     <string name="start_rating">Start Rating</string>
     <string name="no_collections_yet">No Collections Yet</string>
+    <string name="no_movies_yet">No Movies Yet</string>
     <string name="start_building_your_personal_library_by_saving_movies_or_series_you_want_to_remember">Start building your personal library by saving movies or series you want to remember.</string>
     <string name="start_collecting">Start collecting</string>
     <string name="create_new_collection">Create new collection</string>
     <string name="collection_name">Collection Name</string>
     <string name="movies">movies</string>
     <string name="close">Close</string>
-    <string name="tip_swipe_left_to_remove_movies_from_your_collection">Tip: Swipe left to remove movies from your collection.</string>
+    <string name="tip_swipe_left_to_remove_movies_from_your_collection">Tips: Swipe left to remove movies from your collection.</string>
     <string name="no_history_yet">No History Yet</string>
     <string name="it_s_quiet_in_here_start_watching_and_we_ll_keep_track_for_you">It’s quiet in here… Start watching and we’ll keep track for you.</string>
     <string name="find_something_to_watch">Find Something to Watch</string>

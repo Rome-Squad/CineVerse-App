@@ -45,12 +45,11 @@ fun MenuItem(
                 }
             )
             .background(Theme.color.background.card)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 18.dp)
     ) {
         Row(
             modifier = Modifier
-                .weight(1f)
-                .padding(8.dp),
+                .weight(1f),
             horizontalArrangement = Arrangement.spacedBy(
                 space = 8.dp,
                 alignment = Alignment.Start
@@ -61,7 +60,7 @@ fun MenuItem(
                 contentDescription = title,
                 tint = if (isDanger) Theme.color.additional.primary.red else Theme.color.brand.primary,
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(20.dp)
             )
             Text(
                 text = title,
@@ -89,7 +88,7 @@ fun MenuItem(
                     contentDescription = "Navigate to $title",
                     tint = if (isDanger) Theme.color.additional.primary.red else Theme.color.shade.tertiary,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(20.dp)
                 )
             }
         }
