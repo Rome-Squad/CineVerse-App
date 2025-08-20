@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.giraffe.designsystem.theme.Theme
-import com.giraffe.presentation.match.R
 import com.giraffe.match.screen.match_pager.SelectionOption
+import com.giraffe.presentation.match.R
 
 @Composable
 fun getMoodOptions(): List<SelectionOption> {
@@ -24,19 +24,19 @@ fun getTimeOptions(): List<SelectionOption> {
             id = 1,
             label = stringResource(id = R.string.time_short),
             secondLabel = stringResource(id = R.string.time_short_description),
-            icon = painterResource(Theme.icons.dueTone.clock)
+            icon = painterResource(Theme.icons.dueTone.timeShort)
         ),
         SelectionOption(
             id = 2,
             label = stringResource(id = R.string.time_medium),
             secondLabel = stringResource(id = R.string.time_medium_description),
-            icon = painterResource(Theme.icons.dueTone.clock)
+            icon = painterResource(Theme.icons.dueTone.timeMedium)
         ),
         SelectionOption(
             id = 3,
             label = stringResource(id = R.string.time_long),
             secondLabel = stringResource(id = R.string.time_long_description),
-            icon = painterResource(Theme.icons.dueTone.clock)
+            icon = painterResource(Theme.icons.dueTone.timeLong)
         )
     )
 }
