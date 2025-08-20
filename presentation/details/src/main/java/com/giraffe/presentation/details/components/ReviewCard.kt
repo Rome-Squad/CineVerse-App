@@ -1,7 +1,6 @@
 package com.giraffe.presentation.details.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -70,7 +69,7 @@ fun ReviewCard(
                 placeholderIcon = painterResource(id = R.drawable.profile),
                 placeholderModifier = Modifier
                     .size(40.dp)
-                    .border(width = 1.dp, color = Theme.color.stroke.primary, shape = CircleShape)
+                    .background(Theme.color.shade.quinary)
             )
 
             Column(

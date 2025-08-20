@@ -56,7 +56,6 @@ fun VODItem(
             imageUrl = popularMediaItem.backdropUrl,
             contentDescription = "cover",
             contentScale = ContentScale.Crop,
-            placeholderModifier = Modifier.size(40.dp)
         )
         AnimatedVisibility(
             modifier = Modifier
