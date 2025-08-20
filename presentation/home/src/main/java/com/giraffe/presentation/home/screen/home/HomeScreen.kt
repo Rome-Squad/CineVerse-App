@@ -117,6 +117,8 @@ fun HomeContent(
                 endText = stringResource(R.string.show_more),
                 posters = state.recentlyReleased,
                 isLoading = state.isLoadingRecentlyReleased,
+                hasError = state.hasRecentlyReleasedError,
+                onRetry = interactionListener::getRecentlyReleased,
                 onClickItem = interactionListener::onMediaClicked,
                 onClickEndText = {
                     interactionListener.onSeeMoreClicked(
@@ -141,7 +143,9 @@ fun HomeContent(
                 title = stringResource(R.string.upcoming_movies),
                 endText = stringResource(R.string.show_more),
                 posters = state.upcomingMovies,
-                isLoading = state.isLoadingUpcomingMovies,
+                isLoading = state.isLoadingUpcoming,
+                hasError = state.hasUpcomingError,
+                onRetry = interactionListener::getUpcoming,
                 onClickItem = interactionListener::onMediaClicked,
                 onClickEndText = {
                     interactionListener.onSeeMoreClicked(
@@ -149,21 +153,25 @@ fun HomeContent(
                     )
                 }
             )
-            ListSection(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                title = stringResource(R.string.matches_your_vibe),
-                endText = stringResource(R.string.show_more),
-                posters = state.matchVibes,
-                isLoading = state.isLoadingMatchesYourVibe,
-                onClickItem = interactionListener::onMediaClicked,
-                onClickEndText = {
-                    interactionListener.onSeeMoreClicked(
-                        sectionType = CategoryMediaSectionType.MATCHES_YOUR_VIBES
-                    )
-                }
-            )
+            AnimatedVisibility(state.isLoadingMatchesYourVibe || state.hasMatchesYourVibeError || state.matchVibes.isNotEmpty()) {
+                ListSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    title = stringResource(R.string.matches_your_vibe),
+                    endText = stringResource(R.string.show_more),
+                    posters = state.matchVibes,
+                    isLoading = state.isLoadingMatchesYourVibe,
+                    hasError = state.hasMatchesYourVibeError,
+                    onRetry = interactionListener::getMatchesYourVibe,
+                    onClickItem = interactionListener::onMediaClicked,
+                    onClickEndText = {
+                        interactionListener.onSeeMoreClicked(
+                            sectionType = CategoryMediaSectionType.MATCHES_YOUR_VIBES
+                        )
+                    }
+                )
+            }
             CollectionListSection(
                 modifier = Modifier.padding(vertical = 16.dp),
                 collectionItems = state.featuredCollections,
@@ -176,7 +184,9 @@ fun HomeContent(
                 title = stringResource(R.string.top_rated_tv_shows),
                 endText = stringResource(R.string.show_more),
                 posters = state.topRated,
-                isLoading = state.isLoadingTopRatedSeries,
+                isLoading = state.isLoadingTopRated,
+                hasError = state.hasTopRatedError,
+                onRetry = interactionListener::getTopRated,
                 onClickItem = interactionListener::onMediaClicked,
                 onClickEndText = {
                     interactionListener.onSeeMoreClicked(
@@ -184,21 +194,25 @@ fun HomeContent(
                     )
                 }
             )
-            ListSection(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                endText = stringResource(R.string.show_more),
-                title = stringResource(R.string.you_recent_viewed),
-                posters = state.recentlyViewed,
-                isLoading = state.isLoadingRecentlyViewed,
-                onClickItem = interactionListener::onMediaClicked,
-                onClickEndText = {
-                    interactionListener.onSeeMoreClicked(
-                        sectionType = CategoryMediaSectionType.RECENTLY_VIEWED
-                    )
-                }
-            )
+            AnimatedVisibility(state.isLoadingRecentlyViewed || state.hasRecentlyViewedError || state.recentlyViewed.isNotEmpty()) {
+                ListSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    endText = stringResource(R.string.show_more),
+                    title = stringResource(R.string.you_recent_viewed),
+                    posters = state.recentlyViewed,
+                    isLoading = state.isLoadingRecentlyViewed,
+                    hasError = state.hasRecentlyViewedError,
+                    onRetry = interactionListener::getRecentlyViewed,
+                    onClickItem = interactionListener::onMediaClicked,
+                    onClickEndText = {
+                        interactionListener.onSeeMoreClicked(
+                            sectionType = CategoryMediaSectionType.RECENTLY_VIEWED
+                        )
+                    }
+                )
+            }
             AnimatedVisibility(state.yourCollections.isNotEmpty()) {
                 YourCollectionsSections(
                     modifier = Modifier.padding(vertical = 16.dp),

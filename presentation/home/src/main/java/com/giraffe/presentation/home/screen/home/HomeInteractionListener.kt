@@ -20,4 +20,10 @@ interface HomeInteractionListener {
     fun onCollectionClick(collectionId: Int, collectionName: String)
 
     fun onFeaturesCollectionClicked(sectionType: CategoryMediaSectionType)
+
+    fun getRecentlyReleased()
+    fun getRecentlyViewed()
+    fun getMatchesYourVibe()
+    fun getUpcoming()
+    fun getTopRated()
 }

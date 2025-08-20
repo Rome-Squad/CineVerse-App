@@ -34,12 +34,12 @@ class HistoryViewModel @Inject constructor(
     private fun getGenres() {
         safeCollect(
             onEmitNewValue = ::onGetMoviesGenresSuccess,
-            onError = ::onFailure.also { onGetMoviesGenresFailure() },
+            onError = ::onFailure.also { getRecentViewedMovies() },
             block = observeMoviesGenresUseCase::invoke
         )
         safeCollect(
             onEmitNewValue = ::onGetSeriesGenresSuccess,
-            onError = ::onFailure.also { onGetSeriesGenresFailure() },
+            onError = ::onFailure.also { getRecentViewedSeries() },
             block = observeSeriesGenresUseCase::invoke
         )
     }
@@ -49,16 +49,8 @@ class HistoryViewModel @Inject constructor(
         getRecentViewedMovies()
     }
 
-    private fun onGetMoviesGenresFailure() {
-        getRecentViewedMovies()
-    }
-
     private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
         updateState { it.copy(seriesGenres = genres) }
-        getRecentViewedSeries()
-    }
-
-    private fun onGetSeriesGenresFailure() {
         getRecentViewedSeries()
     }
 

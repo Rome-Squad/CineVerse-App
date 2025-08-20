@@ -13,13 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import com.giraffe.designsystem.theme.Theme
 
 fun Any?.orEmpty(): String = this?.toString() ?: ""
 
-fun Modifier.shimmerEffect() = composed {
+fun Modifier.shimmerEffect(
+    isAnimated: Boolean = true
+) = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
     val transition = rememberInfiniteTransition()
     val startOffsetX by transition.animateFloat(
@@ -28,7 +31,7 @@ fun Modifier.shimmerEffect() = composed {
         animationSpec = infiniteRepeatable(tween(durationMillis = 1000)),
     )
     background(
-        brush = Brush.linearGradient(
+        brush = if (!isAnimated) SolidColor(Theme.color.shade.quaternary) else Brush.linearGradient(
             colors = listOf(
                 Theme.color.shade.quaternary,
                 Theme.color.shade.shimmer,
