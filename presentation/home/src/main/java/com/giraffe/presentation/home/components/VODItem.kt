@@ -47,14 +47,16 @@ fun VODItem(
                 .clip(
                     shape = RoundedCornerShape(Theme.radius.xl)
                 )
-                .align(Alignment.TopCenter),
+                .align(Alignment.TopCenter)
+                .background(Theme.color.background.card),
             placeholderModifier = Modifier
                 .background(Theme.color.background.card)
                 .fillMaxSize(),
             placeHolderTint = Theme.color.brand.secondary,
             imageUrl = popularMediaItem.backdropUrl,
             contentDescription = "cover",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            placeholderModifier = Modifier.size(40.dp)
         )
         AnimatedVisibility(
             modifier = Modifier

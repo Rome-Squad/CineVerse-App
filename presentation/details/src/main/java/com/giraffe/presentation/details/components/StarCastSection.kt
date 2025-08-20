@@ -107,6 +107,15 @@ fun CastCard(
                 placeholderModifier = Modifier
                     .background(Theme.color.brand.tertiary)
                     .fillMaxSize()
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = Theme.radius.lg,
+                            bottomStart = Theme.radius.lg,
+                            topEnd = Theme.radius.lg,
+                            bottomEnd = Theme.radius.lg
+                        )
+                    )
+
             )
 
             Column(modifier = Modifier.padding(horizontal = 12.dp)) {

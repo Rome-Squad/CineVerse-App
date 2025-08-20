@@ -1,7 +1,6 @@
 package com.giraffe.presentation.details.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -102,9 +101,8 @@ fun SeasonCard(
                             placeHolderTint = Theme.color.brand.secondary,
                             placeholderModifier = Modifier
                                 .fillMaxSize()
-                                .border(
-                                    width = 1.dp,
-                                    color = Theme.color.stroke.primary,
+                                .background(Theme.color.brand.tertiary)
+                                .clip(
                                     shape = RoundedCornerShape(
                                         topStart = Theme.radius.x4l,
                                         topEnd = Theme.radius.x4l,
@@ -112,6 +110,7 @@ fun SeasonCard(
                                         bottomStart = Theme.radius.xs
                                     )
                                 )
+//
                         )
                     }
                 }
