@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+
 jobs:
   build:
     name: Building and distributing app (Release)
