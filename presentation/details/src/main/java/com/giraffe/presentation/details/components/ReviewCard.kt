@@ -1,11 +1,9 @@
 package com.giraffe.presentation.details.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,16 +13,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.R
 import com.giraffe.designsystem.composable.ReadMoreText
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.utils.formatAsMonthDayYear
 import com.giraffe.presentation.details.utils.getCurrentLocalDateTime
-import com.giraffe.imageviewer.component.SafeIslamicImage
 import kotlinx.datetime.LocalDateTime
 
 
@@ -66,20 +66,12 @@ fun ReviewCard(
                 imageUrl = reviewerImageUrl.toString(),
                 contentDescription = reviewerImageUrl.toString(),
                 contentScale = ContentScale.Crop,
-                placeHolderTint = Theme.color.brand.secondary,
+                placeHolderTint = Theme.color.shade.secondary,
+                placeholderIcon = painterResource(id = R.drawable.profile),
+                placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
                 placeholderModifier = Modifier
-                    .fillMaxSize()
-                    .padding(2.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Theme.color.stroke.primary,
-                        shape = RoundedCornerShape(
-                            topStart = Theme.radius.lg,
-                            bottomStart = Theme.radius.lg,
-                            topEnd = Theme.radius.lg,
-                            bottomEnd = Theme.radius.lg
-                        )
-                    )
+                    .size(40.dp)
+                    .background(Theme.color.shade.quinary)
             )
 
             Column(

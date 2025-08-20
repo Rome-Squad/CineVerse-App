@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,6 +62,7 @@ fun PosterItemHorizontal(
                     )
                 ),
             placeHolderTint = Theme.color.brand.secondary,
+            placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .background(Theme.color.brand.tertiary)
                 .height(88.dp)

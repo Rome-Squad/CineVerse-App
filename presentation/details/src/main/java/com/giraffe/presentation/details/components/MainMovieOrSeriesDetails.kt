@@ -5,13 +5,11 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -86,21 +84,16 @@ fun MainMovieOrSeriesDetails(
                             width = 216.dp - (216 - 40).dp * (animationProgressValue),
                             height = 289.dp - (289 - 40).dp * (animationProgressValue)
                         )
-                        .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * animationProgressValue)),
+                        .clip(RoundedCornerShape(imageClipRadius + (40.dp - imageClipRadius) * animationProgressValue))
+                        .background(Theme.color.background.card),
                     contentScale = ContentScale.Crop,
                     placeHolderTint = Theme.color.brand.secondary,
-                    placeholderModifier = Modifier
-                        .fillMaxSize()
-                        .border(
-                            width = 1.dp,
-                            color = Theme.color.stroke.primary,
-                            shape = RoundedCornerShape(
-                                imageClipRadius
-                                        + (40.dp - imageClipRadius)
-                                        * animationProgressValue
-                            )
-
+                    placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(
+                        color = Color(
+                            0xFFE1E1E3
                         )
+                    ),
+                    placeholderModifier = Modifier.size(40.dp)
                 )
 
                 Row(

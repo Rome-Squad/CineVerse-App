@@ -21,9 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.giraffe.imageviewer.R
 import com.giraffe.imageviewer.model.ImageState
@@ -38,8 +36,10 @@ fun SafeIslamicImage(
     alignment: Alignment = Alignment.Center,
     hasSensitiveText: Boolean = true,
     placeholderModifier: Modifier = Modifier,
+    placeholderTextStyle: TextStyle,
+    eyeSplashTint: Color = Color(0xFFE1E1E3),
     placeholderIcon: Painter = painterResource(id = R.drawable.placeholder),
-    placeHolderTint: Color = Color(0xFFE1E1E3),
+    placeHolderTint: Color = Color(0xFFBEC8FF),
 ) {
     val context = LocalContext.current
     val host = remember { SafeIslamicImageHost(context.applicationContext) }
@@ -70,25 +70,19 @@ fun SafeIslamicImage(
                     Column(
                         Modifier.align(Alignment.Center),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.outline_eye_slash),
                             contentDescription = stringResource(id = R.string.placeholder),
                             modifier = Modifier.size(20.dp),
                             contentScale = ContentScale.FillBounds,
-                            colorFilter = ColorFilter.tint(Color(0xFFE1E1E3))
+                            colorFilter = ColorFilter.tint(eyeSplashTint)
                         )
                         if (hasSensitiveText) {
                             BasicText(
                                 text = stringResource(R.string.sensitive_content),
-                                style = TextStyle(
-                                    color = Color(0xFFE1E1E3),
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    lineHeight = 12.sp,
-                                    letterSpacing = 0.sp
-                                )
+                                style = placeholderTextStyle,
                             )
                         }
                     }
@@ -110,9 +104,8 @@ private fun Placeholder(
 ) {
     Image(
         painter = icon,
-        contentDescription = stringResource(id = R.string.placeholder),
         colorFilter = ColorFilter.tint(tint),
-        modifier = modifier
-            .wrapContentSize()
+        contentDescription = stringResource(id = R.string.placeholder),
+        modifier = modifier.wrapContentSize()
     )
 }

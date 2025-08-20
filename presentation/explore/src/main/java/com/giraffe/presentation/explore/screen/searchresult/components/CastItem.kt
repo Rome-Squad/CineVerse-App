@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,6 +43,7 @@ fun CastItem(
                 .clip(RoundedCornerShape(Theme.radius.lg))
                 .clickable(onClick = onClick),
             placeHolderTint = Theme.color.brand.secondary,
+            placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .fillMaxSize()
                 .border(

@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,14 +48,16 @@ fun VODItem(
                 .clip(
                     shape = RoundedCornerShape(Theme.radius.xl)
                 )
-                .align(Alignment.TopCenter),
+                .align(Alignment.TopCenter)
+                .background(Theme.color.background.card),
             placeholderModifier = Modifier
                 .background(Theme.color.background.card)
                 .fillMaxSize(),
             placeHolderTint = Theme.color.brand.secondary,
             imageUrl = popularMediaItem.backdropUrl,
             contentDescription = "cover",
-            contentScale = ContentScale.Crop
+            placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
+            contentScale = ContentScale.Crop,
         )
         AnimatedVisibility(
             modifier = Modifier

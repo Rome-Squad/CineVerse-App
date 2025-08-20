@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
@@ -153,6 +154,7 @@ fun HomeItemVertically(
                 imageUrl = item.posterUrl,
                 contentDescription = item.title,
                 placeHolderTint = Theme.color.brand.secondary,
+                placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
                 placeholderModifier = Modifier
                     .background(Theme.color.background.card)
                     .fillMaxSize()

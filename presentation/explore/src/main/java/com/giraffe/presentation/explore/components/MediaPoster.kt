@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -107,6 +108,7 @@ fun MediaPoster(
                 hasSensitiveText = isGridSelected,
                 placeHolderTint = Theme.color.brand.secondary,
                 contentScale = ContentScale.FillBounds,
+                placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
                 placeholderModifier = Modifier
                     .align(Alignment.TopStart)
                     .then(
