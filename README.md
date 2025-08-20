@@ -127,11 +127,13 @@ This app demonstrates modern Android development practices:
 - Pagination: Paging3
 - Background Tasks: WorkManager
 - ML: TensorFlow Lite
+- Security: Android Keystore + AES Encryption
   
 **🔧 Quality & DevOps**
-- Testing: JUnit 5, Truth, MockK
-- Monitoring: Firebase Crashlytics
 - DevOps: CI/CD Pipeline
+- Testing: JUnit 5, Truth, MockK
+- Monitoring: Firebase Crashlytics + Firebase Performance
+- Distribution: Firebase App Distribution + GitHub Actions
 ---
 
 ## 🛠️ Tech Stack
