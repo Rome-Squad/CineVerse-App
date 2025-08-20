@@ -7,9 +7,10 @@ import com.giraffe.presentation.home.model.PopularMediaUi
 import com.giraffe.presentation.home.model.Poster
 import com.giraffe.presentation.home.model.YourCollectionUi
 
-
 data class HomeScreenState(
     val userName: String = "",
+    val moviesGenres: List<Genre> = emptyList(),
+    val seriesGenres: List<Genre> = emptyList(),
     val matchVibes: List<Poster> = emptyList(),
     val popularity: List<PopularMediaUi> = emptyList(),
     val recentlyReleased: List<Poster> = emptyList(),
@@ -27,11 +28,13 @@ data class HomeScreenState(
     val isLoadingRecentlyReleased: Boolean = true,
     val isLoadingMatchesYourVibe: Boolean = true,
     val isLoadingRecentlyViewed: Boolean = true,
-    val isLoadingUpcomingMovies: Boolean = true,
-    val isLoadingTopRatedSeries: Boolean = true,
+    val isLoadingUpcoming: Boolean = true,
+    val isLoadingTopRated: Boolean = true,
 
-
-    val isNoInternet: Boolean = false,
-    val moviesGenres: List<Genre> = emptyList(),
-    val seriesGenres: List<Genre> = emptyList()
+    val hasPopularityError: Boolean = false,
+    val hasRecentlyReleasedError: Boolean = false,
+    val hasMatchesYourVibeError: Boolean = false,
+    val hasRecentlyViewedError: Boolean = false,
+    val hasUpcomingError: Boolean = false,
+    val hasTopRatedError: Boolean = false,
 )

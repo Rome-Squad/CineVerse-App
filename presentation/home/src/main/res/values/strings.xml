@@ -30,5 +30,6 @@
     <string name="based_on_true_events">Based on True Events</string>
     <string name="feel_good_favorites">Feel-Good Favorites</string>
     <string name="unknown_genre">Unknown genre</string>
+    <string name="failed_to_load_the_list">Failed to load the list</string>
 
 </resources>

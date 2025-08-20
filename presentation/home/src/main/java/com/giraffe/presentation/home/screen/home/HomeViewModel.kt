@@ -1,10 +1,8 @@
 package com.giraffe.presentation.home.screen.home
 
-import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
-import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.ObservePopularMoviesUseCase
 import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
@@ -30,9 +28,6 @@ import com.giraffe.presentation.home.utils.toUi
 import com.giraffe.user.usecase.GetUserNameUseCase
 import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,9 +55,9 @@ class HomeViewModel @Inject constructor(
         getMoviesGenres()
         getSeriesGenres()
         getRecentlyReleased()
-        getUpcomingMovies()
+        getUpcoming()
         getYourCollections()
-        getTopRatedSeries()
+        getTopRated()
         getMatchesYourVibe()
         getRecentlyViewed()
     }
@@ -72,7 +67,6 @@ class HomeViewModel @Inject constructor(
             onSuccess = {
                 if (it) safeCollect(
                     onEmitNewValue = ::onGetUseNameSuccess,
-                    onError = ::onError,
                     block = getUserNameUseCase::invoke
                 )
             },
@@ -85,7 +79,7 @@ class HomeViewModel @Inject constructor(
     private fun getMoviesGenres() {
         safeCollect(
             onEmitNewValue = ::onGetMoviesGenresSuccess,
-            onError = ::onError.also { getPopularityMovies() },
+            onError = { getPopularityMovies() },
             block = observeMoviesGenresUseCase::invoke
         )
     }
@@ -98,7 +92,7 @@ class HomeViewModel @Inject constructor(
     private fun getSeriesGenres() {
         safeCollect(
             onEmitNewValue = ::onGetSeriesGenresSuccess,
-            onError = ::onError.also { getPopularitySeries() },
+            onError = { getPopularitySeries() },
             block = observeSeriesGenresUseCase::invoke
         )
     }
@@ -109,10 +103,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getPopularityMovies() {
-        updateState { it.copy(isLoadingPopularity = true) }
+        updateState { it.copy(isLoadingPopularity = true, hasPopularityError = false) }
         safeCollect(
             onEmitNewValue = ::onGetPopularityMoviesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingPopularity = false,
+                        hasPopularityError = true
+                    )
+                }
+            },
             block = observePopularMoviesUseCase::invoke
         )
     }
@@ -126,7 +127,14 @@ class HomeViewModel @Inject constructor(
         updateState { it.copy(isLoadingPopularity = true) }
         safeCollect(
             onEmitNewValue = ::onGetPopularitySeriesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingPopularity = false,
+                        hasPopularityError = true
+                    )
+                }
+            },
             block = observePopularSeriesUseCase::invoke
         )
     }
@@ -138,27 +146,38 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updatePopularityMedia(items: List<PopularMediaUi>) {
-        if (items.isNotEmpty()) viewModelScope.launch(Dispatchers.IO) {
-            delay(5000)
-            updateState { currentState ->
-                currentState.copy(
-                    popularity = (items + currentState.popularity).distinctBy { it.id },
-                    isLoadingPopularity = false
-                )
-            }
+        if (items.isNotEmpty()) updateState {
+            it.copy(
+                popularity = (items + it.popularity).distinctBy { item -> item.id },
+                isLoadingPopularity = false
+            )
         }
     }
 
-    private fun getRecentlyReleased() {
-        updateState { it.copy(isLoadingRecentlyReleased = true) }
+    override fun getRecentlyReleased() {
+        updateState { it.copy(isLoadingRecentlyReleased = true, hasRecentlyReleasedError = false) }
         safeCollect(
             onEmitNewValue = ::onGetRecentlyReleasedMoviesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingRecentlyReleased = false,
+                        hasRecentlyReleasedError = true
+                    )
+                }
+            },
             block = observeRecentlyReleasedMoviesUseCase::invoke
         )
         safeCollect(
             onEmitNewValue = ::onGetRecentlyReleasedSeriesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingRecentlyReleased = false,
+                        hasRecentlyReleasedError = true
+                    )
+                }
+            },
             block = observeRecentlyReleasedSeriesUseCase::invoke
         )
     }
@@ -172,42 +191,42 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateRecentlyReleasedPosters(posters: List<Poster>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            delay(5000)
-            updateState { currentState ->
-                currentState.copy(
-                    recentlyReleased = (posters + currentState.recentlyReleased).distinctBy { it.id },
-                    isLoadingRecentlyReleased = false
-                )
-            }
+        if (posters.isNotEmpty()) updateState {
+            it.copy(
+                recentlyReleased = (posters + it.recentlyReleased).distinctBy { item -> item.id },
+                isLoadingRecentlyReleased = false
+            )
         }
     }
 
-    private fun getUpcomingMovies() {
-        updateState { it.copy(isLoadingUpcomingMovies = true) }
+    override fun getUpcoming() {
+        updateState { it.copy(isLoadingUpcoming = true, hasUpcomingError = false) }
         safeCollect(
             onEmitNewValue = ::onGetUpcomingMoviesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingUpcoming = false,
+                        hasUpcomingError = true
+                    )
+                }
+            },
             block = observeUpcomingMoviesUseCase::invoke
         )
     }
 
     private fun onGetUpcomingMoviesSuccess(movies: List<Movie>) {
-        if (movies.isNotEmpty()) viewModelScope.launch(Dispatchers.IO) {
-            delay(5000L)
-            updateState { currentState ->
-                currentState.copy(
-                    upcomingMovies = (movies.map(Movie::toPoster) + currentState.upcomingMovies).distinctBy { it.id },
-                    isLoadingUpcomingMovies = false
-                )
-            }
+        if (movies.isNotEmpty()) updateState {
+            it.copy(
+                upcomingMovies = (movies.map(Movie::toPoster) + it.upcomingMovies).distinctBy { item -> item.id },
+                isLoadingUpcoming = false
+            )
         }
     }
 
     private fun getYourCollections() {
         safeCollect(
             onEmitNewValue = ::onGetYourCollectionsSuccess,
-            onError = ::onError,
             block = getCollectionsUseCase::invoke
         )
     }
@@ -220,37 +239,55 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getTopRatedSeries() {
-        updateState { it.copy(isLoadingTopRatedSeries = true) }
+    override fun getTopRated() {
+        updateState { it.copy(isLoadingTopRated = true, hasTopRatedError = false) }
         safeCollect(
             onEmitNewValue = ::onGetTopRatedSeriesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingTopRated = false,
+                        hasTopRatedError = true
+                    )
+                }
+            },
             block = observeTopRatedSeriesUseCase::invoke
         )
     }
 
     private fun onGetTopRatedSeriesSuccess(series: List<Series>) {
-        if (series.isNotEmpty()) viewModelScope.launch(Dispatchers.IO) {
-            delay(5000L)
-            updateState { currentState ->
-                currentState.copy(
-                    topRated = (series.map(Series::toPoster) + currentState.topRated).distinctBy { it.id },
-                    isLoadingTopRatedSeries = false
-                )
-            }
+        if (series.isNotEmpty()) updateState {
+            it.copy(
+                topRated = (series.map(Series::toPoster) + it.topRated).distinctBy { item -> item.id },
+                isLoadingTopRated = false
+            )
         }
     }
 
-    private fun getMatchesYourVibe() {
-        updateState { it.copy(isLoadingMatchesYourVibe = true) }
+    override fun getMatchesYourVibe() {
+        updateState { it.copy(isLoadingMatchesYourVibe = true, hasMatchesYourVibeError = false) }
         safeCollect(
             onEmitNewValue = ::onGetMatchesYourVibeMoviesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingMatchesYourVibe = false,
+                        hasMatchesYourVibeError = true
+                    )
+                }
+            },
             block = observeMatchesYourVibeMoviesUseCase::invoke
         )
         safeCollect(
             onEmitNewValue = ::onGetMatchesYourVibeSeriesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingMatchesYourVibe = false,
+                        hasMatchesYourVibeError = true
+                    )
+                }
+            },
             block = observeMatchesYourVibeSeriesUseCase::invoke
         )
     }
@@ -264,27 +301,38 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateMatchesYourVibePosters(posters: List<Poster>) {
-        if (posters.isNotEmpty()) viewModelScope.launch(Dispatchers.IO) {
-            delay(5000L)
-            updateState { currentState ->
-                currentState.copy(
-                    matchVibes = (posters + currentState.matchVibes).distinctBy { it.id },
-                    isLoadingMatchesYourVibe = false
-                )
-            }
+        if (posters.isNotEmpty()) updateState {
+            it.copy(
+                matchVibes = (posters + it.matchVibes).distinctBy { item -> item.id },
+                isLoadingMatchesYourVibe = false
+            )
         }
     }
 
-    private fun getRecentlyViewed() {
-        updateState { it.copy(isLoadingRecentlyViewed = true) }
+    override fun getRecentlyViewed() {
+        updateState { it.copy(isLoadingRecentlyViewed = true, hasRecentlyViewedError = false) }
         safeCollect(
             onEmitNewValue = ::onGetRecentlyMoviesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingRecentlyViewed = false,
+                        hasRecentlyViewedError = true
+                    )
+                }
+            },
             block = observeRecentlyViewedMoviesUseCase::invoke
         )
         safeCollect(
             onEmitNewValue = ::onGetRecentlySeriesSuccess,
-            onError = ::onError,
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoadingRecentlyViewed = false,
+                        hasRecentlyViewedError = true
+                    )
+                }
+            },
             block = observeRecentlyViewedSeriesUseCase::invoke
         )
     }
@@ -298,17 +346,14 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateRecentPosters(posters: List<Poster>) {
-        if (posters.isNotEmpty()) viewModelScope.launch(Dispatchers.IO) {
-            delay(5000L)
-            updateState {
-                it.copy(
-                    recentlyViewed = (posters + it.recentlyViewed)
-                        .distinctBy { poster -> poster.id }
-                        .sortedByDescending { poster -> poster.recentViewedAt }
-                        .take(20),
-                    isLoadingRecentlyViewed = false
-                )
-            }
+        updateState {
+            it.copy(
+                recentlyViewed = (posters + it.recentlyViewed)
+                    .distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.recentViewedAt }
+                    .take(20),
+                isLoadingRecentlyViewed = false
+            )
         }
     }
 
@@ -365,9 +410,5 @@ class HomeViewModel @Inject constructor(
                 sectionType = sectionType
             )
         )
-    }
-
-    private fun onError(error: Throwable) = updateState {
-        it.copy(isNoInternet = error is NoInternetException)
     }
 }
