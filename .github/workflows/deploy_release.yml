@@ -5,7 +5,8 @@ on:
     types: [ closed ]
     branches: [ main, develop ]
   workflow_dispatch:
-
+permissions:
+  contents: write
 jobs:
   build:
     name: Building and distributing app (Release)
