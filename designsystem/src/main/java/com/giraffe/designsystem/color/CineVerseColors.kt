@@ -27,7 +27,8 @@ data class Shade(
     val secondary: Color,
     val tertiary: Color,
     val quaternary: Color,
-    val quinary: Color
+    val quinary: Color,
+    val shimmer: Color
 )
 
 data class Brand(

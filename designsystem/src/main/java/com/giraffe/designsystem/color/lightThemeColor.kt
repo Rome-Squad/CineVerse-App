@@ -9,7 +9,8 @@ val lightThemeColor = CineVerseColors(
         secondary = Color(0xFF717171),
         tertiary = Color(0xFFA5A5A5),
         quaternary = Color(0xFFECECEC),
-        quinary = Color(0xFFF6F6F6)
+        quinary = Color(0xFFF6F6F6),
+        shimmer = Color(0x14121212)
     ),
     background = Background(
         screen = Color(0xFFF7F7F7),
