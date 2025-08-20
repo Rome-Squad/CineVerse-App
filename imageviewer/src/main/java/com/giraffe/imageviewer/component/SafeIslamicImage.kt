@@ -75,13 +75,13 @@ fun SafeIslamicImage(
                             contentDescription = stringResource(id = R.string.placeholder),
                             modifier = Modifier.size(20.dp),
                             contentScale = ContentScale.FillBounds,
-                            colorFilter = ColorFilter.tint(Theme.color.shade.primary)
+                            colorFilter = ColorFilter.tint(Color(0xFFE1E1E3))
                         )
                         if (hasSensitiveText) {
                             Text(
                                 text = stringResource(R.string.sensitive_content),
                                 style = Theme.textStyle.body.sm.medium,
-                                color = Theme.color.shade.primary
+                                color = Color(0xFFE1E1E3)
                             )
                         }
                     }
