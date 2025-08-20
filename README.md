@@ -1,12 +1,8 @@
 ## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) CineVerse – Where Every Story Finds Its Star
-![Image](https://github.com/user-attachments/assets/991d2735-8995-471b-a293-c967f5b30f3f)
-
-## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) Download Cineverse APK
-
--- The App still in Development Process --
-But you can see the last updated version here:
-
-[![⬇️ Download Latest Release](https://img.shields.io/github/v/release/Rome-Squad/CineVerse-App?color=brightgreen&label=Latest%20Release&logo=android&style=for-the-badge)](https://github.com/Rome-Squad/CineVerse-App/releases/latest)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/991d2735-8995-471b-a293-c967f5b30f3f">
+  <p  align="center"><strong>Cineverse</strong> is a modern Android application designed for movie and TV series enthusiasts who want to explore, discover, and organize their entertainment journey. Built with cutting-edge technology and powered by TMDB API, Cineverse delivers a seamless and intuitive experience for all your cinematic needs.<br></p>
+</p>
 
 ---
 
@@ -38,6 +34,46 @@ But you can see the last updated version here:
 </table>
 
 ---
+
+## 🧩 CineVerse App Architecture
+<pre>
+<img width="2000" height="1380" alt="image" src="https://github.com/user-attachments/assets/e91509ed-3e5c-4245-9165-ecd12cb433c6" />  
+</pre>
+
+---
+
+## 📱 Features
+
+**🎬 Discovery & Search**
+- Home Screen: Collections of trending movies and TV series
+- Explore Screen: Browse content filtered by genres and categories
+- Smart Search: Find movies, series, actors, and directors
+- Voice Search: Hands-free search using voice recognition
+
+**👤 User Management**
+- Onboarding: First-time user introduction
+- Authentication: Secure user accounts with login/registration
+- Guest Mode: App access without creating an account
+- Collection: Save favorites and create watchlists
+
+**🛡️ Cultural Features**
+- Smart Image Filter: AI-powered content filtering for Islamic culture
+- Automatic Blurring: ML model detects and blurs inappropriate imagery
+- Custom Settings: User-controlled content sensitivity preferences
+
+**📱 User Experience**
+- Dark/Light Themes: Comfortable viewing in any lighting
+- Fast Performance: Optimized loading with smart caching
+- Offline Browse: Access cached home screen content without internet
+
+---
+
+## ![Image](https://github.com/user-attachments/assets/13954c6c-ef15-4e97-ba6c-339fd30a4f25) Download Cineverse APK
+
+-- The App still in Development Process --
+But you can see the last updated version here:
+
+[![⬇️ Download Latest Release](https://img.shields.io/github/v/release/Rome-Squad/CineVerse-App?color=brightgreen&label=Latest%20Release&logo=android&style=for-the-badge)](https://github.com/Rome-Squad/CineVerse-App/releases/latest)
 
 ## Getting Started
 
@@ -73,32 +109,31 @@ You will need to do some Installation steps first to start your tour in CineVers
    
 ## 🧠 Key Concepts
 
-This app is a practical demonstration of:
+This app demonstrates modern Android development practices:
 
-- Jetpack Compose UI
-- CI/CD
-- Modularization
-- Clean MVI Architecture
-- OO A&D + SOLID Principles
-- OnDevice Machine Learning
-- Koin & Hilt & Dagger for Dependency Injection
-- Ktor & Retrofit for Networking
-- Room for Caching
-- Coil
-- Paging3 for Pagination
-
----
-
-## 📱 Features
-
-- onboarding screen to appear only the first time I launch the app.
-- home screen displaying Collections of Movies and Series.
-- Explore Screen displaying Collections of Movies and Series filtered by categories.
-- Search Screen to enable user to search for his favourite Actors, Movies, Series ..etc.
-- Voice Recognition to allow user to search by voice.
-- Authentication
-- New Library for Previewing Images and bluring Images that are not Suitable to the Islamic Culture using ML Models.
-
+**🏗️ Architecture**
+- Language: Kotlin
+- UI: Jetpack Compose
+- Architecture: Clean Architecture + MVI Pattern
+- Modularization: Feature-based modules
+- Principles: SOLID + Repository & Strategy Patterns
+  
+**⚡ Core Tech**
+- DI: Koin, Hilt & Dagger
+- Networking: Ktor & Retrofit + OkHttp
+- Storage: Room + DataStore
+- Async: Kotlin Coroutines + Flow
+- Image Loading: Coil
+- Pagination: Paging3
+- Background Tasks: WorkManager
+- ML: TensorFlow Lite
+- Security: Android Keystore + AES Encryption
+  
+**🔧 Quality & DevOps**
+- DevOps: CI/CD Pipeline
+- Testing: JUnit 5, Truth, MockK + JaCoCo Coverage
+- Monitoring: Firebase Crashlytics + Firebase Performance
+- Distribution: Firebase App Distribution + GitHub Actions
 ---
 
 ## 🛠️ Tech Stack
@@ -118,8 +153,10 @@ This app is a practical demonstration of:
 
 
 ---
-## 🧩 CineVerse App Architecture
-<pre>
-<img width="2000" height="1380" alt="image" src="https://github.com/user-attachments/assets/e91509ed-3e5c-4245-9165-ecd12cb433c6" />  
-</pre>
+
+### 💻 GitHub Contributors
+
+This project came to life thanks to the hard work and passion of an incredible group of people 🔥
+
+[![](https://contrib.rocks/image?repo=Rome-Squad/CineVerse-App)](https://github.com/Rome-Squad/CineVerse-App/graphs/contributors)
 
