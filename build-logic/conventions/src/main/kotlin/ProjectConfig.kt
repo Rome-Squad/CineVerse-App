@@ -7,6 +7,6 @@ object ProjectConfig {
     const val targetSdk = 36
     val jvmTarget = JvmTarget.JVM_11
     val javaVersion = JavaVersion.VERSION_11
-    val versionName = "1.0.2"
+    val versionName = "1.0.3"
     val versionCode = 1
 }
