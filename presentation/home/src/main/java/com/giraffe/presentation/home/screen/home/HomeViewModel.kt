@@ -3,10 +3,11 @@ package com.giraffe.presentation.home.screen.home
 import androidx.lifecycle.viewModelScope
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.ObservePopularMoviesUseCase
-import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.media.movie.usecase.matchesYourVibe.ObserveMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.recentlyReleased.ObserveRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
@@ -41,18 +42,19 @@ class HomeViewModel @Inject constructor(
     private val observeTopRatedSeriesUseCase: ObserveTopRatedSeriesUseCase,
     private val observeUpcomingMoviesUseCase: ObserveUpcomingMoviesUseCase,
     private val getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
-    private val getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase,
     private val observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
     private val observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
     private val observeMatchesYourVibeMoviesUseCase: ObserveMatchesYourVibeMoviesUseCase,
     private val observeMatchesYourVibeSeriesUseCase: ObserveMatchesYourVibeSeriesUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getUserNameUseCase: GetUserNameUseCase,
-    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase
 ) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
     init {
+
         loadHomeScreenData()
     }
 
@@ -69,14 +71,30 @@ class HomeViewModel @Inject constructor(
             )
         }
         isLoggedIn()
-        getPopularity()
+        getUserName()
+        getYourCollections()
+
+        getMoviesGenres()
+
         getRecentlyReleased()
         getUpcomingMovies()
         getMatchesYourVibe()
         getTopRatedSeries()
         getRecentViewed()
-        getUserName()
-        getYourCollections()
+
+    }
+
+    private fun getMoviesGenres() {
+        safeCollect(
+            onEmitNewValue = ::onGetMoviesGenresSuccess,
+            onError = ::onError.also { getPopularity() },
+            block = observeMoviesGenresUseCase::invoke
+        )
+    }
+
+    private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
+        updateState { it.copy(moviesGenres = genres) }
+        getPopularity()
     }
 
     private fun isLoggedIn() {
@@ -121,32 +139,25 @@ class HomeViewModel @Inject constructor(
 
 
     private fun getPopularity() {
-        viewModelScope.launch(Dispatchers.IO) {
-            safeCollect(
-                onEmitNewValue = ::onGetPopularityMoviesSuccess,
-                onError = ::onError,
-                block = observePopularMoviesUseCase::invoke
-            )
-            safeCollect(
-                onEmitNewValue = ::onGetPopularitySeriesSuccess,
-                onError = ::onError,
-                block = observePopularSeriesUseCase::invoke
-            )
-        }
+        safeCollect(
+            onEmitNewValue = ::onGetPopularityMoviesSuccess,
+            onError = ::onError,
+            block = observePopularMoviesUseCase::invoke
+        )
+        safeCollect(
+            onEmitNewValue = ::onGetPopularitySeriesSuccess,
+            onError = ::onError,
+            block = observePopularSeriesUseCase::invoke
+        )
     }
 
     private fun onGetPopularityMoviesSuccess(movies: List<Movie>) {
-        safeExecute {
-            val popularMoviesUi = movies.map { movie ->
-                val genres = getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                movie.toPopularMediaUi(genres)
-            }
-            updateState { currentState ->
-                currentState.copy(
-                    popularity = (popularMoviesUi + currentState.popularity).distinctBy { it.id },
-                    isLoadingPopularity = false
-                )
-            }
+        updateState {
+            val newMovies = movies.map { movie -> movie.toPopularMediaUi(it.moviesGenres) }
+            it.copy(
+                popularity = (newMovies + it.popularity).distinctBy { movie -> movie.id },
+                isLoadingPopularity = false
+            )
         }
     }
 
