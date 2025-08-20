@@ -5,6 +5,14 @@ on:
     types: [ closed ]
     branches: [ main, develop ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Manual version (optional, e.g. 1.0.0)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -63,16 +71,48 @@ jobs:
           alias: ${{ secrets.ANDROID_DEVS_ALIAS }}
           keyPassword: ${{ secrets.ANDROID_DEVS_ALIAS_PASSWORD }}
 
+      - name: 📌 Determine version (manual or Gradle)
+        id: set_version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            echo "Manual version provided: $VERSION"
+          else
+            VERSION=$(grep versionName app/build.gradle | awk '{print $2}' | tr -d '"')
+            echo "Gradle version detected: $VERSION"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Rename APK
+        run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
+
       - name: Upload signed APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIALS_FILE_CONTENT }}
           groups: testers
-          file: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+          file: app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
           releaseNotes: |
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.sha }}
             By: ${{ github.actor }}
             Title: ${{ github.event.pull_request.title }}
             PR Description: ${{ github.event.pull_request.body }}
+
+      - name: 📤 Upload signed APK to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: CineVerse v${{ env.VERSION }}
+          body: |
+            🚀 New CineVerse Release Uploaded!
+
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** ${{ github.sha }}
+            **By:** ${{ github.actor }}
+            **Title:** ${{ github.event.pull_request.title }}
+            **PR Description:** ${{ github.event.pull_request.body }}
+          files: app/build/outputs/apk/release/CineVerse-v${{ env.VERSION }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

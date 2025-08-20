@@ -6,7 +6,7 @@
 -- The App still in Development Process --
 But you can see the last updated version here:
 
-[⬇️ Download Cineverse APK ](https://github.com/Rome-Squad/CineVerse-App/releases/download/V1.0/CineVerse.apk)
+[![⬇️ Download Latest Release](https://img.shields.io/github/v/release/Rome-Squad/CineVerse-App?color=brightgreen&label=Latest%20Release&logo=android&style=for-the-badge)](https://github.com/Rome-Squad/CineVerse-App/releases/latest)
 
 ---
 
