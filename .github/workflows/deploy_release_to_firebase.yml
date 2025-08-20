@@ -76,3 +76,20 @@ jobs:
             By: ${{ github.actor }}
             Title: ${{ github.event.pull_request.title }}
             PR Description: ${{ github.event.pull_request.body }}
+
+      - name: 📤 Upload signed APK to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          body: |
+            🚀 New Release Uploaded!
+
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** ${{ github.sha }}
+            **By:** ${{ github.actor }}
+            **Title:** ${{ github.event.pull_request.title }}
+            **PR Description:** ${{ github.event.pull_request.body }}
+          files: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
