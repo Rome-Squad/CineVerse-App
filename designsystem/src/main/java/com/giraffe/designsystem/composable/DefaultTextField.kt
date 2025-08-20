@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -111,7 +112,8 @@ fun DefaultTextField(
     }
 
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         if (label != null) {
@@ -135,16 +137,17 @@ fun DefaultTextField(
                 )
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val checkLeftIcon = if (isPassword) painterResource(Theme.icons.outline.lock)
             else startIcon
 
             Icon(
-                modifier = Modifier.then(
-                    if (onStartIconClick != null) Modifier.clickable { onStartIconClick(value) }
-                    else Modifier
-                ),
+                modifier = Modifier
+                    .size(20.dp)
+                    .then(
+                        if (onStartIconClick != null) Modifier.clickable { onStartIconClick(value) }
+                        else Modifier
+                    ),
                 painter = checkLeftIcon,
                 contentDescription = stringResource(R.string.user_icon),
                 tint = Theme.color.shade.tertiary
@@ -232,7 +235,7 @@ fun DefaultTextField(
             exit = slideOutVertically(tween(0)) { it }
         ) {
             Text(
-                text = errorMessage .orEmpty(),
+                text = errorMessage.orEmpty(),
                 style = Theme.textStyle.body.sm.regular,
                 color = Theme.color.additional.primary.red
             )

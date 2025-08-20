@@ -110,4 +110,8 @@ class CollectionDetailsViewModel @Inject constructor(
             )
         }
     }
+
+    override fun onStartCollectingClick() {
+        sendEffect(CollectionDetailsEffect.NavigateToExplore)
+    }
 }

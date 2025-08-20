@@ -16,7 +16,7 @@ fun NothingFound(modifier: Modifier = Modifier) {
         caption = stringResource(R.string.we_searched_the_entire_universe_but_found_nothing_matching_your_query_try_something_else),
         icon = painterResource(Theme.icons.dueTone.search),
         buttonBackgroundColor = Theme.color.brand.primary,
-        iconBackgroundColor = Theme.color.button.disabled,
+        iconBackgroundColor = Theme.color.brand.tertiary,
         iconTintColor = Theme.color.brand.primary,
         isButtonsVisible = false
     )

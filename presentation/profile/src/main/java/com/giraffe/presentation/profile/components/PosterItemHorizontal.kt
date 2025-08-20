@@ -91,7 +91,9 @@ fun PosterItemHorizontal(
                     Text(
                         text = movie.name,
                         style = Theme.textStyle.body.md.medium,
-                        color = Theme.color.shade.primary
+                        color = Theme.color.shade.primary,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                     if (movie.genres != null) {
                         Text(
