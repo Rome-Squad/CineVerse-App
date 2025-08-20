@@ -356,7 +356,7 @@ private fun SeriesDetailsContent(
             LoginBottomSheet(
                 isVisible = state.isVisibleLoginBottomSheet,
                 onLogInClick = interaction::onLoginButtonClick,
-                onDismiss = interaction::onDismissGiveStarsBottomSheet
+                onDismiss = interaction::onDismissLoginBottomSheet
             )
         }
     }
