@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -84,7 +85,7 @@ fun LoginContent(
 
         LoginForm(state = state, interaction = interaction)
 
-        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.heightIn(min = 96.dp))
 
         SecondaryButton(
             modifier = Modifier.padding(bottom = 24.dp),
