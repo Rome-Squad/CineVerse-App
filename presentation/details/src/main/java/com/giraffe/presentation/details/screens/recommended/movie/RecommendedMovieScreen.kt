@@ -1,8 +1,7 @@
 package com.giraffe.presentation.details.screens.recommended.movie
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -14,12 +13,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.giraffe.designsystem.composable.ViewToggle
-import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.base.BaseScreen
 import com.giraffe.presentation.details.components.TransitionLazyColumnToGridPoster
 import com.giraffe.presentation.details.utils.EventListener
@@ -53,7 +50,7 @@ fun RecommendedMoviesScreen(
 
     RecommendedMovieContent(
         state = state,
-        interaction = viewModel,
+        interaction = viewModel
     )
 
 }
@@ -68,36 +65,29 @@ fun RecommendedMovieContent(
     val lazyPagingItems = state.recommendedMoviesFlow.collectAsLazyPagingItems()
 
     BaseScreen(
-        title = state.movieTitle.orEmpty(),
-        caption = stringResource(R.string.because_you_watched),
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
+        onRetryClick = interaction::onRetryClick,
+        title = state.movieTitle.orEmpty(),
         onBackClick = interaction::onBackClick,
-        onRetryClick = interaction::onRetryClick
+        hasHorizontalDivider = true
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-
+        Box(Modifier.fillMaxSize()) {
             TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = isListSelected,
-                contentPadding = PaddingValues(vertical = 16.dp),
                 onItemClick = interaction::onMovieClick
             )
 
             ViewToggle(
+                isListSelected = isListSelected,
+                onGridSelected = { isListSelected = !it },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .navigationBarsPadding()
-                    .padding(16.dp),
-                isListSelected = isListSelected,
-                onGridSelected = { isListSelected = !it }
+                    .padding(bottom = 16.dp, end = 16.dp)
             )
         }
     }
-
-
 }
 
