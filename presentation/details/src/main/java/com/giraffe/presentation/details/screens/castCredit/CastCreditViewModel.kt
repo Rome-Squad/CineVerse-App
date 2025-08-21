@@ -30,8 +30,23 @@ class CastCreditViewModel @Inject constructor(
 ), CastCreditInteractionListener {
 
     init {
-        state.value.castId?.let {
-            loadCastCredit(it)
+        // load genres first
+        safeExecute(
+            onSuccess = { (series, movies) ->
+                updateState {
+                    it.copy(
+                        allSeriesGenres = series,
+                        allMovieGenres = movies
+                    )
+                }
+                // then load cast credits
+                state.value.castId?.let { loadCastCredit(it) }
+            },
+            onError = ::loadCastCreditError
+        ) {
+            val series = getSeriesGenresByIds(emptyList())
+            val movies = getMoviesGenresByIds(emptyList())
+            series to movies
         }
     }
 
@@ -50,23 +65,23 @@ class CastCreditViewModel @Inject constructor(
             onSuccess = ::updateCastCreditPosters,
             onError = ::loadCastCreditError
         ) {
-            val allSeriesGenres = getSeriesGenresByIds(emptyList())
-            val allMoviesGenres = getMoviesGenresByIds(emptyList())
-
             val seriesPosters = castCredits.series.map {
-                val genres = it.genreIDs.mapNotNull { id -> allSeriesGenres.find { g -> g.id == id }?.title }
+                val genres = it.genreIDs.mapNotNull { id ->
+                    state.value.allSeriesGenres.find { g -> g.id == id }?.title
+                }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
             val moviesPosters = castCredits.movies.map {
-                val genres = it.genresID.mapNotNull { id -> allMoviesGenres.find { g -> g.id == id }?.title }
+                val genres = it.genresID.mapNotNull { id ->
+                    state.value.allMovieGenres.find { g -> g.id == id }?.title
+                }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
             seriesPosters + moviesPosters
         }
     }
-
     private fun updateCastCreditPosters(posters: List<Poster>) {
         updateState {
             it.copy(
