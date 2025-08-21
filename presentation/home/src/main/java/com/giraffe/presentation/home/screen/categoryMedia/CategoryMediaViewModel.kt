@@ -14,6 +14,7 @@ import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaRoute
 import com.giraffe.user.exception.NoInternetException
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryMediaViewModel @Inject constructor(
     private val categoryMediaFactory: CategoryMediaFactory,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<CategoryMediaScreenState, CategoryMediaEffect>(CategoryMediaScreenState()),
     CategoryMediaInteractionListener {
@@ -30,6 +32,7 @@ class CategoryMediaViewModel @Inject constructor(
     private val sectionType = stateSavedStateHandle.toRoute<CategoryMediaRoute>().sectionType
 
     init {
+        observeContentPreference()
         loadCategoryMediaDate()
     }
 
@@ -113,7 +116,14 @@ class CategoryMediaViewModel @Inject constructor(
             MediaType.SERIES -> sendEffect(CategoryMediaEffect.NavigateToSeriesDetails(mediaId))
         }
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     override fun onBackClick() {
         sendEffect(CategoryMediaEffect.NavigateBack)
     }
