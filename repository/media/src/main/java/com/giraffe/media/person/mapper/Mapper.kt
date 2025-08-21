@@ -202,8 +202,8 @@ fun PersonCreditDto.toMovieEntity() = Movie(
             BASE_IMAGE_URL + it
     }.orEmpty(),
     genresID = genreIds ?: emptyList(),
-    releaseYear = if (firstCreditAirDate.isNullOrEmpty()) null else LocalDate.parse(
-        firstCreditAirDate
+    releaseYear = if (releaseDate.isNullOrEmpty()) null else LocalDate.parse(
+        releaseDate
     ),
     popularity = popularity.orZero(),
     youtubeVideoId = "",

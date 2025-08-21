@@ -6,6 +6,5 @@ import javax.inject.Inject
 class ObserveSeriesGenresUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository
 ) {
-    operator fun invoke() =
-        seriesRepository.observeGenres()
+    operator fun invoke() = seriesRepository.observeGenres()
 }
