@@ -70,6 +70,7 @@ class CastCreditViewModel @Inject constructor(
     }
 
     private fun loadCastCredit() {
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
         safeExecute(
             onSuccess = ::loadCastCreditSuccess,
             onError = ::loadCastCreditError,
@@ -82,7 +83,7 @@ class CastCreditViewModel @Inject constructor(
     private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
         addSeriesPosters(castCredits.series)
         addMoviePosters(castCredits.movies)
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isNoInternet = false, isLoading = false) }
     }
 
     private fun addMoviePosters(movies: List<Movie>) {
@@ -152,5 +153,9 @@ class CastCreditViewModel @Inject constructor(
 
     override fun changeView(isGrid: Boolean) {
         updateState { it.copy(isGridSelected = isGrid) }
+    }
+
+    override fun onRetryClick() {
+        loadCastCredit()
     }
 }

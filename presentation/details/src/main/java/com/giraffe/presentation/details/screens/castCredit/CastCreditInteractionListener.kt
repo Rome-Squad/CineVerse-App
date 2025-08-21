@@ -7,4 +7,6 @@ interface CastCreditInteractionListener {
     fun onPosterClick(mediaId: Int, mediaType: String)
 
     fun changeView(isGrid: Boolean)
+
+    fun onRetryClick()
 }
