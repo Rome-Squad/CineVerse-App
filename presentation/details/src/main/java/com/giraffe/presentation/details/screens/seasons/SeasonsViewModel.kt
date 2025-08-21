@@ -7,6 +7,7 @@ import com.giraffe.media.series.usecase.GetSeasonsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.SeasonsRoute
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.media.exception.NoInternetException as MediaNoInternetException
@@ -15,6 +16,7 @@ import com.giraffe.user.exception.NoInternetException as UserInternetException
 @HiltViewModel
 class SeasonsViewModel @Inject constructor(
     private val getSeasons: GetSeasonsUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeasonsScreenState, SeasonsEffect>(
     SeasonsScreenState(
@@ -23,6 +25,7 @@ class SeasonsViewModel @Inject constructor(
 ), SeasonInteractionListener {
 
     init {
+        observeContentPreference()
         state.value.seriesId?.let {
             loadSeason(it)
         }
@@ -60,7 +63,14 @@ class SeasonsViewModel @Inject constructor(
         }
         sendEffect(SeasonsEffect.ShowError(error))
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     override fun onBackClick() {
         sendEffect(SeasonsEffect.NavigateBack)
     }

@@ -16,6 +16,7 @@ import com.giraffe.presentation.explore.base.BaseViewModel
 import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.screen.search.SearchEffect.NavigateToMovieDetail
 import com.giraffe.presentation.explore.util.toPoster
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -34,11 +35,13 @@ class SearchViewModel @Inject constructor(
     private val observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
     private val clearMoviesCacheUseCase: ClearMoviesCacheUseCase,
     private val clearSeriesCacheUseCase: ClearSeriesCacheUseCase,
-    private val clearRecentlyPeopleUseCase: ClearRecentMediaMembersUseCase
+    private val clearRecentlyPeopleUseCase: ClearRecentMediaMembersUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
 ) : BaseViewModel<SearchScreenState, SearchEffect>(SearchScreenState()),
     SearchInteractionListener {
 
     init {
+        observeContentPreference()
         onQueryChange()
         getRecentViewed()
     }
@@ -173,7 +176,14 @@ class SearchViewModel @Inject constructor(
         onQueryChange()
         getRecentViewed()
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(error: Throwable) {
         updateState {
             it.copy(
