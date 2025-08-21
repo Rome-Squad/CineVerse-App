@@ -2,11 +2,12 @@ package com.giraffe.presentation.details.screens.castCredit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
-import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastCreditRoute
@@ -20,8 +21,8 @@ import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 @HiltViewModel
 class CastCreditViewModel @Inject constructor(
     private val getPeopleMediaCredits: GetCastCreditsUseCase,
-    private val getSeriesGenresByIds: GetSeriesGenresByIdsUseCase,
-    private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(
@@ -43,42 +44,53 @@ class CastCreditViewModel @Inject constructor(
 
         safeExecute(
             onSuccess = ::loadCastCreditSuccess,
-            onError = ::loadCastCreditError,
+            onError = ::onError,
             block = { getPeopleMediaCredits(castId) }
         )
     }
 
     private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
-        safeExecute(
-            onSuccess = ::updateCastCreditPosters,
-            onError = ::loadCastCreditError
+        safeCollect(
+            onEmitNewValue = { onEmitMovies(castCredits, it) },
+            onError = ::onError
         ) {
-            val seriesPosters = castCredits.series.map {
-                val genres = getSeriesGenresByIds(it.genreIDs).map { genre -> genre.title }
-                it.toUi().toPoster().copy(genres = genres.joinToString(", "))
-            }
-
-            val moviesPosters = castCredits.movies.map {
-                val genres = getMoviesGenresByIds(it.genresID).map { genre -> genre.title }
-                it.toUi().toPoster().copy(genres = genres.joinToString(", "))
-            }
-
-            seriesPosters + moviesPosters
+            observeMoviesGenresUseCase()
         }
-    }
 
-    private fun updateCastCreditPosters(posters: List<Poster>) {
+        safeCollect(
+            onEmitNewValue = { onEmitSeries(castCredits, it) },
+            onError = ::onError
+        ) {
+            observeSeriesGenresUseCase()
+        }
+
         updateState {
             it.copy(
                 isLoading = false,
-                isNoInternet = false,
-                posters = posters,
+                isNoInternet = false
             )
         }
     }
 
+    private fun onEmitSeries(
+        castCredits: MediaMemberRepository.CastMedia,
+        genres: List<Genre>
+    ) {
+        val seriesPosters = castCredits.series.map { series ->
+            series.toUi(genres.filter { it.id in series.genreIDs })
+                .toPoster()
+        }
+        updateState { it.copy(seriesPosters = seriesPosters) }
+    }
 
-    private fun loadCastCreditError(exception: Throwable) {
+    private fun onEmitMovies(castCredits: MediaMemberRepository.CastMedia, genres: List<Genre>) {
+        val moviesPosters = castCredits.movies.map { movie ->
+            movie.toUi(genres.filter { it.id in movie.genresID }).toPoster()
+        }
+        updateState { it.copy(moviesPosters = moviesPosters) }
+    }
+
+    private fun onError(exception: Throwable) {
         updateState {
             it.copy(
                 isLoading = false,
@@ -102,6 +114,7 @@ class CastCreditViewModel @Inject constructor(
             }
         )
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->
@@ -110,6 +123,7 @@ class CastCreditViewModel @Inject constructor(
             block = getContentPreferenceUseCase::invoke
         )
     }
+
     override fun changeView(isGrid: Boolean) {
         updateState { it.copy(isGridSelected = isGrid) }
     }

@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -296,8 +297,12 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun syncRecentlyViewedMovies() {
         return safeCall {
-            movieLocal.getRecentlyViewedMovieIds().forEach { movieId ->
-                movieLocal.addMovie(movieRemote.getMovieById(movieId).toCacheDto())
+            withContext(Dispatchers.IO) {
+                movieLocal.getRecentlyViewedMovieIds().forEach { movieId ->
+                    launch {
+                        movieLocal.addMovie(movieRemote.getMovieById(movieId).toCacheDto())
+                    }
+                }
             }
         }
     }

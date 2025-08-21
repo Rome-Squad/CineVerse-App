@@ -11,8 +11,11 @@ import com.giraffe.media.series.mapper.toRecentlyReleasedSeriesCacheDto
 import com.giraffe.media.series.mapper.toTopRatedSeriesCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SeriesLocalDataSourceImp @Inject constructor(
@@ -27,10 +30,14 @@ class SeriesLocalDataSourceImp @Inject constructor(
 
     override suspend fun syncGenres(genres: List<SeriesGenreCacheDto>) {
         safeCall {
-            genres.forEach { genre ->
-                seriesDao.getGenreById(genre.id)?.let {
-                    seriesDao.updateGenreNameOnly(genre.id, genre.name)
-                } ?: seriesDao.upsertGenres(genres)
+            withContext(Dispatchers.IO) {
+                genres.forEach { genre ->
+                    launch {
+                        seriesDao.getGenreById(genre.id)?.let {
+                            seriesDao.updateGenreNameOnly(genre.id, genre.name)
+                        } ?: seriesDao.upsertGenre(genre)
+                    }
+                }
             }
         }
 
