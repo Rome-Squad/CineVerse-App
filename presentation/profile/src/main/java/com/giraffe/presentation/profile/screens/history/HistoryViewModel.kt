@@ -74,11 +74,11 @@ class HistoryViewModel @Inject constructor(
     }
 
     private fun onGetRecentMoviesSuccess(moviesList: List<Movie>) {
-        updateMediaList(moviesList.map { movie -> movie.toPoster(state.value.moviesGenres.filter { it.id in movie.genresID }) })
+        updateMediaList(moviesList.map { movie -> movie.toPoster(state.value.moviesGenres) })
     }
 
     private fun onGetRecentSeriesSuccess(seriesList: List<Series>) {
-        updateMediaList(seriesList.map { series -> series.toPoster(state.value.seriesGenres.filter { it.id in series.genreIDs }) })
+        updateMediaList(seriesList.map { series -> series.toPoster(state.value.seriesGenres) })
     }
 
     private fun updateMediaList(newMediaList: List<Poster>) {
@@ -86,7 +86,7 @@ class HistoryViewModel @Inject constructor(
             it.copy(
                 isLoading = false,
                 isNoInternet = false,
-                mediaList = (it.mediaList + newMediaList)
+                mediaList = (newMediaList + it.mediaList)
                     .distinctBy { poster -> poster.id }
                     .sortedByDescending { poster -> poster.recentViewedAt }
             )

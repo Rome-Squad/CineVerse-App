@@ -98,11 +98,11 @@ class SearchResultViewModel @Inject constructor(
         sendEffect(SearchResultEffect.NavigateBack)
     }
 
-    override fun onPosterClick(id: Int, searchTab: SearchTab) {
-        when (searchTab) {
-            SearchTab.MOVIES -> sendEffect(SearchResultEffect.NavigateToMovieDetail(id))
-            SearchTab.SERIES -> sendEffect(SearchResultEffect.NavigateToSeriesDetail(id))
-            SearchTab.ACTORS -> sendEffect(SearchResultEffect.NavigateToCastDetails(id))
+    override fun onPosterClick(mediaId: Int, selectedTab: SearchTab) {
+        when (selectedTab) {
+            SearchTab.MOVIES -> sendEffect(SearchResultEffect.NavigateToMovieDetail(mediaId))
+            SearchTab.SERIES -> sendEffect(SearchResultEffect.NavigateToSeriesDetail(mediaId))
+            SearchTab.ACTORS -> sendEffect(SearchResultEffect.NavigateToCastDetails(mediaId))
         }
     }
 
@@ -161,18 +161,19 @@ class SearchResultViewModel @Inject constructor(
     }
 
     private fun onGetMoviesSuccess(moviesFlow: Flow<PagingData<Movie>>) {
-        moviesFlow.map { it.map(Movie::toPoster) }.let { posters ->
-            updateState {
-                it.copy(
-                    moviesPosters = posters,
-                    isNoInternet = false,
-                    isLoading = false
-                )
+        moviesFlow.map { it.map { movie -> movie.toPoster(state.value.moviesGenres) } }
+            .let { posters ->
+                updateState {
+                    it.copy(
+                        moviesPosters = posters,
+                        isNoInternet = false,
+                        isLoading = false
+                    )
+                }
+                if (state.value.selectedTab == SearchTab.MOVIES) updateState {
+                    it.copy(selectedPosters = posters)
+                }
             }
-            if (state.value.selectedTab == SearchTab.MOVIES) updateState {
-                it.copy(selectedPosters = posters)
-            }
-        }
     }
 
     private fun getSeries() {
@@ -189,18 +190,19 @@ class SearchResultViewModel @Inject constructor(
     }
 
     private fun onGetSeriesSuccess(seriesFlow: Flow<PagingData<Series>>) {
-        seriesFlow.map { series -> series.map(Series::toPoster) }.let { posters ->
-            updateState {
-                it.copy(
-                    seriesPosters = posters,
-                    isNoInternet = false,
-                    isLoading = false
-                )
+        seriesFlow.map { it.map { series -> series.toPoster(state.value.seriesGenres) } }
+            .let { posters ->
+                updateState {
+                    it.copy(
+                        seriesPosters = posters,
+                        isNoInternet = false,
+                        isLoading = false
+                    )
+                }
+                if (state.value.selectedTab == SearchTab.SERIES) updateState {
+                    it.copy(selectedPosters = posters)
+                }
             }
-            if (state.value.selectedTab == SearchTab.SERIES) updateState {
-                it.copy(selectedPosters = posters)
-            }
-        }
     }
 
     private fun getActors() {
@@ -230,6 +232,7 @@ class SearchResultViewModel @Inject constructor(
             }
         }
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->
@@ -238,6 +241,7 @@ class SearchResultViewModel @Inject constructor(
             block = getContentPreferenceUseCase::invoke
         )
     }
+
     private fun onError(error: Throwable) {
         updateState {
             it.copy(

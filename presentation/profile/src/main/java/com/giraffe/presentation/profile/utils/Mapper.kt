@@ -1,5 +1,6 @@
 package com.giraffe.presentation.profile.utils
 
+import android.util.Log
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
@@ -25,7 +26,7 @@ fun Series.toRatedPoster(genres: List<Genre>) = RatedPoster(
 fun Series.toPoster(genres: List<Genre> = emptyList()) = Poster(
     id = id,
     name = name,
-    genres = genres.joinToString(", ") { it.title },
+    genres = genres.filter { it.id in genreIDs }.joinToString(", ") { it.title },
     imageUrl = posterUrl,
     rating = rating,
     date = releaseYear.toFormattedDate(),
@@ -38,16 +39,22 @@ fun Movie.toRatedPoster(genres: List<Genre>) = RatedPoster(
     rating = userRating.orZero(),
 )
 
-fun Movie.toPoster(genres: List<Genre> = emptyList()) = Poster(
-    id = id,
-    name = name,
-    genres = genres.joinToString(", ") { it.title },
-    imageUrl = posterUrl,
-    rating = rating,
-    date = releaseYear.toFormattedDate(),
-    mediaTypeOfPoster = "movie",
-    recentViewedAt = recentViewedAt ?: 0L
-)
+fun Movie.toPoster(genres: List<Genre> = emptyList()): Poster {
+    Log.d("modri", "==================movie name: ${this.name}==================")
+    Log.d("modri", "all genres: ${genres.map { it.id }}")
+    Log.d("modri", "movie genres: ${this.genresID}")
+    Log.d("modri", "filtered genres: ${genres.filter { it.id in this.genresID }.map { it.id }}")
+    return Poster(
+        id = id,
+        name = name,
+        genres = genres.filter { it.id in this.genresID }.joinToString(", ") { it.title },
+        imageUrl = posterUrl,
+        rating = rating,
+        date = releaseYear.toFormattedDate(),
+        mediaTypeOfPoster = "movie",
+        recentViewedAt = recentViewedAt ?: 0L
+    )
+}
 
 fun Collection.toUi() = CollectionUi(
     id = id,

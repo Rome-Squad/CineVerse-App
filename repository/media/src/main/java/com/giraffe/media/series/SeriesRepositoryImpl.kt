@@ -137,7 +137,6 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     private suspend fun addGenres(genres: List<Genre>) {
-        if (genres.isEmpty()) return
         seriesLocal.syncGenres(genres.map(Genre::toCacheDto))
     }
 
