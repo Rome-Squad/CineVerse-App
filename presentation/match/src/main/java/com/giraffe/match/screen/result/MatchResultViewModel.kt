@@ -14,6 +14,7 @@ import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesDetailsUseCase
 import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -30,6 +31,7 @@ class MatchResultViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MatchResultScreenState, MatchResultScreenEffect>(MatchResultScreenState()),
     MatchResultInteractionListener {
@@ -64,7 +66,7 @@ class MatchResultViewModel @Inject constructor(
         }
 
         checkLoginStatus()
-
+        observeContentPreference()
         loadMatchingResults(
             genreIds = genreIds,
             minRuntime = minRuntime,
@@ -75,6 +77,14 @@ class MatchResultViewModel @Inject constructor(
         )
     }
 
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun loadMatchingResults(
         genreIds: List<Int>,
         minRuntime: Int?,
