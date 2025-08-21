@@ -26,6 +26,7 @@ import coil.compose.AsyncImage
 import com.giraffe.imageviewer.R
 import com.giraffe.imageviewer.model.ImageState
 import com.giraffe.imageviewer.model.SafeIslamicImageHost
+import com.giraffe.imageviewer.model.StrengthLevel
 
 @Composable
 fun SafeIslamicImage(
@@ -40,12 +41,13 @@ fun SafeIslamicImage(
     eyeSplashTint: Color = Color(0xFFE1E1E3),
     placeholderIcon: Painter = painterResource(id = R.drawable.placeholder),
     placeHolderTint: Color = Color(0xFFBEC8FF),
+    strengthLevel: StrengthLevel
 ) {
     val context = LocalContext.current
     val host = remember { SafeIslamicImageHost(context.applicationContext) }
 
     LaunchedEffect(imageUrl) {
-        host.loadImage(imageUrl)
+        host.loadImage(imageUrl, strengthLevel)
     }
 
     Box(
