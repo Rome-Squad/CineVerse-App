@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -88,30 +90,29 @@ private fun CollectionScreenContent(
                     onClickPrimaryButton = interaction::onStartCollectingClick,
                 )
             } else {
-                LazyColumn(
+                LazyVerticalGrid(
                     modifier = Modifier
                         .background(Theme.color.background.screen)
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
+                    columns = GridCells.Adaptive(minSize = 328.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = PaddingValues(vertical = 12.dp)
                 ) {
-                    item {
-                        androidx.compose.animation.AnimatedVisibility(
-                            visible = state.isDeleteTipVisible
-                        ) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        androidx.compose.animation.AnimatedVisibility(visible = state.isDeleteTipVisible) {
                             InfoCard(
                                 description = stringResource(
                                     id = R.string.tip_swipe_left_to_remove_movies_from_your_collection
                                 ),
-                                modifier = Modifier
-                                    .fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth(),
                                 onClosedClick = interaction::onCloseTipClick
                             )
-
                         }
                     }
-                    items(state.collectionMovies) { swipeablePoster ->
+
+                    items(state.collectionMovies, key = { it.poster.id }) { swipeablePoster ->
                         SwipableItem(
                             actionButton = {
                                 DeleteButton(
