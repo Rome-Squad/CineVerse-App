@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,6 +17,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.button_type.SecondaryButton
@@ -34,11 +35,11 @@ fun MessageInfoBox(
     iconTintColor:Color,
     buttonBackgroundColor: Color,
     iconBackgroundColor: Color,
+    modifier: Modifier = Modifier,
     isButtonsVisible: Boolean = true,
     isSecondaryButtonVisible: Boolean = true,
     titlePrimaryButton: String = "",
     titleSecondaryButton: String = "",
-    modifier: Modifier = Modifier,
     onClickPrimaryButton: () -> Unit = {},
     onClickSecondaryButton: () -> Unit = {}
 ) {
@@ -83,7 +84,6 @@ fun MessageInfoBox(
                         onClick = onClickSecondaryButton,
                         modifier = Modifier
                             .weight(1f)
-                            .height(48.dp)
                     )
                 }
 
@@ -93,7 +93,6 @@ fun MessageInfoBox(
                     buttonColorEnabled = buttonBackgroundColor,
                     modifier = Modifier
                         .weight(1f)
-                        .height(48.dp)
                 )
             }
         }
@@ -117,7 +116,8 @@ fun PreviewEditProfileMessage() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF1B1C2A)
+@PreviewFontScale
+@PreviewScreenSizes
 @Composable
 fun PreviewLogoutMessage() {
     CineVerseTheme(isDarkTheme = true) {

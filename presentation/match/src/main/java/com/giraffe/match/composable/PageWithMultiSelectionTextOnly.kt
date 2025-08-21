@@ -2,8 +2,7 @@ package com.giraffe.match.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -39,28 +38,28 @@ fun PageWithMultiSelectionTextOnly(
                 )
             }
         } else {
-            options.take(9).chunked(3).forEach { row ->
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    row.forEach { option ->
-                        SelectionItem(
-                            type = SelectionType.CHIP,
-                            description = option.label,
-                            isSelected = option.id in selectedItems,
-                            modifier = Modifier
-                                .height(44.dp),
-                            onClick = {
-                                if (!readOnly) {
-                                    val current = selectedItems.toMutableList()
-                                    if (option.id in current) current.remove(option.id) else current.add(option.id)
-                                    onSelectionChange(current)
-                                }
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                options.take(9).forEach { option ->
+                    SelectionItem(
+                        type = SelectionType.CHIP,
+                        description = option.label,
+                        isSelected = option.id in selectedItems,
+                        modifier = Modifier
+                            .height(44.dp),
+                        onClick = {
+                            if (!readOnly) {
+                                val current = selectedItems.toMutableList()
+                                if (option.id in current) current.remove(option.id) else current.add(
+                                    option.id
+                                )
+                                onSelectionChange(current)
                             }
-                        )
-                    }
-                    if (row.size < 3) repeat(3 - row.size) { Spacer(modifier = Modifier.weight(1f)) }
+                        }
+                    )
                 }
             }
         }
