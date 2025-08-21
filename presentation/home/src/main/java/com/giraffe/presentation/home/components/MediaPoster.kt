@@ -51,6 +51,8 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.presentation.home.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -58,7 +60,8 @@ fun MediaPoster(
     poster: PosterMedia,
     isGridSelected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    contentPreference: ContentPreference,
 ) {
     val density = LocalDensity.current
     val widowSize = LocalWindowInfo.current
@@ -132,6 +135,7 @@ fun MediaPoster(
                     .width(imageWidth)
                     .aspectRatio(0.73f)
                     .heightIn(min = 88.dp),
+                strengthLevel = contentPreference.toStrengthLevel(),
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(bottom = if (isGridSelected) textHeight else 0.dp)
@@ -264,7 +268,8 @@ private fun MediaPosterPreview() {
             ),
             isGridSelected = false,
             onClick = {},
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            contentPreference = ContentPreference.HIDE_EXPLICIT
         )
     }
 }
