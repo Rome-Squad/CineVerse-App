@@ -6,7 +6,9 @@ import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
+import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
+import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
@@ -15,7 +17,7 @@ import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
@@ -34,29 +36,31 @@ class CastCreditViewModel @Inject constructor(
 ), CastCreditInteractionListener {
 
     init {
+        updateState { it.copy(isNoInternet = false, isLoading = true) }
         observeContentPreference()
         loadSeriesGenres()
         loadMovieGenres()
-        state.value.castId?.let { loadCastCredit(it) }
+        loadCastCredit()
     }
 
     private fun loadSeriesGenres() {
-        safeExecute(
-            onSuccess = ::onSeriesGenresLoaded,
+        safeCollect(
+            onEmitNewValue = ::onSeriesGenresLoaded,
             onError = ::loadCastCreditError
         ) {
-            observeSeriesGenresUseCase().first()
+            observeSeriesGenresUseCase()
         }
     }
 
     private fun loadMovieGenres() {
-        safeExecute(
-            onSuccess = ::onMovieGenresLoaded,
+        safeCollect(
+            onEmitNewValue = ::onMovieGenresLoaded,
             onError = ::loadCastCreditError
         ) {
-            observeMoviesGenresUseCase().first()
+            observeMoviesGenresUseCase()
         }
     }
+
     private fun onSeriesGenresLoaded(series: List<Genre>) {
         updateState { it.copy(allSeriesGenres = series) }
     }
@@ -64,44 +68,49 @@ class CastCreditViewModel @Inject constructor(
     private fun onMovieGenresLoaded(movies: List<Genre>) {
         updateState { it.copy(allMovieGenres = movies) }
     }
-    private fun loadCastCredit(castId: Int) {
-        updateState { it.copy(isNoInternet = false, isLoading = true) }
 
+    private fun loadCastCredit() {
         safeExecute(
             onSuccess = ::loadCastCreditSuccess,
             onError = ::loadCastCreditError,
-            block = { getPeopleMediaCredits(castId) }
-        )
+        ) {
+            delay(500)
+            getPeopleMediaCredits(state.value.castId)
+        }
     }
 
     private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
-        safeExecute(
-            onSuccess = ::updateCastCreditPosters,
-            onError = ::loadCastCreditError
-        ) {
-            val seriesPosters = castCredits.series.map {
-                val genres = it.genreIDs.mapNotNull { id ->
-                    state.value.allSeriesGenres.find { g -> g.id == id }?.title
-                }
-                it.toUi().copy(genres = genres).toPoster()
-            }
-
-            val moviesPosters = castCredits.movies.map {
-                val genres = it.genresID.mapNotNull { id ->
-                    state.value.allMovieGenres.find { g -> g.id == id }?.title
-                }
-                it.toUi().copy(genres = genres).toPoster()
-            }
-
-            seriesPosters + moviesPosters
-        }
+        addSeriesPosters(castCredits.series)
+        addMoviePosters(castCredits.movies)
+        updateState { it.copy(isLoading = false) }
     }
-    private fun updateCastCreditPosters(posters: List<Poster>) {
+
+    private fun addMoviePosters(movies: List<Movie>) {
+        val moviesPosters = movies.map {
+            val genres = it.genresID.mapNotNull { id ->
+                state.value.allMovieGenres.find { g -> g.id == id }?.title
+            }
+            it.toUi().copy(genres = genres).toPoster()
+        }
         updateState {
             it.copy(
-                isLoading = false,
-                isNoInternet = false,
-                posters = posters,
+                posters = (moviesPosters + it.posters).distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.date },
+            )
+        }
+    }
+
+    private fun addSeriesPosters(series: List<Series>) {
+        val seriesPosters = series.map {
+            val genres = it.genreIDs.mapNotNull { id ->
+                state.value.allSeriesGenres.find { g -> g.id == id }?.title
+            }
+            it.toUi().copy(genres = genres).toPoster()
+        }
+        updateState {
+            it.copy(
+                posters = (seriesPosters + it.posters).distinctBy { poster -> poster.id }
+                    .sortedByDescending { poster -> poster.date },
             )
         }
     }
@@ -131,6 +140,7 @@ class CastCreditViewModel @Inject constructor(
             }
         )
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->
@@ -139,13 +149,8 @@ class CastCreditViewModel @Inject constructor(
             block = getContentPreferenceUseCase::invoke
         )
     }
+
     override fun changeView(isGrid: Boolean) {
         updateState { it.copy(isGridSelected = isGrid) }
-    }
-
-    override fun onRetryClick() {
-        state.value.castId?.let {
-            loadCastCredit(it)
-        }
     }
 }

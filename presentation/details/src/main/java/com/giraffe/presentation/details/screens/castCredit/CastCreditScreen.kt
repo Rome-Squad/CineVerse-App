@@ -50,7 +50,6 @@ private fun CastCreditContent(
     BaseScreen(
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,
-        onRetryClick = interaction::onRetryClick,
         title = stringResource(R.string.best_of) + " " + state.actorName,
         onBackClick = interaction::onBackClick,
         hasHorizontalDivider = true
