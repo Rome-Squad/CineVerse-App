@@ -10,7 +10,7 @@ data class CastCreditScreenState(
     val castId: Int? = null,
     val actorName: String = "",
     val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
     val isGridSelected: Boolean = true,
     val moviesGenres: List<Genre> = emptyList(),

@@ -9,8 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,6 +37,7 @@ import com.giraffe.presentation.profile.utils.EffectListener
 import com.giraffe.presentation.profile.utils.showToast
 import com.giraffe.presentation.profile.utils.toStringResource
 import com.giraffe.presentation.profile.R as ProfileResources
+
 
 @Composable
 fun MyCollectionsScreen(
@@ -94,16 +96,13 @@ private fun MyCollectionsScreenContent(
                     onClickPrimaryButton = interaction::onStartCollectingClick,
                 )
             } else {
-                LazyColumn(
+                LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxSize()
-                        .align(
-                            Alignment.TopCenter
-                        ),
-                    contentPadding = PaddingValues(
-                        all = 16.dp
-                    ),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .align(Alignment.TopCenter),
+                    columns = GridCells.Adaptive(minSize = 328.dp),
+                    contentPadding = PaddingValues(all = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(
@@ -118,9 +117,7 @@ private fun MyCollectionsScreenContent(
                                 collection.itemCount
                             ),
                             icon = R.drawable.due_tone_folder,
-                            onClick = {
-                                interaction.onCollectionClick(collection)
-                            }
+                            onClick = { interaction.onCollectionClick(collection) }
                         )
                     }
                 }
