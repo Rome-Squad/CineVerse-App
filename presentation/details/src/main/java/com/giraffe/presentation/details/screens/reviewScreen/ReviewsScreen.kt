@@ -74,7 +74,8 @@ private fun ReviewsContent(
                         reviewDate = review.createdAt,
                         reviewerImageUrl = review.authorImageUrl,
                         reviewerName = review.authorName,
-                        reviewerUsername = review.authorUserName
+                        reviewerUsername = review.authorUserName,
+                        contentPreference = state.contentPreference
                     )
                 }
             }

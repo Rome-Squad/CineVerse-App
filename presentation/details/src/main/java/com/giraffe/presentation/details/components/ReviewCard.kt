@@ -25,6 +25,8 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.utils.formatAsMonthDayYear
 import com.giraffe.presentation.details.utils.getCurrentLocalDateTime
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 import kotlinx.datetime.LocalDateTime
 
 
@@ -33,6 +35,7 @@ fun ReviewCard(
     modifier: Modifier = Modifier,
     rate: Int,
     reviewText: String,
+    contentPreference: ContentPreference,
     reviewDate: LocalDateTime? = getCurrentLocalDateTime(),
     reviewerImageUrl: String?,
     reviewerName: String,
@@ -71,7 +74,8 @@ fun ReviewCard(
                 placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
                 placeholderModifier = Modifier
                     .size(40.dp)
-                    .background(Theme.color.shade.quinary)
+                    .background(Theme.color.shade.quinary),
+                strengthLevel = contentPreference.toStrengthLevel(),
             )
 
             Column(

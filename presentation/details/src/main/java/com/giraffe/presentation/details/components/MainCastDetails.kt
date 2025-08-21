@@ -36,6 +36,8 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.model.SocialMediaUi
 import com.giraffe.presentation.details.utils.getIcon
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 import kotlin.math.max
 
 @Composable
@@ -46,6 +48,7 @@ fun MainCastDetails(
     socialMediaUiList: List<SocialMediaUi>,
     onLinkClick: (String) -> Unit,
     actorImageUrl: String?,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
     animationProgress: Float = 0f
 ) {
@@ -104,7 +107,8 @@ fun MainCastDetails(
                     placeHolderTint = Theme.color.brand.secondary,
                     placeholderModifier = Modifier
                         .background(Theme.color.background.card)
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    strengthLevel = contentPreference.toStrengthLevel()
                 )
             }
 

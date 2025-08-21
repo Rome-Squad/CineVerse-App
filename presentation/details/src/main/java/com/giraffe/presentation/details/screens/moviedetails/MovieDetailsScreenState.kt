@@ -8,6 +8,7 @@ import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.presentation.details.model.CollectionUi
 import com.giraffe.presentation.details.model.MovieUi
 import com.giraffe.presentation.details.model.ReviewUI
+import com.giraffe.user.entity.ContentPreference
 
 @Stable
 data class MovieDetailsScreenState(
@@ -21,7 +22,7 @@ data class MovieDetailsScreenState(
     val movieReviews: List<ReviewUI> = emptyList(),
     val newCollectionName: String = "",
     val currentRating: Int = 0,
-
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
     val collectionBottomSheet: CollectionBottomSheet? = null,
     val isVisibleGiveStarsBottomSheet: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,

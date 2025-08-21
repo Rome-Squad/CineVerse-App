@@ -19,6 +19,7 @@ import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedSeriesRoute
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,6 +32,7 @@ import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 class RecommendedSeriesViewModel @Inject constructor(
     private val getRecommendedSeries: GetRecommendedSeriesUseCase,
     private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<RecommendedSeriesScreenState, RecommendedSeriesEffect>(
     RecommendedSeriesScreenState(
@@ -41,6 +43,7 @@ class RecommendedSeriesViewModel @Inject constructor(
     RecommendedInteractionListener {
 
     init {
+        observeContentPreference()
         getSeriesGenres()
     }
 
@@ -128,7 +131,14 @@ class RecommendedSeriesViewModel @Inject constructor(
         }
     }
 
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(error: Throwable) {
         val isNoInternet = error is NoInternetException ||
                 error is UserNoInternetException

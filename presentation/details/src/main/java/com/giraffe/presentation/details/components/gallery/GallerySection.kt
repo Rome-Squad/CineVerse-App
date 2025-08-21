@@ -12,12 +12,14 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.presentation.details.R
+import com.giraffe.user.entity.ContentPreference
 
 
 @Composable
 fun GallerySection(
     modifier: Modifier = Modifier,
     imageUrls: List<String?>,
+    contentPreference: ContentPreference,
     onShowMoreClick: () -> Unit,
 ) {
     if (imageUrls.isNotEmpty()) {
@@ -34,7 +36,10 @@ fun GallerySection(
                 onClickableText = onShowMoreClick,
                 modifier = Modifier.fillMaxWidth()
             )
-            GalleryItemLayoutLTR(imageUrls = imageUrls)
+            GalleryItemLayoutLTR(
+                imageUrls = imageUrls,
+                contentPreference = contentPreference
+            )
         }
     }
 }
@@ -52,7 +57,8 @@ fun GallerySectionPreview() {
                 null,
                 "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg"
             ),
-            onShowMoreClick = {}
+            onShowMoreClick = {},
+            contentPreference = ContentPreference.HIDE_EXPLICIT
         )
     }
 }

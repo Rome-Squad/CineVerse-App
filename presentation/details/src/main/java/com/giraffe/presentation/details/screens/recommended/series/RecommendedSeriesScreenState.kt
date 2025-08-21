@@ -3,6 +3,7 @@ package com.giraffe.presentation.details.screens.recommended.series
 import androidx.paging.PagingData
 import com.giraffe.media.entity.Genre
 import com.giraffe.presentation.details.components.uimodel.Poster
+import com.giraffe.user.entity.ContentPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -12,5 +13,6 @@ data class RecommendedSeriesScreenState(
     val seriesGenres: List<Genre> = emptyList(),
     val recommendedSeriesFlow: Flow<PagingData<Poster>> = flowOf(),
     val isLoading: Boolean = true,
-    val isNoInternet: Boolean = false
+    val isNoInternet: Boolean = false,
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
 )

@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.presentation.details.components.uimodel.Poster
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun PosterListSection(
     title: String,
     posters: List<Poster>,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
     endText: String? = null,
     paddingHorizontal: Int = 16,
@@ -48,7 +50,8 @@ fun PosterListSection(
                         poster = poster,
                         modifier = Modifier
                             .width(136.dp),
-                        onClickPoster = { onClickPoster(poster) }
+                        onClickPoster = { onClickPoster(poster) },
+                        contentPreference = contentPreference
                     )
                 }
             }
@@ -94,7 +97,8 @@ private fun Preview() {
                     ),
                 ),
                 onClickEndText = {},
-                onClickPoster = {}
+                onClickPoster = {},
+                contentPreference = ContentPreference.HIDE_EXPLICIT
             )
 
             PosterListSection(
@@ -126,7 +130,8 @@ private fun Preview() {
                         rating = 7.5f,
                     ),
                 ),
-                onClickPoster = {}
+                onClickPoster = {},
+                contentPreference = ContentPreference.HIDE_EXPLICIT
             )
         }
     }
