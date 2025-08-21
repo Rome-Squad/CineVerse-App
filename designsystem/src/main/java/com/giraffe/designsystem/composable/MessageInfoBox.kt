@@ -3,6 +3,7 @@ package com.giraffe.designsystem.composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,7 +33,7 @@ fun MessageInfoBox(
     title: String,
     caption: String,
     icon: Painter,
-    iconTintColor:Color,
+    iconTintColor: Color,
     buttonBackgroundColor: Color,
     iconBackgroundColor: Color,
     modifier: Modifier = Modifier,
@@ -82,6 +83,7 @@ fun MessageInfoBox(
                     SecondaryButton(
                         text = titleSecondaryButton,
                         onClick = onClickSecondaryButton,
+                        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 16.dp),
                         modifier = Modifier
                             .weight(1f)
                     )
@@ -91,6 +93,7 @@ fun MessageInfoBox(
                     text = titlePrimaryButton,
                     onClick = onClickPrimaryButton,
                     buttonColorEnabled = buttonBackgroundColor,
+                    contentPadding = PaddingValues(vertical = 14.dp, horizontal = 16.dp),
                     modifier = Modifier
                         .weight(1f)
                 )
@@ -98,6 +101,7 @@ fun MessageInfoBox(
         }
     }
 }
+
 @Preview(showBackground = true, backgroundColor = 0xFF1B1C2A)
 @Composable
 fun PreviewEditProfileMessage() {
@@ -107,7 +111,7 @@ fun PreviewEditProfileMessage() {
             caption = "You’ll be taken to the website to update your name, username, or profile picture.",
             icon = painterResource(Theme.icons.dueTone.linkMinimalistic),
             buttonBackgroundColor = Theme.color.brand.primary,
-            iconTintColor = Theme.color.additional.primary.red ,
+            iconTintColor = Theme.color.additional.primary.red,
             iconBackgroundColor = Theme.color.brand.tertiary,
             titlePrimaryButton = "Go to Website",
             titleSecondaryButton = "Cancel",
@@ -125,7 +129,7 @@ fun PreviewLogoutMessage() {
             title = "Are you sure you want to logout?",
             caption = "You can always sign back in with your account.",
             icon = painterResource(Theme.icons.dueTone.linkMinimalistic),
-            iconTintColor =Theme.color.additional.primary.red ,
+            iconTintColor = Theme.color.additional.primary.red,
             buttonBackgroundColor = Theme.color.additional.primary.red,
             iconBackgroundColor = Theme.color.additional.secondary.red,
             titlePrimaryButton = "Logout",

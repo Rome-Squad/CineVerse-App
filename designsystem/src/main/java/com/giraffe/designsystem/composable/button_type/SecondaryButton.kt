@@ -27,6 +27,7 @@ fun SecondaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
     enabled: Boolean = true,
     isLoading: Boolean = false,
 ) {
@@ -41,7 +42,7 @@ fun SecondaryButton(
             contentColor = Theme.color.button.onSecondary,
             disabledContentColor = Theme.color.button.onDisabled
         ),
-        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
+        contentPadding = contentPadding,
         modifier = modifier
     ) {
         AnimatedContent(
