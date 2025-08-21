@@ -25,6 +25,8 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.modifier.noHoverClickable
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.profile.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun UserProfileSection(
@@ -32,6 +34,7 @@ fun UserProfileSection(
     userProfileImage: String,
     userDisplayName: String,
     username: String,
+    contentPreference: ContentPreference,
     onRowClick: () -> Unit = {}
 ) {
     Row(
@@ -71,6 +74,7 @@ fun UserProfileSection(
                         .clip(CircleShape)
                         .size(56.dp),
                     contentScale = ContentScale.Crop,
+                    strengthLevel = contentPreference.toStrengthLevel()
                 )
             } else {
                 Box(
