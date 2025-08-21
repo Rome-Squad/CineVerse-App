@@ -75,27 +75,23 @@ class CastCreditViewModel @Inject constructor(
     }
 
     private fun loadCastCreditSuccess(castCredits: MediaMemberRepository.CastMedia) {
-        safeExecute(
-            onSuccess = ::updateCastCreditPosters,
-            onError = ::loadCastCreditError
-        ) {
-            val seriesPosters = castCredits.series.map {
-                val genres = it.genreIDs.mapNotNull { id ->
-                    state.value.allSeriesGenres.find { g -> g.id == id }?.title
-                }
-                it.toUi().copy(genres = genres).toPoster()
+        val seriesPosters = castCredits.series.map {
+            val genres = it.genreIDs.mapNotNull { id ->
+                state.value.allSeriesGenres.find { g -> g.id == id }?.title
             }
-
-            val moviesPosters = castCredits.movies.map {
-                val genres = it.genresID.mapNotNull { id ->
-                    state.value.allMovieGenres.find { g -> g.id == id }?.title
-                }
-                it.toUi().copy(genres = genres).toPoster()
-            }
-
-            seriesPosters + moviesPosters
+            it.toUi().copy(genres = genres).toPoster()
         }
+
+        val moviesPosters = castCredits.movies.map {
+            val genres = it.genresID.mapNotNull { id ->
+                state.value.allMovieGenres.find { g -> g.id == id }?.title
+            }
+            it.toUi().copy(genres = genres).toPoster()
+        }
+
+        updateCastCreditPosters(seriesPosters + moviesPosters)
     }
+
     private fun updateCastCreditPosters(posters: List<Poster>) {
         updateState {
             it.copy(
