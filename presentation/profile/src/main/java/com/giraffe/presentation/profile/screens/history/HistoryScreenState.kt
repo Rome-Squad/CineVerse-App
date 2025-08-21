@@ -1,7 +1,8 @@
 package com.giraffe.presentation.profile.screens.history
 
-import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.media.entity.Genre
+import com.giraffe.presentation.profile.uimodel.Poster
+import com.giraffe.user.entity.ContentPreference
 
 
 data class HistoryScreenState(
@@ -14,5 +15,6 @@ data class HistoryScreenState(
     val isSwiped: Boolean = false,
     val swipedPosterId: Int? = null,
     val isTipVisible: Boolean = true,
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
 )
 
