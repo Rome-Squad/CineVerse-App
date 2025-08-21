@@ -109,7 +109,7 @@ fun MovieDto.toCacheDto() = MovieCacheDto(
             BASE_IMAGE_URL + it
     },
     youtubeVideoId = youtubeVideoId,
-    genresID = genresID,
+    genresID = genresID.ifEmpty { genres.map { it.id } },
     releaseYear = releaseDate,
     duration = runtime,
     popularity = popularity.orZero(),

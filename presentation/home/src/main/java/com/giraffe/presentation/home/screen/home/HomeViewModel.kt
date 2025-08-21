@@ -55,8 +55,7 @@ class HomeViewModel @Inject constructor(
     init {
         observeContentPreference()
         getUserName()
-        getMoviesGenres()
-        getSeriesGenres()
+        getGenres()
         getRecentlyReleased()
         getUpcoming()
         getYourCollections()
@@ -79,25 +78,22 @@ class HomeViewModel @Inject constructor(
 
     private fun onGetUseNameSuccess(userName: String) = updateState { it.copy(userName = userName) }
 
-    private fun getMoviesGenres() {
+    private fun getGenres() {
         safeCollect(
             onEmitNewValue = ::onGetMoviesGenresSuccess,
             onError = { getPopularityMovies() },
             block = observeMoviesGenresUseCase::invoke
+        )
+        safeCollect(
+            onEmitNewValue = ::onGetSeriesGenresSuccess,
+            onError = { getPopularitySeries() },
+            block = observeSeriesGenresUseCase::invoke
         )
     }
 
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
         updateState { it.copy(moviesGenres = genres) }
         getPopularityMovies()
-    }
-
-    private fun getSeriesGenres() {
-        safeCollect(
-            onEmitNewValue = ::onGetSeriesGenresSuccess,
-            onError = { getPopularitySeries() },
-            block = observeSeriesGenresUseCase::invoke
-        )
     }
 
     private fun onGetSeriesGenresSuccess(genres: List<Genre>) {
@@ -414,6 +410,7 @@ class HomeViewModel @Inject constructor(
             )
         )
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->

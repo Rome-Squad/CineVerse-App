@@ -25,7 +25,7 @@ fun Series.toRatedPoster(genres: List<Genre>) = RatedPoster(
 fun Series.toPoster(genres: List<Genre> = emptyList()) = Poster(
     id = id,
     name = name,
-    genres = genres.joinToString(", ") { it.title },
+    genres = genres.filter { it.id in genreIDs }.joinToString(", ") { it.title },
     imageUrl = posterUrl,
     rating = rating,
     date = releaseYear.toFormattedDate(),
@@ -41,7 +41,7 @@ fun Movie.toRatedPoster(genres: List<Genre>) = RatedPoster(
 fun Movie.toPoster(genres: List<Genre> = emptyList()) = Poster(
     id = id,
     name = name,
-    genres = genres.joinToString(", ") { it.title },
+    genres = genres.filter { it.id in this.genresID }.joinToString(", ") { it.title },
     imageUrl = posterUrl,
     rating = rating,
     date = releaseYear.toFormattedDate(),
