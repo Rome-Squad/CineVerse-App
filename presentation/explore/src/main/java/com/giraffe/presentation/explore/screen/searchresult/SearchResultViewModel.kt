@@ -22,6 +22,7 @@ import com.giraffe.presentation.explore.screen.discover.SearchTab
 import com.giraffe.presentation.explore.util.BasePagingSource
 import com.giraffe.presentation.explore.util.toPoster
 import com.giraffe.presentation.explore.util.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -34,12 +35,14 @@ class SearchResultViewModel @Inject constructor(
     private val searchPeopleByName: GetMediaMembersByNameUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SearchResultScreenState, SearchResultEffect>(
     SearchResultScreenState(query = savedStateHandle.get<String>("query").orEmpty()),
 ), SearchResultInteractionListener {
 
     init {
+        observeContentPreference()
         getMoviesGenres()
         getSeriesGenres()
         getMovies()
@@ -227,7 +230,14 @@ class SearchResultViewModel @Inject constructor(
             }
         }
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(error: Throwable) {
         updateState {
             it.copy(

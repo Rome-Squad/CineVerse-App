@@ -19,12 +19,15 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.explore.util.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun CastItem(
     modifier: Modifier = Modifier,
     imageUrl: String,
     name: String,
+    contentPreference: ContentPreference,
     onClick: () -> Unit
 ) {
     Column(
@@ -46,7 +49,8 @@ fun CastItem(
             placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .fillMaxSize()
-                .background(Theme.color.background.card)
+                .background(Theme.color.background.card),
+            strengthLevel = contentPreference.toStrengthLevel()
 
         )
 

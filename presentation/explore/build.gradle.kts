@@ -15,6 +15,8 @@ dependencies {
     implementation(projects.domain.media)
     implementation(projects.api.details)
     implementation(projects.api.explore)
+    implementation(projects.domain.user)
+
     //pagination
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.paging.compose)
