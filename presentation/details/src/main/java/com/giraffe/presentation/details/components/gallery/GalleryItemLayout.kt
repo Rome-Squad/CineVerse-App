@@ -12,11 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.Theme
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun GalleryItemLayoutLTR(
     imageUrls: List<String?>,
     modifier: Modifier = Modifier,
+    contentPreference: ContentPreference,
 ) {
     Row(
         verticalAlignment = Alignment.Top,
@@ -36,7 +38,8 @@ fun GalleryItemLayoutLTR(
                         shape = RoundedCornerShape(Theme.radius.lg)
                     )
                     .fillMaxHeight(0.475f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentPreference = contentPreference
             )
             GalleryItem(
                 imageUrl = imageUrls.getOrNull(2),
@@ -47,7 +50,9 @@ fun GalleryItemLayoutLTR(
                     )
                     .weight(1f)
                     .fillMaxHeight(0.5f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentPreference = contentPreference
+
             )
         }
         GalleryItem(
@@ -58,7 +63,9 @@ fun GalleryItemLayoutLTR(
                     shape = RoundedCornerShape(Theme.radius.lg)
                 )
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            contentPreference = contentPreference
+
         )
     }
 }
@@ -66,6 +73,7 @@ fun GalleryItemLayoutLTR(
 @Composable
 fun GalleryItemLayoutRTL(
     imageUrls: List<String?>,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -81,7 +89,9 @@ fun GalleryItemLayoutRTL(
                     shape = RoundedCornerShape(Theme.radius.lg)
                 )
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            contentPreference = contentPreference
+
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,7 +107,9 @@ fun GalleryItemLayoutRTL(
                         shape = RoundedCornerShape(Theme.radius.lg)
                     )
                     .fillMaxHeight(0.475f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentPreference = contentPreference
+
             )
             GalleryItem(
                 imageUrl = imageUrls.getOrNull(2),
@@ -108,7 +120,9 @@ fun GalleryItemLayoutRTL(
                     )
                     .weight(1f)
                     .fillMaxHeight(0.5f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentPreference = contentPreference
+
             )
         }
     }

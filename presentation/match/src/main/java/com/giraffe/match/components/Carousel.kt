@@ -28,6 +28,8 @@ import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.match.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 import kotlin.math.abs
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -35,8 +37,9 @@ import kotlin.math.abs
 fun HeroCarousel(
     modifier: Modifier = Modifier,
     items: List<String>,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 48.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 56.dp),
     onPageChanged: (Int) -> Unit = {},
+    contentPreference: ContentPreference,
     onItemClick: (Int) -> Unit = {}
 ) {
     if (items.isEmpty()) return
@@ -48,9 +51,9 @@ fun HeroCarousel(
         onPageChanged(pagerState.currentPage)
     }
     val screenWidth = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
-    val width = screenWidth - 48.dp
+    val width = screenWidth - 125.dp
     val posterAspectRatio = 4f / 5f
-    val initialHeight = width / posterAspectRatio
+    val initialHeight = (width / posterAspectRatio) * 1.11f
 
     Box(
         modifier = modifier
@@ -72,7 +75,7 @@ fun HeroCarousel(
                 (pageIndex - pagerState.currentPage) + pagerState.currentPageOffsetFraction
             val progress = 1f - abs(pageOffset).coerceIn(0f, 1f)
 
-            val extraHeight = 38.dp * (1f - progress)
+            val extraHeight = 60.dp * (1f - progress)
             val dynamicHeight = initialHeight - extraHeight
 
 
@@ -85,11 +88,12 @@ fun HeroCarousel(
                     .height(dynamicHeight)
                     .zIndex(zIndex)
                     .alpha(alpha)
-                    .clip(shape = RoundedCornerShape(Theme.radius.lg))
+                    .clip(shape = RoundedCornerShape(Theme.radius.xl))
                     .align(Alignment.TopCenter)
                     .clickable { onItemClick(pageIndex) },
                 imageUrl = imageId,
-                isSelected = isSelected
+                isSelected = isSelected,
+                contentPreference = contentPreference
             )
         }
     }
@@ -99,11 +103,13 @@ fun HeroCarousel(
 private fun CarouselItemContent(
     modifier: Modifier = Modifier,
     imageUrl: String,
+    contentPreference: ContentPreference,
     isSelected: Boolean
 ) {
     Box(
         modifier = modifier
-            .clip(shape = RoundedCornerShape(Theme.radius.lg))
+            .clip(shape = RoundedCornerShape(Theme.radius.xl))
+
             .background(Theme.color.background.card)
     ) {
         SafeIslamicImage(
@@ -112,13 +118,14 @@ private fun CarouselItemContent(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(shape = RoundedCornerShape(Theme.radius.lg)),
+                .clip(shape = RoundedCornerShape(Theme.radius.xl)),
             placeHolderTint = Theme.color.brand.secondary,
             placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .background(Theme.color.background.card)
                 .height(88.dp)
-                .width(64.dp)
+                .width(64.dp),
+            strengthLevel = contentPreference.toStrengthLevel()
         )
 
         if (!isSelected) {

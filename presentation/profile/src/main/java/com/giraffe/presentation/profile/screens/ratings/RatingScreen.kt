@@ -112,7 +112,8 @@ private fun RatingContent(
                     RatedItem(
                         ratedPoster = it,
                         onItemClick = interaction::onPosterClick,
-                        onDeleteClick = interaction::onDeleteRatedPosterClick
+                        onDeleteClick = interaction::onDeleteRatedPosterClick,
+                        contentPreference = state.contentPreference
                     )
                 }
             }

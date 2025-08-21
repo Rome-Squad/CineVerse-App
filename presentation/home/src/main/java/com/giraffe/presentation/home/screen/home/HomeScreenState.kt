@@ -6,6 +6,7 @@ import com.giraffe.presentation.home.model.FeaturedCollectionUi
 import com.giraffe.presentation.home.model.PopularMediaUi
 import com.giraffe.presentation.home.model.Poster
 import com.giraffe.presentation.home.model.YourCollectionUi
+import com.giraffe.user.entity.ContentPreference
 
 data class HomeScreenState(
     val userName: String = "",
@@ -18,6 +19,7 @@ data class HomeScreenState(
     val upcomingMovies: List<Poster> = emptyList(),
     val recentlyViewed: List<Poster> = emptyList(),
     val yourCollections: List<YourCollectionUi> = emptyList(),
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
     val featuredCollections: List<FeaturedCollectionUi> = FeaturedCollectionType.entries.map {
         FeaturedCollectionUi(
             it

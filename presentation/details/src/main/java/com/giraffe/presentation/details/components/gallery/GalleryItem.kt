@@ -16,10 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun GalleryItem(
     imageUrl: String?,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier
 ) {
     SafeIslamicImage(
@@ -32,7 +35,8 @@ fun GalleryItem(
         placeHolderTint = Theme.color.brand.secondary,
         placeholderModifier = Modifier
             .background(Theme.color.background.card)
-            .fillMaxSize()
+            .fillMaxSize(),
+        strengthLevel = contentPreference.toStrengthLevel()
     )
 }
 
@@ -45,7 +49,8 @@ fun GalleryItemPreview() {
             imageUrl = null,
             modifier = Modifier
                 .height(128.dp)
-                .width(96.dp)
+                .width(96.dp),
+            contentPreference = ContentPreference.HIDE_EXPLICIT
         )
     }
 }

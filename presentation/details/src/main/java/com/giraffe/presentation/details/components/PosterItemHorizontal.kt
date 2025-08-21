@@ -32,10 +32,13 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.components.uimodel.Poster
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun PosterItemHorizontal(
     movie: Poster,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
     onClickPoster: () -> Unit = {},
 ) {
@@ -69,7 +72,8 @@ fun PosterItemHorizontal(
                 placeholderModifier = Modifier
                     .background(color = Theme.color.brand.tertiary)
                     .height(88.dp)
-                    .width(64.dp)
+                    .width(64.dp),
+                strengthLevel = contentPreference.toStrengthLevel()
             )
 
             Column(
@@ -166,7 +170,8 @@ private fun Preview() {
             ),
             modifier = Modifier
                 .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                .height(88.dp)
+                .height(88.dp),
+            contentPreference = ContentPreference.HIDE_EXPLICIT,
         )
     }
 }

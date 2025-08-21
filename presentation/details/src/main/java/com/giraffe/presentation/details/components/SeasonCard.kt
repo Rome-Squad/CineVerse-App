@@ -37,6 +37,8 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.utils.toLocalizedRating
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun SeasonCard(
@@ -46,6 +48,7 @@ fun SeasonCard(
     rating: Float,
     episodes: Int,
     year: Int?,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     posterWidth: Dp = 48.dp,
@@ -112,8 +115,8 @@ fun SeasonCard(
                                         bottomEnd = Theme.radius.xs,
                                         bottomStart = Theme.radius.xs
                                     )
-                                )
-//
+                                ),
+                            strengthLevel = contentPreference.toStrengthLevel()
                         )
                     }
                 }
@@ -215,6 +218,7 @@ private fun Preview() {
             rating = 0.4f,
             episodes = 15,
             year = 2002,
+            contentPreference = ContentPreference.HIDE_EXPLICIT
         )
     }
 

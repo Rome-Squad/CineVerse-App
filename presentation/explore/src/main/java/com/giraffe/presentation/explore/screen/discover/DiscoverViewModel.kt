@@ -21,6 +21,7 @@ import com.giraffe.presentation.explore.screen.discover.DiscoverEffect.NavigateT
 import com.giraffe.presentation.explore.util.BasePagingSource
 import com.giraffe.presentation.explore.util.toPoster
 import com.giraffe.presentation.explore.util.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -32,10 +33,12 @@ class DiscoverViewModel @Inject constructor(
     private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val getMoviesByGenresUseCase: GetMoviesByGenresUseCase,
     private val getSeriesByGenresUseCase: GetSeriesByGenresUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
 ) : BaseViewModel<DiscoverScreenState, DiscoverEffect>(DiscoverScreenState()),
     DiscoverInteractionListener {
 
     init {
+        observeContentPreference()
         getSeriesGenres()
         getMovieGenres()
     }
@@ -187,7 +190,14 @@ class DiscoverViewModel @Inject constructor(
             }
         }
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(error: Throwable) {
         updateState {
             it.copy(

@@ -6,13 +6,11 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toBitmapOrNull
 import coil.ImageLoader
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Size
-import com.giraffe.imageviewer.R
 import com.giraffe.imageviewer.blur.BlurTransformer
 import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifier
 import com.giraffe.imageviewer.mlmodel.SafeIslamicImageClassifierImpl
@@ -34,14 +32,16 @@ class SafeIslamicImageHost @Inject constructor(
     var imageState by mutableStateOf<ImageState>(ImageState.Loading)
         private set
 
-    suspend fun loadImage(imageUrl: String) = withContext(Dispatchers.Default) {
+    suspend fun loadImage(imageUrl: String, strengthLevel: StrengthLevel) =
+        withContext(Dispatchers.Default) {
         try {
             if (imageUrl.isBlank() || imageUrl.lowercase() == "null") {
                 throw Exception()
             }
             imageState = ImageState.Loading
 
-            val cachedBlurState = classifier.getResultFromCache(imageUrl)
+            val cacheKey = "$imageUrl-${strengthLevel.name}"
+            val cachedBlurState = classifier.getResultFromCache(cacheKey)
 
             val bitmap = if (cachedBlurState == true) {
                 loadBlurredImage(imageUrl)
@@ -50,7 +50,8 @@ class SafeIslamicImageHost @Inject constructor(
             }
 
             bitmap?.let { loadedBitmap ->
-                val isUnsafe = cachedBlurState ?: isImageUnsafe(loadedBitmap, imageUrl)
+                val isUnsafe =
+                    cachedBlurState ?: isImageUnsafe(loadedBitmap, imageUrl, strengthLevel)
 
                 if (isUnsafe && cachedBlurState != true) {
                     val blurredBitmap = applyBlur(loadedBitmap)
@@ -64,6 +65,7 @@ class SafeIslamicImageHost @Inject constructor(
             imageState = ImageState.Error(e)
         }
     }
+
 
     private suspend fun loadNormalImage(imageUrl: String): Bitmap? = withContext(Dispatchers.IO) {
         val request = ImageRequest.Builder(context)
@@ -95,16 +97,14 @@ class SafeIslamicImageHost @Inject constructor(
         BlurTransformer(context, BLUR_RADIUS).transform(bitmap, Size(bitmap.width, bitmap.height))
     }
 
-    private suspend fun isImageUnsafe(bitmap: Bitmap, imageUrl: String): Boolean =
+    private suspend fun isImageUnsafe(
+        bitmap: Bitmap,
+        imageUrl: String,
+        strengthLevel: StrengthLevel
+    ): Boolean =
         withContext(Dispatchers.Default) {
-            classifier.isUnsafe(bitmap, imageUrl)
+            classifier.isUnsafe(bitmap, imageUrl, strengthLevel)
         }
-
-    private fun setPlaceholderState() {
-        val placeholderBitmap = context.getDrawable(R.drawable.placeholder)?.toBitmap()!!
-        imageState = ImageState.Success(placeholderBitmap, false)
-    }
-
 
     companion object {
         private const val BLUR_RADIUS = 35f

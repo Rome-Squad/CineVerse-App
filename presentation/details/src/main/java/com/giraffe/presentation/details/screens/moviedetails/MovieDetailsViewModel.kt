@@ -26,6 +26,7 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -44,6 +45,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
     private val getUserRatingUseCase: GetUserMovieRatingUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MovieDetailsScreenState, MovieDetailsEffect>(
     MovieDetailsScreenState(
@@ -54,6 +56,7 @@ class MovieDetailsViewModel @Inject constructor(
 ), MovieDetailsInteractionListener {
 
     init {
+        observeContentPreference()
         state.value.movie.id.let {
             loadMovieDetailsScreen(it)
         }
@@ -471,7 +474,14 @@ class MovieDetailsViewModel @Inject constructor(
             block = isLoggedInByAccountUseCase::invoke
         )
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(error: Throwable) {
         val isNetworkError = error is NoInternetException || error is UserNoInternetException
 

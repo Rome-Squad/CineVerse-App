@@ -24,6 +24,7 @@ import com.giraffe.presentation.details.utils.groupByRole
 import com.giraffe.presentation.details.utils.toCastUi
 import com.giraffe.presentation.details.utils.toCrewUi
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -40,6 +41,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val addRatingUseCase: AddSeriesRatingUseCase,
     private val getUserRatingUseCase: GetUserSeriesRatingUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SeriesDetailsScreenState, SeriesDetailsEffect>(
     SeriesDetailsScreenState(
@@ -51,6 +53,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
 
     init {
+        observeContentPreference()
         loadSeriesDetailsScreen(state.value.seriesUi.id)
     }
 
@@ -368,7 +371,14 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(throwable: Throwable) {
         val isNetworkError =
             throwable is NoInternetException || throwable is UserNoInternetException

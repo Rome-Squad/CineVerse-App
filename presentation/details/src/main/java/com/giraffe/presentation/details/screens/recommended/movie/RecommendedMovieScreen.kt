@@ -79,7 +79,8 @@ fun RecommendedMovieContent(
             TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = isListSelected,
-                onItemClick = interaction::onMovieClick
+                onItemClick = interaction::onMovieClick,
+                contentPreference = state.contentPreference
             )
 
             ViewToggle(

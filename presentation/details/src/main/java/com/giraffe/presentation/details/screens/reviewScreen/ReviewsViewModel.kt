@@ -16,6 +16,7 @@ import com.giraffe.presentation.details.base.BasePagingSource
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.ReviewRoute
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -26,6 +27,7 @@ import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 class ReviewsViewModel @Inject constructor(
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getSeriesReviewsUseCase: GetSeriesReviewsUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ReviewsScreenState, ReviewEffect>(
     initialState = ReviewsScreenState(
@@ -35,6 +37,7 @@ class ReviewsViewModel @Inject constructor(
 ), ReviewsInteractionListener {
 
     init {
+        observeContentPreference()
         getReviews()
     }
 
@@ -110,7 +113,14 @@ class ReviewsViewModel @Inject constructor(
             )
         }
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(throwable: Throwable) {
         val isNoInternet = throwable is NoInternetException ||
                 throwable is UserNoInternetException

@@ -37,6 +37,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
 import com.giraffe.presentation.home.utils.shimmerEffect
+import com.giraffe.user.entity.ContentPreference
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -48,6 +49,7 @@ fun Carousel(
     onClickItem: (Int, MediaType) -> Unit,
     modifier: Modifier = Modifier,
     isLoading: Boolean = true,
+    contentPreference: ContentPreference,
     scrollDelayMillis: Long = 3000L
 ) {
     val pagerState =
@@ -175,7 +177,8 @@ fun Carousel(
                         })
                         .align(Alignment.TopCenter),
                     popularMediaItem = popularMediaItem,
-                    isSelected = isSelected
+                    isSelected = isSelected,
+                    contentPreference = contentPreference
                 )
             }
 

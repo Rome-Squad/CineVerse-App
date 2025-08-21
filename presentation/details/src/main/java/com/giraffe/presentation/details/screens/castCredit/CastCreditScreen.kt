@@ -59,7 +59,8 @@ private fun CastCreditContent(
             TransitionBetweenColumnAndVerticalGrid(
                 posters = state.posters,
                 isListSelected = !state.isGridSelected,
-                onPosterClicked = interaction::onPosterClick
+                onPosterClicked = interaction::onPosterClick,
+                contentPreference = state.contentPreference
             )
 
             ViewToggle(

@@ -31,6 +31,8 @@ import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
 import com.giraffe.presentation.home.utils.toLocalizedRating
+import com.giraffe.presentation.home.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @SuppressLint("DefaultLocale")
 @Composable
@@ -38,6 +40,7 @@ fun VODItem(
     popularMediaItem: PopularMediaUi,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
+    contentPreference: ContentPreference
 ) {
     Box(
         modifier = modifier
@@ -58,6 +61,7 @@ fun VODItem(
             contentDescription = "cover",
             placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             contentScale = ContentScale.Crop,
+            strengthLevel = contentPreference.toStrengthLevel(),
         )
         AnimatedVisibility(
             modifier = Modifier
@@ -114,8 +118,9 @@ private fun PreviewVODItem() {
                     rating = 4.5f,
                     title = "The SpongeBob Movie: Sponge on the Run",
                     genres = listOf("comedy", "action", "animation"),
-                    mediaType = MediaType.MOVIE
-                )
+                    mediaType = MediaType.MOVIE,
+                ),
+            contentPreference = ContentPreference.HIDE_EXPLICIT
         )
     }
 }
@@ -139,8 +144,10 @@ private fun PreviewMovieItemDark() {
                     rating = 4.5f,
                     title = "The SpongeBob Movie: Sponge on the Run",
                     genres = listOf("comedy", "action", "animation"),
-                    mediaType = MediaType.MOVIE
-                )
+                    mediaType = MediaType.MOVIE,
+                ),
+            contentPreference = ContentPreference.HIDE_EXPLICIT
+
         )
     }
 }

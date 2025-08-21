@@ -74,6 +74,7 @@ fun GalleryContent(
                         modifier = Modifier
                             .height(280.dp)
                             .padding(top = 6.dp, bottom = 6.dp),
+                        contentPreference = state.contentPreference
                     )
                     if (subImageUrls.size > 3) {
                         GalleryItemLayoutRTL(
@@ -81,6 +82,7 @@ fun GalleryContent(
                             modifier = Modifier
                                 .height(280.dp)
                                 .padding(top = 6.dp, bottom = 6.dp),
+                            contentPreference = state.contentPreference
                         )
                     }
                 }

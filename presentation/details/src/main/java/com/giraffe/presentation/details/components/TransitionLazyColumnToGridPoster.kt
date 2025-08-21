@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.utils.ObserveScrollDirection
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun TransitionLazyColumnToGridPoster(
@@ -22,6 +23,7 @@ fun TransitionLazyColumnToGridPoster(
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
+    contentPreference: ContentPreference,
     onItemClick: (Int) -> Unit,
 ) {
     val gridState = rememberLazyGridState()
@@ -55,7 +57,8 @@ fun TransitionLazyColumnToGridPoster(
                             fadeInSpec = tween(700, easing = LinearEasing),
                             placementSpec = tween(700, easing = LinearEasing),
                             fadeOutSpec = tween(700, easing = LinearEasing)
-                        )
+                        ),
+                    contentPreference = contentPreference
                 )
             }
         }

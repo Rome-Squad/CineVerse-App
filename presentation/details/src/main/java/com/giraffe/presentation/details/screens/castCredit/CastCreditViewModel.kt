@@ -12,6 +12,7 @@ import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastCreditRoute
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
@@ -21,6 +22,7 @@ class CastCreditViewModel @Inject constructor(
     private val getPeopleMediaCredits: GetCastCreditsUseCase,
     private val getSeriesGenresByIds: GetSeriesGenresByIdsUseCase,
     private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(
     CastCreditScreenState(
@@ -30,7 +32,8 @@ class CastCreditViewModel @Inject constructor(
 ), CastCreditInteractionListener {
 
     init {
-        // load genres first
+        observeContentPreference()
+
         safeExecute(
             onSuccess = { (series, movies) ->
                 updateState {
@@ -39,7 +42,6 @@ class CastCreditViewModel @Inject constructor(
                         allMovieGenres = movies
                     )
                 }
-                // then load cast credits
                 state.value.castId?.let { loadCastCredit(it) }
             },
             onError = ::loadCastCreditError
@@ -47,7 +49,6 @@ class CastCreditViewModel @Inject constructor(
             val series = getSeriesGenresByIds(emptyList())
             val movies = getMoviesGenresByIds(emptyList())
             series to movies
-        }
     }
 
     private fun loadCastCredit(castId: Int) {
@@ -117,7 +118,14 @@ class CastCreditViewModel @Inject constructor(
             }
         )
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     override fun changeView(isGrid: Boolean) {
         updateState { it.copy(isGridSelected = isGrid) }
     }

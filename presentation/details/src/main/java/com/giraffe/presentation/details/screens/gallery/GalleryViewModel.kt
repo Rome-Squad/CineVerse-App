@@ -6,12 +6,14 @@ import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.usecase.GetMediaMemberImageUrlsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.GalleryRoute
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle,
     private val getMediaMemberImageUrlsUseCase: GetMediaMemberImageUrlsUseCase
 ) :BaseViewModel<GalleryUiState, GalleryEffect>(
@@ -22,6 +24,7 @@ class GalleryViewModel @Inject constructor(
 ), GalleryInteractionListener {
 
     init {
+        observeContentPreference()
         getPersonImages()
     }
 
@@ -61,7 +64,14 @@ class GalleryViewModel @Inject constructor(
             )
         }
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     override fun onBackClick() {
         sendEffect(GalleryEffect.NavigateBack)
     }

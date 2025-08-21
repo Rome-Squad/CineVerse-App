@@ -12,6 +12,7 @@ import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeri
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.presentation.profile.utils.toPoster
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -22,12 +23,14 @@ class HistoryViewModel @Inject constructor(
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val deleteRecentlyViewedMovieByIdUseCase: DeleteRecentlyViewedMovieByIdUseCase,
-    private val deleteSeriesUseCase: DeleteSeriesUseCase
+    private val deleteSeriesUseCase: DeleteSeriesUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase
 ) :
     BaseViewModel<HistoryScreenState, HistoryEffect>(HistoryScreenState()),
     HistoryInteractionListener {
 
     init {
+        observeContentPreference()
         getGenres()
     }
 
@@ -134,5 +137,13 @@ class HistoryViewModel @Inject constructor(
 
     override fun navigateToExploreScreen() {
         sendEffect(HistoryEffect.NavigateToExploreScreen)
+    }
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
     }
 }

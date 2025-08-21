@@ -39,6 +39,8 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.R
 import com.giraffe.presentation.details.utils.toLocalizedRating
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 import kotlin.math.max
 
 
@@ -53,6 +55,7 @@ fun MainMovieOrSeriesDetails(
     releaseDate: String,
     isPlayButtonEnabled: Boolean,
     onClickPlay: () -> Unit,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
     onClickAdd: (() -> Unit)? = null,
     animationProgress: Animatable<Float, AnimationVector1D>
@@ -93,7 +96,8 @@ fun MainMovieOrSeriesDetails(
                             0xFFE1E1E3
                         )
                     ),
-                    placeholderModifier = Modifier.size(40.dp)
+                    placeholderModifier = Modifier.size(40.dp),
+                    strengthLevel = contentPreference.toStrengthLevel()
                 )
 
                 Row(

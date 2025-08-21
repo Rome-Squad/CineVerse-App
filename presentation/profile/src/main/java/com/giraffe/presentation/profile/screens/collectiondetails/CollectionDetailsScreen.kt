@@ -126,7 +126,8 @@ private fun CollectionScreenContent(
                                 movie = swipeablePoster.poster,
                                 onClickPoster = {
                                     interaction.onPosterClick(swipeablePoster.poster.id)
-                                }
+                                },
+                                contentPreference = state.contentPreference,
                             )
                         }
                     }

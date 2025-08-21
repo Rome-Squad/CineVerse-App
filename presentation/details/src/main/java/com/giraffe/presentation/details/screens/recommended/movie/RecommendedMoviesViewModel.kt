@@ -18,6 +18,7 @@ import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.navigation.routes.RecommendedMovieRoute
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,8 +32,9 @@ class RecommendedMoviesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getRecommendedMovies: GetRecommendedMoviesUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase
 
-    ) : BaseViewModel<RecommendedMoviesScreenState, RecommendedMoviesEffect>(
+) : BaseViewModel<RecommendedMoviesScreenState, RecommendedMoviesEffect>(
     RecommendedMoviesScreenState(
 
         movieId = savedStateHandle.toRoute<RecommendedMovieRoute>().movieId,
@@ -42,6 +44,7 @@ class RecommendedMoviesViewModel @Inject constructor(
     RecommendedInteractionListener {
 
     init {
+        observeContentPreference()
         getMoviesGenres()
     }
 
@@ -127,7 +130,14 @@ class RecommendedMoviesViewModel @Inject constructor(
     override fun onRetryClick() {
         getMoviesGenres()
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onError(error: Throwable) {
         val isNoInternet = error is NoInternetException ||
                 error is UserNoInternetException
