@@ -2,11 +2,12 @@ package com.giraffe.presentation.details.screens.castCredit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.giraffe.media.entity.Genre
 import com.giraffe.media.exception.NoInternetException
 import com.giraffe.media.mediaMember.repository.MediaMemberRepository
 import com.giraffe.media.mediaMember.usecase.GetCastCreditsUseCase
-import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
-import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastCreditRoute
@@ -14,14 +15,15 @@ import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toUi
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
 
 @HiltViewModel
 class CastCreditViewModel @Inject constructor(
     private val getPeopleMediaCredits: GetCastCreditsUseCase,
-    private val getSeriesGenresByIds: GetSeriesGenresByIdsUseCase,
-    private val getMoviesGenresByIds: GetMoviesGenresByIdsUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CastCreditScreenState, CastCreditEffect>(
@@ -33,25 +35,35 @@ class CastCreditViewModel @Inject constructor(
 
     init {
         observeContentPreference()
+        loadSeriesGenres()
+        loadMovieGenres()
+        state.value.castId?.let { loadCastCredit(it) }
+    }
 
+    private fun loadSeriesGenres() {
         safeExecute(
-            onSuccess = { (series, movies) ->
-                updateState {
-                    it.copy(
-                        allSeriesGenres = series,
-                        allMovieGenres = movies
-                    )
-                }
-                state.value.castId?.let { loadCastCredit(it) }
-            },
+            onSuccess = ::onSeriesGenresLoaded,
             onError = ::loadCastCreditError
         ) {
-            val series = getSeriesGenresByIds(emptyList())
-            val movies = getMoviesGenresByIds(emptyList())
-            series to movies
+            observeSeriesGenresUseCase().first()
         }
     }
 
+    private fun loadMovieGenres() {
+        safeExecute(
+            onSuccess = ::onMovieGenresLoaded,
+            onError = ::loadCastCreditError
+        ) {
+            observeMoviesGenresUseCase().first()
+        }
+    }
+    private fun onSeriesGenresLoaded(series: List<Genre>) {
+        updateState { it.copy(allSeriesGenres = series) }
+    }
+
+    private fun onMovieGenresLoaded(movies: List<Genre>) {
+        updateState { it.copy(allMovieGenres = movies) }
+    }
     private fun loadCastCredit(castId: Int) {
         updateState { it.copy(isNoInternet = false, isLoading = true) }
 
@@ -71,14 +83,14 @@ class CastCreditViewModel @Inject constructor(
                 val genres = it.genreIDs.mapNotNull { id ->
                     state.value.allSeriesGenres.find { g -> g.id == id }?.title
                 }
-                it.toUi().toPoster().copy(genres = genres.joinToString(", "))
+                it.toUi().copy(genres = genres).toPoster()
             }
 
             val moviesPosters = castCredits.movies.map {
                 val genres = it.genresID.mapNotNull { id ->
                     state.value.allMovieGenres.find { g -> g.id == id }?.title
                 }
-                it.toUi().toPoster().copy(genres = genres.joinToString(", "))
+                it.toUi().copy(genres = genres).toPoster()
             }
 
             seriesPosters + moviesPosters
