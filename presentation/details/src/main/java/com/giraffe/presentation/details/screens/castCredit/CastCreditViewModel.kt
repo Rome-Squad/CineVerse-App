@@ -50,13 +50,16 @@ class CastCreditViewModel @Inject constructor(
             onSuccess = ::updateCastCreditPosters,
             onError = ::loadCastCreditError
         ) {
+            val allSeriesGenres = getSeriesGenresByIds(emptyList())
+            val allMoviesGenres = getMoviesGenresByIds(emptyList())
+
             val seriesPosters = castCredits.series.map {
-                val genres = getSeriesGenresByIds(it.genreIDs).map { genre -> genre.title }
+                val genres = it.genreIDs.mapNotNull { id -> allSeriesGenres.find { g -> g.id == id }?.title }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
             val moviesPosters = castCredits.movies.map {
-                val genres = getMoviesGenresByIds(it.genresID).map { genre -> genre.title }
+                val genres = it.genresID.mapNotNull { id -> allMoviesGenres.find { g -> g.id == id }?.title }
                 it.toUi().toPoster().copy(genres = genres.joinToString(", "))
             }
 
