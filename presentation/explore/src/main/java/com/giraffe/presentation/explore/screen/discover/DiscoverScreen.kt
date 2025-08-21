@@ -119,6 +119,7 @@ fun ExploreContent(
                                 genres = listOf(GenreUi(title = stringResource(R.string.all))) + state.selectedGenres,
                                 isGridSelected = state.isGridSelected,
                                 onGenreSelected = interactions::onGenreSelected,
+                                contentPreference = state.contentPreference
                             )
                         }
                     }

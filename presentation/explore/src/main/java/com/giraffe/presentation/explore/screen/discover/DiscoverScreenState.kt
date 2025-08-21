@@ -3,6 +3,7 @@ package com.giraffe.presentation.explore.screen.discover
 import androidx.paging.PagingData
 import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.model.GenreUi
+import com.giraffe.user.entity.ContentPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -11,6 +12,7 @@ data class DiscoverScreenState(
     val selectedMovieGenre: GenreUi? = null,
     val selectedSeriesGenre: GenreUi? = null,
     val selectedGenres: List<GenreUi> = emptyList(),
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
     val moviesGenres: List<GenreUi> = listOf(),
     val seriesGenres: List<GenreUi> = listOf(),
     @Transient

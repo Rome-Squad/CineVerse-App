@@ -47,6 +47,8 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.explore.components.uimodel.Poster
+import com.giraffe.presentation.explore.util.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -54,6 +56,7 @@ fun MediaPoster(
     poster: Poster,
     isGridSelected: Boolean,
     modifier: Modifier = Modifier,
+    contentPreference: ContentPreference,
     onClick: () -> Unit = {},
 ) {
     val density = LocalDensity.current
@@ -137,7 +140,8 @@ fun MediaPoster(
                             bottomEnd = if (isGridSelected) Theme.radius.lg else 0.dp
                         )
                     )
-                    .background(Theme.color.background.card)
+                    .background(Theme.color.background.card),
+                strengthLevel = contentPreference.toStrengthLevel()
             )
 
             Column(
