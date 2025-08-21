@@ -127,7 +127,8 @@ private fun SearchResultContent(
                                 actors = posters,
                                 navigateToCastDetails = { id ->
                                     interactions.onPosterClick(id, SearchTab.ACTORS)
-                                }
+                                },
+                                contentPreference = state.contentPreference
                             )
                         } else {
                             TransitionLazyColumnToGrid(
@@ -136,7 +137,8 @@ private fun SearchResultContent(
                                 isListSelected = !state.isGridSelected,
                                 onPosterClicked = { id ->
                                     interactions.onPosterClick(id, state.selectedTab)
-                                }
+                                },
+                                contentPreference = state.contentPreference
                             )
                         }
                     }

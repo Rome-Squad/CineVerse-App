@@ -198,7 +198,8 @@ private fun SeriesDetailsContent(
                             modifier = Modifier
                                 .background(Theme.color.background.screen)
                                 .padding(top = 16.dp * (1f - animationProgress.value))
-                                .padding(horizontal = 16.dp)
+                                .padding(horizontal = 16.dp),
+                            contentPreference = state.contentPreference
                         )
                     }
                 }
@@ -252,7 +253,8 @@ private fun SeriesDetailsContent(
                                             ?.split("-")
                                             ?.firstOrNull()
                                             ?.toIntOrNull()
-                                    else null
+                                    else null,
+                                    contentPreference = state.contentPreference
                                 )
                             }
                         }
@@ -266,7 +268,8 @@ private fun SeriesDetailsContent(
                             castList = state.cast,
                             onCastClick = interaction::onCastCardClick,
                             modifier = Modifier
-                                .align(Alignment.CenterStart)
+                                .align(Alignment.CenterStart),
+                            contentPreference = state.contentPreference
                         )
                     }
                 }
@@ -297,7 +300,8 @@ private fun SeriesDetailsContent(
                             },
                             onClickPoster = {
                                 interaction.onSeriesPosterClick(it.id)
-                            }
+                            },
+                            contentPreference = state.contentPreference,
                         )
                     }
                 }
@@ -335,7 +339,8 @@ private fun SeriesDetailsContent(
                                     reviewDate = review.createdAt,
                                     reviewerImageUrl = review.authorImageUrl,
                                     reviewerName = review.authorName,
-                                    reviewerUsername = review.authorUserName
+                                    reviewerUsername = review.authorUserName,
+                                    contentPreference = state.contentPreference
                                 )
                             }
                         }

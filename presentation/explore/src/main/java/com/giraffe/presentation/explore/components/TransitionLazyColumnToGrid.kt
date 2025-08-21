@@ -16,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.explore.components.uimodel.Poster
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun TransitionLazyColumnToGrid(
     modifier: Modifier = Modifier,
     posters: LazyPagingItems<Poster>,
     isListSelected: Boolean = false,
+    contentPreference: ContentPreference,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
     onPosterClicked: (Int) -> Unit
@@ -70,7 +72,8 @@ fun TransitionLazyColumnToGrid(
                             fadeInSpec = tween(700, easing = LinearEasing),
                             placementSpec = tween(700, easing = LinearEasing),
                             fadeOutSpec = tween(700, easing = LinearEasing)
-                        )
+                        ),
+                    contentPreference = contentPreference
                 )
             }
         }

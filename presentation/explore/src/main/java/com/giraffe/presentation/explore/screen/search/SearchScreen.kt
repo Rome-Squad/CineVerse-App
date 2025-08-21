@@ -207,7 +207,8 @@ private fun SearchContent(
                         title = stringResource(R.string.you_recent_viewed_history),
                         posters = state.recentPosters,
                         onClickEndText = interactions::clearAllRecentViewedPosters,
-                        onClickPoster = interactions::onClickPoster
+                        onClickPoster = interactions::onClickPoster,
+                        contentPreference = state.contentPreference
                     )
                 }
             }

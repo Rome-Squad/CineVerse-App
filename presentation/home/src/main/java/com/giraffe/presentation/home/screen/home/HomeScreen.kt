@@ -107,7 +107,8 @@ fun HomeContent(
                     .padding(vertical = 16.dp),
                 popularMediaItems = state.popularity,
                 isLoading = state.isLoadingPopularity,
-                onClickItem = interactionListener::onMediaClicked
+                onClickItem = interactionListener::onMediaClicked,
+                contentPreference = state.contentPreference
             )
             ListSection(
                 modifier = Modifier
@@ -124,7 +125,8 @@ fun HomeContent(
                     interactionListener.onSeeMoreClicked(
                         sectionType = CategoryMediaSectionType.RECENTLY_RELEASED
                     )
-                }
+                },
+                contentPreference = state.contentPreference
             )
             AdvertisementSection(
                 modifier = Modifier
@@ -151,7 +153,9 @@ fun HomeContent(
                     interactionListener.onSeeMoreClicked(
                         sectionType = CategoryMediaSectionType.UPCOMING_MOVIES
                     )
-                }
+                },
+                contentPreference = state.contentPreference
+
             )
             AnimatedVisibility(state.isLoadingMatchesYourVibe || state.hasMatchesYourVibeError || state.matchVibes.isNotEmpty()) {
                 ListSection(
@@ -169,7 +173,8 @@ fun HomeContent(
                         interactionListener.onSeeMoreClicked(
                             sectionType = CategoryMediaSectionType.MATCHES_YOUR_VIBES
                         )
-                    }
+                    },
+                    contentPreference = state.contentPreference
                 )
             }
             CollectionListSection(
@@ -192,7 +197,8 @@ fun HomeContent(
                     interactionListener.onSeeMoreClicked(
                         sectionType = CategoryMediaSectionType.TOP_RATED_TV_SHOWS
                     )
-                }
+                },
+                contentPreference = state.contentPreference
             )
             AnimatedVisibility(state.isLoadingRecentlyViewed || state.hasRecentlyViewedError || state.recentlyViewed.isNotEmpty()) {
                 ListSection(
@@ -210,7 +216,8 @@ fun HomeContent(
                         interactionListener.onSeeMoreClicked(
                             sectionType = CategoryMediaSectionType.RECENTLY_VIEWED
                         )
-                    }
+                    },
+                    contentPreference = state.contentPreference
                 )
             }
             AnimatedVisibility(state.yourCollections.isNotEmpty()) {

@@ -48,12 +48,15 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.components.uimodel.Poster
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun MediaPoster(
     poster: Poster,
     isGridSelected: Boolean,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -144,7 +147,8 @@ fun MediaPoster(
                             bottomEnd = if (isGridSelected) Theme.radius.lg else 0.dp
                         )
                     )
-                    .background(Theme.color.background.card)
+                    .background(Theme.color.background.card),
+                strengthLevel = contentPreference.toStrengthLevel()
             )
 
             Column(

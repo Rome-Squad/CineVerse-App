@@ -9,6 +9,7 @@ import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.series.entity.Series
 import com.giraffe.presentation.match.R
+import com.giraffe.user.entity.ContentPreference
 
 data class MatchResultScreenState(
     val matchItems: List<MatchResultModel> = emptyList(),
@@ -19,6 +20,7 @@ data class MatchResultScreenState(
     val isEmptyResults: Boolean = false,
     val isVisibleLoginBottomSheet: Boolean = false,
     val collectionBottomSheet: CollectionBottomSheet? = null,
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
     val collections: List<CollectionUi> = emptyList(),
     val newCollectionName: String = "",
     val genreIds: List<Int> = emptyList(),

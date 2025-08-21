@@ -8,6 +8,7 @@ import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.utils.toSwipeablePoster
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ class CollectionDetailsViewModel @Inject constructor(
     private val getCollectionMoviesUseCase: GetCollectionMoviesUseCase,
     private val removeMovieFromCollectionUseCase: RemoveMovieFromCollectionUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CollectionDetailsScreenState, CollectionDetailsEffect>(
     CollectionDetailsScreenState(
@@ -26,6 +28,7 @@ class CollectionDetailsViewModel @Inject constructor(
 ), CollectionDetailsInteractionListener {
 
     init {
+        observeContentPreference()
         getMoviesGenres()
         getCollectionItems()
     }
@@ -113,5 +116,13 @@ class CollectionDetailsViewModel @Inject constructor(
 
     override fun onStartCollectingClick() {
         sendEffect(CollectionDetailsEffect.NavigateToExplore)
+    }
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
     }
 }

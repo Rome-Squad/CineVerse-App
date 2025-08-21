@@ -14,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.presentation.details.components.uimodel.Poster
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun TransitionBetweenColumnAndVerticalGrid(
     posters: List<Poster>,
     isListSelected: Boolean = false,
+    contentPreference: ContentPreference,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     onPosterClicked: (Int, String) -> Unit
 ) {
@@ -47,8 +49,9 @@ fun TransitionBetweenColumnAndVerticalGrid(
                     .animateItem(
                         fadeInSpec = tween(700, easing = LinearEasing),
                         placementSpec = tween(700, easing = LinearEasing),
-                        fadeOutSpec = tween(700, easing = LinearEasing)
-                    )
+                        fadeOutSpec = tween(700, easing = LinearEasing),
+                    ),
+                contentPreference = contentPreference
             )
         }
     }

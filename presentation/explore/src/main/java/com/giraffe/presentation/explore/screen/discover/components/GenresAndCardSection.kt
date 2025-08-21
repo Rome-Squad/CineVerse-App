@@ -13,6 +13,7 @@ import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.explore.components.TransitionLazyColumnToGrid
 import com.giraffe.presentation.explore.components.uimodel.Poster
 import com.giraffe.presentation.explore.model.GenreUi
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun GenresAndCardsSection(
@@ -20,6 +21,7 @@ fun GenresAndCardsSection(
     posters: LazyPagingItems<Poster>,
     selectedGenre: GenreUi,
     genres: List<GenreUi>,
+    contentPreference: ContentPreference,
     isGridSelected: Boolean,
     onGenreSelected: (GenreUi) -> Unit,
     onPosterClicked: (Int) -> Unit,
@@ -34,6 +36,7 @@ fun GenresAndCardsSection(
             onPosterClicked = onPosterClicked,
             isListSelected = !isGridSelected,
             contentPadding = PaddingValues(vertical = 60.dp, horizontal = 16.dp),
+            contentPreference = contentPreference
         )
         GenresSection(
             modifier = Modifier.padding(top = 12.dp, bottom = 16.dp),

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.scale
+import com.giraffe.imageviewer.model.StrengthLevel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -28,6 +29,7 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         private var interpreterNsfwModelTmdbData: Interpreter? = null
 
         val cachedImages = ConcurrentHashMap<String, Boolean>()
+        private var currentStrengthLevel: StrengthLevel? = null
 
         private fun getInterpreterNsfwModel(
             context: Context,
@@ -119,16 +121,30 @@ class SafeIslamicImageClassifierImpl @Inject constructor(
         return buffer
     }
 
-    override suspend fun isUnsafe(bitmap: Bitmap, imageUrl: String): Boolean {
+    override suspend fun isUnsafe(
+        bitmap: Bitmap,
+        imageUrl: String,
+        strengthLevel: StrengthLevel
+    ): Boolean {
+        if (currentStrengthLevel != strengthLevel) {
+            cachedImages.clear()
+            currentStrengthLevel = strengthLevel
+        }
+
         return getResultFromCache(imageUrl) ?: withContext(Dispatchers.Default) {
             val unsafeScore = classify(bitmap)
-            val isSafe = unsafeScore > 0.35f  // Threshold
-            cachedImages[imageUrl] = isSafe
-            isSafe
+            val isUnsafe = when (strengthLevel) {
+                StrengthLevel.HIDE_EXPLICIT -> unsafeScore > 0.35f
+                StrengthLevel.STRICT -> unsafeScore > 0.1f
+                StrengthLevel.SHOW_ALL -> false
+            }
+            cachedImages[imageUrl] = isUnsafe
+            isUnsafe
         }
     }
 
-    override fun getResultFromCache(imageUrl: String): Boolean? {
-        return cachedImages[imageUrl]
+
+    override fun getResultFromCache(cacheKey: String): Boolean? {
+        return cachedImages[cacheKey]
     }
 }

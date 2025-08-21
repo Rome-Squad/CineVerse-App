@@ -28,6 +28,8 @@ import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
+import com.giraffe.match.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 import kotlin.math.abs
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -37,6 +39,7 @@ fun HeroCarousel(
     items: List<String>,
     contentPadding: PaddingValues = PaddingValues(horizontal = 48.dp),
     onPageChanged: (Int) -> Unit = {},
+    contentPreference: ContentPreference,
     onItemClick: (Int) -> Unit = {}
 ) {
     if (items.isEmpty()) return
@@ -89,7 +92,8 @@ fun HeroCarousel(
                     .align(Alignment.TopCenter)
                     .clickable { onItemClick(pageIndex) },
                 imageUrl = imageId,
-                isSelected = isSelected
+                isSelected = isSelected,
+                contentPreference = contentPreference
             )
         }
     }
@@ -99,6 +103,7 @@ fun HeroCarousel(
 private fun CarouselItemContent(
     modifier: Modifier = Modifier,
     imageUrl: String,
+    contentPreference: ContentPreference,
     isSelected: Boolean
 ) {
     Box(
@@ -118,7 +123,8 @@ private fun CarouselItemContent(
             placeholderModifier = Modifier
                 .background(Theme.color.background.card)
                 .height(88.dp)
-                .width(64.dp)
+                .width(64.dp),
+            strengthLevel = contentPreference.toStrengthLevel()
         )
 
         if (!isSelected) {

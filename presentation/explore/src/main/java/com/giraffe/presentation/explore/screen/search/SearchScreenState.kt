@@ -1,12 +1,14 @@
 package com.giraffe.presentation.explore.screen.search
 
 import com.giraffe.presentation.explore.components.uimodel.Poster
+import com.giraffe.user.entity.ContentPreference
 
 data class SearchScreenState(
     val query: String = "",
     val keywords: List<String> = emptyList(),
     val recentKeywords: List<String> = emptyList(),
     val recentPosters: List<Poster> = emptyList(),
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
     val isVoiceRecording: Boolean = false,
     val isPermissionGranted: Boolean = false,
     val isNoInternet: Boolean = false,

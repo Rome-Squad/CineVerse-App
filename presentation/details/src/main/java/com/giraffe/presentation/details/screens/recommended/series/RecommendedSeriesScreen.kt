@@ -77,7 +77,8 @@ private fun RecommendedSeriesContent(
             TransitionLazyColumnToGridPoster(
                 lazyPagingItems = lazyPagingItems,
                 isListSelected = !isGridSelected,
-                onItemClick = interaction::onSeriesClick
+                onItemClick = interaction::onSeriesClick,
+                contentPreference = state.contentPreference
             )
 
             ViewToggle(

@@ -27,6 +27,8 @@ import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.model.CastUi
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 
 @Composable
@@ -34,6 +36,7 @@ fun StarCastSection(
     title: String,
     onCastClick: (personId: Int) -> Unit,
     castList: List<CastUi>,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier,
 ) {
     val sizeOfChunkedList = if (castList.size > 2) 2 else 1
@@ -62,6 +65,7 @@ fun StarCastSection(
                                 actorName = cast.name,
                                 character = cast.role,
                                 actorImage = cast.urlImage.toString(),
+                                contentPreference = contentPreference,
                                 modifier = Modifier
                                     .clip(shape = RoundedCornerShape(Theme.radius.lg))
                                     .clickable(
@@ -81,6 +85,7 @@ fun CastCard(
     actorName: String,
     character: String,
     actorImage: String,
+    contentPreference: ContentPreference,
     modifier: Modifier = Modifier
 ) {
     CustomCard(
@@ -116,7 +121,8 @@ fun CastCard(
                             topEnd = Theme.radius.lg,
                             bottomEnd = Theme.radius.lg
                         )
-                    )
+                    ),
+                strengthLevel = contentPreference.toStrengthLevel()
 
             )
 

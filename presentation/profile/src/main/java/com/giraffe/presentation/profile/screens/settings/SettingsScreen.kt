@@ -101,7 +101,8 @@ private fun SettingsContent(
                 } else {
                     interaction.onLoginClick()
                 }
-            }
+            },
+            contentPreference = state.contentPreference
         )
         ProfileShortcuts(
             modifier = Modifier

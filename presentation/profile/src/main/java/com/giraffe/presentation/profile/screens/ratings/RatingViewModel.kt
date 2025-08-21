@@ -13,6 +13,7 @@ import com.giraffe.presentation.profile.base.BaseViewModel
 import com.giraffe.presentation.profile.model.RatedPoster
 import com.giraffe.presentation.profile.uimodel.Poster
 import com.giraffe.presentation.profile.utils.toRatedPoster
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -25,11 +26,13 @@ class RatingViewModel @Inject constructor(
     private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
     private val deleteMovieRatingUseCase: DeleteMovieRatingUseCase,
     private val deleteSeriesRatingUseCase: DeleteSeriesRatingUseCase,
-    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase
+    private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
 ) : BaseViewModel<RatingScreenState, RatingEffect>(RatingScreenState()),
     RatingInteractionListener {
 
     init {
+        observeContentPreference()
         checkLoginStatus()
     }
 
@@ -163,7 +166,14 @@ class RatingViewModel @Inject constructor(
             deleteMovieRatingUseCase(ratedPoster.poster.id)
         }
     }
-
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
+    }
     private fun onDeleteMovieRatingSuccess(ratedPoster: RatedPoster) {
         (state.value.moviesPosters - ratedPoster).let { moviesPosters ->
             updateState {

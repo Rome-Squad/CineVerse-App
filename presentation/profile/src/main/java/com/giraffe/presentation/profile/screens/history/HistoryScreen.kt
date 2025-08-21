@@ -133,7 +133,8 @@ private fun HistoryContent(
                                             it
                                         )
                                     }
-                                }
+                                },
+                                contentPreference = state.contentPreference
                             )
                         }
                     }

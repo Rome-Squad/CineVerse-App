@@ -11,11 +11,13 @@ import com.giraffe.presentation.profile.components.DeleteButton
 import com.giraffe.presentation.profile.components.PosterItemHorizontal
 import com.giraffe.presentation.profile.components.SwipableItem
 import com.giraffe.presentation.profile.model.RatedPoster
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun RatedItem(
     modifier: Modifier = Modifier,
     ratedPoster: RatedPoster,
+    contentPreference: ContentPreference,
     onItemClick: (RatedPoster) -> Unit = {},
     onDeleteClick: (RatedPoster) -> Unit = {}
 ) {
@@ -38,7 +40,8 @@ fun RatedItem(
             PosterItemHorizontal(
                 modifier = modifier.fillMaxWidth(),
                 movie = ratedPoster.poster,
-                onClickPoster = { onItemClick(ratedPoster) }
+                onClickPoster = { onItemClick(ratedPoster) },
+                contentPreference = contentPreference
             )
         }
     }

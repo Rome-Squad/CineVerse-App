@@ -17,11 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PosterMedia
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun TransitionLazyColumnToGrid(
     posters: LazyPagingItems<PosterMedia>,
     isListSelected: Boolean = false,
+    contentPreference: ContentPreference,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     onScroll: (isScrollingUp: Boolean) -> Unit = {},
     onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
@@ -35,7 +37,8 @@ fun TransitionLazyColumnToGrid(
         gridState = gridState,
         contentPadding = contentPadding,
         isListSelected = isListSelected,
-        onClickItem = onClickItem
+        onClickItem = onClickItem,
+        contentPreference = contentPreference
     )
 }
 
@@ -45,6 +48,7 @@ private fun PosterGridView(
     gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
     contentPadding: PaddingValues,
     isListSelected: Boolean,
+    contentPreference: ContentPreference,
     onClickItem: (id: Int, mediaType: MediaType) -> Unit
 ) {
     LazyVerticalGrid(
@@ -70,7 +74,9 @@ private fun PosterGridView(
                             fadeInSpec = tween(700, easing = LinearEasing),
                             placementSpec = tween(700, easing = LinearEasing),
                             fadeOutSpec = tween(700, easing = LinearEasing)
-                        )
+                        ),
+                    contentPreference = contentPreference
+
                 )
             }
         }

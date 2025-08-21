@@ -214,7 +214,8 @@ fun CastDetailsContent(
                             animationProgress = animationProgress.value,
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
-                                .padding(top = 72.dp - 72.dp * animationProgress.value)
+                                .padding(top = 72.dp - 72.dp * animationProgress.value),
+                            contentPreference = state.contentPreference
                         )
 
                         AnimatedVisibility(
@@ -249,7 +250,8 @@ fun CastDetailsContent(
                                 state.actorId,
                                 state.actorName
                             )
-                        }
+                        },
+                        contentPreference = state.contentPreference
                     )
                 }
 
@@ -260,7 +262,8 @@ fun CastDetailsContent(
                             .fillMaxWidth()
                             .padding(horizontal = padding16),
                         imageUrls = state.actorGalleryImageUrls,
-                        onShowMoreClick = interaction::onShowMoreGalleryTextClick
+                        onShowMoreClick = interaction::onShowMoreGalleryTextClick,
+                        contentPreference = state.contentPreference
                     )
                 }
 

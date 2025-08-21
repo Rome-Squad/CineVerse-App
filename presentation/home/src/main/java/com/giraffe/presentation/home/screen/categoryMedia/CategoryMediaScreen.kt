@@ -96,6 +96,7 @@ fun CategoryMediaContent(
                         posters = lazyMediaPosters,
                         isListSelected = state.isListSelected,
                         onClickItem = interactionListener::onMediaClicked,
+                        contentPreference = state.contentPreference,
                     )
                 }
 

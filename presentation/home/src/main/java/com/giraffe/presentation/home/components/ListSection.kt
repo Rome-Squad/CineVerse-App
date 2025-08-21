@@ -21,9 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
@@ -37,6 +37,8 @@ import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.Poster
 import com.giraffe.presentation.home.utils.shimmerEffect
+import com.giraffe.presentation.home.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun ListSection(
@@ -49,8 +51,10 @@ fun ListSection(
     hasError: Boolean = false,
     onRetry: () -> Unit = {},
     onClickEndText: () -> Unit = {},
-    onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> }
-) {
+    onClickItem: (id: Int, mediaType: MediaType) -> Unit = { _, _ -> },
+    contentPreference: ContentPreference,
+
+    ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -121,7 +125,8 @@ fun ListSection(
                     HomeItemVertically(
                         item = uiModel,
                         modifier = Modifier.width(136.dp),
-                        onClick = onClickItem
+                        onClick = onClickItem,
+                        contentPreference = contentPreference
                     )
                 }
             }
@@ -133,8 +138,10 @@ fun ListSection(
 fun HomeItemVertically(
     item: Poster,
     modifier: Modifier = Modifier,
-    onClick: (id: Int, type: MediaType) -> Unit
-) {
+    onClick: (id: Int, type: MediaType) -> Unit,
+    contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
+
+    ) {
     Column(
         modifier = modifier
             .clickable(
@@ -155,6 +162,7 @@ fun HomeItemVertically(
                 contentDescription = item.title,
                 placeHolderTint = Theme.color.brand.secondary,
                 placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
+                strengthLevel = contentPreference.toStrengthLevel(),
                 placeholderModifier = Modifier
                     .background(Theme.color.background.card)
                     .fillMaxSize()

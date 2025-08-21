@@ -179,7 +179,8 @@ private fun MatchResultContent(
                                 MediaType.SERIES -> navigateToSeriesDetailsScreen(it.id)
                             }
                         }
-                    }
+                    },
+                    contentPreference = state.contentPreference
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

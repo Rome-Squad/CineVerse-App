@@ -15,6 +15,7 @@ import com.giraffe.presentation.details.utils.toFormattedDateBornOn
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toSocialMediaUi
 import com.giraffe.presentation.details.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.giraffe.user.exception.NoInternetException as UserNoInternetException
@@ -24,7 +25,8 @@ class CastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getCastDetailsUseCase: GetCastDetailsUseCase,
     private val getCastCreditsUseCase: GetCastCreditsUseCase,
-    private val storeRecentSeriesUseCase: AddCastToRecentCastUseCase
+    private val storeRecentSeriesUseCase: AddCastToRecentCastUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase
 ) : BaseViewModel<CastDetailsUiState, CastDetailsEffect>(
     CastDetailsUiState(
         actorId = savedStateHandle.toRoute<CastDetailsRoute>().id
@@ -33,6 +35,7 @@ class CastDetailsViewModel @Inject constructor(
     CastDetailsInteractionListener {
 
     init {
+        observeContentPreference()
         getCastDetailsAndCredits(state.value.actorId)
     }
 
@@ -144,5 +147,13 @@ class CastDetailsViewModel @Inject constructor(
 
     override fun onRetryClick() {
         getCastDetailsAndCredits(state.value.actorId)
+    }
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
+        )
     }
 }

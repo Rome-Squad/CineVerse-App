@@ -192,7 +192,8 @@ private fun MovieDetailsContent(
                             modifier = Modifier
                                 .background(Theme.color.background.screen)
                                 .padding(horizontal = 16.dp)
-                                .padding(top = 16.dp * (1f - animationProgress.value))
+                                .padding(top = 16.dp * (1f - animationProgress.value)),
+                            contentPreference = state.contentPreference,
                         )
                     }
                 }
@@ -216,7 +217,8 @@ private fun MovieDetailsContent(
                             onCastClick = { interaction.onCastCardClick(it) },
                             castList = state.cast,
                             modifier = Modifier
-                                .align(Alignment.CenterStart)
+                                .align(Alignment.CenterStart),
+                            contentPreference = state.contentPreference
                         )
                     }
                 }
@@ -245,7 +247,8 @@ private fun MovieDetailsContent(
                                     state.movie.name
                                 )
                             },
-                            onClickPoster = { interaction.onMoviePosterClick(it.id) }
+                            onClickPoster = { interaction.onMoviePosterClick(it.id) },
+                            contentPreference = state.contentPreference,
                         )
                     }
                 }
@@ -285,7 +288,8 @@ private fun MovieDetailsContent(
                                     reviewDate = review.createdAt,
                                     reviewerImageUrl = review.authorImageUrl,
                                     reviewerName = review.authorName,
-                                    reviewerUsername = review.authorUserName
+                                    reviewerUsername = review.authorUserName,
+                                    contentPreference = state.contentPreference,
                                 )
                             }
                         }

@@ -25,12 +25,15 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.components.uimodel.Poster
+import com.giraffe.presentation.details.utils.toStrengthLevel
+import com.giraffe.user.entity.ContentPreference
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun PosterItemVertically(
     poster: Poster,
     modifier: Modifier = Modifier,
+    contentPreference: ContentPreference,
     onClickPoster: () -> Unit = {}
 ) {
     Column(
@@ -55,7 +58,8 @@ fun PosterItemVertically(
                 placeHolderTint = Theme.color.brand.secondary,
                 placeholderModifier = Modifier
                     .background(Theme.color.background.card)
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                strengthLevel = contentPreference.toStrengthLevel()
             )
 
             if (poster.rating > 0f) {
@@ -92,7 +96,8 @@ private fun Preview() {
                 imageUrl = "https://m.media-amazon.com/images/M/MV5BZDU4MGExZGEtMWRlMC00NjRhLThhZGQtMGIxMDFlNjE5MWVlXkEyXkFqcGc@._V1_QL75_UX169_.jpg",
                 rating = 0f,
             ),
-            modifier = Modifier.width(156.dp)
+            modifier = Modifier.width(156.dp),
+            contentPreference = ContentPreference.HIDE_EXPLICIT
         )
     }
 }

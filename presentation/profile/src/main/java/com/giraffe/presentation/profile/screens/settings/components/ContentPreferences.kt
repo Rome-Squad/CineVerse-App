@@ -65,15 +65,6 @@ fun ContentPreferences(
             }
         )
 
-        ContentPreferenceItem(
-            isSelected = currentPreference == ContentPreference.SHOW_ALL,
-            icon = painterResource(id = Theme.icons.dueTone.eye),
-            title = stringResource(R.string.show_all_content),
-            caption = stringResource(R.string.no_filtering_all_images_will_be_displayed),
-            onClick = {
-                onPreferenceSelected(ContentPreference.SHOW_ALL)
-            }
-        )
     }
 }
 

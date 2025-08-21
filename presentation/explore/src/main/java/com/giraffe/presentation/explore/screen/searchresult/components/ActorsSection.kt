@@ -9,11 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.explore.components.uimodel.Poster
+import com.giraffe.user.entity.ContentPreference
 
 @Composable
 fun ActorsSection(
     modifier: Modifier = Modifier,
     actors: LazyPagingItems<Poster>,
+    contentPreference: ContentPreference,
     navigateToCastDetails: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -29,7 +31,8 @@ fun ActorsSection(
                 imageUrl = actors[actorIndex]?.imageUrl.toString(),
                 onClick = {
                     navigateToCastDetails(actors[actorIndex]?.id ?: 0)
-                }
+                },
+                contentPreference = contentPreference
             )
         }
     }

@@ -7,6 +7,7 @@ import com.giraffe.presentation.details.model.CastUi
 import com.giraffe.presentation.details.model.ReviewUI
 import com.giraffe.presentation.details.model.SeasonUi
 import com.giraffe.presentation.details.model.SeriesUi
+import com.giraffe.user.entity.ContentPreference
 
 data class SeriesDetailsScreenState(
     val seriesUi: SeriesUi = SeriesUi(),
@@ -17,6 +18,7 @@ data class SeriesDetailsScreenState(
     val recommendedSeries: List<Poster> = emptyList(),
     val seriesReviews: List<ReviewUI> = emptyList(),
     val currentRating: Int = 0,
+    val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
 
     val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,

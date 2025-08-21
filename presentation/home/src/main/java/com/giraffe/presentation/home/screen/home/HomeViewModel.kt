@@ -25,6 +25,7 @@ import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSection
 import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
+import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import com.giraffe.user.usecase.GetUserNameUseCase
 import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,11 +47,13 @@ class HomeViewModel @Inject constructor(
     private val getUserNameUseCase: GetUserNameUseCase,
     private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
-    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase
 ) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
     init {
+        observeContentPreference()
         getUserName()
         getMoviesGenres()
         getSeriesGenres()
@@ -409,6 +412,14 @@ class HomeViewModel @Inject constructor(
             HomeEffect.NavigateToCategoryMediaSection(
                 sectionType = sectionType
             )
+        )
+    }
+    private fun observeContentPreference() {
+        safeCollect(
+            onEmitNewValue = { preference ->
+                updateState { it.copy(contentPreference = preference) }
+            },
+            block = getContentPreferenceUseCase::invoke
         )
     }
 }
