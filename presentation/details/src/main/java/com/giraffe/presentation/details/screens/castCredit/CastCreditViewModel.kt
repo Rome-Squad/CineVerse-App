@@ -49,6 +49,7 @@ class CastCreditViewModel @Inject constructor(
             val series = getSeriesGenresByIds(emptyList())
             val movies = getMoviesGenresByIds(emptyList())
             series to movies
+        }
     }
 
     private fun loadCastCredit(castId: Int) {
