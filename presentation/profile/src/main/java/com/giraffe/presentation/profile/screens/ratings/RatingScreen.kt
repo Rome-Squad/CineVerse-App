@@ -7,8 +7,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -103,14 +104,19 @@ private fun RatingContent(
                 )
             }
         } else {
-            LazyColumn(
+            LazyVerticalGrid(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(12.dp),
+                columns = GridCells.Adaptive(minSize = 328.dp),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(state.selectedPosters, key = { it.poster.id }) {
+                items(
+                    items = state.selectedPosters,
+                    key = { it.poster.id }
+                ) { ratedPoster ->
                     RatedItem(
-                        ratedPoster = it,
+                        ratedPoster = ratedPoster,
                         onItemClick = interaction::onPosterClick,
                         onDeleteClick = interaction::onDeleteRatedPosterClick
                     )

@@ -3,12 +3,15 @@ package com.giraffe.presentation.profile.screens.history
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -87,30 +90,32 @@ private fun HistoryContent(
                     onClickPrimaryButton = { interaction.navigateToExploreScreen() },
                 )
             } else {
-                LazyColumn(
+
+                LazyVerticalGrid(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .background(Theme.color.background.screen)
                         .fillMaxSize()
-                        .systemBarsPadding()
-                        .padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .systemBarsPadding(),
+                    columns = GridCells.Adaptive(minSize = 328.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(all = 16.dp)
                 ) {
                     if (state.isTipVisible) {
-                        item {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
                             InfoCard(
-                                description = stringResource(
-                                    id = R.string.screen_info
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth(),
+                                description = stringResource(id = R.string.screen_info),
+                                modifier = Modifier.fillMaxWidth(),
                                 onClosedClick = interaction::onCloseClicked
                             )
-
                         }
                     }
-                    items(state.mediaList, key = { poster -> poster.id }) { poster ->
+
+                    items(
+                        items = state.mediaList,
+                        key = { poster -> poster.id }
+                    ) { poster ->
                         SwipableItem(
                             actionButton = {
                                 DeleteButton(
@@ -128,10 +133,7 @@ private fun HistoryContent(
                                 movie = poster,
                                 onClickPoster = {
                                     poster.mediaTypeOfPoster?.let {
-                                        interaction.onMediaClicked(
-                                            poster.id,
-                                            it
-                                        )
+                                        interaction.onMediaClicked(poster.id, it)
                                     }
                                 }
                             )
