@@ -1,14 +1,7 @@
 package com.giraffe.presentation.authentication.screens.onboarding.composable
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,62 +9,36 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.giraffe.presentation.authentication.screens.onboarding.screen.OnboardingInteractionListener
 import com.giraffe.designsystem.composable.custom.Icon
 import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.authentication.R
+import com.giraffe.presentation.authentication.screens.onboarding.screen.OnboardingInteractionListener
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun NavigationButtons(
-    pagerState: PagerState,
+    imagePagerState: PagerState,
+    textPagerState: PagerState,
     isFirstPage: Boolean,
     isLastPage: Boolean,
-    direction: Int,
     interaction: OnboardingInteractionListener
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val buttonTargetWidth = if (isLastPage) 145.dp else 48.dp
-    val animatedWidth by animateDpAsState(
-        targetValue = buttonTargetWidth,
-        animationSpec = tween(durationMillis = 300),
-        label = stringResource(R.string.animatedwidth)
-    )
-    val animatedButtonOffsetX = remember { Animatable(0f) }
-    LaunchedEffect(isLastPage, pagerState.currentPage) {
-        if (isLastPage) {
-            animatedButtonOffsetX.snapTo(if (direction > 0) 40f else -40f)
-            animatedButtonOffsetX.animateTo(
-                targetValue = 0f,
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            )
-        } else {
-            animatedButtonOffsetX.snapTo(0f)
-        }
-    }
 
     Row(
         modifier = Modifier
@@ -87,7 +54,23 @@ fun NavigationButtons(
                     .background(Theme.color.button.secondary)
                     .clickable {
                         coroutineScope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                            imagePagerState.animateScrollToPage(
+                                page = imagePagerState.currentPage - 1,
+                                animationSpec = spring(
+                                    dampingRatio = 0.85f,
+                                    stiffness = 100f
+                                )
+                            )
+                        }
+
+                        coroutineScope.launch {
+                            textPagerState.animateScrollToPage(
+                                page = textPagerState.currentPage - 1,
+                                animationSpec = spring(
+                                    dampingRatio = 0.85f,
+                                    stiffness = 100f
+                                )
+                            )
                         }
                     },
                 contentAlignment = Alignment.Center
@@ -102,54 +85,66 @@ fun NavigationButtons(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Box(
+        Row(
             modifier = Modifier
-                .height(48.dp)
-                .width(animatedWidth)
-                .graphicsLayer { translationX = animatedButtonOffsetX.value }
                 .clip(RoundedCornerShape(12.dp))
                 .background(Theme.color.button.primary)
+                .padding(vertical = 14.dp)
+                .animateContentSize(
+                    animationSpec = spring(dampingRatio = 0.85f, stiffness = 100f),
+                    alignment = Alignment.TopEnd
+                )
+                .width(if (isLastPage) 145.dp else 48.dp)
                 .clickable {
                     coroutineScope.launch {
                         if (!isLastPage) {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            imagePagerState.animateScrollToPage(
+                                page = imagePagerState.currentPage + 1,
+                                animationSpec = spring(
+                                    dampingRatio = 0.85f,
+                                    stiffness = 100f
+                                )
+                            )
+                        } else {
+                            interaction.markOnboardingComplete()
+                        }
+                    }
+
+                    coroutineScope.launch {
+                        if (!isLastPage) {
+                            textPagerState.animateScrollToPage(
+                                page = textPagerState.currentPage + 1,
+                                animationSpec = spring(
+                                    dampingRatio = 0.85f,
+                                    stiffness = 100f
+                                )
+                            )
                         } else {
                             interaction.markOnboardingComplete()
                         }
                     }
                 },
-            contentAlignment = Alignment.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            AnimatedContent(
-                targetState = isLastPage,
-                transitionSpec = {
-                    fadeIn(tween(300, delayMillis = 90)).togetherWith(fadeOut(tween(90)))
-                },
-                label = stringResource(R.string.nextorgetstarted)
-            ) { showText ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    if (showText) {
-                        Text(
-                            text = stringResource(R.string.get_started),
-                            style = Theme.textStyle.body.md.medium,
-                            color = Theme.color.background.screen,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                    }
-
-                    Icon(
-                        painter = painterResource(id = Theme.icons.outline.altArrowRight),
-                        contentDescription = if (showText)
-                            stringResource(R.string.get_started)
-                        else
-                            stringResource(R.string.next),
-                        tint = Theme.color.background.screen
-                    )
-                }
+            if (isLastPage) {
+                Text(
+                    text = stringResource(R.string.get_started),
+                    style = Theme.textStyle.body.md.medium,
+                    color = Theme.color.background.screen,
+                    maxLines = 1,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
             }
+
+            Icon(
+                painter = painterResource(id = Theme.icons.outline.altArrowRight),
+                contentDescription = if (isLastPage)
+                    stringResource(R.string.get_started)
+                else
+                    stringResource(R.string.next),
+                tint = Theme.color.background.screen
+            )
         }
     }
 }

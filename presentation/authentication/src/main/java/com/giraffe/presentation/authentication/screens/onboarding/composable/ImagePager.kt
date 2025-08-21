@@ -3,7 +3,6 @@ package com.giraffe.presentation.authentication.screens.onboarding.composable
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -23,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -34,7 +35,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
-import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.authentication.R
 import kotlin.math.absoluteValue
 
@@ -43,14 +43,25 @@ import kotlin.math.absoluteValue
 fun ImagePager(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    images: List<Int>,
+    images: List<Int>
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
     val horizontalPadding = screenWidthDp * 0.1f
+    val glow = remember {
+        listOf(
+            Color(0x3D8C9EFF),
+            Color(0x008C9EFF),
+            Color(0x008C9EFF),
+            Color(0x388C9EFF)
+        )
+    }
+
 
     HorizontalPager(
         state = pagerState,
+        userScrollEnabled = false,
+        beyondViewportPageCount = pagerState.pageCount,
         pageSpacing = 24.dp,
         contentPadding = PaddingValues(horizontal = horizontalPadding),
         modifier = modifier
@@ -69,8 +80,8 @@ fun ImagePager(
         val animatedRotationZ by animateFloatAsState(
             targetValue = rotationZ,
             animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
+                dampingRatio = 0.85f,
+                stiffness = 100f
             ),
             label = stringResource(R.string.rotationanim)
         )
@@ -83,7 +94,8 @@ fun ImagePager(
             pageIndexDiff = pageIndexDiff
         )
         val configuration = LocalConfiguration.current
-        val isPortrait = configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
+        val isPortrait =
+            configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
 
         val imageAspectRatio = if (isPortrait) 3f / 4.5f else 16f / 9f
 
@@ -106,7 +118,7 @@ fun ImagePager(
                     .clip(shape)
                     .border(
                         width = 1.dp,
-                        brush = Theme.color.stroke.glow,
+                        brush = Brush.verticalGradient(glow),
                         shape = shape
                     )
             )

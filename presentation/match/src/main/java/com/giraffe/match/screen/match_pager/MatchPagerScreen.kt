@@ -2,6 +2,7 @@ package com.giraffe.match.screen.match_pager
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,11 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.giraffe.designsystem.composable.AppBar
 import com.giraffe.designsystem.composable.button_type.PrimaryButton
 import com.giraffe.designsystem.composable.custom.Text
+import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.components.ProgressIndicator
 import com.giraffe.match.composable.PageWithIconsSingleSelection
@@ -55,13 +60,11 @@ data class SelectionOption(
 
 @Composable
 fun MatchPagerScreen(
-    modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onFinish: (selectedGenres: List<Int>, moodSelections: List<Int>, timeSelection: Int?, releasePeriodSelection: String?) -> Unit = { _, _, _, _ -> },
     viewModel: MatchPagerViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = state.currentPage, pageCount = { 4 })
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -111,14 +114,49 @@ fun MatchPagerScreen(
             state.currentPage == pagerState.pageCount - 1 && !state.isLoading
         ) {
             viewModel.updateLoadingState(true)
-            kotlinx.coroutines.delay(500)
+            delay(500)
             viewModel.onNextClicked()
         }
     }
 
+    MatchPagerContent(
+        state = state,
+        pagerState = pagerState,
+        scrollState = scrollState,
+        moodOptions = moodOptions,
+
+        onBackClicked = viewModel::onBackClicked,
+        onNextClicked = viewModel::onNextClicked,
+        updateMoodSelections = viewModel::updateMoodSelections,
+        updateGenreSelections = viewModel::updateGenreSelections,
+        updateTimeSelection = viewModel::updateTimeSelection,
+        updateRecencySelection = viewModel::updateRecencySelection,
+        isPageEnabled = viewModel::isPageEnabled,
+        timeOptions = timeOptions,
+        releasePeriodOptions = releasePeriodOptions
+    )
+}
+
+@Composable
+private fun MatchPagerContent(
+    state: MatchScreenState,
+    pagerState: PagerState,
+    scrollState: ScrollState,
+    moodOptions: List<SelectionOption>,
+    timeOptions: List<SelectionOption>,
+    releasePeriodOptions: List<SelectionOption>,
+    onBackClicked: () -> Unit,
+    onNextClicked: () -> Unit,
+    updateMoodSelections: (List<Int>) -> Unit,
+    updateGenreSelections: (List<Int>) -> Unit,
+    updateTimeSelection: (Int) -> Unit,
+    updateRecencySelection: (Int) -> Unit,
+    isPageEnabled: (MatchScreenState) -> Boolean
+) {
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.background.screen)
             .statusBarsPadding()
@@ -126,7 +164,7 @@ fun MatchPagerScreen(
     ) {
         AppBar(
             showBackButton = true,
-            onBackButtonClick = viewModel::onBackClicked
+            onBackButtonClick = onBackClicked
         )
 
         ProgressIndicator(
@@ -163,7 +201,7 @@ fun MatchPagerScreen(
                                     SelectionPageWithIcons(
                                         options = moodOptions,
                                         selectedItems = state.moodSelections,
-                                        onSelectionChange = viewModel::updateMoodSelections
+                                        onSelectionChange = updateMoodSelections
                                     )
                                 }
                             }
@@ -185,7 +223,7 @@ fun MatchPagerScreen(
                                     PageWithMultiSelectionTextOnly(
                                         options = state.genreOptions,
                                         selectedItems = state.genreSelections,
-                                        onSelectionChange = viewModel::updateGenreSelections
+                                        onSelectionChange = updateGenreSelections
                                     )
                                 }
                             }
@@ -219,7 +257,7 @@ fun MatchPagerScreen(
                                     PageWithIconsSingleSelection(
                                         options = timeOptions,
                                         selectedItem = state.timeSelection,
-                                        onSelectionChange = viewModel::updateTimeSelection
+                                        onSelectionChange = updateTimeSelection
                                     )
                                 }
                             }
@@ -266,7 +304,7 @@ fun MatchPagerScreen(
                                         options = releasePeriodOptions,
                                         selectedItem = state.releasePeriodSelection,
                                         onSelectionChange = { selectedId ->
-                                            selectedId?.let { viewModel.updateRecencySelection(it) }
+                                            selectedId?.let { updateRecencySelection(it) }
                                         }
                                     )
                                 }
@@ -351,14 +389,38 @@ fun MatchPagerScreen(
                 } else {
                     stringResource(R.string.start_matching)
                 },
-                enabled = viewModel.isPageEnabled(state),
+                enabled = isPageEnabled(state),
                 isLoading = state.isLoading,
                 onClick = {
                     coroutineScope.launch {
-                        viewModel.onNextClicked()
+                        onNextClicked()
                     }
                 }
             )
         }
+    }
+}
+
+
+@PreviewFontScale
+@PreviewScreenSizes
+@Composable
+private fun Preview() {
+    CineVerseTheme {
+        MatchPagerContent(
+            state = MatchScreenState(),
+            pagerState = rememberPagerState() { 0 },
+            scrollState = rememberScrollState(),
+            moodOptions = emptyList(),
+            timeOptions = emptyList(),
+            releasePeriodOptions = emptyList(),
+            onBackClicked = {},
+            onNextClicked = {},
+            updateMoodSelections = {},
+            updateGenreSelections = {},
+            updateTimeSelection = {},
+            updateRecencySelection = {},
+            isPageEnabled = { true }
+        )
     }
 }

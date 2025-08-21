@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.giraffe.designsystem.composable.Progress
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
@@ -26,6 +27,7 @@ fun SecondaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
     enabled: Boolean = true,
     isLoading: Boolean = false,
 ) {
@@ -40,7 +42,7 @@ fun SecondaryButton(
             contentColor = Theme.color.button.onSecondary,
             disabledContentColor = Theme.color.button.onDisabled
         ),
-        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 24.dp),
+        contentPadding = contentPadding,
         modifier = modifier
     ) {
         AnimatedContent(
@@ -57,6 +59,7 @@ fun SecondaryButton(
                 Text(
                     text = text,
                     style = Theme.textStyle.body.md.medium,
+                    lineHeight = 14.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

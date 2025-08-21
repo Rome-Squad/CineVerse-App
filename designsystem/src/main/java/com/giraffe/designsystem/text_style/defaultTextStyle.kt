@@ -66,16 +66,19 @@ val defaultTextStyle = CineVerseTextStyle(
             regular = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.Normal,
+                letterSpacing = 0.sp,
                 fontSize = 14.sp
             ),
             medium = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.Medium,
+                letterSpacing = 0.sp,
                 fontSize = 14.sp
             ),
             semiBold = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.sp,
                 fontSize = 14.sp
             )
         ),
@@ -83,16 +86,19 @@ val defaultTextStyle = CineVerseTextStyle(
             regular = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.Normal,
+                letterSpacing = 0.sp,
                 fontSize = 12.sp
             ),
             medium = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.Medium,
+                letterSpacing = 0.sp,
                 fontSize = 12.sp
             ),
             semiBold = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.sp,
                 fontSize = 12.sp
             )
         )
@@ -102,16 +108,19 @@ val defaultTextStyle = CineVerseTextStyle(
             regular = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.Normal,
+                letterSpacing = 0.sp,
                 fontSize = 12.sp
             ),
             medium = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.Medium,
+                letterSpacing = 0.sp,
                 fontSize = 12.sp
             ),
             semiBold = TextStyle(
                 fontFamily = manropeFontFamily,
                 fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.sp,
                 fontSize = 12.sp
             )
         )
