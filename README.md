@@ -48,7 +48,7 @@
 - Home Screen: Collections of trending movies and TV series
 - Explore Screen: Browse content filtered by genres and categories
 - Match Mode: Answer preference questions to get personalized recommendations
-- Smart Search: Find movies, series, actors, and directors
+- Smart Search: Find movies, series and actors
 - Voice Search: Hands-free search using voice recognition
 
 **👤 User Management**
