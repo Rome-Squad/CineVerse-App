@@ -1,5 +1,6 @@
 package com.giraffe.presentation.home.screen.categoryMedia
 
+import com.giraffe.media.entity.Genre
 import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.screen.categoryMedia.strategy.BasedOnTrueEventsStrategy
@@ -15,7 +16,12 @@ import com.giraffe.presentation.home.screen.categoryMedia.strategy.TopRatedTvSho
 import com.giraffe.presentation.home.screen.categoryMedia.strategy.UpcomingMoviesStrategy
 
 interface CategoryMediaStrategy {
-    suspend fun loadData(page: Int, pageSize: Int): List<PosterMedia>
+    suspend fun loadData(
+        page: Int,
+        pageSize: Int,
+        seriesGenres: List<Genre>,
+        moviesGenres: List<Genre>
+    ): List<PosterMedia>
     fun getSectionType(): CategoryMediaSectionType
 }
 

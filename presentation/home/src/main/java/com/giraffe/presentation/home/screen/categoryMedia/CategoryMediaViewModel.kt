@@ -1,6 +1,7 @@
 package com.giraffe.presentation.home.screen.categoryMedia
 
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -8,6 +9,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
+import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.home.base.BasePagingSource
 import com.giraffe.presentation.home.base.BaseViewModel
 import com.giraffe.presentation.home.model.MediaType
@@ -17,7 +20,9 @@ import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
@@ -25,6 +30,8 @@ import javax.inject.Inject
 class CategoryMediaViewModel @Inject constructor(
     private val categoryMediaFactory: CategoryMediaFactory,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
+    private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
+    private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     stateSavedStateHandle: SavedStateHandle
 ) : BaseViewModel<CategoryMediaScreenState, CategoryMediaEffect>(CategoryMediaScreenState()),
     CategoryMediaInteractionListener {
@@ -51,6 +58,10 @@ class CategoryMediaViewModel @Inject constructor(
             onError = ::onLoadByStrategyFail,
             onSuccess = ::onLoadByStrategySuccess,
         ) {
+            Log.i("hasDataNow", "Started")
+            val seriesCategories = async { observeSeriesGenresUseCase().first() }
+            val moviesSeries = async { observeMoviesGenresUseCase().first() }
+
             val pager = Pager(
                 config = PagingConfig(
                     pageSize = PAGE_SIZE,
@@ -61,10 +72,16 @@ class CategoryMediaViewModel @Inject constructor(
                 BasePagingSource(
                     onError = ::onLoadByStrategyFail
                 ) { page ->
-                    categoryMediaFactory.createStrategy(sectionType).loadData(page, PAGE_SIZE)
+                    categoryMediaFactory.createStrategy(sectionType)
+                        .loadData(
+                            page = page,
+                            pageSize = PAGE_SIZE,
+                            seriesGenres = seriesCategories.await(),
+                            moviesGenres = moviesSeries.await()
+                        )
                         .also {
-
                             updateState { it.copy(isLoading = false) }
+                            Log.i("hasDataNow", "end")
                         }
                 }
             }
