@@ -83,7 +83,7 @@ class SearchResultViewModel @Inject constructor(
     }
 
     override fun changeView(isGrid: Boolean) {
-        updateState { it.copy(isGridSelected = isGrid, isLoading = true, isNoInternet = false) }
+        updateState { it.copy(isGridSelected = isGrid, isLoading = false) }
     }
 
     override fun onRetryClick() {
