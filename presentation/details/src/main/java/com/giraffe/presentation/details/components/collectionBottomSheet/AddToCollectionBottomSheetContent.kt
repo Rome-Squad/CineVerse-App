@@ -27,6 +27,7 @@ fun AddToCollectionBottomSheetContent(
             AddToCollectionItem(
                 title = collection.title,
                 isLoading = collection.isLoading,
+                isChecked = collection.isChecked,
                 onCollectionClicked = { onCollectionClick(collection.id) }
             )
         }

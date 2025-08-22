@@ -8,6 +8,7 @@ interface CollectionsRepository {
 
     fun getCollections(accountId: Int): Flow<List<Collection>>
 
+    suspend fun getCollectionsByMovieId(movieId: Int): List<Collection>
 
     suspend fun getCollectionDetails(collectionId: Int): Collection
 
@@ -23,7 +24,6 @@ interface CollectionsRepository {
     suspend fun removeMovieFromCollection(collectionId: Int, movieId: Int): Boolean
 
     suspend fun getCollectionMovies(collectionId: Int): List<Movie>
-
 
     suspend fun clearCollectionsCache()
 }

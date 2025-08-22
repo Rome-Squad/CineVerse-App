@@ -41,6 +41,12 @@ class CollectionsRepositoryImp @Inject constructor(
             }
     }
 
+    override suspend fun getCollectionsByMovieId(movieId: Int): List<Collection> =
+        safeCall {
+            collectionsRemoteDataSource.getCollectionsByMovieId(movieId)
+                .map(CollectionDto::toEntity)
+        }
+
 
     override suspend fun getCollectionDetails(
         collectionId: Int
@@ -51,10 +57,12 @@ class CollectionsRepositoryImp @Inject constructor(
     override suspend fun addCollection(
         collection: Collection
     ) = safeCall {
-         collectionsRemoteDataSource.addCollection(collection.toDto())
+        collectionsRemoteDataSource.addCollection(collection.toDto())
             .also {
                 it?.let {
-                    collectionsLocalDataSource.insertCollection(collection.copy(id = it).toCacheDto())
+                    collectionsLocalDataSource.insertCollection(
+                        collection.copy(id = it).toCacheDto()
+                    )
                 }
             }
     }

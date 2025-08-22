@@ -14,6 +14,7 @@ import com.giraffe.media.util.NetworkConstants.COLLECTIONS_END_POINT
 import com.giraffe.media.util.NetworkConstants.COLLECTION_END_POINT
 import com.giraffe.media.util.NetworkConstants.COLLECTION_ID_PATH
 import com.giraffe.media.util.NetworkConstants.CONFIRM_CLEAR_COLLECTION
+import com.giraffe.media.util.NetworkConstants.MOVIE_ID
 import com.giraffe.media.util.NetworkConstants.NEEDS_SESSION
 import com.giraffe.media.util.NetworkConstants.REMOVE_MOVIE_FROM_COLLECTION
 import retrofit2.Response
@@ -74,4 +75,9 @@ interface CollectionsApiService {
     suspend fun getCollectionItems(
         @Path(COLLECTION_ID_PATH) collectionId: Int
     ): Response<CollectionItemsResponse>
+
+    @GET("movie/{$MOVIE_ID}/lists")
+    suspend fun getCollectionsByMovieId(
+        @Path(MOVIE_ID) movieId: Int
+    ): Response<CollectionsResponse>
 }
