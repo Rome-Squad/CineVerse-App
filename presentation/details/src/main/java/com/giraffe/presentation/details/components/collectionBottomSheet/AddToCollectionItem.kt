@@ -32,7 +32,8 @@ fun AddToCollectionItem(
     title: String,
     isLoading: Boolean,
     onCollectionClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isChecked: Boolean = false,
 ) {
     Box(
         modifier = Modifier
@@ -63,13 +64,22 @@ fun AddToCollectionItem(
             )
         }
 
-        if (isLoading)
+        if (isLoading) {
             Progress(
                 modifier = Modifier
                     .size(24.dp)
                     .align(Alignment.CenterEnd)
             )
-
+        } else if (isChecked) {
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.CenterEnd),
+                painter = painterResource(R.drawable.correct),
+                contentDescription = "correct",
+                tint = Theme.color.brand.primary
+            )
+        }
 
     }
 }
