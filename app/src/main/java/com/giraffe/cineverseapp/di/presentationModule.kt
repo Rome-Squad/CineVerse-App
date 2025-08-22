@@ -3,7 +3,6 @@ package com.giraffe.cineverseapp.di
 import com.giraffe.media.movie.usecase.GetMoviesByGenreIdsUseCase
 import com.giraffe.media.movie.usecase.GetMoviesByKeywordsIdUseCase
 import com.giraffe.media.movie.usecase.GetMoviesBySortUseCase
-import com.giraffe.media.movie.usecase.genre.GetMoviesGenresByIdsUseCase
 import com.giraffe.media.movie.usecase.matchesYourVibe.GetMatchesYourVibeMoviesUseCase
 import com.giraffe.media.movie.usecase.recentlyReleased.GetRecentlyReleasedMoviesUseCase
 import com.giraffe.media.movie.usecase.recentlyViewed.ObserveRecentlyViewedMoviesUseCase
@@ -11,7 +10,6 @@ import com.giraffe.media.movie.usecase.upcoming.GetUpcomingMoviesUseCase
 import com.giraffe.media.series.usecase.GetSeriesByGenreIdsUseCase
 import com.giraffe.media.series.usecase.GetSeriesByKeywordsIdUseCase
 import com.giraffe.media.series.usecase.GetSeriesBySortUseCase
-import com.giraffe.media.series.usecase.genre.GetSeriesGenresByIdsUseCase
 import com.giraffe.media.series.usecase.matchesYourVibe.GetMatchesYourVibeSeriesUseCase
 import com.giraffe.media.series.usecase.recentlyReleased.GetRecentlyReleasedSeriesUseCase
 import com.giraffe.media.series.usecase.recentlyViewed.ObserveRecentlyViewedSeriesUseCase
@@ -42,134 +40,100 @@ object PresentationModule {
     @Singleton
     fun provideRecentlyReleasedStrategy(
         getRecentlyReleasedMovies: GetRecentlyReleasedMoviesUseCase,
-        getRecentlyReleasedSeries: GetRecentlyReleasedSeriesUseCase,
-        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
-        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
+        getRecentlyReleasedSeries: GetRecentlyReleasedSeriesUseCase
     ): RecentlyReleasedStrategy =
         RecentlyReleasedStrategy(
             getRecentlyReleasedMovies,
-            getRecentlyReleasedSeries,
-            getMovieGenresUseCase,
-            getSeriesGenresUseCase
+            getRecentlyReleasedSeries
         )
 
     @Provides
     @Singleton
     fun provideTopRatedTvShowsStrategy(
         getTopRatedSeries: GetTopRatedSeriesUseCase,
-        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
-    ): TopRatedTvShowsStrategy = TopRatedTvShowsStrategy(getTopRatedSeries, getSeriesGenresUseCase)
+    ): TopRatedTvShowsStrategy = TopRatedTvShowsStrategy(getTopRatedSeries)
 
     @Provides
     @Singleton
     fun provideUpcomingMoviesStrategy(
         getUpcomingMovies: GetUpcomingMoviesUseCase,
-        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
-    ): UpcomingMoviesStrategy = UpcomingMoviesStrategy(getUpcomingMovies, getMovieGenresUseCase)
+    ): UpcomingMoviesStrategy = UpcomingMoviesStrategy(getUpcomingMovies)
 
     @Provides
     @Singleton
     fun provideRecentlyViewedStrategy(
         observeRecentlyViewedMoviesUseCase: ObserveRecentlyViewedMoviesUseCase,
-        observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase,
-        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
-        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
+        observeRecentlyViewedSeriesUseCase: ObserveRecentlyViewedSeriesUseCase
     ): RecentlyViewedStrategy =
         RecentlyViewedStrategy(
             observeRecentlyViewedMoviesUseCase,
-            observeRecentlyViewedSeriesUseCase,
-            getMovieGenresUseCase,
-            getSeriesGenresUseCase
+            observeRecentlyViewedSeriesUseCase
         )
 
     @Provides
     @Singleton
     fun provideMatchesYourVibesStrategy(
         getMatchesYourVibeMovies: GetMatchesYourVibeMoviesUseCase,
-        getMatchesYourVibeSeries: GetMatchesYourVibeSeriesUseCase,
-        getMovieGenresUseCase: GetMoviesGenresByIdsUseCase,
-        getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
+        getMatchesYourVibeSeries: GetMatchesYourVibeSeriesUseCase
     ): MatchesYourVibesStrategy =
         MatchesYourVibesStrategy(
             getMatchesYourVibeMovies,
-            getMatchesYourVibeSeries,
-            getMovieGenresUseCase,
-            getSeriesGenresUseCase
+            getMatchesYourVibeSeries
         )
 
     @Provides
     @Singleton
     fun provideLateNightThrillsStrategy(
         getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
-        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
         getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
-        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
     ): LateNightThrillsStrategy =
         LateNightThrillsStrategy(
             getSeriesByGenresUseCase,
-            getSeriesGenresByIdsUseCase,
-            getMoviesByGenresUseCase,
-            getMoviesGenresByIdsUseCase
+            getMoviesByGenresUseCase
         )
 
     @Provides
     @Singleton
     fun provideFamilyNightPicksStrategy(
         getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
-        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
-        getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
-        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
+        getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase
     ): FamilyNightPicksStrategy =
         FamilyNightPicksStrategy(
             getSeriesByGenresUseCase,
-            getSeriesGenresByIdsUseCase,
-            getMoviesByGenresUseCase,
-            getMoviesGenresByIdsUseCase
+            getMoviesByGenresUseCase
         )
 
     @Provides
     @Singleton
     fun provideMindBendingStoriesStrategy(
         getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
-        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
         getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
-        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
     ): MindBendingStoriesStrategy =
         MindBendingStoriesStrategy(
             getSeriesByGenresUseCase,
-            getSeriesGenresByIdsUseCase,
-            getMoviesByGenresUseCase,
-            getMoviesGenresByIdsUseCase
+            getMoviesByGenresUseCase
         )
 
     @Provides
     @Singleton
     fun provideBasedOnTrueEventsStrategy(
         getSeriesByKeywordsIdUseCase: GetSeriesByKeywordsIdUseCase,
-        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
         getMoviesByKeywordsIdUseCase: GetMoviesByKeywordsIdUseCase,
-        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
     ): BasedOnTrueEventsStrategy =
         BasedOnTrueEventsStrategy(
             getSeriesByKeywordsIdUseCase,
-            getSeriesGenresByIdsUseCase,
             getMoviesByKeywordsIdUseCase,
-            getMoviesGenresByIdsUseCase
         )
 
     @Provides
     @Singleton
     fun provideCinematicMasterpiecesStrategy(
         getSeriesBySortUseCase: GetSeriesBySortUseCase,
-        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
         getMoviesBySortUseCase: GetMoviesBySortUseCase,
-        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
     ): CinematicMasterpiecesStrategy =
         CinematicMasterpiecesStrategy(
             getSeriesBySortUseCase,
-            getSeriesGenresByIdsUseCase,
             getMoviesBySortUseCase,
-            getMoviesGenresByIdsUseCase
         )
 
 
@@ -177,15 +141,11 @@ object PresentationModule {
     @Singleton
     fun provideFeelGoodPreferencesStrategy(
         getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
-        getSeriesGenresByIdsUseCase: GetSeriesGenresByIdsUseCase,
         getMoviesByGenresUseCase: GetMoviesByGenreIdsUseCase,
-        getMoviesGenresByIdsUseCase: GetMoviesGenresByIdsUseCase
     ): FeelGoodPreferencesStrategy =
         FeelGoodPreferencesStrategy(
             getSeriesByGenresUseCase,
-            getSeriesGenresByIdsUseCase,
             getMoviesByGenresUseCase,
-            getMoviesGenresByIdsUseCase
         )
 
     @Provides

@@ -72,7 +72,7 @@ class HomeViewModel @Inject constructor(
                     block = getUserNameUseCase::invoke
                 )
             },
-            block = isLoggedInByAccountUseCase::invoke
+            block = { isLoggedInByAccountUseCase() }
         )
     }
 
