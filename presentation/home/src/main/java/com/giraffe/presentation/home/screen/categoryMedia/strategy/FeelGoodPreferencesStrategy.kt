@@ -8,6 +8,10 @@ import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 
 class FeelGoodPreferencesStrategy(
     private val getSeriesByGenresUseCase: GetSeriesByGenreIdsUseCase,
@@ -19,27 +23,37 @@ class FeelGoodPreferencesStrategy(
         page: Int,
         pageSize: Int
     ): List<PosterMedia> {
-        val genreIdForComedy = 35
-        val genreIdForRomance = 10749
-        val moviesResult =
-            getMoviesByGenresUseCase(
-                page = page,
-                genreIds = listOf(genreIdForComedy, genreIdForRomance)
-            ).map { movie ->
-                movie.toShowMorePoster(
-                    getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                )
+        return withContext(Dispatchers.IO) {
+            val genreIdForComedy = 35
+            val genreIdForRomance = 10749
+            val moviesResult = async {
+                getMoviesByGenresUseCase(
+                    page = page,
+                    genreIds = listOf(genreIdForComedy, genreIdForRomance)
+                ).map { movie ->
+                    async {
+                        movie.toShowMorePoster(
+                            getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                        )
+                    }
+                }
             }
-        val seriesResult =
-            getSeriesByGenresUseCase(
-                page = page,
-                genreIds = listOf(genreIdForComedy, genreIdForRomance)
-            ).map { series ->
-                series.toShowMorePoster(
-                    getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                )
+
+            val seriesResult = async {
+                getSeriesByGenresUseCase(
+                    page = page,
+                    genreIds = listOf(genreIdForComedy, genreIdForRomance)
+                ).map { series ->
+                    async {
+                        series.toShowMorePoster(
+                            getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+                        )
+                    }
+                }
             }
-        return moviesResult + seriesResult
+
+            moviesResult.await().awaitAll() + seriesResult.await().awaitAll()
+        }
     }
 
     override fun getSectionType() = CategoryMediaSectionType.FEEL_GOOD_PREFERENCES

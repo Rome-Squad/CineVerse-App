@@ -69,6 +69,7 @@ fun CategoryMediaContent(
     interactionListener: CategoryMediaInteractionListener,
 ) {
     val lazyMediaPosters = state.mediaFlow.collectAsLazyPagingItems()
+
     ScreenState(
         isLoading = state.isLoading,
         isNoInternet = state.isNoInternet,

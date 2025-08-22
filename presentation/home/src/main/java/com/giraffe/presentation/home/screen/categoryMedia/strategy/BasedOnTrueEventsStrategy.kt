@@ -8,6 +8,10 @@ import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 
 class BasedOnTrueEventsStrategy(
     private val getSeriesByKeywordsIdUseCase: GetSeriesByKeywordsIdUseCase,
@@ -19,26 +23,36 @@ class BasedOnTrueEventsStrategy(
         page: Int,
         pageSize: Int
     ): List<PosterMedia> {
-        val keywordIdForTrueEvents = 9672
-        val moviesResult =
-            getMoviesByKeywordsIdUseCase(
-                page = page,
-                keywords = keywordIdForTrueEvents
-            ).map { movie ->
-                movie.toShowMorePoster(
-                    getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                )
+        return withContext(Dispatchers.IO) {
+            val keywordIdForTrueEvents = 9672
+            val moviesResult = async {
+                getMoviesByKeywordsIdUseCase(
+                    page = page,
+                    keywords = keywordIdForTrueEvents
+                ).map { movie ->
+                    async {
+                        movie.toShowMorePoster(
+                            getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                        )
+                    }
+                }
             }
-        val seriesResult =
-            getSeriesByKeywordsIdUseCase(
-                page = page,
-                keywords = keywordIdForTrueEvents
-            ).map { series ->
-                series.toShowMorePoster(
-                    getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                )
+
+            val seriesResult = async {
+                getSeriesByKeywordsIdUseCase(
+                    page = page,
+                    keywords = keywordIdForTrueEvents
+                ).map { series ->
+                    async {
+                        series.toShowMorePoster(
+                            getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+                        )
+                    }
+                }
             }
-        return moviesResult + seriesResult
+
+            moviesResult.await().awaitAll() + seriesResult.await().awaitAll()
+        }
     }
 
     override fun getSectionType() = CategoryMediaSectionType.BASED_ON_TRUE_EVENTS
