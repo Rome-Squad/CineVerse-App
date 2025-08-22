@@ -1,6 +1,5 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.collections.entity.Collection
@@ -271,7 +270,10 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 collections = it.collections.map { collection ->
-                    if (collection.id == collectionId) collection.copy(isLoading = false, isChecked = true)
+                    if (collection.id == collectionId) collection.copy(
+                        isLoading = false,
+                        isChecked = true
+                    )
                     else collection
                 },
                 movieCollectionsIds = it.movieCollectionsIds + collectionId,
