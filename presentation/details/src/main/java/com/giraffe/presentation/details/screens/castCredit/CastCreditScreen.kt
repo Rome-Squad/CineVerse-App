@@ -57,7 +57,7 @@ private fun CastCreditContent(
     ) {
         Box(Modifier.fillMaxSize()) {
             TransitionBetweenColumnAndVerticalGrid(
-                posters = state.posters,
+                posters = state.moviesPosters + state.seriesPosters,
                 isListSelected = !state.isGridSelected,
                 onPosterClicked = interaction::onPosterClick,
                 contentPreference = state.contentPreference

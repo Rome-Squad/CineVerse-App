@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -285,12 +286,16 @@ class SeriesRepositoryImpl @Inject constructor(
 
     override suspend fun syncRecentlyViewedSeries() {
         safeCall {
-            seriesLocal.getRecentlyViewedSeriesIds().forEach {
-                seriesRemote.getSeriesDetails(it)
-                    .toCacheDto()
-                    .also { series ->
-                        seriesLocal.addSeries(series)
+            withContext(Dispatchers.IO) {
+                seriesLocal.getRecentlyViewedSeriesIds().forEach {
+                    launch {
+                        seriesRemote.getSeriesDetails(it)
+                            .toCacheDto()
+                            .also { series ->
+                                seriesLocal.addSeries(series)
+                            }
                     }
+                }
             }
         }
     }

@@ -5,13 +5,14 @@ import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.user.entity.ContentPreference
 
 data class CastCreditScreenState(
-    val posters: List<Poster> = emptyList(),
-    val castId: Int,
+    val moviesPosters: List<Poster> = emptyList(),
+    val seriesPosters: List<Poster> = emptyList(),
+    val castId: Int = 0,
     val actorName: String = "",
     val contentPreference: ContentPreference = ContentPreference.HIDE_EXPLICIT,
     val isLoading: Boolean = true,
     val isNoInternet: Boolean = false,
     val isGridSelected: Boolean = true,
-    val allSeriesGenres: List<Genre> = emptyList(),
-    val allMovieGenres: List<Genre> = emptyList()
+    val moviesGenres: List<Genre> = emptyList(),
+    val seriesGenres: List<Genre> = emptyList()
 )

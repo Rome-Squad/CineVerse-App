@@ -133,6 +133,9 @@ interface SeriesDao {
     @Upsert
     suspend fun upsertGenres(genres: List<SeriesGenreCacheDto>)
 
+    @Upsert
+    suspend fun upsertGenre(genre: SeriesGenreCacheDto)
+
     @Query("UPDATE $SERIES_GENRE_TABLE SET name = :name WHERE id = :id")
     suspend fun updateGenreNameOnly(id: Int, name: String)
 

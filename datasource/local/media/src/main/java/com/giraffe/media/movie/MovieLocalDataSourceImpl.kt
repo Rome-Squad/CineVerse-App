@@ -11,8 +11,11 @@ import com.giraffe.media.movie.mapper.toRecentlyViewedMovieCacheDto
 import com.giraffe.media.movie.mapper.toUpcomingMovieCacheDto
 import com.giraffe.media.util.safeCall
 import com.giraffe.media.util.safeFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -25,10 +28,14 @@ class MovieLocalDataSourceImpl @Inject constructor(
     // region Movie Genres
     override suspend fun syncMovieGenres(movieGenres: List<MovieGenreCacheDto>) {
         safeCall {
-            movieGenres.forEach { genre ->
-                movieDao.getGenreById(genre.id)?.let {
-                    movieDao.updateGenreNameOnly(genre.id, genre.name)
-                } ?: movieDao.insertMovieGenre(genre)
+            withContext(Dispatchers.IO) {
+                movieGenres.forEach { genre ->
+                    launch {
+                        movieDao.getGenreById(genre.id)?.let {
+                            movieDao.updateGenreNameOnly(genre.id, genre.name)
+                        } ?: movieDao.insertMovieGenre(genre)
+                    }
+                }
             }
         }
     }
