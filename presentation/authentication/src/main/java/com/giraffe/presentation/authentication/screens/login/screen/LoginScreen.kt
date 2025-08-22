@@ -75,9 +75,9 @@ fun LoginContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
             .background(Theme.color.background.screen)
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
