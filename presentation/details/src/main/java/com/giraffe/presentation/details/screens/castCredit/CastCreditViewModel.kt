@@ -34,9 +34,7 @@ class CastCreditViewModel @Inject constructor(
 
     init {
         observeContentPreference()
-        state.value.castId?.let {
-            loadCastCredit(it)
-        }
+        loadCastCredit(state.value.castId)
     }
 
     private fun loadCastCredit(castId: Int) {
@@ -129,8 +127,6 @@ class CastCreditViewModel @Inject constructor(
     }
 
     override fun onRetryClick() {
-        state.value.castId?.let {
-            loadCastCredit(it)
-        }
+        loadCastCredit(state.value.castId)
     }
 }
