@@ -8,6 +8,10 @@ import com.giraffe.presentation.home.model.PosterMedia
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 
 class CinematicMasterpiecesStrategy(
     private val getSeriesBySortUseCase: GetSeriesBySortUseCase,
@@ -19,26 +23,36 @@ class CinematicMasterpiecesStrategy(
         page: Int,
         pageSize: Int
     ): List<PosterMedia> {
-        val sortBy = "vote_average.desc"
-        val moviesResult =
-            getMoviesBySortUseCase(
-                page = page,
-                sortBy = sortBy
-            ).map { movie ->
-                movie.toShowMorePoster(
-                    getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
-                )
+        return withContext(Dispatchers.IO) {
+            val sortBy = "vote_average.desc"
+            val moviesResult = async {
+                getMoviesBySortUseCase(
+                    page = page,
+                    sortBy = sortBy
+                ).map { movie ->
+                    async {
+                        movie.toShowMorePoster(
+                            getMoviesGenresByIdsUseCase(movie.genresID).map { it.title }
+                        )
+                    }
+                }
             }
-        val seriesResult =
-            getSeriesBySortUseCase(
-                page = page,
-                sortBy = sortBy
-            ).map { series ->
-                series.toShowMorePoster(
-                    getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
-                )
+
+            val seriesResult = async {
+                getSeriesBySortUseCase(
+                    page = page,
+                    sortBy = sortBy
+                ).map { series ->
+                    async {
+                        series.toShowMorePoster(
+                            getSeriesGenresByIdsUseCase(series.genreIDs).map { it.title }
+                        )
+                    }
+                }
             }
-        return moviesResult + seriesResult
+
+            moviesResult.await().awaitAll() + seriesResult.await().awaitAll()
+        }
     }
 
     override fun getSectionType() = CategoryMediaSectionType.CINEMATIC_MASTERPIECE

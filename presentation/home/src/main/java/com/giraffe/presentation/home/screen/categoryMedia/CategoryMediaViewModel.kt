@@ -16,9 +16,9 @@ import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaRoute
 import com.giraffe.user.exception.NoInternetException
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,18 +62,17 @@ class CategoryMediaViewModel @Inject constructor(
                     onError = ::onLoadByStrategyFail
                 ) { page ->
                     categoryMediaFactory.createStrategy(sectionType).loadData(page, PAGE_SIZE)
+                        .also {
+
+                            updateState { it.copy(isLoading = false) }
+                        }
                 }
             }
 
             pager
                 .flow
+                .flowOn(Dispatchers.IO)
                 .cachedIn(viewModelScope)
-                .stateIn(
-                    viewModelScope,
-                    SharingStarted.Lazily,
-                    PagingData.empty()
-                )
-
         }
     }
 
@@ -82,7 +81,6 @@ class CategoryMediaViewModel @Inject constructor(
             it.copy(
                 sectionType = sectionType,
                 mediaFlow = mediaFlow,
-                isLoading = false,
                 isNoInternet = false
             )
         }
@@ -116,6 +114,7 @@ class CategoryMediaViewModel @Inject constructor(
             MediaType.SERIES -> sendEffect(CategoryMediaEffect.NavigateToSeriesDetails(mediaId))
         }
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->
@@ -124,6 +123,7 @@ class CategoryMediaViewModel @Inject constructor(
             block = getContentPreferenceUseCase::invoke
         )
     }
+
     override fun onBackClick() {
         sendEffect(CategoryMediaEffect.NavigateBack)
     }

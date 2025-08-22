@@ -5,16 +5,23 @@ import com.giraffe.media.series.usecase.topRated.GetTopRatedSeriesUseCase
 import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSectionType
 import com.giraffe.presentation.home.screen.categoryMedia.CategoryMediaStrategy
 import com.giraffe.presentation.home.utils.toShowMorePoster
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 
 class TopRatedTvShowsStrategy(
     private val getTopRatedSeries: GetTopRatedSeriesUseCase,
     private val getSeriesGenresUseCase: GetSeriesGenresByIdsUseCase
 ) : CategoryMediaStrategy {
-    override suspend fun loadData(page: Int, pageSize: Int) =
+    override suspend fun loadData(page: Int, pageSize: Int) = withContext(Dispatchers.IO) {
         getTopRatedSeries(page = page, limit = pageSize).map { series ->
-            series.toShowMorePoster(
-                getSeriesGenresUseCase(series.genreIDs).map { it.title })
-        }
+            async {
+                series.toShowMorePoster(
+                    getSeriesGenresUseCase(series.genreIDs).map { it.title })
+            }
+        }.awaitAll()
+    }
 
     override fun getSectionType() = CategoryMediaSectionType.TOP_RATED_TV_SHOWS
 }

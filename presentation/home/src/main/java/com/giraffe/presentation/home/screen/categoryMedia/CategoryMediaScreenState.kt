@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flowOf
 
 data class CategoryMediaScreenState(
     val isLoading: Boolean = true,
+    @Transient
     val mediaFlow: Flow<PagingData<PosterMedia>> = flowOf(),
     val sectionType: CategoryMediaSectionType? = null,
     val isListSelected: Boolean = false,
