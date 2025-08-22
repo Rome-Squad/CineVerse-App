@@ -1,12 +1,14 @@
 package com.giraffe.presentation.profile.screens.collectiondetails
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
+import com.giraffe.presentation.profile.navigation.routes.CollectionRoute
 import com.giraffe.presentation.profile.utils.toSwipeablePoster
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,22 +23,20 @@ class CollectionDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CollectionDetailsScreenState, CollectionDetailsEffect>(
     CollectionDetailsScreenState(
-        collectionId = savedStateHandle.get<Int>("collectionId") ?: 0,
-        collectionName = savedStateHandle.get<String>("collectionName") ?: "",
-
-        )
+        collectionId = savedStateHandle.toRoute<CollectionRoute>().collectionId,
+        collectionName = savedStateHandle.toRoute<CollectionRoute>().collectionName,
+    )
 ), CollectionDetailsInteractionListener {
 
     init {
         observeContentPreference()
         getMoviesGenres()
-        getCollectionItems()
     }
 
     private fun getMoviesGenres() {
         safeCollect(
             onEmitNewValue = ::onGetMoviesGenresSuccess,
-            onError = ::onFailure,
+            onError = ::onFailure.also { getCollectionItems() },
             block = observeMoviesGenresUseCase::invoke
         )
     }
@@ -44,11 +44,11 @@ class CollectionDetailsViewModel @Inject constructor(
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
-                isLoading = false,
                 isNoInternet = false,
                 movieGenres = genres
             )
         }
+        getCollectionItems()
     }
 
     private fun onFailure(error: Throwable, isNoInternet: Boolean) {
@@ -117,6 +117,7 @@ class CollectionDetailsViewModel @Inject constructor(
     override fun onStartCollectingClick() {
         sendEffect(CollectionDetailsEffect.NavigateToExplore)
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->
