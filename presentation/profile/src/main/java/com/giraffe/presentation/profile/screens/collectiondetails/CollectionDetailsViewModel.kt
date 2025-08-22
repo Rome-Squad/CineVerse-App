@@ -30,13 +30,12 @@ class CollectionDetailsViewModel @Inject constructor(
     init {
         observeContentPreference()
         getMoviesGenres()
-        getCollectionItems()
     }
 
     private fun getMoviesGenres() {
         safeCollect(
             onEmitNewValue = ::onGetMoviesGenresSuccess,
-            onError = ::onFailure,
+            onError = ::onFailure.also { getCollectionItems() },
             block = observeMoviesGenresUseCase::invoke
         )
     }
@@ -44,11 +43,11 @@ class CollectionDetailsViewModel @Inject constructor(
     private fun onGetMoviesGenresSuccess(genres: List<Genre>) {
         updateState {
             it.copy(
-                isLoading = false,
                 isNoInternet = false,
                 movieGenres = genres
             )
         }
+        getCollectionItems()
     }
 
     private fun onFailure(error: Throwable, isNoInternet: Boolean) {
@@ -117,6 +116,7 @@ class CollectionDetailsViewModel @Inject constructor(
     override fun onStartCollectingClick() {
         sendEffect(CollectionDetailsEffect.NavigateToExplore)
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->
