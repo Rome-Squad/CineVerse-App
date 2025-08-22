@@ -8,6 +8,7 @@ interface CollectionsRemoteDataSource {
 
     suspend fun getCollections(accountId: Int): List<CollectionDto>
 
+    suspend fun getCollectionsByMovieId(movieId: Int): List<CollectionDto>
 
     suspend fun getCollectionDetails(collectionId: Int): CollectionDto
 

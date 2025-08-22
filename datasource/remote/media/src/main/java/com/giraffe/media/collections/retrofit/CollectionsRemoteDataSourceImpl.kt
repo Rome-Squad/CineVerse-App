@@ -15,20 +15,20 @@ class CollectionsRemoteDataSourceImpl @Inject constructor(
     ): List<CollectionDto> =
         safeCallRemote { collectionsApiService.getCollections(accountId = accountId) }.results
 
+    override suspend fun getCollectionsByMovieId(movieId: Int): List<CollectionDto> =
+        safeCallRemote { collectionsApiService.getCollectionsByMovieId(movieId) }.results
+
     override suspend fun getCollectionDetails(collectionId: Int): CollectionDto =
         safeCallRemote { collectionsApiService.getCollectionDetails(collectionId = collectionId) }
 
-    override suspend fun addCollection(collection: CollectionDto): Int? = safeCallRemote {
-        collectionsApiService.addCollection(collection)
-    }.collectionId
+    override suspend fun addCollection(collection: CollectionDto): Int? =
+        safeCallRemote { collectionsApiService.addCollection(collection) }.collectionId
 
-    override suspend fun removeCollection(collectionId: Int): Boolean = safeCallRemote {
-        collectionsApiService.removeCollection(collectionId)
-    }.isSuccess
+    override suspend fun removeCollection(collectionId: Int): Boolean =
+        safeCallRemote { collectionsApiService.removeCollection(collectionId) }.isSuccess
 
-    override suspend fun clearCollection(collectionId: Int): Boolean = safeCallRemote {
-        collectionsApiService.clearCollection(collectionId)
-    }.isSuccess
+    override suspend fun clearCollection(collectionId: Int): Boolean =
+        safeCallRemote { collectionsApiService.clearCollection(collectionId) }.isSuccess
 
     override suspend fun addMovieToCollection(collectionId: Int, movieId: Int): Boolean =
         safeCallRemote {

@@ -10,14 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,16 +31,14 @@ import com.giraffe.presentation.home.navigation.home.routes.CategoryMediaSection
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun CollectionItem(
-    modifier: Modifier = Modifier,
     collectionItemData: FeaturedCollectionUi,
-    onClick: (CategoryMediaSectionType) -> Unit
+    onClick: (CategoryMediaSectionType) -> Unit,
+    modifier: Modifier = Modifier,
+    width: Int = 280
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-
     Column(
         modifier = modifier
-            .widthIn(min = screenWidth * 0.5f, max = screenWidth * 0.75f)
+            .width(width.dp)
             .clickable(onClick = dropUnlessResumed {
                 onClick(
                     when (collectionItemData.type) {

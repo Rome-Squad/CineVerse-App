@@ -57,10 +57,11 @@ fun ReviewUI.toEntity() = Review(
     createdAt = createdAt
 )
 
-fun Collection.toUi() = CollectionUi(
+fun Collection.toUi(isChecked: Boolean) = CollectionUi(
     id = id,
     title = name,
-    isLoading = false
+    isLoading = false,
+    isChecked = isChecked
 )
 
 fun Review.toUi() = ReviewUI(

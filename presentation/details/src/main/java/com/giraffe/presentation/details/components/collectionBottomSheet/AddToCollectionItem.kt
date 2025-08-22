@@ -32,7 +32,8 @@ fun AddToCollectionItem(
     title: String,
     isLoading: Boolean,
     onCollectionClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isChecked: Boolean,
 ) {
     Box(
         modifier = Modifier
@@ -63,7 +64,17 @@ fun AddToCollectionItem(
             )
         }
 
-        if (isLoading)
+        if (isChecked)
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.CenterEnd),
+                painter = painterResource(R.drawable.correct),
+                contentDescription = "correct",
+                tint = Theme.color.brand.primary
+            )
+
+        if (isLoading && !isChecked)
             Progress(
                 modifier = Modifier
                     .size(24.dp)
@@ -81,6 +92,7 @@ fun PreviewAddToCollectionContentLight() {
         AddToCollectionItem(
             title = "My Folder",
             isLoading = true,
+            isChecked = true,
             modifier = Modifier
                 .width(304.dp)
                 .height(48.dp),
@@ -96,6 +108,7 @@ fun PreviewAddToCollectionContentDark() {
         AddToCollectionItem(
             title = "My Folder",
             isLoading = true,
+            isChecked = true,
             onCollectionClicked = {}
         )
     }
