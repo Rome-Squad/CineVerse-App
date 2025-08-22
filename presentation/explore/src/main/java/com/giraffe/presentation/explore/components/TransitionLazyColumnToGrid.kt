@@ -1,7 +1,6 @@
 package com.giraffe.presentation.explore.components
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -69,9 +68,9 @@ fun TransitionLazyColumnToGrid(
                         .wrapContentHeight()
                         .fillMaxWidth()
                         .animateItem(
-                            fadeInSpec = tween(700, easing = LinearEasing),
-                            placementSpec = tween(700, easing = LinearEasing),
-                            fadeOutSpec = tween(700, easing = LinearEasing)
+                            fadeInSpec = spring(dampingRatio = 0.85f, stiffness = 100f),
+                            placementSpec = spring(dampingRatio = 0.85f, stiffness = 100f),
+                            fadeOutSpec = spring(dampingRatio = 0.85f, stiffness = 100f)
                         ),
                     contentPreference = contentPreference
                 )

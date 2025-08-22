@@ -6,6 +6,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
@@ -75,29 +76,31 @@ fun MediaPoster(
     val transition = updateTransition(isGridSelected)
     val imageWidth by transition.animateDp(
         targetValueByState = { if (it) imageMaxWidth else 64.dp },
-        transitionSpec = { tween(700, easing = LinearEasing) }
+        transitionSpec = { spring(dampingRatio = 0.85f, stiffness = 100f) }
     )
     val columnStartPadding by transition.animateDp(
         targetValueByState = { if (it) 0.dp else 76.dp },
-        transitionSpec = { tween(700, easing = LinearEasing) }
+        transitionSpec = { tween(100) }
     )
     val columnEndPadding by transition.animateDp(
         targetValueByState = { if (it) 0.dp else 12.dp },
-        transitionSpec = { tween(700, easing = LinearEasing) }
+        transitionSpec = { tween(100) }
     )
     val verticalAlignment by transition.animateFloat(
         targetValueByState = { if (it) 1f else 0f },
-        transitionSpec = { tween(700, easing = LinearEasing) }
+        transitionSpec = { spring(dampingRatio = 0.85f, stiffness = 100f) }
     )
 
     val ratingPadding by transition.animateDp(
         targetValueByState = { if (it) 8.dp else 12.dp },
-        transitionSpec = { tween(700, easing = LinearEasing) }
+        transitionSpec = { spring(dampingRatio = 0.85f, stiffness = 100f) }
     )
-    val textHeight = with(density) { 20.sp.toDp() + 8.dp }
+    val textHeight = remember {
+        with(density) { 20.sp.toDp() + 8.dp }
+    }
     val textColor by animateColorAsState(
         targetValue = if (isGridSelected) Theme.color.shade.secondary else Theme.color.shade.primary,
-        animationSpec = tween(700, easing = LinearEasing)
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = 100f)
     )
 
     if (poster.name.isNotBlank()) {
@@ -169,8 +172,8 @@ fun MediaPoster(
 
                 transition.AnimatedVisibility(
                     visible = { !it },
-                    enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
-                    exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
+                    enter = fadeIn(animationSpec = tween(100, easing = LinearEasing)),
+                    exit = fadeOut(animationSpec = tween(100, easing = LinearEasing)),
                     modifier = Modifier.padding(top = 4.dp)
                 ) {
                     Text(
@@ -184,8 +187,8 @@ fun MediaPoster(
 
                 transition.AnimatedVisibility(
                     visible = { !it },
-                    enter = fadeIn(animationSpec = tween(700, easing = LinearEasing)),
-                    exit = fadeOut(animationSpec = tween(700, easing = LinearEasing)),
+                    enter = fadeIn(animationSpec = tween(100, easing = LinearEasing)),
+                    exit = fadeOut(animationSpec = tween(100, easing = LinearEasing)),
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
                     Row(

@@ -1,7 +1,6 @@
 package com.giraffe.presentation.details.components
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.giraffe.presentation.details.components.uimodel.Poster
-import com.giraffe.presentation.details.utils.ObserveScrollDirection
 import com.giraffe.user.entity.ContentPreference
 
 @Composable
@@ -22,27 +20,25 @@ fun TransitionLazyColumnToGridPoster(
     lazyPagingItems: LazyPagingItems<Poster>,
     isListSelected: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
-    onScroll: (isScrollingUp: Boolean) -> Unit = {},
     contentPreference: ContentPreference,
     onItemClick: (Int) -> Unit,
 ) {
     val gridState = rememberLazyGridState()
 
-    ObserveScrollDirection(
-        gridState,
-        { it.firstVisibleItemIndex },
-        { it.firstVisibleItemScrollOffset },
-        onScroll
-    )
-
     LazyVerticalGrid(
+        modifier = Modifier.fillMaxWidth(),
         state = gridState,
         columns = GridCells.Adaptive(if (isListSelected) 328.dp else 156.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = contentPadding
     ) {
-        items(lazyPagingItems.itemCount) { index ->
+        items(
+            count = lazyPagingItems.itemCount,
+            key = { index ->
+                "${lazyPagingItems[index]?.id} + ${lazyPagingItems[index]?.date} + ${lazyPagingItems[index]?.time} + $index"
+            }
+        ) { index ->
             lazyPagingItems[index]?.let { poster ->
                 MediaPoster(
                     poster = poster,
@@ -54,9 +50,9 @@ fun TransitionLazyColumnToGridPoster(
                         .wrapContentHeight()
                         .fillMaxWidth()
                         .animateItem(
-                            fadeInSpec = tween(700, easing = LinearEasing),
-                            placementSpec = tween(700, easing = LinearEasing),
-                            fadeOutSpec = tween(700, easing = LinearEasing)
+                            fadeInSpec = spring(dampingRatio = 0.85f, stiffness = 100f),
+                            placementSpec = spring(dampingRatio = 0.85f, stiffness = 100f),
+                            fadeOutSpec = spring(dampingRatio = 0.85f, stiffness = 100f)
                         ),
                     contentPreference = contentPreference
                 )
