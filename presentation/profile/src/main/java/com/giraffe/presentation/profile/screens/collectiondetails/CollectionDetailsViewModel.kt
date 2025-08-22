@@ -1,12 +1,14 @@
 package com.giraffe.presentation.profile.screens.collectiondetails
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.giraffe.media.collections.usecase.GetCollectionMoviesUseCase
 import com.giraffe.media.collections.usecase.RemoveMovieFromCollectionUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.movie.entity.Movie
 import com.giraffe.media.movie.usecase.genre.ObserveMoviesGenresUseCase
 import com.giraffe.presentation.profile.base.BaseViewModel
+import com.giraffe.presentation.profile.navigation.routes.CollectionRoute
 import com.giraffe.presentation.profile.utils.toSwipeablePoster
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,10 +23,9 @@ class CollectionDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CollectionDetailsScreenState, CollectionDetailsEffect>(
     CollectionDetailsScreenState(
-        collectionId = savedStateHandle.get<Int>("collectionId") ?: 0,
-        collectionName = savedStateHandle.get<String>("collectionName") ?: "",
-
-        )
+        collectionId = savedStateHandle.toRoute<CollectionRoute>().collectionId,
+        collectionName = savedStateHandle.toRoute<CollectionRoute>().collectionName,
+    )
 ), CollectionDetailsInteractionListener {
 
     init {
