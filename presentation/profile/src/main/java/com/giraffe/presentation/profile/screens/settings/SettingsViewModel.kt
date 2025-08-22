@@ -109,12 +109,12 @@ class SettingsViewModel @Inject constructor(
     private fun observeLanguage() {
         safeCollect(
             onError = ::onFailure,
-            onEmitNewValue = ::onLanguageChangedSuccess,
+            onEmitNewValue = ::onGetLanguageSuccess,
             block = getLanguageUseCase::invoke
         )
     }
 
-    fun onLanguageChangedSuccess(langCode: String) {
+    fun onGetLanguageSuccess(langCode: String) {
         updateState {
             it.copy(
                 currentLanguage = Language.entries.firstOrNull { language -> language.code == langCode }
@@ -204,6 +204,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun onLanguageChangeSuccess(languageCode: String) {
+        onDismissSheet()
         LanguageHelper.updateAppLocale(languageCode)
         safeExecute {
             clearMoviesCacheUseCase.clearExceptRecentlyViewed()
@@ -214,7 +215,6 @@ class SettingsViewModel @Inject constructor(
             syncRecentlyViewedSeriesUseCase.invoke()
             syncSeriesGenresUseCase.invoke()
         }
-        onDismissSheet()
     }
 
     override fun onToggleDarkMode(isDark: Boolean) {
