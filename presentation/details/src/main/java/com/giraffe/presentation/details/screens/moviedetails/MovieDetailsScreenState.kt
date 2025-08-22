@@ -18,6 +18,7 @@ data class MovieDetailsScreenState(
     val cast: List<CastUi> = emptyList(),
     val crew: Map<String, List<String>> = emptyMap(),
     val collections: List<CollectionUi> = emptyList(),
+    val movieCollectionsIds: List<Int> = emptyList(),
     val recommendedMovies: List<Poster> = emptyList(),
     val movieReviews: List<ReviewUI> = emptyList(),
     val newCollectionName: String = "",

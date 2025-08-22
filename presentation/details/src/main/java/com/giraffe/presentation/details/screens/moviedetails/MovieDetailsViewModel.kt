@@ -1,10 +1,12 @@
 package com.giraffe.presentation.details.screens.moviedetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.giraffe.media.collections.entity.Collection
 import com.giraffe.media.collections.usecase.AddCollectionUseCase
 import com.giraffe.media.collections.usecase.AddMovieToCollectionUseCase
+import com.giraffe.media.collections.usecase.GetCollectionsByMovieIdUseCase
 import com.giraffe.media.collections.usecase.GetCollectionsUseCase
 import com.giraffe.media.entity.Genre
 import com.giraffe.media.entity.Review
@@ -44,6 +46,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val addMovieToCollectionUseCase: AddMovieToCollectionUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val addCollectionUseCase: AddCollectionUseCase,
+    private val getCollectionsByMovieIdUseCase: GetCollectionsByMovieIdUseCase,
     private val getUserRatingUseCase: GetUserMovieRatingUseCase,
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle,
@@ -72,6 +75,7 @@ class MovieDetailsViewModel @Inject constructor(
         }
 
         loadMovieDetails(movieID)
+        getMovieCollections(movieID)
         loadMoviePeople(movieID)
         loadMovieReviews(movieID)
         loadRecommendedMovie(movieID)
@@ -205,7 +209,11 @@ class MovieDetailsViewModel @Inject constructor(
                 } else {
                     MovieDetailsScreenState.CollectionBottomSheet.NoCollections
                 },
-                collections = collections.map { collection -> collection.toUi() },
+                collections = collections.map { collection ->
+                    collection.toUi(
+                        isChecked = state.value.movieCollectionsIds.contains(collection.id)
+                    )
+                },
                 isLoading = false,
                 isNoInternet = false
             )
@@ -263,15 +271,15 @@ class MovieDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 collections = it.collections.map { collection ->
-                    if (collection.id == collectionId) collection.copy(isLoading = false)
+                    if (collection.id == collectionId) collection.copy(isLoading = false, isChecked = true)
                     else collection
                 },
+                movieCollectionsIds = it.movieCollectionsIds + collectionId,
                 isLoading = false,
                 isNoInternet = false
             )
         }
 
-        onDismissAddToCollectionBottomSheet()
     }
 
     private fun onAddMovieToCollectionError(
@@ -368,6 +376,23 @@ class MovieDetailsViewModel @Inject constructor(
                 movieGenres = genres.map { genre -> genre.title },
                 isLoading = false,
                 isNoInternet = false
+            )
+        }
+    }
+
+    private fun getMovieCollections(movieId: Int) {
+        safeExecute(
+            onSuccess = ::getMovieCollectionsSuccess,
+            onError = ::onError
+        ) {
+            getCollectionsByMovieIdUseCase(movieId)
+        }
+    }
+
+    private fun getMovieCollectionsSuccess(collectionsIds: List<Int>) {
+        updateState {
+            it.copy(
+                movieCollectionsIds = collectionsIds
             )
         }
     }
@@ -474,6 +499,7 @@ class MovieDetailsViewModel @Inject constructor(
             block = isLoggedInByAccountUseCase::invoke
         )
     }
+
     private fun observeContentPreference() {
         safeCollect(
             onEmitNewValue = { preference ->
@@ -482,6 +508,7 @@ class MovieDetailsViewModel @Inject constructor(
             block = getContentPreferenceUseCase::invoke
         )
     }
+
     private fun onError(error: Throwable) {
         val isNetworkError = error is NoInternetException || error is UserNoInternetException
 
