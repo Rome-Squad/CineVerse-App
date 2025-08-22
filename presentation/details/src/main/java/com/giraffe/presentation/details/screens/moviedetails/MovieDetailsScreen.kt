@@ -169,7 +169,6 @@ private fun MovieDetailsContent(
                 state = scrollState,
                 contentPadding = PaddingValues(bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .background(Theme.color.background.screen)
                     .fillMaxSize()
