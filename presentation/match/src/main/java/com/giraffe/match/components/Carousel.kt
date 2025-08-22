@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
@@ -53,7 +52,7 @@ fun HeroCarousel(
     val screenWidth = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
     val width = screenWidth - 125.dp
     val posterAspectRatio = 4f / 5f
-    val initialHeight = (width / posterAspectRatio) * 1.11f
+    val initialHeight = ((width / posterAspectRatio) * 1.11f).coerceAtMost(520.dp)
 
     Box(
         modifier = modifier
@@ -76,7 +75,7 @@ fun HeroCarousel(
             val progress = 1f - abs(pageOffset).coerceIn(0f, 1f)
 
             val extraHeight = 60.dp * (1f - progress)
-            val dynamicHeight = initialHeight - extraHeight
+            val dynamicHeight = (initialHeight - extraHeight)
 
 
             val alpha = lerp(.7f, 1f, progress)
@@ -115,7 +114,6 @@ private fun CarouselItemContent(
         SafeIslamicImage(
             imageUrl = imageUrl,
             contentDescription = "image",
-            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
                 .clip(shape = RoundedCornerShape(Theme.radius.xl)),
