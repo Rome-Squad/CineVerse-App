@@ -1,7 +1,6 @@
 package com.giraffe.presentation.home.screen.categoryMedia
 
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -58,7 +57,6 @@ class CategoryMediaViewModel @Inject constructor(
             onError = ::onLoadByStrategyFail,
             onSuccess = ::onLoadByStrategySuccess,
         ) {
-            Log.i("hasDataNow", "Started")
             val seriesCategories = async { observeSeriesGenresUseCase().first() }
             val moviesSeries = async { observeMoviesGenresUseCase().first() }
 
@@ -81,7 +79,6 @@ class CategoryMediaViewModel @Inject constructor(
                         )
                         .also {
                             updateState { it.copy(isLoading = false) }
-                            Log.i("hasDataNow", "end")
                         }
                 }
             }
