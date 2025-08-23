@@ -39,8 +39,8 @@ class DiscoverViewModel @Inject constructor(
 
     init {
         observeContentPreference()
-        getSeriesGenres()
         getMovieGenres()
+        getSeriesGenres()
     }
 
 
