@@ -108,13 +108,15 @@ fun SelectionItem(
                     color = firstTextColor,
                     text = description,
                     style = Theme.textStyle.body.md.medium,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
                 Text(
                     color = Theme.color.shade.secondary,
                     text = secondDescription,
                     style = Theme.textStyle.body.md.regular,
                     overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }
@@ -124,6 +126,7 @@ fun SelectionItem(
                 text = description,
                 style = Theme.textStyle.body.md.medium,
                 overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
                 modifier = Modifier
             )
         }

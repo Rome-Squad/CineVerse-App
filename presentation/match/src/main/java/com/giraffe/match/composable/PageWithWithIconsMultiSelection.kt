@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,8 +32,7 @@ fun SelectionPageWithIcons(
                         icon = option.icon,
                         isSelected = option.id in selectedItems,
                         modifier = Modifier
-                            .weight(1f)
-                            .height(56.dp),
+                            .weight(1f),
                         onClick = {
                             if (!readOnly) {
                                 val current = selectedItems.toMutableList()
