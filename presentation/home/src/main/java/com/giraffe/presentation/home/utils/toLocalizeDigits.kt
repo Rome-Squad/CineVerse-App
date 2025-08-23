@@ -13,12 +13,19 @@ private fun String.toArabicDigits(): String {
     }.joinToString("")
 }
 
-fun Float.toLocalizedRating(): String {
+fun Float.toLocalized(): String {
     val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
     val numberFormat = NumberFormat.getNumberInstance(locale).apply {
         maximumFractionDigits = 1
         minimumFractionDigits = 1
     }
+    val formatted = numberFormat.format(this)
+    return if (locale.language == "ar") formatted.toArabicDigits() else formatted
+}
+
+fun Int.toLocalized(): String {
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
+    val numberFormat = NumberFormat.getNumberInstance(locale)
     val formatted = numberFormat.format(this)
     return if (locale.language == "ar") formatted.toArabicDigits() else formatted
 }

@@ -30,7 +30,7 @@ import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.MediaType
 import com.giraffe.presentation.home.model.PopularMediaUi
-import com.giraffe.presentation.home.utils.toLocalizedRating
+import com.giraffe.presentation.home.utils.toLocalized
 import com.giraffe.presentation.home.utils.toStrengthLevel
 import com.giraffe.user.entity.ContentPreference
 
@@ -83,7 +83,7 @@ fun VODItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = popularMediaItem.rating.toLocalizedRating(),
+                    text = popularMediaItem.rating.toLocalized(),
                     style = Theme.textStyle.label.md.medium,
                     color = Theme.color.shade.primary
                 )

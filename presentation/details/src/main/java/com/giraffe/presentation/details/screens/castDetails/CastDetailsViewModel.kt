@@ -11,7 +11,7 @@ import com.giraffe.media.mediaMember.usecase.GetCastDetailsUseCase
 import com.giraffe.presentation.details.base.BaseViewModel
 import com.giraffe.presentation.details.components.uimodel.Poster
 import com.giraffe.presentation.details.navigation.routes.CastDetailsRoute
-import com.giraffe.presentation.details.utils.toFormattedDateBornOn
+import com.giraffe.presentation.details.utils.toFormattedDate
 import com.giraffe.presentation.details.utils.toPoster
 import com.giraffe.presentation.details.utils.toSocialMediaUi
 import com.giraffe.presentation.details.utils.toUi
@@ -68,7 +68,7 @@ class CastDetailsViewModel @Inject constructor(
                 isNoInternet = false,
                 actorImageUrl = castMember.imageUrl.orEmpty(),
                 actorName = castMember.name,
-                actorBirth = castMember.birthday.toFormattedDateBornOn(),
+                actorBirth = castMember.birthday.toFormattedDate(),
                 actorPlace = castMember.placeOfBirth.orEmpty(),
                 actorGalleryImageUrls = castMember.otherImages,
                 biographyInfo = castMember.biography.orEmpty(),

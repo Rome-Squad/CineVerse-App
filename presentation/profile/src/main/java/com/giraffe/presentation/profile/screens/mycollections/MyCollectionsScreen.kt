@@ -35,6 +35,7 @@ import com.giraffe.presentation.profile.components.BaseScreen
 import com.giraffe.presentation.profile.screens.mycollections.components.CreateCollectionSection
 import com.giraffe.presentation.profile.utils.EffectListener
 import com.giraffe.presentation.profile.utils.showToast
+import com.giraffe.presentation.profile.utils.toLocalized
 import com.giraffe.presentation.profile.utils.toStringResource
 import com.giraffe.presentation.profile.R as ProfileResources
 
@@ -112,9 +113,8 @@ private fun MyCollectionsScreenContent(
                         CollectionItem(
                             modifier = Modifier.fillMaxWidth(),
                             text = collection.name,
-                            description = stringResource(
-                                ProfileResources.string.movies_count,
-                                collection.itemCount
+                            description = collection.itemCount.toLocalized() + " " + stringResource(
+                                ProfileResources.string.movies
                             ),
                             icon = R.drawable.due_tone_folder,
                             onClick = { interaction.onCollectionClick(collection) }

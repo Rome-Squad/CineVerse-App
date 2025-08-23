@@ -47,6 +47,7 @@ import com.giraffe.presentation.details.components.StarCastSection
 import com.giraffe.presentation.details.utils.EventListener
 import com.giraffe.presentation.details.utils.TypeOfScreen
 import com.giraffe.presentation.details.utils.showToast
+import com.giraffe.presentation.details.utils.toArabicDigits
 import com.giraffe.presentation.details.utils.toStringResource
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -189,7 +190,7 @@ private fun SeriesDetailsContent(
                             name = state.seriesUi.name,
                             genres = state.genres,
                             rating = state.seriesUi.rating,
-                            duration = "${state.seasons.size} ${stringResource(R.string.seasons)}",
+                            duration = "${state.seasons.size.toArabicDigits()} ${stringResource(R.string.seasons)}",
                             releaseDate = state.seriesUi.releaseYear,
                             onClickPlay = { interaction.onPlayButtonClick(state.seriesUi.youtubeVideoId) },
                             isPlayButtonEnabled = state.seriesUi.youtubeVideoId.isNotBlank(),
