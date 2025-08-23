@@ -91,7 +91,7 @@ fun CategoryMediaContent(
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 40.dp)
+                        .navigationBarsPadding()
                 ) {
                     TransitionLazyColumnToGrid(
                         posters = lazyMediaPosters,
@@ -105,7 +105,6 @@ fun CategoryMediaContent(
             ViewToggle(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
                     .padding(bottom = 16.dp, end = 16.dp),
                 isListSelected = state.isListSelected,
                 onGridSelected = interactionListener::onViewChanged

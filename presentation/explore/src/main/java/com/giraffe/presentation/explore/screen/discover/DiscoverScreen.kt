@@ -2,7 +2,6 @@ package com.giraffe.presentation.explore.screen.discover
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -130,7 +129,6 @@ fun ExploreContent(
             ViewToggle(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
                     .padding(bottom = 16.dp, end = 16.dp),
                 isListSelected = !state.isGridSelected,
                 onGridSelected = interactions::onViewChanged,
