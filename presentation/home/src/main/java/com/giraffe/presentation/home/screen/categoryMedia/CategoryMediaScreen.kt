@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -80,7 +80,7 @@ fun CategoryMediaContent(
                 modifier = Modifier
                     .background(Theme.color.background.screen)
                     .fillMaxSize()
-                    .statusBarsPadding()
+                    .systemBarsPadding()
             ) {
                 AppBar(
                     title = state.sectionType?.getSectionTitle(LocalContext.current),
@@ -91,7 +91,7 @@ fun CategoryMediaContent(
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .navigationBarsPadding()
+                        .systemBarsPadding()
                 ) {
                     TransitionLazyColumnToGrid(
                         posters = lazyMediaPosters,
@@ -105,6 +105,7 @@ fun CategoryMediaContent(
             ViewToggle(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
+                    .navigationBarsPadding()
                     .padding(bottom = 16.dp, end = 16.dp),
                 isListSelected = state.isListSelected,
                 onGridSelected = interactionListener::onViewChanged
