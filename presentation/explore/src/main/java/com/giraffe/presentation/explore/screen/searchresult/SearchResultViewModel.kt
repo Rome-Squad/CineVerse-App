@@ -2,6 +2,7 @@ package com.giraffe.presentation.explore.screen.searchresult
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -18,14 +19,17 @@ import com.giraffe.media.series.entity.Series
 import com.giraffe.media.series.usecase.GetSeriesByNameUseCase
 import com.giraffe.media.series.usecase.genre.ObserveSeriesGenresUseCase
 import com.giraffe.presentation.explore.base.BaseViewModel
+import com.giraffe.presentation.explore.navigation.routes.SearchResultRoute
 import com.giraffe.presentation.explore.screen.discover.SearchTab
 import com.giraffe.presentation.explore.util.BasePagingSource
 import com.giraffe.presentation.explore.util.toPoster
 import com.giraffe.presentation.explore.util.toUi
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,23 +42,33 @@ class SearchResultViewModel @Inject constructor(
     private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SearchResultScreenState, SearchResultEffect>(
-    SearchResultScreenState(query = savedStateHandle.get<String>("query").orEmpty()),
+    SearchResultScreenState(query = savedStateHandle.toRoute<SearchResultRoute>().query),
 ), SearchResultInteractionListener {
 
+    private var movieJob: Job? = null
+    private var seriesJob: Job? = null
+    private var actorsJob: Job? = null
+
     init {
+        updateState { it.copy(isLoading = true) }
         observeContentPreference()
         getMoviesGenres()
         getSeriesGenres()
-        getMovies()
-        getSeries()
         getActors()
+        viewModelScope.launch {
+            movieJob?.join()
+            seriesJob?.join()
+            actorsJob?.join()
+            updateState {
+                it.copy(isLoading = false)
+            }
+        }
     }
 
     override fun selectTap(tabIndex: Int) {
         updateState {
             it.copy(
                 selectedTab = SearchTab.entries[tabIndex],
-                isNoInternet = false,
                 isLoading = true
             )
         }
@@ -83,14 +97,16 @@ class SearchResultViewModel @Inject constructor(
     }
 
     override fun changeView(isGrid: Boolean) {
-        updateState { it.copy(isGridSelected = isGrid, isLoading = false) }
+        updateState {
+            it.copy(
+                isGridSelected = isGrid,
+            )
+        }
     }
 
     override fun onRetryClick() {
         getMoviesGenres()
         getSeriesGenres()
-        getMovies()
-        getSeries()
         getActors()
     }
 
@@ -112,10 +128,9 @@ class SearchResultViewModel @Inject constructor(
 
 
     private fun getMoviesGenres() {
-        updateState { it.copy(isLoading = true, isNoInternet = false) }
         safeCollect(
             onEmitNewValue = ::getMoviesGenresSuccess,
-            onError = ::onError,
+            onError = ::onError.also { getMovies() },
             block = observeMoviesGenresUseCase::invoke
         )
     }
@@ -124,33 +139,30 @@ class SearchResultViewModel @Inject constructor(
         updateState {
             it.copy(
                 moviesGenres = genres.map(Genre::toUi),
-                isLoading = false,
-                isNoInternet = false
             )
         }
+        getMovies()
     }
 
     private fun getSeriesGenres() {
-        updateState { it.copy(isNoInternet = false, isLoading = true) }
-
         safeCollect(
-            onEmitNewValue = { genres ->
-                updateState {
-                    it.copy(
-                        seriesGenres = genres.map(Genre::toUi), isLoading = false,
-                        isNoInternet = false
-                    )
-                }
-            },
-            onError = ::onError,
+            onEmitNewValue = ::getSeriesGenresSuccess,
+            onError = ::onError.also { getSeries() },
             block = observeSeriesGenresUseCase::invoke,
         )
     }
 
-    private fun getMovies() {
-        updateState { it.copy(isNoInternet = false, isLoading = true) }
+    private fun getSeriesGenresSuccess(genres: List<Genre>) {
+        updateState {
+            it.copy(
+                seriesGenres = genres.map(Genre::toUi),
+            )
+        }
+        getSeries()
+    }
 
-        safeExecute(
+    private fun getMovies() {
+        movieJob = safeExecute(
             onSuccess = ::onGetMoviesSuccess,
             onError = ::onError,
         ) {
@@ -166,20 +178,14 @@ class SearchResultViewModel @Inject constructor(
                 updateState {
                     it.copy(
                         moviesPosters = posters,
-                        isNoInternet = false,
-                        isLoading = false
+                        selectedPosters = state.value.moviesPosters,
                     )
-                }
-                if (state.value.selectedTab == SearchTab.MOVIES) updateState {
-                    it.copy(selectedPosters = posters)
                 }
             }
     }
 
     private fun getSeries() {
-        updateState { it.copy(isNoInternet = false, isLoading = true) }
-
-        safeExecute(
+        seriesJob = safeExecute(
             onSuccess = ::onGetSeriesSuccess,
             onError = ::onError
         ) {
@@ -195,20 +201,13 @@ class SearchResultViewModel @Inject constructor(
                 updateState {
                     it.copy(
                         seriesPosters = posters,
-                        isNoInternet = false,
-                        isLoading = false
                     )
-                }
-                if (state.value.selectedTab == SearchTab.SERIES) updateState {
-                    it.copy(selectedPosters = posters)
                 }
             }
     }
 
     private fun getActors() {
-        updateState { it.copy(isNoInternet = false, isLoading = true) }
-
-        safeExecute(
+        actorsJob = safeExecute(
             onSuccess = ::onGetActorsSuccess,
             onError = ::onError
         ) {
@@ -223,12 +222,7 @@ class SearchResultViewModel @Inject constructor(
             updateState {
                 it.copy(
                     actorsPosters = posters,
-                    isNoInternet = false,
-                    isLoading = false
                 )
-            }
-            if (state.value.selectedTab == SearchTab.ACTORS) updateState {
-                it.copy(selectedPosters = posters)
             }
         }
     }
