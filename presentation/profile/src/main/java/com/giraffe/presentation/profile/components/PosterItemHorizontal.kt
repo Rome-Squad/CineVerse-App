@@ -68,7 +68,7 @@ fun PosterItemHorizontal(
             placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .background(Theme.color.brand.tertiary)
-                .height(88.dp)
+                .fillMaxHeight()
                 .width(64.dp),
             strengthLevel = contentPreference.toStrengthLevel()
         )
@@ -133,7 +133,10 @@ fun PosterItemHorizontal(
 
 @Composable
 private fun IconWithText(icon: Painter, text: String) {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.clock_icon),

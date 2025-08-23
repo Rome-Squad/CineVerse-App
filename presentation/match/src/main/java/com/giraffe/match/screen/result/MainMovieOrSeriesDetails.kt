@@ -186,7 +186,7 @@ private fun IconWithText(
             text = text,
             style = Theme.textStyle.label.md.regular,
             color = Theme.color.shade.secondary,
-            minLines = 1,
+            maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
     }

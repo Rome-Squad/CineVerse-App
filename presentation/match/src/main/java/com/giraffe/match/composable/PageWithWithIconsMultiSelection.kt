@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.giraffe.match.components.SelectionItem
@@ -22,6 +23,7 @@ fun SelectionPageWithIcons(
         options.chunked(2).forEach { row ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 row.forEach { option ->
@@ -29,7 +31,8 @@ fun SelectionPageWithIcons(
                         description = option.label,
                         icon = option.icon,
                         isSelected = option.id in selectedItems,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f),
                         onClick = {
                             if (!readOnly) {
                                 val current = selectedItems.toMutableList()
