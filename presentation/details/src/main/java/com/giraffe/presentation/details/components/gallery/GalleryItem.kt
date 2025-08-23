@@ -28,6 +28,7 @@ fun GalleryItem(
     SafeIslamicImage(
         imageUrl = imageUrl.orEmpty(),
         contentDescription = imageUrl.orEmpty(),
+        hasSensitiveText = false,
         placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
         contentScale = ContentScale.Crop,
         modifier = modifier
