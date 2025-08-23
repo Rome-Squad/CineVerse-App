@@ -22,3 +22,10 @@ fun Float.toLocalizedRating(): String {
     val formatted = numberFormat.format(this)
     return if (locale.language == "ar") formatted.toArabicDigits() else formatted
 }
+
+fun Int.toArabicDigits(): String {
+    val locale = AppCompatDelegate.getApplicationLocales().get(0) ?: Locale.getDefault()
+    val numberFormat = NumberFormat.getNumberInstance(locale)
+    val formatted = numberFormat.format(this)
+    return if (locale.language == "ar") formatted.toArabicDigits() else formatted
+}

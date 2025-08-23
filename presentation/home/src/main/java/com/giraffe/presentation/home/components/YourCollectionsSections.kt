@@ -19,6 +19,7 @@ import com.giraffe.designsystem.composable.SectionTitle
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.R
 import com.giraffe.presentation.home.model.YourCollectionUi
+import com.giraffe.presentation.home.utils.toLocalized
 
 @Composable
 fun YourCollectionsSections(
@@ -53,9 +54,9 @@ fun YourCollectionsSections(
         ) {
             items(collectionItems) { item ->
                 CollectionItem(
-                    modifier = Modifier.height(63.dp),
+                    modifier = Modifier,
                     text = item.title,
-                    description = item.numberOfItems.toString(),
+                    description = item.numberOfItems.toLocalized(),
                     icon = Theme.icons.dueTone.folder,
                     onClick = {
                         onCollectionClick(item.id, item.title)

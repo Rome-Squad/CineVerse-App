@@ -36,6 +36,7 @@ import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.imageviewer.component.SafeIslamicImage
 import com.giraffe.presentation.details.R
+import com.giraffe.presentation.details.utils.toArabicDigits
 import com.giraffe.presentation.details.utils.toLocalizedRating
 import com.giraffe.presentation.details.utils.toStrengthLevel
 import com.giraffe.user.entity.ContentPreference
@@ -181,7 +182,7 @@ fun SeasonCard(
 
                     Text(
                         modifier = Modifier.padding(end = 8.dp),
-                        text = "$episodes ${stringResource(R.string.episodes)}",
+                        text = "${episodes.toArabicDigits()} ${stringResource(R.string.episodes)}",
                         color = Theme.color.shade.secondary,
                         style = Theme.textStyle.label.md.regular,
                     )
@@ -196,7 +197,7 @@ fun SeasonCard(
                     )
 
                     Text(
-                        text = "$year",
+                        text = year.toArabicDigits(),
                         color = Theme.color.shade.secondary,
                         style = Theme.textStyle.label.md.regular,
                     )
