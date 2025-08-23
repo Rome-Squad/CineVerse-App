@@ -50,6 +50,7 @@ fun MenuItem(
         Row(
             modifier = Modifier
                 .weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(
                 space = 8.dp,
                 alignment = Alignment.Start

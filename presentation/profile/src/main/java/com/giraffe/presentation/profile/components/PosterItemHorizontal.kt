@@ -68,7 +68,7 @@ fun PosterItemHorizontal(
             placeholderTextStyle = Theme.textStyle.body.sm.medium.merge(color = Color(0xFFE1E1E3)),
             placeholderModifier = Modifier
                 .background(Theme.color.brand.tertiary)
-                .height(88.dp)
+                .fillMaxHeight()
                 .width(64.dp),
             strengthLevel = contentPreference.toStrengthLevel()
         )

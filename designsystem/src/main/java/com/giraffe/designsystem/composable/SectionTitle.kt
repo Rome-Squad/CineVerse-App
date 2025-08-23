@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.giraffe.designsystem.composable.custom.Text
@@ -31,6 +32,7 @@ fun SectionTitle(
         Text(
             text = title,
             style = Theme.textStyle.title.sm,
+            overflow = TextOverflow.Ellipsis,
             color = Theme.color.shade.primary,
             maxLines = 1
         )
@@ -38,6 +40,7 @@ fun SectionTitle(
             Text(
                 text = clickableText,
                 style = Theme.textStyle.body.md.medium,
+                overflow = TextOverflow.Ellipsis,
                 color = Theme.color.brand.primary,
                 modifier = Modifier.noHoverClickable(
                     onClick = onClickableText

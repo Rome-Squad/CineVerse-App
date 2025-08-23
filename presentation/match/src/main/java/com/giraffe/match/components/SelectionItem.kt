@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.giraffe.designsystem.composable.custom.Icon
-import com.giraffe.designsystem.composable.custom.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,9 +17,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.giraffe.designsystem.composable.custom.Icon
+import com.giraffe.designsystem.composable.custom.Text
 import com.giraffe.designsystem.theme.CineVerseTheme
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.match.model.SelectionType
@@ -78,7 +79,9 @@ fun SelectionItem(
                 vertical = verticalPadding,
             ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = if (type == SelectionType.CHIP) Arrangement.Center else Arrangement.spacedBy(12.dp)
+        horizontalArrangement = if (type == SelectionType.CHIP) Arrangement.Center else Arrangement.spacedBy(
+            12.dp
+        )
     ) {
         if (type == SelectionType.CARD) {
             icon?.let {
@@ -104,12 +107,14 @@ fun SelectionItem(
                 Text(
                     color = firstTextColor,
                     text = description,
-                    style = Theme.textStyle.body.md.medium
+                    style = Theme.textStyle.body.md.medium,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     color = Theme.color.shade.secondary,
                     text = secondDescription,
                     style = Theme.textStyle.body.md.regular,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }
@@ -118,11 +123,13 @@ fun SelectionItem(
                 color = firstTextColor,
                 text = description,
                 style = Theme.textStyle.body.md.medium,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
             )
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun SelectionItemPreview() {

@@ -229,7 +229,10 @@ fun MediaPoster(
 
 @Composable
 private fun IconWithText(icon: Painter, text: String) {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.clock_icon),

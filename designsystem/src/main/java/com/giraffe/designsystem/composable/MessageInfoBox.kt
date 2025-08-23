@@ -63,6 +63,7 @@ fun MessageInfoBox(
             text = title,
             style = Theme.textStyle.title.sm,
             color = Theme.color.shade.primary,
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 16.dp)
         )
 

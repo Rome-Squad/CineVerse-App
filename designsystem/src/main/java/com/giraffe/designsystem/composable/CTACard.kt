@@ -40,6 +40,7 @@ fun CTACard(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.weight(1f)
         ) {

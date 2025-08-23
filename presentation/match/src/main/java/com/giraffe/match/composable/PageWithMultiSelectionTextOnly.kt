@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,8 +27,7 @@ fun PageWithMultiSelectionTextOnly(
                     description = option.label,
                     isSelected = true,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp),
+                        .fillMaxWidth(),
                     onClick = {
                         if (!readOnly) {
                             onSelectionChange(emptyList())
@@ -48,8 +46,6 @@ fun PageWithMultiSelectionTextOnly(
                         type = SelectionType.CHIP,
                         description = option.label,
                         isSelected = option.id in selectedItems,
-                        modifier = Modifier
-                            .height(44.dp),
                         onClick = {
                             if (!readOnly) {
                                 val current = selectedItems.toMutableList()
