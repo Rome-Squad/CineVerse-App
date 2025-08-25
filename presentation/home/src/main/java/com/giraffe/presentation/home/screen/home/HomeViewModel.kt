@@ -26,6 +26,7 @@ import com.giraffe.presentation.home.utils.toPopularMediaUi
 import com.giraffe.presentation.home.utils.toPoster
 import com.giraffe.presentation.home.utils.toUi
 import com.giraffe.user.usecase.GetContentPreferenceUseCase
+import com.giraffe.user.usecase.GetDarkModeUseCase
 import com.giraffe.user.usecase.GetUserNameUseCase
 import com.giraffe.user.usecase.IsLoggedInByAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,11 +49,13 @@ class HomeViewModel @Inject constructor(
     private val isLoggedInByAccountUseCase: IsLoggedInByAccountUseCase,
     private val observeMoviesGenresUseCase: ObserveMoviesGenresUseCase,
     private val observeSeriesGenresUseCase: ObserveSeriesGenresUseCase,
-    private val getContentPreferenceUseCase: GetContentPreferenceUseCase
+    private val getContentPreferenceUseCase: GetContentPreferenceUseCase,
+    private val getDarkModeUseCase: GetDarkModeUseCase,
 ) : BaseViewModel<HomeScreenState, HomeEffect>(initialState = HomeScreenState()),
     HomeInteractionListener {
 
     init {
+        observeTheme()
         observeContentPreference()
         getUserName()
         getGenres()
@@ -64,6 +67,18 @@ class HomeViewModel @Inject constructor(
         getRecentlyViewed()
     }
 
+    private fun observeTheme() {
+        safeCollect(
+            onEmitNewValue = ::onEmitNewIsDarkTheme,
+            block = getDarkModeUseCase::invoke
+        )
+    }
+
+    private fun onEmitNewIsDarkTheme(isDarkTheme: Boolean) {
+        updateState {
+            it.copy(isDarkTheme = isDarkTheme)
+        }
+    }
     private fun getUserName() {
         safeExecute(
             onSuccess = {

@@ -2,11 +2,15 @@ package com.giraffe.presentation.home.navigation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.rememberNavController
 import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.explore.ExploreApi
@@ -17,9 +21,7 @@ import com.giraffe.match.MatchApi
 import com.giraffe.presentation.home.navigation.api.HomeApiImp
 import com.giraffe.presentation.home.screen.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
 import jakarta.inject.Inject
-import javax.inject.Provider
 
 
 @AndroidEntryPoint
@@ -45,14 +47,26 @@ class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
+            val state by viewModel.state.collectAsState()
+            val isDarkTheme = state.isDarkTheme
+
+            val systemBarsColor = if (isDarkTheme)
+                SystemBarStyle.dark(Color.Transparent.toArgb())
+            else
+                SystemBarStyle.light(
+                    Color.Transparent.toArgb(),
+                    Color.Transparent.toArgb()
+                )
+
+            enableEdgeToEdge(systemBarsColor, systemBarsColor)
 
             LaunchedEffect(Unit) {
                 (homeApi as HomeApiImp).setNavController(navController)
             }
-            CineVerseTheme(isDarkTheme = false) {
+
+            CineVerseTheme(isDarkTheme = isDarkTheme) {
 
                 MainNavGraph(
                     navController = navController,

@@ -26,9 +26,7 @@ fun CineVerseRoot(
         }
 
         authenticationApi.LoginContainer(
-            onBack = {},
             isOnboardingFirstTime = state.isOnBoardingFirstTime == true,
-            isLoggedIn = state.isLoggedIn == true
         )
     }
 

@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.giraffe.api.home.HomeApi
 import com.giraffe.presentation.authentication.nav.routes.LoginRoute
-//import com.giraffe.presentation.authentication.nav.routes.homeRoute
 import com.giraffe.presentation.authentication.nav.routes.loginRoute
 import com.giraffe.presentation.authentication.nav.routes.resetPasswordRoute
 import com.giraffe.presentation.authentication.nav.routes.webViewRoute
@@ -16,12 +15,10 @@ internal fun AuthenticationNavGraph(
     navController: NavHostController,
     homeApi: HomeApi,
     isOnboardingFirstTime: Boolean,
-    isLoggedIn: Boolean
 ) {
     val context = LocalContext.current
     val startDestination = when {
         isOnboardingFirstTime -> OnBoardingRoute
-        //isLoggedIn -> HomeRoute
         else -> LoginRoute()
     }
 
@@ -37,8 +34,6 @@ internal fun AuthenticationNavGraph(
         )
 
         resetPasswordRoute(navController)
-
-        //homeRoute(homeApi)
 
         onBoardingRoute(navController)
     }
