@@ -31,5 +31,6 @@
     <string name="feel_good_favorites">Feel-Good Favorites</string>
     <string name="unknown_genre">Unknown genre</string>
     <string name="failed_to_load_the_list">Failed to load the list</string>
+    <string name="title_activity_home">HomeActivity</string>
 
 </resources>

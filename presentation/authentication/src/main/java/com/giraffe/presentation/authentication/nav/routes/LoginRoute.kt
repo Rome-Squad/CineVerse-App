@@ -16,12 +16,13 @@ fun NavController.navigateLoginScreen(fromRoute: Boolean = false){
 }
 
 fun NavGraphBuilder.loginRoute(
-    navController: NavController
+    navController: NavController,
+    navigateToHome: () -> Unit
 ){
     composable<LoginRoute> {
         LoginScreen(
             navigateToWebViewScreen = navController::navigateToWebView,
-            navigateToHomeScreen = navController::navigateHomeScreen,
+            navigateToHomeScreen = navigateToHome,
             navigateToResetPasswordScreen = navController::navigateToResetPassword,
             onBackClick = navController::popBackStack
         )

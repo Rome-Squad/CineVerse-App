@@ -10,7 +10,7 @@ import com.giraffe.match.navigation.MatchApiImp
 import com.giraffe.presentation.authentication.nav.AuthenticationApiImp
 import com.giraffe.presentation.details.navigation.DetailsApiImp
 import com.giraffe.presentation.explore.navigation.ExploreApiImp
-import com.giraffe.presentation.home.navigation.HomeApiImp
+import com.giraffe.presentation.home.navigation.api.HomeApiImp
 import com.giraffe.presentation.profile.navigation.ProfileApiImp
 import dagger.Binds
 import dagger.Module

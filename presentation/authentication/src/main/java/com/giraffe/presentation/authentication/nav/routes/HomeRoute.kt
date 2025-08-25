@@ -11,7 +11,7 @@ object HomeRoute
 
 fun NavController.navigateHomeScreen() {
     navigate(HomeRoute)
-}
+}/*
 
 fun NavGraphBuilder.homeRoute(
     homeApi: HomeApi,
@@ -19,4 +19,4 @@ fun NavGraphBuilder.homeRoute(
     composable<HomeRoute> {
         homeApi.MainContainer()
     }
-}
+}*/

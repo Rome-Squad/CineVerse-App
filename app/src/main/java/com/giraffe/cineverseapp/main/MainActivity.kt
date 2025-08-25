@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.giraffe.api.authentication.AuthenticationApi
+import com.giraffe.api.home.HomeApi
 import com.giraffe.presentation.profile.utils.FilePicker
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
@@ -25,6 +26,8 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var authenticationApi: AuthenticationApi
+
+    @Inject lateinit var homeApi: HomeApi
 
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -60,6 +63,10 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val state by mainViewModel.state.collectAsState()
+
+            if (state.isLoggedIn == true) {
+                homeApi.launchHome(this)
+            }
             CineVerseRoot(
                 enableEdgeToEdge = ::enableEdgeToEdge,
                 state = state,
