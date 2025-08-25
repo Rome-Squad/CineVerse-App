@@ -39,4 +39,6 @@ data class HomeScreenState(
     val hasRecentlyViewedError: Boolean = false,
     val hasUpcomingError: Boolean = false,
     val hasTopRatedError: Boolean = false,
+
+    val isDarkTheme: Boolean = true
 )

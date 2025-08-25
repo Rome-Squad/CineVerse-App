@@ -1,11 +1,10 @@
 package com.giraffe.api.home
 
 
-import androidx.compose.runtime.Composable
+import android.content.Context
 
 interface HomeApi {
 
+    fun launchHome(context: Context)
     fun navigateToExploreScreen()
-    @Composable
-    fun MainContainer()
 }
