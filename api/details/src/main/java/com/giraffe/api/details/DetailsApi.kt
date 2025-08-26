@@ -1,7 +1,6 @@
 package com.giraffe.api.details
 
 import android.content.Context
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 
 @Stable
