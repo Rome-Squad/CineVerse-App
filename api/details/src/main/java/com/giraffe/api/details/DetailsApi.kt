@@ -1,16 +1,13 @@
 package com.giraffe.api.details
 
-import androidx.compose.runtime.Composable
+import android.content.Context
 import androidx.compose.runtime.Stable
 
 @Stable
 interface DetailsApi {
-    @Composable
-    fun MovieDetailsContainer(movieId: Int, onBackClick: () -> Unit)
+    fun launchMovieDetails(context: Context, movieId: Int)
 
-    @Composable
-    fun SeriesDetailsContainer(seriesId: Int, onBackClick: () -> Unit)
+    fun launchSeriesDetails(context: Context, seriesId: Int)
 
-    @Composable
-    fun CastDetailsContainer(castId: Int, onBackClick: () -> Unit)
+    fun launchCastDetails(context: Context, castId: Int)
 }

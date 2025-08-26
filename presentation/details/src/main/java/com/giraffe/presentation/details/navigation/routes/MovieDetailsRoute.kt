@@ -7,7 +7,7 @@ import com.giraffe.presentation.details.screens.moviedetails.MovieDetailsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class MovieDetailsRoute(val id: Int)
+internal data class MovieDetailsRoute(val id: Int): StartDestination
 
 fun NavController.navigateToMovieDetails(id: Int) {
     navigate(MovieDetailsRoute(id))

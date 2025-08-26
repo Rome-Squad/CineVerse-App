@@ -12,9 +12,7 @@ class AuthenticationApiImp @Inject constructor(
 
     @Composable
     override fun LoginContainer(
-        onBack: () -> Unit,
         isOnboardingFirstTime: Boolean,
-        isLoggedIn: Boolean
     ) {
         val navController = rememberNavController()
 
@@ -22,7 +20,6 @@ class AuthenticationApiImp @Inject constructor(
             navController = navController,
             homeApi = homeApi,
             isOnboardingFirstTime = isOnboardingFirstTime,
-            isLoggedIn = isLoggedIn,
         )
     }
 }

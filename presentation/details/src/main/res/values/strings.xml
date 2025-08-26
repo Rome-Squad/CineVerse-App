@@ -78,4 +78,5 @@
     <string name="collection_not_found">Collection not found!</string>
     <string name="screen_info">Tips: Swipe left to remove movies from your history.</string>
     <string name="new_collection">New Collection</string>
+    <string name="title_activity_details">DetailsActivity</string>
 </resources>

@@ -4,16 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.toRoute
 import com.giraffe.api.authentication.AuthenticationApi
 import com.giraffe.api.details.DetailsApi
 import com.giraffe.api.home.HomeApi
-import com.giraffe.presentation.profile.navigation.routes.MovieDetailsRoute
-import com.giraffe.presentation.profile.navigation.routes.SeriesDetailsRoute
 import com.giraffe.presentation.profile.navigation.routes.SettingsScreenRoute
 import com.giraffe.presentation.profile.navigation.routes.collectionRoute
 import com.giraffe.presentation.profile.navigation.routes.editProfileWebViewRoute
@@ -34,8 +31,7 @@ internal fun ProfileNavGraph(
     onShowBottomBarChange: (Boolean) -> Unit = {},
     navigateBack: (() -> Unit)? = null,
 ) {
-
-
+    val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -57,12 +53,16 @@ internal fun ProfileNavGraph(
 
         historyRoute(
             navController = navController,
-            homeApi = homeApi
+            homeApi = homeApi,
+            navigateToMovieDetails = {detailsApi.launchMovieDetails(context, it)},
+            navigateToSeriesDetails = {detailsApi.launchSeriesDetails(context, it)}
         )
 
         ratingsRoute(
             navController = navController,
-            homeApi = homeApi
+            homeApi = homeApi,
+            navigateToMovieDetails = {detailsApi.launchMovieDetails(context, it)},
+            navigateToSeriesDetails = {detailsApi.launchSeriesDetails(context, it)}
         )
 
         myCollectionsRoute(
@@ -78,8 +78,8 @@ internal fun ProfileNavGraph(
         )
 
         collectionRoute(
-            navController = navController,
             homeApi = homeApi,
+            navigateToMovieDetails = {detailsApi.launchMovieDetails(context, it)},
             navigateBack = {
                 if (navigateBack != null) {
                     navigateBack()
@@ -88,22 +88,6 @@ internal fun ProfileNavGraph(
                 }
             }
         )
-
-        composable<SeriesDetailsRoute> { backStackEntry ->
-            val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
-            detailsApi.SeriesDetailsContainer(
-                seriesId = seriesId,
-                onBackClick = navController::popBackStack
-            )
-        }
-
-        composable<MovieDetailsRoute> { backStackEntry ->
-            val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId
-            detailsApi.MovieDetailsContainer(
-                movieId = movieId,
-                onBackClick = navController::popBackStack
-            )
-        }
 
         loginRoute(authenticationApi)
     }

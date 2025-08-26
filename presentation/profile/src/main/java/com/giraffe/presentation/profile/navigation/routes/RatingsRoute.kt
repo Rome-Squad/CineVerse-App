@@ -16,12 +16,14 @@ internal fun NavController.navigateToRatings() {
 
 fun NavGraphBuilder.ratingsRoute(
     navController: NavController,
-    homeApi: HomeApi
+    homeApi: HomeApi,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
 ) {
     composable<RatingsRoute> { backStackEntry ->
         RatingScreen(
-            navigateToMovieDetails = navController::navigateToMovieDetails,
-            navigateToSeriesDetails = navController::navigateToSeriesDetails,
+            navigateToMovieDetails = navigateToMovieDetails,
+            navigateToSeriesDetails = navigateToSeriesDetails,
             navigateBack = navController::navigateUp,
             navigateToExploreScreen = homeApi::navigateToExploreScreen
         )

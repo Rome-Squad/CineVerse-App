@@ -16,13 +16,15 @@ internal fun NavController.navigateToHistory() {
 
 fun NavGraphBuilder.historyRoute(
     navController: NavController,
+    navigateToMovieDetails: (Int) -> Unit,
+    navigateToSeriesDetails: (Int) -> Unit,
     homeApi: HomeApi,
 ) {
     composable<HistoryRoute> {
         HistoryScreen(
             onBackClicked = navController::navigateUp,
-            navigateToMoviesDetailsScreen = navController::navigateToMovieDetails,
-            navigateToSeriesDetailsScreen = navController::navigateToSeriesDetails,
+            navigateToMoviesDetailsScreen = navigateToMovieDetails,
+            navigateToSeriesDetailsScreen = navigateToSeriesDetails,
             navigateToExploreScreen = homeApi::navigateToExploreScreen
         )
     }
