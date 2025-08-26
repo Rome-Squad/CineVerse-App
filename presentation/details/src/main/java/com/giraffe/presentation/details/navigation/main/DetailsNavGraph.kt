@@ -1,4 +1,4 @@
-package com.giraffe.presentation.details.navigation
+package com.giraffe.presentation.details.navigation.main
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -24,8 +24,8 @@ import com.giraffe.presentation.details.navigation.routes.youTubePlayerRouteRout
 @Composable
 internal fun DetailsNavGraph(
     navController: NavHostController,
-    startDestinationRoute: Any,
     onBackClick: () -> Unit,
+    startDestinationRoute: Any,
     authApi: AuthenticationApi
 ) {
     NavHost(
@@ -34,15 +34,15 @@ internal fun DetailsNavGraph(
     ) {
         movieDetailsRoute(
             navController = navController,
-            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
+            onBackButtonClick = onBackClick,
         )
 
         seriesDetailsRoute(
             navController = navController,
-            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
+            onBackButtonClick = onBackClick,
         )
 
-        seasonsRoute { if (navController.popBackStack().not()) onBackClick() }
+        seasonsRoute(onBackClick = navController::navigateUp)
 
 
         recommendedSeriesRoute(
@@ -59,7 +59,7 @@ internal fun DetailsNavGraph(
         )
 
         castDetailsRoute(
-            onBackButtonClick = { if (navController.popBackStack().not()) onBackClick() },
+            onBackButtonClick = onBackClick,
             navigateToCastCredit = navController::navigateToCastCredit,
             navigateToGallery = navController::navigateToGallery,
             navigateToMovieDetails = navController::navigateToMovieDetails,

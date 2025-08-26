@@ -7,7 +7,7 @@ import com.giraffe.presentation.details.screens.castDetails.CastDetailsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class CastDetailsRoute(val id: Int)
+internal data class CastDetailsRoute(val id: Int): StartDestination
 
 internal fun NavController.navigateToCastDetails(id: Int) {
     navigate(CastDetailsRoute(id))

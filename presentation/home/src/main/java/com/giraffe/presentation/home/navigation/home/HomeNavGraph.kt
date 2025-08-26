@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -19,15 +20,11 @@ import com.giraffe.api.profile.ProfileApi
 import com.giraffe.designsystem.theme.Theme
 import com.giraffe.presentation.home.navigation.home.routes.CollectionRoute
 import com.giraffe.presentation.home.navigation.home.routes.HomeRoute
-import com.giraffe.presentation.home.navigation.home.routes.MovieDetailsRoute
-import com.giraffe.presentation.home.navigation.home.routes.SeriesDetailsRoute
 import com.giraffe.presentation.home.navigation.home.routes.YourCollectionsRoute
 import com.giraffe.presentation.home.navigation.home.routes.categoryMediaRoute
 import com.giraffe.presentation.home.navigation.home.routes.homeRoute
 import com.giraffe.presentation.home.navigation.home.routes.navigateToCategoryMedia
 import com.giraffe.presentation.home.navigation.home.routes.navigateToCollection
-import com.giraffe.presentation.home.navigation.home.routes.navigateToMovieDetails
-import com.giraffe.presentation.home.navigation.home.routes.navigateToSeriesDetails
 import com.giraffe.presentation.home.navigation.home.routes.navigateToYourCollections
 import com.giraffe.presentation.home.navigation.main.routes.HomeRoute.route as HomeNavGraphRoute
 
@@ -40,6 +37,7 @@ fun HomeNavGraph(
     navigateToMatch: () -> Unit,
     onShowBottomBar: (Boolean) -> Unit,
 ) {
+    val context = LocalContext.current
     val navController = rememberNavController()
     val startDestination = HomeRoute
 
@@ -66,12 +64,8 @@ fun HomeNavGraph(
                 navigateToCategoryMediaSection = {
                     navController.navigateToCategoryMedia(it)
                 },
-                navigateToMoviesDetailsScreen = {
-                    navController.navigateToMovieDetails(it)
-                },
-                navigateToSeriesDetailsScreen = {
-                    navController.navigateToSeriesDetails(it)
-                },
+                navigateToMoviesDetailsScreen = {detailsApi.launchMovieDetails(context, it)},
+                navigateToSeriesDetailsScreen = {detailsApi.launchSeriesDetails(context, it)},
                 navigateToCollectionList = navController::navigateToCollection,
                 navigateToYourCollection = navController::navigateToYourCollections,
                 navigateToExploreScreen = navigateToExplore,
@@ -81,12 +75,8 @@ fun HomeNavGraph(
 
             categoryMediaRoute(
                 onBackClick = navController::popBackStack,
-                navigateToMoviesDetailsScreen = {
-                    navController.navigateToMovieDetails(it)
-                },
-                navigateToSeriesDetailsScreen = {
-                    navController.navigateToSeriesDetails(it)
-                }
+                navigateToMoviesDetailsScreen = {detailsApi.launchMovieDetails(context, it)},
+                navigateToSeriesDetailsScreen = {detailsApi.launchSeriesDetails(context, it)}
             )
 
 
@@ -111,19 +101,6 @@ fun HomeNavGraph(
                 )
             }
 
-            composable<SeriesDetailsRoute> { backStackEntry ->
-                val seriesId = backStackEntry.toRoute<SeriesDetailsRoute>().seriesId
-                detailsApi.SeriesDetailsContainer(seriesId) {
-                    navController.popBackStack()
-                }
-            }
-
-            composable<MovieDetailsRoute> { backStackEntry ->
-                val movieId = backStackEntry.toRoute<MovieDetailsRoute>().movieId
-                detailsApi.MovieDetailsContainer(movieId) {
-                    navController.popBackStack()
-                }
-            }
         }
 
     }
